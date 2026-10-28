@@ -49,4 +49,4 @@ settings.html은 관심 주제 체크·제외·문장 사전 매칭에 집중하
 제한 공개 지면, 관리자 대표 관심사(V5), 권한별 메뉴/보호 HTML, 관심지면 통합, 검색 dialog, 실제 이전 약관7개 열람과 현재 판 표시 구현. 최초 Escape 실패를 수정했고 API HTML 확장자도 JSON401을 유지하도록 회귀 추가. Java47 PASS/FAIL0/SKIP0, 변경 후 E2E 및 서버 테스트 재검증. 소스/JAR/SBOM/최종 build·runtime 이미지 게이트 및 실행 digest 일치 PASS. 실제 HTTPS 기사13개·대표태그6개·보호 페이지302·이전 판7개200·신판 가입/로그인/탈퇴 확인. 합성 계정 삭제 및 기존 admin 활성/ADMIN 유지. db/web/proxy healthy, worker running. MENU_AUDIT.md, evidence/public-edition.json, verification.json 참조.
 
 ## 스크랩 지면·최초판 정리 진행
-상단 MoA-PaN/교체형 대표 문구/검색 재배치·중간 설명 제거·공개 이력8페이지 제거·제1판 신규 동의·스크랩 갤러리 완료. Java48 PASS/FAIL0/SKIP0, 이미지 재검사·Compose 반영·공개 HTTPS 실제13기사/가입/로그인/권한/삭제 확인. 기존 admin 유지. 최종 guarded commit/push 및 원격SHA 대조 단계.
+상단 MoA-PaN/교체형 대표 문구/검색 재배치·중간 설명 제거·공개 이력8페이지 제거·제1판 신규 동의·스크랩 갤러리 완료. Java48 PASS/FAIL0/SKIP0, 이미지 재검사·Compose 반영·공개 HTTPS 실제13기사/가입/로그인/권한/삭제 확인. 기존 admin 유지. 구현 커밋 07127433dfa5f7512f8f1c99239ef96d71141bd9를 guarded push했고 codex/moapan-v1 원격 SHA 일치를 확인했다. 이 기록은 전달 확인 후의 문서 보완이다. 현재 요청 완료.
