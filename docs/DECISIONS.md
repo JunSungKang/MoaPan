@@ -1,0 +1,17 @@
+# 결정 기록
+
+- 2026-10-28: 사용자가 지정한 Sprint Delivery 채택. 제품 결과별 2뎁스 계획은 PLAN.md.
+- 최신 사용자 지시 우선: CI/CD·GitHub Actions·스케줄·업데이트 봇을 생성하거나 실행하지 않는다. 로컬 명령으로 동일 검증을 수행한다. requiredChecks 빈 배열은 검사 성공의 증거가 아니다.
+- 서버는 계정·세션·인증과 quota 카운터만 회원 관련 정보로 저장한다. 관심사·검색·클릭은 서버 API를 만들지 않는다.
+- 사용자 지정 branch codex/moapan-v1, 현재 실제 base main. 계약 검증기의 promotion 모드와 merge method merge를 사용하되 main merge는 실행하지 않는다.
+- 수집 요청은 HTTPS·443만, 동일 호스트 redirect 최대 3회, DNS를 한 번 검증한 주소로 연결한다. 압축 응답은 거부하고 identity만 수락한다. 범용 HTML 수집과 JSON 임의 표현식은 지원하지 않는다.
+- 외부 AI·번역·이미지·본문 저장 기능은 V1 기본 경로에서 비활성. 지원하지 않는 동작을 요청하면 오류로 알린다.
+- 로그인 시 해시가 포함된 UserDetails를 세션에 저장하지 않고 UUID·권한만 저장한다. 비밀번호 변경은 모든 세션을 종료해 재로그인한다.
+- 별도 임시 인프라·터널은 만들지 않는다. 제공된 외부 환경이 없어 외부 HTTPS는 미검증이다.
+
+- 2026-10-28: Caddy 2.11.7 공식 이미지의 Go 1.26.8/x/net 0.59 및 Alpine 패키지에서 HIGH 발견. Caddy 표준 모듈을 Go 1.27.3, x/net 0.60.0으로 재빌드한다. go.mod/go.sum을 저장하고 readonly module build와 공식 Go tar SHA256을 검증한다. 제품 Java 스택 변경이 아닌 인프라 보안 수정이다.
+- PostgreSQL 공식 Debian 이미지의 OS·gosu 취약점 때문에 PostgreSQL 18.6 Alpine 공식 digest + apk 보안 업데이트 + 같은 Go 1.27.3으로 재빌드한 gosu 1.19를 선택했다. libc/locale 차이를 고려해 기존 데이터 볼륨을 새 베이스에 직접 연결하지 않고 암호화 dump를 새 database_v1 볼륨에 복원했다. 원래 볼륨은 자동 삭제하지 않는다.
+- 요약 허용 철회는 수동 잠금 여부와 관계없이 공개 DTO에서 즉시 요약을 제외한다. 저장된 편집 결과를 삭제하지 않고 출처 권리로 출력 여부를 결정한다.
+- Trivy filesystem 모드가 JAR 분석을 생략하는 사실을 확인하여 실제 bootJar는 rootfs JAR analyzer로 검사한다. 인식 패키지 0개·빈 SBOM·24시간 초과 DB 동기화는 실패로 처리한다.
+- 보안 인증 식별자 테이블은 신규 bucket 생성 시 PostgreSQL advisory lock으로10000행 용량을 원자적으로 제한한다. 기존 bucket 갱신은 허용하고 만료 행을 정리하며, 용량·DB 장애 때503으로 닫는다.
+- worker lease 회복 시 중단된 fetch_runs도 FAILED/finished_at으로 종료한다. 초기 로컬 개발 실패에서 남은 고아 실행은 별도 로컬 검증 명령에서 실패 이력을 남겨 정리한다.

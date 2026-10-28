@@ -1,0 +1,101 @@
+name: moapan
+x-app: &app
+  image: moapan-local:1.0.0
+  platform: linux/amd64
+  build:
+    context: .
+    target: runtime
+  read_only: true
+  tmpfs: ['/tmp:size=128m,mode=1777']
+  cap_drop: [ALL]
+  security_opt: ['no-new-privileges:true']
+  mem_limit: 768m
+  cpus: 1.5
+  environment: &environment
+    DATABASE_URL: jdbc:postgresql://db:5432/moapan
+    DATABASE_USER: moapan
+    DATABASE_PASSWORD: ${DATABASE_PASSWORD:?Set DATABASE_PASSWORD}
+    MOAPAN_SECRET: ${MOAPAN_SECRET:?Set MOAPAN_SECRET}
+    PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:?Set PUBLIC_BASE_URL}
+    COOKIE_SECURE: ${COOKIE_SECURE:-true}
+    SOURCE_MIN_INTERVAL_SECONDS: ${SOURCE_MIN_INTERVAL_SECONDS:-300}
+  networks: [backend]
+services:
+  db:
+    image: moapan-db-local:18.6
+    build:
+      context: .
+      target: database
+    environment:
+      POSTGRES_DB: moapan
+      POSTGRES_USER: moapan_migrate
+      POSTGRES_PASSWORD: ${DATABASE_ADMIN_PASSWORD:?Set DATABASE_ADMIN_PASSWORD}
+      POSTGRES_APP_PASSWORD: ${DATABASE_PASSWORD:?Set DATABASE_PASSWORD}
+      POSTGRES_INITDB_ARGS: '--locale=C.UTF-8'
+    volumes: [database_v1:/var/lib/postgresql, './scripts/db-init.sh:/docker-entrypoint-initdb.d/10-app-user.sh:ro']
+    networks: [backend]
+    healthcheck:
+      test: ['CMD-SHELL','pg_isready -U moapan -d moapan']
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    security_opt: ['no-new-privileges:true']
+    mem_limit: 512m
+    cpus: 1
+    restart: unless-stopped
+    command: ['postgres','-c','log_statement=none','-c','log_connections=off','-c','log_disconnections=off','-c','log_min_error_statement=panic','-c','max_connections=60']
+  migrate:
+    <<: *app
+    environment:
+      <<: *environment
+      MOAPAN_ROLE: migrate
+      DATABASE_USER: moapan_migrate
+      DATABASE_PASSWORD: ${DATABASE_ADMIN_PASSWORD:?Set DATABASE_ADMIN_PASSWORD}
+    depends_on:
+      db: {condition: service_healthy}
+    restart: 'no'
+  web:
+    <<: *app
+    environment:
+      <<: *environment
+      MOAPAN_ROLE: web
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL','curl -fsS http://localhost:8080/internal/live >/dev/null']
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 45s
+  worker:
+    <<: *app
+    environment:
+      <<: *environment
+      MOAPAN_ROLE: worker
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+    restart: unless-stopped
+  proxy:
+    image: moapan-proxy-local:2.11.7
+    build:
+      context: .
+      target: proxy
+    ports: ['127.0.0.1:8080:8080']
+    volumes: ['./Caddyfile:/etc/caddy/Caddyfile:ro',caddy_data:/data,caddy_config:/config]
+    depends_on:
+      web: {condition: service_healthy}
+    networks: [backend]
+    read_only: true
+    tmpfs: ['/tmp:size=16m,mode=1777']
+    cap_drop: [ALL]
+    security_opt: ['no-new-privileges:true']
+    mem_limit: 128m
+    cpus: 0.5
+    restart: unless-stopped
+networks:
+  backend:
+volumes:
+  database_v1:
+  caddy_data:
+  caddy_config:
