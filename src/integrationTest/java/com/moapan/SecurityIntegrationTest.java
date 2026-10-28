@@ -241,9 +241,9 @@ class SecurityIntegrationTest {
         UUID site=UUID.randomUUID(),source=UUID.randomUUID();
         repo.db().sql("INSERT INTO sites(id,name,homepage_url,normalized_homepage_url,status) VALUES(:id,'Public synthetic','https://public.example.org/','https://public.example.org/','ACTIVE')").param("id",site).update();
         repo.db().sql("INSERT INTO sources(id,site_id,label,type,endpoint_url,normalized_endpoint_url,rights_status,allow_display) VALUES(:id,:site,'Public synthetic','RSS','https://public.example.org/feed','https://public.example.org/feed','APPROVED',true)").param("id",source).param("site",site).update();
-        for(int i=0;i<35;i++)repo.db().sql("INSERT INTO articles(id,source_id,source_guid,canonical_url,title,summary_mode,language,input_hash,collected_at) VALUES(:id,:source,:guid,:url,'Public synthetic','INSUFFICIENT','en',:hash,now())").param("id",UUID.randomUUID()).param("source",source).param("guid","public-"+i).param("url","https://public.example.org/"+i).param("hash","b".repeat(64)).update();
+        for(int i=0;i<55;i++)repo.db().sql("INSERT INTO articles(id,source_id,source_guid,canonical_url,title,summary_mode,language,input_hash,collected_at) VALUES(:id,:source,:guid,:url,'Public synthetic','INSUFFICIENT','en',:hash,now())").param("id",UUID.randomUUID()).param("source",source).param("guid","public-"+i).param("url","https://public.example.org/"+i).param("hash","b".repeat(64)).update();
         repo.db().sql("UPDATE news_editions SET expires_at=now()-interval '1 second'").update();
-        String response=mvc.perform(get("/api/v1/public/news/edition")).andExpect(status().isOk()).andExpect(header().string("Cache-Control","no-store")).andExpect(jsonPath("$.items.length()").value(30)).andExpect(jsonPath("$.nextCursor").isEmpty()).andReturn().getResponse().getContentAsString();
+        String response=mvc.perform(get("/api/v1/public/news/edition")).andExpect(status().isOk()).andExpect(header().string("Cache-Control","no-store")).andExpect(jsonPath("$.items.length()").value(42)).andExpect(jsonPath("$.nextCursor").isEmpty()).andReturn().getResponse().getContentAsString();
         assertFalse(response.contains("admin_note"));assertFalse(response.contains("password"));
         var page=news.publicEdition();UUID hidden=page.items().getFirst().id();repo.db().sql("UPDATE articles SET public=false WHERE id=:id").param("id",hidden).update();assertTrue(news.publicEdition().items().stream().noneMatch(a->a.id().equals(hidden)));
         for(String query:List.of("?size=300","?cursor=x","?limit=-1"))mvc.perform(get("/api/v1/public/news/edition"+query)).andExpect(status().isBadRequest());
@@ -252,6 +252,32 @@ class SecurityIntegrationTest {
         mvc.perform(get("/api/v1/public/news/edition")).andExpect(status().isTooManyRequests()).andExpect(header().exists("Retry-After"));
         repo.db().sql("DELETE FROM auth_rate_limits WHERE bucket='public_news'").update();
     }
+    @Test @Order(80) void serverSearchIsBoundedLiteralPrivateAndRightsAware()throws Exception{
+        UUID site=UUID.randomUUID(),source=UUID.randomUUID();
+        repo.db().sql("INSERT INTO sites(id,name,homepage_url,normalized_homepage_url,status) VALUES(:id,'Search fixture','https://search.example.org','https://search.example.org','ACTIVE')").param("id",site).update();
+        repo.db().sql("INSERT INTO sources(id,site_id,label,type,endpoint_url,normalized_endpoint_url,rights_status,allow_display,allow_summary) VALUES(:id,:site,'Search fixture','RSS','https://search.example.org/rss','https://search.example.org/rss','APPROVED',true,true)").param("id",source).param("site",site).update();
+        for(int i=0;i<150;i++)repo.db().sql("INSERT INTO articles(id,source_id,source_guid,canonical_url,title,summary_bullets,summary_mode,language,input_hash,collected_at) VALUES(:id,:source,:guid,:url,:title,'[\"synthetic-summary-only-query\"]','EXTRACTIVE_ORIGINAL_LANGUAGE','en',:hash,now()-interval '10 days'-make_interval(secs=>:age))").param("id",UUID.randomUUID()).param("source",source).param("guid","search-"+i).param("url","https://search.example.org/"+i).param("title","synthetic-search-fixture-"+i).param("hash","c".repeat(64)).param("age",i).update();
+        String endpoint="/api/v1/public/news/search",body="{\"search\":\"synthetic-search-fixture\",\"category\":\"\",\"day\":null,\"page\":0}";
+        mvc.perform(post(endpoint).contentType("application/json").content(body)).andExpect(status().isForbidden());
+        mvc.perform(post("/api/v1/news/search").with(csrf().asHeader()).contentType("application/json").content(body)).andExpect(status().isUnauthorized());
+        mvc.perform(post(endpoint).with(csrf().asHeader()).contentType("application/json").content(body)).andExpect(status().isOk()).andExpect(header().string("Cache-Control","no-store")).andExpect(jsonPath("$.items.length()").value(7)).andExpect(jsonPath("$.total").value(140)).andExpect(jsonPath("$.pages").value(20)).andExpect(jsonPath("$.items[0].title").value("synthetic-search-fixture-0"));
+        mvc.perform(post(endpoint).with(csrf().asHeader()).contentType("application/json").content(body.replace("\"page\":0","\"page\":19"))).andExpect(status().isOk()).andExpect(jsonPath("$.items[0].title").value("synthetic-search-fixture-133"));
+        for(int page:List.of(-1,20,1000))mvc.perform(post(endpoint).with(csrf().asHeader()).contentType("application/json").content(body.replace("\"page\":0","\"page\":"+page))).andExpect(status().isBadRequest());
+        mvc.perform(post(endpoint+"?offset=7").with(csrf().asHeader()).contentType("application/json").content(body)).andExpect(status().isBadRequest());
+        mvc.perform(post(endpoint).with(csrf().asHeader()).contentType("application/json").content(body.replace("synthetic-search-fixture","%_"))).andExpect(status().isOk()).andExpect(jsonPath("$.total").value(0));
+        mvc.perform(post(endpoint).with(csrf().asHeader()).contentType("application/json").content(body.replace("\"page\":0","\"page\":0,\"limit\":999"))).andExpect(status().isBadRequest());
+        mvc.perform(post(endpoint).with(csrf().asHeader()).contentType("application/json").content(body.replace("synthetic-search-fixture","x".repeat(101)))).andExpect(status().isBadRequest());
+        repo.db().sql("UPDATE sources SET allow_summary=false WHERE id=:id").param("id",source).update();
+        mvc.perform(post(endpoint).with(csrf().asHeader()).contentType("application/json").content(body.replace("synthetic-search-fixture","synthetic-summary-only-query"))).andExpect(status().isOk()).andExpect(jsonPath("$.total").value(0));
+        mvc.perform(post(endpoint).with(csrf().asHeader()).contentType("application/json").content(body)).andExpect(status().isOk()).andExpect(jsonPath("$.items[0].summaryBullets.length()").value(0));
+        repo.db().sql("UPDATE sources SET allow_display=false WHERE id=:id").param("id",source).update();
+        mvc.perform(post(endpoint).with(csrf().asHeader()).contentType("application/json").content(body)).andExpect(status().isOk()).andExpect(jsonPath("$.total").value(0));
+        assertEquals(0,repo.db().sql("SELECT count(*) FROM auth_rate_limits WHERE bucket LIKE '%synthetic-search%'").query(Integer.class).single());
+        repo.db().sql("UPDATE auth_rate_limits SET used=120 WHERE bucket='news_search'").update();
+        mvc.perform(post(endpoint).with(csrf().asHeader()).contentType("application/json").content(body)).andExpect(status().isTooManyRequests()).andExpect(header().exists("Retry-After"));
+        repo.db().sql("DELETE FROM auth_rate_limits WHERE bucket='news_search'").update();
+    }
+
     @Test @Order(81) void representativeInterestsRequireAdminCsrfAndCurrentVersion()throws Exception{
         signup("representative_owner");var owner=accounts.findByUsername("representative_owner").orElseThrow();var userCookie=login(owner.username);
         String tag="00000000-0000-0000-0000-000000000004";

@@ -49,3 +49,5 @@ FS-23/AC-22 상단 보완: 검색 버튼 채움 제거·모바일 구분선/메�
 2026-10-29 확장: 날짜/주제 경계는 CollectionFilterTest·SecurityIntegrationTest(collectionScopeIsEnforcedBeforeDatabaseWrite/arxivAdmissionIsSharedAndCoolsDown), 실제6수집주소130건은 evidence/topic-collection.json 참조. NIST RSS0건은 실제 수집 건수에 포함하지 않는다.
 
 카드 개정: 작성일/작성자 미제공 표시·태그 주제·여섯 항목만 노출(Playwright), Atom/JSON 작성자와 R&D 추출 원문 일치(단위), 기존 요약 재처리·수동 잠금 보존(PostgreSQL) PASS. 별도 인용문 블록 없음. 번역 실제 처리/배포는 별개 미완료이며 이 카드 개정의 완료와 혼동하지 않는다.
+
+서버 검색 후속: AC-09/20/21/22에 NewsSearch·SecurityIntegrationTest.serverSearchIsBoundedLiteralPrivateAndRightsAware·BrowserTest.serverSearchUsesPostOnlyOnSubmitAndLoadsOneSlideAtATime을 연결. 검색어 전송 금지는 사용자가 승인한 일시 처리 범위로 변경했으며 검색 이력 미저장·관심사 비전송은 유지한다. 위 실제 테스트63개/HTTPS 증빙 통과. 기사 제목·요약 실제 번역은 아직 미완료.

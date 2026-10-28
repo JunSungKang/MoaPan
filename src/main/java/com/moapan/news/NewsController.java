@@ -7,9 +7,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import com.moapan.ApiError;
 @RestController @ConditionalOnWebApplication
 public class NewsController {
-    private final RepresentativeInterests interests;private final NewsService service;private final org.springframework.jdbc.core.simple.JdbcClient db;
-    public NewsController(NewsService service,org.springframework.jdbc.core.simple.JdbcClient db,RepresentativeInterests interests){this.service=service;this.db=db;this.interests=interests;}
+    private final NewsSearch search;private final RepresentativeInterests interests;private final NewsService service;private final org.springframework.jdbc.core.simple.JdbcClient db;
+    public NewsController(NewsService service,org.springframework.jdbc.core.simple.JdbcClient db,RepresentativeInterests interests,NewsSearch search){this.search=search;this.service=service;this.db=db;this.interests=interests;}
     @GetMapping("/api/v1/public/news/edition")Object publicEdition(HttpServletRequest request){checkParams(request,Set.of());return service.publicEdition();}
+    @PostMapping({"/api/v1/public/news/search","/api/v1/news/search"})Object search(@RequestBody NewsSearch.Input input,Authentication a,HttpServletRequest request){checkParams(request,Set.of());UUID user=a==null||a instanceof org.springframework.security.authentication.AnonymousAuthenticationToken?null:UUID.fromString(a.getName());return search.search(input,user);}
     @GetMapping("/api/v1/public/interests")Object defaults(){return interests.read();}
     @GetMapping("/api/v1/public/tags")Object publicTags(){return service.tags();}
     @GetMapping("/api/v1/admin/interests")Object adminInterests(){return interests.read();}

@@ -64,3 +64,6 @@ CSS 상호작용/모바일 정렬 변경 검증 2026-10-28T13:00:18.186Z: JDK/�
 새 runtime 이미지 `sha256:5990e938c68381287ab8142afb6fff98484b472dd30f4d1371e09eeb15f018cc` Trivy 이미지 gate 통과 후 배포. 최종 JAR·SBOM·소스 검사 통과. Java 의존성/프록시 이미지는 변경하지 않았으며 기존 proxy go-jose/v3 조건부 적용성 검토와 만료 조건은 계속 유지한다. 카드 작성자는 안전한 textContent로 표시하며 빈 발행일을 수집일로 위장하지 않는다.
 
 기존 피드 밖 요약 재선정까지 포함한 최종 runtime 이미지: `sha256:44337419a19909216493a472268e46758c97ce8d9aa7d66302206ed59e872f56`. 이 정확한 이미지로 Trivy gate를 다시 통과한 후 서비스에 반영했다. 앞선 5990 이미지는 중간 이미지다.
+
+## 검색·슬라이드 산출물 재검증
+2026-10-28T23:21:13.826Z: 소스/비밀값/설정·SBOM·JAR·최종 이미지 Trivy gate 통과. JAR91패키지/SBOM100컴포넌트 인식, advisory DB 동기화2026-10-28T21:57:31.453891Z. 실행 web/worker 이미지 모두 `sha256:a031afba57f6eb2e5ce0d71df7a3c2705b2c13d7ac14d8de6cb32c1210d7568a`로 스캔 대상과 일치한다. 이미지 manifest 내 config digest를 별도 이미지로 조회한 시도는 Docker No such image로 검사되지 않았고, 실제 실행 image ID는 정상 스캔한 manifest ID와 동일함을 확인했다. 미검사를 성공으로 세지 않는다. 프록시/의존성 변경 없음; 기존 go-jose/v3 HIGH1의 한정된 NOT_AFFECTED 근거·만료 조건을 그대로 유지하며 패치 완료로 표시하지 않는다. 검색 조건 SQL 파라미터화·문자 와일드카드 escape·CSRF·quota·no-store·로그 미기록을 검증했다.

@@ -76,3 +76,7 @@ CSS 변경 후 e2eTest/bootJar/sbom/securityCheck/acceptanceTest 통과. 기존 
 2026-10-29 KST: `sh scripts/gradle-local.sh --no-daemon check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest` 성공. JUnit XML 합계 58 tests, failures/errors/skipped 모두 0. 작성자 Atom 다중 저자·JSON 매핑/해시 변경, 연구 근거 문장 선택, 카드 정확한 항목/누락 표시/추천 이유·버튼 제거 검증 포함. 390/768/1440px 기존 화면 회귀 통과. 이전 미연결 번역 UI 모듈 테스트 포함(실제 번역 기능 완료를 의미하지 않음).
 
 재수집 범위 밖 기존 요약을 `research-v2-stored`로 갱신하는 추가 통합 테스트 통과. 최초 추가 테스트를 DB 장애 테스트 뒤에 배치해 연결 실패 1건 발생했으며, PostgreSQL을 의도적으로 종료하는 기존 테스트보다 앞에 실행하도록 순서를 수정했다. 전체 integrationTest 재실행 PASS. 최종 합계 59 tests, failures/errors/skipped 0. 기존 장애 거부 테스트는 유지했다.
+
+## 2026-10-29 서버 검색·슬라이드 실제 검증
+63 tests PASS, failures/errors/skipped 0. PostgreSQL 통합 검색(10일 이전150개 fixture, 최신순7개·140상한·20페이지·CSRF·권리철회·와일드카드 문자 처리·허용 필드·429), Playwright 제출 전 비전송/POST/한 슬라이드씩 조회/메모리 외 미저장/초기화,390·768·1440px 화면을 확인했다. 최초 MockMvc CSRF 테스트의 파라미터 주입은 실제 클라이언트와 같은 헤더 방식으로 수정했고, 빈 지면 문구 기대값을 새 문구로 맞춘 뒤 재실행했다. 테스트 삭제/skip 없음.
+최종 check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest 성공. 실제 HTTPS 기본42개, 검색136개·최대20페이지·페이지당7개, 기본42개 밖 결과 조회, CSRF 누락403/초과페이지400/no-store 확인. 합성 검색어가 web/proxy/db 최근 로그에 없음을 확인했다. 운영 DB는 log_statement=none, log_min_duration_statement=-1, log_min_error_statement=panic, log_parameter_max_length_on_error=0. 증빙: [search-delivery.json](evidence/search-delivery.json).

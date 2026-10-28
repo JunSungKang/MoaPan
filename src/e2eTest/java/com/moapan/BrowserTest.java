@@ -21,6 +21,7 @@ class BrowserTest {
             else if(path.equals("/api/v1/public/interests"))response="{\"version\":0,\"weights\":{\"space\":3}}";
             else if(path.equals("/api/v1/sources"))response="[]";
             else if((path.equals("/api/v1/news/edition")||path.equals("/api/v1/public/news/edition")))response=edition();
+            else if(path.endsWith("/news/search"))response="{\"items\":[],\"page\":0,\"pages\":0,\"total\":0}";
             else if(path.equals("/api/v1/auth/csrf"))response="{\"token\":\"synthetic-csrf\",\"headerName\":\"X-CSRF-TOKEN\"}";
             if(response!=null){byte[]bytes=response.getBytes(StandardCharsets.UTF_8);exchange.getResponseHeaders().set("Content-Type",type);exchange.sendResponseHeaders(200,bytes.length);exchange.getResponseBody().write(bytes);exchange.close();return;}
             if(path.equals("/"))path="/index.html";try(var in=BrowserTest.class.getResourceAsStream("/static"+path)){if(in==null){exchange.sendResponseHeaders(404,-1);}else{type=path.endsWith(".js")?"text/javascript":path.endsWith(".css")?"text/css":"text/html";exchange.getResponseHeaders().set("Content-Type",type+"; charset=utf-8");byte[]bytes=in.readAllBytes();exchange.sendResponseHeaders(200,bytes.length);exchange.getResponseBody().write(bytes);}}exchange.close();
@@ -28,6 +29,29 @@ class BrowserTest {
     }
     static String edition(){StringBuilder items=new StringBuilder();for(int i=0;i<15;i++){if(i>0)items.append(',');items.append("{\"id\":\"synthetic-").append(i).append("\",\"title\":\"[합성 검증 기사] 긴 한글 제목과 인공지능 우주 소식이 여러 단의 신문 지면에서 자연스럽게 표시되는지 확인합니다 ").append(i).append("\",\"summaryBullets\":[\"실제 뉴스가 아닌 화면 검증용 합성 문장입니다. 외부 전송 없이 현재 후보를 정렬합니다.\"],\"source\":{\"id\":\"source-").append(i%5).append("\",\"site\":\"합성 출처\",\"name\":\"Synthetic\",\"language\":\"ko\"},\"publishedAt\":null,\"collectedAt\":\"2026-10-28T00:00:00Z\",\"tags\":[{\"id\":\"ai\",\"slug\":\"ai\",\"name\":\"인공지능\",\"category\":\"기술\",\"confidence\":1}],\"originalUrl\":\"https://example.org/synthetic/").append(i).append("\",\"summaryMode\":\"EXTRACTIVE_ORIGINAL_LANGUAGE\"}");}return "{\"editionId\":\"synthetic-edition\",\"editionAt\":\"2026-10-28T00:00:00Z\",\"periodDays\":7,\"candidateCount\":15,\"items\":["+items+"],\"nextCursor\":null}";}
     @AfterAll static void stop(){if(browser!=null)browser.close();if(playwright!=null)playwright.close();if(server!=null)server.stop(0);}
+
+    @Test void serverSearchUsesPostOnlyOnSubmitAndLoadsOneSlideAtATime(){
+        try(var context=browser.newContext()){
+            List<String> bodies=new ArrayList<>();
+            context.route("**/api/v1/news/search",r->{
+                assertEquals("POST",r.request().method());assertFalse(r.request().url().contains("?"));
+                String body=r.request().postData();bodies.add(body);
+                int page=body.contains("\"page\":1")?1:0;
+                String items=edition().substring(edition().indexOf("["),edition().lastIndexOf("]")+1);
+                var mapper=tools.jackson.databind.json.JsonMapper.builder().build();
+                var list=mapper.readTree(items);
+                var output=new ArrayList<Object>();for(int i=0;i<7;i++)output.add(list.get(i));
+                r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"items\":"+mapper.writeValueAsString(output)+",\"page\":"+page+",\"pages\":20,\"total\":140}"));
+            });
+            Page p=context.newPage();p.navigate(origin+"/index.html");p.waitForSelector("#paper article");
+            p.locator("#open-search").click();p.locator("#search").fill("synthetic-transient-query");assertTrue(bodies.isEmpty());
+            p.locator("#search-form [type=submit]").click();p.waitForFunction("document.querySelector('#slide-position').textContent==='1 / 20'");
+            assertEquals(1,bodies.size());assertEquals(7,p.locator("#paper article").count());
+            p.locator("#next-slide").click();p.waitForFunction("document.querySelector('#slide-position').textContent==='2 / 20'");assertEquals(2,bodies.size());
+            assertFalse((boolean)p.evaluate("JSON.stringify({...localStorage,...sessionStorage}).includes('synthetic-transient-query')"));
+            p.locator("#clear-search").click();assertEquals("1 / 3",p.locator("#slide-position").textContent());assertEquals(2,bodies.size());
+        }
+    }
 
     @Test void encryptedPreferencesTransferBetweenIndependentBrowsers()throws Exception{
         active=A;var traffic=new ArrayList<String>();
@@ -63,14 +87,44 @@ class BrowserTest {
         try(var context=browser.newContext()){
             Page p=context.newPage();p.navigate(origin+"/index.html");p.waitForSelector("#paper article");
             var card=p.locator("#paper article").first();
-            assertEquals(List.of("작성일","작성자","출처","주제"),card.locator("dt").allTextContents());
-            assertEquals("정보 없음",card.locator("dd").nth(0).textContent());
-            assertEquals("정보 없음",card.locator("dd").nth(1).textContent());
-            assertEquals("신기술·R&D 요약",card.locator("h3").textContent());
+            assertEquals(List.of("주제","작성일","작성자"),card.locator(".article-meta-line > span").evaluateAll("nodes=>nodes.map(n=>n.getAttribute('aria-label'))"));
+            assertEquals("정보 없음",card.locator(".article-meta-line > span").nth(1).textContent());
+            assertEquals("정보 없음",card.locator(".article-meta-line > span").nth(2).textContent());
+            assertEquals(0,card.locator("h3").count());assertEquals(1,card.locator(".article-source").count());
             assertEquals(0,card.locator("button,.reason,.eyebrow,.byline").count());
             assertEquals(1,card.locator("h2 a[rel='noopener noreferrer']").count());
             assertFalse(card.textContent().contains("자동 추출"));assertFalse(card.textContent().contains("번역하지 않음"));
         }
+    }
+
+    @Test void slideBoundsAndLanguageSelection(){
+      try(var context=browser.newContext()){
+        Page p=context.newPage();p.navigate(origin+"/index.html");p.waitForSelector("#paper article");
+        assertEquals(7,p.locator("#paper article").count());assertEquals("1 / 3",p.locator("#slide-position").textContent());
+        p.locator("#next-slide").click();assertEquals("2 / 3",p.locator("#slide-position").textContent());
+        p.locator("#next-slide").click();assertEquals(1,p.locator("#paper article").count());assertTrue(p.locator("#next-slide").isDisabled());
+        p.locator("#paper").focus();p.keyboard().press("ArrowLeft");assertEquals("2 / 3",p.locator("#slide-position").textContent());
+        assertEquals(true,p.evaluate("""
+          async()=>{const {slideWindow}=await import('/assets/js/slides.js');const rows=Array.from({length:200},(_,i)=>({id:String(i).padStart(3,'0'),publishedAt:new Date(2026,0,i+1).toISOString()}));const home=slideWindow(rows,100);const search=slideWindow(rows,100,true);return home.pages===6&&home.total===42&&home.items.length===7&&search.pages===20&&search.total===140&&search.page===19&&search.items.length===7&&slideWindow(rows,0,true).items[0].id==='199';}
+          """));
+        p.locator("[data-language-select]").selectOption("en");p.waitForFunction("document.documentElement.lang==='en'&&document.querySelector('#open-search').textContent.includes('Search')");
+        p.navigate(origin+"/signup.html");p.waitForFunction("document.documentElement.lang==='en'");assertTrue(p.locator("h1").textContent().contains("Sign up"));
+        p.locator("[data-language-select]").selectOption("ko");p.waitForFunction("document.querySelector('h1').textContent.includes('회원가입')");
+      }
+    }
+
+    @Test void publicStaticPagesHaveEnglishCopyAndKeepLanguage(){
+      try(var context=browser.newContext()){
+        context.addInitScript("localStorage.setItem('moapan-language','en')");
+        Page p=context.newPage();
+        for(String file:List.of("about","privacy","terms","signup","login")){
+          p.navigate(origin+"/"+file+".html");p.waitForLoadState(com.microsoft.playwright.options.LoadState.NETWORKIDLE);
+          assertEquals("en",p.locator("html").getAttribute("lang"));
+          assertEquals(true,p.evaluate("""
+            ()=>{const walker=document.createTreeWalker(document.querySelector('main'),NodeFilter.SHOW_TEXT);while(walker.nextNode()){const n=walker.currentNode;if(n.parentElement.closest('script,style,[data-original-content],.language-picker'))continue;if(/[가-힣]/.test(n.textContent))return false;}return true;}
+            """),file);
+        }
+      }
     }
 
     @Test void articleLanguagePreservesOriginalAndMakesNoRequests(){
@@ -130,8 +184,8 @@ class BrowserTest {
     @Test void responsivePaperHasNoOverflowAndNoTracking()throws Exception{
         Path dir=Path.of("build/reports/screenshots");Files.createDirectories(dir);
         try(var context=browser.newContext()){Page p=context.newPage();List<String>outbound=new ArrayList<>();p.onRequest(r->{if(!r.url().startsWith(origin))outbound.add(r.url());});
-            for(int width:new int[]{390,768,1440}){p.setViewportSize(width,1000);p.navigate(origin+"/index.html");p.waitForSelector("#paper article");assertEquals(15,p.locator("#paper article").count());assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth <= window.innerWidth"));p.screenshot(new Page.ScreenshotOptions().setPath(dir.resolve("newspaper-"+width+".png")).setFullPage(true));}
-            p.locator("#open-search").click();p.locator("#search").fill("synthetic-search-private-phrase");p.locator("#search-form [type=submit]").click();assertEquals(0,p.locator("#paper article").count());assertTrue(outbound.isEmpty());assertEquals(0,p.locator("script:not([type=module])").count());p.emulateMedia(new Page.EmulateMediaOptions().setMedia(com.microsoft.playwright.options.Media.PRINT));assertFalse(p.locator("#more").isVisible());
+            for(int width:new int[]{390,768,1440}){p.setViewportSize(width,1000);p.navigate(origin+"/index.html");p.waitForSelector("#paper article");assertEquals(7,p.locator("#paper article").count());assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth <= window.innerWidth"));p.screenshot(new Page.ScreenshotOptions().setPath(dir.resolve("newspaper-"+width+".png")).setFullPage(true));}
+            p.locator("#open-search").click();p.locator("#search").fill("synthetic-search-private-phrase");p.locator("#search-form [type=submit]").click();p.waitForFunction("document.querySelector('[role=status]').textContent==='' && document.querySelector('#paper article')===null");assertEquals(0,p.locator("#paper article").count());assertTrue(outbound.isEmpty());assertEquals(0,p.locator("script:not([type=module])").count());p.emulateMedia(new Page.EmulateMediaOptions().setMedia(com.microsoft.playwright.options.Media.PRINT));assertFalse(p.locator("#more").isVisible());
         }
     }
     @Test void simpleAuthFormsRequireConsentAndShowReadableTerms()throws Exception{
@@ -224,11 +278,11 @@ class BrowserTest {
             for(String page:List.of("settings","account","admin")){p.navigate(origin+"/"+page+".html");p.waitForURL("**/login.html");}
             p.navigate(origin+"/index.html");p.waitForSelector("#paper article");assertEquals(0,p.locator("#interest-basis,#range").count());assertEquals(0,p.locator("#paper .reason").count());
             assertEquals(0,p.locator("[data-view],#latest,.tags button").count());assertFalse(p.locator("#search").isVisible());
-            p.locator("#open-search").click();assertTrue(p.locator("#search").isVisible());p.locator("#search").fill("synthetic-popup-private-query");p.keyboard().press("Escape");assertEquals(15,p.locator("#paper article").count());
-            p.locator("#open-search").click();assertEquals("",p.locator("#search").inputValue());p.locator("#search").fill("synthetic-popup-private-query");p.locator("#search-form [type=submit]").click();assertEquals(0,p.locator("#paper article").count());assertFalse(p.locator("#search-dialog").isVisible());
-            p.locator("#clear-search").click();assertEquals(15,p.locator("#paper article").count());
+            p.locator("#open-search").click();assertTrue(p.locator("#search").isVisible());p.locator("#search").fill("synthetic-popup-private-query");p.keyboard().press("Escape");assertEquals(7,p.locator("#paper article").count());
+            p.locator("#open-search").click();assertEquals("",p.locator("#search").inputValue());p.locator("#search").fill("synthetic-popup-private-query");p.locator("#search-form [type=submit]").click();p.waitForFunction("document.querySelector('[role=status]').textContent==='' && document.querySelector('#paper article')===null");assertEquals(0,p.locator("#paper article").count());assertFalse(p.locator("#search-dialog").isVisible());
+            p.locator("#clear-search").click();assertEquals(7,p.locator("#paper article").count());
             for(int width:new int[]{390,768,1440}){p.setViewportSize(width,1000);p.locator("#open-search").click();assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth<=innerWidth"));p.screenshot(new Page.ScreenshotOptions().setPath(Path.of("build/reports/screenshots/search-dialog-"+width+".png")));p.locator("#cancel-search").click();}
-            assertTrue(traffic.stream().noneMatch(v->v.contains("synthetic-popup-private-query")));assertTrue(traffic.stream().noneMatch(v->v.contains("/api/v1/news/edition")));
+            assertEquals(1,traffic.stream().filter(v->v.contains("synthetic-popup-private-query")).count());assertTrue(traffic.stream().filter(v->v.contains("synthetic-popup-private-query")).allMatch(v->v.startsWith(origin+"/api/v1/public/news/search ")));assertTrue(traffic.stream().noneMatch(v->v.contains("/api/v1/news/edition")));
         }
     }
 
@@ -270,7 +324,7 @@ class BrowserTest {
             assertEquals("MoA-PaN",p.locator(".topline [data-brand-en]").textContent());
             assertEquals(p.evaluate("async()=> (await import('/assets/js/config.js')).brand.mastheadQuote"),p.locator("h1").textContent());
             assertEquals(1,p.locator(".topline #open-search").count());
-            assertEquals(0,p.locator("main #open-search,#range,#interest-basis,main nav").count());
+            assertEquals(0,p.locator("main #open-search,#range,#interest-basis,main nav:not(.slide-controls)").count());
             assertFalse(p.locator("header").textContent().contains("개인화 뉴스 V1"));
             for(int width:new int[]{390,768,1440}){
                 p.setViewportSize(width,1000);
@@ -288,13 +342,13 @@ class BrowserTest {
     @Test void loadingEmptyErrorAndKeyboardStatesAreUsable(){
         try(var context=browser.newContext()){
             Page p=context.newPage();var pending=new java.util.concurrent.atomic.AtomicReference<Route>();
-            p.route("**/api/v1/news/edition",pending::set);
+            p.route("**/api/v1/news/edition*",pending::set);
             p.navigate(origin+"/index.html",new Page.NavigateOptions().setWaitUntil(com.microsoft.playwright.options.WaitUntilState.COMMIT));
             p.waitForFunction("document.querySelector('[role=status]').textContent.includes('불러오는 중')");assertNotNull(pending.get());
             pending.get().fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"editionId\":\"empty-fixture\",\"editionAt\":\"2026-10-28T00:00:00Z\",\"periodDays\":7,\"candidateCount\":0,\"items\":[],\"nextCursor\":null}"));
-            p.waitForSelector("#paper p");assertEquals(0,p.locator("#paper article").count());assertTrue(p.locator("#paper").textContent().contains("찾지 못했습니다"));
+            p.waitForSelector("#paper p");assertEquals(0,p.locator("#paper article").count());assertTrue(p.locator("#paper").textContent().contains("표시할 기사가 없습니다"));
             p.keyboard().press("Tab");assertEquals("#main",p.evaluate("document.activeElement.getAttribute('href')"));
-            p.unroute("**/api/v1/news/edition");p.route("**/api/v1/news/edition",r->r.fulfill(new Route.FulfillOptions().setStatus(503).setContentType("application/json").setBody("{\"error\":\"temporarily_unavailable\"}")));
+            p.unroute("**/api/v1/news/edition*");p.route("**/api/v1/news/edition*",r->r.fulfill(new Route.FulfillOptions().setStatus(503).setContentType("application/json").setBody("{\"error\":\"temporarily_unavailable\"}")));
             p.reload();p.waitForFunction("document.querySelector('[role=status]').textContent.includes('일시적으로')");assertFalse(p.locator("#more").isVisible());
         }
     }
