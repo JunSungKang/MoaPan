@@ -31,3 +31,9 @@ check, integrationTest, e2eTest, bootJar, sbom, securityCheck, acceptanceTest를
 사용자 변경 기준에 따라 로컬 Mac에서 검증 이미지로 실행하고 외부 휴대폰 데이터망 HTTPS 접속을 확인한다. 별도 호스팅 배포 검증은 제외한다. 지정 브랜치에 사람 wrapper commit/push 후 원격 SHA를 확인한다. main merge는 승인되지 않았다.
 
 공유 코드 변경은 위 순서로 진행한다. 외부 권한·출처 이용권·고위험 UNKNOWN은 해당 외부 동작을 차단하되 독립 구현은 계속한다. 각 단계의 상태는 PROGRESS와 ACCEPTANCE_MATRIX에 기록한다.
+
+## 6. 이용자 안내 문구 개정
+### 6.1 문구
+약관·개인정보 처리방침의 기술 용어를 일상어로 바꾸고 실제 수집·보관·삭제 범위를 유지한다. 상세 구현·검증 설명은 docs에만 둔다.
+### 6.2 검증·전달
+약관 새 버전 동의 검증, 기존 브라우저 테스트, 최종 JAR/이미지 검사 후 공개 서비스에 반영하고 guarded push한다. 운영자 정보는 만들지 않는다.

@@ -46,9 +46,9 @@ class BrowserTest {
             }
             p.locator("#username").fill("synthetic_terms");p.locator("#password").fill("synthetic password 12345");
             assertFalse(p.locator("input[type=checkbox]").isChecked());p.locator("button[type=submit]").click();assertTrue(bodies.isEmpty());
-            Page terms=p.waitForPopup(()->p.locator(".agreement a").click());terms.waitForLoadState();assertTrue(terms.locator("main").textContent().contains("2026-10-28"));assertTrue(terms.locator("main").textContent().contains("복구할 수 없습니다"));terms.close();
+            Page terms=p.waitForPopup(()->p.locator(".agreement a").click());terms.waitForLoadState();assertTrue(terms.locator("main").textContent().contains("2026-10-28.2"));assertTrue(terms.locator("main").textContent().contains("복구할 수 없습니다"));terms.close();
             assertEquals("synthetic_terms",p.locator("#username").inputValue());p.locator("input[type=checkbox]").check();p.locator("button[type=submit]").click();p.waitForURL("**/login.html");
-            assertEquals(1,bodies.size());assertTrue(bodies.getFirst().contains("\"termsAccepted\":true"));assertTrue(bodies.getFirst().contains("\"termsVersion\":\"2026-10-28\""));
+            assertEquals(1,bodies.size());assertTrue(bodies.getFirst().contains("\"termsAccepted\":true"));assertTrue(bodies.getFirst().contains("\"termsVersion\":\"2026-10-28.2\""));
         }
     }
     @Test void interestSentenceStaysLocalAndAccountsAreSeparated(){

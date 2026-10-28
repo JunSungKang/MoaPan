@@ -21,7 +21,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 @RestController @org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication
 public class AuthController {
     record Credentials(@NotNull @Size(min=4,max=32) String username,@NotNull @Size(min=15,max=256)String password){}
-    public static final String TERMS_VERSION="2026-10-28";
+    public static final String TERMS_VERSION="2026-10-28.2";
     record Signup(@NotNull @Size(min=4,max=32) String username,@NotNull @Size(min=15,max=256) String password,@NotNull @AssertTrue Boolean termsAccepted,@NotBlank @Size(max=32) String termsVersion){}
     record Change(@NotNull String currentPassword,@NotNull @Size(min=15,max=256)String newPassword){}
     record Confirm(@NotNull String currentPassword){}

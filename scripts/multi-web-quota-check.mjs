@@ -20,7 +20,7 @@ const direct=id=>{
 };
 let registered=false;
 try{
- await token();assert.equal((await call('/api/v1/auth/signup','POST',{username,password,termsAccepted:true,termsVersion:'2026-10-28'})).status,200);registered=true;
+ await token();assert.equal((await call('/api/v1/auth/signup','POST',{username,password,termsAccepted:true,termsVersion:'2026-10-28.2'})).status,200);registered=true;
  assert.equal((await call('/api/v1/auth/login','POST',{username,password})).status,200);csrf=undefined;await token();
  const within=Date.now()%60000;if(within>30000)await new Promise(r=>setTimeout(r,61000-within));
  let successful=0;for(let i=0;i<60;i++){assert.equal(direct(ids[i%2]),200);successful++;}

@@ -43,7 +43,7 @@ class SecurityIntegrationTest {
     @Autowired MockMvc mvc;@Autowired Accounts accounts;@Autowired Limits limits;@Autowired CatalogRepository repo;@Autowired CatalogService catalog;@Autowired Worker worker;@Autowired NewsService news;
     @Autowired org.springframework.session.SessionRepository<?> sessions;
     private static final String PASSWORD="synthetic password 12345";
-    private void signup(String user)throws Exception{mvc.perform(post("/api/v1/auth/signup").with(csrf()).contentType("application/json").content("{\"username\":\""+user+"\",\"termsAccepted\":true,\"termsVersion\":\"2026-10-28\",\"password\":\""+PASSWORD+"\"}")).andExpect(status().isOk()).andExpect(jsonPath("$.role").value("USER")).andExpect(jsonPath("$.passwordHash").doesNotExist());}
+    private void signup(String user)throws Exception{mvc.perform(post("/api/v1/auth/signup").with(csrf()).contentType("application/json").content("{\"username\":\""+user+"\",\"termsAccepted\":true,\"termsVersion\":\"2026-10-28.2\",\"password\":\""+PASSWORD+"\"}")).andExpect(status().isOk()).andExpect(jsonPath("$.role").value("USER")).andExpect(jsonPath("$.passwordHash").doesNotExist());}
     private Map<String,Object> claimReady(){
         for(int i=0;i<100;i++){var job=worker.claim();if(job!=null)return job;try{Thread.sleep(20);}catch(InterruptedException e){Thread.currentThread().interrupt();throw new AssertionError(e);}}
         throw new AssertionError("Queued job not ready within 2 seconds: "+repo.db().sql("SELECT status,available_at,now() db_now FROM content_jobs WHERE status='QUEUED'").query().listOfRows());
@@ -55,12 +55,12 @@ class SecurityIntegrationTest {
         mvc.perform(get("/api/v1/auth/csrf")).andExpect(status().isOk()).andExpect(jsonPath("$.token").isString());
     }
     @Test @Order(2) void signupRejectsExtraFieldsAndStoresOnlyHash()throws Exception{
-        mvc.perform(post("/api/v1/auth/signup").with(csrf()).contentType("application/json").content("{\"username\":\"injected\",\"termsAccepted\":true,\"termsVersion\":\"2026-10-28\",\"password\":\""+PASSWORD+"\",\"role\":\"ADMIN\"}")).andExpect(status().isBadRequest());
+        mvc.perform(post("/api/v1/auth/signup").with(csrf()).contentType("application/json").content("{\"username\":\"injected\",\"termsAccepted\":true,\"termsVersion\":\"2026-10-28.2\",\"password\":\""+PASSWORD+"\",\"role\":\"ADMIN\"}")).andExpect(status().isBadRequest());
         signup("synthetic_a");Account a=accounts.findByUsername("synthetic_a").orElseThrow();assertTrue(a.passwordHash.startsWith("$argon2id$"));assertFalse(a.passwordHash.contains(PASSWORD));
     }
     @Test @Order(2) void signupRequiresCurrentExplicitConsent()throws Exception{
         Instant before=Instant.now();
-        for(String fields:List.of("",",\"termsAccepted\":false,\"termsVersion\":\"2026-10-28\"",",\"termsAccepted\":true,\"termsVersion\":\"old\"",",\"termsAccepted\":true")){
+        for(String fields:List.of("",",\"termsAccepted\":false,\"termsVersion\":\"2026-10-28.2\"",",\"termsAccepted\":true,\"termsVersion\":\"old\"",",\"termsAccepted\":true")){
             String body="{\"username\":\"consent_test\",\"password\":\""+PASSWORD+"\""+fields+"}";
             mvc.perform(post("/api/v1/auth/signup").with(csrf()).contentType("application/json").content(body)).andExpect(status().isBadRequest());
             assertTrue(accounts.findByUsername("consent_test").isEmpty());
