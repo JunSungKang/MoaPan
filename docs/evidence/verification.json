@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-28T08:06:31.497Z",
+  "checkedAt": "2026-10-28T08:22:44.443Z",
   "externalDeployment": {
     "status": "PASS",
     "scope": "User-authorized local Mac service reachable from mobile internet; separate hosting deployment excluded",
@@ -29,7 +29,7 @@
         "failures": 0,
         "errors": 0,
         "skipped": 0,
-        "timestamp": "2026-10-28T08:01:54.508Z"
+        "timestamp": "2026-10-28T08:20:16.630Z"
       },
       {
         "task": "test",
@@ -38,28 +38,28 @@
         "failures": 0,
         "errors": 0,
         "skipped": 0,
-        "timestamp": "2026-10-28T08:01:54.645Z"
+        "timestamp": "2026-10-28T08:20:16.766Z"
       },
       {
         "task": "integrationTest",
         "name": "com.moapan.SecurityIntegrationTest",
-        "tests": 20,
+        "tests": 21,
         "failures": 0,
         "errors": 0,
         "skipped": 0,
-        "timestamp": "2026-10-28T08:01:55.706Z"
+        "timestamp": "2026-10-28T08:20:17.458Z"
       },
       {
         "task": "e2eTest",
         "name": "com.moapan.BrowserTest",
-        "tests": 6,
+        "tests": 7,
         "failures": 0,
         "errors": 0,
         "skipped": 0,
-        "timestamp": "2026-10-28T08:02:04.992Z"
+        "timestamp": "2026-10-28T08:20:27.250Z"
       }
     ],
-    "total": 37,
+    "total": 39,
     "bootstrap": {
       "passed": 9,
       "failed": 0,
@@ -71,19 +71,19 @@
     "springBoot": "4.1.2",
     "gradle": "9.8.2",
     "postgresql": "18.6",
-    "jarSha256": "037b3950cb7d384ae0fa91845c6d6d41bc9e05664e2c899f849d95fd5e3f3374",
+    "jarSha256": "148cb7b901e0d4705f36a76bcf43813adcc11298b581130b558e9cdaf507a5c7",
     "sbomSha256": "1ad74a0dc59e1c37447a0d4496fcbe280394be7ddb7a0328ac5655b21c962b63",
     "sbomComponents": 100
   },
   "images": [
     {
       "name": "moapan-local:1.0.0",
-      "digest": "sha256:6d45fbe26d6a2f5c4030e0f8732b8e3173746826b0fae492dc3e3f259db70ef4",
+      "digest": "sha256:a032f9fc1fdafc0e38c101af1e42b620dfa49c023dc6ae6b3d541497cb4d67c6",
       "repoDigests": [
-        "moapan-local@sha256:6d45fbe26d6a2f5c4030e0f8732b8e3173746826b0fae492dc3e3f259db70ef4"
+        "moapan-local@sha256:a032f9fc1fdafc0e38c101af1e42b620dfa49c023dc6ae6b3d541497cb4d67c6"
       ],
       "platform": "linux/amd64",
-      "scanSha256": "c0d794a53bd51f24c6814ab5c4cb02ceecc4ff5286f8aac3009231fe39789bc2",
+      "scanSha256": "300f44dbd2296691ecc08b4315c515f07f631e2785b874a654feaf434c87cc6c",
       "findings": [
         {
           "id": "CVE-2026-102473",
@@ -550,12 +550,12 @@
     },
     {
       "name": "moapan-build:1.0.0",
-      "digest": "sha256:cd7e6ffa4361fe01796ea1d56b910a3e2a852296218666cfb0c744c1458fa32e",
+      "digest": "sha256:e75b64d9247b22dc4684ab1896f505e9c29b561417abf7aa0069056755e2b9c8",
       "repoDigests": [
-        "moapan-build@sha256:cd7e6ffa4361fe01796ea1d56b910a3e2a852296218666cfb0c744c1458fa32e"
+        "moapan-build@sha256:e75b64d9247b22dc4684ab1896f505e9c29b561417abf7aa0069056755e2b9c8"
       ],
       "platform": "linux/amd64",
-      "scanSha256": "b1a397a40bd55595e12562e1a33edbe9c7f628fd9cb44bb99998ab77960342ad",
+      "scanSha256": "f1bceab95530400adaaf363b0cd3515de40b8123a8a689d028b702d2ef7f1e52",
       "findings": [
         {
           "id": "CVE-2026-102473",
@@ -1014,7 +1014,7 @@
   "reports": [
     {
       "name": "source",
-      "sha256": "f18c5d30f54b3122c5cfd0d812eb35f928f34a517c0e1abe9d769f0d4740d3f7",
+      "sha256": "f620cd8bd7467d3b2177595ea14606069974d0d6bb8cb70b8abe3ed2a6699854",
       "packages": 327,
       "findings": [
         {
@@ -1035,13 +1035,13 @@
     },
     {
       "name": "jar",
-      "sha256": "83eb61d90b68e5df0b425790fe35f0016b676f2db5a5d1f136c17feb93cb1056",
+      "sha256": "fc0fd70b5adeaa429e4730d86cce0ec904c3f10b4f7f742c192ca66989d26242",
       "packages": 91,
       "findings": []
     },
     {
       "name": "sbom",
-      "sha256": "1e53290b89e947c79decaa74aef45baf47248a5c92a47b3e4f49604875104089",
+      "sha256": "41a36f2ad241cadf97c0a75f40a22f072b3defb61b6e9d517e247f25d908958c",
       "packages": 100,
       "findings": []
     }

@@ -20,10 +20,10 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 @RestController @org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication
 public class AuthController {
-    record Credentials(@NotNull @Size(min=4,max=32) String username,@NotNull @Size(min=15,max=256)String password){}
+    record Credentials(@NotNull @Size(min=1,max=128) String username,@NotNull @Size(min=6,max=256)String password){}
     public static final String TERMS_VERSION="2026-10-28.2";
-    record Signup(@NotNull @Size(min=4,max=32) String username,@NotNull @Size(min=15,max=256) String password,@NotNull @AssertTrue Boolean termsAccepted,@NotBlank @Size(max=32) String termsVersion){}
-    record Change(@NotNull String currentPassword,@NotNull @Size(min=15,max=256)String newPassword){}
+    record Signup(@NotNull @Size(min=1,max=128) String username,@NotNull @Size(min=6,max=256) String password,@NotNull @AssertTrue Boolean termsAccepted,@NotBlank @Size(max=32) String termsVersion){}
+    record Change(@NotNull String currentPassword,@NotNull @Size(min=6,max=256)String newPassword){}
     record Confirm(@NotNull String currentPassword){}
     record View(UUID id,String username,String role){}
     private final Accounts users;private final PasswordEncoder encoder;private final AuthenticationManager manager;private final SecurityContextRepository contexts;private final Limits limits;private final JdbcClient db;private final TransactionTemplate tx;private final Semaphore hashes=new Semaphore(4);
@@ -58,9 +58,9 @@ public class AuthController {
         hash(()->{if(!encoder.matches(confirm.currentPassword(),user.passwordHash))throw new ApiError(403,"invalid_credentials");tx.executeWithoutResult(s->{db.sql("DELETE FROM spring_session WHERE principal_name=:p").param("p",user.id.toString()).update();db.sql("DELETE FROM auth_rate_limits WHERE bucket=:b").param("b","password:"+user.id).update();db.sql("DELETE FROM auth_rate_limits WHERE bucket=:b").param("b","login:"+limits.fingerprint(user.username)).update();users.delete(user);});return null;});
         if(q.getSession(false)!=null)q.getSession(false).invalidate();SecurityContextHolder.clearContext();
     }
-    private static void passwordLength(String password){int n=password.codePointCount(0,password.length());if(n<15||n>128)throw new ApiError(400,"invalid_password_length");}
+    private static void passwordLength(String password){int n=password.codePointCount(0,password.length());if(n<6||n>128)throw new ApiError(400,"invalid_password_length");}
     private Account current(Authentication auth){return users.findById(UUID.fromString(auth.getName())).filter(a->a.active).orElseThrow(()->new ApiError(401,"authentication_required"));}
     private <T>T hash(java.util.function.Supplier<T> work){if(!hashes.tryAcquire())throw new ApiError(503,"hash_capacity");try{return work.get();}finally{hashes.release();}}
     private static View view(Account a){return new View(a.id,a.username,a.role);}
-    private static String normalize(String value){if(!value.matches("[A-Za-z0-9_]{4,32}"))throw new ApiError(400,"invalid_username");String n=value.toLowerCase(Locale.ROOT);if(!n.matches("[a-z0-9_]{4,32}"))throw new ApiError(400,"invalid_username");return n;}
+    private static String normalize(String value){if(!value.matches("[A-Za-z0-9_]{1,128}"))throw new ApiError(400,"invalid_username");String n=value.toLowerCase(Locale.ROOT);if(!n.matches("[a-z0-9_]{1,128}"))throw new ApiError(400,"invalid_username");return n;}
 }

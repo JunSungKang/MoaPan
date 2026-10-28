@@ -33,3 +33,5 @@ CI/CD는 사용자 명시 제외. PASS는 아래 실제 시험 범위의 통과�
 인증 UX/약관 보완: AC-06·07·21·22에 SecurityIntegrationTest.signupRequiresCurrentExplicitConsent 및 BrowserTest.simpleAuthFormsRequireConsentAndShowReadableTerms 추가. 전체 Java35 PASS/FAIL0/SKIP0. 약관 동의 버전·시각 외 회원 프로필이나 로컬 관심사 전송은 추가하지 않았다.
 
 로그인 제한 안내 보완: AC-07·09·22에 loginWarningsAndRetryAfterFollowStoredExpiry 및 loginWarningCountdownAndUnlockAreVisible 검증 추가. Java37 PASS, 공개 HTTPS 실제 응답과 합성 계정 정리 PASS(evidence/login-countdown.json).
+
+사용자 승인 입력 길이 변경: AC-06·07·22에 accountLengthBoundariesApplyToSignupLoginAndChange, usernameAndPasswordLengthsMatchBrowserAndAccountMenu 검증 추가. Java39 PASS/FAIL0/SKIP0. 비밀번호 최소6자·아이디1~128자가 최신 제품 요구사항이며 기존 최소15자·아이디4~32자를 대체한다.

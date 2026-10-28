@@ -44,3 +44,7 @@ AUTH-001: supplementaryUnicodePasswordUsesCodePointLimit 테스트는 수정 전
 정책 문구 평이화: Java35 PASS/FAIL0/SKIP0 및 변경 이미지 검사 PASS. 실제 공개 HTTPS에서 쉬운 문구 제공·구버전 약관 가입400·2026-10-28.2 동의 가입/로그인/탈퇴 PASS. 상세 결과는 evidence/policy-update.json. 실제 수집 smoke는 앞선 실행 증빙을 유지하며 이번 문구 개정 때 출처 설정을 다시 변경하지 않았다.
 
 로그인 제한 UI: Java37 PASS/FAIL0/SKIP0 (단위11·PostgreSQL20·Playwright6). 1~4회 잔여 횟수 미노출,5~9회5~1 반환,10회429, 실제 기한125초·기한 불연장·만료 후 성공 검증. 브라우저에서5회 안내·02:05→02:03 감소·버튼 비활성/만료 재활성·자동 요청 없음·아이디 변경 시 UI 해제를 검증했다. 합성 화면은 build/reports/screenshots/login-countdown-390.png.
+
+계정 입력 길이 변경: Java39 PASS/FAIL0/SKIP0 (단위11·PostgreSQL21·Playwright7). 아이디 빈값/129자 거부,1/128자 가입·로그인·변경·탈퇴, 비밀번호5자 및5개 보조평면문자 거부·공백 포함6자 보존·6자 한글 변경, 기존128 Unicode 상한 테스트 PASS. 모바일128자 계정 메뉴 넘침 없음과 각 입력의 길이 속성 검증 PASS.
+
+실제 실행: V4 success=true, 공개 HTTPS에서1자·128자 아이디/6자 비밀번호 가입·로그인·변경·탈퇴,5자 비밀번호 거부 PASS. 합성 계정은 삭제했다. 근거 evidence/account-lengths.json; db/web/proxy healthy,worker running.

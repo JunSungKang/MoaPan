@@ -3,10 +3,10 @@
 <body class="auth-page"><a class="skip" href="#main">본문으로 이동</a><header class="auth-brand"><a href="/index.html" data-brand>모아판</a></header>
 <main id="main" class="auth-main"><h1>회원가입</h1>
 <form data-mode="signup" data-terms-version="2026-10-28.2">
-<label for="username">아이디</label><input id="username" name="username" required minlength="4" maxlength="32" pattern="[A-Za-z0-9_]{4,32}" autocomplete="username" autocapitalize="none" spellcheck="false" aria-describedby="username-error username-hint">
-<small id="username-hint">영문·숫자·밑줄 4~32자</small><small id="username-error" class="field-error"></small>
-<label for="password">비밀번호</label><input id="password" name="password" type="password" required minlength="15" maxlength="256" autocomplete="new-password" aria-describedby="password-error password-hint">
-<small id="password-hint">15~128자 · 공백 사용 가능</small><small id="password-error" class="field-error"></small>
+<label for="username">아이디</label><input id="username" name="username" required minlength="1" maxlength="128" pattern="[A-Za-z0-9_]{1,128}" autocomplete="username" autocapitalize="none" spellcheck="false" aria-describedby="username-error username-hint">
+<small id="username-hint">영문·숫자·밑줄 1~128자</small><small id="username-error" class="field-error"></small>
+<label for="password">비밀번호</label><input id="password" name="password" type="password" required minlength="6" maxlength="256" autocomplete="new-password" aria-describedby="password-error password-hint">
+<small id="password-hint">6~128자 · 공백 사용 가능</small><small id="password-error" class="field-error"></small>
 <div class="agreement"><label><input name="termsAccepted" type="checkbox" required aria-describedby="terms-error"> 이용약관에 동의합니다 (필수)</label><a href="/terms.html" target="_blank" rel="noopener noreferrer">약관 전문 읽기 ↗</a><small id="terms-error" class="field-error"></small></div>
 <p class="recovery-hint">비밀번호를 잊으면 계정을 복구할 수 없습니다.</p>
 <button type="submit">가입하기</button><p role="status" aria-live="polite"></p>

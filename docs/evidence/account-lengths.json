@@ -1,0 +1,23 @@
+{
+  "checkedAt": "2026-10-28T08:22:43.065Z",
+  "tlsVerified": true,
+  "results": [
+    {
+      "usernameLength": 1,
+      "passwordLength": 6,
+      "signup": 200,
+      "login": 200,
+      "change": 200,
+      "fiveCharactersRejected": 400
+    },
+    {
+      "usernameLength": 128,
+      "passwordLength": 6,
+      "signup": 200,
+      "login": 200,
+      "change": 200,
+      "fiveCharactersRejected": 400
+    }
+  ],
+  "syntheticAccountsDeleted": true
+}

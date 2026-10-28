@@ -14,7 +14,7 @@
 |PATCH|/api/v1/account/password|currentPassword,newPassword. 모든 기존 세션 종료, 재로그인 필요|
 |DELETE|/api/v1/account|currentPassword. 계정·세션·연결 카운터 삭제|
 
-username은 ASCII 영문·숫자·밑줄4~32, 대문자를 소문자로 정규화. 비밀번호는15~128 Unicode code point, trim/절단하지 않는다. 이메일·role 등 추가 필드 금지. 가입 전 비밀번호 분실 복구 불가 안내.
+username은 ASCII 영문·숫자·밑줄1~128, 대문자를 소문자로 정규화. 비밀번호는6~128 Unicode code point, trim/절단하지 않는다. 이메일·role 등 추가 필드 금지. 가입 전 비밀번호 분실 복구 불가 안내.
 
 ## 회원 뉴스
 

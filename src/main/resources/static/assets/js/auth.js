@@ -19,8 +19,8 @@ form.addEventListener('submit',async event=>{
   for(const input of form.elements)input.removeAttribute('aria-invalid');
   document.querySelector('[role=status]').textContent='';
   const username=form.elements.username.value,password=form.elements.password.value,signup=form.dataset.mode==='signup';
-  if(!/^[A-Za-z0-9_]{4,32}$/.test(username)){error('username','영문·숫자·밑줄 4~32자로 입력하세요.');return;}
-  if([...password].length<15||[...password].length>128){error('password','비밀번호는 15~128자로 입력하세요.');return;}
+  if(!/^[A-Za-z0-9_]{1,128}$/.test(username)){error('username','영문·숫자·밑줄 1~128자로 입력하세요.');return;}
+  if([...password].length<6||[...password].length>128){error('password','비밀번호는 6~128자로 입력하세요.');return;}
   if(signup&&!form.elements.termsAccepted.checked){error('termsAccepted','약관을 읽고 동의해 주세요.');return;}
   pending=true;button.disabled=true;
   try{

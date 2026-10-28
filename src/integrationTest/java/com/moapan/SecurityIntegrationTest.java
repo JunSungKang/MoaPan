@@ -87,6 +87,21 @@ class SecurityIntegrationTest {
         repo.db().sql("UPDATE auth_rate_limits SET expires_at=now()-interval '1 second' WHERE bucket=:b").param("b",bucket).update();
         mvc.perform(post("/api/v1/auth/login").with(csrf()).contentType("application/json").content(correct)).andExpect(status().isOk());
     }
+    @Test @Order(2) void accountLengthBoundariesApplyToSignupLoginAndChange()throws Exception{
+        for(String invalid:List.of("","u".repeat(129)))mvc.perform(post("/api/v1/auth/signup").with(csrf()).contentType("application/json").content("{\"username\":\""+invalid+"\",\"password\":\"abcdef\",\"termsAccepted\":true,\"termsVersion\":\""+AuthController.TERMS_VERSION+"\"}")).andExpect(status().isBadRequest());
+        for(String invalid:List.of("abcde","😀".repeat(5)))mvc.perform(post("/api/v1/auth/signup").with(csrf()).contentType("application/json").content("{\"username\":\"length_bad\",\"password\":\""+invalid+"\",\"termsAccepted\":true,\"termsVersion\":\""+AuthController.TERMS_VERSION+"\"}")).andExpect(status().isBadRequest());
+        assertTrue(accounts.findByUsername("length_bad").isEmpty());
+        for(String username:List.of("z","u".repeat(128))){
+            String password=" aB1! ";
+            mvc.perform(post("/api/v1/auth/signup").with(csrf()).contentType("application/json").content("{\"username\":\""+username+"\",\"password\":\""+password+"\",\"termsAccepted\":true,\"termsVersion\":\""+AuthController.TERMS_VERSION+"\"}")).andExpect(status().isOk());
+            var first=mvc.perform(post("/api/v1/auth/login").with(csrf()).contentType("application/json").content("{\"username\":\""+username+"\",\"password\":\""+password+"\"}")).andExpect(status().isOk()).andReturn().getResponse().getCookie("SESSION");
+            mvc.perform(patch("/api/v1/account/password").cookie(first).with(csrf()).contentType("application/json").content("{\"currentPassword\":\""+password+"\",\"newPassword\":\"abcde\"}")).andExpect(status().isBadRequest());
+            String changed="가나다라마바";
+            mvc.perform(patch("/api/v1/account/password").cookie(first).with(csrf()).contentType("application/json").content("{\"currentPassword\":\""+password+"\",\"newPassword\":\""+changed+"\"}")).andExpect(status().isOk());
+            var second=mvc.perform(post("/api/v1/auth/login").with(csrf()).contentType("application/json").content("{\"username\":\""+username+"\",\"password\":\""+changed+"\"}")).andExpect(status().isOk()).andReturn().getResponse().getCookie("SESSION");
+            mvc.perform(delete("/api/v1/account").cookie(second).with(csrf()).contentType("application/json").content("{\"currentPassword\":\""+changed+"\"}")).andExpect(status().isOk());
+        }
+    }
     private jakarta.servlet.http.Cookie login(String user)throws Exception {
         var initial=mvc.perform(get("/api/v1/auth/csrf")).andExpect(status().isOk()).andReturn().getResponse().getCookie("SESSION");
         assertNotNull(initial);
@@ -165,7 +180,7 @@ class SecurityIntegrationTest {
     }
     @Test @Order(10) void supplementaryUnicodePasswordUsesCodePointLimit()throws Exception {
         signup("synthetic_unicode");var cookie=login("synthetic_unicode");
-        for(String invalid:List.of("😀".repeat(14),"😀".repeat(129))) {
+        for(String invalid:List.of("😀".repeat(5),"😀".repeat(129))) {
             mvc.perform(patch("/api/v1/account/password").cookie(cookie).with(csrf()).contentType("application/json").content("{\"currentPassword\":\""+PASSWORD+"\",\"newPassword\":\""+invalid+"\"}")).andExpect(status().isBadRequest());
         }
         String changed="😀".repeat(128);

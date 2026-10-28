@@ -65,6 +65,16 @@ class BrowserTest {
             p.locator("button[type=submit]").click();p.waitForFunction("document.querySelector('#login-countdown').textContent==='02:05'");p.locator("#username").fill("another_account");assertFalse(p.locator("#login-limit").isVisible());assertFalse(p.locator("button[type=submit]").isDisabled());
         }
     }
+    @Test void usernameAndPasswordLengthsMatchBrowserAndAccountMenu(){
+        try(var context=browser.newContext()){
+            Page p=context.newPage();var requests=new ArrayList<String>();
+            p.route("**/api/v1/auth/signup",r->{requests.add(r.request().postData());r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{}"));});
+            p.navigate(origin+"/signup.html");assertEquals("128",p.locator("#username").getAttribute("maxlength"));p.locator("#username").fill("a");p.locator("#password").fill("abcde");p.locator("input[type=checkbox]").check();p.locator("button[type=submit]").click();assertTrue(requests.isEmpty());
+            p.locator("#password").fill("abcdef");p.locator("button[type=submit]").click();p.waitForURL("**/login.html");assertEquals(1,requests.size());assertEquals("6",p.locator("#password").getAttribute("minlength"));assertEquals("1",p.locator("#username").getAttribute("minlength"));
+            p.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\""+"u".repeat(128)+"\",\"role\":\"USER\"}")));
+            p.setViewportSize(390,900);p.navigate(origin+"/settings.html");p.waitForSelector("#account-menu button");assertEquals("6",p.locator("[name=newPassword]").getAttribute("minlength"));assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth <= innerWidth"));
+        }
+    }
     @Test void interestSentenceStaysLocalAndAccountsAreSeparated(){
         try(var context=browser.newContext()){Page p=context.newPage();List<String>network=new ArrayList<>();p.onRequest(r->network.add(r.url()+" "+Objects.toString(r.postData(),"")));active=A;p.navigate(origin+"/settings.html");p.waitForSelector("#tag-settings input");p.locator("#interest-sentence").fill("인공지능 synthetic-interest-private-phrase");p.locator("#extract").click();p.locator("#confirm-tags").click();p.waitForFunction("document.querySelector('#interest-sentence').value === ''");
             assertEquals(3,((Number)p.evaluate("async id => (await import('/assets/js/preferences.js')).loadPreferences(id).then(s=>s.weights.ai)",A)).intValue());
