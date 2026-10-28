@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 4,
+  "workSlug": "moapan-v1",
+  "flowType": "promotion",
+  "branch": "codex/moapan-v1",
+  "targetBranch": "main",
+  "baseSha": "55d0d80c9b7780bb55193b529b053af76fe84a0c",
+  "mergeMethod": "merge",
+  "governance": {
+    "prAuthorLogin": "JunSungKang",
+    "assigneeLogin": "JunSungKang",
+    "reviewerLogin": "junsung-bot[bot]",
+    "requiredChecks": [],
+    "commitAuthor": {
+      "name": "jun-sung, Kang",
+      "email": "kjuns1@naver.com"
+    },
+    "coAuthors": [
+      {
+        "name": "Codex",
+        "email": "codex@openai.com"
+      },
+      {
+        "name": "junsung-bot[bot]",
+        "email": "302617028+junsung-bot[bot]@users.noreply.github.com"
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "v1",
+      "expectedPaths": [
+        "src/**",
+        "docs/**",
+        "scripts/**",
+        ".github/**",
+        "gradle/**",
+        "build.gradle",
+        "settings.gradle",
+        "gradle.properties",
+        "gradle.lockfile",
+        "gradlew",
+        "gradlew.bat",
+        "README.md",
+        "AGENTS.md",
+        ".gitignore",
+        ".dockerignore",
+        ".env.example",
+        "Dockerfile",
+        "compose.yaml",
+        "Caddyfile"
+      ],
+      "forbiddenPaths": [
+        ".github/workflows/**",
+        ".env",
+        "**/*.pem",
+        "**/*.key"
+      ],
+      "acceptanceCriteria": [
+        "REQ-01 through REQ-12 and AC-01 through AC-25 with actual result evidence",
+        "No CI/CD or scheduled workflows; local verification only",
+        "No private interests transmitted or persisted server-side"
+      ],
+      "validationCommands": [
+        "./gradlew --no-daemon clean check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest",
+        "docker compose config",
+        "docker compose up -d --build"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/PROGRESS.md",
+          "docs/TEST_REPORT.md",
+          "docs/ACCEPTANCE_MATRIX.md"
+        ]
+      }
+    }
+  ]
+}

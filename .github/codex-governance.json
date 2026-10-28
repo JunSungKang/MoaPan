@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 2,
+  "prAuthorLogin": "JunSungKang",
+  "assigneeLogin": "JunSungKang",
+  "reviewerLogin": "junsung-bot[bot]",
+  "requiredChecks": [],
+  "commitAuthor": {
+    "name": "jun-sung, Kang",
+    "email": "kjuns1@naver.com"
+  },
+  "coAuthors": [
+    {
+      "name": "Codex",
+      "email": "codex@openai.com"
+    },
+    {
+      "name": "junsung-bot[bot]",
+      "email": "302617028+junsung-bot[bot]@users.noreply.github.com"
+    }
+  ],
+  "mergeMethods": [
+    "squash",
+    "merge"
+  ],
+  "phase": "local-verification",
+  "note": "User explicitly excludes CI/CD, GitHub Actions and scheduled workflows. requiredChecks remains empty; local tests and security evidence are required before push. No automatic merge or deployment."
+}
