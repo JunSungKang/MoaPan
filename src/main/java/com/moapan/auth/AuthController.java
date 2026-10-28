@@ -37,7 +37,7 @@ public class AuthController {
     @PostMapping("/api/v1/auth/login") View login(@Valid @RequestBody Credentials input,HttpServletRequest request,HttpServletResponse response){
         passwordLength(input.password());limits.auth("login_global",300,900);String username=normalize(input.username());String bucket="login:"+limits.fingerprint(username);limits.checkAuth(bucket,10);
         return hash(()->{
-            try{manager.authenticate(new UsernamePasswordAuthenticationToken(username,input.password()));}catch(AuthenticationException e){limits.auth(bucket,10,900);throw new ApiError(401,"invalid_credentials");}
+            try{manager.authenticate(new UsernamePasswordAuthenticationToken(username,input.password()));}catch(AuthenticationException e){int failures=limits.auth(bucket,10,900);limits.checkAuth(bucket,10);throw new ApiError(401,"invalid_credentials",null,failures>=5?10-failures:null);}
             Account user=users.findByUsername(username).filter(a->a.active).orElseThrow(()->new ApiError(401,"invalid_credentials"));
             if(request.getSession(false)!=null)request.changeSessionId();else request.getSession(true);
             var auth=UsernamePasswordAuthenticationToken.authenticated(user.id.toString(),null,List.of(new SimpleGrantedAuthority("ROLE_"+user.role)));

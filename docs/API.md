@@ -63,3 +63,5 @@ JSON_API는 단일 GET 응답의 제한된 점 구분 경로만 지원: items,id
 관심사 저장·클릭 추적·전체 export·원문 전문 프록시·미인증 뉴스 dump API는 만들지 않는다.
 
 가입 약관 동의: termsAccepted 누락·false·null, termsVersion 누락·현재 버전 불일치는400이다. 동의 버전과 서버 시각을 계정과 함께 저장하며 공개 계정 DTO에 추가 노출하지 않는다. 로그인 DTO에는 이 필드를 받지 않는다. 기존 계정의 동의 이력은 소급 생성하지 않는다.
+
+로그인 실패1~4회:401 invalid_credentials.5~9회:같은401 응답에 attemptsRemaining(5~1) 추가.10회부터429 login_limited와 실제 DB 제한 만료까지의 Retry-After(초)를 반환한다. 전역 로그인 횟수 제한은429 rate_limited로 구분한다. 존재하지 않는 아이디도 같은 실패 카운터 정책을 따른다. 제한된 요청은 만료를 연장하지 않는다.

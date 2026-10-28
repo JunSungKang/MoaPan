@@ -18,20 +18,21 @@ public class Limits {
         if(secret.length()<32) throw new IllegalStateException("MOAPAN_SECRET must have at least 32 characters"); key=secret.getBytes(java.nio.charset.StandardCharsets.UTF_8);
     }
     public String fingerprint(String value){try{Mac mac=Mac.getInstance("HmacSHA256");mac.init(new SecretKeySpec(key,"HmacSHA256"));return HexFormat.of().formatHex(mac.doFinal(value.getBytes(java.nio.charset.StandardCharsets.UTF_8)));}catch(Exception e){throw new IllegalStateException("HMAC unavailable");}}
-    public void auth(String bucket,int maximum,int seconds){
-        int count=tx.execute(s -> {
+    public int auth(String bucket,int maximum,int seconds){
+        int[] result=tx.execute(s -> {
             if(db.sql("SELECT 1 FROM auth_rate_limits WHERE bucket=:b").param("b",bucket).query(Integer.class).list().isEmpty()){
                 db.sql("SELECT pg_advisory_xact_lock(727002)").query((rs,n)->1).list();
                 db.sql("DELETE FROM auth_rate_limits WHERE expires_at<now()").update();
                 boolean full=db.sql("SELECT count(*)>=10000 AND NOT EXISTS(SELECT 1 FROM auth_rate_limits WHERE bucket=:b) FROM auth_rate_limits").param("b",bucket).query(Boolean.class).single();
                 if(full)throw new ApiError(503,"security_counter_capacity");
             }
-            return db.sql("INSERT INTO auth_rate_limits(bucket,window_start,used,expires_at) VALUES (:b,now(),1,now()+make_interval(secs=>:s)) ON CONFLICT(bucket) DO UPDATE SET used=CASE WHEN auth_rate_limits.expires_at<=now() THEN 1 ELSE auth_rate_limits.used+1 END, window_start=CASE WHEN auth_rate_limits.expires_at<=now() THEN now() ELSE auth_rate_limits.window_start END, expires_at=CASE WHEN auth_rate_limits.expires_at<=now() THEN now()+make_interval(secs=>:s) ELSE auth_rate_limits.expires_at END RETURNING used").param("b",bucket).param("s",seconds).query(Integer.class).single();});
-        if(count>maximum) throw new ApiError(429,"rate_limited");
+            return db.sql("INSERT INTO auth_rate_limits(bucket,window_start,used,expires_at) VALUES (:b,now(),1,now()+make_interval(secs=>:s)) ON CONFLICT(bucket) DO UPDATE SET used=CASE WHEN auth_rate_limits.expires_at<=now() THEN 1 ELSE auth_rate_limits.used+1 END, window_start=CASE WHEN auth_rate_limits.expires_at<=now() THEN now() ELSE auth_rate_limits.window_start END, expires_at=CASE WHEN auth_rate_limits.expires_at<=now() THEN now()+make_interval(secs=>:s) ELSE auth_rate_limits.expires_at END RETURNING used, GREATEST(1,ceil(extract(epoch FROM (expires_at-now()))))::int AS remaining").param("b",bucket).param("s",seconds).query((rs,n)->new int[]{rs.getInt("used"),rs.getInt("remaining")}).single();});
+        if(result[0]>maximum) throw new ApiError(429,bucket.startsWith("login:")?"login_limited":"rate_limited",result[1],null);
+        return result[0];
     }
     public void checkAuth(String bucket,int maximum){
-        int count=db.sql("SELECT COALESCE((SELECT used FROM auth_rate_limits WHERE bucket=:b AND expires_at>now()),0)").param("b",bucket).query(Integer.class).single();
-        if(count>=maximum)throw new ApiError(429,"rate_limited");
+        int remaining=db.sql("SELECT COALESCE((SELECT GREATEST(1,ceil(extract(epoch FROM (expires_at-now()))))::int FROM auth_rate_limits WHERE bucket=:b AND expires_at>now() AND used>=:maximum),0)").param("b",bucket).param("maximum",maximum).query(Integer.class).single();
+        if(remaining>0)throw new ApiError(429,"login_limited",remaining,null);
     }
     public UUID beginNews(UUID user){
         UUID id=UUID.randomUUID();

@@ -51,6 +51,20 @@ class BrowserTest {
             assertEquals(1,bodies.size());assertTrue(bodies.getFirst().contains("\"termsAccepted\":true"));assertTrue(bodies.getFirst().contains("\"termsVersion\":\"2026-10-28.2\""));
         }
     }
+    @Test void loginWarningCountdownAndUnlockAreVisible()throws Exception{
+        try(var context=browser.newContext()){
+            Page p=context.newPage();var calls=new java.util.concurrent.atomic.AtomicInteger();
+            p.route("**/api/v1/auth/login",r->{int n=calls.incrementAndGet();r.fulfill(new Route.FulfillOptions().setStatus(n==1?401:429).setContentType("application/json").setHeaders(Map.of("Retry-After","125")).setBody(n==1?"{\"error\":\"invalid_credentials\",\"attemptsRemaining\":5}":"{\"error\":\"login_limited\"}"));});
+            p.setViewportSize(390,900);p.navigate(origin+"/login.html");p.evaluate("window.testNow=Date.now();Date.now=()=>window.testNow");
+            p.locator("#username").fill("synthetic_countdown");p.locator("#password").fill("synthetic wrong password");p.locator("button[type=submit]").click();
+            p.waitForFunction("document.querySelector('[role=status]').textContent.includes('5회 남았습니다')");assertFalse(p.locator("#login-limit").isVisible());
+            p.locator("button[type=submit]").click();p.waitForFunction("document.querySelector('#login-countdown').textContent==='02:05'");assertTrue(p.locator("button[type=submit]").isDisabled());
+            p.evaluate("window.testNow+=2000");p.waitForFunction("document.querySelector('#login-countdown').textContent==='02:03'");assertEquals(2,calls.get());
+            Files.createDirectories(Path.of("build/reports/screenshots"));p.screenshot(new Page.ScreenshotOptions().setPath(Path.of("build/reports/screenshots/login-countdown-390.png")).setFullPage(true));
+            p.evaluate("window.testNow+=123000");p.waitForFunction("!document.querySelector('button[type=submit]').disabled");assertFalse(p.locator("#login-limit").isVisible());assertTrue(p.locator("[role=status]").textContent().contains("다시 로그인할 수 있습니다"));assertEquals(2,calls.get());
+            p.locator("button[type=submit]").click();p.waitForFunction("document.querySelector('#login-countdown').textContent==='02:05'");p.locator("#username").fill("another_account");assertFalse(p.locator("#login-limit").isVisible());assertFalse(p.locator("button[type=submit]").isDisabled());
+        }
+    }
     @Test void interestSentenceStaysLocalAndAccountsAreSeparated(){
         try(var context=browser.newContext()){Page p=context.newPage();List<String>network=new ArrayList<>();p.onRequest(r->network.add(r.url()+" "+Objects.toString(r.postData(),"")));active=A;p.navigate(origin+"/settings.html");p.waitForSelector("#tag-settings input");p.locator("#interest-sentence").fill("인공지능 synthetic-interest-private-phrase");p.locator("#extract").click();p.locator("#confirm-tags").click();p.waitForFunction("document.querySelector('#interest-sentence').value === ''");
             assertEquals(3,((Number)p.evaluate("async id => (await import('/assets/js/preferences.js')).loadPreferences(id).then(s=>s.weights.ai)",A)).intValue());

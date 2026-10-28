@@ -1,0 +1,59 @@
+{
+  "checkedAt": "2026-10-28T08:06:30.075Z",
+  "tlsVerified": true,
+  "failures": [
+    {
+      "attempt": 1,
+      "status": 401,
+      "remaining": null
+    },
+    {
+      "attempt": 2,
+      "status": 401,
+      "remaining": null
+    },
+    {
+      "attempt": 3,
+      "status": 401,
+      "remaining": null
+    },
+    {
+      "attempt": 4,
+      "status": 401,
+      "remaining": null
+    },
+    {
+      "attempt": 5,
+      "status": 401,
+      "remaining": 5
+    },
+    {
+      "attempt": 6,
+      "status": 401,
+      "remaining": 4
+    },
+    {
+      "attempt": 7,
+      "status": 401,
+      "remaining": 3
+    },
+    {
+      "attempt": 8,
+      "status": 401,
+      "remaining": 2
+    },
+    {
+      "attempt": 9,
+      "status": 401,
+      "remaining": 1
+    },
+    {
+      "attempt": 10,
+      "status": 429,
+      "remaining": null
+    }
+  ],
+  "retryAfterSeconds": 900,
+  "correctPasswordBlockedDuringLimit": true,
+  "syntheticAccountAndSessionsDeleted": true
+}

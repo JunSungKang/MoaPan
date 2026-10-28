@@ -6,13 +6,17 @@ import org.springframework.web.bind.annotation.*;
 public class ApiError extends RuntimeException {
     final int status; final String code;
     public int statusCode(){return status;}
-    public ApiError(int status,String code) { super(code); this.status=status; this.code=code; }
+    final Integer retryAfterSeconds; final Integer attemptsRemaining;
+    public ApiError(int status,String code) { this(status,code,null,null); }
+    public ApiError(int status,String code,Integer retryAfterSeconds,Integer attemptsRemaining) { super(code);this.status=status;this.code=code;this.retryAfterSeconds=retryAfterSeconds;this.attemptsRemaining=attemptsRemaining; }
     @RestControllerAdvice
     static class Handler {
         @ExceptionHandler(ApiError.class) ResponseEntity<?> api(ApiError e) {
             var b=ResponseEntity.status(e.status).cacheControl(CacheControl.noStore());
-            if(e.status==429) b.header("Retry-After","60");
-            return b.body(java.util.Map.of("error",e.code));
+            if(e.status==429) b.header("Retry-After",String.valueOf(e.retryAfterSeconds==null?60:e.retryAfterSeconds));
+            var body=new java.util.LinkedHashMap<String,Object>();body.put("error",e.code);
+            if(e.attemptsRemaining!=null)body.put("attemptsRemaining",e.attemptsRemaining);
+            return b.body(body);
         }
         @ExceptionHandler({org.springframework.dao.DataIntegrityViolationException.class,org.springframework.orm.ObjectOptimisticLockingFailureException.class})
         ResponseEntity<?> conflict(Exception e) { return ResponseEntity.status(409).body(java.util.Map.of("error","conflict")); }

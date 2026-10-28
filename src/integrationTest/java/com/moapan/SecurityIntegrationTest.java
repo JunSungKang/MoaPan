@@ -69,6 +69,24 @@ class SecurityIntegrationTest {
         assertEquals(AuthController.TERMS_VERSION,a.termsVersion);assertFalse(a.termsAcceptedAt.isBefore(before));assertFalse(a.termsAcceptedAt.isAfter(Instant.now()));
         Account legacy=accounts.saveAndFlush(new Account("legacy_consent",a.passwordHash));assertNull(accounts.findById(legacy.id).orElseThrow().termsAcceptedAt);assertNull(legacy.termsVersion);
     }
+    @Test @Order(2) void loginWarningsAndRetryAfterFollowStoredExpiry()throws Exception{
+        signup("countdown_user");
+        String body="{\"username\":\"countdown_user\",\"password\":\"synthetic wrong password\"}";
+        String bucket="login:"+limits.fingerprint("countdown_user");
+        for(int i=1;i<=10;i++){
+            var result=mvc.perform(post("/api/v1/auth/login").with(csrf()).contentType("application/json").content(body));
+            if(i<10){result.andExpect(status().isUnauthorized());if(i<5)result.andExpect(jsonPath("$.attemptsRemaining").doesNotExist());else result.andExpect(jsonPath("$.attemptsRemaining").value(10-i));}
+            else{var response=result.andExpect(status().isTooManyRequests()).andExpect(jsonPath("$.error").value("login_limited")).andReturn().getResponse();int retry=Integer.parseInt(response.getHeader("Retry-After"));assertTrue(retry>850&&retry<=900);}
+        }
+        repo.db().sql("UPDATE auth_rate_limits SET expires_at=now()+interval '125 seconds' WHERE bucket=:b").param("b",bucket).update();
+        Instant expires=repo.db().sql("SELECT expires_at FROM auth_rate_limits WHERE bucket=:b").param("b",bucket).query((rs,n)->rs.getTimestamp(1).toInstant()).single();
+        String correct="{\"username\":\"countdown_user\",\"password\":\""+PASSWORD+"\"}";
+        var blocked=mvc.perform(post("/api/v1/auth/login").with(csrf()).contentType("application/json").content(correct)).andExpect(status().isTooManyRequests()).andReturn().getResponse();
+        int retry=Integer.parseInt(blocked.getHeader("Retry-After"));assertTrue(retry>=120&&retry<=125);
+        assertEquals(expires,repo.db().sql("SELECT expires_at FROM auth_rate_limits WHERE bucket=:b").param("b",bucket).query((rs,n)->rs.getTimestamp(1).toInstant()).single());
+        repo.db().sql("UPDATE auth_rate_limits SET expires_at=now()-interval '1 second' WHERE bucket=:b").param("b",bucket).update();
+        mvc.perform(post("/api/v1/auth/login").with(csrf()).contentType("application/json").content(correct)).andExpect(status().isOk());
+    }
     private jakarta.servlet.http.Cookie login(String user)throws Exception {
         var initial=mvc.perform(get("/api/v1/auth/csrf")).andExpect(status().isOk()).andReturn().getResponse().getCookie("SESSION");
         assertNotNull(initial);

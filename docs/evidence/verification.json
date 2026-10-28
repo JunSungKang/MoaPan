@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-28T07:44:34.335Z",
+  "checkedAt": "2026-10-28T08:06:31.497Z",
   "externalDeployment": {
     "status": "PASS",
     "scope": "User-authorized local Mac service reachable from mobile internet; separate hosting deployment excluded",
@@ -29,7 +29,7 @@
         "failures": 0,
         "errors": 0,
         "skipped": 0,
-        "timestamp": "2026-10-28T07:42:26.038Z"
+        "timestamp": "2026-10-28T08:01:54.508Z"
       },
       {
         "task": "test",
@@ -38,28 +38,28 @@
         "failures": 0,
         "errors": 0,
         "skipped": 0,
-        "timestamp": "2026-10-28T07:42:26.171Z"
+        "timestamp": "2026-10-28T08:01:54.645Z"
       },
       {
         "task": "integrationTest",
         "name": "com.moapan.SecurityIntegrationTest",
-        "tests": 19,
+        "tests": 20,
         "failures": 0,
         "errors": 0,
         "skipped": 0,
-        "timestamp": "2026-10-28T07:42:26.828Z"
+        "timestamp": "2026-10-28T08:01:55.706Z"
       },
       {
         "task": "e2eTest",
         "name": "com.moapan.BrowserTest",
-        "tests": 5,
+        "tests": 6,
         "failures": 0,
         "errors": 0,
         "skipped": 0,
-        "timestamp": "2026-10-28T07:42:35.331Z"
+        "timestamp": "2026-10-28T08:02:04.992Z"
       }
     ],
-    "total": 35,
+    "total": 37,
     "bootstrap": {
       "passed": 9,
       "failed": 0,
@@ -71,19 +71,19 @@
     "springBoot": "4.1.2",
     "gradle": "9.8.2",
     "postgresql": "18.6",
-    "jarSha256": "61e9fc02dafa77337e797d3a642635565264860c54da37b7a3db9c9dd2dec5d3",
+    "jarSha256": "037b3950cb7d384ae0fa91845c6d6d41bc9e05664e2c899f849d95fd5e3f3374",
     "sbomSha256": "1ad74a0dc59e1c37447a0d4496fcbe280394be7ddb7a0328ac5655b21c962b63",
     "sbomComponents": 100
   },
   "images": [
     {
       "name": "moapan-local:1.0.0",
-      "digest": "sha256:8fcc1fd15bc0a2a134d385e9d0cbd0f79dfcf39106d993905dabaa8710a4a30b",
+      "digest": "sha256:6d45fbe26d6a2f5c4030e0f8732b8e3173746826b0fae492dc3e3f259db70ef4",
       "repoDigests": [
-        "moapan-local@sha256:8fcc1fd15bc0a2a134d385e9d0cbd0f79dfcf39106d993905dabaa8710a4a30b"
+        "moapan-local@sha256:6d45fbe26d6a2f5c4030e0f8732b8e3173746826b0fae492dc3e3f259db70ef4"
       ],
       "platform": "linux/amd64",
-      "scanSha256": "dd2a848d902b169f62c5264cf0103be1ddb66211f76a6b9d1c914668be662f70",
+      "scanSha256": "c0d794a53bd51f24c6814ab5c4cb02ceecc4ff5286f8aac3009231fe39789bc2",
       "findings": [
         {
           "id": "CVE-2026-102473",
@@ -550,12 +550,12 @@
     },
     {
       "name": "moapan-build:1.0.0",
-      "digest": "sha256:d2da2520e375004ae1393c6a2e2690a7df196aaa41d6e1c594d029b74b6fb181",
+      "digest": "sha256:cd7e6ffa4361fe01796ea1d56b910a3e2a852296218666cfb0c744c1458fa32e",
       "repoDigests": [
-        "moapan-build@sha256:d2da2520e375004ae1393c6a2e2690a7df196aaa41d6e1c594d029b74b6fb181"
+        "moapan-build@sha256:cd7e6ffa4361fe01796ea1d56b910a3e2a852296218666cfb0c744c1458fa32e"
       ],
       "platform": "linux/amd64",
-      "scanSha256": "7b269fbe82710e0b29e0620409ce3051ed897ecba4ebe5e1e257c3ecf0dcce82",
+      "scanSha256": "b1a397a40bd55595e12562e1a33edbe9c7f628fd9cb44bb99998ab77960342ad",
       "findings": [
         {
           "id": "CVE-2026-102473",
@@ -1014,7 +1014,7 @@
   "reports": [
     {
       "name": "source",
-      "sha256": "50290aced538815c64147d03776d725069a961e40ce6344dbff83958d7a1be11",
+      "sha256": "f18c5d30f54b3122c5cfd0d812eb35f928f34a517c0e1abe9d769f0d4740d3f7",
       "packages": 327,
       "findings": [
         {
@@ -1035,13 +1035,13 @@
     },
     {
       "name": "jar",
-      "sha256": "15940c0e27e5e25d373eb2cc19838eac983aed0fde3e773bf72ed9895effd9c3",
+      "sha256": "83eb61d90b68e5df0b425790fe35f0016b676f2db5a5d1f136c17feb93cb1056",
       "packages": 91,
       "findings": []
     },
     {
       "name": "sbom",
-      "sha256": "95b444ffe582c440d4abe5d3198735c8467321da4249685ebfe4189ee3cb9352",
+      "sha256": "1e53290b89e947c79decaa74aef45baf47248a5c92a47b3e4f49604875104089",
       "packages": 100,
       "findings": []
     }

@@ -31,3 +31,5 @@ CI/CD는 사용자 명시 제외. PASS는 아래 실제 시험 범위의 통과�
 |AC-25|12|GitHub 전달|PASS|guarded 사람 commit/push; 복구 커밋767f2b409e534a1f74ceb3630050a556b6e88eb9 원격 일치; PR#1 open, merge 미수행|
 
 인증 UX/약관 보완: AC-06·07·21·22에 SecurityIntegrationTest.signupRequiresCurrentExplicitConsent 및 BrowserTest.simpleAuthFormsRequireConsentAndShowReadableTerms 추가. 전체 Java35 PASS/FAIL0/SKIP0. 약관 동의 버전·시각 외 회원 프로필이나 로컬 관심사 전송은 추가하지 않았다.
+
+로그인 제한 안내 보완: AC-07·09·22에 loginWarningsAndRetryAfterFollowStoredExpiry 및 loginWarningCountdownAndUnlockAreVisible 검증 추가. Java37 PASS, 공개 HTTPS 실제 응답과 합성 계정 정리 PASS(evidence/login-countdown.json).
