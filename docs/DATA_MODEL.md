@@ -18,3 +18,6 @@ V5 representative_interests: singleton boolean PK/check true, weights jsonb obje
 V6: sources.published_since(date), topic_terms(jsonb array max40); source_access_gate는 arXiv 공개 요청의 공유 간격/동시성 제어용 단일행이며 회원 데이터와 무관하다.
 
 V7: `articles.author varchar(2000) NOT NULL DEFAULT ''` 추가. 회원 프로필이 아닌 공개 기사 저작자 메타데이터이며 기존 계정 정보와 연결하지 않는다. `processing_version=research-v2`는 연구 관점 문장 우선 추출을 나타내고 재수집 시 이전 버전도 재처리한다. 수동 요약 잠금은 보존한다.
+
+## 기사 원문 미보관
+원문·피드 원본·설명문·초록을 별도 DB 칼럼, 파일 캐시, 작업 payload, 수정 이력에 저장하지 않는다. SafeFetch의 응답과 Item.description은 처리 중 메모리 입력이며 Worker는 요약과 메타데이터/링크/해시만 저장한다. 본문 웹페이지/PDF를 별도로 가져오는 기능은 없고 allowBody/allowStore 요청은 서버에서 거부한다. 입력 문자열은 처리가 끝나면 별도 보관하지 않으며 JVM 메모리의 즉시 물리 소거를 보장한다는 의미는 아니다. 기사 수정 이력은 이전 입력 해시만 보관한다.

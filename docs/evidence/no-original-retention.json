@@ -1,0 +1,31 @@
+{
+  "checkedAt": "2026-10-28T23:25:10.541Z",
+  "production": {
+    "sources": 12,
+    "bodyOrStorageEnabled": 0,
+    "articles": 191,
+    "originalStorageColumns": [],
+    "largestStoredSummaryJsonChars": 940,
+    "databaseDeletionRequired": false
+  },
+  "implementation": {
+    "input": "Memory-only allowed RSS/API description or abstract",
+    "persisted": "Summary, bibliographic metadata, tags, source URL, hash, processing/operational metadata",
+    "revisions": "Previous input hash and change metadata only",
+    "runtimeChanged": false
+  },
+  "tests": {
+    "test": {
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "integrationTest": {
+      "tests": 28,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  }
+}

@@ -159,6 +159,28 @@ class SecurityIntegrationTest {
         repo.db().sql("UPDATE articles SET public=false WHERE id=:id").param("id",hidden).update();var refreshed=news.first(user,30);assertEquals(first.editionId(),refreshed.editionId());assertTrue(refreshed.items().stream().noneMatch(a->a.id().equals(hidden)));assertEquals(30,refreshed.candidateCount());
         repo.db().sql("UPDATE sources SET allow_display=false WHERE id=:id").param("id",source).update();assertEquals(0,news.first(user,30).items().size());
     }
+    @Test @Order(8) @WithMockUser(roles="ADMIN") void collectionDoesNotPersistOriginalInputEvenInRevisions(){
+        UUID actor=accounts.findByUsername("synthetic_a").orElseThrow().id,site=UUID.randomUUID(),source=UUID.randomUUID();
+        repo.db().sql("INSERT INTO sites(id,name,homepage_url,normalized_homepage_url,status) VALUES(:id,'Retention fixture','https://retention.example.org/','https://retention.example.org/','ACTIVE')").param("id",site).update();
+        repo.db().sql("INSERT INTO sources(id,site_id,label,type,endpoint_url,normalized_endpoint_url,enabled,rights_status,allow_metadata,allow_display,allow_summary,validation_status) VALUES(:id,:site,'Retention fixture','RSS','https://retention.example.org/feed','https://retention.example.org/feed',true,'APPROVED',true,true,true,'PASSED')").param("id",source).param("site",site).update();
+        String marker="SYNTHETIC_ORIGINAL_ONLY_DO_NOT_RETAIN",summary="We propose an efficient retrieval algorithm for database queries.";
+        String firstHash=null;
+        for(int revision=0;revision<2;revision++){
+            String original=summary+" "+marker+" "+revision+". "+"Unselected background material. ".repeat(30);
+            catalog.collect(source,actor);var job=claimReady();
+            worker.apply(job,repo.source(source,false),new SafeFetch.Result(List.of(new SafeFetch.Item("retention-guid","Synthetic retention fixture","https://retention.example.org/story",original,Instant.parse("2026-10-10T00:00:00Z"))),null,null,false));
+            var row=repo.db().sql("SELECT summary_bullets::text AS summary,canonical_url,input_hash FROM articles WHERE source_id=:source").param("source",source).query().singleRow();
+            assertEquals("[\""+summary+"\"]",row.get("summary"));assertEquals("https://retention.example.org/story",row.get("canonical_url"));
+            String hash=row.get("input_hash").toString();assertEquals(64,hash.length());if(firstHash==null)firstHash=hash;else assertNotEquals(firstHash,hash);
+            for(String table:List.of("articles","article_revisions","content_jobs","fetch_runs")){
+                assertFalse(repo.db().sql("SELECT EXISTS(SELECT 1 FROM "+table+" r WHERE to_jsonb(r)::text LIKE :marker)").param("marker","%"+marker+"%").query(Boolean.class).single(),table+" retained source-only text");
+            }
+        }
+        assertEquals(1,repo.db().sql("SELECT count(*) FROM article_revisions r JOIN articles a ON a.id=r.article_id WHERE a.source_id=:source").param("source",source).query(Integer.class).single());
+        var columns=repo.db().sql("SELECT column_name FROM information_schema.columns WHERE table_schema='public' AND table_name IN ('articles','article_revisions','content_jobs','fetch_runs')").query(String.class).list();
+        for(String forbidden:List.of("body","content","description","abstract","raw","raw_body","original_text","payload"))assertFalse(columns.contains(forbidden));
+    }
+
     @Test @Order(9) @WithMockUser(roles="ADMIN") void duplicateFetchAndChangedInputPreserveManualLocks() {
         UUID actor=accounts.findByUsername("synthetic_a").orElseThrow().id,site=UUID.randomUUID(),source=UUID.randomUUID();
         repo.db().sql("INSERT INTO sites(id,name,homepage_url,normalized_homepage_url,status) VALUES(:id,'Worker synthetic','https://worker.example.org/','https://worker.example.org/','ACTIVE')").param("id",site).update();
