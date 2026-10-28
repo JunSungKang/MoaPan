@@ -16,7 +16,7 @@
 
 1. 실제 실행 DB/proxy까지 최종 스캔 이미지로 일치시킨 후 수집·상태 재검증.
 2. 인수 추적·증빙 정리와 비밀값/임시 산출물 점검.
-3. 기능 단위 사람 commit·guarded push·원격 SHA 대조. 백엔드4add120·UI a11320a 기능 commit 완료. push는 아직 미실행.
+3. 기능 단위 사람 commit·guarded push·원격 SHA 대조. 백엔드4add120·UI a11320a 기능 commit 완료. 인프라/증빙7a852eb까지 guarded push 완료. 원격 codex/moapan-v1과 로컬 SHA 7a852eb32da6cba41f97215ea0415b456946d319 일치를 확인했다. 후속 문서 커밋 SHA는 최종 전달 기록에서 별도 확인한다.
 4. 승인된 환경 제공 전 외부 HTTPS 검증은 진행할 수 없다. 상표·콘텐츠 계약·사업 등록·법률 검토는 별도다.
 
 재개 시 현재 git status, goal, 실행 컨테이너 digest, JUnit/scan 결과부터 확인한다. 실패한 명령을 성공으로 기록하거나 보안 게이트를 낮추지 않는다.
