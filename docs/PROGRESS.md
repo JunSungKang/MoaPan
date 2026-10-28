@@ -24,3 +24,6 @@ AUTH-001: 유니코드128 code point 비밀번호 변경 회귀 실패를 먼저
 
 ## 외부 접속 인수
 사용자가 Docker privileged port forwarding 옵션만 명시 승인했다. VirtioFS와 방화벽 전체는 그대로다. 공개 proxy 이미지를 재검사 후 실행하고 Let’s Encrypt 외부 검증·인증서 발급, HTTPS200·비회원 뉴스401·HTTP308·Secure/HttpOnly/SameSite=Strict 쿠키, 합성 계정 로그인/수집/삭제를 확인했다. 휴대폰 데이터망 정상 접근은 사용자가 직접 확인했다. 시작/중지 조건은 DEPLOYMENT.md.
+
+## 인증 화면 마무리 — 구현·실행 검증 완료
+로그인·가입 간소화, 약관 전문·개인정보 안내, 서버 동의 검증과 V3 마이그레이션을 구현했다. Java35개 PASS, 변경된 앱/빌드 이미지 보안 검사 PASS, V3 실제 DB 적용 및 공개 HTTPS 가입·로그인·탈퇴 검증 PASS. 실제2출처 수집도 성공했다. Git 전달 SHA는 마지막 보고와 Git 이력으로 확인한다.

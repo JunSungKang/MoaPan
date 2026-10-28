@@ -35,3 +35,8 @@ sh scripts/image-scan.sh moapan-local:1.0.0 moapan-proxy-local:2.11.7 moapan-db-
 `node --test scripts/local-start.test.mjs`: 실제 가짜 Docker 자식 프로세스로 무응답 엔진10초 종료·Compose 미실행, Compose 실패 코드 유지, 정상 시작 성공의3개 시험 PASS(FAIL0/SKIP0). `check bootJar sbom securityCheck` 성공, `e2eTest --rerun-tasks` 브라우저4개 재실행 성공. 새 DB/proxy/app 이미지를 빌드·재검사했다. PostgreSQL 통합17개를 다시 실행해 PASS했으며 전체 Gradle 인수 명령도 성공했다. proxy 디렉터리 탐색 권한 결함을 수정하고 실제 HTTP healthcheck를 추가했다. 최신 실제 수집 결과와 실행 이미지 일치는 evidence/verification.json에 기록한다.
 
 AUTH-001: supplementaryUnicodePasswordUsesCodePointLimit 테스트는 수정 전 HTTP200 기대/400 실제로 실패했고 수정 후 PASS했다.14/129 code point 거부·128 code point 변경/로그인/탈퇴를 확인했다. PostgreSQL 통합18개, 전체 Java33개(FAIL0/SKIP0).
+
+## 인증 화면·약관 동의 보완 (2026-10-28)
+`sh scripts/gradle-local.sh --no-daemon check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest`: Java35 PASS, FAIL0, SKIP0 (단위11·PostgreSQL19·Playwright5). 미동의/구버전/필드 누락400 및 계정 미생성, 현재 버전·서버 시각 저장, 기존 계정 동의 NULL 보존을 검증했다. 390/768/1440px 로그인·가입 스크린샷과 넘침 없음, 기본 미동의·제출 차단·전문 새 탭·입력 보존·동의 후 전송을 검증했다. 스크린샷은 build/reports/screenshots의 login/signup-*에 있다.
+
+공개 서비스 검증: V3 migration success=true, HTTPS login/signup/terms/privacy200, 미동의 가입400, 비회원 뉴스401, 약관 동의 후 합성 계정 가입·로그인·실제2출처 수집·계정/세션 삭제 PASS. 앱 교체 중 최초 compose --wait는 기존 proxy가 일시 unhealthy여서 exit1이었다. 후속 health 조회와 실제 HTTPS 검증은 정상이며 오류를 최초 성공으로 집계하지 않았다.

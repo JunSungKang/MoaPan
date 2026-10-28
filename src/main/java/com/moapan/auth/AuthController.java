@@ -21,15 +21,18 @@ import org.springframework.transaction.PlatformTransactionManager;
 @RestController @org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication
 public class AuthController {
     record Credentials(@NotNull @Size(min=4,max=32) String username,@NotNull @Size(min=15,max=256)String password){}
+    public static final String TERMS_VERSION="2026-10-28";
+    record Signup(@NotNull @Size(min=4,max=32) String username,@NotNull @Size(min=15,max=256) String password,@NotNull @AssertTrue Boolean termsAccepted,@NotBlank @Size(max=32) String termsVersion){}
     record Change(@NotNull String currentPassword,@NotNull @Size(min=15,max=256)String newPassword){}
     record Confirm(@NotNull String currentPassword){}
     record View(UUID id,String username,String role){}
     private final Accounts users;private final PasswordEncoder encoder;private final AuthenticationManager manager;private final SecurityContextRepository contexts;private final Limits limits;private final JdbcClient db;private final TransactionTemplate tx;private final Semaphore hashes=new Semaphore(4);
     public AuthController(Accounts users,PasswordEncoder encoder,AuthenticationManager manager,SecurityContextRepository contexts,Limits limits,JdbcClient db,PlatformTransactionManager tm){this.users=users;this.encoder=encoder;this.manager=manager;this.contexts=contexts;this.limits=limits;this.db=db;this.tx=new TransactionTemplate(tm);}
     @GetMapping("/api/v1/auth/csrf") Object csrf(CsrfToken token){return Map.of("token",token.getToken(),"headerName",token.getHeaderName());}
-    @PostMapping("/api/v1/auth/signup") View signup(@Valid @RequestBody Credentials input){
+    @PostMapping("/api/v1/auth/signup") View signup(@Valid @RequestBody Signup input){
+        if(!TERMS_VERSION.equals(input.termsVersion()))throw new ApiError(400,"terms_version_outdated");
         passwordLength(input.password());limits.auth("signup",100,3600);String username=normalize(input.username());
-        return hash(()->{if(users.findByUsername(username).isPresent())throw new ApiError(409,"username_unavailable");return view(users.save(new Account(username,encoder.encode(input.password()))));});
+        return hash(()->{if(users.findByUsername(username).isPresent())throw new ApiError(409,"username_unavailable");Account user=new Account(username,encoder.encode(input.password()));user.termsVersion=TERMS_VERSION;user.termsAcceptedAt=java.time.Instant.now();return view(users.save(user));});
     }
     @PostMapping("/api/v1/auth/login") View login(@Valid @RequestBody Credentials input,HttpServletRequest request,HttpServletResponse response){
         passwordLength(input.password());limits.auth("login_global",300,900);String username=normalize(input.username());String bucket="login:"+limits.fingerprint(username);limits.checkAuth(bucket,10);

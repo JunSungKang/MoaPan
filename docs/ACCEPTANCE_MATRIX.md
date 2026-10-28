@@ -29,3 +29,5 @@ CI/CD는 사용자 명시 제외. PASS는 아래 실제 시험 범위의 통과�
 |AC-23|10|Compose·영속·백업|PASS|최종 실행/scan digest 일치·HTTP health·재생성22기사 ID 보존; 빈 DB migration·암호화 격리 복원|
 |AC-24|12|로컬 서비스 외부 HTTPS 접속(사용자 변경)|PASS|공인 IP 인증서·HTTPS200·비회원401·Secure 쿠키·휴대폰 데이터망 사용자 확인; evidence/public-access.json|
 |AC-25|12|GitHub 전달|PASS|guarded 사람 commit/push; 복구 커밋767f2b409e534a1f74ceb3630050a556b6e88eb9 원격 일치; PR#1 open, merge 미수행|
+
+인증 UX/약관 보완: AC-06·07·21·22에 SecurityIntegrationTest.signupRequiresCurrentExplicitConsent 및 BrowserTest.simpleAuthFormsRequireConsentAndShowReadableTerms 추가. 전체 Java35 PASS/FAIL0/SKIP0. 약관 동의 버전·시각 외 회원 프로필이나 로컬 관심사 전송은 추가하지 않았다.

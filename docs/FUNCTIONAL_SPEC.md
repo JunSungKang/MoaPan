@@ -4,7 +4,7 @@
 
 |FS|REQ|기능|입력|처리·전이|출력·예외|구현|
 |---|---|---|---|---|---|---|
-|FS-01|03,08|회원가입|username/password|형식 정규화·USER 고정·Argon2id·알 수 없는 필드 거부|최소 계정 DTO;400/409/429|auth/AuthController|
+|FS-01|03,08|회원가입|username/password·현재 약관 명시 동의|형식 정규화·USER 고정·Argon2id·알 수 없는 필드 거부|최소 계정 DTO;400/409/429|auth/AuthController|
 |FS-02|03,08|로그인·CSRF|자격·세션·CSRF|AuthenticationManager 인증 후 UUID principal 저장·session ID 교체·토큰 폐기|계정 DTO;401/403;30분 유휴·12시간 절대|security/SecurityConfig|
 |FS-03|03,04|계정 관리|현재 비밀번호|변경·탈퇴 시 DB 세션 무효화·브라우저 설정 정리|200/403;복구 없음|auth/AuthController|
 |FS-04|02,09|사이트·주소 분리|site/source ID|영속 FK 연결|사이트 1:N 주소 1:N 기사|site/CatalogRepository|
@@ -32,3 +32,5 @@
 |FS-26|01~12|REST 계약|명시된 routes·DTO|인증·권한·오류·필드 일치|API.md·코드·테스트 연결|docs/API.md|
 
 검증: 단위는 ContentProcessor/SafeFetch, 통합은 PostgreSQL+MockMvc로 인증·관리·quota·worker 상태를, UI는 Playwright Java로 실제 ES Modules·IndexedDB·네트워크와 반응형을 검사한다. 미구현·미검증은 통과로 처리하지 않는다.
+
+2026-10-28 사용자 승인 보완: 가입 시 현재 약관 전문 링크와 미선택 필수 체크박스를 제공한다. 서버도 true 및 현재 버전을 검증하고 버전·시각만 저장한다. 로그인과 가입의 긴 설명은 정책 페이지로 이동했다.

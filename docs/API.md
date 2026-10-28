@@ -7,7 +7,7 @@
 |Method|경로|입력·출력|
 |---|---|---|
 |GET|/api/v1/auth/csrf|token,headerName. JS 메모리만 저장|
-|POST|/api/v1/auth/signup|username/password만. 반환 id,username,role(USER)|
+|POST|/api/v1/auth/signup|username/password, termsAccepted=true, termsVersion=2026-10-28. 반환 id,username,role(USER)|
 |POST|/api/v1/auth/login|username/password. 세션 ID 교체, 최소 계정 반환. 후속 GET csrf로 토큰 재발급|
 |POST|/api/v1/auth/logout|서버 세션 종료. 후속 로그인 전 csrf 재발급|
 |GET|/api/v1/account|id,username,role|
@@ -61,3 +61,5 @@ JSON_API는 단일 GET 응답의 제한된 점 구분 경로만 지원: items,id
 내부 /internal/live, /internal/ready는 요약 상태만. Caddy는 /internal/*와 /actuator/*를 외부에404로 차단한다. worker/migrate/admin-cli는 HTTP를 열지 않는다.
 
 관심사 저장·클릭 추적·전체 export·원문 전문 프록시·미인증 뉴스 dump API는 만들지 않는다.
+
+가입 약관 동의: termsAccepted 누락·false·null, termsVersion 누락·현재 버전 불일치는400이다. 동의 버전과 서버 시각을 계정과 함께 저장하며 공개 계정 DTO에 추가 노출하지 않는다. 로그인 DTO에는 이 필드를 받지 않는다. 기존 계정의 동의 이력은 소급 생성하지 않는다.

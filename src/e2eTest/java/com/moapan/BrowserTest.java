@@ -34,6 +34,23 @@ class BrowserTest {
             p.locator("#search").fill("synthetic-search-private-phrase");assertEquals(0,p.locator("#paper article").count());assertTrue(outbound.isEmpty());assertEquals(0,p.locator("script:not([type=module])").count());p.emulateMedia(new Page.EmulateMediaOptions().setMedia(com.microsoft.playwright.options.Media.PRINT));assertFalse(p.locator("#more").isVisible());
         }
     }
+    @Test void simpleAuthFormsRequireConsentAndShowReadableTerms()throws Exception{
+        Path dir=Path.of("build/reports/screenshots");Files.createDirectories(dir);
+        try(var context=browser.newContext()){
+            Page p=context.newPage();List<String> bodies=new ArrayList<>();
+            p.route("**/api/v1/auth/signup",r->{bodies.add(r.request().postData());r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{}"));});
+            for(int width:new int[]{390,768,1440})for(String mode:List.of("login","signup")){
+                p.setViewportSize(width,900);p.navigate(origin+"/"+mode+".html");
+                assertEquals(2,p.locator("input:not([type=checkbox])").count());assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth <= innerWidth"));
+                p.screenshot(new Page.ScreenshotOptions().setPath(dir.resolve(mode+"-"+width+".png")).setFullPage(true));
+            }
+            p.locator("#username").fill("synthetic_terms");p.locator("#password").fill("synthetic password 12345");
+            assertFalse(p.locator("input[type=checkbox]").isChecked());p.locator("button[type=submit]").click();assertTrue(bodies.isEmpty());
+            Page terms=p.waitForPopup(()->p.locator(".agreement a").click());terms.waitForLoadState();assertTrue(terms.locator("main").textContent().contains("2026-10-28"));assertTrue(terms.locator("main").textContent().contains("복구할 수 없습니다"));terms.close();
+            assertEquals("synthetic_terms",p.locator("#username").inputValue());p.locator("input[type=checkbox]").check();p.locator("button[type=submit]").click();p.waitForURL("**/login.html");
+            assertEquals(1,bodies.size());assertTrue(bodies.getFirst().contains("\"termsAccepted\":true"));assertTrue(bodies.getFirst().contains("\"termsVersion\":\"2026-10-28\""));
+        }
+    }
     @Test void interestSentenceStaysLocalAndAccountsAreSeparated(){
         try(var context=browser.newContext()){Page p=context.newPage();List<String>network=new ArrayList<>();p.onRequest(r->network.add(r.url()+" "+Objects.toString(r.postData(),"")));active=A;p.navigate(origin+"/settings.html");p.waitForSelector("#tag-settings input");p.locator("#interest-sentence").fill("인공지능 synthetic-interest-private-phrase");p.locator("#extract").click();p.locator("#confirm-tags").click();p.waitForFunction("document.querySelector('#interest-sentence').value === ''");
             assertEquals(3,((Number)p.evaluate("async id => (await import('/assets/js/preferences.js')).loadPreferences(id).then(s=>s.weights.ai)",A)).intValue());

@@ -20,3 +20,6 @@
 DB 초기화 스크립트와 Caddyfile은 비밀값 없는 고정 배포 설정이므로 Dockerfile COPY로 포함한다. Compose 실행 시 host bind mount 두 개를 제거하고 DB/Caddy named volume은 그대로 유지한다. 설정 변경은 해당 이미지 재빌드·재스캔 후 반영한다. 파일 공유 정체의 노출 경로를 제거하는 변경이며 Docker 자체 결함 해결을 대신 증명하지 않는다.
 
 - 사용자 완료 기준 변경: 별도 배포 검증 제외, 로컬 실행+외부 접속. 공인 IPv4 직접 연결에 Caddy/Let’s Encrypt shortlived IP 인증서를 사용하고 SNI 없는 IP 접속은 default_sni로 같은 인증서를 선택한다. 참고: https://letsencrypt.org/2026/01/15/6day-and-ip-general-availability 및 https://caddyserver.com/docs/caddyfile/options#default-sni . 인증서 검증 비활성화·공개 터널·도메인 구매 없음.
+
+## 2026-10-28 인증 화면·약관
+사용자 승인에 따라 로그인·가입의 긴 설명을 정책 페이지로 옮기고 아이디·비밀번호 중심으로 간소화했다. 가입 필수 약관 체크박스는 기본 미선택이며 전문을 새 탭에서 읽어 입력을 보존한다. 서버가 명시 동의와 현재 약관 버전을 확인하고 version/timestamp만 추가 저장한다. 기존 계정의 동의는 소급 생성하지 않는다. 운영자·연락처 미정은 사실 그대로 표시하고 법률 검토 완료를 주장하지 않는다. IndexedDB 방식은 유지한다. CI/CD는 계속 제외한다.

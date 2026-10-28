@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-28T06:14:36.425Z",
+  "checkedAt": "2026-10-28T07:32:09.505Z",
   "externalDeployment": {
     "status": "PASS",
     "scope": "User-authorized local Mac service reachable from mobile internet; separate hosting deployment excluded",
@@ -29,7 +29,7 @@
         "failures": 0,
         "errors": 0,
         "skipped": 0,
-        "timestamp": "2026-10-28T05:26:03.204Z"
+        "timestamp": "2026-10-28T07:26:54.482Z"
       },
       {
         "task": "test",
@@ -38,28 +38,28 @@
         "failures": 0,
         "errors": 0,
         "skipped": 0,
-        "timestamp": "2026-10-28T05:26:03.340Z"
+        "timestamp": "2026-10-28T07:26:54.619Z"
       },
       {
         "task": "integrationTest",
         "name": "com.moapan.SecurityIntegrationTest",
-        "tests": 18,
+        "tests": 19,
         "failures": 0,
         "errors": 0,
         "skipped": 0,
-        "timestamp": "2026-10-28T05:26:04.038Z"
+        "timestamp": "2026-10-28T07:26:55.749Z"
       },
       {
         "task": "e2eTest",
         "name": "com.moapan.BrowserTest",
-        "tests": 4,
+        "tests": 5,
         "failures": 0,
         "errors": 0,
         "skipped": 0,
-        "timestamp": "2026-10-28T05:26:12.751Z"
+        "timestamp": "2026-10-28T07:27:04.482Z"
       }
     ],
-    "total": 33,
+    "total": 35,
     "bootstrap": {
       "passed": 9,
       "failed": 0,
@@ -71,19 +71,19 @@
     "springBoot": "4.1.2",
     "gradle": "9.8.2",
     "postgresql": "18.6",
-    "jarSha256": "0e5d8e7324e5d9d403ea63638c25bcbadd83ca1383a184b46d1bbdaf2842eb01",
+    "jarSha256": "1f14d8b0f15a0c6ccad7fa3c2bfd4645a546d884740a199fe3a99afd73b514ae",
     "sbomSha256": "1ad74a0dc59e1c37447a0d4496fcbe280394be7ddb7a0328ac5655b21c962b63",
     "sbomComponents": 100
   },
   "images": [
     {
       "name": "moapan-local:1.0.0",
-      "digest": "sha256:f4ce240bae0958f4b6776046ae8597acb694adfc7cfee132d385afce9e12091d",
+      "digest": "sha256:5443c67f43852eff80c34d7bfd3117cddf9a8dd55021a0ce1abc4e8cf36b9e7d",
       "repoDigests": [
-        "moapan-local@sha256:f4ce240bae0958f4b6776046ae8597acb694adfc7cfee132d385afce9e12091d"
+        "moapan-local@sha256:5443c67f43852eff80c34d7bfd3117cddf9a8dd55021a0ce1abc4e8cf36b9e7d"
       ],
       "platform": "linux/amd64",
-      "scanSha256": "6e791a7fd513b52942869e4efc5aec1411bc3623a42ea051e7f38a4a99810b80",
+      "scanSha256": "0797473b6aee9be20281942580761aa26ca424756c32949bfc6027c946de03d6",
       "findings": [
         {
           "id": "CVE-2026-102473",
@@ -550,12 +550,12 @@
     },
     {
       "name": "moapan-build:1.0.0",
-      "digest": "sha256:937958234e5fbe5e72b2733be9ab415b60864222973ea55ea8d687d9c9fdcc26",
+      "digest": "sha256:4c59a8c2180e592a3a815265e803ee5b81f3aa9fb5b663e151b4d6fbbf3bed7c",
       "repoDigests": [
-        "moapan-build@sha256:937958234e5fbe5e72b2733be9ab415b60864222973ea55ea8d687d9c9fdcc26"
+        "moapan-build@sha256:4c59a8c2180e592a3a815265e803ee5b81f3aa9fb5b663e151b4d6fbbf3bed7c"
       ],
       "platform": "linux/amd64",
-      "scanSha256": "302bd3d319e7f7e20ecc618444400e72fa77040b369385a40e842b9ef5f91620",
+      "scanSha256": "bfe23aaca429f8a9eae207bca24eb06fdd209ae69feff2d61c16c07da4d16980",
       "findings": [
         {
           "id": "CVE-2026-102473",
@@ -1014,7 +1014,7 @@
   "reports": [
     {
       "name": "source",
-      "sha256": "c0bac215067f5ef815a4de679c1590756dc9e3c53451fcdb3b6feec38403920b",
+      "sha256": "ffb558a0eeb5f3b4ddf98ec085de7a438cb6e49f663cf4ad5100581c7e673172",
       "packages": 327,
       "findings": [
         {
@@ -1035,13 +1035,13 @@
     },
     {
       "name": "jar",
-      "sha256": "d07f6d229ea170caad2fee90e7356094f7e87b19ecd20728dd09cac51842ab01",
+      "sha256": "cb3848ba55531cfdace6eaf40c1aa2234d850855641263d0d7446a72a351adfc",
       "packages": 91,
       "findings": []
     },
     {
       "name": "sbom",
-      "sha256": "07a62da5f5563e0a890f7043ace9464fb1adfeaf7f6df12b3c512242ed2cda46",
+      "sha256": "d6cef5822361d9f1929cba746ba1b6990cf8a9bd5c3fe97d131d455547bc4484",
       "packages": 100,
       "findings": []
     }
@@ -1101,23 +1101,23 @@
   },
   "realSources": {
     "kind": "actual-source-smoke",
-    "checkedAt": "2026-10-28T06:11:37.551Z",
+    "checkedAt": "2026-10-28T07:30:53.743Z",
     "sources": [
       {
         "site": "NASA News Releases",
         "endpoint": "https://www.nasa.gov/news-release/feed/",
         "status": "SUCCEEDED",
         "previewCount": 5,
-        "lastRun": "2026-10-28T06:11:30.382Z",
-        "priorRuns": 21
+        "lastRun": "2026-10-28T07:30:46.791Z",
+        "priorRuns": 27
       },
       {
         "site": "NOAA News",
         "endpoint": "https://www.noaa.gov/rss.xml",
         "status": "SUCCEEDED",
         "previewCount": 5,
-        "lastRun": "2026-10-28T06:11:36.849Z",
-        "priorRuns": 16
+        "lastRun": "2026-10-28T07:30:52.300Z",
+        "priorRuns": 22
       }
     ],
     "editionItems": 13,
