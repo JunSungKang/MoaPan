@@ -47,3 +47,5 @@ CI/CD는 사용자 명시 제외. PASS는 아래 실제 시험 범위의 통과�
 FS-23/AC-22 상단 보완: 검색 버튼 채움 제거·모바일 구분선/메뉴 정리·푸터 우측 정렬. 기존 BrowserTest14개 회귀 PASS 및390/768/1440px 스크린샷 확인. 수집/인증/개인화 동작 변경 없음.
 
 2026-10-29 확장: 날짜/주제 경계는 CollectionFilterTest·SecurityIntegrationTest(collectionScopeIsEnforcedBeforeDatabaseWrite/arxivAdmissionIsSharedAndCoolsDown), 실제6수집주소130건은 evidence/topic-collection.json 참조. NIST RSS0건은 실제 수집 건수에 포함하지 않는다.
+
+카드 개정: 작성일/작성자 미제공 표시·태그 주제·여섯 항목만 노출(Playwright), Atom/JSON 작성자와 R&D 추출 원문 일치(단위), 기존 요약 재처리·수동 잠금 보존(PostgreSQL) PASS. 별도 인용문 블록 없음. 번역 실제 처리/배포는 별개 미완료이며 이 카드 개정의 완료와 혼동하지 않는다.

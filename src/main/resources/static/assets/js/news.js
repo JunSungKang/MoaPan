@@ -1,6 +1,6 @@
 import {request} from './api.js';
 import {el,report,date,viewer} from './common.js';
-import {loadPreferences,canonicalize,savePreferences,defaults} from './preferences.js';
+import {loadPreferences,canonicalize,defaults} from './preferences.js';
 import {rank,effectivePreferences} from './ranking.js';
 const paper=document.querySelector('#paper'),status=document.querySelector('[role="status"]'),more=document.querySelector('#more');
 const dialog=document.querySelector('#search-dialog');
@@ -18,12 +18,20 @@ function render(){
 
 }
 function safeUrl(value){try{const u=new URL(value);return ['http:','https:'].includes(u.protocol)?u.href:'#';}catch{return '#';}}
-function articleNode(a,index){const article=el('article',undefined,index===0?'lead':'');article.append(el('div',a.tags.map(t=>t.category).filter((v,i,x)=>x.indexOf(v)===i).join(' · ')||'새 소식','eyebrow'));const heading=el('h2');const link=el('a',a.title);link.href=safeUrl(a.originalUrl);link.target='_blank';link.rel='noopener noreferrer';heading.append(link);article.append(heading);
-  if(a.summaryBullets.length){const list=el('ul');for(const bullet of a.summaryBullets)list.append(el('li',bullet));article.append(list);}else article.append(el('p','요약 정보 부족 · 원문에서 확인하세요.','muted'));
-  article.append(el('p',`${a.source.site} · ${a.publishedAt?'발행':'수집'} ${date(a.publishedAt||a.collectedAt)}`,'byline'));
-  article.append(el('p',`${a.summaryMode==='MANUAL'?'수동 편집':'자동 추출'} · 원문 언어 ${a.source.language} (번역하지 않음)`,'byline'));
-  if(a.matchedTags.length)article.append(el('p','일치 태그: '+a.matchedTags.map(t=>t.name).join(', '),'reason'));
-  const tags=el('div',undefined,'tags');for(const tag of a.tags){const group=el('span');group.append(el('span',tag.name));if(user)for(const [label,delta]of [['더 보기',1],['덜 보기',-1]]){const b=el('button',label);b.type='button';b.setAttribute('aria-label',tag.name+' '+label);b.addEventListener('click',async()=>{prefs={...prefs,enabled:true,weights:{...effective().weights}};const w=prefs.weights[tag.id]||0;if(delta>0){prefs.weights[tag.id]=Math.min(5,w+1);prefs.excludedTags=prefs.excludedTags.filter(id=>id!==tag.id);}else if(w>1)prefs.weights[tag.id]=w-1;else{delete prefs.weights[tag.id];prefs.excludedTags=[...new Set([...prefs.excludedTags,tag.id])];}await savePreferences(user.id,prefs);render();});group.append(b);}tags.append(group);}article.append(tags);return article;
+function articleNode(a,index){
+ const article=el('article',undefined,index===0?'lead':'');
+ const heading=el('h2'),link=el('a',a.title);link.href=safeUrl(a.originalUrl);link.target='_blank';link.rel='noopener noreferrer';heading.append(link);article.append(heading);
+ const details=el('dl',undefined,'article-details');
+ for(const [label,value]of [['작성일',a.publishedAt?date(a.publishedAt):'정보 없음'],['작성자',a.author||'정보 없음'],['출처',a.source.site]]){
+  details.append(el('dt',label),el('dd',value));
+ }
+ details.append(el('dt','주제'));const subjects=el('dd',undefined,'tags');
+ if(a.tags.length)for(const tag of a.tags)subjects.append(el('span',tag.name));else subjects.textContent='미분류';
+ details.append(subjects);article.append(details);
+ article.append(el('h3','신기술·R&D 요약','summary-heading'));
+ if(a.summaryBullets.length){const list=el('ul');for(const bullet of a.summaryBullets)list.append(el('li',bullet));article.append(list);}
+ else article.append(el('p','연구 관점으로 요약할 정보가 부족합니다.','muted'));
+ return article;
 }
 
 async function load(initial){const ticket=generation;more.disabled=true;status.textContent='지면을 불러오는 중입니다.';try{const path=!user?'/api/v1/public/news/edition':initial?'/api/v1/news/edition':'/api/v1/news/page?cursor='+encodeURIComponent(next);const page=await request(path);if(ticket!==generation)return;candidates=[...new Map([...candidates,...page.items].map(a=>[a.id,a])).values()];next=page.nextCursor;more.hidden=!user||!next;status.textContent='';render();}catch(error){report(error);}finally{more.disabled=false;}}

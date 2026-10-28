@@ -21,7 +21,7 @@ import tools.jackson.databind.json.JsonMapper;
 @Component
 public class SafeFetch {
     @org.springframework.beans.factory.annotation.Autowired private ArxivGate arxivGate;
-    public record Item(String guid,String title,String url,String description,Instant publishedAt){}
+    public record Item(String guid,String title,String url,String description,Instant publishedAt,String author){public Item(String guid,String title,String url,String description,Instant publishedAt){this(guid,title,url,description,publishedAt,"");}}
     public record Result(List<Item>items,String etag,String modified,boolean unchanged){}
     public static String canonical(String input){
         try{
@@ -86,13 +86,13 @@ public class SafeFetch {
         if(bytes.length>2_097_152)throw new ApiError(502,"source_too_large");List<Item> result=new ArrayList<>();
         if(type.equals("JSON_API")){
             JsonMapper mapper=JsonMapper.builder().build();JsonNode config=mapper.readTree(mapping);JsonNode root=mapper.readTree(bytes);JsonNode items=path(root,config.path("items").asString("items"));if(!items.isArray())throw new ApiError(502,"invalid_json_items");
-            for(JsonNode item:items){if(result.size()>=100)break;try{String url=canonical(path(item,config.path("url").asString("url")).asString());String title=clean(path(item,config.path("title").asString("title")).asString(),500);if(title.isBlank())continue;result.add(new Item(trim(path(item,config.path("id").asString("id")).asString(url),2048),title,url,clean(path(item,config.path("description").asString("description")).asString(""),8000),instant(path(item,config.path("publishedAt").asString("publishedAt")).asString(""))));}catch(IllegalArgumentException|ApiError ignored){}}
+            for(JsonNode item:items){if(result.size()>=100)break;try{String url=canonical(path(item,config.path("url").asString("url")).asString());String title=clean(path(item,config.path("title").asString("title")).asString(),500);if(title.isBlank())continue;result.add(new Item(trim(path(item,config.path("id").asString("id")).asString(url),2048),title,url,clean(path(item,config.path("description").asString("description")).asString(""),8000),instant(path(item,config.path("publishedAt").asString("publishedAt")).asString("")),clean(path(item,config.path("author").asString("author")).asString(""),2000)));}catch(IllegalArgumentException|ApiError ignored){}}
         }else{
             SAXBuilder builder=new SAXBuilder();builder.setFeature("http://apache.org/xml/features/disallow-doctype-decl",true);builder.setFeature("http://xml.org/sax/features/external-general-entities",false);builder.setFeature("http://xml.org/sax/features/external-parameter-entities",false);builder.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd",false);builder.setExpandEntities(false);
             var feed=new SyndFeedInput().build(builder.build(new ByteArrayInputStream(bytes)));
             for(var entry:feed.getEntries()){
                 if(result.size()>=100)break;
-                try{String link=entry.getLink();if(link!=null&&link.matches("http://arxiv\\.org/abs/[A-Za-z0-9./-]+"))link="https"+link.substring(4);String url=canonical(link);String title=clean(entry.getTitle(),500);if(title.isBlank())continue;String desc=entry.getDescription()==null?"":entry.getDescription().getValue();result.add(new Item(trim(entry.getUri()==null||entry.getUri().isBlank()?url:entry.getUri(),2048),title,url,clean(desc,8000),entry.getPublishedDate()==null?null:future(entry.getPublishedDate().toInstant())));}catch(ApiError ignored){}
+                try{String link=entry.getLink();if(link!=null&&link.matches("http://arxiv\\.org/abs/[A-Za-z0-9./-]+"))link="https"+link.substring(4);String url=canonical(link);String title=clean(entry.getTitle(),500);if(title.isBlank())continue;String desc=entry.getDescription()==null?"":entry.getDescription().getValue();result.add(new Item(trim(entry.getUri()==null||entry.getUri().isBlank()?url:entry.getUri(),2048),title,url,clean(desc,8000),entry.getPublishedDate()==null?null:future(entry.getPublishedDate().toInstant()),clean(entry.getAuthors().isEmpty()?entry.getAuthor():entry.getAuthors().stream().map(person->person.getName()).filter(java.util.Objects::nonNull).collect(java.util.stream.Collectors.joining(", ")),2000)));}catch(ApiError ignored){}
             }
         }return result;
     }

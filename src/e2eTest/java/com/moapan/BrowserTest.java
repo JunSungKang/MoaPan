@@ -59,6 +59,47 @@ class BrowserTest {
             Files.delete(file);
         }
     }
+    @Test void cardsOnlyShowRequestedFields(){
+        try(var context=browser.newContext()){
+            Page p=context.newPage();p.navigate(origin+"/index.html");p.waitForSelector("#paper article");
+            var card=p.locator("#paper article").first();
+            assertEquals(List.of("작성일","작성자","출처","주제"),card.locator("dt").allTextContents());
+            assertEquals("정보 없음",card.locator("dd").nth(0).textContent());
+            assertEquals("정보 없음",card.locator("dd").nth(1).textContent());
+            assertEquals("신기술·R&D 요약",card.locator("h3").textContent());
+            assertEquals(0,card.locator("button,.reason,.eyebrow,.byline").count());
+            assertEquals(1,card.locator("h2 a[rel='noopener noreferrer']").count());
+            assertFalse(card.textContent().contains("자동 추출"));assertFalse(card.textContent().contains("번역하지 않음"));
+        }
+    }
+
+    @Test void articleLanguagePreservesOriginalAndMakesNoRequests(){
+        try(var context=browser.newContext()){
+            Page page=context.newPage();page.navigate(origin+"/about.html");
+            assertEquals(true,page.evaluate("""
+              async () => {
+                const {articleLanguage}=await import('/assets/js/article-language.js');
+                const article={title:'Original <title>',summaryBullets:['Original summary'],source:{language:'en'},summaryMode:'EXTRACTIVE',
+                  translation:{language:'ko',title:'번역 제목',summaryBullets:['번역 요약']}};
+                const link=document.createElement('a'),list=document.createElement('ul');
+                const before=JSON.stringify(article);let requests=0;
+                const previous=window.fetch;window.fetch=()=>{requests++;throw Error('unexpected request');};
+                try {
+                  const {controls,note}=articleLanguage(article,link,list);
+                  if(link.textContent!==article.title||link.querySelector('title'))return false;
+                  controls.querySelectorAll('button')[1].click();
+                  if(link.textContent!=='번역 제목'||list.textContent!=='번역 요약'||!note.textContent.includes('자동 번역'))return false;
+                  controls.querySelectorAll('button')[0].click();
+                  if(link.textContent!==article.title||list.textContent!=='Original summary'||JSON.stringify(article)!==before)return false;
+                  const missing=articleLanguage({...article,translation:null},link,list);
+                  const malformed=articleLanguage({...article,translation:{...article.translation,summaryBullets:[]}},link,list);
+                  return requests===0&&missing.controls.children.length===0&&malformed.controls.children.length===0;
+                } finally {window.fetch=previous;}
+              }
+              """));
+        }
+    }
+
     @Test void portableSettingsRejectTamperingOtherAccountsAndInvalidSchemas(){
         try(var context=browser.newContext()){
             Page p=context.newPage();p.navigate(origin+"/settings.html");p.waitForSelector("#transfer-controls:not([disabled])");
@@ -217,7 +258,7 @@ class BrowserTest {
               const disabled=effectivePreferences({...defaults(),enabled:false,weights:{ai:4},excludedTags:['space']},preset);
               return empty.weights.space===5&&own.weights.ai===4&&disabled.weights.space===5&&disabled.excludedTags[0]==='space';}
             """));
-            p.evaluate("async id => {const m=await import('/assets/js/preferences.js');await m.savePreferences(id,{...m.defaults(),weights:{ai:5}});}",A);p.reload();p.waitForSelector("#paper article");assertEquals(15,p.locator("#paper .reason").count());
+            p.evaluate("async id => {const m=await import('/assets/js/preferences.js');await m.savePreferences(id,{...m.defaults(),weights:{ai:5}});}",A);p.reload();p.waitForSelector("#paper article");assertEquals(0,p.locator("#paper .reason").count());assertEquals(0,p.locator("#paper button").count());
             for(String page:List.of("terms","privacy")){p.navigate(origin+"/"+page+".html");String text=p.locator("main").textContent();assertTrue(text.contains("약관 개정 제 1판"));assertFalse(text.contains("시행일:"));assertFalse(text.contains("최종 수정:"));assertEquals(0,p.locator("a[href='/policy-history.html'],a[href^='/policies/']").count());}
         }
     }

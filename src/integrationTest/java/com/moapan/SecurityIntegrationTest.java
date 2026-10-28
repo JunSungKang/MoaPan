@@ -304,4 +304,15 @@ class SecurityIntegrationTest {
         try(var lease=arxivGate.enter()){assertNotNull(lease);}
     }
 
+
+    @Test @Order(32) void olderFeedExcerptsRefreshWithoutOverwritingManualSummary(){
+        UUID source=repo.db().sql("SELECT id FROM sources WHERE allow_summary LIMIT 1").query(UUID.class).single();
+        UUID id=UUID.randomUUID(),locked=UUID.randomUUID();
+        for(UUID article:List.of(id,locked))repo.db().sql("INSERT INTO articles(id,source_id,source_guid,canonical_url,title,summary_bullets,summary_mode,language,input_hash,collected_at,summary_locked) VALUES(:id,:source,:guid,:url,'Synthetic old research','[\"Subscribe to the latest newsletter for all updates.\",\"We propose an algorithm for efficient retrieval.\"]','EXTRACTIVE_ORIGINAL_LANGUAGE','en',:hash,'1970-01-01',:locked)")
+            .param("id",article).param("source",source).param("guid",article.toString()).param("url","https://example.org/"+article).param("hash","c".repeat(64)).param("locked",article.equals(locked)).update();
+        worker.refreshStoredSummary();
+        var row=repo.db().sql("SELECT summary_bullets::text bullets,processing_version FROM articles WHERE id=:id").param("id",id).query().singleRow();
+        assertEquals("research-v2-stored",row.get("processing_version"));assertFalse(row.get("bullets").toString().contains("newsletter"));assertTrue(row.get("bullets").toString().contains("algorithm"));
+        assertEquals("extractive-v1",repo.db().sql("SELECT processing_version FROM articles WHERE id=:id").param("id",locked).query(String.class).single());
+    }
 }

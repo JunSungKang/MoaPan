@@ -53,3 +53,6 @@ RSS 제공이나 robots.txt를 이용허락으로 간주하지 않는다. 항목
 대안 검토: OpenAlex는 키 없는 기본 조회 가능하지만 대규모/커서 페이지는 인증키 필요(https://help.openalex.org/api/authentication/); 이번에는 키와 추가 어댑터 없이 적용 가능한 arXiv 선택. Crossref는 제목·DOI 검색 가능하지만 일부 초록은 저작권 제한이 있어 무조건 요약할 수 없다(https://www.crossref.org/documentation/retrieve-metadata/rest-api/). Semantic Scholar 공식 API 안내는403으로 이번 검증 미완료. Elastic은 약관상 자동 수집/재게시 제한(https://www.elastic.co/legal/terms-of-use), Hugging Face blog 저장·요약의 명시적 재이용 허락은 확인하지 못해 활성화하지 않는다. PostgreSQL 소프트웨어 라이선스를 모든 커뮤니티 뉴스의 재이용 허락으로 확대 해석하지 않는다.
 
 최종 결과: 보안 공지30건 + 보안/LLM평가/RAG/DB/검색효율 논문 각20건 =130건. NIST 주제RSS0건(비정상 개수 채우기 없음). 공개 URL 중복0, 기준일 위반0. 전체 기간 전수 수집이 아닌 최신 표본이다. 실행 명령: MOAPAN_SMOKE_BASE_URL=https://175.195.62.165 node scripts/topic-source-smoke.mjs (관리자 CLI를 사용할 수 있는 승인된 로컬에서만). 개별 수집 실패가 있으면 스크립트도 실패 종료한다.
+
+### 카드 메타데이터 갱신
+2026-10-29 KST: 기존 승인 출처 재수집으로 arXiv 논문 100건에 공개 저자 메타데이터를 저장했다. GitHub 공지에는 출판 저자가 제공되지 않아 임의의 제보자/기관으로 대체하지 않는다. 요약은 연구 방법·평가·한계 및 취약점 영향/대응 관련 원문 문장 우선 추출로 변경했다. 최신 피드에서 벗어난 기록은 기존 허용 요약 안에서만 재선정한다. 수집 권리·날짜 조건·외부 본문 접근 범위는 변경하지 않았다.

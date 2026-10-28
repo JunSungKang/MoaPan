@@ -16,3 +16,5 @@ V4: users.username을 varchar(128)로 확대하고 CHECK를 영문 소문자·�
 V5 representative_interests: singleton boolean PK/check true, weights jsonb object, version bigint>=0. 회원 FK/개인 관심사 없음. 활성 태그 검증·최대30개·가중치1~5는 service에서 강제하며 ADMIN 갱신은 version 조건 UPDATE. 기존 계정/동의 데이터 보존.
 
 V6: sources.published_since(date), topic_terms(jsonb array max40); source_access_gate는 arXiv 공개 요청의 공유 간격/동시성 제어용 단일행이며 회원 데이터와 무관하다.
+
+V7: `articles.author varchar(2000) NOT NULL DEFAULT ''` 추가. 회원 프로필이 아닌 공개 기사 저작자 메타데이터이며 기존 계정 정보와 연결하지 않는다. `processing_version=research-v2`는 연구 관점 문장 우선 추출을 나타내고 재수집 시 이전 버전도 재처리한다. 수동 요약 잠금은 보존한다.

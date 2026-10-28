@@ -75,3 +75,6 @@ GET /api/v1/admin/interests 및 PUT /api/v1/admin/interests: ADMIN; PUT은 CSRF,
 
 ## 수집 필터 확장
 SourceInput에 publishedSince(YYYY-MM-DD 또는null), topicTerms(최대40개·각1~100자)를 추가한다. 제목/설명에 최소1개 키워드가 일치하면 통과(빈 목록은 주제 제한 없음). 해당 시작일 한국시간00:00 포함. 시작일이 있으면 미상 발행일 거부. 미리보기·worker 저장에 동일 필터. PATCH는 전체 설정을 보내야 하며 필터 변경 시 conditional request 캐시를 지우고 source version/작업 취소 규약 유지. 기존 저장 기사를 자동 삭제하지 않는다. JSON_API items 매핑은 $로 루트 배열을 지원한다. arXiv 공식 http://arxiv.org/abs/ 링크만 https로 정규화하며 다른 HTTP URL 허용은 하지 않는다. arXiv admission 충돌은 재시도, DB 게이트 장애는503/실패 처리하며 무제한 허용하지 않는다.
+
+### 카드 표시 개정
+뉴스 DTO에 `author` 문자열(출처 제공 작성자, 최대 2,000자)을 추가한다. 미제공은 빈 문자열이며 UI에서 `정보 없음`으로 표시한다. `publishedAt`이 없으면 작성일도 `정보 없음`이다. 수집시각으로 작성일을 대체하지 않는다. 제목은 원문 링크이며 카드에는 작성일·작성자·출처·태그·R&D 중심 추출 요약만 표시한다. JSON_API 매핑에 선택 `author` 경로를 지원한다.

@@ -59,3 +59,8 @@ CSS 상호작용/모바일 정렬 변경 검증 2026-10-28T13:00:18.186Z: JDK/�
 최초 새 DB 검사에서 CVE-2026-116587 (go-jose v3/v4) HIGH2건으로 securityCheck 실패했다. 공급자 https://github.com/go-jose/go-jose/security/advisories/GHSA-mgcc-cww5-fp2q 확인: v4 4.1.6 수정, v3 패치 없음. v4를4.1.6으로 갱신하고 x/net0.62.0(공식 Go GO-2026-6860/6866) 패치를 적용한다. smallstep crypto0.91.1은 v3 문제를 해결하지 않아 불필요한 전이 의존성 변경을 피하고 기존0.91.0을 유지했다. v3는 PKI 경로에 남으며 현재 reverse proxy/외부ACME 구성에서 비신뢰 JWK를 처리하는 PKI 서버/관리 API가 노출되지 않아 배포별 NOT_AFFECTED 판정. docs/evidence/jose-v3-applicability.json에 정확한 패키지/버전/설정 SHA 및2026-11-05 만료를 고정하고 설정 변경·다른CVE·기간 경과 시 다시 차단한다. 패치 완료라고 주장하지 않는다. 공식 JDK 최신 릴리스는27.0.1.0.2+1 유지 확인; Spring/Oracle advisory 페이지 재조회. 최종 검사 결과는 후속 증빙에 기록한다.
 
 최종 JAR SHA5241b8627fe698af11cb25e6f0e8be5aed7a3bcb566fc17e4fc3df2948d3e4bf는 실행 web 내부와 호스트 산출물이 일치한다. 최초 태그 기반 스캔에는 이전 runtime이 잡혀 최종 실행 digest37e99bc7…를 별도로 재검사했다. 앱·프록시 실행 digest와 최종 이미지 보고서가 일치한다. 프록시 실제 adapt 결과는 http/tls만, admin disabled, 외부 acme issuer만이며 PKI/acme_server 없음. V3 HIGH1은 삭제/무시가 아니라 위 한정된 NOT_AFFECTED 판정으로 보고서에 그대로 남는다. KEV2026.10.27 대조에서 이번3개CVE 일치 없음(안전 보증 아님). 정확한 시각·Trivy/DB·보고서해시: evidence/topic-security.json.
+
+## 카드 개편 산출물
+새 runtime 이미지 `sha256:5990e938c68381287ab8142afb6fff98484b472dd30f4d1371e09eeb15f018cc` Trivy 이미지 gate 통과 후 배포. 최종 JAR·SBOM·소스 검사 통과. Java 의존성/프록시 이미지는 변경하지 않았으며 기존 proxy go-jose/v3 조건부 적용성 검토와 만료 조건은 계속 유지한다. 카드 작성자는 안전한 textContent로 표시하며 빈 발행일을 수집일로 위장하지 않는다.
+
+기존 피드 밖 요약 재선정까지 포함한 최종 runtime 이미지: `sha256:44337419a19909216493a472268e46758c97ce8d9aa7d66302206ed59e872f56`. 이 정확한 이미지로 Trivy gate를 다시 통과한 후 서비스에 반영했다. 앞선 5990 이미지는 중간 이미지다.
