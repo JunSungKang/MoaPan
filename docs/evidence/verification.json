@@ -1,8 +1,23 @@
 {
-  "checkedAt": "2026-10-28T05:28:54.076Z",
+  "checkedAt": "2026-10-28T06:13:19.100Z",
   "externalDeployment": {
-    "status": "BLOCKED",
-    "reason": "No approved server or domain provided"
+    "status": "PASS",
+    "scope": "User-authorized local Mac service reachable from mobile internet; separate hosting deployment excluded",
+    "baseUrl": "https://175.195.62.165",
+    "checkedAt": "2026-10-28T06:11:51.357Z",
+    "mobileInternetConfirmation": "User explicitly confirmed normal page access with Wi-Fi off",
+    "httpsAboutStatus": 200,
+    "unauthenticatedNewsStatus": 401,
+    "httpRedirectStatus": 308,
+    "certificate": {
+      "issuer": "Lets Encrypt YE1",
+      "notBefore": "2026-10-28T05:11:18Z",
+      "notAfter": "2026-11-03T21:11:17Z",
+      "profile": "shortlived",
+      "renewal": "Caddy ACME automatic renewal while running"
+    },
+    "dockerPermission": "Only privileged port forwarding to external machines enabled with explicit user approval",
+    "fileSharing": "VirtioFS unchanged"
   },
   "ciCd": "EXCLUDED_BY_USER",
   "tests": {
@@ -289,13 +304,13 @@
       ]
     },
     {
-      "name": "moapan-proxy-local:2.11.7",
-      "digest": "sha256:0fd13cd8157fd6c092600bfbb1e85cd5435e247de0f297b80aad08491183cb22",
+      "name": "moapan-proxy-public:2.11.7",
+      "digest": "sha256:47cc022c95e1f4a2ed71f1f165aa3da8baafbd255408fad1467ac45e356e802a",
       "repoDigests": [
-        "moapan-proxy-local@sha256:0fd13cd8157fd6c092600bfbb1e85cd5435e247de0f297b80aad08491183cb22"
+        "moapan-proxy-public@sha256:47cc022c95e1f4a2ed71f1f165aa3da8baafbd255408fad1467ac45e356e802a"
       ],
       "platform": "linux/arm64",
-      "scanSha256": "bae798c3e38b7972661c434b4d9391bd1ae3b9f8e81cc4cf4eee3e43c83aeb4a",
+      "scanSha256": "7ab90b8d3cba3a6bc1d88b25a242f116b44f36e8a74575d90e59dd97c4b06d23",
       "findings": [
         {
           "id": "CVE-2026-102473",
@@ -999,7 +1014,7 @@
   "reports": [
     {
       "name": "source",
-      "sha256": "3d552ca6abf16806146a931a2ffaeb7eea9e716749e702b4bac1c52889c2a9d8",
+      "sha256": "22d9087e6dd6eb256e0327b0e02093c18253d951306d363befd30501cee41a44",
       "packages": 327,
       "findings": [
         {
@@ -1020,13 +1035,13 @@
     },
     {
       "name": "jar",
-      "sha256": "6a508dbf6e19a6e306eba12d1b79290c6967b7afd06b1c389de7d6851e87ebdf",
+      "sha256": "ba44493b84af600a1d9a5b7767f40de52d1606c6fc3efa14c13ac4611ec6af87",
       "packages": 91,
       "findings": []
     },
     {
       "name": "sbom",
-      "sha256": "0e1472ec5b6885814b55c4ae4153f5077f1a0d9f6474d391fb35f527ad1b92f2",
+      "sha256": "cdaa355fbb55a4c77e123d550fad157a26c322b1771fc7ee98de6682f469b08b",
       "packages": 100,
       "findings": []
     }
@@ -1086,27 +1101,27 @@
   },
   "realSources": {
     "kind": "actual-source-smoke",
-    "checkedAt": "2026-10-28T05:28:47.291Z",
+    "checkedAt": "2026-10-28T06:11:37.551Z",
     "sources": [
       {
         "site": "NASA News Releases",
         "endpoint": "https://www.nasa.gov/news-release/feed/",
         "status": "SUCCEEDED",
         "previewCount": 5,
-        "lastRun": "2026-10-28T05:28:40.506Z",
-        "priorRuns": 18
+        "lastRun": "2026-10-28T06:11:30.382Z",
+        "priorRuns": 21
       },
       {
         "site": "NOAA News",
         "endpoint": "https://www.noaa.gov/rss.xml",
         "status": "SUCCEEDED",
         "previewCount": 5,
-        "lastRun": "2026-10-28T05:28:46.079Z",
-        "priorRuns": 13
+        "lastRun": "2026-10-28T06:11:36.849Z",
+        "priorRuns": 16
       }
     ],
-    "editionItems": 12,
-    "candidateCount": 12
+    "editionItems": 13,
+    "candidateCount": 13
   },
   "containerRecreation": {
     "checkedAt": "2026-10-28T05:20:02.532Z",

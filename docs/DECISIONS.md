@@ -18,3 +18,5 @@
 
 ## ENV-001 실행 설정의 이미지 포함
 DB 초기화 스크립트와 Caddyfile은 비밀값 없는 고정 배포 설정이므로 Dockerfile COPY로 포함한다. Compose 실행 시 host bind mount 두 개를 제거하고 DB/Caddy named volume은 그대로 유지한다. 설정 변경은 해당 이미지 재빌드·재스캔 후 반영한다. 파일 공유 정체의 노출 경로를 제거하는 변경이며 Docker 자체 결함 해결을 대신 증명하지 않는다.
+
+- 사용자 완료 기준 변경: 별도 배포 검증 제외, 로컬 실행+외부 접속. 공인 IPv4 직접 연결에 Caddy/Let’s Encrypt shortlived IP 인증서를 사용하고 SNI 없는 IP 접속은 default_sni로 같은 인증서를 선택한다. 참고: https://letsencrypt.org/2026/01/15/6day-and-ip-general-availability 및 https://caddyserver.com/docs/caddyfile/options#default-sni . 인증서 검증 비활성화·공개 터널·도메인 구매 없음.

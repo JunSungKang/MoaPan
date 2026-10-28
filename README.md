@@ -1,3 +1,5 @@
+현재 접속: **https://175.195.62.165/** — 로컬 Mac 실행, 휴대폰 데이터망 확인 완료. 공개 모드 실행/중지는 [배포 안내](docs/DEPLOYMENT.md)를 참고한다.
+
 # 모아판 · MOAPAN
 
 여러 출처의 뉴스를 관심사에 맞게 모아 종이신문처럼 읽는 개인화 뉴스 V1. Java 27 / Spring Boot 4 / Gradle / PostgreSQL / 정적 HTML·CSS·Vanilla ES Modules / Docker Compose 기반이다.

@@ -49,3 +49,9 @@ RUN chmod 0755 /etc/caddy && chmod 0444 /etc/caddy/Caddyfile
 USER 10001:10001
 ENV HOME=/tmp XDG_DATA_HOME=/data XDG_CONFIG_HOME=/config
 ENTRYPOINT ["caddy","run","--config","/etc/caddy/Caddyfile","--adapter","caddyfile"]
+
+FROM proxy AS public-proxy
+USER root
+COPY scripts/Caddyfile.public /etc/caddy/Caddyfile
+RUN chmod 0755 /etc/caddy && chmod 0444 /etc/caddy/Caddyfile
+USER 10001:10001

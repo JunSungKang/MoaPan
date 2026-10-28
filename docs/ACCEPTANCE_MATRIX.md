@@ -1,6 +1,6 @@
 # 인수 추적
 
-CI/CD는 사용자 명시 제외. PASS는 아래 실제 시험 범위의 통과이며 무결점·모든 장애 조합 검증을 뜻하지 않는다. 구현 FS 대응은 FUNCTIONAL_SPEC.md, 코드/시험 상세는 TEST_REPORT.md, 실행 수치·digest는 evidence/verification.json과 연결한다. 외부 배포와 보안 잔여사항이 있으므로 전체 COMPLETE가 아니다.
+CI/CD는 사용자 명시 제외. PASS는 아래 실제 시험 범위의 통과이며 무결점·모든 장애 조합 검증을 뜻하지 않는다. 구현 FS 대응은 FUNCTIONAL_SPEC.md, 코드/시험 상세는 TEST_REPORT.md, 실행 수치·digest는 evidence/verification.json과 연결한다. 사용자 최신 기준은 별도 호스팅 배포 대신 로컬 Mac 서비스의 외부 접속이다. 휴대폰 데이터망 접속 확인으로 이 기준까지 COMPLETE. 보안 잔여사항은 유지한다.
 
 |AC|REQ|범위|상태|코드·시험·실제 증빙|
 |---|---|---|---|---|
@@ -27,5 +27,5 @@ CI/CD는 사용자 명시 제외. PASS는 아래 실제 시험 범위의 통과�
 |AC-21|04|개인정보|PASS|BrowserTest 네트워크·문장 폐기; DB 금지테이블·TTL; 로그 정책|
 |AC-22|07|신문 UI|PASS|BrowserTest390/768/1440·긴 제목·로딩·빈결과·오류·키보드·인쇄|
 |AC-23|10|Compose·영속·백업|PASS|최종 실행/scan digest 일치·HTTP health·재생성22기사 ID 보존; 빈 DB migration·암호화 격리 복원|
-|AC-24|12|외부 HTTPS|BLOCKED|승인된 외부 서버·도메인 미제공|
+|AC-24|12|로컬 서비스 외부 HTTPS 접속(사용자 변경)|PASS|공인 IP 인증서·HTTPS200·비회원401·Secure 쿠키·휴대폰 데이터망 사용자 확인; evidence/public-access.json|
 |AC-25|12|GitHub 전달|PASS|guarded 사람 commit/push; 복구 커밋767f2b409e534a1f74ceb3630050a556b6e88eb9 원격 일치; PR#1 open, merge 미수행|

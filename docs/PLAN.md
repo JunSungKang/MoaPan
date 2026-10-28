@@ -28,6 +28,6 @@ DNS를 고정한 공개 HTTPS, 안전한 XML/JSON 파서, 크기·재시도·lea
 ### 5.1 로컬 검증·보안
 check, integrationTest, e2eTest, bootJar, sbom, securityCheck, acceptanceTest를 실제 실행하고 검사 실패를 통과로 합산하지 않는다. 최종 이미지·truststore와 최신 scanner DB를 대조한다.
 ### 5.2 수동 배포·GitHub
-승인 환경이 제공되면 동일 digest HTTPS 배포를 검증한다. 지정 브랜치에 사람 wrapper commit/push 후 원격 SHA를 확인한다. main merge는 승인되지 않았다.
+사용자 변경 기준에 따라 로컬 Mac에서 검증 이미지로 실행하고 외부 휴대폰 데이터망 HTTPS 접속을 확인한다. 별도 호스팅 배포 검증은 제외한다. 지정 브랜치에 사람 wrapper commit/push 후 원격 SHA를 확인한다. main merge는 승인되지 않았다.
 
 공유 코드 변경은 위 순서로 진행한다. 외부 권한·출처 이용권·고위험 UNKNOWN은 해당 외부 동작을 차단하되 독립 구현은 계속한다. 각 단계의 상태는 PROGRESS와 ACCEPTANCE_MATRIX에 기록한다.

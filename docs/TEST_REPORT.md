@@ -29,7 +29,7 @@ sh scripts/image-scan.sh moapan-local:1.0.0 moapan-proxy-local:2.11.7 moapan-db-
 
 추가 실제 시험: 두 web 컨테이너에 번갈아 요청하여 계정당60회 이후 양쪽429와 재로그인 후 한도 유지를 확인했다. 실행 중 worker를 SIGKILL하고 재시작하여 실제2분 lease 만료 후 attempt2 성공·기사20건 보존·오래된 RUNNING fetch 이력 정리를 확인했다. 각각 multi-web-quota-check.mjs와 worker-recovery-check.mjs로 재현한다.
 
-검증 한계: 장시간 부하와 모든 네트워크 timeout/5xx/리다이렉트 조합의 연결 수준 fault injection은 수행하지 않았다. 재시도 통합 테스트의503·timeout은 수집 계층 오류 fixture이며 실제 소켓 장애를 모두 재현했다는 뜻이 아니다. 외부 HTTPS는 승인 환경 미제공으로 BLOCKED다. GitHub Actions/CI/CD/자동 보안 스케줄은 사용자 요청으로 제외했다.
+검증 한계: 장시간 부하와 모든 네트워크 timeout/5xx/리다이렉트 조합의 연결 수준 fault injection은 수행하지 않았다. 재시도 통합 테스트의503·timeout은 수집 계층 오류 fixture이며 실제 소켓 장애를 모두 재현했다는 뜻이 아니다. 사용자 변경 기준에 따라 로컬 Mac 공인 IP HTTPS와 휴대폰 데이터망 접속 확인 PASS(evidence/public-access.json). 별도 호스팅 배포는 제외했다. GitHub Actions/CI/CD/자동 보안 스케줄은 사용자 요청으로 제외했다.
 
 ## ENV-001 제한 시간 회귀 — 2026-10-28
 `node --test scripts/local-start.test.mjs`: 실제 가짜 Docker 자식 프로세스로 무응답 엔진10초 종료·Compose 미실행, Compose 실패 코드 유지, 정상 시작 성공의3개 시험 PASS(FAIL0/SKIP0). `check bootJar sbom securityCheck` 성공, `e2eTest --rerun-tasks` 브라우저4개 재실행 성공. 새 DB/proxy/app 이미지를 빌드·재검사했다. PostgreSQL 통합17개를 다시 실행해 PASS했으며 전체 Gradle 인수 명령도 성공했다. proxy 디렉터리 탐색 권한 결함을 수정하고 실제 HTTP healthcheck를 추가했다. 최신 실제 수집 결과와 실행 이미지 일치는 evidence/verification.json에 기록한다.

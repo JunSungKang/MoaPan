@@ -1,6 +1,14 @@
 # 수동 실행·배포·백업
 
-외부 승인 서버·도메인이 없다는 사용자 답변에 따라 외부 HTTPS는 BLOCKED/미검증이다. 로컬 HTTP 성공을 외부 배포 성공으로 표시하지 않는다. CI/CD·공개 터널·유료 자원 생성은 없다.
+사용자 최신 완료 기준: 로컬 Mac에서 실행하고 휴대폰 데이터망에서 접속 성공. https://175.195.62.165/ 에서 사용자 확인을 받았다. 별도 호스팅 배포는 범위에서 제외. CI/CD·공개 터널·유료 자원 생성은 없다.
+
+공개 실행: .env에 PUBLIC_BASE_URL=https://175.195.62.165, MOAPAN_PUBLIC_HOST=175.195.62.165, COOKIE_SECURE=true를 설정한다. 비밀값은 기존 .env에 유지한다. `docker compose -f compose.yaml -f scripts/compose-public.yaml up -d --no-build --wait --wait-timeout 90`으로 실행한다. 기본 Compose만 실행하면 로컬 모드 설정이 적용되므로 공개 모드에서는 반드시 두 파일을 지정한다. Docker의 외부 privileged port forwarding은 사용자 승인 후 활성화했다.
+
+공개 proxy는 80→8081(HTTPS redirect/ACME),443→8443(TLS),127.0.0.1:8080(health only)만 노출한다. DB와 web은 호스트 포트를 열지 않는다. Let’s Encrypt shortlived IP 인증서를 Caddy가 named volume에 보관·자동 갱신한다. Mac과 Docker가 실행 중이고 해당 IP와 포트가 유지돼야 접속·갱신 가능하다. 현재 인증서 만료2026-11-03T21:11:17Z; IP가 바뀌면 .env·주소·인증서 재검증이 필요하다.
+
+공개 접속 중지: `docker compose -f compose.yaml -f scripts/compose-public.yaml stop proxy`. 볼륨 삭제는 필요 없다. 다시 로컬 HTTP로 전환하려면 PUBLIC_BASE_URL=http://localhost:8080, COOKIE_SECURE=false 후 기본 Compose로 재생성한다.
+
+검증: `COMPOSE_FILE=compose.yaml:scripts/compose-public.yaml MOAPAN_SMOKE_BASE_URL=https://175.195.62.165 node scripts/local-smoke.mjs`. 합성 계정만 생성하며 완료 후 삭제한다. TLS 검증 우회는 하지 않는다.
 
 ```sh
 cp .env.example .env

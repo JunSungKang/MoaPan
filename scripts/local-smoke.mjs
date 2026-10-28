@@ -1,7 +1,8 @@
 // Local synthetic account only; credentials and cookies remain in process memory.
 import { randomBytes } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
-const base = 'http://localhost:8080';
+const base = process.env.MOAPAN_SMOKE_BASE_URL || 'http://localhost:8080';
+if (!base.startsWith('https://') && base !== 'http://localhost:8080') throw Error('Non-loopback smoke requires HTTPS');
 let cookie='',csrf;
 async function call(path,method='GET',body){
   const headers={Accept:'application/json'};if(cookie)headers.Cookie=cookie;if(method!=='GET'){headers['Content-Type']='application/json';headers['X-CSRF-TOKEN']=csrf;}
