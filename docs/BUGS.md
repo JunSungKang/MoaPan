@@ -22,3 +22,9 @@
 추가 증거: VM의 dockerd 및 runc init 커널 스택이 d_alloc_parallel → filename_lookup → vfs_statx에서 대기한다. 호스트 Apple Virtualization 프로세스(pid42502) 샘플은 파일 공유 스레드가 openat에서 대기함을 보여준다. macOS 커널 로그는 같은 pid에 대해 'watchdog expired for approval entry ... (kTCCServiceSystemPolicyDesktopFolder, pid 42502)'와 syscall-unix333 거부를 반복 기록했다. 시스템 설정 → 파일 및 폴더 → Docker의 데스크탑 폴더 권한은 on이다. 사용자 tccd(pid85583) 샘플은 CFUserNotificationReceiveResponse에서 대기한다. 디스크 여유309GiB, 시스템 확장0개를 확인했다.
 
 판정: 단순 권한 off 또는 VirtioFS 자체 결함으로 확정할 수 없다. 데스크톱 접근 승인 처리 경로의 정체가 직접 관찰됐으며 대기 알림이 어느 앱의 요청인지 추가 확인이 필요하다. 시스템 알림 앱 UserNotificationCenter 접근은 컴퓨터 제어 도구가 안전상 차단했다. 사용자에게 보이는 권한 알림의 앱·내용 확인을 요청했으며 TCC DB 수정·권한 초기화·전체 디스크 권한 부여·공유 방식 변경은 하지 않았다. 진단 bundle은 외부 전송하지 않고 분석 후 삭제한다.
+
+## ENV-001 복구 확인 — 2026-10-28T05:20Z
+사용자 권한 서비스 tccd의 응답 대기가 지속되어 해당 사용자 프로세스만 재시작했다. 저장된 권한·TCC DB·파일 공유 설정은 변경하지 않았다. 새 tccd는 Docker 요청에 authValue=2/authReason=2를 즉시 반환했고 공식 Docker 재시작 후 Engine29.9.2가 준비됐다. VirtioFS를 유지한 채 새 이미지 빌드와 PostgreSQL 통합17개 재실행이 성공했다. 이는 권한 응답 경로 정체를 뒷받침하며 Apple 내부 결함이나 특정 알림의 정체 원인까지 확정하지 않는다. 사용자 화면 조작은 필요하지 않았다.
+
+## ENV-002 proxy 이미지 설정 디렉터리 권한
+COPY --chmod=0444로 새 경로에 설정을 복사할 때 /etc/caddy 디렉터리에도 탐색 권한이 없어 비루트 Caddy가 설정을 읽지 못했다. 실제 컨테이너에서 Permission denied를 재현했다. 디렉터리0755·설정파일0444를 별도로 지정하고, HTTP /about.html healthcheck를 추가했다. 재빌드 후 Compose db/web/proxy healthy와 worker 실행을 확인했다. 이전 시작 상태만으로 성공을 판정하지 않는다.

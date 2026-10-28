@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-28T03:09:45.813Z",
+  "checkedAt": "2026-10-28T05:20:57.744Z",
   "externalDeployment": {
     "status": "BLOCKED",
     "reason": "No approved server or domain provided"
@@ -32,7 +32,7 @@
         "failures": 0,
         "errors": 0,
         "skipped": 0,
-        "timestamp": "2026-10-28T02:21:39.768Z"
+        "timestamp": "2026-10-28T05:14:50.792Z"
       },
       {
         "task": "e2eTest",
@@ -41,7 +41,7 @@
         "failures": 0,
         "errors": 0,
         "skipped": 0,
-        "timestamp": "2026-10-28T02:15:31.547Z"
+        "timestamp": "2026-10-28T04:19:42.126Z"
       }
     ],
     "total": 32,
@@ -58,21 +58,17 @@
     "postgresql": "18.6",
     "jarSha256": "00d8b5b154fef897fd3b2e8aa7a7ec53cf42df2c499de6a43366e17f6b8e5571",
     "sbomSha256": "1ad74a0dc59e1c37447a0d4496fcbe280394be7ddb7a0328ac5655b21c962b63",
-    "sbomComponents": 100,
-    "finalContainerImageVerification": {
-      "status": "PENDING",
-      "reason": "DB/proxy recreation is waiting in Docker start; prior smoke is historical evidence. Re-run record-evidence after recovery."
-    }
+    "sbomComponents": 100
   },
   "images": [
     {
       "name": "moapan-local:1.0.0",
-      "digest": "sha256:9c810f835e6e0af48cd837c99b10140c1cf61f89190042d4b8955c09fb69df72",
+      "digest": "sha256:6d73f03aa92f27777b8e944f181a114caf45e5b221e0c381d73cb13636f6e61d",
       "repoDigests": [
-        "moapan-local@sha256:9c810f835e6e0af48cd837c99b10140c1cf61f89190042d4b8955c09fb69df72"
+        "moapan-local@sha256:6d73f03aa92f27777b8e944f181a114caf45e5b221e0c381d73cb13636f6e61d"
       ],
       "platform": "linux/amd64",
-      "scanSha256": "9e41a311c734dcf120ad6f2a0b990f639caeda75be0e02c2add21573023bfa1a",
+      "scanSha256": "2f29424a21f2aa57017c1157d6156916e2496f812b053e0896d673ea28d6a86e",
       "findings": [
         {
           "id": "CVE-2026-102473",
@@ -294,12 +290,12 @@
     },
     {
       "name": "moapan-proxy-local:2.11.7",
-      "digest": "sha256:b742ea3c0200e3030a6b642f9057024d78fd68c5cf7d8454c8739f4c52e2cbe1",
+      "digest": "sha256:0fd13cd8157fd6c092600bfbb1e85cd5435e247de0f297b80aad08491183cb22",
       "repoDigests": [
-        "moapan-proxy-local@sha256:b742ea3c0200e3030a6b642f9057024d78fd68c5cf7d8454c8739f4c52e2cbe1"
+        "moapan-proxy-local@sha256:0fd13cd8157fd6c092600bfbb1e85cd5435e247de0f297b80aad08491183cb22"
       ],
       "platform": "linux/arm64",
-      "scanSha256": "97f75d780f4fd645098622b2f1476ccc35954adfdccbe7418638438b889fa60c",
+      "scanSha256": "bae798c3e38b7972661c434b4d9391bd1ae3b9f8e81cc4cf4eee3e43c83aeb4a",
       "findings": [
         {
           "id": "CVE-2026-102473",
@@ -454,6 +450,22 @@
           "url": "https://avd.aquasec.com/nvd/cve-2026-89161"
         },
         {
+          "id": "CVE-2026-107161",
+          "component": "libsasl2-2",
+          "installed": "2.1.28+dfsg1-5ubuntu3.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-107161"
+        },
+        {
+          "id": "CVE-2026-107161",
+          "component": "libsasl2-modules-db",
+          "installed": "2.1.28+dfsg1-5ubuntu3.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-107161"
+        },
+        {
           "id": "CVE-2026-40228",
           "component": "libsystemd0",
           "installed": "255.4-1ubuntu8.18",
@@ -513,22 +525,22 @@
     },
     {
       "name": "moapan-db-local:18.6",
-      "digest": "sha256:f5ba0557d23096fe1fe32d2fe8e42d4c2928861a490c7e8a08d8382f5581d342",
+      "digest": "sha256:dc2c3ea15867e5da1c895277f9970eb988fa9c0fe47ade56411874fec373df64",
       "repoDigests": [
-        "moapan-db-local@sha256:f5ba0557d23096fe1fe32d2fe8e42d4c2928861a490c7e8a08d8382f5581d342"
+        "moapan-db-local@sha256:dc2c3ea15867e5da1c895277f9970eb988fa9c0fe47ade56411874fec373df64"
       ],
       "platform": "linux/arm64",
-      "scanSha256": "d559db8d8a0af147912acf542da4aed17ac9eab9a2f94311c07997c5601c7be5",
+      "scanSha256": "1a3b472cf4db59a936ded096b1cd6bc236a58a1d6a15faa6799b330182b8a027",
       "findings": []
     },
     {
       "name": "moapan-build:1.0.0",
-      "digest": "sha256:64b0afc8f01ea405899a3e4e4e9a4655335dd0bea2184e97b98c5861dd67e4c9",
+      "digest": "sha256:56e17a247894497403f56cc21b255162b9a0406ee191ff2861c0d0174e20a1df",
       "repoDigests": [
-        "moapan-build@sha256:64b0afc8f01ea405899a3e4e4e9a4655335dd0bea2184e97b98c5861dd67e4c9"
+        "moapan-build@sha256:56e17a247894497403f56cc21b255162b9a0406ee191ff2861c0d0174e20a1df"
       ],
       "platform": "linux/amd64",
-      "scanSha256": "6c21fec41402df79626ddc4acf48b415bf2dce18f34f25b9d7783ff2f8c21ba3",
+      "scanSha256": "e36d4992c51a00817350e59c344771bdcf3e825d20ec45ea04964fc0463004d9",
       "findings": [
         {
           "id": "CVE-2026-102473",
@@ -755,7 +767,7 @@
         "moapan-proxy-build@sha256:87632a68cb8d39cc1621f7bf0a577bfd192b85515f8af67826aa4c80c74b7037"
       ],
       "platform": "linux/arm64",
-      "scanSha256": "af60a8d3fbc711c3e2bf7c47a9b447413fa6bd8083ebcf4d4a460ed2f3d0bd61",
+      "scanSha256": "1aa59d637b3d9588c24dca62cd1d530d4b6fcbfdc6b9c0e8660e9bc6b913f2d4",
       "findings": [
         {
           "id": "CVE-2026-102473",
@@ -987,7 +999,7 @@
   "reports": [
     {
       "name": "source",
-      "sha256": "54be513be5cf1a118228a907d963ca73ef801632a4a09eac2c0e9d436535bb1b",
+      "sha256": "0ff7821a3d5c6805db3f4da8ab0b1bf39a244e8cddb2db71188a6e254e236721",
       "packages": 327,
       "findings": [
         {
@@ -1008,13 +1020,13 @@
     },
     {
       "name": "jar",
-      "sha256": "5e9c9624280f5f1d85a7d0d76119eff36388a8defa7257944c90a1672e29fa9a",
+      "sha256": "b15f2f8b6da21c29580a78a3df7c3ea9ac6cd41faf960d83a9e3727081953485",
       "packages": 91,
       "findings": []
     },
     {
       "name": "sbom",
-      "sha256": "95263ee419be1309f18790aeba641e9f59a4df0f2217cb499eac8577c5eb9f4a",
+      "sha256": "cfee87f93341c0cd3bebb5358fb34ebc48cd10fa05891c4733b0df2ed7ae0ac5",
       "packages": 100,
       "findings": []
     }
@@ -1074,27 +1086,33 @@
   },
   "realSources": {
     "kind": "actual-source-smoke",
-    "checkedAt": "2026-10-28T02:19:01.324Z",
+    "checkedAt": "2026-10-28T05:19:39.380Z",
     "sources": [
       {
         "site": "NASA News Releases",
         "endpoint": "https://www.nasa.gov/news-release/feed/",
         "status": "SUCCEEDED",
         "previewCount": 5,
-        "lastRun": "2026-10-28T02:18:54.527Z",
-        "priorRuns": 11
+        "lastRun": "2026-10-28T05:19:31.442Z",
+        "priorRuns": 17
       },
       {
         "site": "NOAA News",
         "endpoint": "https://www.noaa.gov/rss.xml",
         "status": "SUCCEEDED",
         "previewCount": 5,
-        "lastRun": "2026-10-28T02:19:00.041Z",
-        "priorRuns": 6
+        "lastRun": "2026-10-28T05:19:36.943Z",
+        "priorRuns": 12
       }
     ],
-    "editionItems": 10,
-    "candidateCount": 10
+    "editionItems": 12,
+    "candidateCount": 12
+  },
+  "containerRecreation": {
+    "checkedAt": "2026-10-28T05:20:02.532Z",
+    "beforeCount": 22,
+    "afterCount": 22,
+    "preserved": true
   },
   "workerRecovery": {
     "kind": "actual-worker-crash-recovery",
@@ -1116,6 +1134,6 @@
   "backupRestore": "articles=20\nactive_accounts=0\nsessions=0\nEncrypted backup decrypt and isolated restore verified; isolated database will be removed.",
   "truststore": {
     "host": "runtime=27.0.1.0.2+1 vendor=Eclipse Adoptium\nroots=118 compromised-chain-roots=absent\nordinary-https=PASS\ndv-g3b=TLS_REJECTED\ndv-g3c=TLS_REJECTED\nov-g3b=TLS_REJECTED\nov-g3c=TLS_REJECTED\nev-g3b=TLS_REJECTED\nev-g3c=TLS_REJECTED\ndv-g3b-aaa=TLS_REJECTED\ndv-g3c-aaa=TLS_REJECTED\nov-g3b-aaa=TLS_REJECTED\nov-g3c-aaa=TLS_REJECTED\nev-g3b-aaa=TLS_REJECTED\nev-g3c-aaa=TLS_REJECTED\ndv-g3b-noct=TLS_REJECTED\ndv-g3b-aaa-noct=TLS_REJECTED",
-    "runtime": "Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp -Duser.timezone=UTC\nruntime=27.0.1.0.2+1 vendor=Eclipse Adoptium\nroots=118 compromised-chain-roots=absent\nordinary-https=PASS\ndv-g3b=TLS_REJECTED\ndv-g3c=TLS_REJECTED\nov-g3b=TLS_REJECTED\nov-g3c=TLS_REJECTED\nev-g3b=TLS_REJECTED\nev-g3c=TLS_REJECTED\ndv-g3b-aaa=TLS_REJECTED\ndv-g3c-aaa=TLS_REJECTED"
+    "runtime": "Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp -Duser.timezone=UTC\nruntime=27.0.1.0.2+1 vendor=Eclipse Adoptium\nroots=118 compromised-chain-roots=absent\nordinary-https=PASS\ndv-g3b=TLS_REJECTED\ndv-g3c=TLS_REJECTED\nov-g3b=TLS_REJECTED\nov-g3c=TLS_REJECTED\nev-g3b=TLS_REJECTED\nev-g3c=TLS_REJECTED\ndv-g3b-aaa=TLS_REJECTED\ndv-g3c-aaa=TLS_REJECTED\nov-g3b-aaa=TLS_REJECTED\nov-g3c-aaa=TLS_REJECTED\nev-g3b-aaa=TLS_REJECTED\nev-g3c-aaa=TLS_REJECTED\ndv-g3b-noct=TLS_REJECTED\ndv-g3b-aaa-noct=TLS_REJECTED"
   }
 }

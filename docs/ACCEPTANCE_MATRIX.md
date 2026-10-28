@@ -26,6 +26,6 @@ CI/CD는 사용자 명시 제외. PASS는 아래 실제 시험 범위의 통과�
 |AC-20|04,05|로컬 추천|PASS|BrowserTest 고정 clock·계정 namespace·제외 우선|
 |AC-21|04|개인정보|PASS|BrowserTest 네트워크·문장 폐기; DB 금지테이블·TTL; 로그 정책|
 |AC-22|07|신문 UI|PASS|BrowserTest390/768/1440·긴 제목·로딩·빈결과·오류·키보드·인쇄|
-|AC-23|10|Compose·영속·백업|PARTIAL|이전5역할·빈 DB migration·20기사·암호화 복원 PASS; 최종 이미지 재생성 지연은 PROGRESS.md|
+|AC-23|10|Compose·영속·백업|PASS|최종 실행/scan digest 일치·HTTP health·재생성22기사 ID 보존; 빈 DB migration·암호화 격리 복원|
 |AC-24|12|외부 HTTPS|BLOCKED|승인된 외부 서버·도메인 미제공|
 |AC-25|12|GitHub 전달|PASS|guarded 사람 commit/push; 7a852eb32da6cba41f97215ea0415b456946d319 원격 일치. 후속 변경은 다시 확인|

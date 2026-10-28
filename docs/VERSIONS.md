@@ -38,4 +38,4 @@ JDK27은 LTS와 구분한다. GPLv2 + Classpath Exception, 상업적 사용을 �
 
 Wrapper는 공식 ZIP에서 생성한 JAR을 별도 공식 SHA256과 대조했다. 의존성은 Maven Central/Gradle Plugin Portal, 고정 Boot BOM·lock·strict verification을 사용한다. verification metadata 자동 생성 자체가 모든 공급자의 서명 확인을 뜻하지 않으며, 공식 배포 경로·release/advisory·실제 산출물 검토를 추가했다. build scan 업로드와 CI/CD는 구성하지 않았다.
 
-Docker Desktop: 공식 updater로4.97.0(244584), 2026-10-26 릴리스, 2026-10-28T04:17Z CLI/UI 확인. 근거 https://docs.docker.com/desktop/release-notes/#4970 . 엔진 기동 검증은 ENV-001 참조.
+Docker Desktop: 공식 updater로4.97.0(244584), 2026-10-26 릴리스, 2026-10-28T04:17Z CLI/UI 확인. 근거 https://docs.docker.com/desktop/release-notes/#4970 . Engine29.9.2 정상 기동 확인. VirtioFS 유지 및 권한 서비스 응답 복구는 ENV-001 참조.

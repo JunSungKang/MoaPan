@@ -93,6 +93,12 @@ services:
     mem_limit: 128m
     cpus: 0.5
     restart: unless-stopped
+    healthcheck:
+      test: ['CMD','curl','--fail','--silent','--max-time','3','http://localhost:8080/about.html']
+      interval: 5s
+      timeout: 4s
+      retries: 6
+      start_period: 10s
 networks:
   backend:
 volumes:
