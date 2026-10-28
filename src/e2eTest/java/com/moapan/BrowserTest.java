@@ -105,9 +105,9 @@ class BrowserTest {
             }
             p.locator("#username").fill("synthetic_terms");p.locator("#password").fill("synthetic password 12345");
             assertFalse(p.locator("input[type=checkbox]").isChecked());p.locator("button[type=submit]").click();assertTrue(bodies.isEmpty());
-            Page terms=p.waitForPopup(()->p.locator(".agreement a").click());terms.waitForLoadState();assertTrue(terms.locator("main").textContent().contains("약관 개정 제 4판"));assertTrue(terms.locator("main").textContent().contains("복구할 수 없습니다"));terms.close();
+            Page terms=p.waitForPopup(()->p.locator(".agreement a").click());terms.waitForLoadState();assertTrue(terms.locator("main").textContent().contains("약관 개정 제 1판"));assertTrue(terms.locator("main").textContent().contains("복구할 수 없습니다"));terms.close();
             assertEquals("synthetic_terms",p.locator("#username").inputValue());p.locator("input[type=checkbox]").check();p.locator("button[type=submit]").click();p.waitForURL("**/login.html");
-            assertEquals(1,bodies.size());assertTrue(bodies.getFirst().contains("\"termsAccepted\":true"));assertTrue(bodies.getFirst().contains("\"termsVersion\":\"terms-4\""));
+            assertEquals(1,bodies.size());assertTrue(bodies.getFirst().contains("\"termsAccepted\":true"));assertTrue(bodies.getFirst().contains("\"termsVersion\":\"terms-1\""));
         }
     }
     @Test void loginWarningCountdownAndUnlockAreVisible()throws Exception{
@@ -176,12 +176,12 @@ class BrowserTest {
         try(var context=browser.newContext()){
             context.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setStatus(401).setContentType("application/json").setBody("{}")));
             Page p=context.newPage();List<String> traffic=new ArrayList<>();p.onRequest(r->traffic.add(r.url()+" "+Objects.toString(r.postData(),"")));
-            for(String page:List.of("index","about","terms","privacy","policy-history","policies/terms-1","policies/terms-2","policies/terms-3","policies/privacy-1","policies/privacy-2","policies/privacy-3","policies/privacy-4","login","signup")){
+            for(String page:List.of("index","about","terms","privacy","login","signup")){
                 p.navigate(origin+"/"+page+".html");p.waitForLoadState(com.microsoft.playwright.options.LoadState.NETWORKIDLE);
                 for(String destination:List.of("settings","account","admin"))assertEquals(0,p.locator("a[href='/"+destination+".html']:visible").count(),page+" leaks "+destination);
             }
             for(String page:List.of("settings","account","admin")){p.navigate(origin+"/"+page+".html");p.waitForURL("**/login.html");}
-            p.navigate(origin+"/index.html");p.waitForSelector("#paper article");assertTrue(p.locator("#interest-basis").textContent().contains("대표 관심사"));
+            p.navigate(origin+"/index.html");p.waitForSelector("#paper article");assertEquals(0,p.locator("#interest-basis,#range").count());assertEquals(0,p.locator("#paper .reason").count());
             assertEquals(0,p.locator("[data-view],#latest,.tags button").count());assertFalse(p.locator("#search").isVisible());
             p.locator("#open-search").click();assertTrue(p.locator("#search").isVisible());p.locator("#search").fill("synthetic-popup-private-query");p.keyboard().press("Escape");assertEquals(15,p.locator("#paper article").count());
             p.locator("#open-search").click();assertEquals("",p.locator("#search").inputValue());p.locator("#search").fill("synthetic-popup-private-query");p.locator("#search-form [type=submit]").click();assertEquals(0,p.locator("#paper article").count());assertFalse(p.locator("#search-dialog").isVisible());
@@ -197,7 +197,7 @@ class BrowserTest {
             var writes=new ArrayList<String>();
             context.route("**/api/v1/admin/**",r->{String body="[]";if(r.request().url().endsWith("/interests")){if(r.request().method().equals("PUT")){writes.add(r.request().postData());body="{\"version\":1,\"weights\":{\"space\":3,\"ai\":3}}";}else body="{\"version\":0,\"weights\":{\"space\":3}}";}r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(body));});
             Page p=context.newPage();
-            for(String page:List.of("index","about","settings","account","terms","privacy","policy-history","policies/terms-1","policies/terms-2","policies/terms-3","policies/privacy-1","policies/privacy-2","policies/privacy-3","policies/privacy-4")){
+            for(String page:List.of("index","about","settings","account","terms","privacy")){
                 p.navigate(origin+"/"+page+".html");p.waitForLoadState(com.microsoft.playwright.options.LoadState.NETWORKIDLE);
                 if(p.locator("#account-menu").count()>0){assertEquals(1,p.locator("#account-menu a[href='/settings.html']").count());assertEquals(1,p.locator("#account-menu a[href='/account.html']").count());assertEquals(role.equals("ADMIN")?1:0,p.locator("#account-menu a[href='/admin.html']").count());assertEquals(0,p.locator("#account-menu a[href='/login.html']").count());}
                 if(List.of("settings","account").contains(page))assertTrue(p.locator("main").isVisible());
@@ -209,7 +209,7 @@ class BrowserTest {
     }
     @Test void defaultInterestsAndPolicyEditionsAreExplicit(){
         try(var context=browser.newContext()){
-            Page p=context.newPage();p.navigate(origin+"/index.html");p.waitForSelector("#paper article");assertTrue(p.locator("#interest-basis").textContent().contains("대표 관심사"));
+            Page p=context.newPage();p.navigate(origin+"/index.html");p.waitForSelector("#paper article");assertEquals(0,p.locator("#interest-basis,#range").count());assertEquals(0,p.locator("#paper .reason").count());
             assertEquals(0,p.locator("a[href='/admin.html']:visible").count());assertEquals(1,p.locator("#account-menu a[href='/settings.html']").count());
             assertEquals(true,p.evaluate("""
             async () => {const {effectivePreferences,rank}=await import('/assets/js/ranking.js');const {defaults}=await import('/assets/js/preferences.js');
@@ -217,8 +217,30 @@ class BrowserTest {
               const disabled=effectivePreferences({...defaults(),enabled:false,weights:{ai:4},excludedTags:['space']},preset);
               return empty.weights.space===5&&own.weights.ai===4&&disabled.weights.space===5&&disabled.excludedTags[0]==='space';}
             """));
-            p.evaluate("async id => {const m=await import('/assets/js/preferences.js');await m.savePreferences(id,{...m.defaults(),weights:{ai:5}});}",A);p.reload();p.waitForSelector("#paper article");assertTrue(p.locator("#interest-basis").textContent().contains("내 관심사"));
-            for(String page:List.of("terms","privacy")){p.navigate(origin+"/"+page+".html");String text=p.locator("main").textContent();assertTrue(text.contains("약관 개정 제"));assertFalse(text.contains("시행일:"));assertFalse(text.contains("최종 수정:"));p.locator("main a[href='/policy-history.html']").click();assertEquals(7,p.locator("main a[href^='/policies/']").count());}
+            p.evaluate("async id => {const m=await import('/assets/js/preferences.js');await m.savePreferences(id,{...m.defaults(),weights:{ai:5}});}",A);p.reload();p.waitForSelector("#paper article");assertEquals(15,p.locator("#paper .reason").count());
+            for(String page:List.of("terms","privacy")){p.navigate(origin+"/"+page+".html");String text=p.locator("main").textContent();assertTrue(text.contains("약관 개정 제 1판"));assertFalse(text.contains("시행일:"));assertFalse(text.contains("최종 수정:"));assertEquals(0,p.locator("a[href='/policy-history.html'],a[href^='/policies/']").count());}
+        }
+    }
+
+
+    @Test void editorialScrapGalleryAndInitialPolicies(){
+        try(var context=browser.newContext()){
+            Page p=context.newPage();p.navigate(origin+"/index.html");p.waitForSelector("#paper article");
+            assertEquals("MoA-PaN",p.locator(".topline [data-brand-en]").textContent());
+            assertEquals(p.evaluate("async()=> (await import('/assets/js/config.js')).brand.mastheadQuote"),p.locator("h1").textContent());
+            assertEquals(1,p.locator(".topline #open-search").count());
+            assertEquals(0,p.locator("main #open-search,#range,#interest-basis,main nav").count());
+            assertFalse(p.locator("header").textContent().contains("개인화 뉴스 V1"));
+            for(int width:new int[]{390,768,1440}){
+                p.setViewportSize(width,1000);
+                p.evaluate("async()=>{await document.fonts.ready;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));}");
+                assertEquals(width==390?"1":width==768?"2":"4",p.locator("#paper").evaluate("e=>getComputedStyle(e).columnCount"));
+                assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth<=innerWidth"));
+                p.screenshot(new Page.ScreenshotOptions().setPath(Path.of("build/reports/screenshots/scrap-gallery-"+width+".png")));
+            }
+            p.emulateMedia(new Page.EmulateMediaOptions().setMedia(com.microsoft.playwright.options.Media.PRINT));
+            assertEquals("none",p.locator("#paper article").first().evaluate("e=>getComputedStyle(e).transform"));
+            for(String old:List.of("policy-history","policies/terms-1","policies/terms-2","policies/terms-3","policies/privacy-1","policies/privacy-2","policies/privacy-3","policies/privacy-4"))assertEquals(404,context.request().get(origin+"/"+old+".html").status());
         }
     }
 

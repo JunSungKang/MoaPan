@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-28T10:22:11.619Z",
+  "checkedAt": "2026-10-28T12:51:31.345Z",
   "externalDeployment": {
     "status": "PASS",
     "scope": "User-authorized local Mac service reachable from mobile internet; separate hosting deployment excluded",
@@ -29,7 +29,7 @@
         "failures": 0,
         "errors": 0,
         "skipped": 0,
-        "timestamp": "2026-10-28T10:17:33.417Z"
+        "timestamp": "2026-10-28T12:45:48.358Z"
       },
       {
         "task": "test",
@@ -38,7 +38,7 @@
         "failures": 0,
         "errors": 0,
         "skipped": 0,
-        "timestamp": "2026-10-28T10:17:33.554Z"
+        "timestamp": "2026-10-28T12:45:48.491Z"
       },
       {
         "task": "integrationTest",
@@ -47,19 +47,19 @@
         "failures": 0,
         "errors": 0,
         "skipped": 0,
-        "timestamp": "2026-10-28T10:17:34.864Z"
+        "timestamp": "2026-10-28T12:45:49.151Z"
       },
       {
         "task": "e2eTest",
         "name": "com.moapan.BrowserTest",
-        "tests": 13,
+        "tests": 14,
         "failures": 0,
         "errors": 0,
         "skipped": 0,
-        "timestamp": "2026-10-28T10:13:26.139Z"
+        "timestamp": "2026-10-28T12:47:00.769Z"
       }
     ],
-    "total": 47,
+    "total": 48,
     "bootstrap": {
       "passed": 9,
       "failed": 0,
@@ -71,19 +71,19 @@
     "springBoot": "4.1.2",
     "gradle": "9.8.2",
     "postgresql": "18.6",
-    "jarSha256": "eaa68865a9ef0ec0c357f07d0b53eeee9175685161a588b4a93cab0b6ea7f3f1",
+    "jarSha256": "a8a61ed8c94c61b1fbb3573981fd9421c13a5fed0464932fc794e02008d6cf3a",
     "sbomSha256": "1ad74a0dc59e1c37447a0d4496fcbe280394be7ddb7a0328ac5655b21c962b63",
     "sbomComponents": 100
   },
   "images": [
     {
       "name": "moapan-local:1.0.0",
-      "digest": "sha256:7443a72cdfa9a5f1342413f8d272e6686eb04331dd43a20028b9e44873d8199f",
+      "digest": "sha256:4c289863a4d7f26ec532c4500c9698cdcce206426b0cebb5b68b5f85706e3fa6",
       "repoDigests": [
-        "moapan-local@sha256:7443a72cdfa9a5f1342413f8d272e6686eb04331dd43a20028b9e44873d8199f"
+        "moapan-local@sha256:4c289863a4d7f26ec532c4500c9698cdcce206426b0cebb5b68b5f85706e3fa6"
       ],
       "platform": "linux/amd64",
-      "scanSha256": "5a2a8c528414eb7ba03bf0a2a19da1bf999e1135d470d94d6c54bfa451d7e6a1",
+      "scanSha256": "a526d830430dfb3a480926fb4832a7c95e002975ea5aef593cd04726492489c3",
       "findings": [
         {
           "id": "CVE-2026-102473",
@@ -550,12 +550,12 @@
     },
     {
       "name": "moapan-build:1.0.0",
-      "digest": "sha256:99ca8161332031e600f2c72d0d4cf46b1492b671724f52a9bc5052acbb58b2a9",
+      "digest": "sha256:35eb38a810c69d1cea2daaf29bfa1d123fabc51447d333acb15377e7d14187aa",
       "repoDigests": [
-        "moapan-build@sha256:99ca8161332031e600f2c72d0d4cf46b1492b671724f52a9bc5052acbb58b2a9"
+        "moapan-build@sha256:35eb38a810c69d1cea2daaf29bfa1d123fabc51447d333acb15377e7d14187aa"
       ],
       "platform": "linux/amd64",
-      "scanSha256": "3d80f9ed3d7436b8cf0e8a936e80a942a8df140a7e791cb2a17547447ed2a31c",
+      "scanSha256": "8f75818f077ae34e51b61e711ff0b2da0c85e8518878b9e3203b26a5355a1dfc",
       "findings": [
         {
           "id": "CVE-2026-102473",
@@ -1014,7 +1014,7 @@
   "reports": [
     {
       "name": "source",
-      "sha256": "fbb1f42a09fef25a3dce2478b8c4021ebccc6f07e99a74eacf68768356df9c1b",
+      "sha256": "eed04ba79350beee83223b8bfa31d84a9faeaa29a2e87a0f571a02f87d004003",
       "packages": 327,
       "findings": [
         {
@@ -1035,13 +1035,13 @@
     },
     {
       "name": "jar",
-      "sha256": "516c24fef870eb52083bf1aff7f959998d451818546d44cea769e24a1f1b3d89",
+      "sha256": "8843a92be8093a1d23d0b23a172b4f3e35838e3cdc5a3cb52b75d2ed7e81a5cf",
       "packages": 91,
       "findings": []
     },
     {
       "name": "sbom",
-      "sha256": "67e33fbea001aac50d1dff23878e6f0244d482bfb12a79c0e7027c71f595ddf1",
+      "sha256": "2b736210b3fee44e1537a42daa9913638784d4e3bac22da6de60c9206924c1b9",
       "packages": 100,
       "findings": []
     }

@@ -49,3 +49,6 @@ Ubuntu24.04의 잔여 MEDIUM/LOW는 발견 목록에 모두 유지한다. 공급
 
 ## 제한 공개 지면·대표 관심사 개정
 사용자 명시 요청으로 최대30개 공개 기사 endpoint를 추가했다. 비회원에게 제공한 뉴스는 복사를 막을 수 없고, 분당600 전역 한도는 IP 추적 없이 적용하므로 공유 한도의 가용성 제한이 있다. 회원 cursor·quota·개인 계정·관리 API 보호는 유지한다. 공개 DTO는 기존 권리/숨김 재검사를 사용하며 무제한 query/cursor는 거부한다. 대표 관심사는 공통 운영 설정으로 ADMIN+CSRF+서비스 권한+version 조건+감사로 변경한다. 보호 HTML3개만 로그인 이동하고 API는 .html 경로도 JSON401 유지. 검색 조건은 네트워크로 보내지 않는다. 새로운 의존성·truststore 변경 없음. 최종 JAR/SBOM/변경 build·runtime 이미지 스캔과 실행 digest 대조는 verification.json 참조.
+
+## 최초판·스크랩 반영 2026-10-28T12:49:33.292Z
+JDK·의존성·truststore·네트워크 권한 변경 없음. 대표 문구는 로컬 정적 설정과 textContent, 스크랩은 자체 CSS이며 외부 폰트/이미지/추적 요청을 추가하지 않았다. 동의판 변경은 신규 가입에만 적용하며 기존 회원 동의 기록은 수정하지 않았다. source/JAR/SBOM과 최종 runtime/build 이미지 재검사 게이트 통과, 실행 JAR SHA·이미지 digest 일치. runtime sha256:4c289863a4d7f26ec532c4500c9698cdcce206426b0cebb5b68b5f85706e3fa6. HIGH/CRITICAL0, 기존 MEDIUM/LOW 및 도구의 근거 있는 NOT_AFFECTED 검토는 유지한다. DB 동기화 시각/개별 발견/원본 보고서 SHA는 evidence/verification.json.

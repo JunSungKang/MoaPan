@@ -69,3 +69,6 @@ Sprint Delivery 유지. src 정적 모듈·설정 화면에 WebCrypto 암호화 
 관심지면 하나로 통합, 검색/카테고리/날짜는 native dialog의 적용/취소/초기화로 로컬 처리. 약관은 판 번호만 표시하고 실제 Git에 존재하는 이전 본문을 정적 이력으로 제공하며 신규 동의 판을 갱신한다. 기존 동의 기록은 유지.
 ### 11.3 검증과 전달
 공개 필드/상한/숨김 기사/권한/CSRF/충돌/기본값 및 메뉴 전체역할·검색 팝업·비전송·판 이력을 PostgreSQL와 Playwright Java로 검증. 기존 인수 기준의 변경 근거를 문서화. local 검사·이미지 검사·Compose 반영·HTTPS 확인·guarded push까지 진행한다. CI/CD/main merge/개인 관심사 서버 저장은 제외. 변경 경로 src/docs/scripts 및 현재 GitHub 계약 범위, 작업 루트는 승인된 moapan workspace만.
+
+## 12. 최초 약관과 스크랩 갤러리
+현재 약관·개인정보 안내를 최초 제1판으로 표시하고 공개 이력 파일·링크를 삭제한다. 기존 회원 동의 기록은 변조하지 않는다. MoA-PaN 워드마크와 중앙 설정의 대표 문구, 상단 검색 버튼으로 제호를 정리한다. 중간 지면 설명·수량 줄을 제거하고 기사 순서·접근성을 유지한 4/2/1단 스크랩 갤러리를 만든다. Playwright·PostgreSQL·산출물/이미지 검사 후 현재 Compose 서비스 반영 및 guarded push한다.

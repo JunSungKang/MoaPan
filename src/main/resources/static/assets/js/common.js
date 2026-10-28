@@ -5,6 +5,7 @@ export function report(error){const node=document.querySelector('[role="status"]
 export function date(value){return new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'}).format(new Date(value));}
 for(const node of document.querySelectorAll('[data-brand]'))node.textContent=brand.name;
 for(const node of document.querySelectorAll('[data-brand-en]'))node.textContent=brand.english;
+for(const node of document.querySelectorAll('[data-masthead-quote]'))node.textContent=brand.mastheadQuote;
 document.title=brand.name+' · '+document.title;
 const today=document.querySelector('#today');if(today)today.textContent=date(Date.now());
 const menu=document.querySelector('#account-menu');

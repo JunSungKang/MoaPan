@@ -60,3 +60,5 @@ Wrapper ZIP/JAR 체크섬, dependency locking, strict verification을 사용한�
 법률·상표·도메인·사업자·언론 관련 등록 검토가 완료됐다고 주장하지 않는다. 현재 공개 저장소의 main merge는 수행하지 않고 지정 작업 브랜치로 전달한다.
 
 엔진/서비스 준비를 제한 시간 안에 확인하려면 이미지 빌드 후 `node scripts/local-start.mjs`를 실행한다. Engine 사전 검사10초, Compose health90초, 전체 시작120초 상한이며 실패를 성공으로 처리하지 않는다. Docker 시작 장애 기록은 docs/BUGS.md를 참고한다.
+
+대표 문구 변경: `src/main/resources/static/assets/js/config.js`의 `brand.mastheadQuote`를 수정한다. `\n`은 의도한 줄바꿈이다. 브랜드 영문 표기는 같은 파일의 `english`에서 관리한다. 코드 변경 후 검증·이미지 재빌드·서비스 재생성이 필요하며 자동 문구 순환은 사용하지 않는다.

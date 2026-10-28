@@ -8,4 +8,29 @@
 
 #interest-controls,#transfer-controls{min-width:0}#transfer-controls input{display:block;width:100%;min-width:0;max-width:100%;margin:.5rem 0}#transfer-controls button{max-width:100%;margin:.4rem 0}#transfer-controls p{overflow-wrap:anywhere}
 
-dialog{background:var(--paper);color:var(--ink);border:1px solid var(--ink);width:min(90vw,560px);max-height:85dvh;padding:1.5rem;overflow:auto}dialog::backdrop{background:rgb(0 0 0 / .45)}dialog input,dialog select{width:100%;min-width:0}#search-summary{overflow-wrap:anywhere}.policy-history-link{font-size:.8rem;color:var(--muted)}@media print{dialog,#open-search,#clear-search{display:none!important}}
+dialog{background:var(--paper);color:var(--ink);border:1px solid var(--ink);width:min(90vw,560px);max-height:85dvh;padding:1.5rem;overflow:auto}dialog::backdrop{background:rgb(0 0 0 / .45)}dialog input,dialog select{width:100%;min-width:0}#search-summary{overflow-wrap:anywhere}@media print{dialog,#open-search,#clear-search{display:none!important}}
+
+/* Editorial masthead. Copy lives in assets/js/config.js. */
+.topline{text-transform:none;letter-spacing:0;min-height:2.5rem}
+.brand-wordmark{font:800 1.45rem/1.2 Georgia,serif;letter-spacing:-.06em;text-decoration:none}
+.masthead .editorial-quote{white-space:pre-line;max-width:26ch;margin:2.3rem auto 2.5rem;font-size:clamp(1.8rem,3.3vw,3rem);line-height:1.5;letter-spacing:-.055em;word-break:keep-all;font-weight:700}
+.masthead .compact-brand{text-align:left;font-size:1.8rem;letter-spacing:-.06em;margin:.3rem 0}
+.search-trigger{display:inline-flex;gap:.5rem;align-items:center;border:0;border-bottom:1px solid var(--ink);padding:.2rem 0;font:.85rem system-ui}
+.search-trigger span{font:1.6rem/1 Georgia,serif}
+.search-result-summary:not(:has(#search-summary:not(:empty))){display:none}
+[role=status]:empty{display:none}
+/* Uneven clippings follow DOM order down each column, without fixed heights. */
+.paper.scrap-gallery{display:block;columns:4;column-gap:1.6rem;padding:1.2rem .5rem .5rem}
+.scrap-gallery article,.scrap-gallery article.lead{display:inline-block;vertical-align:top;width:100%;break-inside:avoid;margin:0 0 1.8rem;padding:1.3rem 1.15rem 1.1rem;border:0;border-top:3px solid var(--ink);background:#fffdf7;box-shadow:1px 3px 0 #d9d3c4,3px 6px 12px #302b1810;position:relative;transform:rotate(-.45deg)}
+.scrap-gallery article:nth-child(3n+2){background:#eee9dc;border-top:1px solid var(--rule);transform:rotate(.55deg);padding-top:1.8rem}
+.scrap-gallery article:nth-child(3n+2)::before{content:"";position:absolute;width:3.6rem;height:.85rem;background:#c6b99070;top:-.4rem;left:calc(50% - 1.8rem);transform:rotate(-5deg);pointer-events:none}
+.scrap-gallery article:nth-child(3n){background:#fdfbf3;border-top:1px dashed var(--rule);transform:rotate(.2deg)}
+.scrap-gallery h2,.scrap-gallery .lead h2{font-size:1.45rem;line-height:1.5;margin:.6rem 0 1rem;word-break:keep-all;overflow-wrap:anywhere}
+.scrap-gallery .lead h2{font-size:1.8rem}
+.scrap-gallery .eyebrow{border-bottom:1px solid var(--rule);padding-bottom:.55rem}
+.scrap-gallery .byline{margin:.55rem 0}
+.scrap-gallery .tags{margin-top:.9rem}
+@media(max-width:1000px){.paper.scrap-gallery{columns:2}}
+@media(max-width:600px){.paper.scrap-gallery{columns:1;padding:1rem .2rem;column-gap:0}.scrap-gallery article,.scrap-gallery article.lead{transform:none;padding:1.2rem;margin-bottom:1.5rem}.masthead .editorial-quote{margin:1.7rem auto 1.8rem;font-size:1.8rem}.brand-wordmark{font-size:1.3rem}.search-trigger{font-size:.8rem}}
+@media(prefers-reduced-motion:reduce){.scrap-gallery article{transform:none}}
+@media print{.paper.scrap-gallery{columns:3;padding:0;column-gap:1.5rem}.scrap-gallery article,.scrap-gallery article.lead,.scrap-gallery article:nth-child(n){display:block;transform:none;box-shadow:none;background:#fff;border:0;border-bottom:1px solid #aaa;padding:.7rem 0;margin:0}.scrap-gallery article::before{display:none}.scrap-gallery h2,.scrap-gallery .lead h2{font-size:14pt}.masthead .editorial-quote{font-size:20pt;margin:1rem auto}}
