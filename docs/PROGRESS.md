@@ -12,7 +12,7 @@
 - 실제2 web quota·worker SIGKILL lease 복구·빈 DB migration·암호화 격리 백업 복원도 별도 검증했다.
 
 ## 전달 및 남은 조건
-- 기존 guarded commit/push와 PR#1 생성·사람 assignee 설정 완료. 이번 복구·proxy 수정·최신 증빙은 후속 guarded commit/push 후 원격 SHA를 다시 확인한다.
+- 기존 guarded commit/push와 PR#1 생성·사람 assignee 설정 완료. 복구·proxy 수정·최신 증빙 커밋767f2b409e534a1f74ceb3630050a556b6e88eb9를 guarded push하고 원격 SHA 일치를 확인했다.
 - main merge는 승인되지 않아 수행하지 않는다. 현재 head의 독립 App formal review는 병합 전 별도 gate다.
 - 외부 HTTPS 검증은 승인된 서버·도메인 미제공으로 BLOCKED. 공급자 보안 검토 일부 불확실성·잔여 MEDIUM/LOW는 인수표 AC-03 PARTIAL 유지.
 - 사업 개시 전 상표·콘텐츠 이용 범위·운영자 정보·사업/언론 등록 여부·법률 검토는 별도 확인한다.
