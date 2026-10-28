@@ -43,3 +43,5 @@ CI/CD는 사용자 명시 제외. PASS는 아래 실제 시험 범위의 통과�
 공개 지면 변경(최신 사용자 요청): AC-08의 비회원 뉴스 일괄 차단은 회원 전용 API에 유지하고 별도 공개 edition은30개/no cursor로 허용한다. publicEditionIsBoundedAndProtectedPagesStayPrivate, representativeInterestsRequireAdminCsrfAndCurrentVersion, guestMenusProtectedPagesAndSearchDialog, memberAndAdminMenusAndRepresentativeEditor, defaultInterestsAndPolicyEditionsAreExplicit로 검증한다. 기존 판별 기준을 몰래 완화하지 않고 명시적 정책 변경으로 기록한다.
 
 최초판·스크랩 사용자 변경: FS-23 → config.js/common.js/index.html/news.js/newspaper.css → BrowserTest.editorialScrapGalleryAndInitialPolicies 및 기존 popup/메뉴 테스트 PASS. FS-25/AC-06 → terms/privacy/signup/AuthController → signupRequiresCurrentExplicitConsent/simpleAuthFormsRequireConsentAndShowReadableTerms PASS. 기존 정책 이력 제공 요구는 이번 명시적 삭제 요청으로 대체했다. AC-22의4/2/1단·키보드·인쇄·검색·넘침 검증 유지. 최신 총48 PASS, 공개 실행 evidence/scrap-layout.json.
+
+FS-23/AC-22 상단 보완: 검색 버튼 채움 제거·모바일 구분선/메뉴 정리·푸터 우측 정렬. 기존 BrowserTest14개 회귀 PASS 및390/768/1440px 스크린샷 확인. 수집/인증/개인화 동작 변경 없음.

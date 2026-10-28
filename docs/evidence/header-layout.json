@@ -1,0 +1,19 @@
+{
+  "checkedAt": "2026-10-28T13:00:16.803Z",
+  "url": "https://175.195.62.165/",
+  "styles": [
+    {
+      "path": "/assets/css/newspaper.css",
+      "status": 200,
+      "sha256": "90537d4d0280d95b2c975e0d646d89299fbad78bedc2f325df5fc84ddd1b3bc3",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "/assets/css/auth.css",
+      "status": 200,
+      "sha256": "5ba39fd9f9b691744e068b75dab1d39f56fe2e033cafa36cab68abdaeadca424",
+      "matchesWorkspace": true
+    }
+  ],
+  "publicArticles": 13
+}

@@ -9,7 +9,7 @@
 - Compose: db/web/proxy healthy, worker 실행, migrate exit0. 재생성22기사 보존. 시작 명령: docker compose -f compose.yaml -f scripts/compose-public.yaml up -d --no-build --wait. 접속 URL https://175.195.62.165/ — 휴대폰 데이터망 확인 완료. 공개 모드 실행 명령은 DEPLOYMENT.md.
 - 테스트: Java48 PASS/FAIL0/SKIP0, bootstrap9 PASS, 시작 제한 시간3 PASS. 실제2 web quota·worker lease 복구·암호화 격리 복원 PASS. 검증 한계는 TEST_REPORT.md.
 - 보안: 소스/JAR/SBOM/이미지5종/도구 검사 HIGH·CRITICAL0. 잔여 MEDIUM·LOW 및 OpenPGP 미포함 근거를 유지. 알려진 취약점0 또는 미공개 취약점 부재를 보장하지 않는다.
-- 최종 앱 이미지: sha256:4c289863a4d7f26ec532c4500c9698cdcce206426b0cebb5b68b5f85706e3fa6. 다른 이미지와 report SHA는 evidence/verification.json.
+- 최종 앱 이미지: sha256:10fb33088f67df15ac84f45c5d16651031a558264c67df199d598525b1edd3c5. 다른 이미지와 report SHA는 evidence/verification.json.
 - GitHub: https://github.com/JunSungKang/MoaPan / codex/moapan-v1 / PR#1. 최종 커밋 후 guarded push와 원격 SHA 대조로 전달한다.
 - 운영 조건: Mac/Docker 실행, 현재 공인 IP와80/443 유지. Caddy 인증서 자동 갱신. 별도 서버·도메인 구매 없음.
 - 사업 개시 전: 운영자 정보·상표·콘텐츠 이용계약/범위·사업자 및 언론 관련 등록 여부·법률 검토 별도 확인.

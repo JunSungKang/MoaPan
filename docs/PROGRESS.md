@@ -50,3 +50,6 @@ settings.html은 관심 주제 체크·제외·문장 사전 매칭에 집중하
 
 ## 스크랩 지면·최초판 정리 진행
 상단 MoA-PaN/교체형 대표 문구/검색 재배치·중간 설명 제거·공개 이력8페이지 제거·제1판 신규 동의·스크랩 갤러리 완료. Java48 PASS/FAIL0/SKIP0, 이미지 재검사·Compose 반영·공개 HTTPS 실제13기사/가입/로그인/권한/삭제 확인. 기존 admin 유지. 구현 커밋 07127433dfa5f7512f8f1c99239ef96d71141bd9를 guarded push했고 codex/moapan-v1 원격 SHA 일치를 확인했다. 이 기록은 전달 확인 후의 문서 보완이다. 현재 요청 완료.
+
+## 검색 버튼·모바일 상단·푸터 정리
+CSS 구현과 E2E14개 회귀 및 최종 JAR/SBOM/이미지 검사 완료. Compose db/web/proxy healthy·worker running, HTTPS CSS 두 파일이 workspace와 동일하며 실제 공개 기사 제공 확인. 구현·검증·서비스 반영 완료. 전달은 해당 커밋의 guarded push와 원격 SHA 대조로 확인한다. 수집 방식은 RSS/Atom 파서·제한 JSON 매핑 기반이며 LLM 미사용임을 코드에서 확인했다.

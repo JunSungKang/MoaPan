@@ -52,3 +52,5 @@ Ubuntu24.04의 잔여 MEDIUM/LOW는 발견 목록에 모두 유지한다. 공급
 
 ## 최초판·스크랩 반영 2026-10-28T12:49:33.292Z
 JDK·의존성·truststore·네트워크 권한 변경 없음. 대표 문구는 로컬 정적 설정과 textContent, 스크랩은 자체 CSS이며 외부 폰트/이미지/추적 요청을 추가하지 않았다. 동의판 변경은 신규 가입에만 적용하며 기존 회원 동의 기록은 수정하지 않았다. source/JAR/SBOM과 최종 runtime/build 이미지 재검사 게이트 통과, 실행 JAR SHA·이미지 digest 일치. runtime sha256:4c289863a4d7f26ec532c4500c9698cdcce206426b0cebb5b68b5f85706e3fa6. HIGH/CRITICAL0, 기존 MEDIUM/LOW 및 도구의 근거 있는 NOT_AFFECTED 검토는 유지한다. DB 동기화 시각/개별 발견/원본 보고서 SHA는 evidence/verification.json.
+
+CSS 상호작용/모바일 정렬 변경 검증 2026-10-28T13:00:18.186Z: JDK/의존성/truststore 불변. source/JAR/SBOM·변경 runtime/build 이미지 검사 통과, 실행 JAR와 검사 산출물 일치. runtime sha256:10fb33088f67df15ac84f45c5d16651031a558264c67df199d598525b1edd3c5. 기존 MEDIUM/LOW 발견은 유지하며 HIGH/CRITICAL0. 공개 전달 CSS SHA는 evidence/header-layout.json.

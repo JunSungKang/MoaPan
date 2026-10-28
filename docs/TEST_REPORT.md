@@ -62,3 +62,6 @@ Java47개(unit11/integration23/E2E13) PASS/FAIL0/SKIP0. PostgreSQL 공개30개·
 ## 최초판·스크랩 지면 (2026-10-28T12:49:33.292Z)
 Java48개(unit11/integration23/E2E14) PASS/FAIL0/SKIP0. 전체 check/integrationTest/e2eTest/bootJar/sbom/securityCheck/acceptanceTest 통과. 최초 삭제 URL 검증의 빈404 응답을 브라우저 navigation으로 읽을 때 발생한 테스트 도구 오류는 실제 HTTP 응답 검사로 수정했고 8개 모두404를 확인했다. 검증 기준은 유지했다.
 MoA-PaN/중앙 문구 설정/상단 검색 위치/중간 설명 제거/4·2·1단/가로 넘침 없음/인쇄 장식 제거/검색 비전송/권한 메뉴/신규 terms-1 가입을 검증했다. 스크린샷: build/reports/screenshots/scrap-gallery-{390,768,1440}.png (합성 기사). 공개 HTTPS 실제13기사와 최초판2문서, 구 동의 거부400·신 동의200·로그인200·회원 API200·일반회원 admin403·테스트 계정 삭제 PASS. 기존 admin 활성/ADMIN 유지, Compose db/web/proxy healthy·worker running. evidence/scrap-layout.json 및 verification.json 참조.
+
+## 검색 상호작용·모바일 상단·푸터
+CSS 변경 후 e2eTest/bootJar/sbom/securityCheck/acceptanceTest 통과. 기존 E2E14개 모두 재실행 PASS, 전체 최신 보고서48 PASS/FAIL0/SKIP0. 390/768/1440px 합성 지면 스크린샷 확인, 모바일 중복 구분선 제거 및 가로 넘침 없음. 검색 팝업·키보드·역할 메뉴·인쇄 회귀 유지. 최종 이미지/공개 CSS 일치 증빙은 evidence/header-layout.json 및 verification.json.

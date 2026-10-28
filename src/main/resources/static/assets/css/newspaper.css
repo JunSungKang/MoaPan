@@ -16,6 +16,7 @@ dialog{background:var(--paper);color:var(--ink);border:1px solid var(--ink);widt
 .masthead .editorial-quote{white-space:pre-line;max-width:26ch;margin:2.3rem auto 2.5rem;font-size:clamp(1.8rem,3.3vw,3rem);line-height:1.5;letter-spacing:-.055em;word-break:keep-all;font-weight:700}
 .masthead .compact-brand{text-align:left;font-size:1.8rem;letter-spacing:-.06em;margin:.3rem 0}
 .search-trigger{display:inline-flex;gap:.5rem;align-items:center;border:0;border-bottom:1px solid var(--ink);padding:.2rem 0;font:.85rem system-ui}
+.search-trigger:hover,.search-trigger:active,.search-trigger:focus{background:transparent;color:var(--ink)}
 .search-trigger span{font:1.6rem/1 Georgia,serif}
 .search-result-summary:not(:has(#search-summary:not(:empty))){display:none}
 [role=status]:empty{display:none}
@@ -34,3 +35,15 @@ dialog{background:var(--paper);color:var(--ink);border:1px solid var(--ink);widt
 @media(max-width:600px){.paper.scrap-gallery{columns:1;padding:1rem .2rem;column-gap:0}.scrap-gallery article,.scrap-gallery article.lead{transform:none;padding:1.2rem;margin-bottom:1.5rem}.masthead .editorial-quote{margin:1.7rem auto 1.8rem;font-size:1.8rem}.brand-wordmark{font-size:1.3rem}.search-trigger{font-size:.8rem}}
 @media(prefers-reduced-motion:reduce){.scrap-gallery article{transform:none}}
 @media print{.paper.scrap-gallery{columns:3;padding:0;column-gap:1.5rem}.scrap-gallery article,.scrap-gallery article.lead,.scrap-gallery article:nth-child(n){display:block;transform:none;box-shadow:none;background:#fff;border:0;border-bottom:1px solid #aaa;padding:.7rem 0;margin:0}.scrap-gallery article::before{display:none}.scrap-gallery h2,.scrap-gallery .lead h2{font-size:14pt}.masthead .editorial-quote{font-size:20pt;margin:1rem auto}}
+
+/* Keep mobile utilities unboxed; clippings provide the visual separation. */
+footer{justify-content:flex-end;text-align:right}
+@media(max-width:600px){
+  .masthead{border-bottom:0;padding-bottom:.25rem}
+  .masthead .meta{border-top:0;padding-top:0;gap:.75rem;align-items:center}
+  .masthead .meta time{font-size:.72rem;color:var(--muted)}
+  .masthead #account-menu{gap:.7rem;justify-content:flex-end;margin-left:auto;font-size:.75rem}
+  .masthead #account-menu button{padding:.25rem .45rem}
+  footer{gap:.5rem 1rem}
+  footer>span{flex-basis:100%}
+}
