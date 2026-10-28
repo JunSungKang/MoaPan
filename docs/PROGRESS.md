@@ -24,3 +24,6 @@
 ## 현재 재검증 장애 (2026-10-28T03:16Z)
 
 최종 이미지 대조에서 DB/proxy 실행 이미지가 최신 scan 대상과 달라 재생성을 시작했다. Docker 엔진 ping과 같은 DB 이미지의 단독 postgres --version은 성공하나 bind mount가 있는 db/proxy start가 대기 중이다. 이전 smoke 성공을 현재 Compose 성공으로 주장하지 않는다. 사용자가 Docker Desktop 재시작을 명시 승인했다. 일반 restart의 stopping 정체 후 공식 stop --force로 종료했고 새 세션의 starting 상태를 확인했다. 현재 데몬 컨테이너 복원 단계가 준비되지 않아 Compose 복구 명령이 대기 중이다. 승인 대기는 해소됐으며 엔진 준비 장애를 추적한다. 데이터 볼륨은 삭제하지 않았다. 재시작/회복 후 Compose 재실행·실제 smoke·record-evidence 재생성이 필요하다.
+
+## ENV-001 수정 진행 — 2026-10-28T04:21Z
+Docker Desktop4.97.0 업데이트 완료 후에도 엔진 정체 재현. UI의 gRPC FUSE 설정 적용도 engine stopping에 정체하므로 설정 파일 직접 수정의 workspace 외부 경로 예외를 사용자에게 요청했다. 이 예외 전에는 파일을 직접 변경하지 않는다. 프로젝트 변경: runtime bind mount 두 개를 이미지 COPY로 전환, 시작/수집/증빙 도구에 제한 시간 추가. 제한 시간 회귀3개·브라우저4개 재실행 PASS, check/bootJar/SBOM/securityCheck 성공. Docker 새 이미지·통합 회귀·수집·최종 증빙 갱신·후속 push는 남아 있다.

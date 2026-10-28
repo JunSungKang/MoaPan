@@ -7,7 +7,7 @@ const root=fs.realpathSync('.');
 const write=(file,text)=>{const target=path.resolve(root,file);assert(target.startsWith(root+path.sep));fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,text);};
 const read=p=>JSON.parse(fs.readFileSync(p,'utf8'));
 const sha=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
-const docker=args=>execFileSync('docker',args,{encoding:'utf8'}).trim();
+const docker=args=>execFileSync('docker',args,{timeout:30000,killSignal:'SIGKILL',encoding:'utf8'}).trim();
 const objectLog=p=>{const s=fs.readFileSync(p,'utf8');return JSON.parse(s.slice(s.indexOf('{'),s.lastIndexOf('}')+1));};
 const suites=[];for(const task of ['test','integrationTest','e2eTest'])for(const f of fs.readdirSync(`build/test-results/${task}`).filter(x=>x.endsWith('.xml'))){const tag=fs.readFileSync(`build/test-results/${task}/${f}`,'utf8').match(/<testsuite\s[^>]*>/)[0];const field=k=>tag.match(new RegExp(`${k}="([^"]*)"`))?.[1];suites.push({task,name:field('name'),tests:Number(field('tests')),failures:Number(field('failures')),errors:Number(field('errors')),skipped:Number(field('skipped')),timestamp:field('timestamp')});}
 assert(suites.every(x=>x.failures===0&&x.errors===0&&x.skipped===0),'Tests must all execute and pass');

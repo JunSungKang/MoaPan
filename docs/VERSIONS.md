@@ -37,3 +37,5 @@ JDK27은 LTS와 구분한다. GPLv2 + Classpath Exception, 상업적 사용을 �
 호스트 java/javac·Gradle daemon/toolchain·단위/통합/브라우저 테스트는 workspace Temurin27.0.1.0.2+1을 사용한다. 시스템 기본25.0.3은 사용하지 않는다. Docker runtime 내부 동일 문자열과 truststore를 별도로 검사했고, 호스트 bootJar와 컨테이너 내부 JAR SHA256이 같은지 확인한다. Linux arm64의 선택 패치 미제공으로 app는 명시적 linux/amd64다. 최신이라는 tag만 사용하거나 JDK를 몰래 낮추지 않았다.
 
 Wrapper는 공식 ZIP에서 생성한 JAR을 별도 공식 SHA256과 대조했다. 의존성은 Maven Central/Gradle Plugin Portal, 고정 Boot BOM·lock·strict verification을 사용한다. verification metadata 자동 생성 자체가 모든 공급자의 서명 확인을 뜻하지 않으며, 공식 배포 경로·release/advisory·실제 산출물 검토를 추가했다. build scan 업로드와 CI/CD는 구성하지 않았다.
+
+Docker Desktop: 공식 updater로4.97.0(244584), 2026-10-26 릴리스, 2026-10-28T04:17Z CLI/UI 확인. 근거 https://docs.docker.com/desktop/release-notes/#4970 . 엔진 기동 검증은 ENV-001 참조.

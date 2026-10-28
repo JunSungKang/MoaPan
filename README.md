@@ -54,3 +54,5 @@ Wrapper ZIP/JAR 체크섬, dependency locking, strict verification을 사용한�
 컨테이너를 재생성해도 DB volume은 유지한다. `docker compose down -v`는 데이터를 지우므로 일반 운영 명령으로 사용하지 않는다. 백업 도구는 `sh scripts/build-backup-tools.sh`로 보안 수정 버전을 준비한다. 백업은 `sh scripts/backup.sh <age-public-recipient>`로 암호화하고, `sh scripts/restore-check.sh <backup> <private-identity-file>`로 격리 복원을 검증한다. 실제 `.local/backups` 파일·identity를 Git이나 공개 아티팩트로 올리지 않는다. 자동 백업은 구성하지 않는다.
 
 법률·상표·도메인·사업자·언론 관련 등록 검토가 완료됐다고 주장하지 않는다. 현재 공개 저장소의 main merge는 수행하지 않고 지정 작업 브랜치로 전달한다.
+
+엔진/서비스 준비를 제한 시간 안에 확인하려면 이미지 빌드 후 `node scripts/local-start.mjs`를 실행한다. Engine 사전 검사10초, Compose health90초, 전체 시작120초 상한이며 실패를 성공으로 처리하지 않는다. Docker 시작 장애 기록은 docs/BUGS.md를 참고한다.

@@ -5,7 +5,7 @@ const base = 'http://localhost:8080';
 let cookie='',csrf;
 async function call(path,method='GET',body){
   const headers={Accept:'application/json'};if(cookie)headers.Cookie=cookie;if(method!=='GET'){headers['Content-Type']='application/json';headers['X-CSRF-TOKEN']=csrf;}
-  const response=await fetch(base+path,{method,headers,body:body===undefined?undefined:JSON.stringify(body)});
+  const response=await fetch(base+path,{signal:AbortSignal.timeout(15000),method,headers,body:body===undefined?undefined:JSON.stringify(body)});
   for(const value of response.headers.getSetCookie()){const pair=value.split(';')[0];if(pair.startsWith('SESSION='))cookie=pair;}
   const text=await response.text();let result;try{result=text?JSON.parse(text):null;}catch{throw Error('Non-JSON API response');}
   if(!response.ok)throw Error(`HTTP ${response.status} ${result?.error||'request_failed'}`);return result;
@@ -14,7 +14,7 @@ async function token(){csrf=(await call('/api/v1/auth/csrf')).token;}
 const username='smoke_'+randomBytes(6).toString('hex'), password=randomBytes(32).toString('base64url');let created=false;
 try{
   await token();await call('/api/v1/auth/signup','POST',{username,password});created=true;
-  const grant=spawnSync('docker',['compose','run','--rm','-T','-e','MOAPAN_ROLE=admin-cli','web'],{input:username+'\n',encoding:'utf8'});
+  const grant=spawnSync('docker',['compose','run','--rm','-T','-e','MOAPAN_ROLE=admin-cli','web'],{timeout:60000,killSignal:'SIGKILL',input:username+'\n',encoding:'utf8'});
   if(grant.status!==0)throw Error('Local admin-cli failed; inspect role startup without credentials');
   await call('/api/v1/auth/login','POST',{username,password});await token();
   const definitions=[

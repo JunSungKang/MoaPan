@@ -39,10 +39,12 @@ RUN --mount=type=cache,id=moapan-go-mod,target=/root/go/pkg/mod --mount=type=cac
 FROM postgres:18.6-alpine@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5 AS database
 RUN apk upgrade --no-cache
 COPY --from=proxy-build /gosu /usr/local/bin/gosu
+COPY --chmod=0555 scripts/db-init.sh /docker-entrypoint-initdb.d/10-app-user.sh
 FROM ubuntu:24.04@sha256:24737cef17f4e22b1977df7d9a05e77c4e28b7da5b8911f8d8ccda136bf3573c AS proxy
 RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates && rm -rf /var/lib/apt/lists/* \
     && mkdir -p /data /config && chown -R 10001:10001 /data /config
 COPY --from=proxy-build /caddy /usr/bin/caddy
+COPY --chmod=0444 Caddyfile /etc/caddy/Caddyfile
 USER 10001:10001
 ENV HOME=/tmp XDG_DATA_HOME=/data XDG_CONFIG_HOME=/config
 ENTRYPOINT ["caddy","run","--config","/etc/caddy/Caddyfile","--adapter","caddyfile"]

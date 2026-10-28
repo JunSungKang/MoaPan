@@ -30,3 +30,7 @@ sh scripts/restore-check.sh <workspace-encrypted-backup> <workspace-private-iden
 격리 복원은 별도 DB를 생성해 복호화·SQL을 검증하고 모든 복원 계정을 비활성화·세션을 제거한 뒤 그 격리 DB만 삭제한다. 운영 복원 전 공개를 중지하고 이 정책을 적용하여 탈퇴 계정이 자동 부활하지 않게 한다. 재활성화는 별도 운영 확인을 거친다. 실제 검증에서 articles=20, active_accounts=0, sessions=0이었다. 검증용 키·암호화 백업은 검증 후 정리한다. 수동 백업 보관기간은7일이며 자동 백업은 구성하지 않았다.
 
 앱 rollback은 이전 앱과 현재 schema의 호환성을 확인한 경우에만 수행한다. 파괴적 DB rollback이나 취약한 이미지로의 무조건 복귀는 하지 않는다. 보안 수정 실패 시 외부 공개 중지·격리를 우선한다. 외부 배포·백업 저장소 접근통제·사업자 로그 정책은 실제 운영 환경이 정해진 뒤 확인해야 한다.
+
+엔진/서비스 준비를 제한 시간 안에 확인하려면 이미지 빌드 후 `node scripts/local-start.mjs`를 실행한다. Engine 사전 검사10초, Compose health90초, 전체 시작120초 상한이며 실패를 성공으로 처리하지 않는다. Docker 시작 장애 기록은 docs/BUGS.md를 참고한다.
+
+Caddyfile과 scripts/db-init.sh는 이미지에 포함된다. 수정 후 proxy/db 이미지를 재빌드하고 다시 보안 검사한다. 기본 Compose는 호스트 파일 bind mount를 사용하지 않으며 기존 named volume을 유지한다.

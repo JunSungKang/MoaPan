@@ -15,3 +15,6 @@
 - Trivy filesystem 모드가 JAR 분석을 생략하는 사실을 확인하여 실제 bootJar는 rootfs JAR analyzer로 검사한다. 인식 패키지 0개·빈 SBOM·24시간 초과 DB 동기화는 실패로 처리한다.
 - 보안 인증 식별자 테이블은 신규 bucket 생성 시 PostgreSQL advisory lock으로10000행 용량을 원자적으로 제한한다. 기존 bucket 갱신은 허용하고 만료 행을 정리하며, 용량·DB 장애 때503으로 닫는다.
 - worker lease 회복 시 중단된 fetch_runs도 FAILED/finished_at으로 종료한다. 초기 로컬 개발 실패에서 남은 고아 실행은 별도 로컬 검증 명령에서 실패 이력을 남겨 정리한다.
+
+## ENV-001 실행 설정의 이미지 포함
+DB 초기화 스크립트와 Caddyfile은 비밀값 없는 고정 배포 설정이므로 Dockerfile COPY로 포함한다. Compose 실행 시 host bind mount 두 개를 제거하고 DB/Caddy named volume은 그대로 유지한다. 설정 변경은 해당 이미지 재빌드·재스캔 후 반영한다. 파일 공유 정체의 노출 경로를 제거하는 변경이며 Docker 자체 결함 해결을 대신 증명하지 않는다.
