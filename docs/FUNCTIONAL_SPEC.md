@@ -34,3 +34,5 @@
 검증: 단위는 ContentProcessor/SafeFetch, 통합은 PostgreSQL+MockMvc로 인증·관리·quota·worker 상태를, UI는 Playwright Java로 실제 ES Modules·IndexedDB·네트워크와 반응형을 검사한다. 미구현·미검증은 통과로 처리하지 않는다.
 
 2026-10-28 사용자 승인 보완: 가입 시 현재 약관 전문 링크와 미선택 필수 체크박스를 제공한다. 서버도 true 및 현재 버전을 검증하고 버전·시각만 저장한다. 로그인과 가입의 긴 설명은 정책 페이지로 이동했다.
+
+FS-03 계정 관리 화면은 /account.html 및 assets/js/account.js, FS-21 관심사 설정은 기존 /settings.html 및 assets/js/settings.js로 분리했다. 공통 메뉴에 각각 노출한다. 관심 문장 제안은 브라우저의 별칭 사전 매칭이며 LLM 처리나 문장 전송을 하지 않는다.

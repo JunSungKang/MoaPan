@@ -48,3 +48,7 @@ AUTH-001: supplementaryUnicodePasswordUsesCodePointLimit 테스트는 수정 전
 계정 입력 길이 변경: Java39 PASS/FAIL0/SKIP0 (단위11·PostgreSQL21·Playwright7). 아이디 빈값/129자 거부,1/128자 가입·로그인·변경·탈퇴, 비밀번호5자 및5개 보조평면문자 거부·공백 포함6자 보존·6자 한글 변경, 기존128 Unicode 상한 테스트 PASS. 모바일128자 계정 메뉴 넘침 없음과 각 입력의 길이 속성 검증 PASS.
 
 실제 실행: V4 success=true, 공개 HTTPS에서1자·128자 아이디/6자 비밀번호 가입·로그인·변경·탈퇴,5자 비밀번호 거부 PASS. 합성 계정은 삭제했다. 근거 evidence/account-lengths.json; db/web/proxy healthy,worker running.
+
+관심사·계정 화면 분리: Java40 PASS/FAIL0/SKIP0 (단위11·PostgreSQL21·Playwright8). 별도 메뉴·페이지 책임, 관심사 저장 후 왕복 유지, 계정 화면의 tags/sources API 미요청, 탈퇴 시 A설정 삭제/B설정 보존,390/768/1440px 표시·넘침 없음 PASS. 기존 관심 문장 비전송 테스트도 선택적 문장 입력 영역을 열어 검증했다. 스크린샷 settings-*/account-*는 build/reports/screenshots에 있다.
+
+공개 HTTPS: settings/account200, 각 페이지 기능 분리, 새 모듈200, 비회원 account API401 PASS(evidence/settings-pages.json). 기존 admin 계정 활성·ADMIN 유지 확인. 최종 실행 이미지와 검사 digest/JAR SHA 일치 확인.

@@ -72,15 +72,32 @@ class BrowserTest {
             p.navigate(origin+"/signup.html");assertEquals("128",p.locator("#username").getAttribute("maxlength"));p.locator("#username").fill("a");p.locator("#password").fill("abcde");p.locator("input[type=checkbox]").check();p.locator("button[type=submit]").click();assertTrue(requests.isEmpty());
             p.locator("#password").fill("abcdef");p.locator("button[type=submit]").click();p.waitForURL("**/login.html");assertEquals(1,requests.size());assertEquals("6",p.locator("#password").getAttribute("minlength"));assertEquals("1",p.locator("#username").getAttribute("minlength"));
             p.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\""+"u".repeat(128)+"\",\"role\":\"USER\"}")));
-            p.setViewportSize(390,900);p.navigate(origin+"/settings.html");p.waitForSelector("#account-menu button");assertEquals("6",p.locator("[name=newPassword]").getAttribute("minlength"));assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth <= innerWidth"));
+            p.setViewportSize(390,900);p.navigate(origin+"/account.html");p.waitForSelector("#account-menu button");assertEquals("6",p.locator("[name=newPassword]").getAttribute("minlength"));assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth <= innerWidth"));
         }
     }
     @Test void interestSentenceStaysLocalAndAccountsAreSeparated(){
-        try(var context=browser.newContext()){Page p=context.newPage();List<String>network=new ArrayList<>();p.onRequest(r->network.add(r.url()+" "+Objects.toString(r.postData(),"")));active=A;p.navigate(origin+"/settings.html");p.waitForSelector("#tag-settings input");p.locator("#interest-sentence").fill("인공지능 synthetic-interest-private-phrase");p.locator("#extract").click();p.locator("#confirm-tags").click();p.waitForFunction("document.querySelector('#interest-sentence').value === ''");
+        try(var context=browser.newContext()){Page p=context.newPage();List<String>network=new ArrayList<>();p.onRequest(r->network.add(r.url()+" "+Objects.toString(r.postData(),"")));active=A;p.navigate(origin+"/settings.html");p.waitForSelector("#tag-settings input");p.locator("summary").click();p.locator("#interest-sentence").fill("인공지능 synthetic-interest-private-phrase");p.locator("#extract").click();p.locator("#confirm-tags").click();p.waitForFunction("document.querySelector('#interest-sentence').value === ''");
             assertEquals(3,((Number)p.evaluate("async id => (await import('/assets/js/preferences.js')).loadPreferences(id).then(s=>s.weights.ai)",A)).intValue());
             assertEquals(0,((Number)p.evaluate("async id => Object.keys((await (await import('/assets/js/preferences.js')).loadPreferences(id)).weights).length",B)).intValue());
             assertTrue(network.stream().noneMatch(v->v.contains("synthetic-interest-private-phrase")));assertTrue(network.stream().noneMatch(v->v.contains("synthetic-search-private-phrase")));
             p.locator("#clear-local").click();p.waitForFunction("document.querySelector('[role=status]').textContent.includes('削除') || document.querySelector('[role=status]').textContent.includes('삭제')");
+        }
+    }
+    @Test void interestsAndAccountPagesKeepSeparateResponsibilities()throws Exception{
+        try(var context=browser.newContext()){
+            active=A;Page p=context.newPage();List<String>paths=new ArrayList<>();p.onRequest(r->paths.add(r.url()));
+            p.navigate(origin+"/settings.html");p.waitForSelector("#tag-settings input");assertEquals(0,p.locator("#change-password,#delete-account").count());assertFalse(p.locator("#interest-sentence").isVisible());
+            p.locator("#tag-ai").check();p.waitForFunction("async id => (await (await import('/assets/js/preferences.js')).loadPreferences(id)).weights.ai===3",A);
+            p.locator("#account-menu a[href='/account.html']").click();p.waitForSelector("#account-controls:not([disabled])");assertEquals(2,p.locator("#change-password,#delete-account").count());assertEquals(0,p.locator("#tag-settings,#interest-sentence").count());
+            paths.clear();p.reload();p.waitForSelector("#account-controls:not([disabled])");assertTrue(paths.stream().noneMatch(u->u.contains("/api/v1/tags")||u.contains("/api/v1/sources")));
+            p.locator("#account-menu a[href='/settings.html']").click();p.waitForSelector("#tag-settings input");assertTrue(p.locator("#tag-ai").isChecked());
+            Path dir=Path.of("build/reports/screenshots");Files.createDirectories(dir);
+            for(int width:new int[]{390,768,1440})for(String page:List.of("settings","account")){p.setViewportSize(width,1000);p.navigate(origin+"/"+page+".html");p.waitForSelector(page.equals("settings")?"#interest-controls:not([disabled])":"#account-controls:not([disabled])");assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth <= innerWidth"));p.screenshot(new Page.ScreenshotOptions().setPath(dir.resolve(page+"-"+width+".png")).setFullPage(true));}
+            p.evaluate("async id => {const m=await import('/assets/js/preferences.js');await m.savePreferences(id,{...m.defaults(),weights:{space:4}});}",B);
+            p.route("**/api/v1/account",r->{if(r.request().method().equals("DELETE"))r.fulfill(new Route.FulfillOptions().setStatus(200).setBody(""));else r.fallback();});
+            p.locator("#delete-account input").fill("synthetic password 12345");p.locator("#delete-account button").click();p.waitForURL("**/login.html");
+            assertEquals(0,((Number)p.evaluate("async id => Object.keys((await (await import('/assets/js/preferences.js')).loadPreferences(id)).weights).length",A)).intValue());
+            assertEquals(4,((Number)p.evaluate("async id => (await (await import('/assets/js/preferences.js')).loadPreferences(id)).weights.space",B)).intValue());
         }
     }
     @Test void actualModulesRankDeterministicallyAndRespectExclusions(){

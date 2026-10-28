@@ -7,7 +7,7 @@
 - 증빙 확인: 2026-10-28T06:13:19.100Z; 외부 접속 evidence/public-access.json.
 - 실제 출처: NASA News Releases / NOAA News, 2026-10-28T05:28:47.291Z 두 수집 SUCCEEDED. 주소·최근 실행은 evidence/verification.json, 권리 범위는 SOURCES.md.
 - Compose: db/web/proxy healthy, worker 실행, migrate exit0. 재생성22기사 보존. 시작 명령: docker compose -f compose.yaml -f scripts/compose-public.yaml up -d --no-build --wait. 접속 URL https://175.195.62.165/ — 휴대폰 데이터망 확인 완료. 공개 모드 실행 명령은 DEPLOYMENT.md.
-- 테스트: Java39 PASS/FAIL0/SKIP0, bootstrap9 PASS, 시작 제한 시간3 PASS. 실제2 web quota·worker lease 복구·암호화 격리 복원 PASS. 검증 한계는 TEST_REPORT.md.
+- 테스트: Java40 PASS/FAIL0/SKIP0, bootstrap9 PASS, 시작 제한 시간3 PASS. 실제2 web quota·worker lease 복구·암호화 격리 복원 PASS. 검증 한계는 TEST_REPORT.md.
 - 보안: 소스/JAR/SBOM/이미지5종/도구 검사 HIGH·CRITICAL0. 잔여 MEDIUM·LOW 및 OpenPGP 미포함 근거를 유지. 알려진 취약점0 또는 미공개 취약점 부재를 보장하지 않는다.
 - 최종 앱 이미지: sha256:f4ce240bae0958f4b6776046ae8597acb694adfc7cfee132d385afce9e12091d. 다른 이미지와 report SHA는 evidence/verification.json.
 - GitHub: https://github.com/JunSungKang/MoaPan / codex/moapan-v1 / PR#1. 최종 커밋 후 guarded push와 원격 SHA 대조로 전달한다.
