@@ -78,3 +78,6 @@ Sprint Delivery 유지. src 정적 모듈·설정 화면에 WebCrypto 암호화 
 검색 버튼의 hover/active/focus 배경 채움을 제거하되 키보드 focus 윤곽은 유지한다. 모바일 masthead와 meta 구분선을 제거하고 날짜/계정 메뉴 간격과 줄바꿈을 정리한다. 모든 footer를 우측 정렬한다. CSS만 변경하며 수집 로직은 변경하지 않는다.
 ### 13.2 검증·전달
 기존 Playwright 화면/검색/메뉴 회귀와390/768/1440px 시각 확인, 최종 JAR/SBOM/이미지 검사 후 현재 Compose 반영·HTTPS 확인·guarded push. 작업 경로는 현재 workspace src/docs와 기존 계약 범위.
+
+## 14. 실제 기술 동향 데이터 재구성
+사용자 요청에 따라 worker 중지와 DB 트랜잭션으로 기존 기사·지면·연결 이력만 삭제하고 기존 출처를 중지한다. 회원·태그 사전·대표 관심사는 보존한다. 공식 이용조건과 robots를 검토한 새 RSS를 관리자 API로 등록하고 Java worker의 실제 성공 및 공개 지면을 확인한다. 코드는 변경하지 않으며 CI/CD·배포·기존 출처 재활성화는 하지 않는다. 결과와 제외 후보를 docs에 남기고 기존 guarded branch로 전달한다.

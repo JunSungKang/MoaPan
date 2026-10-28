@@ -65,3 +65,6 @@ MoA-PaN/중앙 문구 설정/상단 검색 위치/중간 설명 제거/4·2·1�
 
 ## 검색 상호작용·모바일 상단·푸터
 CSS 변경 후 e2eTest/bootJar/sbom/securityCheck/acceptanceTest 통과. 기존 E2E14개 모두 재실행 PASS, 전체 최신 보고서48 PASS/FAIL0/SKIP0. 390/768/1440px 합성 지면 스크린샷 확인, 모바일 중복 구분선 제거 및 가로 넘침 없음. 검색 팝업·키보드·역할 메뉴·인쇄 회귀 유지. 최종 이미지/공개 CSS 일치 증빙은 evidence/header-layout.json 및 verification.json.
+
+## 2026-10-28 실험 뉴스 재구성
+기존23기사 삭제 및 관련 지면/이력 정리 완료. NIST40건·NSF15건 실제 worker SUCCEEDED, 공개 HTTPS200·최근7일3건 확인. NASA/NOAA0건·비활성, 기존admin ADMIN 유지·합성 계정0건 확인. FTC 실제 점검502 source_http_rejected는 실패로 기록하고 비활성 유지. 소스코드/의존성/이미지 변경 없음; 전체 Gradle·이미지 검사를 이번 데이터 작업에서 재실행했다고 주장하지 않는다. 증빙: evidence/news-reseed.json, 출처·제외 사유: SOURCES.md.

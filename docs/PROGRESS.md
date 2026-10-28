@@ -53,3 +53,6 @@ settings.html은 관심 주제 체크·제외·문장 사전 매칭에 집중하
 
 ## 검색 버튼·모바일 상단·푸터 정리
 CSS 구현과 E2E14개 회귀 및 최종 JAR/SBOM/이미지 검사 완료. Compose db/web/proxy healthy·worker running, HTTPS CSS 두 파일이 workspace와 동일하며 실제 공개 기사 제공 확인. 구현·검증·서비스 반영 완료. 전달은 해당 커밋의 guarded push와 원격 SHA 대조로 확인한다. 수집 방식은 RSS/Atom 파서·제한 JSON 매핑 기반이며 LLM 미사용임을 코드에서 확인했다.
+
+## 2026-10-28 실험 뉴스 재구성
+기존23기사 삭제 및 관련 지면/이력 정리 완료. NIST40건·NSF15건 실제 worker SUCCEEDED, 공개 HTTPS200·최근7일3건 확인. NASA/NOAA0건·비활성, 기존admin ADMIN 유지·합성 계정0건 확인. FTC 실제 점검502 source_http_rejected는 실패로 기록하고 비활성 유지. 소스코드/의존성/이미지 변경 없음; 전체 Gradle·이미지 검사를 이번 데이터 작업에서 재실행했다고 주장하지 않는다. 증빙: evidence/news-reseed.json, 출처·제외 사유: SOURCES.md.
