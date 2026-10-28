@@ -27,3 +27,6 @@
 
 ## ENV-001 수정 진행 — 2026-10-28T04:21Z
 Docker Desktop4.97.0 업데이트 완료 후에도 엔진 정체 재현. UI의 gRPC FUSE 설정 적용도 engine stopping에 정체하므로 설정 파일 직접 수정의 workspace 외부 경로 예외를 사용자에게 요청했다. 이 예외 전에는 파일을 직접 변경하지 않는다. 프로젝트 변경: runtime bind mount 두 개를 이미지 COPY로 전환, 시작/수집/증빙 도구에 제한 시간 추가. 제한 시간 회귀3개·브라우저4개 재실행 PASS, check/bootJar/SBOM/securityCheck 성공. Docker 새 이미지·통합 회귀·수집·최종 증빙 갱신·후속 push는 남아 있다.
+
+## ENV-001 원인 범위 축소 — 2026-10-28T04:39Z
+사용자 지시로 VirtioFS 유지. 설정 파일 경로 예외 요청은 철회한다. 새 진단에서 macOS DesktopFolder 승인 timeout/거부와 호스트 VM openat 대기를 확인했다. Docker 폴더 권한은 UI에서 on이며 사용자 tccd는 시스템 알림 응답 대기다. 시스템 알림 앱 접근은 도구 안전 제한으로 차단되어 사용자가 보이는 알림의 앱·요청 내용을 확인하도록 질문했다. 엔진 복구·새 이미지 검증은 여전히 미완료다. 증거와 해석 한계는 BUGS.md에 기록했다.
