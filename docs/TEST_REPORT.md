@@ -52,3 +52,6 @@ AUTH-001: supplementaryUnicodePasswordUsesCodePointLimit 테스트는 수정 전
 관심사·계정 화면 분리: Java40 PASS/FAIL0/SKIP0 (단위11·PostgreSQL21·Playwright8). 별도 메뉴·페이지 책임, 관심사 저장 후 왕복 유지, 계정 화면의 tags/sources API 미요청, 탈퇴 시 A설정 삭제/B설정 보존,390/768/1440px 표시·넘침 없음 PASS. 기존 관심 문장 비전송 테스트도 선택적 문장 입력 영역을 열어 검증했다. 스크린샷 settings-*/account-*는 build/reports/screenshots에 있다.
 
 공개 HTTPS: settings/account200, 각 페이지 기능 분리, 새 모듈200, 비회원 account API401 PASS(evidence/settings-pages.json). 기존 admin 계정 활성·ADMIN 유지 확인. 최종 실행 이미지와 검사 digest/JAR SHA 일치 확인.
+
+## 관심사 파일 이전 (2026-10-28)
+Java42개(unit11/integration21/E2E10) PASS, FAIL0/SKIP0. 독립 BrowserContext 두 개로 같은 계정의 설정이 처음에는 분리됨, 암호화 다운로드/파일 입력/확인/취소/명시적 교체/새로고침 후 유지/이후 독립 변경을 실제 Chromium에서 검증했다. 잘못된 파일 비밀번호, 다른 계정, 암호문 변조, 크기 초과, 미지원 구조, 가중치 범위·프로토타입 키·중복/과다 배열 거부 확인. 파일·비밀번호·설정의 네트워크 전송 없음. 최초 모바일 가로 넘침 실패2건을 CSS 수정 후 전체 재검증해 해결했다.

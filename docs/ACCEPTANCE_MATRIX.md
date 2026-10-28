@@ -37,3 +37,5 @@ CI/CD는 사용자 명시 제외. PASS는 아래 실제 시험 범위의 통과�
 사용자 승인 입력 길이 변경: AC-06·07·22에 accountLengthBoundariesApplyToSignupLoginAndChange, usernameAndPasswordLengthsMatchBrowserAndAccountMenu 검증 추가. Java39 PASS/FAIL0/SKIP0. 비밀번호 최소6자·아이디1~128자가 최신 제품 요구사항이며 기존 최소15자·아이디4~32자를 대체한다.
 
 화면 분리: AC-20·21·22에 interestsAndAccountPagesKeepSeparateResponsibilities 검증 추가.40개 Java 테스트 PASS. 관심사 저장 스키마 변경 없음, 계정 화면 관심사 API 미요청, 탈퇴 시 해당 계정 설정만 삭제.
+
+기기 간 이전 추가: REQ-04/05 → FS-21 → preferences-transfer.js/preferences-transfer-ui.js/settings.html → BrowserTest의 encryptedPreferencesTransferBetweenIndependentBrowsers 및 portableSettingsRejectTamperingOtherAccountsAndInvalidSchemas PASS. AC-20/21/22 회귀 포함. 이는 서버 저장 없는 수동 이전이며 자동 동기화 인수로 간주하지 않는다.

@@ -1,0 +1,27 @@
+{
+  "checkedAt": "2026-10-28T09:18:40.845Z",
+  "origin": "https://175.195.62.165",
+  "checks": [
+    {
+      "path": "/settings.html",
+      "status": 200
+    },
+    {
+      "path": "/assets/js/preferences-transfer.js",
+      "status": 200
+    },
+    {
+      "path": "/assets/js/preferences-transfer-ui.js",
+      "status": 200
+    },
+    {
+      "path": "/privacy.html",
+      "status": 200
+    },
+    {
+      "path": "/api/v1/news/edition",
+      "status": 401
+    }
+  ],
+  "mode": "manual encrypted file transfer; no server storage; no automatic sync"
+}

@@ -36,3 +36,6 @@
 2026-10-28 사용자 승인 보완: 가입 시 현재 약관 전문 링크와 미선택 필수 체크박스를 제공한다. 서버도 true 및 현재 버전을 검증하고 버전·시각만 저장한다. 로그인과 가입의 긴 설명은 정책 페이지로 이동했다.
 
 FS-03 계정 관리 화면은 /account.html 및 assets/js/account.js, FS-21 관심사 설정은 기존 /settings.html 및 assets/js/settings.js로 분리했다. 공통 메뉴에 각각 노출한다. 관심 문장 제안은 브라우저의 별칭 사전 매칭이며 LLM 처리나 문장 전송을 하지 않는다.
+
+## FS-21 확장: 기기 간 수동 이전
+관심사 화면에서 파일 전용 비밀번호로 내보내기, 같은 계정의 다른 브라우저에서 파일 확인 후 명시적 적용/취소를 지원한다. 입력 문장·로그인 비밀번호·기사·검색 이력은 포함하지 않는다. 자동 동기화는 제공하지 않는다. API/DB 변경 없음. MAX128KiB, v1 고정 암호 형식과 설정 whitelist 검증, 오류 시 기존 설정 유지. 테스트: BrowserTest.encryptedPreferencesTransferBetweenIndependentBrowsers / portableSettingsRejectTamperingOtherAccountsAndInvalidSchemas.

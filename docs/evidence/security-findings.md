@@ -1,6 +1,6 @@
 # 최종 보안 발견 목록
 
-확인 시각 2026-10-28T09:04:56.372Z. 실제 image digest별 원본 report SHA256은 verification.json에 있다. HIGH/CRITICAL 0건이며, 아래 MEDIUM/LOW/UNKNOWN을 숨기거나 취약점0건으로 표시하지 않는다. 각 항목의 프로젝트 노출·후속 조치는 ../SECURITY_REVIEW.md와 함께 읽는다. UNKNOWN openpgp 경고는 해당 하위 패키지 미포함 근거로 NOT_AFFECTED 판정했다.
+확인 시각 2026-10-28T09:18:42.284Z. 실제 image digest별 원본 report SHA256은 verification.json에 있다. HIGH/CRITICAL 0건이며, 아래 MEDIUM/LOW/UNKNOWN을 숨기거나 취약점0건으로 표시하지 않는다. 각 항목의 프로젝트 노출·후속 조치는 ../SECURITY_REVIEW.md와 함께 읽는다. UNKNOWN openpgp 경고는 해당 하위 패키지 미포함 근거로 NOT_AFFECTED 판정했다.
 
 |ID|구성요소|설치 버전|수정 버전|검사 등급|대상|근거|
 |---|---|---|---|---|---|---|

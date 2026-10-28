@@ -34,3 +34,9 @@ DB 초기화 스크립트와 Caddyfile은 비밀값 없는 고정 배포 설정�
 비밀번호 최소6자, 아이디1~128자로 변경한다. 비밀번호 단독 인증 최소15자를 제시한 NIST 지침과 차이가 있음을 설명한 뒤 사용자가6자를 명시 선택했다. 이전 단문 비밀번호 위험 설명에 따른 제품 정책 결정이며 NIST 해당 길이 기준 충족으로 표시하지 않는다. Argon2id·실패 횟수 제한 등은 유지한다. 기존 유니코드 경계 테스트의 최소 미만 값은 새 기준에 맞춰5자로 바꾸며 상한 검증은 그대로 유지한다.
 
 관심사/계정 페이지 분리: settings.html·settings.js는 관심사 전용, account.html·account.js는 계정 전용. IndexedDB 스키마·이름·키를 유지하여 기존 관심사 마이그레이션이 필요 없다. 문장 분석은 기존 태그 별칭 사전과 단어 경계 규칙을 사용하며 LLM이나 외부 전송을 추가하지 않는다.
+
+## 기기 간 관심사 이전 (2026-10-28)
+서버 비전송 경계를 유지하며 암호화 파일의 수동 이전을 채택했다. IndexedDB는 브라우저/출처별 저장이며 계정 로그인만으로 다른 PC와 동기화되지 않는다. 자동 동기화는 서버 등 공유 저장소 또는 동시에 연결된 기기를 요구한다. WebRTC도 신호 교환 및 NAT 환경에 따른 STUN/TURN이 필요해 V1에서 추가하지 않았다.
+네이티브 WebCrypto PBKDF2-HMAC-SHA256 600,000회, 무작위16바이트 salt, AES-256-GCM, 매번 무작위12바이트 IV 및 형식 AAD. 파일 전용15~128자 비밀번호는 저장/전송하지 않는다. 로그인 비밀번호 정책은 변경하지 않는다. 브라우저 메모리의 완전 삭제나 악성 확장/XSS 방어를 암호화만으로 보장하지 않는다. 계정 UUID는 암호화 내부에만 포함, 다른 계정 적용을 UI에서 거부한다. 파일 비밀번호 보유자는 평문을 볼 수 있으므로 계정 비교를 암호학적 접근 통제로 주장하지 않는다.
+최대128KiB, 필드 whitelist/설정개수500/가중치1~5/키검사/중복배열검사. 적용 전 명시적 확인·취소, 실패 시 기존값 보존. 현재 사전에 없는 유효한 설정 ID도 보존하고 병합 매핑 적용. 내보낸 파일은 서버/탈퇴/브라우저 초기화로 회수되지 않는다. 수동 이전 이후 각 기기는 독립적이며 최신 파일을 다시 옮겨야 한다.
+근거(2026-10-28 확인): https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API ; https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/deriveKey ; https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/encrypt ; https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Protocols ; https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html (PBKDF2 작업량 참고이며 파일 암호화 전체의 보안 보증 아님).

@@ -41,3 +41,6 @@ Java37 PASS/FAIL0/SKIP0, 변경 이미지 검사 및 실행 digest/JAR 일치 PA
 
 ## 관심사·계정 화면 분리 — 완료
 settings.html은 관심 주제 체크·제외·문장 사전 매칭에 집중하고 account.html로 비밀번호 변경·탈퇴를 분리한다. IndexedDB 이름/버전/계정 키는 유지한다. Java40개, 이미지 보안 검사, 공개 HTTPS 두 페이지와 새 모듈 제공·계정 API401 PASS. 메뉴 분리·개인정보 비전송·탈퇴 로컬 삭제·기존 설정 보존 검증 완료. admin 활성/ADMIN 유지 확인.
+
+## 기기 간 관심사 이전 — 구현·실행 검증 완료
+서버 저장 없는 암호화 파일 이전 구현. 첫 E2E에서 발견한 파일 입력 모바일 넘침을 수정한 뒤 Java42 PASS/FAIL0/SKIP0. 잘못된 비밀번호·다른 계정·변조·과대/잘못된 스키마 거부, 두 독립 브라우저 복원·적용/취소·비전송 검증. 소스/JAR/SBOM·변경 이미지 보안 게이트 및 실행 digest 일치 PASS. 공개 HTTPS 새 화면/두 모듈/개인정보 안내200, 비회원 뉴스401, db/web/proxy healthy 및 worker running. 기존 admin 활성/ADMIN 유지. 수동 파일 이전이며 자동 동기화는 제공하지 않는다. 증빙: evidence/preferences-transfer.json 및 verification.json.

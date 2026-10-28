@@ -27,6 +27,64 @@ class BrowserTest {
     }
     static String edition(){StringBuilder items=new StringBuilder();for(int i=0;i<15;i++){if(i>0)items.append(',');items.append("{\"id\":\"synthetic-").append(i).append("\",\"title\":\"[합성 검증 기사] 긴 한글 제목과 인공지능 우주 소식이 여러 단의 신문 지면에서 자연스럽게 표시되는지 확인합니다 ").append(i).append("\",\"summaryBullets\":[\"실제 뉴스가 아닌 화면 검증용 합성 문장입니다. 외부 전송 없이 현재 후보를 정렬합니다.\"],\"source\":{\"id\":\"source-").append(i%5).append("\",\"site\":\"합성 출처\",\"name\":\"Synthetic\",\"language\":\"ko\"},\"publishedAt\":null,\"collectedAt\":\"2026-10-28T00:00:00Z\",\"tags\":[{\"id\":\"ai\",\"slug\":\"ai\",\"name\":\"인공지능\",\"category\":\"기술\",\"confidence\":1}],\"originalUrl\":\"https://example.org/synthetic/").append(i).append("\",\"summaryMode\":\"EXTRACTIVE_ORIGINAL_LANGUAGE\"}");}return "{\"editionId\":\"synthetic-edition\",\"editionAt\":\"2026-10-28T00:00:00Z\",\"periodDays\":7,\"candidateCount\":15,\"items\":["+items+"],\"nextCursor\":null}";}
     @AfterAll static void stop(){if(browser!=null)browser.close();if(playwright!=null)playwright.close();if(server!=null)server.stop(0);}
+
+    @Test void encryptedPreferencesTransferBetweenIndependentBrowsers()throws Exception{
+        active=A;var traffic=new ArrayList<String>();
+        try(var first=browser.newContext();var second=browser.newContext()){
+            first.onRequest(r->traffic.add(r.url()+" "+Objects.toString(r.postData(),"")));
+            second.onRequest(r->traffic.add(r.url()+" "+Objects.toString(r.postData(),"")));
+            Page a=first.newPage(),b=second.newPage();
+            a.navigate(origin+"/settings.html");a.waitForSelector("#transfer-controls:not([disabled])");
+            a.locator("#tag-ai").check();
+            a.waitForFunction("async id => (await (await import('/assets/js/preferences.js')).loadPreferences(id)).weights.ai===3",A);
+            a.locator("#transfer-password").fill("synthetic portable secret 12345");
+            Download download=a.waitForDownload(()->a.locator("#transfer-export").click());
+            Path file=Path.of("build/reports/preferences-transfer.moapan");Files.createDirectories(file.getParent());download.saveAs(file);
+            String encrypted=Files.readString(file);assertFalse(encrypted.contains(A));assertFalse(encrypted.contains("weights"));assertFalse(encrypted.contains("synthetic portable"));
+            b.navigate(origin+"/settings.html");b.waitForSelector("#transfer-controls:not([disabled])");assertFalse(b.locator("#tag-ai").isChecked());
+            b.locator("#tag-space").check();b.waitForFunction("async id => (await (await import('/assets/js/preferences.js')).loadPreferences(id)).weights.space===3",A);
+            b.locator("#transfer-file").setInputFiles(file);
+            b.locator("#transfer-password").fill("synthetic wrong secret 12345");b.locator("#transfer-import").click();
+            b.waitForFunction("document.querySelector('#transfer-status').textContent.includes('손상')");assertTrue(b.locator("#tag-space").isChecked());assertFalse(b.locator("#transfer-apply").isVisible());
+            b.locator("#transfer-password").fill("synthetic portable secret 12345");b.locator("#transfer-import").click();b.waitForSelector("#transfer-apply");
+            assertTrue(b.locator("#tag-space").isChecked());assertFalse(b.locator("#tag-ai").isChecked());assertEquals("",b.locator("#transfer-password").inputValue());
+            b.locator("#transfer-cancel").click();assertTrue(b.locator("#tag-space").isChecked());
+            b.locator("#transfer-file").setInputFiles(file);b.locator("#transfer-password").fill("synthetic portable secret 12345");b.locator("#transfer-import").click();b.waitForSelector("#transfer-apply");b.locator("#transfer-apply").click();
+            b.waitForFunction("document.querySelector('#transfer-status').textContent.includes('가져왔습니다')");assertTrue(b.locator("#tag-ai").isChecked());assertFalse(b.locator("#tag-space").isChecked());
+            b.reload();b.waitForSelector("#transfer-controls:not([disabled])");assertTrue(b.locator("#tag-ai").isChecked());
+            b.locator("#tag-space").check();assertFalse(a.locator("#tag-space").isChecked());
+            for(int width:new int[]{390,768,1440}){b.setViewportSize(width,1000);assertTrue((boolean)b.evaluate("document.documentElement.scrollWidth <= innerWidth"));b.screenshot(new Page.ScreenshotOptions().setPath(Path.of("build/reports/screenshots/transfer-"+width+".png")).setFullPage(true));}
+            assertTrue(traffic.stream().allMatch(v->v.startsWith(origin)));assertTrue(traffic.stream().noneMatch(v->v.contains("synthetic portable")||v.contains("ciphertext")||v.contains("weights")));
+            Files.delete(file);
+        }
+    }
+    @Test void portableSettingsRejectTamperingOtherAccountsAndInvalidSchemas(){
+        try(var context=browser.newContext()){
+            Page p=context.newPage();p.navigate(origin+"/settings.html");p.waitForSelector("#transfer-controls:not([disabled])");
+            assertEquals(true,p.evaluate("""
+              async ([a,b]) => {
+                const m=await import('/assets/js/preferences-transfer.js');
+                const settings={version:1,enabled:false,weights:{ai:5},excludedTags:['space'],excludedSources:['source-1']};
+                const password='synthetic portable secret 12345';
+                const text=await m.exportPreferences(a,settings,password);
+                if(JSON.stringify(await m.importPreferences(text,a,password))!==JSON.stringify(settings))return false;
+                const other=await m.exportPreferences(a,settings,password);if(text===other)return false;
+                const rejects=async fn=>{try{await fn();return false;}catch{return true;}};
+                const damaged=JSON.parse(text);damaged.ciphertext=(damaged.ciphertext[0]==='A'?'B':'A')+damaged.ciphertext.slice(1);
+                const cases=[()=>m.importPreferences(text,b,password),()=>m.importPreferences(JSON.stringify(damaged),a,password),
+                  ()=>m.importPreferences('x'.repeat(m.MAX_FILE_BYTES+1),a,password),()=>m.importPreferences('{}',a,password),
+                  ()=>m.exportPreferences(a,settings,'short'),()=>m.exportPreferences(a,{...settings,phrase:'private'},password),
+                  ()=>m.validatePreferences({...settings,weights:{ai:6}}),
+                  ()=>m.validatePreferences({...settings,excludedTags:['space','space']}),
+                  ()=>m.validatePreferences({...settings,weights:JSON.parse('{"__proto__":3}')}),
+                  ()=>m.validatePreferences({...settings,excludedSources:Array(501).fill('s')})];
+                for(const fn of cases)if(!await rejects(fn))return false;
+                return (await (await import('/assets/js/preferences.js')).loadPreferences(a)).enabled===true;
+              }
+              """,List.of(A,B)));
+        }
+    }
+
     @Test void responsivePaperHasNoOverflowAndNoTracking()throws Exception{
         Path dir=Path.of("build/reports/screenshots");Files.createDirectories(dir);
         try(var context=browser.newContext()){Page p=context.newPage();List<String>outbound=new ArrayList<>();p.onRequest(r->{if(!r.url().startsWith(origin))outbound.add(r.url());});
