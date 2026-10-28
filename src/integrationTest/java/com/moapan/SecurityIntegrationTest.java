@@ -134,6 +134,16 @@ class SecurityIntegrationTest {
         var result=mvc.perform(post("/api/v1/auth/login").with(csrf()).contentType("application/json").content("{\"username\":\"synthetic_lifecycle\",\"password\":\"changed synthetic password 12345\"}")).andExpect(status().isOk()).andReturn();var cookie=result.getResponse().getCookie("SESSION");assertNotNull(cookie);
         mvc.perform(delete("/api/v1/account").cookie(cookie).with(csrf()).contentType("application/json").content("{\"currentPassword\":\"changed synthetic password 12345\"}")).andExpect(status().isOk());assertTrue(accounts.findByUsername("synthetic_lifecycle").isEmpty());mvc.perform(get("/api/v1/account").cookie(cookie)).andExpect(status().isUnauthorized());
     }
+    @Test @Order(10) void supplementaryUnicodePasswordUsesCodePointLimit()throws Exception {
+        signup("synthetic_unicode");var cookie=login("synthetic_unicode");
+        for(String invalid:List.of("😀".repeat(14),"😀".repeat(129))) {
+            mvc.perform(patch("/api/v1/account/password").cookie(cookie).with(csrf()).contentType("application/json").content("{\"currentPassword\":\""+PASSWORD+"\",\"newPassword\":\""+invalid+"\"}")).andExpect(status().isBadRequest());
+        }
+        String changed="😀".repeat(128);
+        mvc.perform(patch("/api/v1/account/password").cookie(cookie).with(csrf()).contentType("application/json").content("{\"currentPassword\":\""+PASSWORD+"\",\"newPassword\":\""+changed+"\"}")).andExpect(status().isOk());
+        var result=mvc.perform(post("/api/v1/auth/login").with(csrf()).contentType("application/json").content("{\"username\":\"synthetic_unicode\",\"password\":\""+changed+"\"}")).andExpect(status().isOk()).andReturn();
+        mvc.perform(delete("/api/v1/account").cookie(result.getResponse().getCookie("SESSION")).with(csrf()).contentType("application/json").content("{\"currentPassword\":\""+changed+"\"}")).andExpect(status().isOk());
+    }
     @Test @Order(11) void administratorCanCreateDraftSourceWithSafeDefaults()throws Exception {
         signup("synthetic_admin");var a=accounts.findByUsername("synthetic_admin").orElseThrow();a.role="ADMIN";accounts.save(a);var cookie=login("synthetic_admin");
         var created=mvc.perform(post("/api/v1/admin/sites").cookie(cookie).with(csrf()).contentType("application/json").content("{\"name\":\"HTTP synthetic site\",\"homepageUrl\":\"https://http.example.org/\"}")).andExpect(status().isOk()).andReturn();

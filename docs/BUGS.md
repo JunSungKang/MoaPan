@@ -28,3 +28,6 @@
 
 ## ENV-002 proxy 이미지 설정 디렉터리 권한
 COPY --chmod=0444로 새 경로에 설정을 복사할 때 /etc/caddy 디렉터리에도 탐색 권한이 없어 비루트 Caddy가 설정을 읽지 못했다. 실제 컨테이너에서 Permission denied를 재현했다. 디렉터리0755·설정파일0444를 별도로 지정하고, HTTP /about.html healthcheck를 추가했다. 재빌드 후 Compose db/web/proxy healthy와 worker 실행을 확인했다. 이전 시작 상태만으로 성공을 판정하지 않는다.
+
+## AUTH-001 유니코드 비밀번호 변경 경계
+변경 DTO의 Bean Validation max128은 UTF-16 code unit을 세어 보조 평면 문자128개(256 code unit)를 거부했다. signup/login과 동일하게 DTO 상한256을 적용하고 최종15~128 code point 검증을 유지했다. 회귀 테스트는 수정 전128개 변경400 실패를 재현했으며14개/129개 거부,128개 변경·로그인·탈퇴를 검증한다. 비밀번호 trim·절단은 하지 않는다.

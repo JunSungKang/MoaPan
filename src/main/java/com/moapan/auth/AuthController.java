@@ -21,7 +21,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 @RestController @org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication
 public class AuthController {
     record Credentials(@NotNull @Size(min=4,max=32) String username,@NotNull @Size(min=15,max=256)String password){}
-    record Change(@NotNull String currentPassword,@NotNull @Size(min=15,max=128)String newPassword){}
+    record Change(@NotNull String currentPassword,@NotNull @Size(min=15,max=256)String newPassword){}
     record Confirm(@NotNull String currentPassword){}
     record View(UUID id,String username,String role){}
     private final Accounts users;private final PasswordEncoder encoder;private final AuthenticationManager manager;private final SecurityContextRepository contexts;private final Limits limits;private final JdbcClient db;private final TransactionTemplate tx;private final Semaphore hashes=new Semaphore(4);

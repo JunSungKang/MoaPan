@@ -6,7 +6,7 @@ CI/CD는 사용자 명시 제외. PASS는 아래 실제 시험 범위의 통과�
 |---|---|---|---|---|
 |AC-01|10,11|기술·정확한 JDK|PASS|RuntimeSecurityTest; VERSIONS.md; 실행 JAR 일치|
 |AC-02|10,11|Gradle 공급망|PASS|Wrapper SHA·lock·strict metadata; 전체 task 실행|
-|AC-03|11|산출물 보안|PARTIAL|로컬 scanner HIGH/CRITICAL0; MEDIUM/LOW 잔여 및 공급자 조회 한계: SECURITY_REVIEW.md|
+|AC-03|11|산출물 보안|PASS|로컬 scanner HIGH/CRITICAL0·KEV 대조·공급자 CVE22건 재조회/노출 검토; MEDIUM/LOW 잔여 유지: SECURITY_REVIEW.md|
 |AC-04|11|truststore|PASS|RuntimeSecurityTest; TrustAudit 호스트/실행 이미지14 TLS 거부|
 |AC-05|07|정적 화면|PASS|sourceCheck; BrowserTest; static ES Modules|
 |AC-06|03,08|가입·금지필드|PASS|SecurityIntegrationTest: 과다필드·role·Argon2id|
