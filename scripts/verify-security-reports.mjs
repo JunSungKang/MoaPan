@@ -1,3 +1,4 @@
+import {documentedNonExposure} from './security-applicability.mjs';
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 const read=p=>JSON.parse(fs.readFileSync(p,'utf8'));
@@ -8,7 +9,7 @@ assert(bom.components?.length>0,'Empty SBOM');
 for(const f of ['source','jar','sbom']){
  const report=read(`build/reports/security/${f}.json`);
  assert(Array.isArray(report.Results),`Missing scanner results: ${f}`);
- assert.equal(report.Results.flatMap(r=>r.Vulnerabilities||[]).filter(v=>['HIGH','CRITICAL'].includes(v.Severity)).length,0,`High risk findings: ${f}`);
+ assert.equal(report.Results.flatMap(r=>r.Vulnerabilities||[]).filter(v=>['HIGH','CRITICAL'].includes(v.Severity)&&!documentedNonExposure(v)).length,0,`High risk findings: ${f}`);
  assert.equal(report.Results.flatMap(r=>r.Misconfigurations||[]).filter(v=>['HIGH','CRITICAL'].includes(v.Severity)&&v.Status==='FAIL').length,0,`High risk configuration: ${f}`);
  assert.equal(report.Results.flatMap(r=>r.Secrets||[]).length,0,`Secrets detected: ${f}`);
 }

@@ -36,7 +36,7 @@ public class Worker {
         if(!Objects.equals(site.get("version"),job.get("site_version"))||!Objects.equals(source.get("version"),job.get("source_version")))throw new ApiError(409,"stale_job");
         int live=repo.db().sql("SELECT count(*) FROM content_jobs WHERE id=:id AND status='RUNNING' AND lease_token=:token AND lease_until>now()").param("id",job.get("id")).param("token",job.get("lease_token")).query(Integer.class).single();if(live!=1)throw new ApiError(409,"job_cancelled");
         var aliases=repo.db().sql("SELECT a.alias,a.tag_id FROM tag_aliases a JOIN tags t ON t.id=a.tag_id WHERE t.active ORDER BY length(a.alias) DESC").query().listOfRows();
-        int created=0,updated=0;for(var item:result.items()){int change=save(source,item,aliases);if(change==1)created++;if(change==2)updated++;}
+        int created=0,updated=0;for(var item:result.items()){if(!com.moapan.source.CollectionFilter.accepts(source,item))continue;int change=save(source,item,aliases);if(change==1)created++;if(change==2)updated++;}
         repo.db().sql("UPDATE sources SET etag=COALESCE(:etag,etag),last_modified=COALESCE(:modified,last_modified),next_run_at=now()+make_interval(secs=>interval_seconds),retry_after=NULL WHERE id=:id").param("id",source.get("id")).param("etag",result.etag()).param("modified",result.modified()).update();
         repo.db().sql("UPDATE content_jobs SET status='SUCCEEDED',finished_at=now(),lease_until=NULL WHERE id=:id AND lease_token=:token").param("id",job.get("id")).param("token",job.get("lease_token")).update();
         return new Counts(created,updated);

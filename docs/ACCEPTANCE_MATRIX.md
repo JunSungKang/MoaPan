@@ -45,3 +45,5 @@ CI/CD는 사용자 명시 제외. PASS는 아래 실제 시험 범위의 통과�
 최초판·스크랩 사용자 변경: FS-23 → config.js/common.js/index.html/news.js/newspaper.css → BrowserTest.editorialScrapGalleryAndInitialPolicies 및 기존 popup/메뉴 테스트 PASS. FS-25/AC-06 → terms/privacy/signup/AuthController → signupRequiresCurrentExplicitConsent/simpleAuthFormsRequireConsentAndShowReadableTerms PASS. 기존 정책 이력 제공 요구는 이번 명시적 삭제 요청으로 대체했다. AC-22의4/2/1단·키보드·인쇄·검색·넘침 검증 유지. 최신 총48 PASS, 공개 실행 evidence/scrap-layout.json.
 
 FS-23/AC-22 상단 보완: 검색 버튼 채움 제거·모바일 구분선/메뉴 정리·푸터 우측 정렬. 기존 BrowserTest14개 회귀 PASS 및390/768/1440px 스크린샷 확인. 수집/인증/개인화 동작 변경 없음.
+
+2026-10-29 확장: 날짜/주제 경계는 CollectionFilterTest·SecurityIntegrationTest(collectionScopeIsEnforcedBeforeDatabaseWrite/arxivAdmissionIsSharedAndCoolsDown), 실제6수집주소130건은 evidence/topic-collection.json 참조. NIST RSS0건은 실제 수집 건수에 포함하지 않는다.

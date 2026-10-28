@@ -20,6 +20,7 @@ import tools.jackson.databind.json.JsonMapper;
 
 @Component
 public class SafeFetch {
+    @org.springframework.beans.factory.annotation.Autowired private ArxivGate arxivGate;
     public record Item(String guid,String title,String url,String description,Instant publishedAt){}
     public record Result(List<Item>items,String etag,String modified,boolean unchanged){}
     public static String canonical(String input){
@@ -48,7 +49,7 @@ public class SafeFetch {
     }
     public Result read(Map<String,Object> source){
         URI endpoint=URI.create(canonical((String)source.get("endpoint_url")));String host=endpoint.getHost();
-        try{
+        try(var gate=host.equals("export.arxiv.org")||host.equals("arxiv.org")?arxivGate.enter():null){
             DnsResolver resolver=pinnedResolver(host,InetAddress.getAllByName(host));
             try(var connection=PoolingHttpClientConnectionManagerBuilder.create().setDnsResolver(resolver).setDefaultConnectionConfig(ConnectionConfig.custom().setConnectTimeout(Timeout.ofSeconds(5)).setSocketTimeout(Timeout.ofSeconds(10)).build()).build();
                 var client=HttpClients.custom().setConnectionManager(connection).disableRedirectHandling().disableAutomaticRetries().disableContentCompression().setDefaultRequestConfig(RequestConfig.custom().setResponseTimeout(Timeout.ofSeconds(10)).setConnectionRequestTimeout(Timeout.ofSeconds(3)).build()).build()){
@@ -72,7 +73,7 @@ public class SafeFetch {
                     if(response.status==304)return new Result(List.of(),null,null,true);
                     if(response.location!=null&&response.status>=300&&response.status<400){current=redirect(current,response.location,host);continue;}
                     List<Item> items=parse(response.bytes,source.get("type").toString(),source.get("json_mapping").toString());
-                    return new Result(items,response.etag,response.modified,false);
+                    return new Result(items.stream().filter(item->CollectionFilter.accepts(source,item)).toList(),response.etag,response.modified,false);
                 }
                 throw new ApiError(502,"redirect_limit");
             }
@@ -91,11 +92,11 @@ public class SafeFetch {
             var feed=new SyndFeedInput().build(builder.build(new ByteArrayInputStream(bytes)));
             for(var entry:feed.getEntries()){
                 if(result.size()>=100)break;
-                try{String url=canonical(entry.getLink());String title=clean(entry.getTitle(),500);if(title.isBlank())continue;String desc=entry.getDescription()==null?"":entry.getDescription().getValue();result.add(new Item(trim(entry.getUri()==null||entry.getUri().isBlank()?url:entry.getUri(),2048),title,url,clean(desc,8000),entry.getPublishedDate()==null?null:future(entry.getPublishedDate().toInstant())));}catch(ApiError ignored){}
+                try{String link=entry.getLink();if(link!=null&&link.matches("http://arxiv\\.org/abs/[A-Za-z0-9./-]+"))link="https"+link.substring(4);String url=canonical(link);String title=clean(entry.getTitle(),500);if(title.isBlank())continue;String desc=entry.getDescription()==null?"":entry.getDescription().getValue();result.add(new Item(trim(entry.getUri()==null||entry.getUri().isBlank()?url:entry.getUri(),2048),title,url,clean(desc,8000),entry.getPublishedDate()==null?null:future(entry.getPublishedDate().toInstant())));}catch(ApiError ignored){}
             }
         }return result;
     }
-    private static JsonNode path(JsonNode node,String path){for(String key:path.split("\\."))node=node.path(key);return node;}
+    private static JsonNode path(JsonNode node,String path){if(path.equals("$"))return node;for(String key:path.split("\\."))node=node.path(key);return node;}
     public static String clean(String s,int max){return trim(Jsoup.parse(s==null?"":s).text(),max);}
     static String trim(String s,int max){return s.length()>max?s.substring(0,max):s;}
     static Instant instant(String s){try{return future(Instant.parse(s));}catch(Exception e){return null;}}

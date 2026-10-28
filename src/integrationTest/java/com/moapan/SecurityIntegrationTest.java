@@ -205,11 +205,11 @@ class SecurityIntegrationTest {
     @Test @Order(13) @WithMockUser(roles="ADMIN") void previewDoesNotPublishAndEndpointChangeResetsApproval(){
         UUID actor=accounts.findByUsername("synthetic_a").orElseThrow().id;
         @SuppressWarnings("unchecked")var site=(Map<String,Object>)catalog.createSite(new CatalogService.SiteInput("Preview fixture","https://preview.example.org/","","",null),actor);
-        var draft=new CatalogService.SourceInput("Preview","RSS","https://preview.example.org/feed","en",900,false,"UNREVIEWED",false,false,false,false,false,false,false,false,null,null,"",Map.of(),null,null);
+        var draft=new CatalogService.SourceInput("Preview","RSS","https://preview.example.org/feed","en",900,false,"UNREVIEWED",false,false,false,false,false,false,false,false,null,null,"",Map.of(),null,null,List.of(),null);
         @SuppressWarnings("unchecked")var source=(Map<String,Object>)catalog.createSource((UUID)site.get("id"),draft,actor);UUID id=(UUID)source.get("id");assertThrows(ApiError.class,()->catalog.preview(id,false,actor));
-        var approved=new CatalogService.SourceInput("Preview","RSS","https://preview.example.org/feed","en",900,false,"RESTRICTED",true,true,true,false,false,false,false,false,"https://preview.example.org/terms",java.time.LocalDate.of(2026,10,28),"Synthetic terms fixture",Map.of(),null,0L);
+        var approved=new CatalogService.SourceInput("Preview","RSS","https://preview.example.org/feed","en",900,false,"RESTRICTED",true,true,true,false,false,false,false,false,"https://preview.example.org/terms",java.time.LocalDate.of(2026,10,28),"Synthetic terms fixture",Map.of(),null,null,List.of(),0L);
         catalog.updateSource(id,approved,actor);catalog.preview(id,false,actor);assertEquals("NOT_TESTED",repo.source(id,false).get("validation_status"));catalog.preview(id,true,actor);assertEquals("PASSED",repo.source(id,false).get("validation_status"));assertEquals(0,repo.db().sql("SELECT count(*) FROM articles WHERE source_id=:id").param("id",id).query(Integer.class).single());assertEquals(0,repo.db().sql("SELECT count(*) FROM content_jobs WHERE source_id=:id").param("id",id).query(Integer.class).single());
-        var changed=new CatalogService.SourceInput("Preview","RSS","https://changed.example.org/feed","en",900,false,"RESTRICTED",true,true,true,false,false,false,false,false,"https://preview.example.org/terms",java.time.LocalDate.of(2026,10,28),"Synthetic",Map.of(),null,1L);catalog.updateSource(id,changed,actor);assertEquals("UNREVIEWED",repo.source(id,false).get("rights_status"));assertEquals("NOT_TESTED",repo.source(id,false).get("validation_status"));assertEquals(false,repo.source(id,false).get("enabled"));
+        var changed=new CatalogService.SourceInput("Preview","RSS","https://changed.example.org/feed","en",900,false,"RESTRICTED",true,true,true,false,false,false,false,false,"https://preview.example.org/terms",java.time.LocalDate.of(2026,10,28),"Synthetic",Map.of(),null,null,List.of(),1L);catalog.updateSource(id,changed,actor);assertEquals("UNREVIEWED",repo.source(id,false).get("rights_status"));assertEquals("NOT_TESTED",repo.source(id,false).get("validation_status"));assertEquals(false,repo.source(id,false).get("enabled"));
     }
     @Test @Order(14) @WithMockUser(roles="ADMIN") void tagEditingAndCanonicalMergePreserveLockedLinks(){
         UUID actor=accounts.findByUsername("synthetic_a").orElseThrow().id;
@@ -280,6 +280,28 @@ class SecurityIntegrationTest {
         repo.db().sql("INSERT INTO auth_rate_limits(bucket,window_start,used,expires_at) SELECT 'capacity-fixture-'||n,now(),1,now()+interval '15 minutes' FROM generate_series(1,10000)n").update();
         try{assertEquals(503,assertThrows(ApiError.class,()->limits.auth("new-capacity-fixture",1,60)).statusCode());}
         finally{repo.db().sql("DELETE FROM auth_rate_limits WHERE bucket LIKE 'capacity-fixture-%'").update();}
+    }
+
+    @Test @Order(30) @WithMockUser(roles="ADMIN") void collectionScopeIsEnforcedBeforeDatabaseWrite(){
+        UUID actor=UUID.randomUUID(),site=UUID.randomUUID(),source=UUID.randomUUID();
+        repo.db().sql("INSERT INTO sites(id,name,homepage_url,normalized_homepage_url,status) VALUES(:id,'Scope fixture','https://scope.example.org/','https://scope.example.org/','ACTIVE')").param("id",site).update();
+        repo.db().sql("INSERT INTO sources(id,site_id,label,type,endpoint_url,normalized_endpoint_url,enabled,rights_status,allow_metadata,allow_display,validation_status,published_since,topic_terms) VALUES(:id,:site,'Scope','ATOM','https://scope.example.org/feed','https://scope.example.org/feed',true,'APPROVED',true,true,'PASSED','2026-10-10','[\"RAG\"]')").param("id",source).param("site",site).update();
+        catalog.collect(source,actor);var job=claimReady();
+        var result=worker.apply(job,repo.source(source,false),new SafeFetch.Result(List.of(
+            new SafeFetch.Item("ok","RAG fixture","https://scope.example.org/ok","",Instant.parse("2026-10-10T00:00:00Z")),
+            new SafeFetch.Item("old","RAG old fixture","https://scope.example.org/old","",Instant.parse("2026-10-09T00:00:00Z")),
+            new SafeFetch.Item("unknown","RAG undated fixture","https://scope.example.org/unknown","",null),
+            new SafeFetch.Item("wrong","Astronomy fixture","https://scope.example.org/wrong","",Instant.parse("2026-10-10T00:00:00Z"))
+        ),null,null,false));assertEquals(1,result.created());assertEquals(1,repo.db().sql("SELECT count(*) FROM articles WHERE source_id=:id").param("id",source).query(Integer.class).single());
+    }
+
+    @Autowired com.moapan.source.ArxivGate arxivGate;
+    @Test @Order(31) void arxivAdmissionIsSharedAndCoolsDown(){
+        repo.db().sql("UPDATE source_access_gate SET next_at=now()-interval '1 second'").update();
+        try(var lease=arxivGate.enter()){assertThrows(SafeFetch.FetchFailure.class,()->arxivGate.enter());}
+        assertThrows(SafeFetch.FetchFailure.class,()->arxivGate.enter());
+        repo.db().sql("UPDATE source_access_gate SET next_at=now()-interval '1 second'").update();
+        try(var lease=arxivGate.enter()){assertNotNull(lease);}
     }
 
 }

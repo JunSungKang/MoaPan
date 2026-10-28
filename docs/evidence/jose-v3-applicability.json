@@ -1,0 +1,17 @@
+{
+  "advisory": "CVE-2026-116587",
+  "package": "github.com/go-jose/go-jose/v3",
+  "version": "v3.0.5",
+  "status": "not_affected",
+  "justification": "vulnerable_code_not_in_execute_path",
+  "reviewedAt": "2026-10-28T22:00:46.406Z",
+  "expiresAt": "2026-11-05T00:00:00Z",
+  "upstream": "https://github.com/go-jose/go-jose/security/advisories/GHSA-mgcc-cww5-fp2q",
+  "reason": "Remaining v3 path is smallstep PKI/JWK parsing. Current Caddy configuration exposes only reverse_proxy/respond with admin off, uses external ACME issuer, and does not expose acme_server, internal issuer, PKI enrollment or untrusted JWK provisioning. External ACME client uses patched go-jose/v4 4.1.6. This is deployment-specific non-exposure, not a patched v3 library. Any configuration change or expiry revokes this decision.",
+  "configurationSha256": {
+    "Caddyfile": "cb2476a527947f09aebd8c9a0754c37814b07b799794626cedacc30d586d83ed",
+    "scripts/Caddyfile.public": "792f8145aa1de0a6f3ea10117ff299ba97ad342d19b3e62c10e52fd00cc5d711",
+    "scripts/proxy/main.go": "803d6a35d2a7a6c5708c50e1076e4667f943ef49c2066d22e20215f4effb3da0",
+    "scripts/compose-public.yaml": "137b8f4f78b792c00943f69928bcb4fa0ee2a8a26ff656f2bd1440f5ab0de7e7"
+  }
+}

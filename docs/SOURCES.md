@@ -1,4 +1,8 @@
-# 현재 실험용 뉴스 출처
+# 현재 수집 범위 — 2026-10-29
+
+2026-10-10(한국시간, 날짜 포함) 이후 보안 취약점·LLM 성능·RAG·데이터베이스·검색 효율 자료를 수집한다. GitHub Advisory30건과 arXiv 논문100건이 현재 공개 대상이다. NIST 사이버보안 RSS는 등록됐으나 해당 피드의 대상자료0건. 수집주소·검색식: [등록 정의](topic-sources.json), 최신 실행: [증빙](evidence/topic-collection.json). 기존55건은 비공개 보존한다. 아래 10월28일 기록은 과거 상태다.
+
+## 2026-10-28 실험용 출처 기록
 
 2026-10-28 23:06 KST 확인. 기존 기사23건과 연결 지면·기사 태그·작업·수집 이력을 삭제했다. NASA/NOAA 사이트는 PAUSED, 주소는 비활성으로 보존했다. 회원·관리자·태그 사전·대표 관심사는 변경하지 않았다. 현재 실제 저장55건, 최근7일 지면3건. 정확한 시각·건수: [실행 증빙](evidence/news-reseed.json). 이전 verification.json의 NASA/NOAA 건수는 당시 검증 결과이며 현재 데이터가 아니다.
 
@@ -36,3 +40,16 @@
 RSS 제공이나 robots.txt를 이용허락으로 간주하지 않는다. 항목별 제3자 권리 표시나 조건 변경이 확인되면 해당 기사를 숨기고 출처의 허용 범위를 재검토한다. 이 근거는 전체 웹사이트의 모든 콘텐츠를 허가받았다는 뜻이 아니다. 한국어 출처는 명확한 권리 근거를 확보하지 못해 초기 출처에 넣지 않았다. 사업 개시 전 별도 콘텐츠·법률 검토가 필요하다.
 
 아래는 이전 검증 절차이며 현재 출처 재구성 후 실행하면 NASA/NOAA를 재활성화하므로 실행하지 않는다. 이전 재검증은 로컬 합성 계정만 사용하는 `node scripts/local-smoke.mjs`로 실행한다. 점검·미리보기 최대5개와 실제 worker job 성공을 구분하고, 실행 후 합성 계정·세션을 삭제한다. 실제 운영 DB에서 테스트용 권한 부여를 실행하지 않는다.
+
+## 2026-10-29 분야별 수집과 논문
+현재 등록 정의는 [topic-sources.json](topic-sources.json), 실제 결과는 evidence/topic-collection.json을 확인한다. 2026-10-10 00:00 Asia/Seoul(2026-10-09T15:00Z) 이상 발행 자료만 허용하며 날짜 불명/미래로 무효화된 자료는 저장하지 않는다. 기존55건은 삭제하지 않고 비공개 보존했고 이전 넓은 범위 출처를 중지했다.
+
+- NIST 사이버보안 RSS: 기관 작성 텍스트, 기존 공식 이용조건 적용.
+- GitHub Advisory API: reviewed·미철회 공지, published 필터와 저장 전 날짜 검사. CC BY4.0 출처·원문·라이선스와 추출/축약 표시를 소개 페이지에 제공. 원문코드/실행지시는 실행하지 않는다.
+- arXiv: 공식 API https://info.arxiv.org/help/api/user-manual.html 의 검색식으로 보안(cs.CR), LLM 성능/평가, RAG, DB(cs.DB), 검색 효율(cs.IR)5개 주소. 앞선 주제 검색식을 ANDNOT으로 제외하여 주소 간 중복을 줄인다. https://info.arxiv.org/help/api/tou.html 은 제목·초록 등 descriptive metadata의 CC0 저장·변환·공유를 명시적으로 허용한다. PDF/전문은 수집하지 않는다. export.arxiv.org robots의 일반 크롤러 금지와 공식 API 사용 허가를 구분하며 HTML crawling은 하지 않는다. PostgreSQL 공유 admission lock으로 모든 web preview/worker의 arXiv 동시 요청1개와3초 간격을 강제한다. API 검색은 제출일, 저장 검증은 Atom published이며 updated를 최초 발행일로 사용하지 않는다.
+
+각 arXiv 주소 최신20건, 보안 API 최신30건,6시간 주기. 기간 전체를 빠짐없이 backfill하거나 새 자료가20건을 넘을 때 모두 수집하는 계약은 아니다. 요청된 주제와 관련된 메타데이터 검색이며 논문 타당성·동료심사·성능 재현을 보증하지 않는다. 영어 원문 유지.
+
+대안 검토: OpenAlex는 키 없는 기본 조회 가능하지만 대규모/커서 페이지는 인증키 필요(https://help.openalex.org/api/authentication/); 이번에는 키와 추가 어댑터 없이 적용 가능한 arXiv 선택. Crossref는 제목·DOI 검색 가능하지만 일부 초록은 저작권 제한이 있어 무조건 요약할 수 없다(https://www.crossref.org/documentation/retrieve-metadata/rest-api/). Semantic Scholar 공식 API 안내는403으로 이번 검증 미완료. Elastic은 약관상 자동 수집/재게시 제한(https://www.elastic.co/legal/terms-of-use), Hugging Face blog 저장·요약의 명시적 재이용 허락은 확인하지 못해 활성화하지 않는다. PostgreSQL 소프트웨어 라이선스를 모든 커뮤니티 뉴스의 재이용 허락으로 확대 해석하지 않는다.
+
+최종 결과: 보안 공지30건 + 보안/LLM평가/RAG/DB/검색효율 논문 각20건 =130건. NIST 주제RSS0건(비정상 개수 채우기 없음). 공개 URL 중복0, 기준일 위반0. 전체 기간 전수 수집이 아닌 최신 표본이다. 실행 명령: MOAPAN_SMOKE_BASE_URL=https://175.195.62.165 node scripts/topic-source-smoke.mjs (관리자 CLI를 사용할 수 있는 승인된 로컬에서만). 개별 수집 실패가 있으면 스크립트도 실패 종료한다.

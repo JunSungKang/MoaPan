@@ -39,3 +39,6 @@ JDK27은 LTS와 구분한다. GPLv2 + Classpath Exception, 상업적 사용을 �
 Wrapper는 공식 ZIP에서 생성한 JAR을 별도 공식 SHA256과 대조했다. 의존성은 Maven Central/Gradle Plugin Portal, 고정 Boot BOM·lock·strict verification을 사용한다. verification metadata 자동 생성 자체가 모든 공급자의 서명 확인을 뜻하지 않으며, 공식 배포 경로·release/advisory·실제 산출물 검토를 추가했다. build scan 업로드와 CI/CD는 구성하지 않았다.
 
 Docker Desktop: 공식 updater로4.97.0(244584), 2026-10-26 릴리스, 2026-10-28T04:17Z CLI/UI 확인. 근거 https://docs.docker.com/desktop/release-notes/#4970 . Engine29.9.2 정상 기동 확인. VirtioFS 유지 및 권한 서비스 응답 복구는 ENV-001 참조.
+
+## 2026-10-29 보안 재검사에 따른 프록시 의존성 갱신
+Caddy2.11.7/Go1.27.3 및 Java27.0.1.0.2+1 유지. go-jose/v4 4.1.6, x/net0.62.0으로 보안 수정하고 필요한 전이 x/crypto0.58.0,x/sync0.24.0,x/sys0.49.0,x/term0.47.0,x/text0.43.0을 go.mod/go.sum에 고정. 공급자 근거: https://github.com/go-jose/go-jose/releases/tag/v4.1.6 , https://pkg.go.dev/vuln/GO-2026-6860 , https://pkg.go.dev/vuln/GO-2026-6866 . v3에는 패치가 없어 현재 설정 비노출 판정과 만료를 SECURITY_REVIEW.md에 기록. 최종 runtime/build/proxy digest와 보고서 SHA는 evidence/topic-security.json 및 topic-collection.json 참조.

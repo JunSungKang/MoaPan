@@ -14,3 +14,5 @@ users.terms_version varchar(32), terms_accepted_at timestamptz. 둘 다 NULL이�
 V4: users.username을 varchar(128)로 확대하고 CHECK를 영문 소문자·숫자·밑줄1~128자로 변경했다. 기존 계정·고유성·식별자·동의 기록을 보존하며 기존 마이그레이션 파일은 수정하지 않는다.
 
 V5 representative_interests: singleton boolean PK/check true, weights jsonb object, version bigint>=0. 회원 FK/개인 관심사 없음. 활성 태그 검증·최대30개·가중치1~5는 service에서 강제하며 ADMIN 갱신은 version 조건 UPDATE. 기존 계정/동의 데이터 보존.
+
+V6: sources.published_since(date), topic_terms(jsonb array max40); source_access_gate는 arXiv 공개 요청의 공유 간격/동시성 제어용 단일행이며 회원 데이터와 무관하다.

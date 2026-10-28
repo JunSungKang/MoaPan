@@ -1,0 +1,13 @@
+{
+  "checkedAt": "2026-10-28T22:08:04.259Z",
+  "apps": [
+    "http",
+    "tls"
+  ],
+  "adminDisabled": true,
+  "issuers": [
+    "acme"
+  ],
+  "pkiConfigured": false,
+  "acmeServerConfigured": false
+}

@@ -1,0 +1,100 @@
+{
+  "checkedAt": "2026-10-28T22:10:13.964Z",
+  "publishedSinceInclusive": "2026-10-10T00:00:00+09:00",
+  "sources": [
+    {
+      "label": "LLM 성능·평가 논문",
+      "enabled": true,
+      "validation_status": "PASSED",
+      "published_since": "2026-10-10",
+      "interval_seconds": 21600,
+      "public_articles": 20,
+      "first_published": "2026-10-27T11:10:26+00:00",
+      "last_published": "2026-10-27T17:57:00+00:00"
+    },
+    {
+      "label": "NIST 사이버보안",
+      "enabled": true,
+      "validation_status": "PASSED",
+      "published_since": "2026-10-10",
+      "interval_seconds": 21600,
+      "public_articles": 0,
+      "first_published": null,
+      "last_published": null
+    },
+    {
+      "label": "RAG 논문",
+      "enabled": true,
+      "validation_status": "PASSED",
+      "published_since": "2026-10-10",
+      "interval_seconds": 21600,
+      "public_articles": 20,
+      "first_published": "2026-10-26T04:00:15+00:00",
+      "last_published": "2026-10-27T14:55:58+00:00"
+    },
+    {
+      "label": "검색 속도·효율 논문",
+      "enabled": true,
+      "validation_status": "PASSED",
+      "published_since": "2026-10-10",
+      "interval_seconds": 21600,
+      "public_articles": 20,
+      "first_published": "2026-10-22T04:10:13+00:00",
+      "last_published": "2026-10-27T14:11:12+00:00"
+    },
+    {
+      "label": "검토된 보안 취약점",
+      "enabled": true,
+      "validation_status": "PASSED",
+      "published_since": "2026-10-10",
+      "interval_seconds": 21600,
+      "public_articles": 30,
+      "first_published": "2026-10-28T21:10:17+00:00",
+      "last_published": "2026-10-28T21:23:44+00:00"
+    },
+    {
+      "label": "데이터베이스 논문",
+      "enabled": true,
+      "validation_status": "PASSED",
+      "published_since": "2026-10-10",
+      "interval_seconds": 21600,
+      "public_articles": 20,
+      "first_published": "2026-10-21T12:43:35+00:00",
+      "last_published": "2026-10-27T13:53:04+00:00"
+    },
+    {
+      "label": "보안 취약점 논문",
+      "enabled": true,
+      "validation_status": "PASSED",
+      "published_since": "2026-10-10",
+      "interval_seconds": 21600,
+      "public_articles": 20,
+      "first_published": "2026-10-25T12:29:23+00:00",
+      "last_published": "2026-10-27T10:53:47+00:00"
+    }
+  ],
+  "dateViolations": 0,
+  "duplicatePublicUrls": 0,
+  "syntheticAccountsRemaining": 0,
+  "previousArticlesHidden": 55,
+  "newPublicArticles": 130,
+  "publicEdition": {
+    "status": 200,
+    "items": 30,
+    "candidateCount": 127
+  },
+  "images": [
+    {
+      "name": "/moapan-web-1",
+      "image": "sha256:37e99bc7f666c82777bc568c31e5317ea9759e0042a9158a303d026888a5a4fe"
+    },
+    {
+      "name": "/moapan-worker-1",
+      "image": "sha256:37e99bc7f666c82777bc568c31e5317ea9759e0042a9158a303d026888a5a4fe"
+    },
+    {
+      "name": "/moapan-proxy-1",
+      "image": "sha256:fe56a3237e03ff80c5f49035f4b2c9eac2c2c0a25a13759985fe19d5d93a153b"
+    }
+  ]
+}
