@@ -28,8 +28,12 @@ https://{$MOAPAN_PUBLIC_HOST} {
  }
 }
 http://localhost:8080 {
- reverse_proxy /about.html web:8080 {
-  header_up Host {$MOAPAN_PUBLIC_HOST}
+ handle /about.html {
+  reverse_proxy web:8080 {
+   header_up Host {$MOAPAN_PUBLIC_HOST}
+  }
  }
- respond 404
+ handle {
+  respond 404
+ }
 }

@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-28T06:13:19.100Z",
+  "checkedAt": "2026-10-28T06:14:36.425Z",
   "externalDeployment": {
     "status": "PASS",
     "scope": "User-authorized local Mac service reachable from mobile internet; separate hosting deployment excluded",
@@ -305,12 +305,12 @@
     },
     {
       "name": "moapan-proxy-public:2.11.7",
-      "digest": "sha256:47cc022c95e1f4a2ed71f1f165aa3da8baafbd255408fad1467ac45e356e802a",
+      "digest": "sha256:cca5b2fd88afe29331ae47733b4760a09b62fc6780a889114f377f1e205480b5",
       "repoDigests": [
-        "moapan-proxy-public@sha256:47cc022c95e1f4a2ed71f1f165aa3da8baafbd255408fad1467ac45e356e802a"
+        "moapan-proxy-public@sha256:cca5b2fd88afe29331ae47733b4760a09b62fc6780a889114f377f1e205480b5"
       ],
       "platform": "linux/arm64",
-      "scanSha256": "7ab90b8d3cba3a6bc1d88b25a242f116b44f36e8a74575d90e59dd97c4b06d23",
+      "scanSha256": "b04bc05bf2227deb4a4686bbb1875b8e2a0eb0860c5db335e71a163036a03a74",
       "findings": [
         {
           "id": "CVE-2026-102473",
@@ -1014,7 +1014,7 @@
   "reports": [
     {
       "name": "source",
-      "sha256": "22d9087e6dd6eb256e0327b0e02093c18253d951306d363befd30501cee41a44",
+      "sha256": "c0bac215067f5ef815a4de679c1590756dc9e3c53451fcdb3b6feec38403920b",
       "packages": 327,
       "findings": [
         {
@@ -1035,13 +1035,13 @@
     },
     {
       "name": "jar",
-      "sha256": "ba44493b84af600a1d9a5b7767f40de52d1606c6fc3efa14c13ac4611ec6af87",
+      "sha256": "d07f6d229ea170caad2fee90e7356094f7e87b19ecd20728dd09cac51842ab01",
       "packages": 91,
       "findings": []
     },
     {
       "name": "sbom",
-      "sha256": "cdaa355fbb55a4c77e123d550fad157a26c322b1771fc7ee98de6682f469b08b",
+      "sha256": "07a62da5f5563e0a890f7043ace9464fb1adfeaf7f6df12b3c512242ed2cda46",
       "packages": 100,
       "findings": []
     }
