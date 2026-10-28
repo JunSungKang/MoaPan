@@ -23,4 +23,4 @@
 
 ## 현재 재검증 장애 (2026-10-28T03:16Z)
 
-최종 이미지 대조에서 DB/proxy 실행 이미지가 최신 scan 대상과 달라 재생성을 시작했다. Docker 엔진 ping과 같은 DB 이미지의 단독 postgres --version은 성공하나 bind mount가 있는 db/proxy start가 대기 중이다. 이전 smoke 성공을 현재 Compose 성공으로 주장하지 않는다. Docker Desktop 재시작은 다른 프로젝트 컨테이너에 영향을 주므로 사용자 확인 대기. 데이터 볼륨은 삭제하지 않았다. 재시작/회복 후 Compose 재실행·실제 smoke·record-evidence 재생성이 필요하다.
+최종 이미지 대조에서 DB/proxy 실행 이미지가 최신 scan 대상과 달라 재생성을 시작했다. Docker 엔진 ping과 같은 DB 이미지의 단독 postgres --version은 성공하나 bind mount가 있는 db/proxy start가 대기 중이다. 이전 smoke 성공을 현재 Compose 성공으로 주장하지 않는다. 사용자가 Docker Desktop 재시작을 명시 승인했다. 일반 restart의 stopping 정체 후 공식 stop --force로 종료했고 새 세션의 starting 상태를 확인했다. 현재 데몬 컨테이너 복원 단계가 준비되지 않아 Compose 복구 명령이 대기 중이다. 승인 대기는 해소됐으며 엔진 준비 장애를 추적한다. 데이터 볼륨은 삭제하지 않았다. 재시작/회복 후 Compose 재실행·실제 smoke·record-evidence 재생성이 필요하다.
