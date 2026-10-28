@@ -43,24 +43,25 @@ class SecurityIntegrationTest {
     @Autowired MockMvc mvc;@Autowired Accounts accounts;@Autowired Limits limits;@Autowired CatalogRepository repo;@Autowired CatalogService catalog;@Autowired Worker worker;@Autowired NewsService news;
     @Autowired org.springframework.session.SessionRepository<?> sessions;
     private static final String PASSWORD="synthetic password 12345";
-    private void signup(String user)throws Exception{mvc.perform(post("/api/v1/auth/signup").with(csrf()).contentType("application/json").content("{\"username\":\""+user+"\",\"termsAccepted\":true,\"termsVersion\":\"2026-10-28.2\",\"password\":\""+PASSWORD+"\"}")).andExpect(status().isOk()).andExpect(jsonPath("$.role").value("USER")).andExpect(jsonPath("$.passwordHash").doesNotExist());}
+    private void signup(String user)throws Exception{mvc.perform(post("/api/v1/auth/signup").with(csrf()).contentType("application/json").content("{\"username\":\""+user+"\",\"termsAccepted\":true,\"termsVersion\":\"terms-4\",\"password\":\""+PASSWORD+"\"}")).andExpect(status().isOk()).andExpect(jsonPath("$.role").value("USER")).andExpect(jsonPath("$.passwordHash").doesNotExist());}
     private Map<String,Object> claimReady(){
         for(int i=0;i<100;i++){var job=worker.claim();if(job!=null)return job;try{Thread.sleep(20);}catch(InterruptedException e){Thread.currentThread().interrupt();throw new AssertionError(e);}}
         throw new AssertionError("Queued job not ready within 2 seconds: "+repo.db().sql("SELECT status,available_at,now() db_now FROM content_jobs WHERE status='QUEUED'").query().listOfRows());
     }
     @Test @Order(1) void unauthenticatedAndCsrf()throws Exception{
+        mvc.perform(get("/api/v1/private.html")).andExpect(status().isUnauthorized()).andExpect(content().contentType("application/json"));
         mvc.perform(get("/api/v1/news/edition").header("Referer","http://localhost").header("User-Agent","browser")).andExpect(status().isUnauthorized());
         mvc.perform(post("/api/v1/auth/signup").contentType("application/json").content("{\"username\":\"badone\",\"password\":\""+PASSWORD+"\"}")).andExpect(status().isForbidden());
         mvc.perform(post("/api/v1/auth/signup").with(csrf().useInvalidToken()).contentType("application/json").content("{}")).andExpect(status().isForbidden());
         mvc.perform(get("/api/v1/auth/csrf")).andExpect(status().isOk()).andExpect(jsonPath("$.token").isString());
     }
     @Test @Order(2) void signupRejectsExtraFieldsAndStoresOnlyHash()throws Exception{
-        mvc.perform(post("/api/v1/auth/signup").with(csrf()).contentType("application/json").content("{\"username\":\"injected\",\"termsAccepted\":true,\"termsVersion\":\"2026-10-28.2\",\"password\":\""+PASSWORD+"\",\"role\":\"ADMIN\"}")).andExpect(status().isBadRequest());
+        mvc.perform(post("/api/v1/auth/signup").with(csrf()).contentType("application/json").content("{\"username\":\"injected\",\"termsAccepted\":true,\"termsVersion\":\"terms-4\",\"password\":\""+PASSWORD+"\",\"role\":\"ADMIN\"}")).andExpect(status().isBadRequest());
         signup("synthetic_a");Account a=accounts.findByUsername("synthetic_a").orElseThrow();assertTrue(a.passwordHash.startsWith("$argon2id$"));assertFalse(a.passwordHash.contains(PASSWORD));
     }
     @Test @Order(2) void signupRequiresCurrentExplicitConsent()throws Exception{
         Instant before=Instant.now();
-        for(String fields:List.of("",",\"termsAccepted\":false,\"termsVersion\":\"2026-10-28.2\"",",\"termsAccepted\":true,\"termsVersion\":\"old\"",",\"termsAccepted\":true")){
+        for(String fields:List.of("",",\"termsAccepted\":false,\"termsVersion\":\"terms-4\"",",\"termsAccepted\":true,\"termsVersion\":\"old\"",",\"termsAccepted\":true")){
             String body="{\"username\":\"consent_test\",\"password\":\""+PASSWORD+"\""+fields+"}";
             mvc.perform(post("/api/v1/auth/signup").with(csrf()).contentType("application/json").content(body)).andExpect(status().isBadRequest());
             assertTrue(accounts.findByUsername("consent_test").isEmpty());
@@ -231,6 +232,43 @@ class SecurityIntegrationTest {
         }
         FixtureConfig.failureStatus.set(429);assertThrows(ApiError.class,()->catalog.preview(source,true,actor));assertEquals("FAILED",repo.source(source,false).get("validation_status"));
         repo.db().sql("INSERT INTO auth_rate_limits(bucket,window_start,used,expires_at) VALUES('synthetic-expired',now()-interval '1 day',1,now()-interval '1 second')").update();worker.cleanup();assertEquals(0,repo.db().sql("SELECT count(*) FROM auth_rate_limits WHERE bucket='synthetic-expired'").query(Integer.class).single());
+    }
+
+
+    @Test @Order(80) void publicEditionIsBoundedAndProtectedPagesStayPrivate()throws Exception{
+        for(String page:List.of("settings","account","admin"))mvc.perform(get("/"+page+".html")).andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("/login.html"));
+        mvc.perform(get("/api/v1/account")).andExpect(status().isUnauthorized());
+        UUID site=UUID.randomUUID(),source=UUID.randomUUID();
+        repo.db().sql("INSERT INTO sites(id,name,homepage_url,normalized_homepage_url,status) VALUES(:id,'Public synthetic','https://public.example.org/','https://public.example.org/','ACTIVE')").param("id",site).update();
+        repo.db().sql("INSERT INTO sources(id,site_id,label,type,endpoint_url,normalized_endpoint_url,rights_status,allow_display) VALUES(:id,:site,'Public synthetic','RSS','https://public.example.org/feed','https://public.example.org/feed','APPROVED',true)").param("id",source).param("site",site).update();
+        for(int i=0;i<35;i++)repo.db().sql("INSERT INTO articles(id,source_id,source_guid,canonical_url,title,summary_mode,language,input_hash,collected_at) VALUES(:id,:source,:guid,:url,'Public synthetic','INSUFFICIENT','en',:hash,now())").param("id",UUID.randomUUID()).param("source",source).param("guid","public-"+i).param("url","https://public.example.org/"+i).param("hash","b".repeat(64)).update();
+        repo.db().sql("UPDATE news_editions SET expires_at=now()-interval '1 second'").update();
+        String response=mvc.perform(get("/api/v1/public/news/edition")).andExpect(status().isOk()).andExpect(header().string("Cache-Control","no-store")).andExpect(jsonPath("$.items.length()").value(30)).andExpect(jsonPath("$.nextCursor").isEmpty()).andReturn().getResponse().getContentAsString();
+        assertFalse(response.contains("admin_note"));assertFalse(response.contains("password"));
+        var page=news.publicEdition();UUID hidden=page.items().getFirst().id();repo.db().sql("UPDATE articles SET public=false WHERE id=:id").param("id",hidden).update();assertTrue(news.publicEdition().items().stream().noneMatch(a->a.id().equals(hidden)));
+        for(String query:List.of("?size=300","?cursor=x","?limit=-1"))mvc.perform(get("/api/v1/public/news/edition"+query)).andExpect(status().isBadRequest());
+        mvc.perform(get("/api/v1/public/news/page?cursor=x")).andExpect(status().isUnauthorized());
+        repo.db().sql("UPDATE auth_rate_limits SET used=600 WHERE bucket='public_news'").update();
+        mvc.perform(get("/api/v1/public/news/edition")).andExpect(status().isTooManyRequests()).andExpect(header().exists("Retry-After"));
+        repo.db().sql("DELETE FROM auth_rate_limits WHERE bucket='public_news'").update();
+    }
+    @Test @Order(81) void representativeInterestsRequireAdminCsrfAndCurrentVersion()throws Exception{
+        signup("representative_owner");var owner=accounts.findByUsername("representative_owner").orElseThrow();var userCookie=login(owner.username);
+        String tag="00000000-0000-0000-0000-000000000004";
+        String initial=mvc.perform(get("/api/v1/public/interests")).andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        long version=tools.jackson.databind.json.JsonMapper.builder().build().readTree(initial).get("version").asLong();
+        String body="{\"version\":"+version+",\"weights\":{\""+tag+"\":5}}";
+        mvc.perform(put("/api/v1/admin/interests").with(csrf()).contentType("application/json").content(body)).andExpect(status().isUnauthorized());
+        mvc.perform(put("/api/v1/admin/interests").cookie(userCookie).with(csrf()).contentType("application/json").content(body)).andExpect(status().isForbidden());
+        mvc.perform(get("/admin.html").cookie(userCookie)).andExpect(redirectedUrl("/index.html"));
+        owner.role="ADMIN";accounts.saveAndFlush(owner);var admin=login(owner.username);
+        mvc.perform(put("/api/v1/admin/interests").cookie(admin).contentType("application/json").content(body)).andExpect(status().isForbidden());
+        mvc.perform(put("/api/v1/admin/interests").cookie(admin).with(csrf()).contentType("application/json").content(body)).andExpect(status().isOk()).andExpect(jsonPath("$.version").value(version+1));
+        mvc.perform(put("/api/v1/admin/interests").cookie(admin).with(csrf()).contentType("application/json").content(body)).andExpect(status().isConflict());
+        mvc.perform(get("/api/v1/public/interests")).andExpect(jsonPath("$.weights['"+tag+"']").value(5));
+        for(String weights:List.of("{}","{\""+tag+"\":6}","{\""+UUID.randomUUID()+"\":3}"))mvc.perform(put("/api/v1/admin/interests").cookie(admin).with(csrf()).contentType("application/json").content("{\"version\":"+(version+1)+",\"weights\":"+weights+"}")).andExpect(status().isBadRequest());
+        assertEquals(1,repo.db().sql("SELECT count(*) FROM admin_actions WHERE action='representative_interests' AND admin_id=:id").param("id",owner.id).query(Integer.class).single());
+        mvc.perform(get("/settings.html").cookie(admin)).andExpect(status().isOk());
     }
 
     @Test @Order(99) void databaseOutageDoesNotBypassSessionsOrQuota()throws Exception {

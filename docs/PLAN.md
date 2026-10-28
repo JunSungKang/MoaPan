@@ -61,3 +61,11 @@ check, integrationTest, e2eTest, bootJar, sbom, securityCheck, acceptanceTest를
 Sprint Delivery 유지. src 정적 모듈·설정 화면에 WebCrypto 암호화 파일 내보내기/가져오기를 추가한다. 계정 UUID와 설정만 암호화하며 로그인 비밀번호·문장·뉴스는 포함하지 않는다. 자동 동기화·서버 저장·API 추가는 제외한다. 파일 크기/스키마/계정 검증 후 명시적 적용, 오류 시 기존 설정 유지. 기존 IndexedDB 형식 유지.
 ### 10.2 검증·전달
 서로 독립된 브라우저에서 같은 계정 복원, 다른 계정/암호 오류/변조/잘못된 파일 거부, 네트워크 비전송과 적용 전 보존을 Playwright Java로 검사한다. 로컬 Gradle 검사·변경 이미지 스캔 후 공개 서비스 반영, 증빙 문서와 guarded push. 실패 시 서비스는 기존 이미지를 유지한다. 작업 경계는 현재 승인된 moapan workspace이며 global 파일과 실제 회원 데이터는 변경하지 않는다.
+
+## 11. 공개 관심지면·권한별 메뉴·검색·약관 이력
+### 11.1 기본 지면과 권한
+최신 사용자 요청으로 비회원 실제 뉴스 금지를 제한 공개 지면으로 변경한다. 공개 GET은 최대30개/no cursor/전역 원자적 한도로 제한하고 기존 회원 quota/cursor는 유지. 관리자 공통 대표 관심사(DB singleton, version 충돌, ADMIN+CSRF+감사)를 비회원 및 관심사 미설정 회원에 적용. 회원별 관심사는 계속 브라우저만. 모든 정적 페이지/메뉴를 guest/USER/ADMIN으로 검사하고 보호 페이지 직접 접근도 제한한다.
+### 11.2 화면과 이력
+관심지면 하나로 통합, 검색/카테고리/날짜는 native dialog의 적용/취소/초기화로 로컬 처리. 약관은 판 번호만 표시하고 실제 Git에 존재하는 이전 본문을 정적 이력으로 제공하며 신규 동의 판을 갱신한다. 기존 동의 기록은 유지.
+### 11.3 검증과 전달
+공개 필드/상한/숨김 기사/권한/CSRF/충돌/기본값 및 메뉴 전체역할·검색 팝업·비전송·판 이력을 PostgreSQL와 Playwright Java로 검증. 기존 인수 기준의 변경 근거를 문서화. local 검사·이미지 검사·Compose 반영·HTTPS 확인·guarded push까지 진행한다. CI/CD/main merge/개인 관심사 서버 저장은 제외. 변경 경로 src/docs/scripts 및 현재 GitHub 계약 범위, 작업 루트는 승인된 moapan workspace만.

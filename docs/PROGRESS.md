@@ -44,3 +44,6 @@ settings.html은 관심 주제 체크·제외·문장 사전 매칭에 집중하
 
 ## 기기 간 관심사 이전 — 구현·실행 검증 완료
 서버 저장 없는 암호화 파일 이전 구현. 첫 E2E에서 발견한 파일 입력 모바일 넘침을 수정한 뒤 Java42 PASS/FAIL0/SKIP0. 잘못된 비밀번호·다른 계정·변조·과대/잘못된 스키마 거부, 두 독립 브라우저 복원·적용/취소·비전송 검증. 소스/JAR/SBOM·변경 이미지 보안 게이트 및 실행 digest 일치 PASS. 공개 HTTPS 새 화면/두 모듈/개인정보 안내200, 비회원 뉴스401, db/web/proxy healthy 및 worker running. 기존 admin 활성/ADMIN 유지. 수동 파일 이전이며 자동 동기화는 제공하지 않는다. 증빙: evidence/preferences-transfer.json 및 verification.json.
+
+## 공개 관심지면·메뉴·검색·약관 — 구현·실행 검증 완료
+제한 공개 지면, 관리자 대표 관심사(V5), 권한별 메뉴/보호 HTML, 관심지면 통합, 검색 dialog, 실제 이전 약관7개 열람과 현재 판 표시 구현. 최초 Escape 실패를 수정했고 API HTML 확장자도 JSON401을 유지하도록 회귀 추가. Java47 PASS/FAIL0/SKIP0, 변경 후 E2E 및 서버 테스트 재검증. 소스/JAR/SBOM/최종 build·runtime 이미지 게이트 및 실행 digest 일치 PASS. 실제 HTTPS 기사13개·대표태그6개·보호 페이지302·이전 판7개200·신판 가입/로그인/탈퇴 확인. 합성 계정 삭제 및 기존 admin 활성/ADMIN 유지. db/web/proxy healthy, worker running. MENU_AUDIT.md, evidence/public-edition.json, verification.json 참조.

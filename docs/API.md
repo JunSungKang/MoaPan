@@ -7,7 +7,7 @@
 |Method|경로|입력·출력|
 |---|---|---|
 |GET|/api/v1/auth/csrf|token,headerName. JS 메모리만 저장|
-|POST|/api/v1/auth/signup|username/password, termsAccepted=true, termsVersion=2026-10-28.2. 반환 id,username,role(USER)|
+|POST|/api/v1/auth/signup|username/password, termsAccepted=true, termsVersion=terms-4. 반환 id,username,role(USER)|
 |POST|/api/v1/auth/login|username/password. 세션 ID 교체, 최소 계정 반환. 후속 GET csrf로 토큰 재발급|
 |POST|/api/v1/auth/logout|서버 세션 종료. 후속 로그인 전 csrf 재발급|
 |GET|/api/v1/account|id,username,role|
@@ -60,8 +60,15 @@ JSON_API는 단일 GET 응답의 제한된 점 구분 경로만 지원: items,id
 
 내부 /internal/live, /internal/ready는 요약 상태만. Caddy는 /internal/*와 /actuator/*를 외부에404로 차단한다. worker/migrate/admin-cli는 HTTP를 열지 않는다.
 
-관심사 저장·클릭 추적·전체 export·원문 전문 프록시·미인증 뉴스 dump API는 만들지 않는다.
+회원 개인 관심사 저장·클릭 추적·전체 export·원문 전문 프록시·미인증 뉴스 dump API는 만들지 않는다.
 
 가입 약관 동의: termsAccepted 누락·false·null, termsVersion 누락·현재 버전 불일치는400이다. 동의 버전과 서버 시각을 계정과 함께 저장하며 공개 계정 DTO에 추가 노출하지 않는다. 로그인 DTO에는 이 필드를 받지 않는다. 기존 계정의 동의 이력은 소급 생성하지 않는다.
 
 로그인 실패1~4회:401 invalid_credentials.5~9회:같은401 응답에 attemptsRemaining(5~1) 추가.10회부터429 login_limited와 실제 DB 제한 만료까지의 Retry-After(초)를 반환한다. 전역 로그인 횟수 제한은429 rate_limited로 구분한다. 존재하지 않는 아이디도 같은 실패 카운터 정책을 따른다. 제한된 요청은 만료를 연장하지 않는다.
+
+## 공개 지면과 대표 관심사 (최신 사용자 변경)
+GET /api/v1/public/news/edition: 비회원 허용, query 불허, 최근 공통 edition에서 최대30개, cursor 없음. 공개 상태·출처 권리·요약 허용 여부 재검사. 전체 공개 요청 분당600, 기존 전체 API 분당3000 카운터/실패 시503 유지. IP·기기 식별자 추가 없음.
+GET /api/v1/public/interests: version,weights(UUID:1~5). 개인 설정이 아닌 관리자 공통 대표값.
+GET /api/v1/public/tags: 공개 태그·별칭·병합 매핑.
+GET /api/v1/admin/interests 및 PUT /api/v1/admin/interests: ADMIN; PUT은 CSRF, {version,weights}필수, 활성 태그1~30개, 가중치1~5, version 불일치409. 감사 action은 representative_interests이며 개인 관심사 API는 아님.
+/settings.html,/account.html은 인증 필요, /admin.html은 ADMIN. 비회원 HTML 요청은 /login.html로, 일반회원의 admin.html은 /index.html로 이동한다. API는 기존401/403 JSON 유지.

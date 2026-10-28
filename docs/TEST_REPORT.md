@@ -55,3 +55,6 @@ AUTH-001: supplementaryUnicodePasswordUsesCodePointLimit 테스트는 수정 전
 
 ## 관심사 파일 이전 (2026-10-28)
 Java42개(unit11/integration21/E2E10) PASS, FAIL0/SKIP0. 독립 BrowserContext 두 개로 같은 계정의 설정이 처음에는 분리됨, 암호화 다운로드/파일 입력/확인/취소/명시적 교체/새로고침 후 유지/이후 독립 변경을 실제 Chromium에서 검증했다. 잘못된 파일 비밀번호, 다른 계정, 암호문 변조, 크기 초과, 미지원 구조, 가중치 범위·프로토타입 키·중복/과다 배열 거부 확인. 파일·비밀번호·설정의 네트워크 전송 없음. 최초 모바일 가로 넘침 실패2건을 CSS 수정 후 전체 재검증해 해결했다.
+
+## 공개 지면·메뉴·검색·약관 개정
+Java47개(unit11/integration23/E2E13) PASS/FAIL0/SKIP0. PostgreSQL 공개30개·query 거부·숨김 기사 재검사·공유429·보호 HTML/계정 API 접근·ADMIN/CSRF/대표값 갱신/409/입력400/감사 검증. 기존 회원 cursor/quota 회귀 유지. 브라우저 전체 메뉴 역할 점검은 MENU_AUDIT.md. 첫 dialog Escape 실패를 수정 후 전체 회귀 통과. 신규 약관 동의 ID terms-4와 기존 동의 기록 불변을 검증. 변경 후 UI 재실행 및 보안/배포 증빙은 최종 verification.json 참조.

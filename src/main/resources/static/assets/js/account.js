@@ -1,8 +1,8 @@
 import {account,request} from './api.js';
-import {report} from './common.js';
+import {report,requireAccount} from './common.js';
 import {deletePreferences} from './preferences.js';
 let user;
-try{user=await account();document.querySelector('#account-username').textContent=user.username;document.querySelector('#account-controls').disabled=false;}catch(e){report(e);}
+try{user=await requireAccount();document.querySelector('#account-username').textContent=user.username;document.querySelector('#account-controls').disabled=false;}catch(e){report(e);}
 for(const [formId,path,method] of [['change-password','/api/v1/account/password','PATCH'],['delete-account','/api/v1/account','DELETE']]){
   const form=document.querySelector('#'+formId);
   form.addEventListener('submit',async e=>{

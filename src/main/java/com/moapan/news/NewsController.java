@@ -7,8 +7,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import com.moapan.ApiError;
 @RestController @ConditionalOnWebApplication
 public class NewsController {
-    private final NewsService service;private final org.springframework.jdbc.core.simple.JdbcClient db;
-    public NewsController(NewsService service,org.springframework.jdbc.core.simple.JdbcClient db){this.service=service;this.db=db;}
+    private final RepresentativeInterests interests;private final NewsService service;private final org.springframework.jdbc.core.simple.JdbcClient db;
+    public NewsController(NewsService service,org.springframework.jdbc.core.simple.JdbcClient db,RepresentativeInterests interests){this.service=service;this.db=db;this.interests=interests;}
+    @GetMapping("/api/v1/public/news/edition")Object publicEdition(HttpServletRequest request){checkParams(request,Set.of());return service.publicEdition();}
+    @GetMapping("/api/v1/public/interests")Object defaults(){return interests.read();}
+    @GetMapping("/api/v1/public/tags")Object publicTags(){return service.tags();}
+    @GetMapping("/api/v1/admin/interests")Object adminInterests(){return interests.read();}
+    @PutMapping("/api/v1/admin/interests")Object updateInterests(@RequestBody RepresentativeInterests.Settings input,Authentication a){return interests.update(input,UUID.fromString(a.getName()));}
     @GetMapping("/api/v1/news/edition")Object edition(Authentication a,@RequestParam(defaultValue="30")int size,HttpServletRequest request){checkParams(request,Set.of("size"));return service.first(UUID.fromString(a.getName()),size);}
     @GetMapping("/api/v1/news/page")Object page(Authentication a,@RequestParam String cursor,HttpServletRequest request){checkParams(request,Set.of("cursor"));return service.next(UUID.fromString(a.getName()),cursor);}
     @GetMapping("/api/v1/tags")Object tags(){return service.tags();}

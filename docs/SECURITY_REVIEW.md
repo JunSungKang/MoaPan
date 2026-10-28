@@ -46,3 +46,6 @@ Ubuntu24.04의 잔여 MEDIUM/LOW는 발견 목록에 모두 유지한다. 공급
 
 ## 관심사 파일 이전 검토 (2026-10-28)
 새 서버 API/DB 저장/의존성 없음. WebCrypto AES-GCM 인증 암호화와 고정 PBKDF2 작업량, 무작위 salt/IV, 비추출 CryptoKey, 크기·필드·ID·가중치 제한, 계정 비교와 명시적 적용을 검증했다. 잘못된 암호·변조·타 계정·손상 입력은 기존 IndexedDB 변경 없이 거부한다. 파일/파일 비밀번호 네트워크 전송 없음을 두 독립 Chromium context로 검사했다. 강한 파일 비밀번호 사용과 별도 전달이 필요하며 파일 자체의 오프라인 추측 공격, 악성 브라우저/확장/XSS, 사용자가 남긴 파일 복사본은 암호화만으로 제거할 수 없다. 로그인 비밀번호를 암호화 키로 사용하지 않는다. 최신 소스/JAR/SBOM 및 변경된 build/runtime 이미지 검사를 실행했고 고위험 게이트 통과. 기존 OS MEDIUM/LOW 발견의 공급자 검토는 유지한다. 정확한 digest/report SHA는 evidence/verification.json.
+
+## 제한 공개 지면·대표 관심사 개정
+사용자 명시 요청으로 최대30개 공개 기사 endpoint를 추가했다. 비회원에게 제공한 뉴스는 복사를 막을 수 없고, 분당600 전역 한도는 IP 추적 없이 적용하므로 공유 한도의 가용성 제한이 있다. 회원 cursor·quota·개인 계정·관리 API 보호는 유지한다. 공개 DTO는 기존 권리/숨김 재검사를 사용하며 무제한 query/cursor는 거부한다. 대표 관심사는 공통 운영 설정으로 ADMIN+CSRF+서비스 권한+version 조건+감사로 변경한다. 보호 HTML3개만 로그인 이동하고 API는 .html 경로도 JSON401 유지. 검색 조건은 네트워크로 보내지 않는다. 새로운 의존성·truststore 변경 없음. 최종 JAR/SBOM/변경 build·runtime 이미지 스캔과 실행 digest 대조는 verification.json 참조.

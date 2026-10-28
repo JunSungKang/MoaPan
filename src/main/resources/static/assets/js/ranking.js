@@ -1,3 +1,4 @@
+export function effectivePreferences(preferences, representative){return {...preferences,enabled:true,weights:preferences.enabled&&Object.keys(preferences.weights).length?preferences.weights:{...representative}};}
 export function rank(candidates, preferences, now = Date.now()) {
   const weights=preferences.enabled?preferences.weights:{};const total=Object.values(weights).reduce((a,b)=>a+b,0);
   const filtered=candidates.filter(a=>!preferences.excludedSources.includes(a.source.id)&&!a.tags.some(t=>preferences.excludedTags.includes(t.id)));

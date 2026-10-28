@@ -2,7 +2,7 @@
 
 기본 명령: ./gradlew --no-daemon clean check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest. 호스트에서는 scripts/gradle-local.sh로 workspace JDK·캐시·임시 경로를 고정한다. CI/CD는 구성하지 않는다.
 
-비회원 뉴스401·일반회원 admin403·CSRF403·권한 service 검사·no-store·CSP·no-referrer·안전 DOM·TLS 검증을 유지한다. 계정의 허용 응답 복사와 다중계정 분산 수집을 완전히 막는다고 주장하지 않는다.
+회원 전용 뉴스401·공개 지면 최대30개/별도 공유 한도·일반회원 admin403·CSRF403·권한 service 검사·no-store·CSP·no-referrer·안전 DOM·TLS 검증을 유지한다. 계정의 허용 응답 복사와 다중계정 분산 수집을 완전히 막는다고 주장하지 않는다.
 
 서명 cursor는 계정·edition·위치·만료·size를 검증한다. quota는 DB 원자 업데이트로 분60·일6000·동시3 제한. 카운터 확인 실패는 허용하지 않는다. 로그인 식별자는 keyed HMAC만, global limiter로 임의 식별자 폭증을 제한한다.
 

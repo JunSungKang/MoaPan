@@ -36,10 +36,10 @@ public class SecurityConfig {
         var handler=new CsrfTokenRequestAttributeHandler();
         http.csrf(c->c.csrfTokenRepository(csrf).csrfTokenRequestHandler(handler))
             .securityContext(c->c.securityContextRepository(repository))
-            .authorizeHttpRequests(a->a.requestMatchers("/api/v1/auth/csrf","/api/v1/auth/signup","/api/v1/auth/login","/internal/live").permitAll().requestMatchers("/api/v1/admin/**").hasRole("ADMIN").requestMatchers("/api/**").authenticated().anyRequest().permitAll())
+            .authorizeHttpRequests(a->a.requestMatchers("/api/v1/auth/csrf","/api/v1/auth/signup","/api/v1/auth/login","/internal/live").permitAll().requestMatchers(org.springframework.http.HttpMethod.GET,"/api/v1/public/news/edition","/api/v1/public/interests","/api/v1/public/tags").permitAll().requestMatchers("/api/v1/admin/**","/admin.html").hasRole("ADMIN").requestMatchers("/settings.html","/account.html").authenticated().requestMatchers("/api/**").authenticated().anyRequest().permitAll())
             .requestCache(c->c.disable()).formLogin(c->c.disable()).httpBasic(c->c.disable())
             .logout(c->c.disable())
-            .exceptionHandling(e->e.authenticationEntryPoint((q,r,x)->error(r,401)).accessDeniedHandler((q,r,x)->error(r,403)))
+            .exceptionHandling(e->e.authenticationEntryPoint((q,r,x)->{if(Set.of("/settings.html","/account.html","/admin.html").contains(q.getRequestURI()))r.sendRedirect("/login.html");else error(r,401);}).accessDeniedHandler((q,r,x)->{if(Set.of("/settings.html","/account.html","/admin.html").contains(q.getRequestURI()))r.sendRedirect("/index.html");else error(r,403);}))
             .headers(h->h.contentSecurityPolicy(c->c.policyDirectives("default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'"))
                 .referrerPolicy(c->c.policy(org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER))
                 .permissionsPolicyHeader(c->c.policy("camera=(), microphone=(), geolocation=()")))

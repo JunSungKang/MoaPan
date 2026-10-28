@@ -39,3 +39,9 @@ FS-03 계정 관리 화면은 /account.html 및 assets/js/account.js, FS-21 관�
 
 ## FS-21 확장: 기기 간 수동 이전
 관심사 화면에서 파일 전용 비밀번호로 내보내기, 같은 계정의 다른 브라우저에서 파일 확인 후 명시적 적용/취소를 지원한다. 입력 문장·로그인 비밀번호·기사·검색 이력은 포함하지 않는다. 자동 동기화는 제공하지 않는다. API/DB 변경 없음. MAX128KiB, v1 고정 암호 형식과 설정 whitelist 검증, 오류 시 기존 설정 유지. 테스트: BrowserTest.encryptedPreferencesTransferBetweenIndependentBrowsers / portableSettingsRejectTamperingOtherAccountsAndInvalidSchemas.
+
+## 공개 관심지면·권한별 메뉴 개정
+FS-15/16: 비회원 공개 endpoint 허용, 회원 전용 endpoint401 및 관리자403 유지. settings/account/admin HTML 직접 접근 제한 및 초기 hidden으로 메뉴 노출 방지. 공통 메뉴는 동일 viewer 상태 사용.
+FS-17/21/22: 공개30개, 회원 기존최대300개 후보. 관리자 대표 weights와 version을 DB 저장·ADMIN/CSRF/낙관적 잠금으로 수정. 개인 관심사 없거나 끄면 대표값을 사용하고 제외 설정 유지. 전체/관심 탭 및 일반 최신 구역 제거.
+FS-23: native dialog 검색, 검색어/날짜/카테고리 적용·취소·Escape·초기화. 서버 비전송.
+FS-25: 현재 이용약관 제4판(동의 ID terms-4), 개인정보 제5판. 이전 이용약관3판/개인정보4판을 정책 이력 페이지에서 조회. 실제 Git 본문에 근거하며 날짜 표시만 판 번호로 대체. 기존 동의 ID/시각은 변경하지 않는다.

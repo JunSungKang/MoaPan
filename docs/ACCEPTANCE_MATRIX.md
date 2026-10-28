@@ -11,7 +11,7 @@ CI/CD는 사용자 명시 제외. PASS는 아래 실제 시험 범위의 통과�
 |AC-05|07|정적 화면|PASS|sourceCheck; BrowserTest; static ES Modules|
 |AC-06|03,08|가입·금지필드|PASS|SecurityIntegrationTest: 과다필드·role·Argon2id|
 |AC-07|03,08|세션·CSRF·계정|PASS|SecurityIntegrationTest: 실제 JDBC 세션·교체·만료·변경·탈퇴|
-|AC-08|08|401·403|PASS|SecurityIntegrationTest; local-smoke 비회원/일반회원|
+|AC-08|08|회원 전용401·관리자403·제한 공개200|PASS|SecurityIntegrationTest; local-smoke 비회원/일반회원|
 |AC-09|08|quota·cursor|PASS|SecurityIntegrationTest 경쟁·변조; 실제2 web60회·재로그인429|
 |AC-10|08|공개 한계·필드|PASS|명시적 NewsService DTO; 정책 안내·secret 부재|
 |AC-11|02,09|사이트 관리|PASS|CatalogService; SecurityIntegrationTest; Admin UI|
@@ -27,7 +27,7 @@ CI/CD는 사용자 명시 제외. PASS는 아래 실제 시험 범위의 통과�
 |AC-21|04|개인정보|PASS|BrowserTest 네트워크·문장 폐기; DB 금지테이블·TTL; 로그 정책|
 |AC-22|07|신문 UI|PASS|BrowserTest390/768/1440·긴 제목·로딩·빈결과·오류·키보드·인쇄|
 |AC-23|10|Compose·영속·백업|PASS|최종 실행/scan digest 일치·HTTP health·재생성22기사 ID 보존; 빈 DB migration·암호화 격리 복원|
-|AC-24|12|로컬 서비스 외부 HTTPS 접속(사용자 변경)|PASS|공인 IP 인증서·HTTPS200·비회원401·Secure 쿠키·휴대폰 데이터망 사용자 확인; evidence/public-access.json|
+|AC-24|12|로컬 서비스 외부 HTTPS 접속(사용자 변경)|PASS|공인 IP 인증서·HTTPS200·회원 전용401·Secure 쿠키·휴대폰 데이터망 사용자 확인; evidence/public-access.json|
 |AC-25|12|GitHub 전달|PASS|guarded 사람 commit/push; 복구 커밋767f2b409e534a1f74ceb3630050a556b6e88eb9 원격 일치; PR#1 open, merge 미수행|
 
 인증 UX/약관 보완: AC-06·07·21·22에 SecurityIntegrationTest.signupRequiresCurrentExplicitConsent 및 BrowserTest.simpleAuthFormsRequireConsentAndShowReadableTerms 추가. 전체 Java35 PASS/FAIL0/SKIP0. 약관 동의 버전·시각 외 회원 프로필이나 로컬 관심사 전송은 추가하지 않았다.
@@ -39,3 +39,5 @@ CI/CD는 사용자 명시 제외. PASS는 아래 실제 시험 범위의 통과�
 화면 분리: AC-20·21·22에 interestsAndAccountPagesKeepSeparateResponsibilities 검증 추가.40개 Java 테스트 PASS. 관심사 저장 스키마 변경 없음, 계정 화면 관심사 API 미요청, 탈퇴 시 해당 계정 설정만 삭제.
 
 기기 간 이전 추가: REQ-04/05 → FS-21 → preferences-transfer.js/preferences-transfer-ui.js/settings.html → BrowserTest의 encryptedPreferencesTransferBetweenIndependentBrowsers 및 portableSettingsRejectTamperingOtherAccountsAndInvalidSchemas PASS. AC-20/21/22 회귀 포함. 이는 서버 저장 없는 수동 이전이며 자동 동기화 인수로 간주하지 않는다.
+
+공개 지면 변경(최신 사용자 요청): AC-08의 비회원 뉴스 일괄 차단은 회원 전용 API에 유지하고 별도 공개 edition은30개/no cursor로 허용한다. publicEditionIsBoundedAndProtectedPagesStayPrivate, representativeInterestsRequireAdminCsrfAndCurrentVersion, guestMenusProtectedPagesAndSearchDialog, memberAndAdminMenusAndRepresentativeEditor, defaultInterestsAndPolicyEditionsAreExplicit로 검증한다. 기존 판별 기준을 몰래 완화하지 않고 명시적 정책 변경으로 기록한다.

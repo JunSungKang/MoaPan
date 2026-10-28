@@ -12,3 +12,5 @@ sites 1:N sources 1:N articles. sites와 sources는 상태·권리·기술점검
 users.terms_version varchar(32), terms_accepted_at timestamptz. 둘 다 NULL이거나 둘 다 값이 있어야 한다. 기존 회원은 NULL 유지(과거 동의 추정 금지), 신규 가입은 서버가 현재 버전 및 현재 시각을 저장한다. 탈퇴 시 계정과 함께 삭제한다. 동의용 IP·UA·기기 정보를 추가하지 않는다.
 
 V4: users.username을 varchar(128)로 확대하고 CHECK를 영문 소문자·숫자·밑줄1~128자로 변경했다. 기존 계정·고유성·식별자·동의 기록을 보존하며 기존 마이그레이션 파일은 수정하지 않는다.
+
+V5 representative_interests: singleton boolean PK/check true, weights jsonb object, version bigint>=0. 회원 FK/개인 관심사 없음. 활성 태그 검증·최대30개·가중치1~5는 service에서 강제하며 ADMIN 갱신은 version 조건 UPDATE. 기존 계정/동의 데이터 보존.

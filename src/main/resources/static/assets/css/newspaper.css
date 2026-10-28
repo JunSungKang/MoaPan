@@ -7,3 +7,5 @@
 .nav [aria-current=page]{font-weight:bold;text-decoration:underline}#account-username{overflow-wrap:anywhere}#interest-controls details{border-top:1px solid var(--rule);margin:1.5rem 0;padding-top:1rem}#interest-controls summary{cursor:pointer;font-weight:bold}
 
 #interest-controls,#transfer-controls{min-width:0}#transfer-controls input{display:block;width:100%;min-width:0;max-width:100%;margin:.5rem 0}#transfer-controls button{max-width:100%;margin:.4rem 0}#transfer-controls p{overflow-wrap:anywhere}
+
+dialog{background:var(--paper);color:var(--ink);border:1px solid var(--ink);width:min(90vw,560px);max-height:85dvh;padding:1.5rem;overflow:auto}dialog::backdrop{background:rgb(0 0 0 / .45)}dialog input,dialog select{width:100%;min-width:0}#search-summary{overflow-wrap:anywhere}.policy-history-link{font-size:.8rem;color:var(--muted)}@media print{dialog,#open-search,#clear-search{display:none!important}}
