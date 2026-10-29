@@ -71,3 +71,6 @@ tasks.withType(AbstractArchiveTask).configureEach {
     preserveFileTimestamps = false
     reproducibleFileOrder = true
 }
+
+tasks.register('docsCheck', Exec) { commandLine 'node','scripts/test/docs-check.mjs' }
+check.dependsOn docsCheck

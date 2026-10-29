@@ -1,11 +1,13 @@
 package com.moapan.classification;
+import com.moapan.classification.application.TopicCatalog;
+import com.moapan.classification.infrastructure.LocalClassifier;
 import java.util.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import tools.jackson.databind.json.JsonMapper;
 class LocalClassifierTest {
     final UUID id=UUID.randomUUID();
-    TopicCatalog.Snapshot topics(){return new TopicCatalog.Snapshot(0,List.of(new TopicCatalog.Topic(id,"security","보안","Software vulnerabilities only")),"hash");}
+    com.moapan.classification.domain.TopicTaxonomy.Snapshot topics(){return new com.moapan.classification.domain.TopicTaxonomy.Snapshot(0,List.of(new com.moapan.classification.domain.TopicTaxonomy.Topic(id,"security","보안","Software vulnerabilities only")),"hash");}
     @Test void onlyAllowedUniqueTopicsAndExactSchema(){
         assertEquals(Set.of(id),LocalClassifier.parse("{\"topics\":[\"security\"]}",topics()));assertEquals(Set.of(),LocalClassifier.parse("{\"topics\":[]}",topics()));
         for(String s:List.of("{\"topics\":[\"other\"]}","{\"topics\":[\"security\",\"security\"]}","{\"topics\":null}","{\"topics\":[],\"secret\":1}","[]","not json","{\"topics\":[]} {}","{\"topics\":[1]}"))assertThrows(IllegalArgumentException.class,()->LocalClassifier.parse(s,topics()));

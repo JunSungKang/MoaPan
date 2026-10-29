@@ -1,6 +1,7 @@
 package com.moapan;
-import com.moapan.source.SafeFetch;
-import com.moapan.news.ContentProcessor;
+import com.moapan.shared.api.ApiError;
+import com.moapan.collection.infrastructure.SafeFetch;
+import com.moapan.article.domain.ContentProcessor;
 import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.Test;
@@ -16,11 +17,11 @@ class ContentTest {
     @Test void rejectsOversizedParserInput(){assertThrows(ApiError.class,()->SafeFetch.parse(new byte[2_097_153],"RSS","{}"));}
     @org.junit.jupiter.api.Test void pinnedDnsCannotBeReboundOrRedirectedToAnotherHost()throws Exception {
         var publicIp=java.net.InetAddress.getByAddress(new byte[]{8,8,8,8});var privateIp=java.net.InetAddress.getByAddress(new byte[]{127,0,0,1});var original=new java.net.InetAddress[]{publicIp};
-        var resolver=com.moapan.source.SafeFetch.pinnedResolver("news.example.org",original);original[0]=privateIp;
+        var resolver=com.moapan.collection.infrastructure.SafeFetch.pinnedResolver("news.example.org",original);original[0]=privateIp;
         assertEquals(publicIp,resolver.resolve("news.example.org")[0]);var returned=resolver.resolve("news.example.org");returned[0]=privateIp;assertEquals(publicIp,resolver.resolve("news.example.org")[0]);
-        assertThrows(java.net.UnknownHostException.class,()->resolver.resolve("metadata.example.org"));assertThrows(com.moapan.ApiError.class,()->com.moapan.source.SafeFetch.pinnedResolver("news.example.org",new java.net.InetAddress[]{publicIp,privateIp}));
-        var current=java.net.URI.create("https://news.example.org/feed");assertEquals("https://news.example.org/new",com.moapan.source.SafeFetch.redirect(current,"/new","news.example.org").toString());
-        for(String target:java.util.List.of("https://evil.example.org/feed","http://news.example.org/feed","https://news.example.org:8443/feed","https://news.example.org@metadata.example.org/","//metadata.example.org/feed"))assertThrows(com.moapan.ApiError.class,()->com.moapan.source.SafeFetch.redirect(current,target,"news.example.org"));
+        assertThrows(java.net.UnknownHostException.class,()->resolver.resolve("metadata.example.org"));assertThrows(com.moapan.shared.api.ApiError.class,()->com.moapan.collection.infrastructure.SafeFetch.pinnedResolver("news.example.org",new java.net.InetAddress[]{publicIp,privateIp}));
+        var current=java.net.URI.create("https://news.example.org/feed");assertEquals("https://news.example.org/new",com.moapan.collection.infrastructure.SafeFetch.redirect(current,"/new","news.example.org").toString());
+        for(String target:java.util.List.of("https://evil.example.org/feed","http://news.example.org/feed","https://news.example.org:8443/feed","https://news.example.org@metadata.example.org/","//metadata.example.org/feed"))assertThrows(com.moapan.shared.api.ApiError.class,()->com.moapan.collection.infrastructure.SafeFetch.redirect(current,target,"news.example.org"));
     }
 
 }

@@ -1,6 +1,18 @@
 package com.moapan;
 
-import com.moapan.news.*;
+import com.moapan.article.domain.ContentProcessor;
+import com.moapan.article.application.EditorialService;
+import com.moapan.article.api.EditorialController;
+import com.moapan.edition.application.NewsService;
+import com.moapan.edition.application.NewsSearch;
+import com.moapan.edition.application.RepresentativeInterests;
+import com.moapan.edition.api.NewsController;
+import com.moapan.translation.domain.TranslationValidator;
+import com.moapan.translation.domain.TranslationGlossary;
+import com.moapan.translation.domain.TranslationFailure;
+import com.moapan.translation.infrastructure.LocalTranslator;
+import com.moapan.translation.infrastructure.ArticleTranslations;
+import com.moapan.translation.api.TranslationStatusController;
 import java.nio.charset.StandardCharsets;
 import java.io.*;
 import java.util.*;

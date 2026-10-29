@@ -1,7 +1,7 @@
 package com.moapan;
 
-import com.moapan.news.LocalTranslator;
-import com.moapan.news.TranslationGlossary;
+import com.moapan.translation.infrastructure.LocalTranslator;
+import com.moapan.translation.domain.TranslationGlossary;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

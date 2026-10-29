@@ -1,16 +1,15 @@
-# 문서 색인
+# MOAPAN 공식 산출물
 
-| 분류 | 문서 |
-|---|---|
-| 시작·현재 상태 | [README](../README.md), [PROGRESS](PROGRESS.md), [DELIVERY](DELIVERY.md) |
-| 요구·계획 | [REQUIREMENTS](REQUIREMENTS.md), [FUNCTIONAL_SPEC](FUNCTIONAL_SPEC.md), [PLAN](PLAN.md), [DECISIONS](DECISIONS.md) |
-| 구조·계약 | [ARCHITECTURE](ARCHITECTURE.md), [DATA_MODEL](DATA_MODEL.md), [API](API.md) |
-| 실행·복구 | [DEPLOYMENT](DEPLOYMENT.md), [LINUX_TRANSLATION](LINUX_TRANSLATION.md) |
-| 보안·개인정보 | [SECURITY](SECURITY.md), [SECURITY_REVIEW](SECURITY_REVIEW.md), [PRIVACY](PRIVACY.md), [VERSIONS](VERSIONS.md) |
-| 콘텐츠·번역 | [CLASSIFICATION](CLASSIFICATION.md), [SOURCES](SOURCES.md), [TRANSLATION_MODELS](TRANSLATION_MODELS.md), [출처 정의](topic-sources.json) |
-| 검증·문제 | [TEST_REPORT](TEST_REPORT.md), [ACCEPTANCE_MATRIX](ACCEPTANCE_MATRIX.md), [BUGS](BUGS.md), [MENU_AUDIT](MENU_AUDIT.md) |
-| 과거 실행 증거 | [evidence](evidence/)의 시각·revision·digest별 기록 |
+[산출물대장](01-management/deliverable-register.md)에서 문서번호·책임·경로를 확인한다. 기준선은 develop의 병합 커밋이며 작성/검토 상태와 실제 사용자 승인은 구분한다.
 
-과거 증거의 파일 경로와 digest는 당시 상태를 나타내며 현재 운영 상태로 해석하지 않는다. 필수 명세의 고정 문서 경로는 유지하고 이 색인으로 목적별 탐색을 제공한다.
+| 단계 | 공식 산출물 | 폴더 |
+|---|---|---|
+| 사업·프로젝트 관리 | 수행계획, 진척현황, 인도목록, 산출물대장 | [01-management](01-management/) |
+| 분석 | 요구사항정의서, 기능명세서 | [02-analysis](02-analysis/) |
+| 설계 | 아키텍처, DB, 인터페이스, 도메인 설계서, 설계결정 | [03-design](03-design/) |
+| 구현 | 프로그램목록, 모델 검토 자료 | [04-implementation](04-implementation/) |
+| 시험 | 인수 추적표, 시험결과서, 결함대장, 증빙 | [05-test](05-test/) |
+| 이행 | 설치·배포, Linux 이관, 버전 구성 | [06-transition](06-transition/) |
+| 운영 | 보안, 개인정보, 콘텐츠 출처 관리 | [07-operation](07-operation/) |
 
-Kubernetes 배치: [Helm chart](../scripts/deploy/helm/moapan/README.md). Compose와 Kubernetes의 검증 상태를 구분한다.
+관리 절차는 [문서관리계획서](01-management/document-control.md), 변경 경로는 [이관대장](01-management/path-mapping.json)을 따른다.

@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 4,
+  "workSlug": "moapan-domain-deliverables",
+  "flowType": "integration",
+  "branch": "codex/domain-deliverables",
+  "targetBranch": "develop",
+  "baseSha": "d249d462d7975a62bc2d1ef1593bd46237dab6f6",
+  "mergeMethod": "squash",
+  "governance": {
+    "prAuthorLogin": "JunSungKang",
+    "assigneeLogin": "JunSungKang",
+    "reviewerLogin": "junsung-bot[bot]",
+    "requiredChecks": [],
+    "commitAuthor": {
+      "name": "jun-sung, Kang",
+      "email": "kjuns1@naver.com"
+    },
+    "coAuthors": [
+      {
+        "name": "Codex",
+        "email": "codex@openai.com"
+      },
+      {
+        "name": "junsung-bot[bot]",
+        "email": "302617028+junsung-bot[bot]@users.noreply.github.com"
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "refactor",
+      "expectedPaths": [
+        "src/**",
+        "docs/**",
+        "scripts/**",
+        "config/**",
+        "build.gradle",
+        "README.md",
+        "AGENTS.md",
+        ".github/workflow-plans/domain-deliverables.json"
+      ],
+      "forbiddenPaths": [
+        ".github/workflows/**",
+        ".env",
+        "**/*.key"
+      ],
+      "acceptanceCriteria": [
+        "Formal SI deliverable register and lifecycle",
+        "Domain ownership and portable policy boundaries",
+        "Preserve behavior with regression checks"
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/README.md"
+        ]
+      }
+    }
+  ]
+}

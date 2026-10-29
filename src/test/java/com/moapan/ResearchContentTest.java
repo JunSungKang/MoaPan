@@ -1,6 +1,6 @@
 package com.moapan;
-import com.moapan.news.ContentProcessor;
-import com.moapan.source.SafeFetch;
+import com.moapan.article.domain.ContentProcessor;
+import com.moapan.collection.infrastructure.SafeFetch;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.nio.charset.StandardCharsets;

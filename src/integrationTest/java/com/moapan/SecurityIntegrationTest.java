@@ -1,10 +1,15 @@
 package com.moapan;
-import com.moapan.auth.*;
-import com.moapan.security.Limits;
-import com.moapan.site.*;
-import com.moapan.jobs.Worker;
-import com.moapan.source.SafeFetch;
-import com.moapan.news.NewsService;
+import com.moapan.shared.api.ApiError;
+import com.moapan.identity.api.AuthController;
+import com.moapan.identity.infrastructure.Account;
+import com.moapan.identity.infrastructure.Accounts;
+import com.moapan.access.infrastructure.Limits;
+import com.moapan.catalog.api.AdminController;
+import com.moapan.catalog.application.CatalogService;
+import com.moapan.catalog.infrastructure.CatalogRepository;
+import com.moapan.collection.application.Worker;
+import com.moapan.collection.infrastructure.SafeFetch;
+import com.moapan.edition.application.NewsService;
 import java.util.*;
 import java.util.concurrent.*;
 import java.time.Instant;
@@ -35,12 +40,12 @@ class SecurityIntegrationTest {
         SafeFetch fixtureFetcher(){return new SafeFetch(){@Override public Result read(Map<String,Object> source){if(source.get("endpoint_url").equals("https://failure.example.org/feed"))throw new FetchFailure(failureStatus.get(),failureStatus.get()==429?"120":null);if(source.get("endpoint_url").equals("https://preview.example.org/feed"))return new Result(List.of(new Item("preview-fixture","Synthetic preview","https://preview.example.org/story","Synthetic preview only, never published or stored by preview.",null)),null,null,false);return super.read(source);}};}
     }
     @Autowired org.springframework.transaction.PlatformTransactionManager tm;
-    @Autowired com.moapan.news.EditorialService editorial;
+    @Autowired com.moapan.article.application.EditorialService editorial;
     static final PostgreSQLContainer<?> postgres=new PostgreSQLContainer<>(org.testcontainers.utility.DockerImageName.parse("postgres@sha256:edb0c08dc33befd0262ab3b5cf1c4f3f8cfd8b09e88c05b45adee29d6761ddb6").asCompatibleSubstituteFor("postgres"));
     static { postgres.start(); org.flywaydb.core.Flyway.configure().dataSource(postgres.getJdbcUrl(),postgres.getUsername(),postgres.getPassword()).cleanDisabled(true).load().migrate(); }
     @DynamicPropertySource static void properties(DynamicPropertyRegistry r){r.add("spring.datasource.url",postgres::getJdbcUrl);r.add("spring.datasource.username",postgres::getUsername);r.add("spring.datasource.password",postgres::getPassword);}
     @AfterAll static void stop(){postgres.stop();}
-    @Autowired com.moapan.news.ArticleTranslations translations;
+    @Autowired com.moapan.translation.infrastructure.ArticleTranslations translations;
     @Autowired MockMvc mvc;@Autowired Accounts accounts;@Autowired Limits limits;@Autowired CatalogRepository repo;@Autowired CatalogService catalog;@Autowired Worker worker;@Autowired NewsService news;
     @Autowired org.springframework.session.SessionRepository<?> sessions;
     private static final String PASSWORD="synthetic password 12345";
@@ -187,8 +192,8 @@ class SecurityIntegrationTest {
         repo.db().sql("INSERT INTO sites(id,name,homepage_url,normalized_homepage_url,status) VALUES(:id,'Translation fixture','https://translation.example.org','https://translation.example.org','ACTIVE')").param("id",site).update();
         repo.db().sql("INSERT INTO sources(id,site_id,label,type,endpoint_url,normalized_endpoint_url,rights_status,allow_display,allow_summary,allow_translation) VALUES(:id,:site,'Translation fixture','RSS','https://translation.example.org/rss','https://translation.example.org/rss','APPROVED',true,true,false)").param("id",source).param("site",site).update();
         repo.db().sql("INSERT INTO articles(id,source_id,source_guid,canonical_url,title,summary_bullets,summary_mode,language,input_hash) VALUES(:id,:source,'translate-fixture','https://translation.example.org/article','Synthetic retrieval','[\"A synthetic retrieval algorithm.\"]','EXTRACTIVE_ORIGINAL_LANGUAGE','en',:hash)").param("id",id).param("source",source).param("hash","e".repeat(64)).update();
-        String hash=com.moapan.news.ArticleTranslations.contentHash("Synthetic retrieval",List.of("A synthetic retrieval algorithm."));
-        var text=new com.moapan.news.ArticleTranslations.Text("합성 검색",List.of("합성 검색 알고리즘입니다."));
+        String hash=com.moapan.translation.infrastructure.ArticleTranslations.contentHash("Synthetic retrieval",List.of("A synthetic retrieval algorithm."));
+        var text=new com.moapan.translation.infrastructure.ArticleTranslations.Text("합성 검색",List.of("합성 검색 알고리즘입니다."));
         assertFalse(translations.store(id,hash,"ko",text,"synthetic-test"));
         repo.db().sql("UPDATE sources SET allow_translation=true WHERE id=:id").param("id",source).update();
         assertFalse(translations.store(id,"wrong-hash","ko",text,"synthetic-test"));
@@ -196,17 +201,17 @@ class SecurityIntegrationTest {
         repo.db().sql("UPDATE news_editions SET expires_at=now()-interval '1 second'").update();
         var article=news.publicEdition().items().stream().filter(a->a.id().equals(id)).findFirst().orElseThrow();
         assertEquals("Synthetic retrieval",article.title());assertEquals(text,article.translations().get("ko"));
-        var searchService=new com.moapan.news.NewsSearch(repo,news,limits,tm);
-        assertEquals(id,searchService.search(new com.moapan.news.NewsSearch.Input("합성 검색","",null,0),null).items().getFirst().id());
+        var searchService=new com.moapan.edition.application.NewsSearch(repo.db(),news,limits,tm);
+        assertEquals(id,searchService.search(new com.moapan.edition.application.NewsSearch.Input("합성 검색","",null,0),null).items().getFirst().id());
         repo.db().sql("UPDATE sources SET allow_translation=false WHERE id=:id").param("id",source).update();
-        assertTrue(translations.read(List.of(article)).isEmpty());
-        assertEquals(0,searchService.search(new com.moapan.news.NewsSearch.Input("합성 검색","",null,0),null).total());
+        assertTrue(translations.read(List.of(new com.moapan.translation.infrastructure.ArticleTranslations.Original(article.id(),article.title(),article.summaryBullets()))).isEmpty());
+        assertEquals(0,searchService.search(new com.moapan.edition.application.NewsSearch.Input("합성 검색","",null,0),null).total());
         repo.db().sql("UPDATE sources SET allow_translation=true WHERE id=:id").param("id",source).update();
         repo.db().sql("UPDATE articles SET title='Changed synthetic retrieval' WHERE id=:id").param("id",id).update();
         assertEquals(0,repo.db().sql("SELECT count(*) FROM article_translations WHERE article_id=:id").param("id",id).query(Integer.class).single());
         assertFalse(translations.store(id,hash,"ko",text,"synthetic-test"));
-        var engine=new com.moapan.news.LocalTranslator("",""){@Override public String translate(String input,String language,int attempt,String reason){return "합성 번역";}};
-        var translationWorker=new com.moapan.jobs.TranslationWorker(repo,engine,translations,tm);
+        var engine=new com.moapan.translation.infrastructure.LocalTranslator("",""){@Override public String translate(String input,String language,int attempt,String reason){return "합성 번역";}};
+        var translationWorker=new com.moapan.translation.application.TranslationWorker(repo.db(),engine,translations,tm);
         var first=translationWorker.claim();assertEquals(id,first.get("article_id"));assertNull(translationWorker.claim());
         repo.db().sql("UPDATE article_translation_jobs SET lease_until=now()-interval '1 second' WHERE article_id=:id").param("id",id).update();
         assertTrue(translationWorker.processOne());
@@ -215,24 +220,24 @@ class SecurityIntegrationTest {
         assertNull(translationWorker.claim());
         repo.db().sql("UPDATE articles SET title='Another synthetic change' WHERE id=:id").param("id",id).update();
         assertEquals(0,repo.db().sql("SELECT count(*) FROM article_translation_jobs WHERE article_id=:id").param("id",id).query(Integer.class).single());
-        var failing=new com.moapan.news.LocalTranslator("",""){@Override public String translate(String input,String language,int attempt,String reason){throw new IllegalStateException("synthetic failure");}};
-        var retryWorker=new com.moapan.jobs.TranslationWorker(repo,failing,translations,tm);
+        var failing=new com.moapan.translation.infrastructure.LocalTranslator("",""){@Override public String translate(String input,String language,int attempt,String reason){throw new IllegalStateException("synthetic failure");}};
+        var retryWorker=new com.moapan.translation.application.TranslationWorker(repo.db(),failing,translations,tm);
         for(int attempt=0;attempt<3;attempt++){assertTrue(retryWorker.processOne());repo.db().sql("UPDATE article_translation_jobs SET available_at=now() WHERE article_id=:id").param("id",id).update();}
         assertFalse(retryWorker.processOne());
         assertEquals("translation_invalid",repo.db().sql("SELECT error_code FROM article_translation_jobs WHERE article_id=:id").param("id",id).query(String.class).single());
         assertEquals("ORIGINAL",repo.db().sql("SELECT state FROM article_translation_jobs WHERE article_id=:id").param("id",id).query(String.class).single());
         repo.db().sql("UPDATE articles SET title='Infrastructure fixture' WHERE id=:id").param("id",id).update();
-        var unavailable=new com.moapan.news.LocalTranslator("",""){
-            @Override public String translate(String input,String language,int attempt,String reason){throw new com.moapan.news.TranslationFailure("translation_transport",true);}
+        var unavailable=new com.moapan.translation.infrastructure.LocalTranslator("",""){
+            @Override public String translate(String input,String language,int attempt,String reason){throw new com.moapan.translation.domain.TranslationFailure("translation_transport",true);}
             @Override public boolean healthy(){return false;}
         };
-        var infrastructureWorker=new com.moapan.jobs.TranslationWorker(repo,unavailable,translations,tm);
+        var infrastructureWorker=new com.moapan.translation.application.TranslationWorker(repo.db(),unavailable,translations,tm);
         for(int i=0;i<4;i++){assertTrue(infrastructureWorker.processOne());repo.db().sql("UPDATE article_translation_jobs SET available_at=now() WHERE article_id=:id").param("id",id).update();}
         assertEquals("RETRY",repo.db().sql("SELECT state FROM article_translation_jobs WHERE article_id=:id").param("id",id).query(String.class).single());
         assertEquals("{}",repo.db().sql("SELECT field_attempts::text FROM article_translation_jobs WHERE article_id=:id").param("id",id).query(String.class).single());
         assertEquals(4,repo.db().sql("SELECT infra_failures FROM article_translation_jobs WHERE article_id=:id").param("id",id).query(Integer.class).single());
         assertFalse(infrastructureWorker.runtimeReady());
-        var recovered=new com.moapan.jobs.TranslationWorker(repo,engine,translations,tm);
+        var recovered=new com.moapan.translation.application.TranslationWorker(repo.db(),engine,translations,tm);
         var leased=recovered.claim();assertNotNull(leased);
         assertTrue(recovered.heartbeat(id,(UUID)leased.get("token")));
         assertFalse(recovered.heartbeat(id,UUID.randomUUID()));
@@ -300,7 +305,7 @@ class SecurityIntegrationTest {
     }
     @Test @Order(14) @WithMockUser(roles="ADMIN") void tagEditingAndCanonicalMergePreserveLockedLinks(){
         UUID actor=accounts.findByUsername("synthetic_a").orElseThrow().id;
-        @SuppressWarnings("unchecked")var created=(Map<String,Object>)editorial.tag(new com.moapan.news.EditorialService.TagInput("ai-unified","Synthetic AI","기술"),actor);UUID target=(UUID)created.get("id"),old=UUID.fromString("00000000-0000-0000-0000-000000000001");editorial.updateTag(target,new com.moapan.news.EditorialService.TagInput("ai-unified","수정 합성 태그","기술"),actor);editorial.merge(old,target,actor);assertEquals(target,repo.db().sql("SELECT canonical_id FROM tag_redirects WHERE old_id=:id").param("id",old).query(UUID.class).single());assertEquals(0,repo.db().sql("SELECT count(*) FROM article_tags WHERE tag_id=:id").param("id",old).query(Integer.class).single());assertEquals(target,repo.db().sql("SELECT tag_id FROM tag_aliases WHERE alias='ai'").query(UUID.class).single());
+        @SuppressWarnings("unchecked")var created=(Map<String,Object>)editorial.tag(new com.moapan.article.application.EditorialService.TagInput("ai-unified","Synthetic AI","기술"),actor);UUID target=(UUID)created.get("id"),old=UUID.fromString("00000000-0000-0000-0000-000000000001");editorial.updateTag(target,new com.moapan.article.application.EditorialService.TagInput("ai-unified","수정 합성 태그","기술"),actor);editorial.merge(old,target,actor);assertEquals(target,repo.db().sql("SELECT canonical_id FROM tag_redirects WHERE old_id=:id").param("id",old).query(UUID.class).single());assertEquals(0,repo.db().sql("SELECT count(*) FROM article_tags WHERE tag_id=:id").param("id",old).query(Integer.class).single());assertEquals(target,repo.db().sql("SELECT tag_id FROM tag_aliases WHERE alias='ai'").query(UUID.class).single());
     }
 
     @Test @Order(15) @WithMockUser(roles="ADMIN") void retryAfterFailureAndTtlCleanupAreEnforced(){
@@ -408,7 +413,7 @@ class SecurityIntegrationTest {
         ),null,null,false));assertEquals(1,result.created());assertEquals(1,repo.db().sql("SELECT count(*) FROM articles WHERE source_id=:id").param("id",source).query(Integer.class).single());
     }
 
-    @Autowired com.moapan.source.ArxivGate arxivGate;
+    @Autowired com.moapan.collection.infrastructure.ArxivGate arxivGate;
     @Test @Order(31) void arxivAdmissionIsSharedAndCoolsDown(){
         repo.db().sql("UPDATE source_access_gate SET next_at=now()-interval '1 second'").update();
         try(var lease=arxivGate.enter()){assertThrows(SafeFetch.FetchFailure.class,()->arxivGate.enter());}
@@ -435,10 +440,10 @@ class SecurityIntegrationTest {
         UUID tag=repo.db().sql("SELECT id FROM tags WHERE active LIMIT 1").query(UUID.class).single();
         repo.db().sql("DELETE FROM article_tags WHERE article_id=:id").param("id",article).update();
         repo.db().sql("INSERT INTO article_tags VALUES(:id,:tag,0.8,'RULE',false)").param("id",article).param("tag",tag).update();
-        editorial.edit(article,new com.moapan.news.EditorialService.Edit(List.of("Synthetic edited summary"),true,false,true,null),actor);
+        editorial.edit(article,new com.moapan.article.application.EditorialService.Edit(List.of("Synthetic edited summary"),true,false,true,null),actor);
         assertEquals(tag,repo.db().sql("SELECT tag_id FROM article_tags WHERE article_id=:id").param("id",article).query(UUID.class).single());
         assertEquals("RULE",repo.db().sql("SELECT method FROM article_tags WHERE article_id=:id").param("id",article).query(String.class).single());
-        editorial.edit(article,new com.moapan.news.EditorialService.Edit(List.of("Synthetic edited summary"),true,false,true,List.of()),actor);
+        editorial.edit(article,new com.moapan.article.application.EditorialService.Edit(List.of("Synthetic edited summary"),true,false,true,List.of()),actor);
         assertEquals(0,repo.db().sql("SELECT count(*) FROM article_tags WHERE article_id=:id").param("id",article).query(Integer.class).single());
     }
 }

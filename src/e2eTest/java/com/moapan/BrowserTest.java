@@ -82,13 +82,13 @@ class BrowserTest {
             Page a=first.newPage(),b=second.newPage();
             a.navigate(origin+"/settings.html");a.waitForSelector("#transfer-controls:not([disabled])");
             a.locator("#tag-space").uncheck();a.locator("#tag-ai").check();
-            a.waitForFunction("async id => (await (await import('/assets/js/preferences.js')).loadPreferences(id)).weights.ai===3",A);
+            a.waitForFunction("async id => (await (await import('/assets/js/personalization/preferences.js')).loadPreferences(id)).weights.ai===3",A);
             a.locator("#transfer-password").fill("synthetic portable secret 12345");
             Download download=a.waitForDownload(()->a.locator("#transfer-export").click());
             Path file=Path.of("build/reports/preferences-transfer.moapan");Files.createDirectories(file.getParent());download.saveAs(file);
             String encrypted=Files.readString(file);assertFalse(encrypted.contains(A));assertFalse(encrypted.contains("weights"));assertFalse(encrypted.contains("synthetic portable"));
             b.navigate(origin+"/settings.html");b.waitForSelector("#transfer-controls:not([disabled])");assertFalse(b.locator("#tag-ai").isChecked());
-            b.locator("#tag-space").uncheck();b.locator("#tag-space").check();b.waitForFunction("async id => (await (await import('/assets/js/preferences.js')).loadPreferences(id)).weights.space===3",A);
+            b.locator("#tag-space").uncheck();b.locator("#tag-space").check();b.waitForFunction("async id => (await (await import('/assets/js/personalization/preferences.js')).loadPreferences(id)).weights.space===3",A);
             b.locator("#transfer-file").setInputFiles(file);
             b.locator("#transfer-password").fill("synthetic wrong secret 12345");b.locator("#transfer-import").click();
             b.waitForFunction("document.querySelector('#transfer-status').textContent.includes('손상')");assertTrue(b.locator("#tag-space").isChecked());assertFalse(b.locator("#transfer-apply").isVisible());
@@ -126,7 +126,7 @@ class BrowserTest {
         p.locator("#next-slide").click();assertEquals(1,p.locator("#paper article").count());assertTrue(p.locator("#next-slide").isDisabled());
         p.locator("#paper").focus();p.keyboard().press("ArrowLeft");assertEquals("2 / 3",p.locator("#slide-position").textContent());
         assertEquals(true,p.evaluate("""
-          async()=>{const {slideWindow}=await import('/assets/js/slides.js');const rows=Array.from({length:200},(_,i)=>({id:String(i).padStart(3,'0'),publishedAt:new Date(2026,0,i+1).toISOString()}));const home=slideWindow(rows,100);const search=slideWindow(rows,100,true);return home.pages===6&&home.total===42&&home.items.length===7&&search.pages===20&&search.total===140&&search.page===19&&search.items.length===7&&slideWindow(rows,0,true).items[0].id==='199';}
+          async()=>{const {slideWindow}=await import('/assets/js/edition/slides.js');const rows=Array.from({length:200},(_,i)=>({id:String(i).padStart(3,'0'),publishedAt:new Date(2026,0,i+1).toISOString()}));const home=slideWindow(rows,100);const search=slideWindow(rows,100,true);return home.pages===6&&home.total===42&&home.items.length===7&&search.pages===20&&search.total===140&&search.page===19&&search.items.length===7&&slideWindow(rows,0,true).items[0].id==='199';}
           """));
         p.locator("[data-language-select]").selectOption("en");p.waitForFunction("document.documentElement.lang==='en'&&document.querySelector('#open-search').textContent.includes('Search')");
         p.navigate(origin+"/signup.html");p.waitForFunction("document.documentElement.lang==='en'");assertTrue(p.locator("h1").textContent().contains("Sign up"));
@@ -153,7 +153,7 @@ class BrowserTest {
             Page page=context.newPage();page.navigate(origin+"/about.html");
             assertEquals(true,page.evaluate("""
               async () => {
-                const {articleLanguage}=await import('/assets/js/article-language.js');
+                const {articleLanguage}=await import('/assets/js/article/article-language.js');
                 const article={title:'Original <title>',summaryBullets:['Original summary'],source:{language:'en'},summaryMode:'EXTRACTIVE',
                   translation:{language:'ko',title:'번역 제목',summaryBullets:['번역 요약']}};
                 const link=document.createElement('a'),list=document.createElement('ul');
@@ -180,7 +180,7 @@ class BrowserTest {
             Page p=context.newPage();p.navigate(origin+"/settings.html");p.waitForSelector("#transfer-controls:not([disabled])");
             assertEquals(true,p.evaluate("""
               async ([a,b]) => {
-                const m=await import('/assets/js/preferences-transfer.js');
+                const m=await import('/assets/js/personalization/preferences-transfer.js');
                 const settings={version:1,enabled:false,weights:{ai:5},excludedTags:['space'],excludedSources:['source-1']};
                 const password='synthetic portable secret 12345';
                 const text=await m.exportPreferences(a,settings,password);
@@ -196,7 +196,7 @@ class BrowserTest {
                   ()=>m.validatePreferences({...settings,weights:JSON.parse('{"__proto__":3}')}),
                   ()=>m.validatePreferences({...settings,excludedSources:Array(501).fill('s')})];
                 for(const fn of cases)if(!await rejects(fn))return false;
-                return (await (await import('/assets/js/preferences.js')).loadPreferences(a)).enabled===true;
+                return (await (await import('/assets/js/personalization/preferences.js')).loadPreferences(a)).enabled===true;
               }
               """,List.of(A,B)));
         }
@@ -252,8 +252,8 @@ class BrowserTest {
     }
     @Test void interestSentenceStaysLocalAndAccountsAreSeparated(){
         try(var context=browser.newContext()){Page p=context.newPage();List<String>network=new ArrayList<>();p.onRequest(r->network.add(r.url()+" "+Objects.toString(r.postData(),"")));active=A;p.navigate(origin+"/settings.html");p.waitForSelector("#tag-settings input");p.locator("summary").click();p.locator("#interest-sentence").fill("인공지능 synthetic-interest-private-phrase");p.locator("#extract").click();p.locator("#confirm-tags").click();p.waitForFunction("document.querySelector('#interest-sentence').value === ''");
-            assertEquals(3,((Number)p.evaluate("async id => (await import('/assets/js/preferences.js')).loadPreferences(id).then(s=>s.weights.ai)",A)).intValue());
-            assertEquals(0,((Number)p.evaluate("async id => Object.keys((await (await import('/assets/js/preferences.js')).loadPreferences(id)).weights).length",B)).intValue());
+            assertEquals(3,((Number)p.evaluate("async id => (await import('/assets/js/personalization/preferences.js')).loadPreferences(id).then(s=>s.weights.ai)",A)).intValue());
+            assertEquals(0,((Number)p.evaluate("async id => Object.keys((await (await import('/assets/js/personalization/preferences.js')).loadPreferences(id)).weights).length",B)).intValue());
             assertTrue(network.stream().noneMatch(v->v.contains("synthetic-interest-private-phrase")));assertTrue(network.stream().noneMatch(v->v.contains("synthetic-search-private-phrase")));
             p.locator("#clear-local").click();p.waitForFunction("document.querySelector('[role=status]').textContent.includes('削除') || document.querySelector('[role=status]').textContent.includes('삭제')");
         }
@@ -262,24 +262,24 @@ class BrowserTest {
         try(var context=browser.newContext()){
             active=A;Page p=context.newPage();List<String>paths=new ArrayList<>();p.onRequest(r->paths.add(r.url()));
             p.navigate(origin+"/settings.html");p.waitForSelector("#tag-settings input");assertEquals(0,p.locator("#change-password,#delete-account").count());assertFalse(p.locator("#interest-sentence").isVisible());
-            p.locator("#tag-ai").check();p.waitForFunction("async id => (await (await import('/assets/js/preferences.js')).loadPreferences(id)).weights.ai===3",A);
+            p.locator("#tag-ai").check();p.waitForFunction("async id => (await (await import('/assets/js/personalization/preferences.js')).loadPreferences(id)).weights.ai===3",A);
             p.locator("#account-menu a[href='/account.html']").click();p.waitForSelector("#account-controls:not([disabled])");assertEquals(2,p.locator("#change-password,#delete-account").count());assertEquals(0,p.locator("#tag-settings,#interest-sentence").count());
             paths.clear();p.reload();p.waitForSelector("#account-controls:not([disabled])");assertTrue(paths.stream().noneMatch(u->u.contains("/api/v1/tags")||u.contains("/api/v1/sources")));
             p.locator("#account-menu a[href='/settings.html']").click();p.waitForSelector("#tag-settings input");assertTrue(p.locator("#tag-ai").isChecked());
             Path dir=Path.of("build/reports/screenshots");Files.createDirectories(dir);
             for(int width:new int[]{390,768,1440})for(String page:List.of("settings","account")){p.setViewportSize(width,1000);p.navigate(origin+"/"+page+".html");p.waitForSelector(page.equals("settings")?"#interest-controls:not([disabled])":"#account-controls:not([disabled])");assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth <= innerWidth"));p.screenshot(new Page.ScreenshotOptions().setPath(dir.resolve(page+"-"+width+".png")).setFullPage(true));}
-            p.evaluate("async id => {const m=await import('/assets/js/preferences.js');await m.savePreferences(id,{...m.defaults(),weights:{space:4}});}",B);
+            p.evaluate("async id => {const m=await import('/assets/js/personalization/preferences.js');await m.savePreferences(id,{...m.defaults(),weights:{space:4}});}",B);
             p.route("**/api/v1/account",r->{if(r.request().method().equals("DELETE"))r.fulfill(new Route.FulfillOptions().setStatus(200).setBody(""));else r.fallback();});
             p.locator("#delete-account input").fill("synthetic password 12345");p.locator("#delete-account button").click();p.waitForURL("**/login.html");
-            assertEquals(0,((Number)p.evaluate("async id => Object.keys((await (await import('/assets/js/preferences.js')).loadPreferences(id)).weights).length",A)).intValue());
-            assertEquals(4,((Number)p.evaluate("async id => (await (await import('/assets/js/preferences.js')).loadPreferences(id)).weights.space",B)).intValue());
+            assertEquals(0,((Number)p.evaluate("async id => Object.keys((await (await import('/assets/js/personalization/preferences.js')).loadPreferences(id)).weights).length",A)).intValue());
+            assertEquals(4,((Number)p.evaluate("async id => (await (await import('/assets/js/personalization/preferences.js')).loadPreferences(id)).weights.space",B)).intValue());
         }
     }
     @Test void actualModulesRankDeterministicallyAndRespectExclusions(){
         try(var context=browser.newContext()){Page p=context.newPage();p.navigate(origin+"/about.html");Object result=p.evaluate("""
             async () => {
-              const {rank}=await import('/assets/js/ranking.js');
-              const {extractTags,canonicalize}=await import('/assets/js/preferences.js');
+              const {rank}=await import('/assets/js/personalization/ranking.js');
+              const {extractTags,canonicalize}=await import('/assets/js/personalization/preferences.js');
               const now=Date.parse('2026-10-28T00:00:00Z');
               const candidates=[{id:'a',source:{id:'s1'},publishedAt:new Date(now-3600000).toISOString(),tags:[{id:'ai',confidence:1}]},{id:'b',source:{id:'s2'},publishedAt:new Date(now).toISOString(),tags:[{id:'space',confidence:1}]}];
               const base={enabled:true,weights:{ai:5},excludedTags:[],excludedSources:[]};
@@ -328,12 +328,12 @@ class BrowserTest {
             Page p=context.newPage();p.navigate(origin+"/index.html");p.waitForSelector("#paper article");assertEquals(0,p.locator("#interest-basis,#range").count());assertEquals(0,p.locator("#paper .reason").count());
             assertEquals(0,p.locator("a[href='/admin.html']:visible").count());assertEquals(1,p.locator("#account-menu a[href='/settings.html']").count());
             assertEquals(true,p.evaluate("""
-            async () => {const {effectivePreferences,rank}=await import('/assets/js/ranking.js');const {defaults}=await import('/assets/js/preferences.js');
+            async () => {const {effectivePreferences,rank}=await import('/assets/js/personalization/ranking.js');const {defaults}=await import('/assets/js/personalization/preferences.js');
               const preset={space:5};const empty=effectivePreferences(defaults(),preset);const own=effectivePreferences({...defaults(),weights:{ai:4}},preset);
               const disabled=effectivePreferences({...defaults(),enabled:false,weights:{ai:4},excludedTags:['space']},preset);
               return empty.weights.space===5&&own.weights.ai===4&&disabled.weights.space===5&&disabled.excludedTags[0]==='space';}
             """));
-            p.evaluate("async id => {const m=await import('/assets/js/preferences.js');await m.savePreferences(id,{...m.defaults(),weights:{ai:5}});}",A);p.reload();p.waitForSelector("#paper article");assertEquals(0,p.locator("#paper .reason").count());assertEquals(0,p.locator("#paper button").count());
+            p.evaluate("async id => {const m=await import('/assets/js/personalization/preferences.js');await m.savePreferences(id,{...m.defaults(),weights:{ai:5}});}",A);p.reload();p.waitForSelector("#paper article");assertEquals(0,p.locator("#paper .reason").count());assertEquals(0,p.locator("#paper button").count());
             for(String page:List.of("terms","privacy")){p.navigate(origin+"/"+page+".html");String text=p.locator("main").textContent();assertTrue(text.contains("약관 개정 제 1판"));assertFalse(text.contains("시행일:"));assertFalse(text.contains("최종 수정:"));assertEquals(0,p.locator("a[href='/policy-history.html'],a[href^='/policies/']").count());}
         }
     }
@@ -343,7 +343,7 @@ class BrowserTest {
         try(var context=browser.newContext()){
             Page p=context.newPage();p.navigate(origin+"/index.html");p.waitForSelector("#paper article");
             assertEquals("MoA-PaN",p.locator(".topline [data-brand-en]").textContent());
-            assertEquals(p.evaluate("async()=> (await import('/assets/js/config.js')).brand.mastheadQuote"),p.locator("h1").textContent());
+            assertEquals(p.evaluate("async()=> (await import('/assets/js/shared/config.js')).brand.mastheadQuote"),p.locator("h1").textContent());
             assertEquals(1,p.locator(".topline #open-search").count());
             assertEquals(0,p.locator("main #open-search,#range,#interest-basis,main nav:not(.slide-controls)").count());
             assertFalse(p.locator("header").textContent().contains("개인화 뉴스 V1"));
@@ -409,10 +409,10 @@ class BrowserTest {
     @Test void expiredSessionPreservesLocalPreferences(){
         try(var context=browser.newContext()){
             Page p=context.newPage();p.navigate(origin+"/about.html");
-            p.evaluate("async id=>{const m=await import('/assets/js/preferences.js');await m.savePreferences(id,{...m.defaults(),weights:{ai:5}});sessionStorage.setItem('moapan-account',id);}",A);
+            p.evaluate("async id=>{const m=await import('/assets/js/personalization/preferences.js');await m.savePreferences(id,{...m.defaults(),weights:{ai:5}});sessionStorage.setItem('moapan-account',id);}",A);
             context.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setStatus(401).setContentType("application/json").setBody("{}")));
-            p.evaluate("async()=>{try{await(await import('/assets/js/api.js')).account();}catch(e){if(e.status!==401)throw e;}}");
-            assertEquals(5,((Number)p.evaluate("async id=>(await(await import('/assets/js/preferences.js')).loadPreferences(id)).weights.ai",A)).intValue());
+            p.evaluate("async()=>{try{await(await import('/assets/js/shared/api.js')).account();}catch(e){if(e.status!==401)throw e;}}");
+            assertEquals(5,((Number)p.evaluate("async id=>(await(await import('/assets/js/personalization/preferences.js')).loadPreferences(id)).weights.ai",A)).intValue());
             assertNull(p.evaluate("sessionStorage.getItem('moapan-account')"));
         }
     }

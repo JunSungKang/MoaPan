@@ -1,0 +1,29 @@
+{
+  "checkedAt": "2026-10-29T06:42:41.199Z",
+  "tests": {
+    "test": {
+      "tests": 128,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "integrationTest": {
+      "tests": 40,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "e2eTest": {
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "javaClassesReviewed": 34,
+  "browserModulesReviewed": 19,
+  "deliverables": 26,
+  "securityGate": "PASS",
+  "image": "sha256:583c2acb721f95b314c6cf3980d076aa132c2be78d069a16baccfc38930fb570",
+  "scope": "Pure policy compile test covers ArticleInput, ContentProcessor and TopicTaxonomy; application assembly still needs Spring/PostgreSQL. Existing evidence preserved byte-for-byte."
+}

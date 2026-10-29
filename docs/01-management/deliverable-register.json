@@ -1,0 +1,210 @@
+[
+  {
+    "id": "MP-DOC-001",
+    "path": "docs/01-management/plan.md",
+    "title": "Sprint Delivery 실행 계획",
+    "status": "유지관리",
+    "owner": "개발 담당",
+    "reviewer": "독립 리뷰 담당"
+  },
+  {
+    "id": "MP-DOC-002",
+    "path": "docs/01-management/progress.md",
+    "title": "MOAPAN 진행 상태",
+    "status": "유지관리",
+    "owner": "개발 담당",
+    "reviewer": "독립 리뷰 담당"
+  },
+  {
+    "id": "MP-DOC-003",
+    "path": "docs/01-management/delivery.md",
+    "title": "현재 상태 안내",
+    "status": "유지관리",
+    "owner": "개발 담당",
+    "reviewer": "독립 리뷰 담당"
+  },
+  {
+    "id": "MP-DOC-004",
+    "path": "docs/02-analysis/requirements.md",
+    "title": "요구사항",
+    "status": "유지관리",
+    "owner": "개발 담당",
+    "reviewer": "독립 리뷰 담당"
+  },
+  {
+    "id": "MP-DOC-005",
+    "path": "docs/02-analysis/functional-spec.md",
+    "title": "기능명세",
+    "status": "유지관리",
+    "owner": "개발 담당",
+    "reviewer": "독립 리뷰 담당"
+  },
+  {
+    "id": "MP-DOC-006",
+    "path": "docs/03-design/architecture.md",
+    "title": "아키텍처",
+    "status": "유지관리",
+    "owner": "개발 담당",
+    "reviewer": "독립 리뷰 담당"
+  },
+  {
+    "id": "MP-DOC-007",
+    "path": "docs/03-design/data-model.md",
+    "title": "데이터 모델",
+    "status": "유지관리",
+    "owner": "개발 담당",
+    "reviewer": "독립 리뷰 담당"
+  },
+  {
+    "id": "MP-DOC-008",
+    "path": "docs/03-design/api.md",
+    "title": "REST API 계약",
+    "status": "유지관리",
+    "owner": "개발 담당",
+    "reviewer": "독립 리뷰 담당"
+  },
+  {
+    "id": "MP-DOC-009",
+    "path": "docs/03-design/classification.md",
+    "title": "기사 주제 분류",
+    "status": "유지관리",
+    "owner": "개발 담당",
+    "reviewer": "독립 리뷰 담당"
+  },
+  {
+    "id": "MP-DOC-010",
+    "path": "docs/03-design/decisions.md",
+    "title": "결정 기록",
+    "status": "유지관리",
+    "owner": "개발 담당",
+    "reviewer": "독립 리뷰 담당"
+  },
+  {
+    "id": "MP-DOC-011",
+    "path": "docs/04-implementation/translation-models.md",
+    "title": "로컬 번역 모델 선정",
+    "status": "유지관리",
+    "owner": "개발 담당",
+    "reviewer": "독립 리뷰 담당"
+  },
+  {
+    "id": "MP-DOC-012",
+    "path": "docs/05-test/acceptance-matrix.md",
+    "title": "인수 추적",
+    "status": "유지관리",
+    "owner": "개발 담당",
+    "reviewer": "독립 리뷰 담당"
+  },
+  {
+    "id": "MP-DOC-013",
+    "path": "docs/05-test/test-report.md",
+    "title": "실제 검증 결과",
+    "status": "유지관리",
+    "owner": "개발 담당",
+    "reviewer": "독립 리뷰 담당"
+  },
+  {
+    "id": "MP-DOC-014",
+    "path": "docs/05-test/menu-audit.md",
+    "title": "메뉴·접근 권한 전수 점검",
+    "status": "유지관리",
+    "owner": "개발 담당",
+    "reviewer": "독립 리뷰 담당"
+  },
+  {
+    "id": "MP-DOC-015",
+    "path": "docs/05-test/bugs.md",
+    "title": "환경 결함 기록",
+    "status": "유지관리",
+    "owner": "개발 담당",
+    "reviewer": "독립 리뷰 담당"
+  },
+  {
+    "id": "MP-DOC-016",
+    "path": "docs/06-transition/deployment.md",
+    "title": "수동 실행·배포·백업",
+    "status": "유지관리",
+    "owner": "개발 담당",
+    "reviewer": "독립 리뷰 담당"
+  },
+  {
+    "id": "MP-DOC-017",
+    "path": "docs/06-transition/linux-translation.md",
+    "title": "Linux 자동 번역 운영",
+    "status": "유지관리",
+    "owner": "개발 담당",
+    "reviewer": "독립 리뷰 담당"
+  },
+  {
+    "id": "MP-DOC-018",
+    "path": "docs/06-transition/versions.md",
+    "title": "버전·공급망 확인",
+    "status": "유지관리",
+    "owner": "개발 담당",
+    "reviewer": "독립 리뷰 담당"
+  },
+  {
+    "id": "MP-DOC-019",
+    "path": "docs/07-operation/security.md",
+    "title": "보안 운영",
+    "status": "유지관리",
+    "owner": "보안 담당",
+    "reviewer": "독립 리뷰 담당"
+  },
+  {
+    "id": "MP-DOC-020",
+    "path": "docs/07-operation/security-review.md",
+    "title": "보안 검토",
+    "status": "유지관리",
+    "owner": "보안 담당",
+    "reviewer": "독립 리뷰 담당"
+  },
+  {
+    "id": "MP-DOC-021",
+    "path": "docs/07-operation/privacy.md",
+    "title": "개인정보 경계",
+    "status": "유지관리",
+    "owner": "개발 담당",
+    "reviewer": "독립 리뷰 담당"
+  },
+  {
+    "id": "MP-DOC-022",
+    "path": "docs/07-operation/sources.md",
+    "title": "현재 수집 범위 — 2026-10-29",
+    "status": "유지관리",
+    "owner": "개발 담당",
+    "reviewer": "독립 리뷰 담당"
+  },
+  {
+    "id": "MP-DOC-023",
+    "path": "docs/01-management/deliverable-register.md",
+    "title": "산출물대장",
+    "status": "유지관리",
+    "owner": "개발 담당",
+    "reviewer": "독립 리뷰 담당"
+  },
+  {
+    "id": "MP-DOC-024",
+    "path": "docs/01-management/document-control.md",
+    "title": "문서관리계획서",
+    "status": "유지관리",
+    "owner": "개발 담당",
+    "reviewer": "독립 리뷰 담당"
+  },
+  {
+    "id": "MP-DOC-025",
+    "path": "docs/03-design/domain-design.md",
+    "title": "도메인 상세설계서",
+    "status": "유지관리",
+    "owner": "개발 담당",
+    "reviewer": "독립 리뷰 담당"
+  },
+  {
+    "id": "MP-DOC-026",
+    "path": "docs/04-implementation/program-inventory.md",
+    "title": "프로그램목록",
+    "status": "유지관리",
+    "owner": "개발 담당",
+    "reviewer": "독립 리뷰 담당"
+  }
+]
