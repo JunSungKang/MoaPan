@@ -118,3 +118,6 @@ Helm classifier Deployment·PVC·ClusterIP·worker Secret·NetworkPolicy 및 mig
 
 ## SI 산출물·도메인 리팩토링
 191 PASS(단위128/통합40/E2E23), 실패/오류/건너뜀0. docsCheck 26개 산출물/링크/ES모듈/도메인 경계 PASS. 3개 핵심 정책을 framework classpath 없이 JDK 단독 컴파일 PASS. 소스/JAR/SBOM 및 최종 앱 이미지 gate PASS. 기존 증빙 byte-identical 확인. 상세 evidence/domain-refactor.json.
+
+## 회색 신문지 질감
+CSS gradient 기반 종이 질감과 중립색 기사 조각 적용. E2E23 PASS/실패0/건너뜀0, 390·768·1440px 합성 화면과 print 확인. SVG 방식에서 언어 전환 시 이미지 추가 요청이 발생해 순수CSS로 수정했고 기존 무통신 검증을 유지했다. JAR/SBOM/소스·최종 앱 이미지 보안 gate PASS. 앱sha256:2584ff56ac496eaca9199f7526d5732c256f0447d0d44c0b8c98374d0fa764bb.

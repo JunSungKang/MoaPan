@@ -7,3 +7,5 @@ SI 산출물 체계와 도메인 리팩토링 구현 및 회귀 검증 완료. �
 - 시험191 PASS와 보안 gate PASS. [시험결과서](../05-test/test-report.md) 참조.
 - 운영 모듈은 Spring/PostgreSQL 어댑터와 스키마를 함께 이식해야 한다.
 - [과거 진척](sprints/pre-domain-refactor.md)은 당시 상태다.
+
+회색 신문지 스타일: 바탕 질감·기사 조각 색·그림자 조정, E2E23 및 보안 gate 통과. 현재 디자인 브랜치에서 검토/전달하며 develop 병합과 구분한다.
