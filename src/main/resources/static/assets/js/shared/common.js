@@ -8,7 +8,15 @@ for(const node of document.querySelectorAll('[data-brand]'))node.textContent=bra
 for(const node of document.querySelectorAll('[data-brand-en]'))node.textContent=brand.english;
 for(const node of document.querySelectorAll('[data-masthead-quote]'))node.textContent=brand.mastheadQuote;
 const pageTitle=document.title;document.title=brand.english+' · '+t(pageTitle);
-const today=document.querySelector('#today');if(today)today.textContent=date(Date.now());
+const today=document.querySelector('#today');
+export function setIssueDate(items){
+ const latest=items.filter(a=>Number.isFinite(Date.parse(a.collectedAt))).sort((a,b)=>Date.parse(b.collectedAt)-Date.parse(a.collectedAt)||String(a.id).localeCompare(String(b.id)))[0];
+ if(!today)return;
+ if(!latest){delete today.dataset.issueValue;today.removeAttribute('datetime');today.textContent=t('발행 정보 없음');return;}
+ const published=Number.isFinite(Date.parse(latest.publishedAt));today.dataset.issueValue=published?latest.publishedAt:latest.collectedAt;today.dataset.issueKind=published?'published':'collected';renderIssueDate();
+}
+function renderIssueDate(){if(!today?.dataset.issueValue)return;today.dateTime=today.dataset.issueValue;today.textContent=(today.dataset.issueKind==='collected'?t('수집 기준')+' · ':'')+date(today.dataset.issueValue);}
+if(today)today.textContent='';
 const menu=document.querySelector('#account-menu');
 function guestMenu(){if(menu){menu.replaceChildren();for(const [name,href] of [['로그인','/login.html'],['회원가입','/signup.html']]){const link=el('a',name);link.href=href;menu.append(link);}}for(const node of document.querySelectorAll('[data-auth]'))node.hidden=true;}
 export const viewer=account().catch(error=>{if(error.status!==401)throw error;return null;});
@@ -18,7 +26,7 @@ window.addEventListener('moapan-auth-lost',()=>{guestMenu();const main=document.
 
 const searchButton=document.querySelector('#open-search');
 if(searchButton){const tools=document.createElement('div');tools.className='header-tools';searchButton.before(tools);tools.append(languagePicker(),searchButton);}else{const header=document.querySelector('.masthead,.auth-brand');if(header)header.prepend(languagePicker());}
-window.addEventListener('moapan-language',()=>{if(today)today.textContent=date(Date.now());document.title=brand.english+' · '+t(pageTitle);});
+window.addEventListener('moapan-language',()=>{renderIssueDate();document.title=brand.english+' · '+t(pageTitle);});
 
 const adSlot=document.querySelector('[data-ad-slot]');
 if(adSlot&&advertisement.imageUrl){

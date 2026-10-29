@@ -99,3 +99,14 @@ body{background-image:radial-gradient(#30382a08 .35px,transparent .6px),radial-g
   .newspaper-sheet ul{font-family:system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;font-size:.95rem;line-height:1.85;text-align:left}
   .newspaper-sheet .article-source{padding-bottom:.7rem;margin-bottom:.8rem;border-color:#d5d7ce}
 }
+
+@media screen and (max-width:600px){
+ .masthead .meta{flex-direction:column;align-items:flex-end;gap:.5rem}
+ .masthead .meta time{display:block;max-width:100%;white-space:nowrap;text-align:right}
+ .newspaper-sheet .article-meta-line{flex-direction:column;align-items:flex-end;gap:.15rem;text-align:right}
+ .newspaper-sheet .article-meta-line>span{flex:none;max-width:100%;overflow:visible;text-overflow:clip}
+ .newspaper-sheet .article-subjects,.newspaper-sheet .article-author{white-space:normal;overflow-wrap:anywhere}
+ .newspaper-sheet .article-written{white-space:nowrap}
+ .newspaper-sheet .article-meta-line>span+span::before{display:none}
+ .newspaper-sheet .article-source{text-align:right}
+}

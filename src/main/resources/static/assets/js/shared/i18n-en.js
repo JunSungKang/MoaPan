@@ -1,4 +1,6 @@
 export default {
+"수집 기준":"Collected as of",
+"발행 정보 없음":"Publication date unavailable",
 "광고":"Advertisement",
 "광고 문의":"Advertise here",
 "LLM 모델·성능":"LLM models & performance",

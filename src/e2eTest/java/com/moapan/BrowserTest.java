@@ -380,6 +380,29 @@ class BrowserTest {
         }
     }
 
+    @Test void issueDateUsesLatestCollectedArticleAndMobileMetadataStacks(){
+        try(var context=browser.newContext()){
+            context.route("**/api/v1/news/edition*",r->{
+                var mapper=tools.jackson.databind.json.JsonMapper.builder().build();var root=mapper.readTree(edition());
+                var first=(tools.jackson.databind.node.ObjectNode)root.path("items").path(0);first.put("collectedAt","2026-10-28T12:30:59Z");first.put("publishedAt","2026-10-27T08:12:45Z");first.put("author","Synthetic author");
+                var other=(tools.jackson.databind.node.ObjectNode)root.path("items").path(1);other.put("publishedAt","2026-10-29T00:00:00Z");
+                r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(mapper.writeValueAsString(root)));
+            });
+            Page p=context.newPage();p.setViewportSize(390,1000);p.navigate(origin+"/index.html");p.waitForSelector("#paper article");
+            p.waitForFunction("document.querySelector('#today').dateTime==='2026-10-27T08:12:45Z'");
+            assertEquals(p.evaluate("new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'}).format(new Date('2026-10-27T08:12:45Z'))"),p.locator("#today").textContent());
+            assertEquals("column",p.locator(".article-meta-line").first().evaluate("e=>getComputedStyle(e).flexDirection"));
+            assertEquals("right",p.locator(".article-meta-line").first().evaluate("e=>getComputedStyle(e).textAlign"));
+            assertEquals("nowrap",p.locator(".article-written").first().evaluate("e=>getComputedStyle(e).whiteSpace"));
+            p.locator("[data-language-select]").selectOption("en");assertEquals("2026-10-27T08:12:45Z",p.locator("#today").getAttribute("datetime"));
+            assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth<=innerWidth"));
+        }
+        try(var context=browser.newContext()){
+            Page p=context.newPage();p.navigate(origin+"/index.html");p.waitForSelector("#paper article");
+            p.waitForFunction("document.querySelector('#today').textContent.startsWith('수집 기준')");assertEquals("2026-10-28T00:00:00Z",p.locator("#today").getAttribute("datetime"));
+        }
+    }
+
     @Test void loadingEmptyErrorAndKeyboardStatesAreUsable(){
         try(var context=browser.newContext()){
             Page p=context.newPage();var pending=new java.util.concurrent.atomic.AtomicReference<Route>();

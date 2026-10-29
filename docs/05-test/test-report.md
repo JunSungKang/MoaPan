@@ -127,3 +127,6 @@ E2E24 PASS, FAIL/ERROR/SKIP0. 390/768/1440px에서1/2/6열 그리드와 넘침 �
 
 ## 모바일 블로그 카드
 E2E24 PASS, FAIL/ERROR/SKIP0. 390px에서 모든 카드와 지면폭 일치(0.5px 허용), 카드배경·제목크기 일관·가로넘침 없음 확인. 768/1440px와 print 기존배치 검증. 소스/JAR/SBOM/최종앱이미지 gate PASS: sha256:ea29796215f16f356c9b2ffa05d87c2c6cd953b238308bfd27410caafc2c7728.
+
+## 지면 발행시각과 모바일 메타
+단일 재실행 E2E25 PASS/FAIL0/ERROR0/SKIP0. 최근수집 순서와 발행순서가 다른 고정fixture, 분단위 표시/언어전환/발행미상시수집기준/모바일세로우측정렬 검증. 초기 두 검증 프로세스의 결과파일 충돌(EOF/NoSuchFile)은 성공으로 세지 않았고 종료 후 --rerun-tasks 단일실행으로 재검증. 소스/JAR/SBOM 및 앱이미지 gate PASS, sha256:b8b5dbcbafa3a528993850385a025fe56cda795bfa6268a63faea774749688d9.
