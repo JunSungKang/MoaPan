@@ -446,4 +446,12 @@ class SecurityIntegrationTest {
         editorial.edit(article,new com.moapan.article.application.EditorialService.Edit(List.of("Synthetic edited summary"),true,false,true,List.of()),actor);
         assertEquals(0,repo.db().sql("SELECT count(*) FROM article_tags WHERE article_id=:id").param("id",article).query(Integer.class).single());
     }
+    @Test @Order(82) void discoveryIsPublicAndSensitivePagesStayOutOfIndex()throws Exception{
+        mvc.perform(get("/robots.txt")).andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.containsString("Sitemap: http://localhost/sitemap.xml")));
+        var xml=mvc.perform(get("/sitemap.xml")).andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        assertTrue(xml.contains("http://localhost/index.html"));for(String name:List.of("admin","account","settings","login","signup"))assertFalse(xml.contains(name+".html"));
+        mvc.perform(get("/index.html")).andExpect(header().string("Link","<http://localhost/index.html>; rel=\"canonical\""));
+        mvc.perform(get("/login.html")).andExpect(header().string("X-Robots-Tag","noindex, follow"));
+        mvc.perform(get("/api/v1/account")).andExpect(status().isUnauthorized()).andExpect(header().string("X-Robots-Tag","noindex, follow"));
+    }
 }

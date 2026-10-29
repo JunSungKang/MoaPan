@@ -7,12 +7,16 @@ export function date(value){return new Intl.DateTimeFormat(language==='en'?'en-U
 for(const node of document.querySelectorAll('[data-brand]'))node.textContent=brand.name;
 for(const node of document.querySelectorAll('[data-brand-en]'))node.textContent=brand.english;
 for(const node of document.querySelectorAll('[data-masthead-quote]'))node.textContent=brand.mastheadQuote;
-const pageTitle=document.title;document.title=brand.english+' · '+t(pageTitle);
-const today=document.querySelector('#today');
+const pageTitle=document.documentElement.dataset.pageTitle||document.title;
+const pageDescription=document.querySelector('meta[name=description]')?.content;
+function setPageMetadata(){document.title=t(pageTitle)+' | '+(language==='ko'?brand.name+' '+brand.english:brand.english);const og=document.querySelector('meta[property="og:title"]');if(og)og.content=document.title;if(pageDescription)for(const node of document.querySelectorAll('meta[name=description],meta[property="og:description"]'))node.content=t(pageDescription);const locale=document.querySelector('meta[property="og:locale"]');if(locale)locale.content=language==='ko'?'ko_KR':'en_US';const canonical=document.querySelector('link[rel="canonical"]');if(canonical)canonical.href=new URL(canonical.getAttribute('href'),location.origin).href;}
+setPageMetadata();
+let today=document.querySelector('#today');
 export function setIssueDate(items){
  const latest=items.filter(a=>Number.isFinite(Date.parse(a.collectedAt))).sort((a,b)=>Date.parse(b.collectedAt)-Date.parse(a.collectedAt)||String(a.id).localeCompare(String(b.id)))[0];
  if(!today)return;
- if(!latest){delete today.dataset.issueValue;today.removeAttribute('datetime');today.textContent=t('발행 정보 없음');return;}
+ if(!latest){const placeholder=document.createElement('span');placeholder.id='today';placeholder.textContent=t('발행 정보 없음');today.replaceWith(placeholder);today=placeholder;return;}
+ if(today.tagName!=='TIME'){const time=document.createElement('time');time.id='today';today.replaceWith(time);today=time;}
  const published=Number.isFinite(Date.parse(latest.publishedAt));today.dataset.issueValue=published?latest.publishedAt:latest.collectedAt;today.dataset.issueKind=published?'published':'collected';renderIssueDate();
 }
 function renderIssueDate(){if(!today?.dataset.issueValue)return;today.dateTime=today.dataset.issueValue;today.textContent=(today.dataset.issueKind==='collected'?t('수집 기준')+' · ':'')+date(today.dataset.issueValue);}
@@ -26,7 +30,7 @@ window.addEventListener('moapan-auth-lost',()=>{guestMenu();const main=document.
 
 const searchButton=document.querySelector('#open-search');
 if(searchButton){const tools=document.createElement('div');tools.className='header-tools';searchButton.before(tools);tools.append(languagePicker(),searchButton);}else{const header=document.querySelector('.masthead,.auth-brand');if(header)header.prepend(languagePicker());}
-window.addEventListener('moapan-language',()=>{renderIssueDate();document.title=brand.english+' · '+t(pageTitle);});
+window.addEventListener('moapan-language',()=>{renderIssueDate();setPageMetadata();});
 
 const adSlot=document.querySelector('[data-ad-slot]');
 if(adSlot&&advertisement.imageUrl){

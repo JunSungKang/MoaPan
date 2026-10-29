@@ -33,17 +33,22 @@
         "src/main/resources/static/**",
         "docs/**",
         ".github/workflow-plans/mobile-article-cards.json",
-        "src/e2eTest/**"
+        "src/e2eTest/**",
+        "src/main/java/com/moapan/discovery/**",
+        "src/integrationTest/**",
+        "src/test/**",
+        "scripts/test/**"
       ],
       "forbiddenPaths": [
         ".env"
       ],
       "acceptanceCriteria": [
         "Mobile articles use full-width blog cards; preserve desktop newspaper and print",
-        "Responsive, pagination, language, ad and search regressions pass"
+        "Responsive, pagination, language, ad and search regressions pass",
+        "Centered login, correct static and localized titles, public discovery and private noindex boundaries"
       ],
       "validationCommands": [
-        "sh scripts/build/gradle-local.sh e2eTest bootJar sbom securityCheck"
+        "sh scripts/build/gradle-local.sh check integrationTest e2eTest bootJar sbom securityCheck"
       ],
       "documentation": {
         "paths": [

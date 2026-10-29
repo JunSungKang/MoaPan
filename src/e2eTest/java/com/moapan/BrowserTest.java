@@ -403,6 +403,18 @@ class BrowserTest {
         }
     }
 
+    @Test void loginLayoutAndPageTitlesAreCenteredAndDistinct(){
+        try(var context=browser.newContext()){
+            context.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\"synthetic_admin\",\"role\":\"ADMIN\"}")));
+            Page p=context.newPage();p.navigate(origin+"/login.html");p.waitForSelector("[data-language-select]");
+            for(int width:new int[]{390,1440}){p.setViewportSize(width,1000);var form=p.locator("main").boundingBox();var brand=p.locator("header [data-brand-en]").boundingBox();var footer=p.locator("footer").boundingBox();assertEquals(form.x+form.width/2,brand.x+brand.width/2,1);assertEquals(form.x+form.width/2,footer.x+footer.width/2,1);assertEquals(0,p.locator("main h1").count());assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth<=innerWidth"));p.screenshot(new Page.ScreenshotOptions().setPath(Path.of("build/reports/screenshots/login-centered-"+width+".png")));}
+            for(String page:List.of("index","about","privacy","terms","login","signup","account","settings","admin")){
+                p.navigate(origin+"/"+page+".html");p.waitForSelector("[data-language-select]");p.locator("[data-language-select]").selectOption("ko");p.waitForFunction("document.title.includes('모아판 MoA-PaN')");assertEquals(1,p.title().split("\\|",-1).length-1);
+                p.locator("[data-language-select]").selectOption("en");p.waitForFunction("document.title.endsWith(' | MoA-PaN')");assertFalse(p.title().contains("모아판"));
+            }
+        }
+    }
+
     @Test void loadingEmptyErrorAndKeyboardStatesAreUsable(){
         try(var context=browser.newContext()){
             Page p=context.newPage();var pending=new java.util.concurrent.atomic.AtomicReference<Route>();

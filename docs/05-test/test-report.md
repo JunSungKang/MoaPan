@@ -130,3 +130,6 @@ E2E24 PASS, FAIL/ERROR/SKIP0. 390px에서 모든 카드와 지면폭 일치(0.5p
 
 ## 지면 발행시각과 모바일 메타
 단일 재실행 E2E25 PASS/FAIL0/ERROR0/SKIP0. 최근수집 순서와 발행순서가 다른 고정fixture, 분단위 표시/언어전환/발행미상시수집기준/모바일세로우측정렬 검증. 초기 두 검증 프로세스의 결과파일 충돌(EOF/NoSuchFile)은 성공으로 세지 않았고 종료 후 --rerun-tasks 단일실행으로 재검증. 소스/JAR/SBOM 및 앱이미지 gate PASS, sha256:b8b5dbcbafa3a528993850385a025fe56cda795bfa6268a63faea774749688d9.
+
+## 로그인·탭 제목·SEO/HTML 표준
+197 PASS(단위130/통합41/E2E26), FAIL/ERROR/SKIP0. 정적9페이지 Nu26.10.12 검사 messages0. 초기 빈 time/heading 수정, DB중단 테스트 후 실행되어503을 받은 신규 통합케이스는 DB중단 전에 검증하도록 순서를 수정한 뒤 재검증. 초기 누락된 영문 제목 번역을 추가했고 최종 모든9페이지 탭 제목/로그인390·1440중앙정렬 검증 PASS. 소스/JAR/SBOM/이미지 gatePASS. 공식문서·범위·남은조건은 seo-web-audit.md, 증빙 evidence/login-seo.json.
