@@ -37,10 +37,10 @@ public class SecurityConfig {
         var handler=new CsrfTokenRequestAttributeHandler();
         http.csrf(c->c.csrfTokenRepository(csrf).csrfTokenRequestHandler(handler))
             .securityContext(c->c.securityContextRepository(repository))
-            .authorizeHttpRequests(a->a.requestMatchers("/api/v1/auth/csrf","/api/v1/auth/signup","/api/v1/auth/login","/internal/live").permitAll().requestMatchers(org.springframework.http.HttpMethod.GET,"/api/v1/public/news/edition","/api/v1/public/interests","/api/v1/public/tags").permitAll().requestMatchers(org.springframework.http.HttpMethod.POST,"/api/v1/public/news/search").permitAll().requestMatchers("/api/v1/admin/**","/admin.html").hasRole("ADMIN").requestMatchers("/settings.html","/account.html").authenticated().requestMatchers("/api/**").authenticated().anyRequest().permitAll())
+            .authorizeHttpRequests(a->a.requestMatchers("/api/v1/auth/csrf","/api/v1/auth/signup","/api/v1/auth/login","/internal/live").permitAll().requestMatchers(org.springframework.http.HttpMethod.GET,"/api/v1/public/interests","/api/v1/public/tags").permitAll().requestMatchers("/api/v1/admin/**","/admin.html").hasRole("ADMIN").requestMatchers("/","/index.html","/settings.html","/account.html").authenticated().requestMatchers("/api/**").authenticated().anyRequest().permitAll())
             .requestCache(c->c.disable()).formLogin(c->c.disable()).httpBasic(c->c.disable())
             .logout(c->c.disable())
-            .exceptionHandling(e->e.authenticationEntryPoint((q,r,x)->{if(Set.of("/settings.html","/account.html","/admin.html").contains(q.getRequestURI()))r.sendRedirect("/login.html");else error(r,401);}).accessDeniedHandler((q,r,x)->{if(Set.of("/settings.html","/account.html","/admin.html").contains(q.getRequestURI()))r.sendRedirect("/index.html");else error(r,403);}))
+            .exceptionHandling(e->e.authenticationEntryPoint((q,r,x)->{if(Set.of("/","/index.html","/settings.html","/account.html","/admin.html").contains(q.getRequestURI()))r.sendRedirect("/login.html");else error(r,401);}).accessDeniedHandler((q,r,x)->{if(Set.of("/settings.html","/account.html","/admin.html").contains(q.getRequestURI()))r.sendRedirect("/index.html");else error(r,403);}))
             .headers(h->h.contentSecurityPolicy(c->c.policyDirectives("default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'"))
                 .referrerPolicy(c->c.policy(org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER))
                 .permissionsPolicyHeader(c->c.policy("camera=(), microphone=(), geolocation=()")))
@@ -63,9 +63,9 @@ public class SecurityConfig {
                 HttpSession session=q.getSession(false);
                 var auth=org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
                 if(session!=null&&auth!=null&&auth.isAuthenticated()){
-                    boolean valid=System.currentTimeMillis()-session.getCreationTime()<43_200_000L;
+                    boolean valid=RememberedSession.valid(session);
                     try{valid&=accounts.findById(UUID.fromString(auth.getName())).filter(a->a.active&&auth.getAuthorities().stream().anyMatch(p->p.getAuthority().equals("ROLE_"+a.role))).isPresent();}catch(IllegalArgumentException e){valid=false;}
-                    if(!valid){session.invalidate();org.springframework.security.core.context.SecurityContextHolder.clearContext();error(r,401);return;}
+                    if(!valid){session.invalidate();org.springframework.security.core.context.SecurityContextHolder.clearContext();if(q.getRequestURI().equals("/")||q.getRequestURI().endsWith(".html"))r.sendRedirect("/login.html");else error(r,401);return;}
                 }
                 if(q.getRequestURI().equals("/api/v1/auth/csrf")&&session==null)limits.auth("anonymous_sessions",600,60);
                 chain.doFilter(q,r);

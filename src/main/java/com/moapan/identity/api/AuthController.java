@@ -23,7 +23,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 @RestController @org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication
 public class AuthController {
-    record Credentials(@NotNull @Size(min=1,max=128) String username,@NotNull @Size(min=6,max=256)String password){}
+    record Credentials(@NotNull @Size(min=1,max=128) String username,@NotNull @Size(min=6,max=256)String password,Boolean rememberMe){}
     public static final String TERMS_VERSION="terms-1";
     record Signup(@NotNull @Size(min=1,max=128) String username,@NotNull @Size(min=6,max=256) String password,@NotNull @AssertTrue Boolean termsAccepted,@NotBlank @Size(max=32) String termsVersion){}
     record Change(@NotNull String currentPassword,@NotNull @Size(min=6,max=256)String newPassword){}
@@ -43,6 +43,7 @@ public class AuthController {
             try{manager.authenticate(new UsernamePasswordAuthenticationToken(username,input.password()));}catch(AuthenticationException e){int failures=limits.auth(bucket,10,900);limits.checkAuth(bucket,10);throw new ApiError(401,"invalid_credentials",null,failures>=5?10-failures:null);}
             Account user=users.findByUsername(username).filter(a->a.active).orElseThrow(()->new ApiError(401,"invalid_credentials"));
             if(request.getSession(false)!=null)request.changeSessionId();else request.getSession(true);
+            com.moapan.access.infrastructure.RememberedSession.configure(request.getSession(),Boolean.TRUE.equals(input.rememberMe()));
             var auth=UsernamePasswordAuthenticationToken.authenticated(user.id.toString(),null,List.of(new SimpleGrantedAuthority("ROLE_"+user.role)));
             var context=SecurityContextHolder.createEmptyContext();context.setAuthentication(auth);SecurityContextHolder.setContext(context);contexts.saveContext(context,request,response);
             new HttpSessionCsrfTokenRepository().saveToken(null,request,response);

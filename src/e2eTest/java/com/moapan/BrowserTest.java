@@ -23,6 +23,7 @@ class BrowserTest {
             else if((path.equals("/api/v1/news/edition")||path.equals("/api/v1/public/news/edition")))response=edition();
             else if(path.endsWith("/news/search"))response="{\"items\":[],\"page\":0,\"pages\":0,\"total\":0}";
             else if(path.equals("/api/v1/auth/csrf"))response="{\"token\":\"synthetic-csrf\",\"headerName\":\"X-CSRF-TOKEN\"}";
+            if(path.equals("/api/v1/account")&&Objects.toString(exchange.getRequestHeaders().getFirst("Referer"),"").contains("/login.html")){response="{}";byte[] bytes=response.getBytes(StandardCharsets.UTF_8);exchange.getResponseHeaders().set("Content-Type","application/json");exchange.sendResponseHeaders(401,bytes.length);exchange.getResponseBody().write(bytes);exchange.close();return;}
             if(response!=null){byte[]bytes=response.getBytes(StandardCharsets.UTF_8);exchange.getResponseHeaders().set("Content-Type",type);exchange.sendResponseHeaders(200,bytes.length);exchange.getResponseBody().write(bytes);exchange.close();return;}
             if(path.equals("/"))path="/index.html";try(var in=BrowserTest.class.getResourceAsStream("/static"+path)){if(in==null){exchange.sendResponseHeaders(404,-1);}else{type=path.endsWith(".js")?"text/javascript":path.endsWith(".css")?"text/css":"text/html";exchange.getResponseHeaders().set("Content-Type",type+"; charset=utf-8");byte[]bytes=in.readAllBytes();exchange.sendResponseHeaders(200,bytes.length);exchange.getResponseBody().write(bytes);}}exchange.close();
         });server.start();origin="http://localhost:"+server.getAddress().getPort();playwright=Playwright.create();browser=playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true).setChannel("chromium").setArgs(List.of("--disable-gpu")));
@@ -297,13 +298,13 @@ class BrowserTest {
                 for(String destination:List.of("settings","account","admin"))assertEquals(0,p.locator("a[href='/"+destination+".html']:visible").count(),page+" leaks "+destination);
             }
             for(String page:List.of("settings","account","admin")){p.navigate(origin+"/"+page+".html");p.waitForURL("**/login.html");}
-            p.navigate(origin+"/index.html");p.waitForSelector("#paper article");assertEquals(0,p.locator("#interest-basis,#range").count());assertEquals(0,p.locator("#paper .reason").count());
+            p.navigate(origin+"/index.html");p.waitForURL("**/login.html");assertEquals(0,p.locator("#paper article").count());context.unroute("**/api/v1/account");p.navigate(origin+"/index.html");p.waitForSelector("#paper article");assertEquals(0,p.locator("#interest-basis,#range").count());assertEquals(0,p.locator("#paper .reason").count());
             assertEquals(0,p.locator("[data-view],#latest,.tags button").count());assertFalse(p.locator("#search").isVisible());
             p.locator("#open-search").click();assertTrue(p.locator("#search").isVisible());p.locator("#search").fill("synthetic-popup-private-query");p.keyboard().press("Escape");assertEquals(7,p.locator("#paper article").count());
             p.locator("#open-search").click();assertEquals("",p.locator("#search").inputValue());p.locator("#search").fill("synthetic-popup-private-query");p.locator("#search-form [type=submit]").click();p.waitForFunction("document.querySelector('[role=status]').textContent==='' && document.querySelector('#paper article')===null");assertEquals(0,p.locator("#paper article").count());assertFalse(p.locator("#search-dialog").isVisible());
             p.locator("#clear-search").click();assertEquals(7,p.locator("#paper article").count());
             for(int width:new int[]{390,768,1440}){p.setViewportSize(width,1000);p.locator("#open-search").click();assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth<=innerWidth"));p.screenshot(new Page.ScreenshotOptions().setPath(Path.of("build/reports/screenshots/search-dialog-"+width+".png")));p.locator("#cancel-search").click();}
-            assertEquals(1,traffic.stream().filter(v->v.contains("synthetic-popup-private-query")).count());assertTrue(traffic.stream().filter(v->v.contains("synthetic-popup-private-query")).allMatch(v->v.startsWith(origin+"/api/v1/public/news/search ")));assertTrue(traffic.stream().noneMatch(v->v.contains("/api/v1/news/edition")));
+            assertEquals(1,traffic.stream().filter(v->v.contains("synthetic-popup-private-query")).count());assertTrue(traffic.stream().filter(v->v.contains("synthetic-popup-private-query")).allMatch(v->v.startsWith(origin+"/api/v1/news/search ")));assertTrue(traffic.stream().anyMatch(v->v.contains("/api/v1/news/edition")));
         }
     }
 
@@ -405,13 +406,25 @@ class BrowserTest {
 
     @Test void loginLayoutAndPageTitlesAreCenteredAndDistinct(){
         try(var context=browser.newContext()){
-            context.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\"synthetic_admin\",\"role\":\"ADMIN\"}")));
+            context.route("**/api/v1/account",r->{if(r.request().frame().url().contains("/login.html"))r.fulfill(new Route.FulfillOptions().setStatus(401).setContentType("application/json").setBody("{}"));else r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\"synthetic_admin\",\"role\":\"ADMIN\"}"));});
             Page p=context.newPage();p.navigate(origin+"/login.html");p.waitForSelector("[data-language-select]");
             for(int width:new int[]{390,1440}){p.setViewportSize(width,1000);var form=p.locator("main").boundingBox();var brand=p.locator("header [data-brand-en]").boundingBox();var footer=p.locator("footer").boundingBox();assertEquals(form.x+form.width/2,brand.x+brand.width/2,1);assertEquals(form.x+form.width/2,footer.x+footer.width/2,1);assertEquals(0,p.locator("main h1").count());assertEquals(0,p.locator("header [data-language-select]").count());assertEquals(0,p.locator("footer [data-language-select]").count());assertEquals(1,p.locator(".auth-language-top [data-language-select]").count());var language=p.locator(".auth-language-top [data-language-select]").boundingBox();assertEquals(width-24,language.x+language.width,1);assertTrue(language.y+language.height<=brand.y);assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth<=innerWidth"));p.screenshot(new Page.ScreenshotOptions().setPath(Path.of("build/reports/screenshots/login-centered-"+width+".png")));}
             for(String page:List.of("index","about","privacy","terms","login","signup","account","settings","admin")){
                 p.navigate(origin+"/"+page+".html");p.waitForSelector("[data-language-select]");p.locator("[data-language-select]").selectOption("ko");p.waitForFunction("document.title.includes('모아판 MoA-PaN')");assertEquals(1,p.title().split("\\|",-1).length-1);
                 p.locator("[data-language-select]").selectOption("en");p.waitForFunction("document.title.endsWith(' | MoA-PaN')");assertFalse(p.title().contains("모아판"));
             }
+        }
+    }
+
+    @Test void loginRedirectsAuthenticatedBrowserAndSendsRememberOnlyOnOptIn(){
+        try(var context=browser.newContext()){
+            context.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\"synthetic_member\",\"role\":\"USER\"}")));
+            Page p=context.newPage();p.navigate(origin+"/login.html");p.waitForURL("**/index.html");
+        }
+        try(var context=browser.newContext()){
+            context.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setStatus(401).setContentType("application/json").setBody("{}")));
+            List<String> bodies=new ArrayList<>();context.route("**/api/v1/auth/login",r->{bodies.add(r.request().postData());r.fulfill(new Route.FulfillOptions().setStatus(401).setContentType("application/json").setBody("{\"error\":\"invalid_credentials\"}"));});
+            Page p=context.newPage();p.navigate(origin+"/login.html");assertFalse(p.locator("#remember-me").isChecked());p.locator("#username").fill("synthetic_login");p.locator("#password").fill("synthetic password");p.locator("button[type=submit]").click();p.waitForCondition(()->bodies.size()==1);assertTrue(bodies.getFirst().contains("\"rememberMe\":false"));p.locator("#remember-me").check();p.locator("button[type=submit]").click();p.waitForCondition(()->bodies.size()==2);assertTrue(bodies.getLast().contains("\"rememberMe\":true"));
         }
     }
 

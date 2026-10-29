@@ -13,3 +13,5 @@
 .auth-language-top .language-picker{float:none;margin:0;font:.75rem/1.5 system-ui;color:var(--muted)}
 .auth-language-top select{min-height:44px;min-width:88px;border:0;padding:.5rem .4rem;background:transparent;cursor:pointer}
 .auth-page:has(>.auth-language-top) .auth-brand{padding-top:12px}
+
+.auth-main .remember-option{display:flex;align-items:center;gap:.5rem;margin-top:.85rem;font-size:.85rem;font-weight:400}.remember-option input{width:18px;height:18px;margin:0;accent-color:#252722}.auth-main .remember-hint{margin:0;font:.72rem/1.6 system-ui;color:var(--muted)}

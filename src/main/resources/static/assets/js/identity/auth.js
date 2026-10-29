@@ -1,6 +1,7 @@
 import {request,refreshCsrf} from '../shared/api.js';
-import {report} from '../shared/common.js';
+import {report,viewer} from '../shared/common.js';
 const form=document.querySelector('form');
+if(form.dataset.mode==='login')viewer.then(a=>{if(a)location.replace('/index.html');}).catch(()=>{});
 const button=form.querySelector('button'),status=document.querySelector('[role=status]');
 let pending=false,deadline=0,timer,limitedUsername=null;
 function clearLimit(announce=false){clearInterval(timer);deadline=0;limitedUsername=null;const panel=document.querySelector('#login-limit');if(panel)panel.hidden=true;button.disabled=pending;if(announce)status.textContent='다시 로그인할 수 있습니다. 비밀번호를 확인하고 시도해 주세요.';}
@@ -25,6 +26,7 @@ form.addEventListener('submit',async event=>{
   pending=true;button.disabled=true;
   try{
     const body={username,password};
+    if(!signup)body.rememberMe=Boolean(form.elements.rememberMe?.checked);
     if(signup){body.termsAccepted=true;body.termsVersion=form.dataset.termsVersion;}
     await request('/api/v1/auth/'+(signup?'signup':'login'),{method:'POST',body});
     form.elements.password.value='';await refreshCsrf();location.assign(signup?'/login.html':'/index.html');

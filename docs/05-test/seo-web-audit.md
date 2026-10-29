@@ -8,8 +8,8 @@
 | 로그인 정렬 | 제호·폼·약관 링크 동일 중심, 중복 로그인 제목 제거 | 390/1440px 좌표 및 화면 |
 | 탭 제목 | 9개 초기 HTML 고유 제목과 브랜드, 언어 전환 중복 제거 | 정적 파서/Playwright |
 | 설명·공유 정보 | 페이지별 description/OG 제목·설명, 언어에 맞춰 갱신 | 정적 파서/브라우저 |
-| 대표 URL | 공개4페이지 canonical, 서버 Link는 설정 PUBLIC_BASE_URL 사용 | PostgreSQL 통합/실제 HTTP |
-| 사이트맵 | index/about/privacy/terms만 포함, 가짜 lastmod 없음 | XML 응답 테스트 |
+| 대표 URL | 공개 안내3페이지 canonical, 서버 Link는 설정 PUBLIC_BASE_URL 사용 | PostgreSQL 통합/실제 HTTP |
+| 사이트맵 | about/privacy/terms만 포함, 가짜 lastmod 없음 | XML 응답 테스트 |
 | 크롤러 | robots에 사이트맵 제공, 민감 HTML은 crawl 가능하되 noindex | 응답/소스 검사 |
 | 개인정보 | 회원/관리/API noindex와 기존 인증 유지 | 통합 테스트 |
 | 정적 HTML | lang/charset/viewport/main/ID/초기 제목, 비어 있던 heading/time 수정 | Nu checker9개 HTML |
@@ -36,3 +36,5 @@ Nu HTML Checker 26.10.12 (0a70d65), 공식 validator/validator latest release AP
 - [noindex와 crawl 허용](https://developers.google.com/search/docs/crawling-indexing/block-indexing)
 - [대표 URL과 HTTP Link](https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls)
 - [Nu HTML Checker](https://validator.github.io/validator/)
+
+후속 로그인 필수 정책: index는 인증 화면이므로 noindex로 전환하고 sitemap/대표URL 목록에서 제외했다. 검색엔진에는 소개·약관의 공개 안내만 제공하며 뉴스 인증을 색인 때문에 우회하지 않는다.
