@@ -425,6 +425,9 @@ class BrowserTest {
             context.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setStatus(401).setContentType("application/json").setBody("{}")));
             List<String> bodies=new ArrayList<>();context.route("**/api/v1/auth/login",r->{bodies.add(r.request().postData());r.fulfill(new Route.FulfillOptions().setStatus(401).setContentType("application/json").setBody("{\"error\":\"invalid_credentials\"}"));});
             Page p=context.newPage();p.navigate(origin+"/login.html");assertFalse(p.locator("#remember-me").isChecked());p.locator("#username").fill("synthetic_login");p.locator("#password").fill("synthetic password");p.locator("button[type=submit]").click();p.waitForCondition(()->bodies.size()==1);assertTrue(bodies.getFirst().contains("\"rememberMe\":false"));p.locator("#remember-me").check();p.locator("button[type=submit]").click();p.waitForCondition(()->bodies.size()==2);assertTrue(bodies.getLast().contains("\"rememberMe\":true"));
+            assertTrue(p.locator("#save-username").isChecked());assertTrue(p.locator("#save-username").isDisabled());
+            p.reload();assertEquals("synthetic_login",p.locator("#username").inputValue());assertTrue(p.locator("#save-username").isChecked());assertEquals("",p.locator("#password").inputValue());assertFalse(p.locator("#remember-me").isChecked());
+            p.locator("#save-username").uncheck();p.reload();assertEquals("",p.locator("#username").inputValue());assertFalse(p.locator("#save-username").isChecked());
         }
     }
 

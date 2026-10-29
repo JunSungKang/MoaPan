@@ -49,7 +49,8 @@
         "Mobile articles use full-width blog cards; preserve desktop newspaper and print",
         "Responsive, pagination, language, ad and search regressions pass",
         "Centered login, correct static and localized titles, public discovery and private noindex boundaries",
-        "Authenticated news gate and opt-in 30-day browser session, same-browser logout revocation, all-session password/delete revocation"
+        "Authenticated news gate and opt-in 30-day browser session, same-browser logout revocation, all-session password/delete revocation",
+        "Remember username locally; auto-login forces checked disabled username option; clearing removes stored username; no password persistence"
       ],
       "validationCommands": [
         "sh scripts/build/gradle-local.sh check integrationTest e2eTest bootJar sbom securityCheck"

@@ -1,6 +1,8 @@
 export default {
 "여러 출처의 뉴스를 관심사에 맞게 모아 종이신문처럼 읽는 개인화 뉴스 서비스입니다. 관심사는 서버로 보내지 않습니다. 로그인 후 대표 관심사 지면을 읽거나 자신의 관심사를 적용할 수 있습니다. 제공받은 제한된 후보 안에서 브라우저가 정렬합니다.":"MoA-PaN brings news from multiple sources into a newspaper-style edition. Your interests stay in your browser. Log in to read the default edition or apply your own interests within the limited articles provided.",
 "일반 로그인은 30분 동안 이용하지 않거나 로그인한 지 12시간이 지나면 만료됩니다. 자동 로그인을 선택하면 해당 브라우저의 로그인 상태를 최대 30일 동안 유지합니다. 로그아웃하면 해당 브라우저의 자동 로그인이 해제되며, 비밀번호 변경이나 탈퇴 시에는 모든 기기의 로그인 상태가 해제됩니다.":"A normal login expires after 30 minutes of inactivity or 12 hours. Choosing automatic login keeps this browser signed in for up to 30 days. Logging out ends automatic login in this browser. Changing your password or deleting your account signs out every device.",
+"아이디 저장을 선택하면 현재 브라우저에 아이디를 저장해 다음 로그인 화면에 표시합니다. 자동 로그인 중에는 아이디 저장도 함께 켜집니다. 자동 로그인을 끈 뒤 아이디 저장을 해제하면 저장된 아이디가 삭제됩니다. 비밀번호는 브라우저에 저장하지 않습니다.":"Remember username stores your username in this browser for your next login. Automatic login also enables this option. Turn off automatic login, then clear Remember username to remove the saved username. The site does not store your password in browser storage.",
+"아이디 저장":"Remember username",
 "이 PC에서 자동 로그인":"Keep me signed in on this PC",
 "최대 30일간 유지됩니다. 공용 PC에서는 사용하지 마세요.":"Lasts up to 30 days. Do not use on a shared PC.",
 "모아판 소개·출처":"About MoA-PaN & sources",

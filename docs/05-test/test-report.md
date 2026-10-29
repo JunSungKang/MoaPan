@@ -144,3 +144,5 @@ E2E26 PASS(390/1440px 우측24px 여백/제호 위 배치/푸터선택없음/중
 최종200 PASS(단위130/통합43/E2E27), FAIL/ERROR/SKIP0. CookieMaxAge·HttpOnly·Strict, sessionfixation교체, 기존쿠키로그아웃후401, 타브라우저유지,30일absolute/pw/delete검증. 비회원뉴스API401/HTMLredirect, legacypublic경로계정quota강제. 기존 비회원검색 검증은 최신인증계약에 맞춰 로그인 세션으로 실행하고 무인증거부검증을 추가했다. Nu9HTML messages0, 소스/JAR/SBOM/앱이미지 gate PASS.
 
 실제 HTTPS 자동 로그인 smoke PASS: 로그인 필수 이동·영속 쿠키·로그아웃 이전 쿠키 무효·별도 브라우저 유지 확인. 합성 계정 삭제. evidence/remember-https.json 참조.
+
+아이디 저장 UI: 단위130/E2E27 PASS(실패·skip0), Nu9페이지 메시지0, 소스/JAR/SBOM/최종 이미지 gate PASS. 증빙 saved-username.json. 백엔드 변경이 없어 통합테스트는 재실행하지 않음.

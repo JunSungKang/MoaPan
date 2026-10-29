@@ -2,6 +2,18 @@ import {request,refreshCsrf} from '../shared/api.js';
 import {report,viewer} from '../shared/common.js';
 const form=document.querySelector('form');
 if(form.dataset.mode==='login')viewer.then(a=>{if(a)location.replace('/index.html');}).catch(()=>{});
+const savedUsernameKey='moapan-saved-username';
+function persistUsername(){
+  if(form.dataset.mode!=='login')return;
+  try{if(form.elements.saveUsername.checked)localStorage.setItem(savedUsernameKey,form.elements.username.value);else localStorage.removeItem(savedUsernameKey);}catch{/* Browser storage may be unavailable; login still works. */}
+}
+if(form.dataset.mode==='login'){
+  const save=form.elements.saveUsername,remember=form.elements.rememberMe;
+  try{const saved=localStorage.getItem(savedUsernameKey);if(saved&&/^[A-Za-z0-9_]{1,128}$/.test(saved)){form.elements.username.value=saved;save.checked=true;}}catch{}
+  remember.addEventListener('change',()=>{if(remember.checked)save.checked=true;save.disabled=remember.checked;persistUsername();});
+  save.addEventListener('change',persistUsername);
+  form.elements.username.addEventListener('input',persistUsername);
+}
 const button=form.querySelector('button'),status=document.querySelector('[role=status]');
 let pending=false,deadline=0,timer,limitedUsername=null;
 function clearLimit(announce=false){clearInterval(timer);deadline=0;limitedUsername=null;const panel=document.querySelector('#login-limit');if(panel)panel.hidden=true;button.disabled=pending;if(announce)status.textContent='다시 로그인할 수 있습니다. 비밀번호를 확인하고 시도해 주세요.';}
@@ -23,6 +35,7 @@ form.addEventListener('submit',async event=>{
   if(!/^[A-Za-z0-9_]{1,128}$/.test(username)){error('username','영문·숫자·밑줄 1~128자로 입력하세요.');return;}
   if([...password].length<6||[...password].length>128){error('password','비밀번호는 6~128자로 입력하세요.');return;}
   if(signup&&!form.elements.termsAccepted.checked){error('termsAccepted','약관을 읽고 동의해 주세요.');return;}
+  persistUsername();
   pending=true;button.disabled=true;
   try{
     const body={username,password};

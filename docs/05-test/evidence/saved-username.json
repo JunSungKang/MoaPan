@@ -1,0 +1,27 @@
+{
+  "checkedAt": "2026-10-29T23:42:44.978Z",
+  "tests": {
+    "test": {
+      "tests": 130,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "e2eTest": {
+      "tests": 27,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "htmlMessages": 0,
+  "image": "sha256:8f5409b21fbe91f87c83999a0092bab9ae27cc773a8824fc9095afb2553f68b8",
+  "sourceJarSbomImageGate": "PASS",
+  "behavior": [
+    "Opt-in username-only browser persistence",
+    "Automatic login forces checked disabled username saving",
+    "Reload restores username with empty password",
+    "Opt-out deletes stored username"
+  ],
+  "integration": "Not rerun; no backend or authentication-session changes"
+}
