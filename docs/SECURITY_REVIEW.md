@@ -14,7 +14,7 @@ Vulnerability DB는 schema2, 마지막 다운로드2026-10-28T01:04:00.046418Z, 
 
 선정 Temurin27.0.1.0.2+1은 [공급자10월27일 공지](https://adoptium.net/news/2026/10/temurin-october-2026-emudhra/)가 명시한 수정 빌드다. Temurin은 Mozilla NSS3.131.1 기반 truststore를 사용하며 compromised chain의 G3/AAA를 신뢰하지 않는다. upstream CheckCerts의 emSign G1 경고를 확인했지만, 공급자는 G1을 손상된 intermediate와 구별하며 Mozilla 분석에 따라 유지한다고 설명한다. G1을 이름만 보고 임의 삭제하지 않았다.
 
-호스트/실제 app 이미지에서 기본 truststore118인증서, G3·AAA 부재, custom javax.net.ssl.trustStore 미설정을 확인했다. `scripts/TrustAudit.java`로 일반 NASA HTTPS 성공과 공급자가 연결한14개 TLS test chain 모두 **SSLHandshakeException** 거부를 확인했다. 단순 timeout을 인증서 거부로 합산하지 않는다. JDK 전체를 공급자 원본으로 교체했으며 오래된 볼륨 cacerts를 덮어쓰지 않았다. 이 TLS 시험은 Java signed-code intermediate 처리의 별도 보증은 아니다. 서비스는 외부 Java 코드를 로드·실행하지 않는다. TLS 검증 해제·TrustAll·curl -k는 사용하지 않았다.
+호스트/실제 app 이미지에서 기본 truststore118인증서, G3·AAA 부재, custom javax.net.ssl.trustStore 미설정을 확인했다. `scripts/security/TrustAudit.java`로 일반 NASA HTTPS 성공과 공급자가 연결한14개 TLS test chain 모두 **SSLHandshakeException** 거부를 확인했다. 단순 timeout을 인증서 거부로 합산하지 않는다. JDK 전체를 공급자 원본으로 교체했으며 오래된 볼륨 cacerts를 덮어쓰지 않았다. 이 TLS 시험은 Java signed-code intermediate 처리의 별도 보증은 아니다. 서비스는 외부 Java 코드를 로드·실행하지 않는다. TLS 검증 해제·TrustAll·curl -k는 사용하지 않았다.
 
 ## 발견·수정
 
@@ -75,3 +75,7 @@ Index2BQ8 공식 SHA 및 upstream b11960 공식 archive SHA 검증, runtime advi
 
 ### Linux 번역 최종 산출물 (2026-10-29)
 Trivy0.76.1 최종 앱/translator 이미지 검사 gate 통과. 앱59f4c97c8c7ee18b88ff29ec18b978b78c3602c09b3d1d98c8082147615e40fe, translator2221c46cc144f87d4b371b0264809a3ad3d8fec9642b83b7ab14ee990cec4ee0(sha256). DB 마지막 동기화2026-10-28T21:57:31.453891Z. 소스·JAR·SBOM 검사도 실행. 모델 runtime은 비루트/read-only/cap_drop/internal network/no host port/CPU 자원 제한. 모델-init만 다운로드 접근. native C++ 구성요소의 scanner 탐지 범위는 OS 패키지 검사와 같지 않으며 CVE 미검출을 무취약 보증으로 해석하지 않는다. 기존 Caddy 조건부 VEX와 보안 잔여 위험은 유지한다.
+
+
+### Helm 설정 검사 경계
+실행 가능한 구성은 scripts/deploy/helm/moapan. Trivy 렌더링 검사 HIGH0/CRITICAL0/MEDIUM11/LOW2. synthetic registry 검사10건은 실제 승인registry 지정 후 재검사 필요. ConfigMap DATABASE_URL/USER는 비밀값을 포함하지 않는다(credential은 기존Secret에서 주입). PostgreSQL alpine UID/GID70은 비루트이나 scanner >10000 권고와 차이가 있다. 경고를 전역 ignore하지 않았다. 최초 readOnlyRootFilesystem 누락2건은 수정·재검증했다. 모델 다운로드 init와 실행 Pod의 egress 공유 한계 때문에 실클러스터 운영 보안 승인으로 간주하지 않는다. Caddy VEX 참조만 새 경로로 갱신했고 기존4파일 SHA256이 동일함을 확인했으며 만료일/영향 판정은 연장하지 않았다.

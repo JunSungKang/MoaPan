@@ -75,3 +75,7 @@ DB 초기화 스크립트와 Caddyfile은 비밀값 없는 고정 배포 설정�
 
 ### Linux 운영 기준 자동 번역
 사용자 승인: Linux CPU Docker 서비스, Index2B Q8 유지. Mac Metal/host.docker.internal 의존성을 제거한다. 모델 자체의 자기평가 대신 수치·단위·식별자·일부 부정/방향/핵심용어 규칙으로 보수적 공개 gate를 적용한다. 항목별 최대3회 이후 원문 유지로 자동 종결하며 인프라 실패는 별도 backoff 후 재개한다. GPU와 원격 서버 성능은 실제 장비 확보 후 검증한다. CI/CD는 추가하지 않는다.
+
+
+### 중간 정리와 Kubernetes 요청 반영
+필수문서/Gradle표준 경로는 유지하고 운영 도구를 scripts 하위 기능별로 분리한다. 과거 비교실험은 삭제 대신 experiments에 격리하여 재현성을 보존한다. 사용자 최신 요청으로 Helm 배치를 추가하지만 CI/CD 제외는 유지한다. 모델은 Git/이미지에 넣지 않고 HF 고정revision과SHA256으로 실행 시 준비한다. 외부registry/클러스터가 없으므로 임의 자원 생성 없이 chart 검증 범위만 보고한다.

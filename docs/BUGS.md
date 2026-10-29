@@ -8,7 +8,7 @@
 
 대응: gRPC FUSE 선택은 적용 대기 후 재기동에서 유지되지 않아 적용 성공으로 처리하지 않았다. 공식4.97.0(244584)에는 진단 지연·응답 불능 및 truststore/로그 보안 수정이 있어 제품 내 업데이트로 교체를 진행한다. 업데이트 후 실제 엔진·bind mount·Compose·수집·이미지 digest 일치로 확인해야 해결 판정한다.
 
-재발 시 무기한 대기를 피하도록 scripts/local-start.mjs에 Engine10초 사전 검사와 Compose90초 health 대기/120초 프로세스 상한을 추가했다. 실패는 비정상 종료하며 DB 볼륨 삭제·공장 초기화를 자동 수행하지 않는다. 이는 엔진 결함 자체의 수정 완료를 뜻하지 않는다.
+재발 시 무기한 대기를 피하도록 scripts/deploy/local-start.mjs에 Engine10초 사전 검사와 Compose90초 health 대기/120초 프로세스 상한을 추가했다. 실패는 비정상 종료하며 DB 볼륨 삭제·공장 초기화를 자동 수행하지 않는다. 이는 엔진 결함 자체의 수정 완료를 뜻하지 않는다.
 
 근거: https://docs.docker.com/desktop/release-notes/#4970 및 https://docs.docker.com/desktop/settings-and-maintenance/settings/ . 진단 묶음은 외부 업로드하지 않았고 민감 로그 가능성이 있어 공개 산출물에서 제외·정리한다.
 

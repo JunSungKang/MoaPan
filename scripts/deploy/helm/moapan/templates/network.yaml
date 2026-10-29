@@ -1,0 +1,20 @@
+# Requires a NetworkPolicy-capable CNI. Ingress-only policy: see README for egress boundary.
+{{- range $component, $port := dict "db" 5432 "web" 8080 "translator" 11435 }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: {namespace: {{ $.Release.Namespace | quote }}, name: {{ $component }}-ingress}
+spec:
+  podSelector: {matchLabels: {app: moapan, component: {{ $component }}}}
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+      {{- if eq $component "db" }}
+        - podSelector: {matchExpressions: [{key: component, operator: In, values: [web, worker, migrate]}], matchLabels: {app: moapan}}
+      {{- else if eq $component "web" }}
+        - podSelector: {matchLabels: {app: moapan, component: proxy}}
+      {{- else }}
+        - podSelector: {matchLabels: {app: moapan, component: worker}}
+      {{- end }}
+      ports: [{protocol: TCP, port: {{ $port }}}]
+{{- end }}

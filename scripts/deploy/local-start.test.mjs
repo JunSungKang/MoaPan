@@ -3,14 +3,14 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import {spawnSync} from 'node:child_process';
-const root=fs.realpathSync(new URL('..',import.meta.url));
+const root=fs.realpathSync(new URL('../..',import.meta.url));
 function run(fake){
   const base=path.join(root,'.local/tmp');
   assert(base.startsWith(root+path.sep));fs.mkdirSync(base,{recursive:true});
   const dir=fs.mkdtempSync(path.join(base,'local-start-test-'));
   try{
     fs.writeFileSync(path.join(dir,'docker'),'#!'+process.execPath+'\n'+fake,{mode:0o700});
-    return spawnSync(process.execPath,[path.join(root,'scripts/local-start.mjs')],{cwd:root,env:{...process.env,PATH:dir+path.delimiter+process.env.PATH},encoding:'utf8',timeout:15000,killSignal:'SIGKILL'});
+    return spawnSync(process.execPath,[path.join(root,'scripts/deploy/local-start.mjs')],{cwd:root,env:{...process.env,PATH:dir+path.delimiter+process.env.PATH},encoding:'utf8',timeout:15000,killSignal:'SIGKILL'});
   }finally{fs.rmSync(dir,{recursive:true,force:true});}
 }
 test('unresponsive engine terminates preflight and never invokes Compose',()=>{

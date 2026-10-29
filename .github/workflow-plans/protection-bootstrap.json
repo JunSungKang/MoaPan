@@ -32,8 +32,8 @@
       "expectedPaths": [
         ".github/codex-governance.json",
         ".github/workflow-plans/protection-bootstrap.json",
-        "scripts/github-protection-bootstrap.mjs",
-        "scripts/github-protection-bootstrap.test.mjs",
+        "scripts/governance/github-protection-bootstrap.mjs",
+        "scripts/governance/github-protection-bootstrap.test.mjs",
         "docs/PROGRESS.md"
       ],
       "forbiddenPaths": [
@@ -47,8 +47,8 @@
         "No product changes, commit, push or merge during provisioning"
       ],
       "validationCommands": [
-        "node --test scripts/github-protection-bootstrap.test.mjs",
-        "node scripts/github-protection-bootstrap.mjs --dry-run .github/workflow-plans/protection-bootstrap.json",
+        "node --test scripts/governance/github-protection-bootstrap.test.mjs",
+        "node scripts/governance/github-protection-bootstrap.mjs --dry-run .github/workflow-plans/protection-bootstrap.json",
         "node /Users/kkkk/.codex/scripts/github-app-workflow-guard.mjs --verify-server .github/workflow-plans/protection-bootstrap.json"
       ],
       "documentation": {

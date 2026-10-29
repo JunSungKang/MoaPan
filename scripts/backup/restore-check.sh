@@ -1,9 +1,9 @@
 #!/bin/sh
 set -eu
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/../.."
 MOAPAN_ROOT=$(pwd -P)
 export PATH="$MOAPAN_ROOT/.local/bin:$PATH"
-[ "$#" -eq 2 ] || { echo 'Usage: sh scripts/restore-check.sh <encrypted-backup> <private-identity-file>' >&2; exit 1; }
+[ "$#" -eq 2 ] || { echo 'Usage: sh scripts/backup/restore-check.sh <encrypted-backup> <private-identity-file>' >&2; exit 1; }
 command -v age >/dev/null 2>&1 || { echo 'Verified age required' >&2; exit 1; }
 [ ! -L "$1" ] && [ ! -L "$2" ] || { echo 'Symlinks not accepted' >&2; exit 1; }
 backup=$(cd "$(dirname "$1")" && pwd -P)/$(basename "$1")

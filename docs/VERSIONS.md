@@ -13,7 +13,7 @@
 |Go 인프라 빌더|1.27.3|[공식 다운로드 SHA256](https://go.dev/dl/?mode=json), [보안 릴리스](https://go.dev/doc/devel/release). Java 서비스 스택 변경 없이 Caddy/gosu/age 재빌드에만 사용|
 |gosu|1.19 태그의6456aaa0f3c8 commit|Go module 고정 pseudo-version, moby/sys/user0.4.1 보안 수정. go.mod/go.sum·모듈 checksum DB 검증|
 |Trivy|0.76.1, 2026-10-21|공식 aquasecurity/trivy 정식 배포 archive SHA256 검증, 내장 Go1.27.3 및 도구 바이너리 자체 scan|
-|age|공식 소스1.3.2 → v1.3.2+moapan-security.1|공식 배포 원본의 오래된 Go/x-crypto 발견 후 Go1.27.3/x-crypto0.57.0으로 재빌드. scripts/backup-tools go.mod/go.sum·복원 왕복 검증|
+|age|공식 소스1.3.2 → v1.3.2+moapan-security.1|공식 배포 원본의 오래된 Go/x-crypto 발견 후 Go1.27.3/x-crypto0.57.0으로 재빌드. scripts/backup/backup-tools go.mod/go.sum·복원 왕복 검증|
 
 JDK27은 LTS와 구분한다. GPLv2 + Classpath Exception, 상업적 사용을 위한 별도 Oracle 구독을 선택하지 않았다. 공급자 [지원 정책](https://adoptium.net/support/)의 JDK27 availability 종료는2027년3월이며, 이 비LTS 릴리스에 무기한 지원을 약속하지 않는다. JDK license/notice를 전체 배포본과 함께 이미지에 보존한다. Gradle·Spring·Caddy·Trivy는 각 배포 라이선스/notice를 유지한다.
 

@@ -6,11 +6,11 @@
 Docker Engine/Compose(기존 !override 설정을 지원하는 버전), 충분한 디스크/메모리, HTTPS 인입과 DNS/방화벽 설정이 필요하다. CPU 번역 기본 제한2 CPU/4GiB 외에 web/worker/DB/OS 자원이 필요하다. 4GiB 서버 전체에서 실행 가능하다는 뜻이 아니다. 정확한 최소 사양과 처리량은 실제 서버에서 측정한다.
 
 1. 저장소와 검증한 이미지/소스 버전을 준비한다. `.env.example`을 참고해 `.env`에 별도 DB 비밀값·MOAPAN_SECRET·PUBLIC_BASE_URL=https://승인주소·MOAPAN_PUBLIC_HOST=승인주소를 설정한다. 비밀값은 Git에 넣지 않는다.
-2. `sh scripts/translation-prepare.sh` — workspace secret 준비, Linux CPU 이미지 빌드, 모델 영속 볼륨에 공식2B Q8 다운로드와 SHA256 검증. 기존 모델이 있으면 다운로드 없이 검증한다. 손상 파일을 실행하지 않는다. 중단된 임시 파일은 다음 초기화 때 다시 다운로드하며 flock은 프로세스 종료 시 해제된다.
-3. `docker compose -f compose.yaml -f scripts/compose-server.yaml -f scripts/compose-translation.yaml build`
-4. 검증 runner에서 `sh scripts/image-scan.sh moapan-local:1.0.0 moapan-translator:cpu-b11960 moapan-proxy-public:2.11.7 moapan-db-local:18.6` 및 프로젝트 보안검사를 실행한다. 실패를 통과 처리하지 않는다. 이미지 이관 시 검증 digest를 대조한다.
-5. `docker compose -f compose.yaml -f scripts/compose-server.yaml -f scripts/compose-translation.yaml up -d --no-build`
-6. `docker compose -f compose.yaml -f scripts/compose-server.yaml -f scripts/compose-translation.yaml ps`와 관리자 번역 현황을 확인한다.
+2. `sh scripts/translation/translation-prepare.sh` — workspace secret 준비, Linux CPU 이미지 빌드, 모델 영속 볼륨에 공식2B Q8 다운로드와 SHA256 검증. 기존 모델이 있으면 다운로드 없이 검증한다. 손상 파일을 실행하지 않는다. 중단된 임시 파일은 다음 초기화 때 다시 다운로드하며 flock은 프로세스 종료 시 해제된다.
+3. `docker compose -f compose.yaml -f scripts/deploy/compose-server.yaml -f scripts/deploy/compose-translation.yaml build`
+4. 검증 runner에서 `sh scripts/security/image-scan.sh moapan-local:1.0.0 moapan-translator:cpu-b11960 moapan-proxy-public:2.11.7 moapan-db-local:18.6` 및 프로젝트 보안검사를 실행한다. 실패를 통과 처리하지 않는다. 이미지 이관 시 검증 digest를 대조한다.
+5. `docker compose -f compose.yaml -f scripts/deploy/compose-server.yaml -f scripts/deploy/compose-translation.yaml up -d --no-build`
+6. `docker compose -f compose.yaml -f scripts/deploy/compose-server.yaml -f scripts/deploy/compose-translation.yaml ps`와 관리자 번역 현황을 확인한다.
 
 로컬 테스트는 server overlay 대신 기본 loopback 구성을 사용한다. 현재 승인된 Mac 공개IP 실행에는 기존 compose-public.yaml을 유지한다. Linux server overlay는 공개IP가 서버 NIC에 직접 할당되지 않은 NAT 환경에서도 listen 주소와 사이트 주소를 분리한다.
 

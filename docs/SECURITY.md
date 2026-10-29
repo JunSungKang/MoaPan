@@ -1,6 +1,6 @@
 # 보안 운영
 
-기본 명령: ./gradlew --no-daemon clean check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest. 호스트에서는 scripts/gradle-local.sh로 workspace JDK·캐시·임시 경로를 고정한다. CI/CD는 구성하지 않는다.
+기본 명령: ./gradlew --no-daemon clean check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest. 호스트에서는 scripts/build/gradle-local.sh로 workspace JDK·캐시·임시 경로를 고정한다. CI/CD는 구성하지 않는다.
 
 회원 전용 뉴스401·공개 지면 최대30개/별도 공유 한도·일반회원 admin403·CSRF403·권한 service 검사·no-store·CSP·no-referrer·안전 DOM·TLS 검증을 유지한다. 계정의 허용 응답 복사와 다중계정 분산 수집을 완전히 막는다고 주장하지 않는다.
 

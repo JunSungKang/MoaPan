@@ -57,3 +57,7 @@ FS-23/AC-22 상단 보완: 검색 버튼 채움 제거·모바일 구분선/메�
 - Linux ARM64 CPU 실제 모델 실행/네트워크 격리/모델 checksum/모델 프로세스 종료 자동 복구: PASS.
 - 규칙 검증·항목별 checkpoint·최대3회 품질 재시도·인프라 장애 분리·lease heartbeat·권리철회: 단위/통합 PASS, TEST_REPORT 참조.
 - 원격 Linux·AMD64·GPU·전체 기존 기사 번역 완료: 미검증 또는 진행 중.
+
+
+### 중간 정리/Helm 추가
+README 최신화·스크립트 분류·실행 참조·Compose 기동/데이터 보존: PASS. Helm lint/render/3가지 부정입력: PASS. Kubernetes 실제 설치·이미지pull·PVC·Ingress TLS·egress 운영 제한: NOT_RUN/추가 구성 필요.

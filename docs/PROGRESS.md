@@ -108,3 +108,11 @@ check·integrationTest·e2eTest·bootJar·sbom·securityCheck·acceptanceTest �
 실행 앱 이미지 sha256:59f4c97c8c7ee18b88ff29ec18b978b78c3602c09b3d1d98c8082147615e40fe, translator sha256:2221c46cc144f87d4b371b0264809a3ad3d8fec9642b83b7ab14ee990cec4ee0. 최종 이미지·JAR·SBOM·소스 검사 gate 통과. 자동 검사 통과가 완전한 의미 정확성을 보장하지 않는다. 전체 기존 기사 재번역은 백그라운드 진행 중이며 모두 번역 완료라고 보고하지 않는다.
 
 V9 적용 DB 암호화 백업·별도 DB 복원 PASS: 기사191개, 복원 계정 활성0/세션0. 운영 DB를 덮어쓰지 않았으며 시험 DB는 제거했다. 현재 공개 HTTPS200 확인.
+
+
+## 중간 구조 정리 및 Helm 준비 (2026-10-29)
+운영 지원 파일을 scripts/build·deploy·translation·backup·security·test·governance·experiments로 이동하고 Gradle/Docker/문서/스크립트 참조를 함께 갱신했다. README의 번역 미연결/AMD64 전용 설명을 정정하고 docs/README 색인을 추가했다. 기존 Mac 번역 비교 실행기는 재현용 experiments로 분리, 운영 미사용. 데이터/비밀값/모델/캐시는 Git 제외를 유지했다. Compose 모든 실행 조합 config검사, shell/Node 문법검사, Node12 tests, 전체 이미지4종 빌드·보안 검사 및 새 경로 Compose 기동/HTTPS200 확인.
+
+Helm4.3.1 공식 archive checksum검증 후 lint/template 및 필수값·unpinned image·잘못된 migrationVersion 거부3건 PASS. 실제 Kubernetes context 없음: 설치/Pod기동/PVC/TLS/registry pull은 NOT_RUN. rendered Trivy config HIGH0/CRITICAL0, MEDIUM11/LOW2 남음: 합성 registry 주소 허용목록 경고10, 비밀값 없는 DATABASE_URL/USER ConfigMap 탐지1, PostgreSQL 공식 alpine UID/GID70 경고2. egress 차단 미구현과 운영 검증 조건은 chart README에 명시했다. 초기 path 이동으로 VEX검사 ENOENT와 Helm range namespace 렌더링 오류를 발견·수정하고 재검증했다. 빈 렌더링 검사 결과를 PASS로 사용하지 않았다. 증빙 docs/evidence/directory-helm-checkpoint.json.
+
+최종 clean 전체검증: 173 PASS(단위124/통합29/E2E20), FAIL0/ERROR0/SKIP0, 모든16 Gradle task 실제 실행 성공(1분3초). 소스/JAR/SBOM 보안 gate PASS. Node12 tests PASS. 비밀값/캐시 추적경로 없음 및 필수 빌드/Wrapper/lock/verification 파일 존재 확인.

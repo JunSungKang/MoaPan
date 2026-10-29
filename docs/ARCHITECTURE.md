@@ -8,3 +8,13 @@ Account는 JPA, 기능별 CatalogRepository/JdbcClient는 명시 SQL을 사용�
 
 ## 기사 원문 미보관
 원문·피드 원본·설명문·초록을 별도 DB 칼럼, 파일 캐시, 작업 payload, 수정 이력에 저장하지 않는다. SafeFetch의 응답과 Item.description은 처리 중 메모리 입력이며 Worker는 요약과 메타데이터/링크/해시만 저장한다. 본문 웹페이지/PDF를 별도로 가져오는 기능은 없고 allowBody/allowStore 요청은 서버에서 거부한다. 입력 문자열은 처리가 끝나면 별도 보관하지 않으며 JVM 메모리의 즉시 물리 소거를 보장한다는 의미는 아니다. 기사 수정 이력은 이전 입력 해시만 보관한다.
+
+
+## 파일 배치와 번역 경계
+표준 Gradle src 경로는 유지하고 Java 기능 패키지(auth/security/site/source/news/jobs)로 책임을 나눈다. 운영 지원 파일은 scripts 하위 build/deploy/backup/security/test/governance/translation으로 분류한다. experiments의 Mac 실행기는 과거 비교 재현용이며 운영 Compose에서 참조하지 않는다. 루트에는 빌드와 기본 실행 진입점만 둔다.
+
+worker → 전용 internal network → translator(CPU)로 제목·요약을 전달한다. 모델 초기화는 다운로드 가능한 별도 일회성 서비스이며 실행 모델에는 공개 포트가 없다. 자동 번역 상태/checkpoint는 PostgreSQL에 저장한다. 파일 이동으로 API·DB 스키마·볼륨 이름을 변경하지 않는다. 전체 디렉토리 표는 README, 문서 카테고리는 docs/README.md를 따른다.
+
+
+## Kubernetes 배치 추가
+최신 사용자 요청으로 초기 V1의 Kubernetes 제외를 변경했다. scripts/deploy/helm/moapan에 전체 역할용 chart를 제공한다. Compose는 현 실행 경로, Helm은 향후 서버 배치 경로다. DB StatefulSet/PVC, migrate Job, web/worker/proxy/translator Deployment, 모델 init 다운로드/PVC, ClusterIP/Ingress/NetworkPolicy로 분리한다. 실클러스터·egress 제한·TLS 운영 조건은 차트 README의 미검증 범위를 따른다. CI/CD는 계속 제외한다.

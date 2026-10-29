@@ -1,7 +1,7 @@
 #!/bin/sh
 # macOS Apple Silicon, workspace-contained model/runtime/cache. No paid API.
 set -eu
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/../.."
 ROOT=$(pwd -P)
 DIR="$ROOT/.local/translation"
 mkdir -p "$DIR/models" "$DIR/runtime" "$DIR/cache" "$DIR/config" "$DIR/tmp"
@@ -32,7 +32,7 @@ case "${1:-status}" in
 const fs=require('node:fs'), {spawn}=require('node:child_process');
 const [root,dir]=process.argv.slice(2);
 const out=fs.openSync(dir+'/server.log','a',0o600);
-const child=spawn('/bin/sh',[root+'/scripts/translation-local.sh','run'],{cwd:root,detached:true,stdio:['ignore',out,out]});
+const child=spawn('/bin/sh',[root+'/scripts/experiments/translation-local.sh','run'],{cwd:root,detached:true,stdio:['ignore',out,out]});
 fs.writeFileSync(dir+'/server.pid',String(child.pid));
 child.unref();fs.closeSync(out);
 NODE
@@ -52,5 +52,5 @@ NODE
     fi
     ;;
   status) curl --fail --silent --max-time 3 http://127.0.0.1:11435/health ;;
-  *) echo 'Usage: sh scripts/translation-local.sh install|run|start|status|stop'; exit 1 ;;
+  *) echo 'Usage: sh scripts/experiments/translation-local.sh install|run|start|status|stop'; exit 1 ;;
 esac

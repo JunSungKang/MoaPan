@@ -1,6 +1,6 @@
 #!/bin/sh
 set -eu
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/../.."
 MOAPAN_ROOT=$(pwd -P)
 export TMPDIR="$MOAPAN_ROOT/.local/tmp"
 export TRIVY_DISABLE_TELEMETRY=true
@@ -12,5 +12,5 @@ mkdir -p build/reports/security .local/trivy
 for image in "$@"; do
   digest=$(docker image inspect --format '{{.Id}}' "$image")
   trivy --cache-dir "$MOAPAN_ROOT/.local/trivy" image --scanners vuln,secret --list-all-pkgs --severity UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL --exit-code 0 --format json --output "build/reports/security/image-${digest#sha256:}.json" "$image"
-  node scripts/verify-image-report.mjs "build/reports/security/image-${digest#sha256:}.json" "$digest"
+  node scripts/security/verify-image-report.mjs "build/reports/security/image-${digest#sha256:}.json" "$digest"
 done

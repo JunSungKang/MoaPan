@@ -124,3 +124,10 @@ Sprint Delivery 유지. src 정적 모듈·설정 화면에 WebCrypto 암호화 
 2. 자동검증: 수치·단위·식별자·방향/부정의 제한된 규칙, 보호표식 재번역, 항목별 checkpoint/3회 제한, 인프라 장애 별도 backoff, 원문 종결, 처리 버전 무효화.
 3. 운영검증: 100개 이상 고정 정상/변조 fixture, PostgreSQL lease/중단복구/권리철회, Linux CPU 실제 번역, 깨끗한 모델 준비, 컨테이너 재생성, 관리자 집계, 보안/이미지검사, commit/push.
 선행: 기존 DB/기사는 보존. 번역실패는 성공으로 바꾸지 않으며 전체 의미정확성 보장 안함. 실패시 원문 서비스 유지. 신규 DB migration은 additive, 파괴적 rollback 없음. 외부 Linux 서버/GPU 장비 미제공은 컨테이너 검증과 분리 보고.
+
+
+## 중간 정리 Sprint
+1. 구조 정리: scripts를 build/deploy/backup/security/test/governance/experiments/translation으로 구분하고 모든 실행 참조를 갱신한다. 표준 Gradle src와 필수 문서 경로는 유지한다.
+2. 인수: README 최신화, 구조/문서 색인, 추적 파일·secret 제외 감사, shell/Node 검사·Gradle 회귀·Compose 모든 조합 검증·변경 이미지 보안 검사 후 현재 브랜치에 commit/push 및 원격SHA 일치 확인. main merge·데이터 삭제는 제외한다.
+
+追加 사용자 요청: Hugging Face 고정 모델 자동 다운로드를 Compose/Helm에서 공통 사용한다. scripts/deploy/helm/moapan에 전체 이미지 역할용 차트와 기존 Secret·PVC·Ingress 설정을 제공한다. Kubernetes 제외 조건은 이번 요청으로 변경됐다. 클러스터 context가 없으므로 lint/template와 부정 입력 검증까지 실행하고 실클러스터 설치는 미검증으로 보고한다.

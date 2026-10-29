@@ -42,7 +42,7 @@ tasks.withType(Test).configureEach {
 }
 tasks.register('integrationTest', Test) { testClassesDirs = sourceSets.integrationTest.output.classesDirs; classpath = sourceSets.integrationTest.runtimeClasspath; shouldRunAfter test }
 tasks.register('e2eTest', Test) { testClassesDirs = sourceSets.e2eTest.output.classesDirs; classpath = sourceSets.e2eTest.runtimeClasspath; shouldRunAfter integrationTest }
-tasks.register('sourceCheck', Exec) { commandLine 'sh', 'scripts/source-check.sh' }
+tasks.register('sourceCheck', Exec) { commandLine 'sh', 'scripts/security/source-check.sh' }
 check.dependsOn sourceCheck
 tasks.register('sbom') {
     dependsOn bootJar
@@ -57,7 +57,7 @@ tasks.register('sbom') {
         out.parentFile.mkdirs(); out.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson([bomFormat:'CycloneDX',specVersion:'1.6',version:1,components:components]))
     }
 }
-tasks.register('securityCheck', Exec) { dependsOn sbom; commandLine 'sh','scripts/security-check.sh' }
+tasks.register('securityCheck', Exec) { dependsOn sbom; commandLine 'sh','scripts/security/security-check.sh' }
 tasks.register('acceptanceTest') { dependsOn check, integrationTest, e2eTest, securityCheck; doLast { println 'Local acceptance tasks completed; external HTTPS and real-source smoke evidence must also be reviewed.' } }
 tasks.register('playwrightInstall', JavaExec) { classpath = sourceSets.e2eTest.runtimeClasspath; mainClass = 'com.microsoft.playwright.CLI'; args 'install','chromium'; environment 'PLAYWRIGHT_BROWSERS_PATH',file('.local/browsers').absolutePath; environment 'TMPDIR',file('.local/tmp').absolutePath }
 tasks.withType(Test).configureEach {

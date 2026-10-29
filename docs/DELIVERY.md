@@ -1,3 +1,7 @@
+# 현재 상태 안내
+
+현재 실행·번역·명령은 [README](../README.md), [PROGRESS](PROGRESS.md), [LINUX_TRANSLATION](LINUX_TRANSLATION.md)를 따른다. 아래 내용은 각 시점의 납품 기록이며 이미지와 시험 수치를 현재 값으로 해석하지 않는다.
+
 # 2026-10-29 추가 전달
 
 수집 날짜·주제 필터와 arXiv 논문 수집, GitHub 보안 공지 등록 완료. 신규130건, 실제7주소 실행 성공(그중 NIST0건), 날짜위반/공개URL중복0. 54테스트PASS. 실행/검사 증빙: evidence/topic-collection.json 및 topic-security.json. 기존 배포·초기 출처 기록은 아래 당시 상태이며 현재 출처는 SOURCES.md를 따른다.
@@ -10,7 +14,7 @@
 - 실제 JDK: Eclipse Temurin27.0.1.0.2+1. Boot4.1.2, Gradle9.8.2, PostgreSQL18.6. 공급자 버전 근거는 VERSIONS.md.
 - 증빙 확인: 2026-10-28T06:13:19.100Z; 외부 접속 evidence/public-access.json.
 - 실제 출처: NASA News Releases / NOAA News, 2026-10-28T05:28:47.291Z 두 수집 SUCCEEDED. 주소·최근 실행은 evidence/verification.json, 권리 범위는 SOURCES.md.
-- Compose: db/web/proxy healthy, worker 실행, migrate exit0. 재생성22기사 보존. 시작 명령: docker compose -f compose.yaml -f scripts/compose-public.yaml up -d --no-build --wait. 접속 URL https://175.195.62.165/ — 휴대폰 데이터망 확인 완료. 공개 모드 실행 명령은 DEPLOYMENT.md.
+- Compose: db/web/proxy healthy, worker 실행, migrate exit0. 재생성22기사 보존. 시작 명령: docker compose -f compose.yaml -f scripts/deploy/compose-public.yaml up -d --no-build --wait. 접속 URL https://175.195.62.165/ — 휴대폰 데이터망 확인 완료. 공개 모드 실행 명령은 DEPLOYMENT.md.
 - 테스트: Java48 PASS/FAIL0/SKIP0, bootstrap9 PASS, 시작 제한 시간3 PASS. 실제2 web quota·worker lease 복구·암호화 격리 복원 PASS. 검증 한계는 TEST_REPORT.md.
 - 보안: 소스/JAR/SBOM/이미지5종/도구 검사 HIGH·CRITICAL0. 잔여 MEDIUM·LOW 및 OpenPGP 미포함 근거를 유지. 알려진 취약점0 또는 미공개 취약점 부재를 보장하지 않는다.
 - 최종 앱 이미지: sha256:10fb33088f67df15ac84f45c5d16651031a558264c67df199d598525b1edd3c5. 다른 이미지와 report SHA는 evidence/verification.json.

@@ -5,10 +5,10 @@
 실행 명령:
 
 ```sh
-sh scripts/gradle-local.sh --no-daemon --max-workers=2 clean check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest
-node --test scripts/github-protection-bootstrap.test.mjs
-node scripts/local-smoke.mjs
-sh scripts/image-scan.sh moapan-local:1.0.0 moapan-proxy-local:2.11.7 moapan-db-local:18.6 moapan-build:1.0.0 moapan-proxy-build:2.11.7
+sh scripts/build/gradle-local.sh --no-daemon --max-workers=2 clean check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest
+node --test scripts/governance/github-protection-bootstrap.test.mjs
+node scripts/test/local-smoke.mjs
+sh scripts/security/image-scan.sh moapan-local:1.0.0 moapan-proxy-local:2.11.7 moapan-db-local:18.6 moapan-build:1.0.0 moapan-proxy-build:2.11.7
 ```
 
 |범위|검증 내용|증빙|
@@ -22,7 +22,7 @@ sh scripts/image-scan.sh moapan-local:1.0.0 moapan-proxy-local:2.11.7 moapan-db-
 |Compose|db healthy·migrate exit0·web healthy·worker heartbeat·proxy200·비회원 news401·DB/web host 포트 비공개|실제 Compose와 SQL 조회|
 |영속·백업|컨테이너 재생성 후20기사 유지, 새 볼륨에 암호화 dump 복원, 격리 복원 articles=20/active_accounts=0/sessions=0 후 격리 DB 제거|backup.sh, restore-check.sh|
 |보안|Trivy 원본 소스/전체 lock·runtime SBOM·실제 JAR 인식91패키지·실행/빌드 이미지·secret/config 검사, 공식 공지·KEV 대조|SECURITY_REVIEW.md|
-|TLS|호스트와 실제 실행 이미지의 기본 truststore·일반 HTTPS 성공·공급자 연결된14개 검증 호스트 모두 SSLHandshakeException 거부|scripts/TrustAudit.java|
+|TLS|호스트와 실제 실행 이미지의 기본 truststore·일반 HTTPS 성공·공급자 연결된14개 검증 호스트 모두 SSLHandshakeException 거부|scripts/security/TrustAudit.java|
 |Git 보호|최초 보호 설정 실행기9테스트·서버 보호 read-back·guard|bootstrap-tests.log, guarded wrapper|
 
 재현 중 발견한 실패는 수정 후 재검증했다: Spring JDBC Instant 바인딩, DB 프록시 필드 접근, 세션 fixture 만료 시각, safe DNS CIDR 오차, JAR scanner 미인식, Caddy/DB 이미지 취약 구성요소, DB 장애 Retry-After 누락. 실패 기록을 성공으로 합산하거나 테스트 기준을 낮추지 않았다.
@@ -32,12 +32,12 @@ sh scripts/image-scan.sh moapan-local:1.0.0 moapan-proxy-local:2.11.7 moapan-db-
 검증 한계: 장시간 부하와 모든 네트워크 timeout/5xx/리다이렉트 조합의 연결 수준 fault injection은 수행하지 않았다. 재시도 통합 테스트의503·timeout은 수집 계층 오류 fixture이며 실제 소켓 장애를 모두 재현했다는 뜻이 아니다. 사용자 변경 기준에 따라 로컬 Mac 공인 IP HTTPS와 휴대폰 데이터망 접속 확인 PASS(evidence/public-access.json). 별도 호스팅 배포는 제외했다. GitHub Actions/CI/CD/자동 보안 스케줄은 사용자 요청으로 제외했다.
 
 ## ENV-001 제한 시간 회귀 — 2026-10-28
-`node --test scripts/local-start.test.mjs`: 실제 가짜 Docker 자식 프로세스로 무응답 엔진10초 종료·Compose 미실행, Compose 실패 코드 유지, 정상 시작 성공의3개 시험 PASS(FAIL0/SKIP0). `check bootJar sbom securityCheck` 성공, `e2eTest --rerun-tasks` 브라우저4개 재실행 성공. 새 DB/proxy/app 이미지를 빌드·재검사했다. PostgreSQL 통합17개를 다시 실행해 PASS했으며 전체 Gradle 인수 명령도 성공했다. proxy 디렉터리 탐색 권한 결함을 수정하고 실제 HTTP healthcheck를 추가했다. 최신 실제 수집 결과와 실행 이미지 일치는 evidence/verification.json에 기록한다.
+`node --test scripts/deploy/local-start.test.mjs`: 실제 가짜 Docker 자식 프로세스로 무응답 엔진10초 종료·Compose 미실행, Compose 실패 코드 유지, 정상 시작 성공의3개 시험 PASS(FAIL0/SKIP0). `check bootJar sbom securityCheck` 성공, `e2eTest --rerun-tasks` 브라우저4개 재실행 성공. 새 DB/proxy/app 이미지를 빌드·재검사했다. PostgreSQL 통합17개를 다시 실행해 PASS했으며 전체 Gradle 인수 명령도 성공했다. proxy 디렉터리 탐색 권한 결함을 수정하고 실제 HTTP healthcheck를 추가했다. 최신 실제 수집 결과와 실행 이미지 일치는 evidence/verification.json에 기록한다.
 
 AUTH-001: supplementaryUnicodePasswordUsesCodePointLimit 테스트는 수정 전 HTTP200 기대/400 실제로 실패했고 수정 후 PASS했다.14/129 code point 거부·128 code point 변경/로그인/탈퇴를 확인했다. PostgreSQL 통합18개, 전체 Java33개(FAIL0/SKIP0).
 
 ## 인증 화면·약관 동의 보완 (2026-10-28)
-`sh scripts/gradle-local.sh --no-daemon check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest`: Java35 PASS, FAIL0, SKIP0 (단위11·PostgreSQL19·Playwright5). 미동의/구버전/필드 누락400 및 계정 미생성, 현재 버전·서버 시각 저장, 기존 계정 동의 NULL 보존을 검증했다. 390/768/1440px 로그인·가입 스크린샷과 넘침 없음, 기본 미동의·제출 차단·전문 새 탭·입력 보존·동의 후 전송을 검증했다. 스크린샷은 build/reports/screenshots의 login/signup-*에 있다.
+`sh scripts/build/gradle-local.sh --no-daemon check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest`: Java35 PASS, FAIL0, SKIP0 (단위11·PostgreSQL19·Playwright5). 미동의/구버전/필드 누락400 및 계정 미생성, 현재 버전·서버 시각 저장, 기존 계정 동의 NULL 보존을 검증했다. 390/768/1440px 로그인·가입 스크린샷과 넘침 없음, 기본 미동의·제출 차단·전문 새 탭·입력 보존·동의 후 전송을 검증했다. 스크린샷은 build/reports/screenshots의 login/signup-*에 있다.
 
 공개 서비스 검증: V3 migration success=true, HTTPS login/signup/terms/privacy200, 미동의 가입400, 비회원 뉴스401, 약관 동의 후 합성 계정 가입·로그인·실제2출처 수집·계정/세션 삭제 PASS. 앱 교체 중 최초 compose --wait는 기존 proxy가 일시 unhealthy여서 exit1이었다. 후속 health 조회와 실제 HTTPS 검증은 정상이며 오류를 최초 성공으로 집계하지 않았다.
 
@@ -73,7 +73,7 @@ CSS 변경 후 e2eTest/bootJar/sbom/securityCheck/acceptanceTest 통과. 기존 
 관리자 발행 시작일/키워드 필터·V6 마이그레이션·루트 JSON 배열·arXiv Atom 링크 호환과 PostgreSQL 공유 요청 gate 구현. Java 테스트54 PASS/FAIL0/SKIP0(단위·통합·Playwright 포함). 실제 GitHub 보안30건, arXiv5분야 각20건 총100건 저장. NIST 주제RSS는200/정상형식이나 대상항목0건. 모든 신규 공개자료는2026-10-10 KST 포함 이후, 날짜위반0/중복공개URL0, 합성계정0. 공개HTTPS200/30항목, 최근7일 공통후보127건. 이전55건은 비공개 보존. 처음 권리 확인일의 UTC/KST 차이400은 UTC 확인일로 바로잡고, 주소 사이 arXiv cooldown 실패는4초 대기로 해결한 후 실제 성공을 확인했다. 최초 보안검사HIGH2 발견·v4수정/v3설정별 비노출 판정은 SECURITY_REVIEW.md 참조. 실행 증빙 evidence/topic-collection.json.
 
 ## 카드 여섯 항목 / research-v2
-2026-10-29 KST: `sh scripts/gradle-local.sh --no-daemon check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest` 성공. JUnit XML 합계 58 tests, failures/errors/skipped 모두 0. 작성자 Atom 다중 저자·JSON 매핑/해시 변경, 연구 근거 문장 선택, 카드 정확한 항목/누락 표시/추천 이유·버튼 제거 검증 포함. 390/768/1440px 기존 화면 회귀 통과. 이전 미연결 번역 UI 모듈 테스트 포함(실제 번역 기능 완료를 의미하지 않음).
+2026-10-29 KST: `sh scripts/build/gradle-local.sh --no-daemon check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest` 성공. JUnit XML 합계 58 tests, failures/errors/skipped 모두 0. 작성자 Atom 다중 저자·JSON 매핑/해시 변경, 연구 근거 문장 선택, 카드 정확한 항목/누락 표시/추천 이유·버튼 제거 검증 포함. 390/768/1440px 기존 화면 회귀 통과. 이전 미연결 번역 UI 모듈 테스트 포함(실제 번역 기능 완료를 의미하지 않음).
 
 재수집 범위 밖 기존 요약을 `research-v2-stored`로 갱신하는 추가 통합 테스트 통과. 최초 추가 테스트를 DB 장애 테스트 뒤에 배치해 연결 실패 1건 발생했으며, PostgreSQL을 의도적으로 종료하는 기존 테스트보다 앞에 실행하도록 순서를 수정했다. 전체 integrationTest 재실행 PASS. 최종 합계 59 tests, failures/errors/skipped 0. 기존 장애 거부 테스트는 유지했다.
 
@@ -95,3 +95,11 @@ check·integrationTest·e2eTest·bootJar·sbom·securityCheck·acceptanceTest �
 실행 앱 이미지 sha256:59f4c97c8c7ee18b88ff29ec18b978b78c3602c09b3d1d98c8082147615e40fe, translator sha256:2221c46cc144f87d4b371b0264809a3ad3d8fec9642b83b7ab14ee990cec4ee0. 최종 이미지·JAR·SBOM·소스 검사 gate 통과. 자동 검사 통과가 완전한 의미 정확성을 보장하지 않는다. 전체 기존 기사 재번역은 백그라운드 진행 중이며 모두 번역 완료라고 보고하지 않는다.
 
 V9 적용 DB 암호화 백업·별도 DB 복원 PASS: 기사191개, 복원 계정 활성0/세션0. 운영 DB를 덮어쓰지 않았으며 시험 DB는 제거했다. 현재 공개 HTTPS200 확인.
+
+
+## 중간 구조 정리 및 Helm 준비 (2026-10-29)
+운영 지원 파일을 scripts/build·deploy·translation·backup·security·test·governance·experiments로 이동하고 Gradle/Docker/문서/스크립트 참조를 함께 갱신했다. README의 번역 미연결/AMD64 전용 설명을 정정하고 docs/README 색인을 추가했다. 기존 Mac 번역 비교 실행기는 재현용 experiments로 분리, 운영 미사용. 데이터/비밀값/모델/캐시는 Git 제외를 유지했다. Compose 모든 실행 조합 config검사, shell/Node 문법검사, Node12 tests, 전체 이미지4종 빌드·보안 검사 및 새 경로 Compose 기동/HTTPS200 확인.
+
+Helm4.3.1 공식 archive checksum검증 후 lint/template 및 필수값·unpinned image·잘못된 migrationVersion 거부3건 PASS. 실제 Kubernetes context 없음: 설치/Pod기동/PVC/TLS/registry pull은 NOT_RUN. rendered Trivy config HIGH0/CRITICAL0, MEDIUM11/LOW2 남음: 합성 registry 주소 허용목록 경고10, 비밀값 없는 DATABASE_URL/USER ConfigMap 탐지1, PostgreSQL 공식 alpine UID/GID70 경고2. egress 차단 미구현과 운영 검증 조건은 chart README에 명시했다. 초기 path 이동으로 VEX검사 ENOENT와 Helm range namespace 렌더링 오류를 발견·수정하고 재검증했다. 빈 렌더링 검사 결과를 PASS로 사용하지 않았다. 증빙 docs/evidence/directory-helm-checkpoint.json.
+
+최종 clean 전체검증: 173 PASS(단위124/통합29/E2E20), FAIL0/ERROR0/SKIP0, 모든16 Gradle task 실제 실행 성공(1분3초). 소스/JAR/SBOM 보안 gate PASS. Node12 tests PASS. 비밀값/캐시 추적경로 없음 및 필수 빌드/Wrapper/lock/verification 파일 존재 확인.

@@ -35,13 +35,13 @@ RUN case "$TARGETARCH" in amd64) checksum=65efbc80fdc1fa2cd2631cad5b481777a68e87
     && echo "$checksum  /go.tar.gz" | sha256sum -c - && tar -xzf /go.tar.gz -C /usr/local && rm /go.tar.gz
 ENV PATH="/usr/local/go/bin:${PATH}" GOTOOLCHAIN=local CGO_ENABLED=0
 WORKDIR /proxy
-COPY scripts/proxy/ ./
+COPY scripts/deploy/proxy/ ./
 RUN --mount=type=cache,id=moapan-go-mod,target=/root/go/pkg/mod --mount=type=cache,id=moapan-go-build,target=/root/.cache/go-build go build -mod=readonly -trimpath -o /caddy . \
     && go build -mod=readonly -trimpath -o /gosu github.com/tianon/gosu
 FROM postgres:18.6-alpine@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5 AS database
 RUN apk upgrade --no-cache
 COPY --from=proxy-build /gosu /usr/local/bin/gosu
-COPY --chmod=0555 scripts/db-init.sh /docker-entrypoint-initdb.d/10-app-user.sh
+COPY --chmod=0555 scripts/deploy/db-init.sh /docker-entrypoint-initdb.d/10-app-user.sh
 FROM ubuntu:24.04@sha256:24737cef17f4e22b1977df7d9a05e77c4e28b7da5b8911f8d8ccda136bf3573c AS proxy
 RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates curl && rm -rf /var/lib/apt/lists/* \
     && mkdir -p /data /config && chown -R 10001:10001 /data /config
@@ -54,6 +54,6 @@ ENTRYPOINT ["caddy","run","--config","/etc/caddy/Caddyfile","--adapter","caddyfi
 
 FROM proxy AS public-proxy
 USER root
-COPY scripts/Caddyfile.public /etc/caddy/Caddyfile
+COPY scripts/deploy/Caddyfile.public /etc/caddy/Caddyfile
 RUN chmod 0755 /etc/caddy && chmod 0444 /etc/caddy/Caddyfile
 USER 10001:10001

@@ -1,9 +1,9 @@
 #!/bin/sh
 set -eu
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/../.."
 MOAPAN_ROOT=$(pwd -P)
 export PATH="$MOAPAN_ROOT/.local/bin:$PATH"
-[ "$#" -eq 1 ] || { echo 'Usage: sh scripts/backup.sh <age-recipient-public-key>' >&2; exit 1; }
+[ "$#" -eq 1 ] || { echo 'Usage: sh scripts/backup/backup.sh <age-recipient-public-key>' >&2; exit 1; }
 command -v age >/dev/null 2>&1 || { echo 'Verified age required' >&2; exit 1; }
 umask 077
 mkdir -p "$MOAPAN_ROOT/.local/backups"

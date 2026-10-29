@@ -16,10 +16,10 @@ async function token(){csrf=(await call('/api/v1/auth/csrf')).token;}
 const username='smoke_'+randomBytes(6).toString('hex'), password=randomBytes(32).toString('base64url');let created=false;
 try{
   await token();await call('/api/v1/auth/signup','POST',{username,password,termsAccepted:true,termsVersion:'terms-1'});created=true;
-  const grant=spawnSync('docker',['compose','-f','compose.yaml','-f','scripts/compose-public.yaml','run','--rm','-T','-e','MOAPAN_ROLE=admin-cli','web'],{timeout:60000,killSignal:'SIGKILL',input:username+'\n',encoding:'utf8'});
+  const grant=spawnSync('docker',['compose','-f','compose.yaml','-f','scripts/deploy/compose-public.yaml','run','--rm','-T','-e','MOAPAN_ROLE=admin-cli','web'],{timeout:60000,killSignal:'SIGKILL',input:username+'\n',encoding:'utf8'});
   if(grant.status!==0)throw Error('Local admin-cli failed; inspect role startup without credentials');
   await call('/api/v1/auth/login','POST',{username,password});await token();
-  const {definitions,publishedSince}=JSON.parse(readFileSync(new URL('../docs/topic-sources.json',import.meta.url),'utf8'));
+  const {definitions,publishedSince}=JSON.parse(readFileSync(new URL('../../docs/topic-sources.json',import.meta.url),'utf8'));
   const results=[];
   for(const d of definitions){try{await new Promise(r=>setTimeout(r,4000));
     const list=await call('/api/v1/admin/sites?search='+encodeURIComponent(d.name));let site=list.find(s=>s.normalized_homepage_url===d.home);

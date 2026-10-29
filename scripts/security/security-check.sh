@@ -1,6 +1,6 @@
 #!/bin/sh
 set -eu
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/../.."
 MOAPAN_ROOT=$(pwd -P)
 export TMPDIR="$MOAPAN_ROOT/.local/tmp"
 export TRIVY_DISABLE_TELEMETRY=true
@@ -14,4 +14,4 @@ trivy --cache-dir "$MOAPAN_ROOT/.local/trivy" sbom --exit-code 0 --severity UNKN
 trivy --cache-dir "$MOAPAN_ROOT/.local/trivy" rootfs --list-all-pkgs --scanners vuln --exit-code 0 --severity UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL --format json --output build/reports/security/jar.json build/libs
 date -u '+%Y-%m-%dT%H:%M:%SZ' > build/reports/security/completed-at.txt
 
-node scripts/verify-security-reports.mjs
+node scripts/security/verify-security-reports.mjs

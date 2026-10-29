@@ -1,0 +1,40 @@
+{
+  "checkedAt": "2026-10-29T02:09:14.145Z",
+  "images": {
+    "moapan-web-1": "sha256:735044b66afe87f37c4fd007153e681dd0afdb02652b0521ad694975ce1c8922",
+    "moapan-db-1": "sha256:43853516f9d452497377625b7a608974a04dc416ab4b4faa8cbc4ab6d70726be",
+    "moapan-proxy-1": "sha256:7c09475aad80645b36ea2a18c00cdb7871ecc64f64e85c0d68c3d89684461970",
+    "moapan-translator-1": "sha256:33589c1edc5f6b67a3eebd165b6d1e78230aa1e3835baec73fadcc34bad51a06"
+  },
+  "helmVersion": "4.3.1",
+  "helmOfficialArchiveSHA256": "6b4e61c8cd27d99e5a801e63ff25dd5c70b36875c2cd659d3e9ce6b76fc23198",
+  "helmLint": "PASS",
+  "helmTemplate": "PASS",
+  "helmInvalidInputChecks": 3,
+  "kubernetesDeployment": "NOT_RUN: no configured Kubernetes context",
+  "renderedConfigScan": {
+    "high": 0,
+    "critical": 0,
+    "medium": 11,
+    "low": 2,
+    "findings": {
+      "KSV-0020": {
+        "severity": "LOW",
+        "title": "Runs with UID <= 10000"
+      },
+      "KSV-0021": {
+        "severity": "LOW",
+        "title": "Runs with GID <= 10000"
+      },
+      "KSV-01010": {
+        "severity": "MEDIUM",
+        "title": "ConfigMap with sensitive content"
+      },
+      "KSV-0125": {
+        "severity": "MEDIUM",
+        "title": "Restrict container images to trusted registries"
+      }
+    }
+  },
+  "scope": "Synthetic registry references for lint/render only; actual deployment registry/TLS/storage/egress verification remains required"
+}

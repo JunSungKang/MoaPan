@@ -72,7 +72,7 @@ function ghApi(endpoint, { missingProtection = false, method = 'GET', body } = {
 
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   const [mode, planPath] = process.argv.slice(2);
-  if (!['--dry-run', '--apply'].includes(mode) || !planPath || process.argv.length !== 4) throw Error('Usage: node scripts/github-protection-bootstrap.mjs --dry-run|--apply <plan>');
+  if (!['--dry-run', '--apply'].includes(mode) || !planPath || process.argv.length !== 4) throw Error('Usage: node scripts/governance/github-protection-bootstrap.mjs --dry-run|--apply <plan>');
   const scripts = resolve(homedir(), '.codex/scripts');
   const { loadPlan } = await import(pathToFileURL(resolve(scripts, 'github-app-contract.mjs')));
   const { resolveRepository, getInstallationToken } = await import(pathToFileURL(resolve(scripts, 'github-app-auth.mjs')));
