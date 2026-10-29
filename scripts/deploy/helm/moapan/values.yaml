@@ -1,0 +1,19 @@
+# One release per dedicated namespace: fixed internal Service names match application allowlists.
+publicHost: ""
+existingSecret: ""
+images:
+  app: ""
+  database: ""
+  proxy: ""
+  translator: ""
+imagePullSecrets: []
+webReplicas: 1
+storageClass: ""
+databaseStorage: 10Gi
+modelStorage: 5Gi
+migrationVersion: "9"
+translationThreads: "2"
+ingress:
+  enabled: true
+  className: ""
+  tlsSecret: ""

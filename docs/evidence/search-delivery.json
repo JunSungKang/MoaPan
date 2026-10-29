@@ -1,0 +1,16 @@
+{
+  "checkedAt": "2026-10-28T23:21:13.826Z",
+  "url": "https://175.195.62.165",
+  "httpsVerified": true,
+  "homeItems": 42,
+  "searchTotal": 136,
+  "searchPageItems": 7,
+  "searchPages": 20,
+  "beyondHomeFound": true,
+  "csrfMissing": 403,
+  "page20": 400,
+  "noStore": true,
+  "syntheticProbeAbsentFromServiceLogs": true,
+  "runtimeImage": "sha256:a031afba57f6eb2e5ce0d71df7a3c2705b2c13d7ac14d8de6cb32c1210d7568a",
+  "translation": "UI dictionary only; article translation engine not connected"
+}

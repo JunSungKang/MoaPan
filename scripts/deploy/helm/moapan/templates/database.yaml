@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata: {namespace: {{ .Release.Namespace | quote }}, name: db}
+spec:
+  serviceName: db
+  replicas: 1
+  selector: {matchLabels: {app: moapan, component: db}}
+  template:
+    metadata: {labels: {app: moapan, component: db}}
+    spec:
+      automountServiceAccountToken: false
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets: {{ toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext: {runAsUser: 70, runAsGroup: 70, runAsNonRoot: true, fsGroup: 70, seccompProfile: {type: RuntimeDefault}}
+      containers:
+        - name: db
+          image: {{ include "moapan.image" .Values.images.database }}
+          args: [postgres, -c, log_statement=none, -c, log_connections=off, -c, log_disconnections=off, -c, log_min_error_statement=panic, -c, max_connections=60]
+          env:
+            - {name: POSTGRES_DB, value: moapan}
+            - {name: POSTGRES_USER, value: moapan_migrate}
+            - {name: PGDATA, value: /var/lib/postgresql/18/docker}
+            - {name: POSTGRES_INITDB_ARGS, value: '--locale=C.UTF-8'}
+            - name: POSTGRES_PASSWORD
+              valueFrom: {secretKeyRef: {name: {{ .Values.existingSecret | quote }}, key: DATABASE_ADMIN_PASSWORD}}
+            - name: POSTGRES_APP_PASSWORD
+              valueFrom: {secretKeyRef: {name: {{ .Values.existingSecret | quote }}, key: DATABASE_PASSWORD}}
+          ports: [{containerPort: 5432}]
+          securityContext: {readOnlyRootFilesystem: true, allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}}
+          resources: {requests: {cpu: 100m, memory: 256Mi}, limits: {cpu: '1', memory: 512Mi}}
+          readinessProbe: {exec: {command: [pg_isready, -U, moapan, -d, moapan]}, periodSeconds: 5}
+          livenessProbe: {exec: {command: [pg_isready, -U, moapan, -d, moapan]}, initialDelaySeconds: 60, periodSeconds: 15}
+          volumeMounts: [{name: data, mountPath: /var/lib/postgresql}, {name: run, mountPath: /var/run/postgresql}, {name: tmp, mountPath: /tmp}]
+      volumes:
+        - {name: data, persistentVolumeClaim: {claimName: moapan-database}}
+        - {name: run, emptyDir: {}}
+        - {name: tmp, emptyDir: {}}

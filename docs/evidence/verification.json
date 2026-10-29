@@ -1,0 +1,1154 @@
+{
+  "checkedAt": "2026-10-28T13:00:18.186Z",
+  "externalDeployment": {
+    "status": "PASS",
+    "scope": "User-authorized local Mac service reachable from mobile internet; separate hosting deployment excluded",
+    "baseUrl": "https://175.195.62.165",
+    "checkedAt": "2026-10-28T06:11:51.357Z",
+    "mobileInternetConfirmation": "User explicitly confirmed normal page access with Wi-Fi off",
+    "httpsAboutStatus": 200,
+    "unauthenticatedNewsStatus": 401,
+    "httpRedirectStatus": 308,
+    "certificate": {
+      "issuer": "Lets Encrypt YE1",
+      "notBefore": "2026-10-28T05:11:18Z",
+      "notAfter": "2026-11-03T21:11:17Z",
+      "profile": "shortlived",
+      "renewal": "Caddy ACME automatic renewal while running"
+    },
+    "dockerPermission": "Only privileged port forwarding to external machines enabled with explicit user approval",
+    "fileSharing": "VirtioFS unchanged"
+  },
+  "ciCd": "EXCLUDED_BY_USER",
+  "tests": {
+    "suites": [
+      {
+        "task": "test",
+        "name": "com.moapan.ContentTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "timestamp": "2026-10-28T12:57:43.488Z"
+      },
+      {
+        "task": "test",
+        "name": "com.moapan.RuntimeSecurityTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "timestamp": "2026-10-28T12:57:43.623Z"
+      },
+      {
+        "task": "integrationTest",
+        "name": "com.moapan.SecurityIntegrationTest",
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "timestamp": "2026-10-28T12:57:44.283Z"
+      },
+      {
+        "task": "e2eTest",
+        "name": "com.moapan.BrowserTest",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "timestamp": "2026-10-28T12:57:53.940Z"
+      }
+    ],
+    "total": 48,
+    "bootstrap": {
+      "passed": 9,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "runtime": {
+    "jdk": "Eclipse Temurin 27.0.1.0.2+1",
+    "springBoot": "4.1.2",
+    "gradle": "9.8.2",
+    "postgresql": "18.6",
+    "jarSha256": "4287a85b06ad7ac0d25a6c80f91de4abdff504f9a0640bd2b16a6c3953417614",
+    "sbomSha256": "1ad74a0dc59e1c37447a0d4496fcbe280394be7ddb7a0328ac5655b21c962b63",
+    "sbomComponents": 100
+  },
+  "images": [
+    {
+      "name": "moapan-local:1.0.0",
+      "digest": "sha256:10fb33088f67df15ac84f45c5d16651031a558264c67df199d598525b1edd3c5",
+      "repoDigests": [
+        "moapan-local@sha256:10fb33088f67df15ac84f45c5d16651031a558264c67df199d598525b1edd3c5"
+      ],
+      "platform": "linux/amd64",
+      "scanSha256": "c62039a5270120301019be9f19bf1cfff590f53e0b1796ff3bc3cff3525fbddd",
+      "findings": [
+        {
+          "id": "CVE-2026-102473",
+          "component": "dash",
+          "installed": "0.5.12-6ubuntu5",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-102473"
+        },
+        {
+          "id": "CVE-2026-102474",
+          "component": "dash",
+          "installed": "0.5.12-6ubuntu5",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-102474"
+        },
+        {
+          "id": "CVE-2026-18374",
+          "component": "libc-bin",
+          "installed": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-18374"
+        },
+        {
+          "id": "CVE-2026-89092",
+          "component": "libc-bin",
+          "installed": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-89092"
+        },
+        {
+          "id": "CVE-2026-18374",
+          "component": "libc6",
+          "installed": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-18374"
+        },
+        {
+          "id": "CVE-2026-89092",
+          "component": "libc6",
+          "installed": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-89092"
+        },
+        {
+          "id": "CVE-2026-67693",
+          "component": "libgnutls30t64",
+          "installed": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-67693"
+        },
+        {
+          "id": "CVE-2026-88647",
+          "component": "libgnutls30t64",
+          "installed": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-88647"
+        },
+        {
+          "id": "CVE-2026-88648",
+          "component": "libgnutls30t64",
+          "installed": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-88648"
+        },
+        {
+          "id": "CVE-2026-95184",
+          "component": "libgnutls30t64",
+          "installed": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-95184"
+        },
+        {
+          "id": "CVE-2026-95209",
+          "component": "libgnutls30t64",
+          "installed": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-95209"
+        },
+        {
+          "id": "CVE-2026-95210",
+          "component": "libgnutls30t64",
+          "installed": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-95210"
+        },
+        {
+          "id": "CVE-2026-103111",
+          "component": "libpcre2-8-0",
+          "installed": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-103111"
+        },
+        {
+          "id": "CVE-2026-86145",
+          "component": "libpcre2-8-0",
+          "installed": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-86145"
+        },
+        {
+          "id": "CVE-2026-89156",
+          "component": "libpcre2-8-0",
+          "installed": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-89156"
+        },
+        {
+          "id": "CVE-2026-89157",
+          "component": "libpcre2-8-0",
+          "installed": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-89157"
+        },
+        {
+          "id": "CVE-2026-89158",
+          "component": "libpcre2-8-0",
+          "installed": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-89158"
+        },
+        {
+          "id": "CVE-2026-89160",
+          "component": "libpcre2-8-0",
+          "installed": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-89160"
+        },
+        {
+          "id": "CVE-2026-89161",
+          "component": "libpcre2-8-0",
+          "installed": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-89161"
+        },
+        {
+          "id": "CVE-2026-107161",
+          "component": "libsasl2-2",
+          "installed": "2.1.28+dfsg1-5ubuntu3.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-107161"
+        },
+        {
+          "id": "CVE-2026-107161",
+          "component": "libsasl2-modules-db",
+          "installed": "2.1.28+dfsg1-5ubuntu3.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-107161"
+        },
+        {
+          "id": "CVE-2026-40228",
+          "component": "libsystemd0",
+          "installed": "255.4-1ubuntu8.18",
+          "fixed": null,
+          "severity": "LOW",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-40228"
+        },
+        {
+          "id": "CVE-2026-40228",
+          "component": "libudev1",
+          "installed": "255.4-1ubuntu8.18",
+          "fixed": null,
+          "severity": "LOW",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-40228"
+        },
+        {
+          "id": "CVE-2024-56433",
+          "component": "login",
+          "installed": "1:4.13+dfsg1-4ubuntu3.2",
+          "fixed": null,
+          "severity": "LOW",
+          "url": "https://avd.aquasec.com/nvd/cve-2024-56433"
+        },
+        {
+          "id": "CVE-2024-56433",
+          "component": "passwd",
+          "installed": "1:4.13+dfsg1-4ubuntu3.2",
+          "fixed": null,
+          "severity": "LOW",
+          "url": "https://avd.aquasec.com/nvd/cve-2024-56433"
+        },
+        {
+          "id": "CVE-2026-18477",
+          "component": "tar",
+          "installed": "1.35+dfsg-3ubuntu0.4",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-18477"
+        },
+        {
+          "id": "CVE-2026-18508",
+          "component": "tar",
+          "installed": "1.35+dfsg-3ubuntu0.4",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-18508"
+        }
+      ]
+    },
+    {
+      "name": "moapan-proxy-public:2.11.7",
+      "digest": "sha256:cca5b2fd88afe29331ae47733b4760a09b62fc6780a889114f377f1e205480b5",
+      "repoDigests": [
+        "moapan-proxy-public@sha256:cca5b2fd88afe29331ae47733b4760a09b62fc6780a889114f377f1e205480b5"
+      ],
+      "platform": "linux/arm64",
+      "scanSha256": "b04bc05bf2227deb4a4686bbb1875b8e2a0eb0860c5db335e71a163036a03a74",
+      "findings": [
+        {
+          "id": "CVE-2026-102473",
+          "component": "dash",
+          "installed": "0.5.12-6ubuntu5",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-102473"
+        },
+        {
+          "id": "CVE-2026-102474",
+          "component": "dash",
+          "installed": "0.5.12-6ubuntu5",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-102474"
+        },
+        {
+          "id": "CVE-2026-18374",
+          "component": "libc-bin",
+          "installed": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-18374"
+        },
+        {
+          "id": "CVE-2026-89092",
+          "component": "libc-bin",
+          "installed": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-89092"
+        },
+        {
+          "id": "CVE-2026-18374",
+          "component": "libc6",
+          "installed": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-18374"
+        },
+        {
+          "id": "CVE-2026-89092",
+          "component": "libc6",
+          "installed": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-89092"
+        },
+        {
+          "id": "CVE-2026-67693",
+          "component": "libgnutls30t64",
+          "installed": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-67693"
+        },
+        {
+          "id": "CVE-2026-88647",
+          "component": "libgnutls30t64",
+          "installed": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-88647"
+        },
+        {
+          "id": "CVE-2026-88648",
+          "component": "libgnutls30t64",
+          "installed": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-88648"
+        },
+        {
+          "id": "CVE-2026-95184",
+          "component": "libgnutls30t64",
+          "installed": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-95184"
+        },
+        {
+          "id": "CVE-2026-95209",
+          "component": "libgnutls30t64",
+          "installed": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-95209"
+        },
+        {
+          "id": "CVE-2026-95210",
+          "component": "libgnutls30t64",
+          "installed": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-95210"
+        },
+        {
+          "id": "CVE-2026-103111",
+          "component": "libpcre2-8-0",
+          "installed": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-103111"
+        },
+        {
+          "id": "CVE-2026-86145",
+          "component": "libpcre2-8-0",
+          "installed": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-86145"
+        },
+        {
+          "id": "CVE-2026-89156",
+          "component": "libpcre2-8-0",
+          "installed": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-89156"
+        },
+        {
+          "id": "CVE-2026-89157",
+          "component": "libpcre2-8-0",
+          "installed": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-89157"
+        },
+        {
+          "id": "CVE-2026-89158",
+          "component": "libpcre2-8-0",
+          "installed": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-89158"
+        },
+        {
+          "id": "CVE-2026-89160",
+          "component": "libpcre2-8-0",
+          "installed": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-89160"
+        },
+        {
+          "id": "CVE-2026-89161",
+          "component": "libpcre2-8-0",
+          "installed": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-89161"
+        },
+        {
+          "id": "CVE-2026-107161",
+          "component": "libsasl2-2",
+          "installed": "2.1.28+dfsg1-5ubuntu3.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-107161"
+        },
+        {
+          "id": "CVE-2026-107161",
+          "component": "libsasl2-modules-db",
+          "installed": "2.1.28+dfsg1-5ubuntu3.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-107161"
+        },
+        {
+          "id": "CVE-2026-40228",
+          "component": "libsystemd0",
+          "installed": "255.4-1ubuntu8.18",
+          "fixed": null,
+          "severity": "LOW",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-40228"
+        },
+        {
+          "id": "CVE-2026-40228",
+          "component": "libudev1",
+          "installed": "255.4-1ubuntu8.18",
+          "fixed": null,
+          "severity": "LOW",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-40228"
+        },
+        {
+          "id": "CVE-2024-56433",
+          "component": "login",
+          "installed": "1:4.13+dfsg1-4ubuntu3.2",
+          "fixed": null,
+          "severity": "LOW",
+          "url": "https://avd.aquasec.com/nvd/cve-2024-56433"
+        },
+        {
+          "id": "CVE-2024-56433",
+          "component": "passwd",
+          "installed": "1:4.13+dfsg1-4ubuntu3.2",
+          "fixed": null,
+          "severity": "LOW",
+          "url": "https://avd.aquasec.com/nvd/cve-2024-56433"
+        },
+        {
+          "id": "CVE-2026-18477",
+          "component": "tar",
+          "installed": "1.35+dfsg-3ubuntu0.4",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-18477"
+        },
+        {
+          "id": "CVE-2026-18508",
+          "component": "tar",
+          "installed": "1.35+dfsg-3ubuntu0.4",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-18508"
+        },
+        {
+          "id": "GO-2026-5932",
+          "component": "golang.org/x/crypto",
+          "installed": "v0.57.0",
+          "fixed": null,
+          "severity": "UNKNOWN",
+          "url": "https://vuln.go.dev/ID/GO-2026-5932.json"
+        }
+      ]
+    },
+    {
+      "name": "moapan-db-local:18.6",
+      "digest": "sha256:dc2c3ea15867e5da1c895277f9970eb988fa9c0fe47ade56411874fec373df64",
+      "repoDigests": [
+        "moapan-db-local@sha256:dc2c3ea15867e5da1c895277f9970eb988fa9c0fe47ade56411874fec373df64"
+      ],
+      "platform": "linux/arm64",
+      "scanSha256": "1a3b472cf4db59a936ded096b1cd6bc236a58a1d6a15faa6799b330182b8a027",
+      "findings": []
+    },
+    {
+      "name": "moapan-build:1.0.0",
+      "digest": "sha256:45c304e6f09cfaf593af64f3394293a3ff30a83169edfee4fb678b25b39b661a",
+      "repoDigests": [
+        "moapan-build@sha256:45c304e6f09cfaf593af64f3394293a3ff30a83169edfee4fb678b25b39b661a"
+      ],
+      "platform": "linux/amd64",
+      "scanSha256": "2c0d1ee6468bc2a278907b58ab558cbdcd927a12a4f376d6f7798b5669fc4f12",
+      "findings": [
+        {
+          "id": "CVE-2026-102473",
+          "component": "dash",
+          "installed": "0.5.12-6ubuntu5",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-102473"
+        },
+        {
+          "id": "CVE-2026-102474",
+          "component": "dash",
+          "installed": "0.5.12-6ubuntu5",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-102474"
+        },
+        {
+          "id": "CVE-2026-18374",
+          "component": "libc-bin",
+          "installed": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-18374"
+        },
+        {
+          "id": "CVE-2026-89092",
+          "component": "libc-bin",
+          "installed": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-89092"
+        },
+        {
+          "id": "CVE-2026-18374",
+          "component": "libc6",
+          "installed": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-18374"
+        },
+        {
+          "id": "CVE-2026-89092",
+          "component": "libc6",
+          "installed": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-89092"
+        },
+        {
+          "id": "CVE-2026-67693",
+          "component": "libgnutls30t64",
+          "installed": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-67693"
+        },
+        {
+          "id": "CVE-2026-88647",
+          "component": "libgnutls30t64",
+          "installed": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-88647"
+        },
+        {
+          "id": "CVE-2026-88648",
+          "component": "libgnutls30t64",
+          "installed": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-88648"
+        },
+        {
+          "id": "CVE-2026-95184",
+          "component": "libgnutls30t64",
+          "installed": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-95184"
+        },
+        {
+          "id": "CVE-2026-95209",
+          "component": "libgnutls30t64",
+          "installed": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-95209"
+        },
+        {
+          "id": "CVE-2026-95210",
+          "component": "libgnutls30t64",
+          "installed": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-95210"
+        },
+        {
+          "id": "CVE-2026-103111",
+          "component": "libpcre2-8-0",
+          "installed": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-103111"
+        },
+        {
+          "id": "CVE-2026-86145",
+          "component": "libpcre2-8-0",
+          "installed": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-86145"
+        },
+        {
+          "id": "CVE-2026-89156",
+          "component": "libpcre2-8-0",
+          "installed": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-89156"
+        },
+        {
+          "id": "CVE-2026-89157",
+          "component": "libpcre2-8-0",
+          "installed": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-89157"
+        },
+        {
+          "id": "CVE-2026-89158",
+          "component": "libpcre2-8-0",
+          "installed": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-89158"
+        },
+        {
+          "id": "CVE-2026-89160",
+          "component": "libpcre2-8-0",
+          "installed": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-89160"
+        },
+        {
+          "id": "CVE-2026-89161",
+          "component": "libpcre2-8-0",
+          "installed": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-89161"
+        },
+        {
+          "id": "CVE-2026-107161",
+          "component": "libsasl2-2",
+          "installed": "2.1.28+dfsg1-5ubuntu3.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-107161"
+        },
+        {
+          "id": "CVE-2026-107161",
+          "component": "libsasl2-modules-db",
+          "installed": "2.1.28+dfsg1-5ubuntu3.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-107161"
+        },
+        {
+          "id": "CVE-2026-40228",
+          "component": "libsystemd0",
+          "installed": "255.4-1ubuntu8.18",
+          "fixed": null,
+          "severity": "LOW",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-40228"
+        },
+        {
+          "id": "CVE-2026-40228",
+          "component": "libudev1",
+          "installed": "255.4-1ubuntu8.18",
+          "fixed": null,
+          "severity": "LOW",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-40228"
+        },
+        {
+          "id": "CVE-2024-56433",
+          "component": "login",
+          "installed": "1:4.13+dfsg1-4ubuntu3.2",
+          "fixed": null,
+          "severity": "LOW",
+          "url": "https://avd.aquasec.com/nvd/cve-2024-56433"
+        },
+        {
+          "id": "CVE-2024-56433",
+          "component": "passwd",
+          "installed": "1:4.13+dfsg1-4ubuntu3.2",
+          "fixed": null,
+          "severity": "LOW",
+          "url": "https://avd.aquasec.com/nvd/cve-2024-56433"
+        },
+        {
+          "id": "CVE-2026-18477",
+          "component": "tar",
+          "installed": "1.35+dfsg-3ubuntu0.4",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-18477"
+        },
+        {
+          "id": "CVE-2026-18508",
+          "component": "tar",
+          "installed": "1.35+dfsg-3ubuntu0.4",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-18508"
+        }
+      ]
+    },
+    {
+      "name": "moapan-proxy-build:2.11.7",
+      "digest": "sha256:87632a68cb8d39cc1621f7bf0a577bfd192b85515f8af67826aa4c80c74b7037",
+      "repoDigests": [
+        "moapan-proxy-build@sha256:87632a68cb8d39cc1621f7bf0a577bfd192b85515f8af67826aa4c80c74b7037"
+      ],
+      "platform": "linux/arm64",
+      "scanSha256": "1aa59d637b3d9588c24dca62cd1d530d4b6fcbfdc6b9c0e8660e9bc6b913f2d4",
+      "findings": [
+        {
+          "id": "CVE-2026-102473",
+          "component": "dash",
+          "installed": "0.5.12-6ubuntu5",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-102473"
+        },
+        {
+          "id": "CVE-2026-102474",
+          "component": "dash",
+          "installed": "0.5.12-6ubuntu5",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-102474"
+        },
+        {
+          "id": "CVE-2026-18374",
+          "component": "libc-bin",
+          "installed": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-18374"
+        },
+        {
+          "id": "CVE-2026-89092",
+          "component": "libc-bin",
+          "installed": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-89092"
+        },
+        {
+          "id": "CVE-2026-18374",
+          "component": "libc6",
+          "installed": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-18374"
+        },
+        {
+          "id": "CVE-2026-89092",
+          "component": "libc6",
+          "installed": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-89092"
+        },
+        {
+          "id": "CVE-2026-67693",
+          "component": "libgnutls30t64",
+          "installed": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-67693"
+        },
+        {
+          "id": "CVE-2026-88647",
+          "component": "libgnutls30t64",
+          "installed": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-88647"
+        },
+        {
+          "id": "CVE-2026-88648",
+          "component": "libgnutls30t64",
+          "installed": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-88648"
+        },
+        {
+          "id": "CVE-2026-95184",
+          "component": "libgnutls30t64",
+          "installed": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-95184"
+        },
+        {
+          "id": "CVE-2026-95209",
+          "component": "libgnutls30t64",
+          "installed": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-95209"
+        },
+        {
+          "id": "CVE-2026-95210",
+          "component": "libgnutls30t64",
+          "installed": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-95210"
+        },
+        {
+          "id": "CVE-2026-103111",
+          "component": "libpcre2-8-0",
+          "installed": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-103111"
+        },
+        {
+          "id": "CVE-2026-86145",
+          "component": "libpcre2-8-0",
+          "installed": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-86145"
+        },
+        {
+          "id": "CVE-2026-89156",
+          "component": "libpcre2-8-0",
+          "installed": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-89156"
+        },
+        {
+          "id": "CVE-2026-89157",
+          "component": "libpcre2-8-0",
+          "installed": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-89157"
+        },
+        {
+          "id": "CVE-2026-89158",
+          "component": "libpcre2-8-0",
+          "installed": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-89158"
+        },
+        {
+          "id": "CVE-2026-89160",
+          "component": "libpcre2-8-0",
+          "installed": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-89160"
+        },
+        {
+          "id": "CVE-2026-89161",
+          "component": "libpcre2-8-0",
+          "installed": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-89161"
+        },
+        {
+          "id": "CVE-2026-107161",
+          "component": "libsasl2-2",
+          "installed": "2.1.28+dfsg1-5ubuntu3.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-107161"
+        },
+        {
+          "id": "CVE-2026-107161",
+          "component": "libsasl2-modules-db",
+          "installed": "2.1.28+dfsg1-5ubuntu3.1",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-107161"
+        },
+        {
+          "id": "CVE-2026-40228",
+          "component": "libsystemd0",
+          "installed": "255.4-1ubuntu8.18",
+          "fixed": null,
+          "severity": "LOW",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-40228"
+        },
+        {
+          "id": "CVE-2026-40228",
+          "component": "libudev1",
+          "installed": "255.4-1ubuntu8.18",
+          "fixed": null,
+          "severity": "LOW",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-40228"
+        },
+        {
+          "id": "CVE-2024-56433",
+          "component": "login",
+          "installed": "1:4.13+dfsg1-4ubuntu3.2",
+          "fixed": null,
+          "severity": "LOW",
+          "url": "https://avd.aquasec.com/nvd/cve-2024-56433"
+        },
+        {
+          "id": "CVE-2024-56433",
+          "component": "passwd",
+          "installed": "1:4.13+dfsg1-4ubuntu3.2",
+          "fixed": null,
+          "severity": "LOW",
+          "url": "https://avd.aquasec.com/nvd/cve-2024-56433"
+        },
+        {
+          "id": "CVE-2026-18477",
+          "component": "tar",
+          "installed": "1.35+dfsg-3ubuntu0.4",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-18477"
+        },
+        {
+          "id": "CVE-2026-18508",
+          "component": "tar",
+          "installed": "1.35+dfsg-3ubuntu0.4",
+          "fixed": null,
+          "severity": "MEDIUM",
+          "url": "https://avd.aquasec.com/nvd/cve-2026-18508"
+        },
+        {
+          "id": "GO-2026-5932",
+          "component": "golang.org/x/crypto",
+          "installed": "v0.57.0",
+          "fixed": null,
+          "severity": "UNKNOWN",
+          "url": "https://vuln.go.dev/ID/GO-2026-5932.json"
+        }
+      ]
+    }
+  ],
+  "reports": [
+    {
+      "name": "source",
+      "sha256": "bf77130d64aa95de370240e40bb8db5f200e14f72ce7140bf43e3560c9d8986f",
+      "packages": 327,
+      "findings": [
+        {
+          "id": "GO-2026-5932",
+          "component": "golang.org/x/crypto",
+          "severity": "UNKNOWN",
+          "installed": "v0.57.0",
+          "fixed": null
+        },
+        {
+          "id": "GO-2026-5932",
+          "component": "golang.org/x/crypto",
+          "severity": "UNKNOWN",
+          "installed": "v0.57.0",
+          "fixed": null
+        }
+      ]
+    },
+    {
+      "name": "jar",
+      "sha256": "77100b213b10aeebc451855880b117d8dd47d05c0ab3bf1716dd9345b65e3680",
+      "packages": 91,
+      "findings": []
+    },
+    {
+      "name": "sbom",
+      "sha256": "1d758d50b14470466025003be10c94bc2f995d926b67a3bf81d1dfc6f40dfdea",
+      "packages": 100,
+      "findings": []
+    }
+  ],
+  "tools": [
+    {
+      "name": "age",
+      "sha256": "73f6b20c99d2dc219f944f6e43d4709e4127f5af80b97af1ca8c3b4d17e8d6de",
+      "go": "v1.27.3",
+      "findings": [
+        {
+          "id": "GO-2026-5932",
+          "severity": "UNKNOWN",
+          "component": "golang.org/x/crypto"
+        }
+      ]
+    },
+    {
+      "name": "age-keygen",
+      "sha256": "2ede5cf5aa8de0710d7d2495d4f02dba24a8e3a11d0c91f55a0aa5850b1e7fe9",
+      "go": "v1.27.3",
+      "findings": [
+        {
+          "id": "GO-2026-5932",
+          "severity": "UNKNOWN",
+          "component": "golang.org/x/crypto"
+        }
+      ]
+    },
+    {
+      "name": "trivy",
+      "sha256": "5c03401caf9d3cc04d9e0c7f3abd102e97518e8237465cce702162b605535e8d",
+      "go": "v1.27.3",
+      "findings": [
+        {
+          "id": "GO-2026-5932",
+          "severity": "UNKNOWN",
+          "component": "golang.org/x/crypto"
+        }
+      ]
+    }
+  ],
+  "scanner": {
+    "name": "Trivy",
+    "version": "0.76.1",
+    "db": {
+      "Version": 2,
+      "NextUpdate": "2026-10-28T19:17:44.708952538Z",
+      "UpdatedAt": "2026-10-27T19:17:44.708952708Z",
+      "DownloadedAt": "2026-10-28T01:04:00.046418Z"
+    },
+    "kev": {
+      "catalogVersion": "2026.10.27",
+      "dateReleased": "2026-10-27T19:00:02.2307Z",
+      "matches": []
+    }
+  },
+  "realSources": {
+    "kind": "actual-source-smoke",
+    "checkedAt": "2026-10-28T07:30:53.743Z",
+    "sources": [
+      {
+        "site": "NASA News Releases",
+        "endpoint": "https://www.nasa.gov/news-release/feed/",
+        "status": "SUCCEEDED",
+        "previewCount": 5,
+        "lastRun": "2026-10-28T07:30:46.791Z",
+        "priorRuns": 27
+      },
+      {
+        "site": "NOAA News",
+        "endpoint": "https://www.noaa.gov/rss.xml",
+        "status": "SUCCEEDED",
+        "previewCount": 5,
+        "lastRun": "2026-10-28T07:30:52.300Z",
+        "priorRuns": 22
+      }
+    ],
+    "editionItems": 13,
+    "candidateCount": 13
+  },
+  "containerRecreation": {
+    "checkedAt": "2026-10-28T05:20:02.532Z",
+    "beforeCount": 22,
+    "afterCount": 22,
+    "preserved": true
+  },
+  "workerRecovery": {
+    "kind": "actual-worker-crash-recovery",
+    "checkedAt": "2026-10-28T02:13:35.280Z",
+    "jobStatus": "SUCCEEDED",
+    "attempts": 2,
+    "articlesBefore": 20,
+    "articlesAfter": 20,
+    "staleRunningFetches": 0
+  },
+  "multiWebQuota": {
+    "kind": "actual-multi-web-quota",
+    "checkedAt": "2026-10-28T02:12:24.143Z",
+    "webInstances": 2,
+    "successfulRequests": 60,
+    "overLimitBoth": 429,
+    "reloginStatus": 429
+  },
+  "backupRestore": "articles=20\nactive_accounts=0\nsessions=0\nEncrypted backup decrypt and isolated restore verified; isolated database will be removed.",
+  "truststore": {
+    "host": "runtime=27.0.1.0.2+1 vendor=Eclipse Adoptium\nroots=118 compromised-chain-roots=absent\nordinary-https=PASS\ndv-g3b=TLS_REJECTED\ndv-g3c=TLS_REJECTED\nov-g3b=TLS_REJECTED\nov-g3c=TLS_REJECTED\nev-g3b=TLS_REJECTED\nev-g3c=TLS_REJECTED\ndv-g3b-aaa=TLS_REJECTED\ndv-g3c-aaa=TLS_REJECTED\nov-g3b-aaa=TLS_REJECTED\nov-g3c-aaa=TLS_REJECTED\nev-g3b-aaa=TLS_REJECTED\nev-g3c-aaa=TLS_REJECTED\ndv-g3b-noct=TLS_REJECTED\ndv-g3b-aaa-noct=TLS_REJECTED",
+    "runtime": "Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp -Duser.timezone=UTC\nruntime=27.0.1.0.2+1 vendor=Eclipse Adoptium\nroots=118 compromised-chain-roots=absent\nordinary-https=PASS\ndv-g3b=TLS_REJECTED\ndv-g3c=TLS_REJECTED\nov-g3b=TLS_REJECTED\nov-g3c=TLS_REJECTED\nev-g3b=TLS_REJECTED\nev-g3c=TLS_REJECTED\ndv-g3b-aaa=TLS_REJECTED\ndv-g3c-aaa=TLS_REJECTED\nov-g3b-aaa=TLS_REJECTED\nov-g3c-aaa=TLS_REJECTED\nev-g3b-aaa=TLS_REJECTED\nev-g3c-aaa=TLS_REJECTED\ndv-g3b-noct=TLS_REJECTED\ndv-g3b-aaa-noct=TLS_REJECTED"
+  }
+}

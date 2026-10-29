@@ -1,0 +1,27 @@
+{
+  "at": "2026-10-29T00:21:22.679Z",
+  "model": "Index Translate 2B Q8_0",
+  "glossary": "glossary-v1",
+  "entries": 35,
+  "image": "sha256:e4b05e4e6828a6076d8c82548460cc14a1bb50bc8664a9cbb27f2139307061ae",
+  "tests": {
+    "unit": 21,
+    "integration": 29,
+    "e2e": 20,
+    "failed": 0,
+    "skipped": 0
+  },
+  "live": {
+    "articles": 136,
+    "translated": 36,
+    "pending": 99,
+    "failed": 1,
+    "enabledSources": 6,
+    "syntheticAccounts": 0
+  },
+  "https": true,
+  "browserKoreanAndEnglish": true,
+  "backgroundBackfill": true,
+  "failedBehavior": "Original retained; numeric preservation rejection observed",
+  "automaticHostStartup": false
+}

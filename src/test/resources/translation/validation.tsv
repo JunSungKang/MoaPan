@@ -1,0 +1,101 @@
+# Fixed bilingual quantity corpus: 25 pairs x 2 directions x original/mutated = 100 checks. Not an LLM accuracy benchmark.
+1	ko	A 100 MB request blocks execution for close to a minute.	100MB 요청은 실행을 거의 1분 동안 차단합니다.	PASS
+2	ko	A 100 MB request blocks execution for close to a minute.	107MB 요청은 실행을 거의 1분 동안 차단합니다.	translation_numbers_changed
+3	en	100MB 요청은 실행을 거의 1분 동안 차단합니다.	A 100 MB request blocks execution for close to a minute.	PASS
+4	en	100MB 요청은 실행을 거의 1분 동안 차단합니다.	A 107 MB request blocks execution for close to a minute.	translation_numbers_changed
+5	ko	The delay is 1000 milliseconds.	지연은 1초입니다.	PASS
+6	ko	The delay is 1000 milliseconds.	지연은 8초입니다.	translation_numbers_changed
+7	en	지연은 1초입니다.	The delay is 1000 milliseconds.	PASS
+8	en	지연은 1초입니다.	The delay is 1007 milliseconds.	translation_numbers_changed
+9	ko	The timeout is 2 minutes.	시간 제한은 120초입니다.	PASS
+10	ko	The timeout is 2 minutes.	시간 제한은 127초입니다.	translation_numbers_changed
+11	en	시간 제한은 120초입니다.	The timeout is 2 minutes.	PASS
+12	en	시간 제한은 120초입니다.	The timeout is 9 minutes.	translation_numbers_changed
+13	ko	The test uses 1 million vectors.	시험은 100만 벡터를 사용합니다.	PASS
+14	ko	The test uses 1 million vectors.	시험은 107만 벡터를 사용합니다.	translation_numbers_changed
+15	en	시험은 100만 벡터를 사용합니다.	The test uses 1 million vectors.	PASS
+16	en	시험은 100만 벡터를 사용합니다.	The test uses 8 million vectors.	translation_numbers_changed
+17	ko	The test uses 2 billion records.	시험은 20억 레코드를 사용합니다.	PASS
+18	ko	The test uses 2 billion records.	시험은 27억 레코드를 사용합니다.	translation_numbers_changed
+19	en	시험은 20억 레코드를 사용합니다.	The test uses 2 billion records.	PASS
+20	en	시험은 20억 레코드를 사용합니다.	The test uses 9 billion records.	translation_numbers_changed
+21	ko	The index has 1,000 entries.	인덱스에는 1000개 항목이 있습니다.	PASS
+22	ko	The index has 1,000 entries.	인덱스에는 1007개 항목이 있습니다.	translation_numbers_changed
+23	en	인덱스에는 1000개 항목이 있습니다.	The index has 1,000 entries.	PASS
+24	en	인덱스에는 1000개 항목이 있습니다.	The index has 8,000 entries.	translation_numbers_changed
+25	ko	Memory use is 100 MB.	메모리 사용량은 100MB입니다.	PASS
+26	ko	Memory use is 100 MB.	메모리 사용량은 107MB입니다.	translation_numbers_changed
+27	en	메모리 사용량은 100MB입니다.	Memory use is 100 MB.	PASS
+28	en	메모리 사용량은 100MB입니다.	Memory use is 107 MB.	translation_numbers_changed
+29	ko	Storage use is 2 GB.	저장 공간 사용량은 2GB입니다.	PASS
+30	ko	Storage use is 2 GB.	저장 공간 사용량은 9GB입니다.	translation_numbers_changed
+31	en	저장 공간 사용량은 2GB입니다.	Storage use is 2 GB.	PASS
+32	en	저장 공간 사용량은 2GB입니다.	Storage use is 9 GB.	translation_numbers_changed
+33	ko	The cache occupies 512 MiB.	캐시는 512MiB를 차지합니다.	PASS
+34	ko	The cache occupies 512 MiB.	캐시는 519MiB를 차지합니다.	translation_numbers_changed
+35	en	캐시는 512MiB를 차지합니다.	The cache occupies 512 MiB.	PASS
+36	en	캐시는 512MiB를 차지합니다.	The cache occupies 519 MiB.	translation_numbers_changed
+37	ko	The result is 15 percent.	결과는 15%입니다.	PASS
+38	ko	The result is 15 percent.	결과는 22%입니다.	translation_numbers_changed
+39	en	결과는 15%입니다.	The result is 15 percent.	PASS
+40	en	결과는 15%입니다.	The result is 22 percent.	translation_numbers_changed
+41	ko	The difference is 15 percentage points.	차이는 15%p입니다.	PASS
+42	ko	The difference is 15 percentage points.	차이는 22%p입니다.	translation_numbers_changed
+43	en	차이는 15%p입니다.	The difference is 15 percentage points.	PASS
+44	en	차이는 15%p입니다.	The difference is 22 percentage points.	translation_numbers_changed
+45	ko	Latency decreased from 120 ms to 90 ms.	지연 시간이 120ms에서 90ms로 감소했습니다.	PASS
+46	ko	Latency decreased from 120 ms to 90 ms.	지연 시간이 127ms에서 90ms로 감소했습니다.	translation_numbers_changed
+47	en	지연 시간이 120ms에서 90ms로 감소했습니다.	Latency decreased from 120 ms to 90 ms.	PASS
+48	en	지연 시간이 120ms에서 90ms로 감소했습니다.	Latency decreased from 127 ms to 90 ms.	translation_numbers_changed
+49	ko	Latency increased from 90 ms to 120 ms.	지연 시간이 90ms에서 120ms로 증가했습니다.	PASS
+50	ko	Latency increased from 90 ms to 120 ms.	지연 시간이 97ms에서 120ms로 증가했습니다.	translation_numbers_changed
+51	en	지연 시간이 90ms에서 120ms로 증가했습니다.	Latency increased from 90 ms to 120 ms.	PASS
+52	en	지연 시간이 90ms에서 120ms로 증가했습니다.	Latency increased from 97 ms to 120 ms.	translation_numbers_changed
+53	ko	The score is 0.95.	점수는 0.95입니다.	PASS
+54	ko	The score is 0.95.	점수는 7.95입니다.	translation_numbers_changed
+55	en	점수는 0.95입니다.	The score is 0.95.	PASS
+56	en	점수는 0.95입니다.	The score is 7.95.	translation_numbers_changed
+57	ko	The delta is -0.25.	변화량은 -0.25입니다.	PASS
+58	ko	The delta is -0.25.	변화량은 -7.25입니다.	translation_numbers_changed
+59	en	변화량은 -0.25입니다.	The delta is -0.25.	PASS
+60	en	변화량은 -0.25입니다.	The delta is -7.25.	translation_numbers_changed
+61	ko	The value is 1e3.	값은 1000입니다.	PASS
+62	ko	The value is 1e3.	값은 1007입니다.	translation_numbers_changed
+63	en	값은 1000입니다.	The value is 1e3.	PASS
+64	en	값은 1000입니다.	The value is 8e3.	translation_numbers_changed
+65	ko	The interval is 3 hours.	간격은 10800초입니다.	PASS
+66	ko	The interval is 3 hours.	간격은 10807초입니다.	translation_numbers_changed
+67	en	간격은 10800초입니다.	The interval is 3 hours.	PASS
+68	en	간격은 10800초입니다.	The interval is 10 hours.	translation_numbers_changed
+69	ko	The observation lasted 0.5 seconds.	관측은 500밀리초 동안 지속됐습니다.	PASS
+70	ko	The observation lasted 0.5 seconds.	관측은 507밀리초 동안 지속됐습니다.	translation_numbers_changed
+71	en	관측은 500밀리초 동안 지속됐습니다.	The observation lasted 0.5 seconds.	PASS
+72	en	관측은 500밀리초 동안 지속됐습니다.	The observation lasted 7.5 seconds.	translation_numbers_changed
+73	ko	The run uses 8 threads and 2 workers.	실행은 스레드 8개와 워커 2개를 사용합니다.	PASS
+74	ko	The run uses 8 threads and 2 workers.	실행은 스레드 15개와 워커 2개를 사용합니다.	translation_numbers_changed
+75	en	실행은 스레드 8개와 워커 2개를 사용합니다.	The run uses 8 threads and 2 workers.	PASS
+76	en	실행은 스레드 8개와 워커 2개를 사용합니다.	The run uses 15 threads and 2 workers.	translation_numbers_changed
+77	ko	The score changed from 0.82 to 0.91.	점수는 0.82에서 0.91로 바뀌었습니다.	PASS
+78	ko	The score changed from 0.82 to 0.91.	점수는 7.82에서 0.91로 바뀌었습니다.	translation_numbers_changed
+79	en	점수는 0.82에서 0.91로 바뀌었습니다.	The score changed from 0.82 to 0.91.	PASS
+80	en	점수는 0.82에서 0.91로 바뀌었습니다.	The score changed from 7.82 to 0.91.	translation_numbers_changed
+81	ko	The median latency is 32 ms.	중앙값 지연 시간은 32ms입니다.	PASS
+82	ko	The median latency is 32 ms.	중앙값 지연 시간은 39ms입니다.	translation_numbers_changed
+83	en	중앙값 지연 시간은 32ms입니다.	The median latency is 32 ms.	PASS
+84	en	중앙값 지연 시간은 32ms입니다.	The median latency is 39 ms.	translation_numbers_changed
+85	ko	The throughput is 1000.	처리량은 1000입니다.	PASS
+86	ko	The throughput is 1000.	처리량은 1007입니다.	translation_numbers_changed
+87	en	처리량은 1000입니다.	The throughput is 1000.	PASS
+88	en	처리량은 1000입니다.	The throughput is 1007.	translation_numbers_changed
+89	ko	There is no evidence of improvement in 3 tests.	3개 시험에서 개선의 증거는 없습니다.	PASS
+90	ko	There is no evidence of improvement in 3 tests.	10개 시험에서 개선의 증거는 없습니다.	translation_numbers_changed
+91	en	3개 시험에서 개선의 증거는 없습니다.	There is no evidence of improvement in 3 tests.	PASS
+92	en	3개 시험에서 개선의 증거는 없습니다.	There is no evidence of improvement in 10 tests.	translation_numbers_changed
+93	ko	The difference is not statistically significant in 2 trials.	2회 실험에서 차이는 통계적으로 유의미하지 않습니다.	PASS
+94	ko	The difference is not statistically significant in 2 trials.	9회 실험에서 차이는 통계적으로 유의미하지 않습니다.	translation_numbers_changed
+95	en	2회 실험에서 차이는 통계적으로 유의미하지 않습니다.	The difference is not statistically significant in 2 trials.	PASS
+96	en	2회 실험에서 차이는 통계적으로 유의미하지 않습니다.	The difference is not statistically significant in 9 trials.	translation_numbers_changed
+97	ko	The range is 10 to 20.	범위는 10에서 20입니다.	PASS
+98	ko	The range is 10 to 20.	범위는 17에서 20입니다.	translation_numbers_changed
+99	en	범위는 10에서 20입니다.	The range is 10 to 20.	PASS
+100	en	범위는 10에서 20입니다.	The range is 17 to 20.	translation_numbers_changed

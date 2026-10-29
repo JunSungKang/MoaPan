@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: {namespace: {{ .Release.Namespace | quote }}, name: worker}
+spec:
+  replicas: 1
+  strategy: {type: Recreate}
+  selector: {matchLabels: {app: moapan, component: worker}}
+  template:
+    metadata:
+      labels: {app: moapan, component: worker}
+      annotations:
+        checksum/settings: {{ include (print $.Template.BasePath "/config.yaml") . | sha256sum }}
+    spec:
+      automountServiceAccountToken: false
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets: {{ toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext: {runAsUser: 10001, runAsGroup: 10001, runAsNonRoot: true, seccompProfile: {type: RuntimeDefault}}
+      initContainers:
+        - name: wait-schema
+          image: {{ include "moapan.image" .Values.images.database }}
+          env:
+            - name: PGPASSWORD
+              valueFrom: {secretKeyRef: {name: {{ .Values.existingSecret | quote }}, key: DATABASE_PASSWORD}}
+          resources: {requests: {cpu: 25m, memory: 32Mi}, limits: {cpu: '0.25', memory: 128Mi}}
+          command: [sh, -ec]
+          args:
+            - |
+              n=0
+              until [ "$(psql -h db -U moapan -d moapan -Atc "SELECT count(*) FROM flyway_schema_history WHERE version='{{ .Values.migrationVersion }}' AND success" 2>/dev/null)" = 1 ]; do
+                n=$((n+1)); [ "$n" -lt 200 ] || exit 1; sleep 3
+              done
+          securityContext: {readOnlyRootFilesystem: true, allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}}
+      containers:
+        - name: worker
+          image: {{ include "moapan.image" .Values.images.app }}
+          envFrom: [{configMapRef: {name: moapan-settings}}]
+          env:
+            - {name: MOAPAN_ROLE, value: worker}
+{{ include "moapan.secretEnv" . | indent 12 }}
+            - {name: MOAPAN_TRANSLATION_URL, value: 'http://translator:11435/v1/chat/completions'}
+            - {name: MOAPAN_TRANSLATION_KEY_FILE, value: /run/secrets/translation_key}
+            - {name: TRANSLATION_TIMEOUT_SECONDS, value: '300'}
+          securityContext: {readOnlyRootFilesystem: true, allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}}
+          resources: {requests: {cpu: 100m, memory: 256Mi}, limits: {cpu: '1.5', memory: 768Mi}}
+          volumeMounts:
+            - {name: tmp, mountPath: /tmp}
+            - {name: key, mountPath: /run/secrets, readOnly: true}
+      volumes:
+        - {name: tmp, emptyDir: {sizeLimit: 128Mi}}
+        - name: key
+          secret:
+            secretName: {{ .Values.existingSecret | quote }}
+            items: [{key: TRANSLATION_KEY, path: translation_key}]

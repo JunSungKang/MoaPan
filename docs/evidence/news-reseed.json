@@ -1,0 +1,78 @@
+{
+  "checkedAt": "2026-10-28T14:06:33.340Z",
+  "reset": {
+    "oldArticlesDeleted": 23,
+    "editionItemsDeleted": 143,
+    "editionsDeleted": 12,
+    "articleTagsDeleted": 15,
+    "jobsDeleted": 98,
+    "fetchRunsDeleted": 101,
+    "articlesImmediatelyAfterReset": 0,
+    "usersAndPreferencesUntouched": true
+  },
+  "sources": [
+    {
+      "label": "FTC Press Releases",
+      "endpoint_url": "https://www.ftc.gov/feeds/press-release.xml",
+      "enabled": false,
+      "validation_status": "FAILED",
+      "articles": 0,
+      "recent_articles": 0,
+      "latest_published_at": null,
+      "last_success": null
+    },
+    {
+      "label": "NASA News Releases",
+      "endpoint_url": "https://www.nasa.gov/news-release/feed/",
+      "enabled": false,
+      "validation_status": "PASSED",
+      "articles": 0,
+      "recent_articles": 0,
+      "latest_published_at": null,
+      "last_success": null
+    },
+    {
+      "label": "NIST News",
+      "endpoint_url": "https://www.nist.gov/news-events/news/rss.xml",
+      "enabled": true,
+      "validation_status": "PASSED",
+      "articles": 40,
+      "recent_articles": 1,
+      "latest_published_at": "2026-10-27T12:00:00+00:00",
+      "last_success": "2026-10-28T14:04:06.944321+00:00"
+    },
+    {
+      "label": "NOAA News",
+      "endpoint_url": "https://www.noaa.gov/rss.xml",
+      "enabled": false,
+      "validation_status": "PASSED",
+      "articles": 0,
+      "recent_articles": 0,
+      "latest_published_at": null,
+      "last_success": null
+    },
+    {
+      "label": "NSF News",
+      "endpoint_url": "https://www.nsf.gov/rss/rss_www_news.xml",
+      "enabled": true,
+      "validation_status": "PASSED",
+      "articles": 15,
+      "recent_articles": 2,
+      "latest_published_at": "2026-10-27T20:23:58+00:00",
+      "last_success": "2026-10-28T14:05:43.088838+00:00"
+    }
+  ],
+  "publicHttps": {
+    "status": 200,
+    "itemCount": 3,
+    "candidateCount": 3,
+    "titles": [
+      "Podcast: The future of electronics goes beyond circuit boards",
+      "New dwarf planet candidate discovered by NSF–DOE Rubin Observatory",
+      "NIST Report Provides Guidelines for Transition to Post-Quantum Cryptography Standards"
+    ]
+  },
+  "syntheticAccountsRemaining": 0,
+  "adminPreserved": true,
+  "codeOrImageChanged": false
+}

@@ -1,0 +1,73 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '4.1.2'
+}
+group = 'com.moapan'
+version = '1.0.0'
+java { toolchain { languageVersion = JavaLanguageVersion.of(27); vendor = JvmVendorSpec.ADOPTIUM } }
+dependencies {
+    implementation platform('org.springframework.boot:spring-boot-dependencies:4.1.2')
+    implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-session-jdbc'
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-database-postgresql'
+    implementation 'org.bouncycastle:bcprov-jdk18on:1.86'
+    implementation 'com.rometools:rome:2.1.0'
+    implementation 'org.apache.httpcomponents.client5:httpclient5'
+    implementation 'org.jsoup:jsoup:1.23.2'
+    runtimeOnly 'org.postgresql:postgresql'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.testcontainers:postgresql:1.21.4'
+    testImplementation 'com.microsoft.playwright:playwright:1.64.0'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+dependencyLocking { lockAllConfigurations() }
+sourceSets {
+    integrationTest { java.srcDir 'src/integrationTest/java'; resources.srcDir 'src/integrationTest/resources'; compileClasspath += sourceSets.main.output + configurations.testRuntimeClasspath; runtimeClasspath += output + compileClasspath }
+    e2eTest { java.srcDir 'src/e2eTest/java'; resources.srcDir 'src/e2eTest/resources'; compileClasspath += sourceSets.main.output + configurations.testRuntimeClasspath; runtimeClasspath += output + compileClasspath }
+}
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+    jvmArgs '-XX:+EnableDynamicAgentLoading', '-Duser.timezone=UTC'
+    environment 'TMPDIR', file('.local/tmp').absolutePath
+    environment 'PLAYWRIGHT_BROWSERS_PATH', file('.local/browsers').absolutePath
+    environment 'PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD','1'
+    systemProperty 'java.io.tmpdir', file('.local/tmp').absolutePath
+    systemProperty 'user.home', file('.local/test-home').absolutePath
+}
+tasks.register('integrationTest', Test) { testClassesDirs = sourceSets.integrationTest.output.classesDirs; classpath = sourceSets.integrationTest.runtimeClasspath; shouldRunAfter test }
+tasks.register('e2eTest', Test) { testClassesDirs = sourceSets.e2eTest.output.classesDirs; classpath = sourceSets.e2eTest.runtimeClasspath; shouldRunAfter integrationTest }
+tasks.register('sourceCheck', Exec) { commandLine 'sh', 'scripts/security/source-check.sh' }
+check.dependsOn sourceCheck
+tasks.register('sbom') {
+    dependsOn bootJar
+    outputs.file layout.buildDirectory.file('reports/sbom.cdx.json')
+    doLast {
+        def artifacts = configurations.runtimeClasspath.resolvedConfiguration.resolvedArtifacts
+        def components = artifacts.collect { a ->
+            def digest = java.security.MessageDigest.getInstance('SHA-256').digest(a.file.bytes).encodeHex().toString()
+            [type:'library', group:a.moduleVersion.id.group, name:a.name, version:a.moduleVersion.id.version, hashes:[[alg:'SHA-256',content:digest]], purl:"pkg:maven/${a.moduleVersion.id.group}/${a.name}@${a.moduleVersion.id.version}"]
+        }.sort { it.purl }
+        def out = layout.buildDirectory.file('reports/sbom.cdx.json').get().asFile
+        out.parentFile.mkdirs(); out.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson([bomFormat:'CycloneDX',specVersion:'1.6',version:1,components:components]))
+    }
+}
+tasks.register('securityCheck', Exec) { dependsOn sbom; commandLine 'sh','scripts/security/security-check.sh' }
+tasks.register('acceptanceTest') { dependsOn check, integrationTest, e2eTest, securityCheck; doLast { println 'Local acceptance tasks completed; external HTTPS and real-source smoke evidence must also be reviewed.' } }
+tasks.register('playwrightInstall', JavaExec) { classpath = sourceSets.e2eTest.runtimeClasspath; mainClass = 'com.microsoft.playwright.CLI'; args 'install','chromium'; environment 'PLAYWRIGHT_BROWSERS_PATH',file('.local/browsers').absolutePath; environment 'TMPDIR',file('.local/tmp').absolutePath }
+tasks.withType(Test).configureEach {
+    systemProperty 'api.version','1.44'
+    environment 'DOCKER_HOST', System.getenv('DOCKER_HOST') ?: (System.getProperty('os.name').toLowerCase().contains('mac') ? 'unix://' + System.getProperty('user.home') + '/.docker/run/docker.sock' : 'unix:///var/run/docker.sock')
+    environment 'TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE','/var/run/docker.sock'
+}
+tasks.named('playwrightInstall') { jvmArgs '-Djava.io.tmpdir=' + file('.local/tmp').absolutePath; environment 'PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD','0' }
+
+tasks.withType(AbstractArchiveTask).configureEach {
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+}

@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "scope": "User-authorized local Mac service reachable from mobile internet; separate hosting deployment excluded",
+  "baseUrl": "https://175.195.62.165",
+  "checkedAt": "2026-10-28T06:11:51.357Z",
+  "mobileInternetConfirmation": "User explicitly confirmed normal page access with Wi-Fi off",
+  "httpsAboutStatus": 200,
+  "unauthenticatedNewsStatus": 401,
+  "httpRedirectStatus": 308,
+  "certificate": {
+    "issuer": "Lets Encrypt YE1",
+    "notBefore": "2026-10-28T05:11:18Z",
+    "notAfter": "2026-11-03T21:11:17Z",
+    "profile": "shortlived",
+    "renewal": "Caddy ACME automatic renewal while running"
+  },
+  "dockerPermission": "Only privileged port forwarding to external machines enabled with explicit user approval",
+  "fileSharing": "VirtioFS unchanged"
+}

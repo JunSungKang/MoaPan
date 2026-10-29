@@ -1,0 +1,100 @@
+{
+  "checkedAt": "2026-10-28T10:21:49.240Z",
+  "base": "https://175.195.62.165",
+  "checks": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/policy-history.html",
+      "status": 200
+    },
+    {
+      "path": "/terms.html",
+      "status": 200
+    },
+    {
+      "path": "/privacy.html",
+      "status": 200
+    },
+    {
+      "path": "/policies/terms-1.html",
+      "status": 200
+    },
+    {
+      "path": "/policies/terms-2.html",
+      "status": 200
+    },
+    {
+      "path": "/policies/terms-3.html",
+      "status": 200
+    },
+    {
+      "path": "/policies/privacy-1.html",
+      "status": 200
+    },
+    {
+      "path": "/policies/privacy-2.html",
+      "status": 200
+    },
+    {
+      "path": "/policies/privacy-3.html",
+      "status": 200
+    },
+    {
+      "path": "/policies/privacy-4.html",
+      "status": 200
+    },
+    {
+      "path": "/settings.html",
+      "status": 302,
+      "to": "/login.html"
+    },
+    {
+      "path": "/account.html",
+      "status": 302,
+      "to": "/login.html"
+    },
+    {
+      "path": "/admin.html",
+      "status": 302,
+      "to": "/login.html"
+    },
+    {
+      "path": "/api/v1/account",
+      "status": 401
+    },
+    {
+      "path": "/api/v1/news/edition",
+      "status": 401
+    },
+    {
+      "path": "/api/v1/admin/interests",
+      "status": 401
+    },
+    {
+      "path": "/api/v1/private.html",
+      "status": 401
+    },
+    {
+      "path": "/api/v1/public/news/edition",
+      "status": 200,
+      "items": 13,
+      "cursor": null
+    },
+    {
+      "path": "/api/v1/public/interests",
+      "status": 200,
+      "tagCount": 6
+    },
+    {
+      "syntheticSignup": "terms-4 accepted; prior version rejected",
+      "memberPages": 200,
+      "adminApi": 403
+    },
+    {
+      "syntheticAccountDeleted": true
+    }
+  ]
+}

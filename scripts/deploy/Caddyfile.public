@@ -1,0 +1,39 @@
+{
+ admin off
+ http_port 8081
+ https_port 8443
+ default_sni {$MOAPAN_PUBLIC_HOST}
+}
+https://{$MOAPAN_PUBLIC_HOST} {
+ tls {
+  issuer acme {
+   dir https://acme-v02.api.letsencrypt.org/directory
+   profile shortlived
+  }
+ }
+ @internal path /internal/* /actuator/*
+ respond @internal 404
+ header Strict-Transport-Security "max-age=86400"
+ request_body {
+  max_size 16KB
+ }
+ reverse_proxy web:8080 {
+  header_up -X-Forwarded-For
+  header_up -X-Forwarded-Host
+  header_up -X-Forwarded-Proto
+  transport http {
+   dial_timeout 5s
+   response_header_timeout 15s
+  }
+ }
+}
+http://localhost:8080 {
+ handle /about.html {
+  reverse_proxy web:8080 {
+   header_up Host {$MOAPAN_PUBLIC_HOST}
+  }
+ }
+ handle {
+  respond 404
+ }
+}

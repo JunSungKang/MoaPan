@@ -1,0 +1,27 @@
+# 현재 상태 안내
+
+현재 실행·번역·명령은 [README](../README.md), [PROGRESS](PROGRESS.md), [LINUX_TRANSLATION](LINUX_TRANSLATION.md)를 따른다. 아래 내용은 각 시점의 납품 기록이며 이미지와 시험 수치를 현재 값으로 해석하지 않는다.
+
+# 2026-10-29 추가 전달
+
+수집 날짜·주제 필터와 arXiv 논문 수집, GitHub 보안 공지 등록 완료. 신규130건, 실제7주소 실행 성공(그중 NIST0건), 날짜위반/공개URL중복0. 54테스트PASS. 실행/검사 증빙: evidence/topic-collection.json 및 topic-security.json. 기존 배포·초기 출처 기록은 아래 당시 상태이며 현재 출처는 SOURCES.md를 따른다.
+
+# V1 전달 결과
+
+전체 상태: COMPLETE — 사용자 변경 기준인 로컬 실행+외부 휴대폰 접속을 충족했다. https://175.195.62.165/ 를 사용자가 데이터망에서 확인했다. 별도 호스팅 배포·main 병합·사업 개시는 포함하지 않는다. CI/CD는 제외했다.
+
+- 구현: 최소 계정·세션·CSRF·권한, 사이트/주소/권리 관리, 실제 worker 수집·요약·태그, 공통 edition·cursor·quota, 신문형 정적 UI·계정별 로컬 관심사·관리자·정책 화면.
+- 실제 JDK: Eclipse Temurin27.0.1.0.2+1. Boot4.1.2, Gradle9.8.2, PostgreSQL18.6. 공급자 버전 근거는 VERSIONS.md.
+- 증빙 확인: 2026-10-28T06:13:19.100Z; 외부 접속 evidence/public-access.json.
+- 실제 출처: NASA News Releases / NOAA News, 2026-10-28T05:28:47.291Z 두 수집 SUCCEEDED. 주소·최근 실행은 evidence/verification.json, 권리 범위는 SOURCES.md.
+- Compose: db/web/proxy healthy, worker 실행, migrate exit0. 재생성22기사 보존. 시작 명령: docker compose -f compose.yaml -f scripts/deploy/compose-public.yaml up -d --no-build --wait. 접속 URL https://175.195.62.165/ — 휴대폰 데이터망 확인 완료. 공개 모드 실행 명령은 DEPLOYMENT.md.
+- 테스트: Java48 PASS/FAIL0/SKIP0, bootstrap9 PASS, 시작 제한 시간3 PASS. 실제2 web quota·worker lease 복구·암호화 격리 복원 PASS. 검증 한계는 TEST_REPORT.md.
+- 보안: 소스/JAR/SBOM/이미지5종/도구 검사 HIGH·CRITICAL0. 잔여 MEDIUM·LOW 및 OpenPGP 미포함 근거를 유지. 알려진 취약점0 또는 미공개 취약점 부재를 보장하지 않는다.
+- 최종 앱 이미지: sha256:10fb33088f67df15ac84f45c5d16651031a558264c67df199d598525b1edd3c5. 다른 이미지와 report SHA는 evidence/verification.json.
+- GitHub: https://github.com/JunSungKang/MoaPan / codex/moapan-v1 / PR#1. 최종 커밋 후 guarded push와 원격 SHA 대조로 전달한다.
+- 운영 조건: Mac/Docker 실행, 현재 공인 IP와80/443 유지. Caddy 인증서 자동 갱신. 별도 서버·도메인 구매 없음.
+- 사업 개시 전: 운영자 정보·상표·콘텐츠 이용계약/범위·사업자 및 언론 관련 등록 여부·법률 검토 별도 확인.
+
+관심사 기기 간 이전: 관심사 설정에서 암호화 파일을 내보내 다른 기기의 같은 계정으로 가져올 수 있다. 확인 후 명시적 적용하며 파일/비밀번호/설정을 서버로 전송하지 않는다. 이후 기기별 변경은 독립적이다.
+
+공개 관심지면·메뉴 개정: 비회원은 대표 관심사 공개 지면(최대30개), 회원도 미설정 시 대표값 사용. 관리→대표 관심사에서 수정. 관심지면 하나와 검색 팝업, 역할별 메뉴 및 보호 페이지 접근 제한 적용. 공식 개시 전 사용자 요청에 따라 현재 이용약관·개인정보 모두 최초 제1판이며 공개 이력은 제거했다. 공개 HTTPS에서 실제 기사13개·보호 HTML302·계정401·일반회원 관리자403·신판 가입/로그인/탈퇴 및 합성 계정 삭제 확인. 이전 공개 지면 검증은 evidence/public-edition.json, 최신 최초판/스크랩 반영 검증은 evidence/scrap-layout.json, 메뉴는 MENU_AUDIT.md 참조.

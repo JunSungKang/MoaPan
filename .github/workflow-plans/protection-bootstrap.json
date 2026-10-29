@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 4,
+  "workSlug": "protection-bootstrap",
+  "flowType": "bootstrap",
+  "branch": "main",
+  "targetBranch": "main",
+  "baseSha": "55d0d80c9b7780bb55193b529b053af76fe84a0c",
+  "mergeMethod": "merge",
+  "governance": {
+    "prAuthorLogin": "JunSungKang",
+    "assigneeLogin": "JunSungKang",
+    "reviewerLogin": "junsung-bot[bot]",
+    "requiredChecks": [],
+    "commitAuthor": {
+      "name": "jun-sung, Kang",
+      "email": "kjuns1@naver.com"
+    },
+    "coAuthors": [
+      {
+        "name": "Codex",
+        "email": "codex@openai.com"
+      },
+      {
+        "name": "junsung-bot[bot]",
+        "email": "302617028+junsung-bot[bot]@users.noreply.github.com"
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "protection-bootstrap",
+      "expectedPaths": [
+        ".github/codex-governance.json",
+        ".github/workflow-plans/protection-bootstrap.json",
+        "scripts/governance/github-protection-bootstrap.mjs",
+        "scripts/governance/github-protection-bootstrap.test.mjs",
+        "docs/PROGRESS.md"
+      ],
+      "forbiddenPaths": [
+        "src/**",
+        ".env",
+        "**/*.pem"
+      ],
+      "acceptanceCriteria": [
+        "Human ADMIN installs current-origin main protection without App administration",
+        "Current-head review and merge safety verified by server guard",
+        "No product changes, commit, push or merge during provisioning"
+      ],
+      "validationCommands": [
+        "node --test scripts/governance/github-protection-bootstrap.test.mjs",
+        "node scripts/governance/github-protection-bootstrap.mjs --dry-run .github/workflow-plans/protection-bootstrap.json",
+        "node /Users/kkkk/.codex/scripts/github-app-workflow-guard.mjs --verify-server .github/workflow-plans/protection-bootstrap.json"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/PROGRESS.md"
+        ]
+      }
+    }
+  ]
+}

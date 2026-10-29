@@ -1,0 +1,77 @@
+{
+  "checkedAt": "2026-10-28T22:12:56.688Z",
+  "testResults": {
+    "passed": 54,
+    "failed": 0,
+    "skipped": 0
+  },
+  "jarSha256": "5241b8627fe698af11cb25e6f0e8be5aed7a3bcb566fc17e4fc3df2948d3e4bf",
+  "trivyVersion": "Version: 0.76.1",
+  "db": {
+    "Version": 2,
+    "NextUpdate": "2026-10-29T19:18:03.419608078Z",
+    "UpdatedAt": "2026-10-28T19:18:03.419608319Z",
+    "DownloadedAt": "2026-10-28T21:57:31.453891Z"
+  },
+  "kev": {
+    "catalogVersion": "2026.10.27",
+    "dateReleased": "2026-10-27T19:00:02.2307Z",
+    "matches": []
+  },
+  "reports": {
+    "source": {
+      "sha256": "e5d9d61222af75e25ec70bba31487dd292925bebc7738aaded780117cd64a075",
+      "createdAt": "2026-10-29T07:14:02.042668+09:00",
+      "highCritical": [
+        {
+          "id": "CVE-2026-116587",
+          "package": "github.com/go-jose/go-jose/v3",
+          "version": "v3.0.5"
+        }
+      ],
+      "secrets": 0
+    },
+    "jar": {
+      "sha256": "6ee0fe232e213396020dd8a003c023769ce9eedaa93d0691285b8ae81b6a6d5b",
+      "createdAt": "2026-10-29T07:14:03.42549+09:00",
+      "highCritical": [],
+      "secrets": 0
+    },
+    "sbom": {
+      "sha256": "317adc73068e8ad2be7e5f4f41f73d67edce02ef704d1ecae2204e48d2afd4d5",
+      "createdAt": "2026-10-29T07:14:02.141748+09:00",
+      "highCritical": [],
+      "secrets": 0
+    },
+    "image-37e99bc7f666c82777bc568c31e5317ea9759e0042a9158a303d026888a5a4fe": {
+      "sha256": "a2ab16de78211482b09c558f9d9aaa97143bfb73e3bae34f3c5a2266345bd396",
+      "createdAt": "2026-10-29T07:10:38.686466+09:00",
+      "imageId": "sha256:37e99bc7f666c82777bc568c31e5317ea9759e0042a9158a303d026888a5a4fe",
+      "highCritical": [],
+      "secrets": 0
+    },
+    "image-fe56a3237e03ff80c5f49035f4b2c9eac2c2c0a25a13759985fe19d5d93a153b": {
+      "sha256": "89e032725a5905900a8988fda969edbf7c14269ceb94c6ea5475921984797986",
+      "createdAt": "2026-10-29T07:10:38.947075+09:00",
+      "imageId": "sha256:fe56a3237e03ff80c5f49035f4b2c9eac2c2c0a25a13759985fe19d5d93a153b",
+      "highCritical": [
+        {
+          "id": "CVE-2026-116587",
+          "package": "github.com/go-jose/go-jose/v3",
+          "version": "v3.0.5"
+        }
+      ],
+      "secrets": 0
+    },
+    "image-0f91afc7d28443670678b3be91e446047d3ec5bb1715d58aa00f3289b640df17": {
+      "sha256": "0dc65aa76acd516be48ae268c8ebb3989e75399dd56cc6576d5ebb1ba9ed2df4",
+      "createdAt": "2026-10-29T07:13:10.90181+09:00",
+      "imageId": "sha256:0f91afc7d28443670678b3be91e446047d3ec5bb1715d58aa00f3289b640df17",
+      "highCritical": [],
+      "secrets": 0
+    }
+  },
+  "nonExposureReview": "jose-v3-applicability.json",
+  "liveProxyProof": "proxy-runtime-applicability.json",
+  "finalScanRecordedAt": "2026-10-28T22:14:35.011Z"
+}

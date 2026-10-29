@@ -1,0 +1,90 @@
+{
+  "publishedSince": "2026-10-10",
+  "timezone": "Asia/Seoul",
+  "definitions": [
+    {
+      "name": "NIST News",
+      "label": "NIST 사이버보안",
+      "home": "https://www.nist.gov/",
+      "type": "RSS",
+      "endpoint": "https://www.nist.gov/news-events/cybersecurity/rss.xml",
+      "terms": "https://www.nist.gov/copyrights-disclaimers",
+      "note": "Agency-authored cybersecurity RSS text only, attribution NIST. Exclude copyright-marked third-party material, images, logos, full bodies and AI external processing. Date filter 2026-10-10 Asia/Seoul inclusive.",
+      "mapping": {},
+      "topics": []
+    },
+    {
+      "name": "GitHub Advisory Database",
+      "label": "검토된 보안 취약점",
+      "home": "https://github.com/advisories",
+      "type": "JSON_API",
+      "endpoint": "https://api.github.com/advisories?type=reviewed&is_withdrawn=false&published=%3E%3D2026-10-10&sort=published&direction=desc&per_page=30",
+      "terms": "https://github.com/github/advisory-database/blob/main/LICENSE.md",
+      "note": "GitHub Advisory Database CC BY 4.0. Attribution via source name, original advisory link and site terms link. Extractive summaries are modified excerpts; no endorsement. Reviewed, non-withdrawn advisories only; latest 30 per poll, not a complete vulnerability feed.",
+      "mapping": {
+        "items": "$",
+        "id": "ghsa_id",
+        "title": "summary",
+        "url": "html_url",
+        "publishedAt": "published_at",
+        "description": "description"
+      },
+      "topics": []
+    },
+    {
+      "name": "arXiv",
+      "label": "보안 취약점 논문",
+      "home": "https://arxiv.org/",
+      "type": "ATOM",
+      "endpoint": "https://export.arxiv.org/api/query?search_query=%28%28cat%3Acs.CR+AND+%28ti%3Avulnerability+OR+ti%3Aexploit+OR+ti%3Aattack%29%29%29+AND+submittedDate%3A%5B202610091500+TO+209912312359%5D&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending",
+      "terms": "https://info.arxiv.org/help/api/tou.html",
+      "note": "CC0 descriptive metadata (title/abstract/identifier) only; original abstract links, no PDF/body retrieval. Topic and submitted-date query, first 20 results, preprints not guaranteed peer-reviewed. Earlier topic queries excluded to reduce cross-feed duplicates. Official API authorization; no HTML crawling. Shared single-connection gate and 3-second cooldown.",
+      "mapping": {},
+      "topics": []
+    },
+    {
+      "name": "arXiv",
+      "label": "LLM 성능·평가 논문",
+      "home": "https://arxiv.org/",
+      "type": "ATOM",
+      "endpoint": "https://export.arxiv.org/api/query?search_query=%28%28%28ti%3ALLM+OR+ti%3A%22language+model%22%29+AND+%28all%3Abenchmark+OR+all%3Aevaluation+OR+all%3Aperformance%29%29+ANDNOT+%28%28cat%3Acs.CR+AND+%28ti%3Avulnerability+OR+ti%3Aexploit+OR+ti%3Aattack%29%29%29%29+AND+submittedDate%3A%5B202610091500+TO+209912312359%5D&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending",
+      "terms": "https://info.arxiv.org/help/api/tou.html",
+      "note": "CC0 descriptive metadata (title/abstract/identifier) only; original abstract links, no PDF/body retrieval. Topic and submitted-date query, first 20 results, preprints not guaranteed peer-reviewed. Earlier topic queries excluded to reduce cross-feed duplicates. Official API authorization; no HTML crawling. Shared single-connection gate and 3-second cooldown.",
+      "mapping": {},
+      "topics": []
+    },
+    {
+      "name": "arXiv",
+      "label": "RAG 논문",
+      "home": "https://arxiv.org/",
+      "type": "ATOM",
+      "endpoint": "https://export.arxiv.org/api/query?search_query=%28%28ti%3ARAG+OR+all%3A%22retrieval+augmented+generation%22+OR+all%3A%22retrieval-augmented+generation%22%29+ANDNOT+%28%28cat%3Acs.CR+AND+%28ti%3Avulnerability+OR+ti%3Aexploit+OR+ti%3Aattack%29%29+OR+%28%28ti%3ALLM+OR+ti%3A%22language+model%22%29+AND+%28all%3Abenchmark+OR+all%3Aevaluation+OR+all%3Aperformance%29%29%29%29+AND+submittedDate%3A%5B202610091500+TO+209912312359%5D&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending",
+      "terms": "https://info.arxiv.org/help/api/tou.html",
+      "note": "CC0 descriptive metadata (title/abstract/identifier) only; original abstract links, no PDF/body retrieval. Topic and submitted-date query, first 20 results, preprints not guaranteed peer-reviewed. Earlier topic queries excluded to reduce cross-feed duplicates. Official API authorization; no HTML crawling. Shared single-connection gate and 3-second cooldown.",
+      "mapping": {},
+      "topics": []
+    },
+    {
+      "name": "arXiv",
+      "label": "데이터베이스 논문",
+      "home": "https://arxiv.org/",
+      "type": "ATOM",
+      "endpoint": "https://export.arxiv.org/api/query?search_query=%28%28cat%3Acs.DB+AND+%28all%3Adatabase+OR+all%3Aquery%29%29+ANDNOT+%28%28cat%3Acs.CR+AND+%28ti%3Avulnerability+OR+ti%3Aexploit+OR+ti%3Aattack%29%29+OR+%28%28ti%3ALLM+OR+ti%3A%22language+model%22%29+AND+%28all%3Abenchmark+OR+all%3Aevaluation+OR+all%3Aperformance%29%29+OR+%28ti%3ARAG+OR+all%3A%22retrieval+augmented+generation%22+OR+all%3A%22retrieval-augmented+generation%22%29%29%29+AND+submittedDate%3A%5B202610091500+TO+209912312359%5D&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending",
+      "terms": "https://info.arxiv.org/help/api/tou.html",
+      "note": "CC0 descriptive metadata (title/abstract/identifier) only; original abstract links, no PDF/body retrieval. Topic and submitted-date query, first 20 results, preprints not guaranteed peer-reviewed. Earlier topic queries excluded to reduce cross-feed duplicates. Official API authorization; no HTML crawling. Shared single-connection gate and 3-second cooldown.",
+      "mapping": {},
+      "topics": []
+    },
+    {
+      "name": "arXiv",
+      "label": "검색 속도·효율 논문",
+      "home": "https://arxiv.org/",
+      "type": "ATOM",
+      "endpoint": "https://export.arxiv.org/api/query?search_query=%28%28cat%3Acs.IR+AND+%28all%3Alatency+OR+all%3Aefficiency+OR+all%3A%22nearest+neighbor%22+OR+all%3Athroughput%29%29+ANDNOT+%28%28cat%3Acs.CR+AND+%28ti%3Avulnerability+OR+ti%3Aexploit+OR+ti%3Aattack%29%29+OR+%28%28ti%3ALLM+OR+ti%3A%22language+model%22%29+AND+%28all%3Abenchmark+OR+all%3Aevaluation+OR+all%3Aperformance%29%29+OR+%28ti%3ARAG+OR+all%3A%22retrieval+augmented+generation%22+OR+all%3A%22retrieval-augmented+generation%22%29+OR+%28cat%3Acs.DB+AND+%28all%3Adatabase+OR+all%3Aquery%29%29%29%29+AND+submittedDate%3A%5B202610091500+TO+209912312359%5D&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending",
+      "terms": "https://info.arxiv.org/help/api/tou.html",
+      "note": "CC0 descriptive metadata (title/abstract/identifier) only; original abstract links, no PDF/body retrieval. Topic and submitted-date query, first 20 results, preprints not guaranteed peer-reviewed. Earlier topic queries excluded to reduce cross-feed duplicates. Official API authorization; no HTML crawling. Shared single-connection gate and 3-second cooldown.",
+      "mapping": {},
+      "topics": []
+    }
+  ]
+}
