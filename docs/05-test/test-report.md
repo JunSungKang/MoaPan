@@ -136,3 +136,6 @@ E2E24 PASS, FAIL/ERROR/SKIP0. 390px에서 모든 카드와 지면폭 일치(0.5p
 
 ## 로그인 언어 선택 재배치
 E2E26 PASS, 오류/건너뜀0. 390/1440px에서 header언어선택0/footer언어선택1 및 약관 아래 배치/언어전환 확인. Nu9HTML messages0. 소스/JAR/SBOM 및 최종 앱 이미지 gatePASS: sha256:b48680e08e4d908ffaaadc2a12f3ebe2cde84ad0f062f388889732bb689393f8.
+
+## 로그인 언어 도구 상단 분리
+E2E26 PASS(390/1440px 우측24px 여백/제호 위 배치/푸터선택없음/중앙정렬), Nu9HTML messages0. 소스/JAR/SBOM/이미지 gatePASS. 앱sha256:f4da0654b5ac212a4540c77c3e9a77e5b49553c217bed78976fbec23aff1e95e.

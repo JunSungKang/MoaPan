@@ -8,7 +8,8 @@
 .auth-wordmark{font:900 36px/1.2 Georgia,serif;margin:0;text-align:center;width:100%}
 .auth-footer{width:100%;max-width:360px;margin:0 auto 24px;justify-content:center;text-align:center;padding:12px 0}
 
-/* Login language is a quiet footer utility, below the policy links. */
-.auth-language{flex-basis:100%;display:flex;justify-content:center;margin-top:0}
-.auth-footer .language-picker{float:none;margin:0;font:.75rem/1.5 system-ui;color:var(--muted)}
-.auth-footer .language-picker select{min-height:40px;border:0;padding:.5rem .4rem;background:transparent;cursor:pointer}
+/* Page-level language utility, separate from the centered login column. */
+.auth-language-top{width:100%;display:flex;justify-content:flex-end;padding-top:8px;min-height:52px}
+.auth-language-top .language-picker{float:none;margin:0;font:.75rem/1.5 system-ui;color:var(--muted)}
+.auth-language-top select{min-height:44px;min-width:88px;border:0;padding:.5rem .4rem;background:transparent;cursor:pointer}
+.auth-page:has(>.auth-language-top) .auth-brand{padding-top:12px}
