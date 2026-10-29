@@ -1,10 +1,10 @@
-현재 접속: **https://175.195.62.165/** — 로컬 Mac 실행, 휴대폰 데이터망 확인 완료. 공개 모드 실행/중지는 [배포 안내](docs/DEPLOYMENT.md)를 참고한다.
+현재 접속: **https://175.195.62.165/** — 로컬 Mac 실행, 휴대폰 데이터망 확인 완료. 공개 모드 실행/중지는 [배포 안내](docs/06-transition/deployment.md)를 참고한다.
 
 # 모아판 · MOAPAN
 
 여러 출처의 뉴스를 관심사에 맞게 모아 종이신문처럼 읽는 개인화 뉴스 V1. Java 27 / Spring Boot 4 / Gradle / PostgreSQL / 정적 HTML·CSS·Vanilla ES Modules / Docker Compose 기반이다.
 
-**CI·CD, GitHub Actions, 예약 workflow는 사용자 요청에 따라 구현·실행하지 않는다.** 검증은 로컬 명령으로 실행한다. 외부 HTTPS 배포와 사업 개시는 별도 승인·검토가 필요하다. 실제 인수 상태는 [진행 상태](docs/PROGRESS.md)와 [테스트 보고](docs/TEST_REPORT.md)를 확인한다.
+**CI·CD, GitHub Actions, 예약 workflow는 사용자 요청에 따라 구현·실행하지 않는다.** 검증은 로컬 명령으로 실행한다. 외부 HTTPS 배포와 사업 개시는 별도 승인·검토가 필요하다. 실제 인수 상태는 [진행 상태](docs/01-management/progress.md)와 [테스트 보고](docs/05-test/test-report.md)를 확인한다.
 
 ## 로컬 실행
 
@@ -37,7 +37,7 @@ docker compose run --rm -e MOAPAN_ROLE=admin-cli web
 ./gradlew --no-daemon clean check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest
 ```
 
-JDK는 정확한 공급자 빌드가 필요하다. 현재 macOS aarch64 workspace JDK와 cache를 사용할 때는 같은 인자를 `sh scripts/build/gradle-local.sh`에 전달한다. `java`, `javac`, Gradle toolchain과 런타임을 [버전 기록](docs/VERSIONS.md)과 대조한다. preview·incubator·Maven 빌드는 사용하지 않는다.
+JDK는 정확한 공급자 빌드가 필요하다. 현재 macOS aarch64 workspace JDK와 cache를 사용할 때는 같은 인자를 `sh scripts/build/gradle-local.sh`에 전달한다. `java`, `javac`, Gradle toolchain과 런타임을 [버전 기록](docs/06-transition/versions.md)과 대조한다. preview·incubator·Maven 빌드는 사용하지 않는다.
 
 Playwright Java browser는 먼저 `sh scripts/build/gradle-local.sh playwrightInstall`로 workspace `.local/browsers`에 준비한다. PostgreSQL 통합 테스트에는 Docker가 필요하다. 테스트는 격리 Testcontainers DB와 합성 계정·문장을 사용한다. 실제 외부 source smoke는 `node scripts/test/local-smoke.mjs`로 분리한다. 이 명령은 loopback Compose에서만 실행하며 합성 관리자 계정을 검증 후 삭제한다. 운영 DB에서 실행하지 않는다.
 
@@ -53,13 +53,13 @@ Wrapper ZIP/JAR 체크섬, dependency locking, strict verification을 사용한�
 
 이름·이메일·전화번호를 받지 않으며 개인 관심사·가중치는 브라우저 UUID별 IndexedDB에 저장한다. 검색 조건은 실행과 결과 페이지 이동 때 같은 origin 서버에 POST로 보내 일시 처리한다. URL·DB·로그·회원 검색 이력에 저장하거나 외부로 전송하지 않는다. 입력 중에는 전송하지 않는다. 비밀번호 복구와 자동 기기 동기화는 없으며, 암호화 파일로 관심사를 직접 옮길 수 있다. 같은 브라우저 프로필의 다른 접근자에 대한 암호학적 비밀성을 보장하지 않는다. 계정·세션·보안 카운터도 회원 관련 정보다.
 
-원문은 직접 링크로 이동한다. 기사 전문, 이미지·로고, 추적 SDK와 클릭 이벤트 저장은 기본 제공하지 않는다. [개인정보 경계](docs/PRIVACY.md), [API](docs/API.md), [출처](docs/SOURCES.md), [보안 검토](docs/SECURITY_REVIEW.md), [배포·백업](docs/DEPLOYMENT.md)를 참조한다.
+원문은 직접 링크로 이동한다. 기사 전문, 이미지·로고, 추적 SDK와 클릭 이벤트 저장은 기본 제공하지 않는다. [개인정보 경계](docs/07-operation/privacy.md), [API](docs/03-design/api.md), [출처](docs/07-operation/sources.md), [보안 검토](docs/07-operation/security-review.md), [배포·백업](docs/06-transition/deployment.md)를 참조한다.
 
 컨테이너를 재생성해도 DB volume은 유지한다. `docker compose down -v`는 데이터를 지우므로 일반 운영 명령으로 사용하지 않는다. 백업 도구는 `sh scripts/backup/build-backup-tools.sh`로 보안 수정 버전을 준비한다. 백업은 `sh scripts/backup/backup.sh <age-public-recipient>`로 암호화하고, `sh scripts/backup/restore-check.sh <backup> <private-identity-file>`로 격리 복원을 검증한다. 실제 `.local/backups` 파일·identity를 Git이나 공개 아티팩트로 올리지 않는다. 자동 백업은 구성하지 않는다.
 
 법률·상표·도메인·사업자·언론 관련 등록 검토가 완료됐다고 주장하지 않는다. 현재 공개 저장소의 main merge는 수행하지 않고 지정 작업 브랜치로 전달한다.
 
-엔진/서비스 준비를 제한 시간 안에 확인하려면 이미지 빌드 후 `node scripts/deploy/local-start.mjs`를 실행한다. Engine 사전 검사10초, Compose health90초, 전체 시작120초 상한이며 실패를 성공으로 처리하지 않는다. Docker 시작 장애 기록은 docs/BUGS.md를 참고한다.
+엔진/서비스 준비를 제한 시간 안에 확인하려면 이미지 빌드 후 `node scripts/deploy/local-start.mjs`를 실행한다. Engine 사전 검사10초, Compose health90초, 전체 시작120초 상한이며 실패를 성공으로 처리하지 않는다. Docker 시작 장애 기록은 docs/05-test/bugs.md를 참고한다.
 
 대표 문구 변경: `src/main/resources/static/assets/js/config.js`의 `brand.mastheadQuote`를 수정한다. `\n`은 의도한 줄바꿈이다. 브랜드 영문 표기는 같은 파일의 `english`에서 관리한다. 코드 변경 후 검증·이미지 재빌드·서비스 재생성이 필요하며 자동 문구 순환은 사용하지 않는다.
 
@@ -74,7 +74,7 @@ docker compose -f compose.yaml -f scripts/deploy/compose-public.yaml -f scripts/
 docker compose -f compose.yaml -f scripts/deploy/compose-public.yaml -f scripts/deploy/compose-translation.yaml ps -a
 ```
 
-Linux 서버에서는 `compose-public.yaml` 대신 `scripts/deploy/compose-server.yaml`을 사용한다. 공개 주소·방화벽·Docker 자동 시작 설정은 해당 서버에 맞춰 준비한다. [Linux 이관 안내](docs/LINUX_TRANSLATION.md)를 따른다. 단순 재시작에는 `--build`를 생략한다.
+Linux 서버에서는 `compose-public.yaml` 대신 `scripts/deploy/compose-server.yaml`을 사용한다. 공개 주소·방화벽·Docker 자동 시작 설정은 해당 서버에 맞춰 준비한다. [Linux 이관 안내](docs/06-transition/linux-translation.md)를 따른다. 단순 재시작에는 `--build`를 생략한다.
 
 ## 디렉토리 안내
 
@@ -94,7 +94,7 @@ Linux 서버에서는 `compose-public.yaml` 대신 `scripts/deploy/compose-serve
 | scripts/governance | 저장소 보호 초기 설정 도구와 테스트 |
 | scripts/experiments | 과거 Mac 번역 비교용 실행기; 운영 미사용 |
 | docs | [문서 색인](docs/README.md)·설계·운영·인수 기록 |
-| docs/evidence | 비밀값 없는 검증 증빙 |
+| docs/05-test/evidence | 비밀값 없는 검증 증빙 |
 | .local·build·.gradle | 비공개 설정/캐시/실행 산출물, Git 제외 |
 
 현재 작업은 `codex/moapan-v1` 브랜치로 전달하며 main 병합은 별도다. 기존 경로를 참조하는 외부 명령은 위 분류에 맞춰 변경한다.
@@ -110,4 +110,4 @@ Linux 서버에서는 `compose-public.yaml` 대신 `scripts/deploy/compose-serve
 ## Qwen 기사 주제 분류
 `sh scripts/deploy/start.sh local|public|server`는 기존 번역과 별개로 Qwen3.5-4B Q4_K_M도 Hugging Face에서 고정 revision으로 다운로드·SHA256 검증 후 내부 Compose 서비스로 실행한다. classifier는 외부 포트를 열지 않으며 Java worker가 저장된 제목·요약을 비동기 분류한다. 관리자 화면 **기사 주제 분류**에서 1~8개 태그와 포함/제외 기준을 편집할 수 있다. 초기 5개 주제는 시작용 기본값이다. 수동 잠금은 유지하며 기존 기사는 순차 처리한다.
 
-구성·정책·자원·실패 처리: [docs/CLASSIFICATION.md](docs/CLASSIFICATION.md). 수동 Compose 명령에도 `-f scripts/deploy/compose-classification.yaml`을 포함한다. Helm은 classifier 이미지 digest·전용 PVC·Secret·내부 Service를 미리 준비했으며 실제 Kubernetes 설치는 수행하지 않았다.
+구성·정책·자원·실패 처리: [docs/03-design/classification.md](docs/03-design/classification.md). 수동 Compose 명령에도 `-f scripts/deploy/compose-classification.yaml`을 포함한다. Helm은 classifier 이미지 digest·전용 PVC·Secret·내부 Service를 미리 준비했으며 실제 Kubernetes 설치는 수행하지 않았다.

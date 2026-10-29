@@ -1,6 +1,9 @@
 package com.moapan;
-import com.moapan.classification.*;
-import com.moapan.site.CatalogRepository;
+import com.moapan.classification.application.TopicCatalog;
+import com.moapan.classification.application.ClassificationWorker;
+import com.moapan.classification.infrastructure.LocalClassifier;
+import com.moapan.classification.api.ClassificationController;
+import com.moapan.catalog.infrastructure.CatalogRepository;
 import java.util.*;
 import java.util.concurrent.*;
 import org.junit.jupiter.api.*;
@@ -56,7 +59,7 @@ class ClassificationIntegrationTest {
         assertEquals(1,repo.db().sql("SELECT count(*) FROM article_tags WHERE article_id=:id AND tag_id=:tag").param("id",article).param("tag",tag).query(Integer.class).single());assertNull(worker.claim());
     }
     @Test void preservedManualTagsConsumeTheSixTopicBudget(){
-        var job=worker.claim();var selected=new HashSet<>(job.topics().topics().stream().map(TopicCatalog.Topic::id).toList());
+        var job=worker.claim();var selected=new HashSet<>(job.topics().topics().stream().map(com.moapan.classification.domain.TopicTaxonomy.Topic::id).toList());
         var manual=repo.db().sql("SELECT id FROM tags WHERE slug IN ('ai','postgresql')").query(UUID.class).list();assertEquals(2,manual.size());
         for(UUID tag:manual)repo.db().sql("INSERT INTO article_tags VALUES(:id,:tag,1,'MANUAL',true)").param("id",article).param("tag",tag).update();
         assertTrue(worker.finish(job,selected));assertEquals(6,repo.db().sql("SELECT count(*) FROM article_tags WHERE article_id=:id").param("id",article).query(Integer.class).single());

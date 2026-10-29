@@ -19,7 +19,7 @@ try{
   const grant=spawnSync('docker',['compose','-f','compose.yaml','-f','scripts/deploy/compose-public.yaml','run','--rm','-T','-e','MOAPAN_ROLE=admin-cli','web'],{timeout:60000,killSignal:'SIGKILL',input:username+'\n',encoding:'utf8'});
   if(grant.status!==0)throw Error('Local admin-cli failed; inspect role startup without credentials');
   await call('/api/v1/auth/login','POST',{username,password});await token();
-  const {definitions,publishedSince}=JSON.parse(readFileSync(new URL('../../docs/topic-sources.json',import.meta.url),'utf8'));
+  const {definitions,publishedSince}=JSON.parse(readFileSync(new URL('../../config/sources/topic-sources.json',import.meta.url),'utf8'));
   const results=[];
   for(const d of definitions){try{await new Promise(r=>setTimeout(r,4000));
     const list=await call('/api/v1/admin/sites?search='+encodeURIComponent(d.name));let site=list.find(s=>s.normalized_homepage_url===d.home);
