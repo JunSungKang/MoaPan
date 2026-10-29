@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 4,
+  "workSlug": "moapan-mobile-article-cards",
+  "flowType": "integration",
+  "branch": "codex/mobile-article-cards",
+  "targetBranch": "develop",
+  "baseSha": "09c2721cf0a7ff5b1e117d01a37150830df213f1",
+  "mergeMethod": "squash",
+  "governance": {
+    "prAuthorLogin": "JunSungKang",
+    "assigneeLogin": "JunSungKang",
+    "reviewerLogin": "junsung-bot[bot]",
+    "requiredChecks": [],
+    "commitAuthor": {
+      "name": "jun-sung, Kang",
+      "email": "kjuns1@naver.com"
+    },
+    "coAuthors": [
+      {
+        "name": "Codex",
+        "email": "codex@openai.com"
+      },
+      {
+        "name": "junsung-bot[bot]",
+        "email": "302617028+junsung-bot[bot]@users.noreply.github.com"
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "design",
+      "expectedPaths": [
+        "src/main/resources/static/**",
+        "docs/**",
+        ".github/workflow-plans/mobile-article-cards.json",
+        "src/e2eTest/**"
+      ],
+      "forbiddenPaths": [
+        ".env"
+      ],
+      "acceptanceCriteria": [
+        "Mobile articles use full-width blog cards; preserve desktop newspaper and print",
+        "Responsive, pagination, language, ad and search regressions pass"
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh e2eTest bootJar sbom securityCheck"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/progress.md"
+        ]
+      }
+    }
+  ]
+}

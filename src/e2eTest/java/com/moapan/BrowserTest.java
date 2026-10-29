@@ -365,6 +365,12 @@ class BrowserTest {
                 assertEquals("none",p.locator("#paper article").first().evaluate("e=>getComputedStyle(e).boxShadow"));
                 assertEquals("none",p.locator("#paper article").first().evaluate("e=>getComputedStyle(e).transform"));
                 assertTrue(p.locator(".masthead-ad").isVisible());
+                if(width==390){
+                    double paperWidth=p.locator("#paper").boundingBox().width;
+                    for(var article:p.locator("#paper article").all())assertEquals(paperWidth,article.boundingBox().width,.5);
+                    assertEquals("rgb(246, 246, 241)",p.locator("#paper article").first().evaluate("e=>getComputedStyle(e).backgroundColor"));
+                    assertEquals(p.locator("#paper article h2").first().evaluate("e=>getComputedStyle(e).fontSize"),p.locator("#paper article h2").nth(1).evaluate("e=>getComputedStyle(e).fontSize"));
+                }
                 assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth<=innerWidth"));
                 p.screenshot(new Page.ScreenshotOptions().setPath(Path.of("build/reports/screenshots/newspaper-sheet-"+width+".png")));
             }
