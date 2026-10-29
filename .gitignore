@@ -1,6 +1,6 @@
 .gradle/
 .local/
-build/
+/build/
 .env
 .env.*
 !.env.example

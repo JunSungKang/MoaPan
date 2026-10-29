@@ -25,7 +25,7 @@ username은 ASCII 영문·숫자·밑줄1~128, 대문자를 소문자로 정규�
 |GET|/api/v1/tags|tags(id,slug,name,category),aliases(alias,tagId),redirects(oldId,canonicalId)|
 |GET|/api/v1/sources|공개 허용 출처 최소 메타데이터 id,label,language,site,termsUrl|
 
-뉴스 응답: editionId,editionAt,candidateCount,periodDays(7),items,nextCursor. 모든 회원에게 공통으로 최대300개 후보를 선정한다. 진입은 기본30개만 내려받고 다음 페이지는 사용자의 더보기 요청에 따른다.
+뉴스 응답: editionId,editionAt,candidateCount,periodDays(7),items,nextCursor. 모든 회원에게 공통으로 최대300개 후보를 선정한다. API 기본 size는30·최대50이나 현재 웹 지면은 size=42를 한 번 요청해7개씩6슬라이드만 표시한다. 내부 후보300개/cursor 계약은 유지하지만 UI 더보기는 사용하지 않는다. 추가 기사는 별도 검색(최대140개)에서 조회한다.
 
 기사 DTO: id,title,summaryBullets,source(id,name,site,language),publishedAt(null 가능),collectedAt,tags(id,slug,name,category,confidence),originalUrl,summaryMode. 발행시각이 없으면 수집시각임을 표시한다. 자동 요약 모드는 EXTRACTIVE_ORIGINAL_LANGUAGE 또는 INSUFFICIENT, 수동 MANUAL. 본문 전문·회원 관심사·내부 메모·secret은 없다. 숨김·권리 철회는 기존 edition에서도 매 응답에 재검사한다.
 
@@ -67,7 +67,7 @@ JSON_API는 단일 GET 응답의 제한된 점 구분 경로만 지원: items,id
 로그인 실패1~4회:401 invalid_credentials.5~9회:같은401 응답에 attemptsRemaining(5~1) 추가.10회부터429 login_limited와 실제 DB 제한 만료까지의 Retry-After(초)를 반환한다. 전역 로그인 횟수 제한은429 rate_limited로 구분한다. 존재하지 않는 아이디도 같은 실패 카운터 정책을 따른다. 제한된 요청은 만료를 연장하지 않는다.
 
 ## 공개 지면과 대표 관심사 (최신 사용자 변경)
-GET /api/v1/public/news/edition: 비회원 허용, query 불허, 최근 공통 edition에서 최대30개, cursor 없음. 공개 상태·출처 권리·요약 허용 여부 재검사. 전체 공개 요청 분당600, 기존 전체 API 분당3000 카운터/실패 시503 유지. IP·기기 식별자 추가 없음.
+GET /api/v1/public/news/edition: 비회원 허용, query 불허, 최근 공통 edition에서 최대42개, cursor 없음. 공개 상태·출처 권리·요약 허용 여부 재검사. 전체 공개 요청 분당600, 기존 전체 API 분당3000 카운터/실패 시503 유지. IP·기기 식별자 추가 없음.
 GET /api/v1/public/interests: version,weights(UUID:1~5). 개인 설정이 아닌 관리자 공통 대표값.
 GET /api/v1/public/tags: 공개 태그·별칭·병합 매핑.
 GET /api/v1/admin/interests 및 PUT /api/v1/admin/interests: ADMIN; PUT은 CSRF, {version,weights}필수, 활성 태그1~30개, 가중치1~5, version 불일치409. 감사 action은 representative_interests이며 개인 관심사 API는 아님.
@@ -92,3 +92,5 @@ JSON 입력: search(필수 문자열, 최대100자), category(필수 문자열, 
 
 ### 관리자 번역 상태
 GET /api/v1/admin/translations (ADMIN): runtime(state,failures,next_probe_at,checked_at,error_code), counts(state,count), failures(error_code,count), recent(최근20개 article_id,state,error_code,attempts,infra_failures,updated_at). 회원정보·원문·실패 번역 전문·secret 제외. 관리자 화면 새로고침으로 관측하며 작업 승인 없이 자동 처리한다.
+
+관리 기사 편집: GET /api/v1/admin/articles의 tag_ids는 현재 태그 UUID JSON 문자열이다. PATCH tagIds=null/미지정은 기존 연결을 보존하고, []는 명시적 전체 제거, UUID 목록은 교체한다.

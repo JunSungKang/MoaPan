@@ -428,4 +428,17 @@ class SecurityIntegrationTest {
         assertEquals("research-v2-stored",row.get("processing_version"));assertFalse(row.get("bullets").toString().contains("newsletter"));assertTrue(row.get("bullets").toString().contains("algorithm"));
         assertEquals("extractive-v1",repo.db().sql("SELECT processing_version FROM articles WHERE id=:id").param("id",locked).query(String.class).single());
     }
+
+    @Test @Order(30) @WithMockUser(roles="ADMIN") void editorialSummaryOnlyPreservesTagsAndExplicitEmptyRemovesThem(){
+        UUID actor=accounts.findByUsername("synthetic_a").orElseThrow().id;
+        UUID article=repo.db().sql("SELECT id FROM articles LIMIT 1").query(UUID.class).single();
+        UUID tag=repo.db().sql("SELECT id FROM tags WHERE active LIMIT 1").query(UUID.class).single();
+        repo.db().sql("DELETE FROM article_tags WHERE article_id=:id").param("id",article).update();
+        repo.db().sql("INSERT INTO article_tags VALUES(:id,:tag,0.8,'RULE',false)").param("id",article).param("tag",tag).update();
+        editorial.edit(article,new com.moapan.news.EditorialService.Edit(List.of("Synthetic edited summary"),true,false,true,null),actor);
+        assertEquals(tag,repo.db().sql("SELECT tag_id FROM article_tags WHERE article_id=:id").param("id",article).query(UUID.class).single());
+        assertEquals("RULE",repo.db().sql("SELECT method FROM article_tags WHERE article_id=:id").param("id",article).query(String.class).single());
+        editorial.edit(article,new com.moapan.news.EditorialService.Edit(List.of("Synthetic edited summary"),true,false,true,List.of()),actor);
+        assertEquals(0,repo.db().sql("SELECT count(*) FROM article_tags WHERE article_id=:id").param("id",article).query(Integer.class).single());
+    }
 }

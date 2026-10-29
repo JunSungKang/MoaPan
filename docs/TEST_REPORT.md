@@ -103,3 +103,5 @@ V9 적용 DB 암호화 백업·별도 DB 복원 PASS: 기사191개, 복원 계�
 Helm4.3.1 공식 archive checksum검증 후 lint/template 및 필수값·unpinned image·잘못된 migrationVersion 거부3건 PASS. 실제 Kubernetes context 없음: 설치/Pod기동/PVC/TLS/registry pull은 NOT_RUN. rendered Trivy config HIGH0/CRITICAL0, MEDIUM11/LOW2 남음: 합성 registry 주소 허용목록 경고10, 비밀값 없는 DATABASE_URL/USER ConfigMap 탐지1, PostgreSQL 공식 alpine UID/GID70 경고2. egress 차단 미구현과 운영 검증 조건은 chart README에 명시했다. 초기 path 이동으로 VEX검사 ENOENT와 Helm range namespace 렌더링 오류를 발견·수정하고 재검증했다. 빈 렌더링 검사 결과를 PASS로 사용하지 않았다. 증빙 docs/evidence/directory-helm-checkpoint.json.
 
 최종 clean 전체검증: 173 PASS(단위124/통합29/E2E20), FAIL0/ERROR0/SKIP0, 모든16 Gradle task 실제 실행 성공(1분3초). 소스/JAR/SBOM 보안 gate PASS. Node12 tests PASS. 비밀값/캐시 추적경로 없음 및 필수 빌드/Wrapper/lock/verification 파일 존재 확인.
+
+독립 리뷰4건 수정 후 clean 전체검증 176 PASS(단위124/통합30/E2E22), FAIL0/ERROR0/SKIP0. scripts/build 실행기 추적 확인, 소스/JAR/SBOM 보안 gate 및 앱 이미지 검사 통과. 현재 head 재리뷰 후 develop 병합 예정.

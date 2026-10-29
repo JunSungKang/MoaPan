@@ -20,7 +20,7 @@
 |FS-14|05,06|태그|별칭·입력 근거|경계 매칭·최대6·잠금·병합 canonical ID|태그·신뢰도·이전ID 매핑|news/EditorialService|
 |FS-15|08|보안 목표|모든 API|인증·권한·상태·제한|허용 응답 복사는 막는다고 주장하지 않음|security/SecurityConfig|
 |FS-16|07,08|브라우저 접근|동일 origin 요청|CSRF·Host/Origin·CSP·안전 DOM|401/403/400/409/429/503|security/SecurityConfig|
-|FS-17|04,05,08|edition|인증 계정·size|7일·최대300·공통 고정 순서·현재 공개상태 재검사|첫30·최대50;수동 더보기|news/NewsService|
+|FS-17|04,05,08|edition|인증 계정·size|7일·최대300·공통 고정 순서·현재 공개상태 재검사|API 기본30·최대50;현재 UI42개·6슬라이드|news/NewsService|
 |FS-18|08|cursor|서명 토큰|계정·edition·위치·만료·size 검증|400 변조/만료;인증 별도|news/NewsService|
 |FS-19|08|quota|호출·반환량|PostgreSQL 원자 카운터·lease·TTL·장애시503|분60·일6000·동시3·429+Retry-After|security/Limits|
 |FS-20|04,08|DTO·캐시|기사 상태|공개 필드 DTO·no-store·추적 없음|원문전문·secret·검토메모 제외|news/NewsService|
@@ -42,7 +42,7 @@ FS-03 계정 관리 화면은 /account.html 및 assets/js/account.js, FS-21 관�
 
 ## 공개 관심지면·권한별 메뉴 개정
 FS-15/16: 비회원 공개 endpoint 허용, 회원 전용 endpoint401 및 관리자403 유지. settings/account/admin HTML 직접 접근 제한 및 초기 hidden으로 메뉴 노출 방지. 공통 메뉴는 동일 viewer 상태 사용.
-FS-17/21/22: 공개30개, 회원 기존최대300개 후보. 관리자 대표 weights와 version을 DB 저장·ADMIN/CSRF/낙관적 잠금으로 수정. 개인 관심사 없거나 끄면 대표값을 사용하고 제외 설정 유지. 전체/관심 탭 및 일반 최신 구역 제거.
+FS-17/21/22: 공개42개, 회원 지면42개(내부 후보 최대300개·UI 더보기 없음). 관리자 대표 weights와 version을 DB 저장·ADMIN/CSRF/낙관적 잠금으로 수정. 개인 관심사 없거나 끄면 대표값을 사용하고 제외 설정 유지. 전체/관심 탭 및 일반 최신 구역 제거.
 FS-23: native dialog 검색, 검색어/날짜/카테고리 적용·취소·Escape·초기화. 검색 실행과 페이지 이동 시에만 서버 일시 처리. 검색 기록 저장 없음.
 FS-25: 공식 개시 전 사용자 요청으로 현재 이용약관·개인정보를 최초 제1판으로 표시한다. 신규 동의 ID는 terms-1. 공개 이력 페이지·과거 본문·링크는 제거하고 기존 회원 동의 ID/시각은 변경하지 않는다.
 FS-23 최신 화면: 상단 MoA-PaN과 config.js의 mastheadQuote를 표시한다. 검색 버튼은 상단 우측이며 중간 지면명/대표값 설명/수량 줄은 제거했다. 기사 스크랩 갤러리는4/2/1단으로 DOM 순서대로 읽으며 인쇄 시 장식을 제거한다.

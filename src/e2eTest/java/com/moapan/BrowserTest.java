@@ -374,4 +374,46 @@ class BrowserTest {
         }
     }
 
+
+    @Test void adminSiteSwitchClearsSourceAndSummarySavePreservesTags(){
+        try(var context=browser.newContext()){
+            List<String> writes=new ArrayList<>();
+            context.route("**/api/v1/**",r->{
+                String path=URI.create(r.request().url()).getPath();String body="[]";
+                if(r.request().method().equals("PATCH")||r.request().method().equals("POST")){writes.add(path+" "+r.request().postData());body="{}";}
+                else if(path.endsWith("/account"))body="{\"id\":\""+A+"\",\"role\":\"ADMIN\",\"username\":\"synthetic\"}";
+                else if(path.endsWith("/csrf"))body="{\"token\":\"test\"}";
+                else if(path.endsWith("/interests"))body="{\"version\":0,\"weights\":{}}";
+                else if(path.endsWith("/tags"))body="{\"tags\":[],\"aliases\":[],\"redirects\":[]}";
+                else if(path.equals("/api/v1/admin/sites"))body="[{\"id\":\"A\",\"name\":\"Site A\",\"homepage_url\":\"https://a.example\"},{\"id\":\"B\",\"name\":\"Site B\",\"homepage_url\":\"https://b.example\"}]";
+                else if(path.equals("/api/v1/admin/sites/A"))body="{\"id\":\"A\",\"name\":\"Site A\",\"homepage_url\":\"https://a.example\",\"version\":0}";
+                else if(path.equals("/api/v1/admin/sites/B"))body="{\"id\":\"B\",\"name\":\"Site B\",\"homepage_url\":\"https://b.example\",\"version\":0}";
+                else if(path.equals("/api/v1/admin/sites/A/sources"))body="[{\"id\":\"source-A\",\"label\":\"Source A\",\"type\":\"RSS\"}]";
+                else if(path.equals("/api/v1/admin/sources/source-A"))body="{\"id\":\"source-A\",\"site_id\":\"A\",\"label\":\"Source A\",\"type\":\"RSS\",\"endpoint_url\":\"https://a.example/feed\",\"language\":\"en\",\"interval_seconds\":900,\"rights_status\":\"UNREVIEWED\"}";
+                else if(path.endsWith("/articles"))body="[{\"id\":\"article-A\",\"title\":\"Synthetic article\",\"summary_bullets\":\"[\\\"Original summary\\\"]\",\"tag_ids\":\"[\\\"tag-A\\\"]\",\"public\":true}]";
+                r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(body));
+            });
+            Page p=context.newPage();p.navigate(origin+"/admin.html");
+            p.locator("#sites tr").nth(0).getByText("상세·수정").click();p.locator("#source-list").getByText("수정",new com.microsoft.playwright.Locator.GetByTextOptions().setExact(true)).click();
+            p.waitForFunction("document.querySelector('#source-form [name=label]').value==='Source A'");
+            p.locator("#sites tr").nth(1).getByText("상세·수정").click();
+            p.waitForFunction("document.querySelector('#site-form [name=name]').value==='Site B'");
+            assertEquals("",p.locator("#source-form [name=label]").inputValue());assertEquals("",p.locator("#source-form [name=endpointUrl]").inputValue());
+            p.locator("#refresh-articles").click();p.waitForSelector("#article-list form");
+            assertEquals("tag-A",p.getByLabel("수동 태그 UUID 목록").inputValue());
+            p.getByLabel("수동 요약 (한 줄 한 항목)").fill("Changed summary");p.locator("#article-list button").click();
+            p.waitForCondition(()->!writes.isEmpty());assertTrue(writes.getFirst().contains("\"tagIds\":null"));
+        }
+    }
+
+    @Test void expiredSessionPreservesLocalPreferences(){
+        try(var context=browser.newContext()){
+            Page p=context.newPage();p.navigate(origin+"/about.html");
+            p.evaluate("async id=>{const m=await import('/assets/js/preferences.js');await m.savePreferences(id,{...m.defaults(),weights:{ai:5}});sessionStorage.setItem('moapan-account',id);}",A);
+            context.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setStatus(401).setContentType("application/json").setBody("{}")));
+            p.evaluate("async()=>{try{await(await import('/assets/js/api.js')).account();}catch(e){if(e.status!==401)throw e;}}");
+            assertEquals(5,((Number)p.evaluate("async id=>(await(await import('/assets/js/preferences.js')).loadPreferences(id)).weights.ai",A)).intValue());
+            assertNull(p.evaluate("sessionStorage.getItem('moapan-account')"));
+        }
+    }
 }

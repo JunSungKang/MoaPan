@@ -118,3 +118,9 @@ Helm4.3.1 공식 archive checksum검증 후 lint/template 및 필수값·unpinne
 최종 clean 전체검증: 173 PASS(단위124/통합29/E2E20), FAIL0/ERROR0/SKIP0, 모든16 Gradle task 실제 실행 성공(1분3초). 소스/JAR/SBOM 보안 gate PASS. Node12 tests PASS. 비밀값/캐시 추적경로 없음 및 필수 빌드/Wrapper/lock/verification 파일 존재 확인.
 
 사용자 승인으로 develop 통합 준비. main 대상 PR과 구분하며 현재 head 독립 리뷰/승인과 guarded merge가 완료되기 전에는 develop 반영 완료로 보고하지 않는다.
+
+독립 리뷰에서 scripts/build/gradle-local.sh가 build/ 무시 규칙으로 Git 추적 누락된 것을 발견했다. 루트 /build/만 제외하도록 git/docker ignore를 수정하고 실행기를 명시적으로 추적한다. 새 체크아웃 경로 확인을 추가한다.
+
+독립 리뷰 추가 수정: 기사 태그 조회/미변경 보존, 사이트 전환 시 주소 선택 초기화·비동기 응답 epoch 검사, 정상401에서 개인 설정 보존. 관리자 UI와 세션 만료 Playwright 회귀 및 태그 보존 PostgreSQL 회귀 추가.
+
+독립 리뷰4건 수정 후 clean 전체검증 176 PASS(단위124/통합30/E2E22), FAIL0/ERROR0/SKIP0. scripts/build 실행기 추적 확인, 소스/JAR/SBOM 보안 gate 및 앱 이미지 검사 통과. 현재 head 재리뷰 후 develop 병합 예정.
