@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 4,
+  "workSlug": "moapan-newsprint-texture",
+  "flowType": "integration",
+  "branch": "codex/newsprint-texture",
+  "targetBranch": "develop",
+  "baseSha": "81afec367e4711317dffd3f08eb550d025e0af7d",
+  "mergeMethod": "squash",
+  "governance": {
+    "prAuthorLogin": "JunSungKang",
+    "assigneeLogin": "JunSungKang",
+    "reviewerLogin": "junsung-bot[bot]",
+    "requiredChecks": [],
+    "commitAuthor": {
+      "name": "jun-sung, Kang",
+      "email": "kjuns1@naver.com"
+    },
+    "coAuthors": [
+      {
+        "name": "Codex",
+        "email": "codex@openai.com"
+      },
+      {
+        "name": "junsung-bot[bot]",
+        "email": "302617028+junsung-bot[bot]@users.noreply.github.com"
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "design",
+      "expectedPaths": [
+        "src/main/resources/static/**",
+        "docs/**",
+        ".github/workflow-plans/newsprint-texture.json",
+        "src/e2eTest/**"
+      ],
+      "forbiddenPaths": [
+        ".env"
+      ],
+      "acceptanceCriteria": [
+        "Reference-led continuous newspaper sheet, centered masthead, prominent lead story and ruled columns",
+        "Readable responsive and print layouts; preserve seven-item pagination and language/search behavior"
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh e2eTest bootJar sbom securityCheck"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/progress.md"
+        ]
+      }
+    }
+  ]
+}

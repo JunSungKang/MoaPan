@@ -339,7 +339,18 @@ class BrowserTest {
     }
 
 
-    @Test void editorialScrapGalleryAndInitialPolicies(){
+    @Test void mastheadAdUsesLocalImageAndToolsBelowIt(){
+        try(var context=browser.newContext()){
+            context.route("**/assets/js/shared/config.js",r->r.fulfill(new Route.FulfillOptions().setContentType("text/javascript").setBody("export const brand={name:'모아판',english:'MoA-PaN',mastheadQuote:'합성 제호 안내'};export const advertisement={imageUrl:'/assets/synthetic-ad.svg',linkUrl:'https://sponsor.example.test/',alt:'합성 광고'};")));
+            context.route("**/assets/synthetic-ad.svg",r->r.fulfill(new Route.FulfillOptions().setContentType("image/svg+xml").setBody("<svg xmlns='http://www.w3.org/2000/svg' width='220' height='80'><rect width='220' height='80' fill='#ddd'/></svg>")));
+            List<String> outgoing=new ArrayList<>();Page p=context.newPage();p.onRequest(r->{if(!r.url().startsWith(origin))outgoing.add(r.url());});p.navigate(origin+"/index.html");p.waitForSelector("[data-ad-slot] img");
+            var ad=p.locator(".masthead-ad");var tools=p.locator(".masthead-sidebar .header-tools");assertTrue(tools.boundingBox().y>=ad.boundingBox().y+ad.boundingBox().height);
+            assertEquals("https://sponsor.example.test/",p.locator("[data-ad-slot] a").getAttribute("href"));assertTrue(p.locator("[data-ad-slot] a").getAttribute("rel").contains("sponsored"));assertTrue(outgoing.isEmpty());
+            p.locator("[data-language-select]").selectOption("en");p.waitForFunction("document.querySelector('.ad-label').textContent==='Advertisement'");
+        }
+    }
+
+    @Test void continuousNewspaperAndInitialPolicies(){
         try(var context=browser.newContext()){
             Page p=context.newPage();p.navigate(origin+"/index.html");p.waitForSelector("#paper article");
             assertEquals("MoA-PaN",p.locator(".topline [data-brand-en]").textContent());
@@ -350,9 +361,12 @@ class BrowserTest {
             for(int width:new int[]{390,768,1440}){
                 p.setViewportSize(width,1000);
                 p.evaluate("async()=>{await document.fonts.ready;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));}");
-                assertEquals(width==390?"1":width==768?"2":"4",p.locator("#paper").evaluate("e=>getComputedStyle(e).columnCount"));
+                assertEquals(width==390?1:width==768?2:6,((Number)p.locator("#paper").evaluate("e=>getComputedStyle(e).gridTemplateColumns.split(' ').length")).intValue());
+                assertEquals("none",p.locator("#paper article").first().evaluate("e=>getComputedStyle(e).boxShadow"));
+                assertEquals("none",p.locator("#paper article").first().evaluate("e=>getComputedStyle(e).transform"));
+                assertTrue(p.locator(".masthead-ad").isVisible());
                 assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth<=innerWidth"));
-                p.screenshot(new Page.ScreenshotOptions().setPath(Path.of("build/reports/screenshots/scrap-gallery-"+width+".png")));
+                p.screenshot(new Page.ScreenshotOptions().setPath(Path.of("build/reports/screenshots/newspaper-sheet-"+width+".png")));
             }
             p.emulateMedia(new Page.EmulateMediaOptions().setMedia(com.microsoft.playwright.options.Media.PRINT));
             assertEquals("none",p.locator("#paper article").first().evaluate("e=>getComputedStyle(e).transform"));
