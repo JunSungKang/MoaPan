@@ -131,3 +131,7 @@ Sprint Delivery 유지. src 정적 모듈·설정 화면에 WebCrypto 암호화 
 2. 인수: README 최신화, 구조/문서 색인, 추적 파일·secret 제외 감사, shell/Node 검사·Gradle 회귀·Compose 모든 조합 검증·변경 이미지 보안 검사 후 현재 브랜치에 commit/push 및 원격SHA 일치 확인. main merge·데이터 삭제는 제외한다.
 
 追加 사용자 요청: Hugging Face 고정 모델 자동 다운로드를 Compose/Helm에서 공통 사용한다. scripts/deploy/helm/moapan에 전체 이미지 역할용 차트와 기존 Secret·PVC·Ingress 설정을 제공한다. Kubernetes 제외 조건은 이번 요청으로 변경됐다. 클러스터 context가 없으므로 lint/template와 부정 입력 검증까지 실행하고 실클러스터 설치는 미검증으로 보고한다.
+
+
+## develop 통합 승인
+사용자가 현재 작업의 develop 반영을 승인했다. 기존 develop 기준 squash integration 계약, 보호검증, 독립 에이전트 read-only 리뷰와 App current-head formal approval 후 human merge wrapper를 사용한다. main 반영은 범위 밖이다. 성공 후 head의 원격/로컬/추적 branch 부재와 develop tree를 확인한다.
