@@ -42,3 +42,8 @@ sh scripts/restore-check.sh <workspace-encrypted-backup> <workspace-private-iden
 엔진/서비스 준비를 제한 시간 안에 확인하려면 이미지 빌드 후 `node scripts/local-start.mjs`를 실행한다. Engine 사전 검사10초, Compose health90초, 전체 시작120초 상한이며 실패를 성공으로 처리하지 않는다. Docker 시작 장애 기록은 docs/BUGS.md를 참고한다.
 
 Caddyfile과 scripts/db-init.sh는 이미지에 포함된다. 수정 후 proxy/db 이미지를 재빌드하고 다시 보안 검사한다. 기본 Compose는 호스트 파일 bind mount를 사용하지 않으며 기존 named volume을 유지한다.
+
+## 선택적 무료 로컬 번역 (macOS arm64)
+`sh scripts/translation-local.sh install`로 공식 고정 runtime/model 체크섬을 검증하고 `sh scripts/translation-local.sh start`, `sh scripts/translation-local.sh status`로 실행/준비 상태를 확인한다. 모델·cache·secret은 workspace `.local/translation`에만 있다. 재부팅 후에는 이 명령을 다시 실행해야 하며 자동 시작을 구성했다고 주장하지 않는다. 서버 API는127.0.0.1:11435, 인증키 필요, 공개proxy경로 없음. 호스트 Docker Desktop이 host.docker.internal을 통해 loopback에 연결할 수 있는 환경에서 `docker compose -f compose.yaml -f scripts/compose-public.yaml -f scripts/compose-translation.yaml up -d`로 worker만 연결한다. 공개IP/도메인은 기존 승인 설정 사용. 권리 검토한 source만 관리자 화면의 로컬 번역 허용 체크. 일시 실패는10분 간격 최대3회, 모델 재시작만으로 실패 작업을 무한 반복하지 않는다. 원인 해결 후 관리자가 해당 작업의 attempts/available_at을 명시적으로 재설정한다. 모델 미실행 시 기존 원문 뉴스는 계속 제공된다.
+
+선택 모델: Index Translate 2B Q8_0. 용어표는 src/main/resources/translation/glossary.tsv, 모델 처리기록에 glossary-v1 포함. start는 workspace 내부 로그와 PID로 분리 실행하고 readiness를 확인한다. 터미널에서 계속 실행하려면 run을 사용한다. launchd/자동 재부팅 시작은 구성하지 않았으며 Mac/Docker 재시작 후 모델 및 translation Compose overlay를 다시 실행한다.

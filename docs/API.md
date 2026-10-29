@@ -45,7 +45,7 @@ username은 ASCII 영문·숫자·밑줄1~128, 대문자를 소문자로 정규�
 - GET `/api/v1/admin/jobs/{id}`: QUEUED/RUNNING/SUCCEEDED/FAILED/CANCELLED,attempts,시각,정제 오류 코드.
 - GET `/api/v1/admin/workers`: worker ID·heartbeat.
 
-주소 입력: label,type(RSS/ATOM/JSON_API),endpointUrl,language,intervalSeconds(기본900·300~86400),enabled,rightsStatus,allowMetadata,allowDisplay,allowSummary,allowBody,allowStore,allowTranslation,allowImage,allowExternalAi,termsUrl,termsCheckedOn,reviewNote,jsonMapping,secretRef,version. body/store/translation/image/externalAI의 true는 V1 미지원400. 승인·제한 권리는 조건 URL·확인일 필요. endpoint/type/secret 참조 변경 시 비활성·권리/기술 초기화. 승인된 endpoint의 공개 HTTPS hostname만 접근하고 secret은 서버 환경의 MOAPAN_SOURCE_* 참조로 Bearer header에만 사용한다. 값은 응답하지 않는다.
+주소 입력: label,type(RSS/ATOM/JSON_API),endpointUrl,language,intervalSeconds(기본900·300~86400),enabled,rightsStatus,allowMetadata,allowDisplay,allowSummary,allowBody,allowStore,allowTranslation,allowImage,allowExternalAi,termsUrl,termsCheckedOn,reviewNote,jsonMapping,secretRef,version. body/store/image/externalAI의 true는 V1 미지원400. allowTranslation은 권리 검토 후 로컬 제목·요약 번역만 허용. 승인·제한 권리는 조건 URL·확인일 필요. endpoint/type/secret 참조 변경 시 비활성·권리/기술 초기화. 승인된 endpoint의 공개 HTTPS hostname만 접근하고 secret은 서버 환경의 MOAPAN_SOURCE_* 참조로 Bearer header에만 사용한다. 값은 응답하지 않는다.
 
 JSON_API는 단일 GET 응답의 제한된 점 구분 경로만 지원: items,id,title,url,publishedAt,description. 최대100개 처리·응답2MiB, 페이지네이션 코드를 실행하지 않는다. 필요 시 별도 검토 후 제한된 페이지네이션을 확장해야 하며 임의 표현식은 금지한다. 사이트별 코드 추가·재배포 없이 이 범위의 표준 source를 등록할 수 있다.
 
@@ -85,3 +85,6 @@ JSON 입력: search(필수 문자열, 최대100자), category(필수 문자열, 
 응답: items(공개 ArticleView 최대7개), page, pages(최대20), total(최대140). 최근7일/지면42개 밖의 저장 공개기사도 포함한다. 발행시각 또는 수집시각 내림차순/ID로 정렬하며 미래자료 제외. 개인 관심사/제외조건은 적용하지 않는다. 제목·표시 허용 요약·활성 태그의 문자 일치 검색이며 SQL 와일드카드를 문자로 취급한다. 카테고리는 정확 일치.
 공개 권리와 공개상태를 매 요청 재확인한다. 요청 하나 안의 count/items는 repeatable-read. 페이지 간 새 수집·숨김·정정으로 결과가 달라질 수 있으며 검색 스냅샷이나 검색어를 영속 보관하지 않는다.
 검색 전체 서비스120회/분, 회원 기존60회/분·동시3회·6000항목/일도 적용. 장애 시503, 한도429+Retry-After. 400 입력, 403 CSRF, 회원경로401. 검색어는 요청 처리 메모리 외 저장·로깅·외부 전송하지 않는다.
+
+## 카드 번역
+뉴스 DTO는 translations: {ko|en: {title,summaryBullets}}를 추가한다. 현재 입력 hash·공개 상태·출처 display/summary/translation 권리를 확인한 저장 결과만 포함한다. 원문 title/summaryBullets는 보존하며 provider·내부 해시는 공개하지 않는다. 번역이 없거나 유효하지 않으면 원문 표시. 검색은 허용된 저장 번역도 검색하며 검색어는 보관하지 않는다.

@@ -1,4 +1,5 @@
-import {language} from './i18n.js';
+import {language,t} from './i18n.js';
+import {articleText} from './article-text.js';
 import {slideWindow} from './slides.js';
 import {request} from './api.js';
 import {el,report,date,viewer} from './common.js';
@@ -24,15 +25,16 @@ function render(){
 }
 function safeUrl(value){try{const u=new URL(value);return ['http:','https:'].includes(u.protocol)?u.href:'#';}catch{return '#';}}
 function articleNode(a,index){
+ const text=articleText(a,language);
  const article=el('article',undefined,index===0?'lead':'');
- const heading=el('h2'),link=el('a',a.title);link.href=safeUrl(a.originalUrl);link.target='_blank';link.rel='noopener noreferrer';link.dataset.originalContent='';heading.append(link);article.append(heading);
+ const heading=el('h2'),link=el('a',text.title);link.href=safeUrl(a.originalUrl);link.target='_blank';link.rel='noopener noreferrer';link.dataset.originalContent='';link.lang=text.language;heading.append(link);article.append(heading);
  const line=el('div',undefined,'article-meta-line');
- const subjects=el('span',a.tags.map(t=>t.name).join(' · ')||'미분류','article-subjects');subjects.setAttribute('aria-label','주제');
+ const subjects=el('span',a.tags.map(tag=>t(tag.name)).join(' · ')||'미분류','article-subjects');subjects.setAttribute('aria-label','주제');
  const written=el('span',a.publishedAt?new Intl.DateTimeFormat(language==='en'?'en-GB':'ko-KR',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(a.publishedAt)):'정보 없음');written.setAttribute('aria-label','작성일');
  const author=el('span',a.author||'정보 없음','article-author');if(a.author)author.dataset.originalContent='';author.title=a.author||'';subjects.title=a.tags.map(t=>t.name).join(' · ');author.setAttribute('aria-label','작성자');
  line.append(subjects,written,author);article.append(line);
  const source=el('p',a.source.site,'article-source');source.setAttribute('aria-label','출처');article.append(source);
- if(a.summaryBullets.length){const list=el('ul');list.dataset.originalContent='';for(const bullet of a.summaryBullets)list.append(el('li',bullet));article.append(list);}
+ if(text.summaryBullets.length){const list=el('ul');list.dataset.originalContent='';list.lang=text.language;for(const bullet of text.summaryBullets)list.append(el('li',bullet));article.append(list);}
  else article.append(el('p','연구 관점으로 요약할 정보가 부족합니다.','muted'));
  return article;
 }

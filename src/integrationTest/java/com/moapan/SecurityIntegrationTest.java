@@ -40,6 +40,7 @@ class SecurityIntegrationTest {
     static { postgres.start(); org.flywaydb.core.Flyway.configure().dataSource(postgres.getJdbcUrl(),postgres.getUsername(),postgres.getPassword()).cleanDisabled(true).load().migrate(); }
     @DynamicPropertySource static void properties(DynamicPropertyRegistry r){r.add("spring.datasource.url",postgres::getJdbcUrl);r.add("spring.datasource.username",postgres::getUsername);r.add("spring.datasource.password",postgres::getPassword);}
     @AfterAll static void stop(){postgres.stop();}
+    @Autowired com.moapan.news.ArticleTranslations translations;
     @Autowired MockMvc mvc;@Autowired Accounts accounts;@Autowired Limits limits;@Autowired CatalogRepository repo;@Autowired CatalogService catalog;@Autowired Worker worker;@Autowired NewsService news;
     @Autowired org.springframework.session.SessionRepository<?> sessions;
     private static final String PASSWORD="synthetic password 12345";
@@ -179,6 +180,47 @@ class SecurityIntegrationTest {
         assertEquals(1,repo.db().sql("SELECT count(*) FROM article_revisions r JOIN articles a ON a.id=r.article_id WHERE a.source_id=:source").param("source",source).query(Integer.class).single());
         var columns=repo.db().sql("SELECT column_name FROM information_schema.columns WHERE table_schema='public' AND table_name IN ('articles','article_revisions','content_jobs','fetch_runs')").query(String.class).list();
         for(String forbidden:List.of("body","content","description","abstract","raw","raw_body","original_text","payload"))assertFalse(columns.contains(forbidden));
+    }
+
+    @Test @Order(8) void translationsRequirePermissionCurrentContentAndRetainOnlyTranslatedCards(){
+        UUID site=UUID.randomUUID(),source=UUID.randomUUID(),id=UUID.randomUUID();
+        repo.db().sql("INSERT INTO sites(id,name,homepage_url,normalized_homepage_url,status) VALUES(:id,'Translation fixture','https://translation.example.org','https://translation.example.org','ACTIVE')").param("id",site).update();
+        repo.db().sql("INSERT INTO sources(id,site_id,label,type,endpoint_url,normalized_endpoint_url,rights_status,allow_display,allow_summary,allow_translation) VALUES(:id,:site,'Translation fixture','RSS','https://translation.example.org/rss','https://translation.example.org/rss','APPROVED',true,true,false)").param("id",source).param("site",site).update();
+        repo.db().sql("INSERT INTO articles(id,source_id,source_guid,canonical_url,title,summary_bullets,summary_mode,language,input_hash) VALUES(:id,:source,'translate-fixture','https://translation.example.org/article','Synthetic retrieval','[\"A synthetic retrieval algorithm.\"]','EXTRACTIVE_ORIGINAL_LANGUAGE','en',:hash)").param("id",id).param("source",source).param("hash","e".repeat(64)).update();
+        String hash=com.moapan.news.ArticleTranslations.contentHash("Synthetic retrieval",List.of("A synthetic retrieval algorithm."));
+        var text=new com.moapan.news.ArticleTranslations.Text("합성 검색",List.of("합성 검색 알고리즘입니다."));
+        assertFalse(translations.store(id,hash,"ko",text,"synthetic-test"));
+        repo.db().sql("UPDATE sources SET allow_translation=true WHERE id=:id").param("id",source).update();
+        assertFalse(translations.store(id,"wrong-hash","ko",text,"synthetic-test"));
+        assertTrue(translations.store(id,hash,"ko",text,"synthetic-test"));
+        repo.db().sql("UPDATE news_editions SET expires_at=now()-interval '1 second'").update();
+        var article=news.publicEdition().items().stream().filter(a->a.id().equals(id)).findFirst().orElseThrow();
+        assertEquals("Synthetic retrieval",article.title());assertEquals(text,article.translations().get("ko"));
+        var searchService=new com.moapan.news.NewsSearch(repo,news,limits,tm);
+        assertEquals(id,searchService.search(new com.moapan.news.NewsSearch.Input("합성 검색","",null,0),null).items().getFirst().id());
+        repo.db().sql("UPDATE sources SET allow_translation=false WHERE id=:id").param("id",source).update();
+        assertTrue(translations.read(List.of(article)).isEmpty());
+        assertEquals(0,searchService.search(new com.moapan.news.NewsSearch.Input("합성 검색","",null,0),null).total());
+        repo.db().sql("UPDATE sources SET allow_translation=true WHERE id=:id").param("id",source).update();
+        repo.db().sql("UPDATE articles SET title='Changed synthetic retrieval' WHERE id=:id").param("id",id).update();
+        assertEquals(0,repo.db().sql("SELECT count(*) FROM article_translations WHERE article_id=:id").param("id",id).query(Integer.class).single());
+        assertFalse(translations.store(id,hash,"ko",text,"synthetic-test"));
+        var engine=new com.moapan.news.LocalTranslator("",""){@Override public String translate(String input,String language){return "합성 번역";}};
+        var translationWorker=new com.moapan.jobs.TranslationWorker(repo,engine,translations,tm);
+        var first=translationWorker.claim();assertEquals(id,first.get("article_id"));assertNull(translationWorker.claim());
+        repo.db().sql("UPDATE article_translation_jobs SET lease_until=now()-interval '1 second' WHERE article_id=:id").param("id",id).update();
+        assertTrue(translationWorker.processOne());
+        assertEquals(1,repo.db().sql("SELECT count(*) FROM article_translations WHERE article_id=:id").param("id",id).query(Integer.class).single());
+        assertNull(translationWorker.claim());
+        repo.db().sql("UPDATE articles SET title='Another synthetic change' WHERE id=:id").param("id",id).update();
+        assertEquals(0,repo.db().sql("SELECT count(*) FROM article_translation_jobs WHERE article_id=:id").param("id",id).query(Integer.class).single());
+        var failing=new com.moapan.news.LocalTranslator("",""){@Override public String translate(String input,String language){throw new IllegalStateException("synthetic failure");}};
+        var retryWorker=new com.moapan.jobs.TranslationWorker(repo,failing,translations,tm);
+        for(int attempt=0;attempt<3;attempt++){assertTrue(retryWorker.processOne());repo.db().sql("UPDATE article_translation_jobs SET available_at=now() WHERE article_id=:id").param("id",id).update();}
+        assertFalse(retryWorker.processOne());
+        assertEquals("translation_failed",repo.db().sql("SELECT error_code FROM article_translation_jobs WHERE article_id=:id").param("id",id).query(String.class).single());
+        repo.db().sql("UPDATE articles SET public=false WHERE id=:id").param("id",id).update();
+        repo.db().sql("UPDATE news_editions SET expires_at=now()-interval '1 second'").update();
     }
 
     @Test @Order(9) @WithMockUser(roles="ADMIN") void duplicateFetchAndChangedInputPreserveManualLocks() {

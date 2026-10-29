@@ -1,0 +1,36 @@
+# glossary-v1: English<TAB>Korean. Reviewed technical terms only; matched in source.
+retrieval-augmented generation	검색 증강 생성
+large language model	대규모 언어 모델
+large language models	대규모 언어 모델
+unsupported claims	근거 없는 주장
+context window	문맥 창
+fine-tuning	미세 조정
+knowledge distillation	지식 증류
+quantization	양자화
+prompt injection	프롬프트 주입
+authentication bypass	인증 우회
+authentication	인증
+authorization	인가
+without authentication	인증 없이
+unauthenticated attacker	인증되지 않은 공격자
+remote code execution	원격 코드 실행
+privilege escalation	권한 상승
+path traversal	경로 순회
+SQL injection	SQL 삽입
+cross-site scripting	크로스 사이트 스크립팅
+server-side request forgery	서버 측 요청 위조
+snapshot isolation	스냅샷 격리
+multiversion concurrency control	다중 버전 동시성 제어
+transaction isolation	트랜잭션 격리
+query optimizer	쿼리 최적화기
+index construction	인덱스 구축
+approximate nearest neighbor	근사 최근접 이웃
+approximate nearest neighbors	근사 최근접 이웃
+vector search	벡터 검색
+hybrid search	하이브리드 검색
+recall	재현율
+throughput	처리량
+latency	지연 시간
+median	중앙값
+confidence interval	신뢰 구간
+statistically significant	통계적으로 유의미한

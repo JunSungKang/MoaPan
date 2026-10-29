@@ -67,3 +67,7 @@ CSS 상호작용/모바일 정렬 변경 검증 2026-10-28T13:00:18.186Z: JDK/�
 
 ## 검색·슬라이드 산출물 재검증
 2026-10-28T23:21:13.826Z: 소스/비밀값/설정·SBOM·JAR·최종 이미지 Trivy gate 통과. JAR91패키지/SBOM100컴포넌트 인식, advisory DB 동기화2026-10-28T21:57:31.453891Z. 실행 web/worker 이미지 모두 `sha256:a031afba57f6eb2e5ce0d71df7a3c2705b2c13d7ac14d8de6cb32c1210d7568a`로 스캔 대상과 일치한다. 이미지 manifest 내 config digest를 별도 이미지로 조회한 시도는 Docker No such image로 검사되지 않았고, 실제 실행 image ID는 정상 스캔한 manifest ID와 동일함을 확인했다. 미검사를 성공으로 세지 않는다. 프록시/의존성 변경 없음; 기존 go-jose/v3 HIGH1의 한정된 NOT_AFFECTED 근거·만료 조건을 그대로 유지하며 패치 완료로 표시하지 않는다. 검색 조건 SQL 파라미터화·문자 와일드카드 escape·CSRF·quota·no-store·로그 미기록을 검증했다.
+
+## 2026-10-29 로컬 번역 적용
+Index2BQ8 공식 SHA 및 upstream b11960 공식 archive SHA 검증, runtime advisory 근거는 evidence/translation-runtime-security.json. 네이티브 런타임은 JAR Trivy 검사 범위에 포함되지 않으므로 검사0건으로 대체하지 않는다. loopback/API key/offline/무도구/무RPC/무webUI, worker만 연결. 원문일치 용어표와 숫자/CVE 검증은 완전한 의미정확성 보장이 아니다.
+최종앱이미지 sha256:e4b05e4e6828a6076d8c82548460cc14a1bb50bc8664a9cbb27f2139307061ae Trivy gate 통과, source/bootJar/SBOM gate 통과. 기존 proxy 조건부 영향없음 판정은 유지되며 전체환경 취약점0 주장하지 않는다. 정확한 실행 evidence/translation-delivery.json.

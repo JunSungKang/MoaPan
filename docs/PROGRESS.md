@@ -83,3 +83,15 @@ UI 정리, 작성자 수집·DB·DTO, research-v2 근거 문장 추출을 구현
 
 ## 원문 미보관 확인 완료
 기존 수집기는 허용 설명문/초록을 메모리에서만 처리하고 요약·메타데이터·링크·해시만 보관한다. 운영 스키마와12개 source의 본문/저장 비활성 확인. 원문 삭제가 필요한 별도 저장 필드는 발견되지 않아 기존 요약/기사는 유지했다. PostgreSQL 신규/변경 수집 회귀 추가, 통합28개 PASS. 운영 코드·이미지는 변경하지 않았다. 문서/회귀 테스트를 guarded commit/push로 전달한다.
+
+## 실제 카드 번역 진행 (2026-10-29)
+무료 로컬 경량 LLM 사용 승인. 사용자 추가 요청에 따라 TranslateGemma4B를 최상위라고 단정하지 않고 Google/Tencent/Bilibili 공식 모델·평가·배포 파일을 재비교 중. V8 번역 저장/입력 해시 무효화/권리 검사/카드 언어 전환 기반 구현, check·integrationTest·e2eTest 성공. 운영 서비스에는 아직 미반영. 공식 llama.cpp stable v0.8.0이 지시하는 b11960 arm64 바이너리 체크섬 검증 완료. 모델 비교 다운로드/로컬 기술문장 평가 진행 중. 제목·저장 요약만 번역하며 원문 본문은 저장하지 않는다.
+
+번역 기반 운영 이미지62238ee30ffaa3f16cf65c2dd7026ee75e252596e0214f3181f99c1a1480d64d/V8 적용,68테스트와이미지gate PASS. 실제출처 allow_translation은 아직 켜지 않아 기존원문 표시 유지. 사용자가 TranslateGemma4B 실제 품질·메모리 비교를 추가 요청하여 Index최종선정을 보류했다. 공식Ollama legacyGGUF 호환계층을 확인했고 같은Mac에서 실측 비교를 준비한다.
+
+TranslateGemma4B Q4를 공식 Ollama v0.40.12 내장 llama-server 호환계층으로 정상 로드했다. 모델 파일 수정 없음, HOME변경/전역설치 없음. 14문장×2회 동일context4096/parallel1/temp0 비교 실시, Q8도 공식registry4.95GB 다운로드 중. Index 역시 동일실행기로 재측정한다. 선정은 아직 보류, 운영번역권한0/저장번역0 확인.
+
+## 사용자 모델 결정 후 적용 중
+Index Translate 2B Q8_0 및 매칭 용어표 승인. 35항목 TSV/경계·조사 테스트 추가. 실제 출처 번역 활성화 전 전체회귀·산출물검사 진행 중. 모델선정은 완료됐으며 전체 기사 번역 완료와 구분한다.
+
+번역 운영 적용: Index2BQ8+glossary-v1 35항목. 70tests PASS/FAIL0/SKIP0, 최종이미지 sha256:e4b05e4e6828a6076d8c82548460cc14a1bb50bc8664a9cbb27f2139307061ae 검사 후 web/worker 동일digest 실행. 실제출처6개 번역권한 활성화 및 한국어/영어 브라우저 전환 확인. 스냅샷 번역36/공개136, 대기99, 검증실패1(원문유지). 초기전체처리는 background로 계속되며 완료로 오인하지 않음. 임시계정0개. 운영시작 직후 502에서 첫 활성화 요청 실패, healthy 후 재실행 성공. 탈퇴204를 JSON으로 읽어 스크립트 cleanup failed가 출력됐으나 DB삭제0잔여 확인. evidence/translation-delivery.json.

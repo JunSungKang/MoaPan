@@ -82,3 +82,6 @@ CSS 변경 후 e2eTest/bootJar/sbom/securityCheck/acceptanceTest 통과. 기존 
 최종 check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest 성공. 실제 HTTPS 기본42개, 검색136개·최대20페이지·페이지당7개, 기본42개 밖 결과 조회, CSRF 누락403/초과페이지400/no-store 확인. 합성 검색어가 web/proxy/db 최근 로그에 없음을 확인했다. 운영 DB는 log_statement=none, log_min_duration_statement=-1, log_min_error_statement=panic, log_parameter_max_length_on_error=0. 증빙: [search-delivery.json](evidence/search-delivery.json).
 
 원문 미보관 회귀: check/integrationTest 성공. 통합28개 PASS/FAIL0/SKIP0, 기존 단위17개 결과는 UP-TO-DATE. collectionDoesNotPersistOriginalInputEvenInRevisions는 입력 전용 표식이 기사·수정 이력·작업·실행 이력에 남지 않고, 요약/링크 보존 및 원문 변경 해시 갱신을 확인했다. 운영 DB191개 기사 및12개 수집원 조사: 원문 저장 칼럼 없음, 본문 접근/보관 활성0. docs/evidence/no-original-retention.json 참조. 운영 코드·의존성·이미지 변경이 없으므로 E2E/이미지 스캔/재배포는 이번에 재실행하지 않았다.
+
+## Index Translate 2B + glossary-v1
+2026-10-29: unit21/integration29/Playwright20=70 tests PASS, failure/error/skip0. 원문 매칭/부분문자열 제외/한국어조사/역방향 canonical 용어, 숫자·CVE 검증, 권리철회/내용변경 무효화/lease/translated search 및 브라우저 저장번역 선택 포함. 로컬 명령 check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest 성공. 운영실제 번역 검증은 후속 증빙으로 기록한다.

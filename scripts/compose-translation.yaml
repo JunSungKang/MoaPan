@@ -1,0 +1,9 @@
+services:
+  worker:
+    environment:
+      MOAPAN_TRANSLATION_URL: http://host.docker.internal:11435/v1/chat/completions
+      MOAPAN_TRANSLATION_KEY_FILE: /run/secrets/translation_key
+    secrets: [translation_key]
+secrets:
+  translation_key:
+    file: ./.local/translation/api.key

@@ -53,6 +53,27 @@ class BrowserTest {
         }
     }
 
+    @Test void languagePickerChangesStoredCardTitleAndSummaryWithoutNetwork(){
+        try(var context=browser.newContext()){
+            context.route("**/api/v1/news/edition*",r->{
+                var mapper=tools.jackson.databind.json.JsonMapper.builder().build();var root=mapper.readTree(edition());
+                for(var item:root.get("items")){
+                    var object=(tools.jackson.databind.node.ObjectNode)item;
+                    object.put("title","Synthetic original title");((tools.jackson.databind.node.ObjectNode)object.get("source")).put("language","en");
+                    object.set("summaryBullets",mapper.valueToTree(List.of("Synthetic original summary.")));
+                    object.set("translations",mapper.valueToTree(Map.of("ko",Map.of("title","합성 번역 제목","summaryBullets",List.of("합성 번역 요약입니다.")))));
+                }
+                r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(mapper.writeValueAsString(root)));
+            });
+            Page p=context.newPage();p.navigate(origin+"/index.html");p.waitForSelector("#paper article");
+            assertEquals("합성 번역 제목",p.locator("#paper article h2 a").first().textContent());assertEquals("합성 번역 요약입니다.",p.locator("#paper article li").first().textContent());
+            List<String> requests=new ArrayList<>();p.onRequest(r->requests.add(r.url()));
+            p.locator("[data-language-select]").selectOption("en");p.waitForFunction("document.querySelector('#paper h2 a').textContent==='Synthetic original title'");
+            assertEquals("Synthetic original summary.",p.locator("#paper article li").first().textContent());
+            p.locator("[data-language-select]").selectOption("ko");p.waitForFunction("document.querySelector('#paper h2 a').textContent==='합성 번역 제목'");assertTrue(requests.isEmpty());
+        }
+    }
+
     @Test void encryptedPreferencesTransferBetweenIndependentBrowsers()throws Exception{
         active=A;var traffic=new ArrayList<String>();
         try(var first=browser.newContext();var second=browser.newContext()){
