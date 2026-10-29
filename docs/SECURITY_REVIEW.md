@@ -71,3 +71,7 @@ CSS 상호작용/모바일 정렬 변경 검증 2026-10-28T13:00:18.186Z: JDK/�
 ## 2026-10-29 로컬 번역 적용
 Index2BQ8 공식 SHA 및 upstream b11960 공식 archive SHA 검증, runtime advisory 근거는 evidence/translation-runtime-security.json. 네이티브 런타임은 JAR Trivy 검사 범위에 포함되지 않으므로 검사0건으로 대체하지 않는다. loopback/API key/offline/무도구/무RPC/무webUI, worker만 연결. 원문일치 용어표와 숫자/CVE 검증은 완전한 의미정확성 보장이 아니다.
 최종앱이미지 sha256:e4b05e4e6828a6076d8c82548460cc14a1bb50bc8664a9cbb27f2139307061ae Trivy gate 통과, source/bootJar/SBOM gate 통과. 기존 proxy 조건부 영향없음 판정은 유지되며 전체환경 취약점0 주장하지 않는다. 정확한 실행 evidence/translation-delivery.json.
+
+
+### Linux 번역 최종 산출물 (2026-10-29)
+Trivy0.76.1 최종 앱/translator 이미지 검사 gate 통과. 앱59f4c97c8c7ee18b88ff29ec18b978b78c3602c09b3d1d98c8082147615e40fe, translator2221c46cc144f87d4b371b0264809a3ad3d8fec9642b83b7ab14ee990cec4ee0(sha256). DB 마지막 동기화2026-10-28T21:57:31.453891Z. 소스·JAR·SBOM 검사도 실행. 모델 runtime은 비루트/read-only/cap_drop/internal network/no host port/CPU 자원 제한. 모델-init만 다운로드 접근. native C++ 구성요소의 scanner 탐지 범위는 OS 패키지 검사와 같지 않으며 CVE 미검출을 무취약 보증으로 해석하지 않는다. 기존 Caddy 조건부 VEX와 보안 잔여 위험은 유지한다.

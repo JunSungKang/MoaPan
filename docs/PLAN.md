@@ -117,3 +117,10 @@ Sprint Delivery 유지. src 정적 모듈·설정 화면에 WebCrypto 암호화 
 2. 화면 연결: 공통 언어 선택으로 카드 제목·요약 전환, 번역 미존재/실패 시 원문 유지. 날짜는 locale, 저자·기관 고유명은 원래 표기 유지.
 3. 실행 연결: 사용자에게 로컬 번역 전용 모델과 기존 API 중 선택 요청. 선택 전 모델 설치/외부 기사 전송은 하지 않는다. 모델 독립 DB/API/화면 연결과 회귀 검증은 진행한다.
 4. 완료: 실제 번역 생성→내용 갱신 시 무효화/권리 차단 검증→보안 검사→Compose 적용→현재 카드 한국어/영어 전환 확인→커밋·푸시. 번역된 척 원문을 반환해 완료하지 않는다.
+
+## Linux 번역 완전 자동화 — 승인 2026-10-29
+방법론 Sprint Delivery. 허용 root /Users/kkkk/Desktop/jskang/03.workspace/01.project/moapan. 소스/Compose/테스트/docs 변경, CI/CD·외부AI·회원데이터 전송·기사전문저장·main merge 제외.
+1. Linux 실행: 고정 llama.cpp CPU 이미지(amd64/arm64 빌드 경로), 검증 모델 volume 초기화, 내부망 translator/worker, 재시작/health/watchdog. 실측한 아키텍처만 검증 완료.
+2. 자동검증: 수치·단위·식별자·방향/부정의 제한된 규칙, 보호표식 재번역, 항목별 checkpoint/3회 제한, 인프라 장애 별도 backoff, 원문 종결, 처리 버전 무효화.
+3. 운영검증: 100개 이상 고정 정상/변조 fixture, PostgreSQL lease/중단복구/권리철회, Linux CPU 실제 번역, 깨끗한 모델 준비, 컨테이너 재생성, 관리자 집계, 보안/이미지검사, commit/push.
+선행: 기존 DB/기사는 보존. 번역실패는 성공으로 바꾸지 않으며 전체 의미정확성 보장 안함. 실패시 원문 서비스 유지. 신규 DB migration은 additive, 파괴적 rollback 없음. 외부 Linux 서버/GPU 장비 미제공은 컨테이너 검증과 분리 보고.

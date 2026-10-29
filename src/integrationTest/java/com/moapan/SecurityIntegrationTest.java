@@ -205,20 +205,43 @@ class SecurityIntegrationTest {
         repo.db().sql("UPDATE articles SET title='Changed synthetic retrieval' WHERE id=:id").param("id",id).update();
         assertEquals(0,repo.db().sql("SELECT count(*) FROM article_translations WHERE article_id=:id").param("id",id).query(Integer.class).single());
         assertFalse(translations.store(id,hash,"ko",text,"synthetic-test"));
-        var engine=new com.moapan.news.LocalTranslator("",""){@Override public String translate(String input,String language){return "합성 번역";}};
+        var engine=new com.moapan.news.LocalTranslator("",""){@Override public String translate(String input,String language,int attempt,String reason){return "합성 번역";}};
         var translationWorker=new com.moapan.jobs.TranslationWorker(repo,engine,translations,tm);
         var first=translationWorker.claim();assertEquals(id,first.get("article_id"));assertNull(translationWorker.claim());
         repo.db().sql("UPDATE article_translation_jobs SET lease_until=now()-interval '1 second' WHERE article_id=:id").param("id",id).update();
+        assertTrue(translationWorker.processOne());
         assertTrue(translationWorker.processOne());
         assertEquals(1,repo.db().sql("SELECT count(*) FROM article_translations WHERE article_id=:id").param("id",id).query(Integer.class).single());
         assertNull(translationWorker.claim());
         repo.db().sql("UPDATE articles SET title='Another synthetic change' WHERE id=:id").param("id",id).update();
         assertEquals(0,repo.db().sql("SELECT count(*) FROM article_translation_jobs WHERE article_id=:id").param("id",id).query(Integer.class).single());
-        var failing=new com.moapan.news.LocalTranslator("",""){@Override public String translate(String input,String language){throw new IllegalStateException("synthetic failure");}};
+        var failing=new com.moapan.news.LocalTranslator("",""){@Override public String translate(String input,String language,int attempt,String reason){throw new IllegalStateException("synthetic failure");}};
         var retryWorker=new com.moapan.jobs.TranslationWorker(repo,failing,translations,tm);
         for(int attempt=0;attempt<3;attempt++){assertTrue(retryWorker.processOne());repo.db().sql("UPDATE article_translation_jobs SET available_at=now() WHERE article_id=:id").param("id",id).update();}
         assertFalse(retryWorker.processOne());
-        assertEquals("translation_failed",repo.db().sql("SELECT error_code FROM article_translation_jobs WHERE article_id=:id").param("id",id).query(String.class).single());
+        assertEquals("translation_invalid",repo.db().sql("SELECT error_code FROM article_translation_jobs WHERE article_id=:id").param("id",id).query(String.class).single());
+        assertEquals("ORIGINAL",repo.db().sql("SELECT state FROM article_translation_jobs WHERE article_id=:id").param("id",id).query(String.class).single());
+        repo.db().sql("UPDATE articles SET title='Infrastructure fixture' WHERE id=:id").param("id",id).update();
+        var unavailable=new com.moapan.news.LocalTranslator("",""){
+            @Override public String translate(String input,String language,int attempt,String reason){throw new com.moapan.news.TranslationFailure("translation_transport",true);}
+            @Override public boolean healthy(){return false;}
+        };
+        var infrastructureWorker=new com.moapan.jobs.TranslationWorker(repo,unavailable,translations,tm);
+        for(int i=0;i<4;i++){assertTrue(infrastructureWorker.processOne());repo.db().sql("UPDATE article_translation_jobs SET available_at=now() WHERE article_id=:id").param("id",id).update();}
+        assertEquals("RETRY",repo.db().sql("SELECT state FROM article_translation_jobs WHERE article_id=:id").param("id",id).query(String.class).single());
+        assertEquals("{}",repo.db().sql("SELECT field_attempts::text FROM article_translation_jobs WHERE article_id=:id").param("id",id).query(String.class).single());
+        assertEquals(4,repo.db().sql("SELECT infra_failures FROM article_translation_jobs WHERE article_id=:id").param("id",id).query(Integer.class).single());
+        assertFalse(infrastructureWorker.runtimeReady());
+        var recovered=new com.moapan.jobs.TranslationWorker(repo,engine,translations,tm);
+        var leased=recovered.claim();assertNotNull(leased);
+        assertTrue(recovered.heartbeat(id,(UUID)leased.get("token")));
+        assertFalse(recovered.heartbeat(id,UUID.randomUUID()));
+        repo.db().sql("UPDATE sources SET allow_translation=false WHERE id=:id").param("id",source).update();
+        assertNull(recovered.claim());
+        assertEquals("CANCELLED",repo.db().sql("SELECT state FROM article_translation_jobs WHERE article_id=:id").param("id",id).query(String.class).single());
+        repo.db().sql("UPDATE sources SET allow_translation=true WHERE id=:id").param("id",source).update();
+        assertTrue(recovered.processOne());assertTrue(recovered.processOne());
+        assertEquals("DONE",repo.db().sql("SELECT state FROM article_translation_jobs WHERE article_id=:id").param("id",id).query(String.class).single());
         repo.db().sql("UPDATE articles SET public=false WHERE id=:id").param("id",id).update();
         repo.db().sql("UPDATE news_editions SET expires_at=now()-interval '1 second'").update();
     }

@@ -23,3 +23,7 @@ V7: `articles.author varchar(2000) NOT NULL DEFAULT ''` 추가. 회원 프로필
 원문·피드 원본·설명문·초록을 별도 DB 칼럼, 파일 캐시, 작업 payload, 수정 이력에 저장하지 않는다. SafeFetch의 응답과 Item.description은 처리 중 메모리 입력이며 Worker는 요약과 메타데이터/링크/해시만 저장한다. 본문 웹페이지/PDF를 별도로 가져오는 기능은 없고 allowBody/allowStore 요청은 서버에서 거부한다. 입력 문자열은 처리가 끝나면 별도 보관하지 않으며 JVM 메모리의 즉시 물리 소거를 보장한다는 의미는 아니다. 기사 수정 이력은 이전 입력 해시만 보관한다.
 
 V8: article_translations는 기사별 대상 언어·현재 제목/요약 hash·번역 제목/요약·provider만 저장한다. article_translation_jobs는 ID·시도 횟수·lease·정제된 오류만 저장하며 원문 payload가 없다. 원본 제목/요약 변경 trigger가 번역과 대기 상태를 무효화한다. 최대3회 재시도,10분 lease/backoff, SKIP LOCKED 선점. 권리 철회 후 응답/저장 거부.
+
+
+### V9 번역 자동화
+article_translation_jobs: state,policy_version,progress(jsonb 검증된 번역 checkpoint),field_attempts,updated_at,infra_failures. PENDING/RUNNING/RETRY/DONE/ORIGINAL/CANCELLED. translation_runtime singleton은 readiness/backoff 집계만 저장한다. checkpoint는 종결 시 삭제한다. V9는 기존 파생 번역만 재검사 목적으로 삭제하며 기사·회원은 유지한다.

@@ -1,9 +1,57 @@
 services:
+  model-init:
+    image: moapan-translator:cpu-b11960
+    build:
+      context: .
+      dockerfile: scripts/translation/Dockerfile
+    entrypoint: ['/opt/translation/model-init.sh']
+    volumes: [translation_models:/models]
+    read_only: true
+    tmpfs: ['/tmp:size=32m,mode=1777']
+    cap_drop: [ALL]
+    security_opt: ['no-new-privileges:true']
+    mem_limit: 192m
+    cpus: 0.5
+    restart: 'no'
+  translator:
+    image: moapan-translator:cpu-b11960
+    build:
+      context: .
+      dockerfile: scripts/translation/Dockerfile
+    environment:
+      TRANSLATION_THREADS: ${TRANSLATION_THREADS:-2}
+    volumes: [translation_models:/models:ro]
+    secrets: [translation_key]
+    networks: [translation]
+    read_only: true
+    tmpfs: ['/tmp:size=128m,mode=1777']
+    cap_drop: [ALL]
+    security_opt: ['no-new-privileges:true']
+    mem_limit: ${TRANSLATION_MEMORY:-4g}
+    cpus: ${TRANSLATION_CPUS:-2}
+    pids_limit: 128
+    restart: unless-stopped
+    stop_grace_period: 20s
+    depends_on:
+      model-init: {condition: service_completed_successfully}
+    healthcheck:
+      test: ['CMD','curl','--fail','--silent','--max-time','3','http://127.0.0.1:11435/health']
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 120s
   worker:
     environment:
-      MOAPAN_TRANSLATION_URL: http://host.docker.internal:11435/v1/chat/completions
+      MOAPAN_TRANSLATION_URL: http://translator:11435/v1/chat/completions
       MOAPAN_TRANSLATION_KEY_FILE: /run/secrets/translation_key
+      TRANSLATION_TIMEOUT_SECONDS: ${TRANSLATION_TIMEOUT_SECONDS:-300}
     secrets: [translation_key]
+    networks: [backend,translation]
 secrets:
   translation_key:
-    file: ./.local/translation/api.key
+    file: ${TRANSLATION_KEY_FILE:-./.local/translation/api.key}
+networks:
+  translation:
+    internal: true
+volumes:
+  translation_models:

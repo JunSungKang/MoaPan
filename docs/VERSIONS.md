@@ -42,3 +42,7 @@ Docker Desktop: 공식 updater로4.97.0(244584), 2026-10-26 릴리스, 2026-10-2
 
 ## 2026-10-29 보안 재검사에 따른 프록시 의존성 갱신
 Caddy2.11.7/Go1.27.3 및 Java27.0.1.0.2+1 유지. go-jose/v4 4.1.6, x/net0.62.0으로 보안 수정하고 필요한 전이 x/crypto0.58.0,x/sync0.24.0,x/sys0.49.0,x/term0.47.0,x/text0.43.0을 go.mod/go.sum에 고정. 공급자 근거: https://github.com/go-jose/go-jose/releases/tag/v4.1.6 , https://pkg.go.dev/vuln/GO-2026-6860 , https://pkg.go.dev/vuln/GO-2026-6866 . v3에는 패치가 없어 현재 설정 비노출 판정과 만료를 SECURITY_REVIEW.md에 기록. 최종 runtime/build/proxy digest와 보고서 SHA는 evidence/topic-security.json 및 topic-collection.json 참조.
+
+
+### Linux CPU 번역 runtime 추가
+llama.cpp b11960 공식 commit 8642541b255bfb5dc39cd351a178be09013a55d6, source archive SHA256 1688a167a8edd9499cdd0c19b8bd044f0fa184b466981977bbf2222d884953a4. 공식 server 문서 https://github.com/ggml-org/llama.cpp/blob/8642541b255bfb5dc39cd351a178be09013a55d6/tools/server/README.md 확인. 모델 revision 3a0eca6ce931d88d00614d427ab3ed8ff0743902/Q8_0, SHA256 a09d287f41d297206947a2e51acc29dd03c8b22356111fdb1e289c0c97c173f3. aarch64 Temurin27.0.1.0.2+1 공식 archive SHA256 5ddacf925244a00b60cac828b61ff2f67a68cd32b8dfe5cee1405e333b4589e5 추가 검증. 실제 Linux ARM64 실행, AMD64 build 경로 미실행.

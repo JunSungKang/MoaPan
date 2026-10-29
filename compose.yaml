@@ -1,7 +1,6 @@
 name: moapan
 x-app: &app
   image: moapan-local:1.0.0
-  platform: linux/amd64
   build:
     context: .
     target: runtime

@@ -95,3 +95,16 @@ TranslateGemma4B Q4를 공식 Ollama v0.40.12 내장 llama-server 호환계층�
 Index Translate 2B Q8_0 및 매칭 용어표 승인. 35항목 TSV/경계·조사 테스트 추가. 실제 출처 번역 활성화 전 전체회귀·산출물검사 진행 중. 모델선정은 완료됐으며 전체 기사 번역 완료와 구분한다.
 
 번역 운영 적용: Index2BQ8+glossary-v1 35항목. 70tests PASS/FAIL0/SKIP0, 최종이미지 sha256:e4b05e4e6828a6076d8c82548460cc14a1bb50bc8664a9cbb27f2139307061ae 검사 후 web/worker 동일digest 실행. 실제출처6개 번역권한 활성화 및 한국어/영어 브라우저 전환 확인. 스냅샷 번역36/공개136, 대기99, 검증실패1(원문유지). 초기전체처리는 background로 계속되며 완료로 오인하지 않음. 임시계정0개. 운영시작 직후 502에서 첫 활성화 요청 실패, healthy 후 재실행 성공. 탈퇴204를 JSON으로 읽어 스크립트 cleanup failed가 출력됐으나 DB삭제0잔여 확인. evidence/translation-delivery.json.
+
+## Linux 자동화 구현 착수
+사용자가 Linux 운영 기준 자동화 계획 승인. 기존 체크아웃 clean 확인/guard 통과. 현재 호스트 모델 의존성을 Linux CPU translator 서비스로 바꾸고 수치 오탐/실패사유/항목재시도/복구를 구현한다. 아직 완료 아님.
+
+
+## Linux 자동 번역 납품 검증 (2026-10-29)
+Index Translate 2B Q8_0를 Linux CPU 컨테이너로 이관했다. Docker Desktop Linux ARM64 VM에서 실제 실행했으며 원격 Linux 서버·AMD64·GPU는 미검증이다. native Mac 모델 프로세스는 중지했고 worker는 내부 translator:11435만 사용한다. 빈 모델 볼륨 다운로드·SHA256 검증과 실제 CPU 추론 성공. 번역 자식 프로세스 SIGKILL 후 Docker RestartCount 0→1, healthy 및 runtime READY 복구 확인. worker PID1 kill 요청은 실제 재시작되지 않았으므로 worker 강제종료 복구 성공으로 계산하지 않는다. worker lease/heartbeat/권리철회/재시도는 PostgreSQL 통합 테스트로 검증했다.
+
+check·integrationTest·e2eTest·bootJar·sbom·securityCheck·acceptanceTest 실행: 173 PASS(단위124/통합29/E2E20), FAIL0/ERROR0/SKIP0. 고정 validator100사례는 25문장쌍×양방향×정상/수치변조이며 100개 독립 LLM 번역 품질 점수가 아니다. 실제 CPU 짧은 문장4개 3619~4360ms, 중앙값4321ms(2CPU/2thread/context4096/parallel1/GPU0). 긴 논문 요약 처리량으로 일반화하지 않는다. 증빙: docs/evidence/translation-linux-cpu.json.
+
+실행 앱 이미지 sha256:59f4c97c8c7ee18b88ff29ec18b978b78c3602c09b3d1d98c8082147615e40fe, translator sha256:2221c46cc144f87d4b371b0264809a3ad3d8fec9642b83b7ab14ee990cec4ee0. 최종 이미지·JAR·SBOM·소스 검사 gate 통과. 자동 검사 통과가 완전한 의미 정확성을 보장하지 않는다. 전체 기존 기사 재번역은 백그라운드 진행 중이며 모두 번역 완료라고 보고하지 않는다.
+
+V9 적용 DB 암호화 백업·별도 DB 복원 PASS: 기사191개, 복원 계정 활성0/세션0. 운영 DB를 덮어쓰지 않았으며 시험 DB는 제거했다. 현재 공개 HTTPS200 확인.

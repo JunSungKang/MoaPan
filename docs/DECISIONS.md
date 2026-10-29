@@ -71,3 +71,7 @@ DB 초기화 스크립트와 Caddyfile은 비밀값 없는 고정 배포 설정�
 사용자 승인에 따라 외부 유료API 없이 Index-Translate2B 공식Q8을 선택했다. 공식평가·실제8문장 비교·한계는 TRANSLATION_MODELS.md. 모델이 기사를 재요약하지 않고 저장 제목/요약만 번역한다. 개인화·검색과 분리된 worker, 입력 변경 무효화, 권리 재검사,수치/식별자 검증. Ollama 기본키 생성의 workspace밖 쓰기를 피하기 위해 workspace-contained llama.cpp를 사용한다.
 
 - 2026-10-29: 사용자 확정에 따라 Index Translate 2B Q8_0 + glossary-v1 선택. 35개 양방향 기술 용어를 TSV로 분리하고 원문 일치 항목만 prompt에 포함한다. 모호한 readers 같은 일반 단어는 전역 치환하지 않는다. 번역은 저장 제목·요약에 한정하며 숫자/CVE 검증 실패는 원문 유지.
+
+
+### Linux 운영 기준 자동 번역
+사용자 승인: Linux CPU Docker 서비스, Index2B Q8 유지. Mac Metal/host.docker.internal 의존성을 제거한다. 모델 자체의 자기평가 대신 수치·단위·식별자·일부 부정/방향/핵심용어 규칙으로 보수적 공개 gate를 적용한다. 항목별 최대3회 이후 원문 유지로 자동 종결하며 인프라 실패는 별도 backoff 후 재개한다. GPU와 원격 서버 성능은 실제 장비 확보 후 검증한다. CI/CD는 추가하지 않는다.

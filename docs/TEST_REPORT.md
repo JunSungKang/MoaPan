@@ -85,3 +85,13 @@ CSS 변경 후 e2eTest/bootJar/sbom/securityCheck/acceptanceTest 통과. 기존 
 
 ## Index Translate 2B + glossary-v1
 2026-10-29: unit21/integration29/Playwright20=70 tests PASS, failure/error/skip0. 원문 매칭/부분문자열 제외/한국어조사/역방향 canonical 용어, 숫자·CVE 검증, 권리철회/내용변경 무효화/lease/translated search 및 브라우저 저장번역 선택 포함. 로컬 명령 check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest 성공. 운영실제 번역 검증은 후속 증빙으로 기록한다.
+
+
+## Linux 자동 번역 납품 검증 (2026-10-29)
+Index Translate 2B Q8_0를 Linux CPU 컨테이너로 이관했다. Docker Desktop Linux ARM64 VM에서 실제 실행했으며 원격 Linux 서버·AMD64·GPU는 미검증이다. native Mac 모델 프로세스는 중지했고 worker는 내부 translator:11435만 사용한다. 빈 모델 볼륨 다운로드·SHA256 검증과 실제 CPU 추론 성공. 번역 자식 프로세스 SIGKILL 후 Docker RestartCount 0→1, healthy 및 runtime READY 복구 확인. worker PID1 kill 요청은 실제 재시작되지 않았으므로 worker 강제종료 복구 성공으로 계산하지 않는다. worker lease/heartbeat/권리철회/재시도는 PostgreSQL 통합 테스트로 검증했다.
+
+check·integrationTest·e2eTest·bootJar·sbom·securityCheck·acceptanceTest 실행: 173 PASS(단위124/통합29/E2E20), FAIL0/ERROR0/SKIP0. 고정 validator100사례는 25문장쌍×양방향×정상/수치변조이며 100개 독립 LLM 번역 품질 점수가 아니다. 실제 CPU 짧은 문장4개 3619~4360ms, 중앙값4321ms(2CPU/2thread/context4096/parallel1/GPU0). 긴 논문 요약 처리량으로 일반화하지 않는다. 증빙: docs/evidence/translation-linux-cpu.json.
+
+실행 앱 이미지 sha256:59f4c97c8c7ee18b88ff29ec18b978b78c3602c09b3d1d98c8082147615e40fe, translator sha256:2221c46cc144f87d4b371b0264809a3ad3d8fec9642b83b7ab14ee990cec4ee0. 최종 이미지·JAR·SBOM·소스 검사 gate 통과. 자동 검사 통과가 완전한 의미 정확성을 보장하지 않는다. 전체 기존 기사 재번역은 백그라운드 진행 중이며 모두 번역 완료라고 보고하지 않는다.
+
+V9 적용 DB 암호화 백업·별도 DB 복원 PASS: 기사191개, 복원 계정 활성0/세션0. 운영 DB를 덮어쓰지 않았으며 시험 DB는 제거했다. 현재 공개 HTTPS200 확인.

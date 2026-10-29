@@ -1,10 +1,12 @@
 # The current Temurin container tag lags the chosen PSU; replace the complete JDK from verified vendor release.
 FROM ubuntu:24.04@sha256:24737cef17f4e22b1977df7d9a05e77c4e28b7da5b8911f8d8ccda136bf3573c AS patched-jdk
+ARG TARGETARCH
 ENV JAVA_HOME=/opt/java/openjdk
 ENV PATH="${JAVA_HOME}/bin:${PATH}"
 RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates libstdc++6 zlib1g && rm -rf /var/lib/apt/lists/*
-RUN curl --fail --location --proto '=https' --tlsv1.2 -o /jdk.tar.gz 'https://github.com/adoptium/temurin27-binaries/releases/download/jdk-27.0.1.0.2%2B1/OpenJDK27U-jdk_x64_linux_hotspot_27.0.1.0.2_1.tar.gz' \
-    && echo '30cb129f6cf299c852cec0feca9ea2a596d2ee9f26d8605d3a253951f6c8b20f  /jdk.tar.gz' | sha256sum -c - \
+RUN case "$TARGETARCH" in amd64) jdk_arch=x64; checksum=30cb129f6cf299c852cec0feca9ea2a596d2ee9f26d8605d3a253951f6c8b20f;; arm64) jdk_arch=aarch64; checksum=5ddacf925244a00b60cac828b61ff2f67a68cd32b8dfe5cee1405e333b4589e5;; *) exit 1;; esac \
+    && curl --fail --location --proto '=https' --tlsv1.2 -o /jdk.tar.gz "https://github.com/adoptium/temurin27-binaries/releases/download/jdk-27.0.1.0.2%2B1/OpenJDK27U-jdk_${jdk_arch}_linux_hotspot_27.0.1.0.2_1.tar.gz" \
+    && echo "$checksum  /jdk.tar.gz" | sha256sum -c - \
     && rm -rf /opt/java/openjdk && mkdir -p /opt/java/openjdk \
     && tar --no-same-owner -xzf /jdk.tar.gz -C /opt/java/openjdk --strip-components=1 && rm /jdk.tar.gz \
     && java -version 2>&1 | grep -F '27.0.1.0.2+1'

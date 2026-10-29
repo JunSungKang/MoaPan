@@ -51,3 +51,9 @@ FS-23/AC-22 상단 보완: 검색 버튼 채움 제거·모바일 구분선/메�
 카드 개정: 작성일/작성자 미제공 표시·태그 주제·여섯 항목만 노출(Playwright), Atom/JSON 작성자와 R&D 추출 원문 일치(단위), 기존 요약 재처리·수동 잠금 보존(PostgreSQL) PASS. 별도 인용문 블록 없음. 번역 실제 처리/배포는 별개 미완료이며 이 카드 개정의 완료와 혼동하지 않는다.
 
 서버 검색 후속: AC-09/20/21/22에 NewsSearch·SecurityIntegrationTest.serverSearchIsBoundedLiteralPrivateAndRightsAware·BrowserTest.serverSearchUsesPostOnlyOnSubmitAndLoadsOneSlideAtATime을 연결. 검색어 전송 금지는 사용자가 승인한 일시 처리 범위로 변경했으며 검색 이력 미저장·관심사 비전송은 유지한다. 위 실제 테스트63개/HTTPS 증빙 통과. 기사 제목·요약 실제 번역은 아직 미완료.
+
+
+### Linux 자동 번역 추가 인수
+- Linux ARM64 CPU 실제 모델 실행/네트워크 격리/모델 checksum/모델 프로세스 종료 자동 복구: PASS.
+- 규칙 검증·항목별 checkpoint·최대3회 품질 재시도·인프라 장애 분리·lease heartbeat·권리철회: 단위/통합 PASS, TEST_REPORT 참조.
+- 원격 Linux·AMD64·GPU·전체 기존 기사 번역 완료: 미검증 또는 진행 중.

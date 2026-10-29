@@ -1,0 +1,67 @@
+{
+  "at": "2026-10-29T01:12:37.945Z",
+  "platform": "Linux ARM64 container on Docker Desktop VM",
+  "cpuLimit": 2,
+  "threads": 2,
+  "gpuLayers": 0,
+  "context": 4096,
+  "parallel": 1,
+  "samples": [
+    {
+      "input": "The patch fixes an authentication bypass in version 2.4.1.",
+      "output": "이 패치는 2.4.1 버전의 인증 우회 문제를 수정합니다.",
+      "finish": "stop",
+      "elapsedMs": 4328,
+      "usage": {
+        "completion_tokens": 19,
+        "prompt_tokens": 62,
+        "total_tokens": 81,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      }
+    },
+    {
+      "input": "The median latency decreased from 120 ms to 90 ms.",
+      "output": "중앙값 지연 시간은 120ms에서 90ms로 감소했습니다.",
+      "finish": "stop",
+      "elapsedMs": 4314,
+      "usage": {
+        "completion_tokens": 19,
+        "prompt_tokens": 63,
+        "total_tokens": 82,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      }
+    },
+    {
+      "input": "A 100 MB request blocks execution for close to a minute.",
+      "output": "100MB 요청은 거의 1분 동안 실행을 중단합니다.",
+      "finish": "stop",
+      "elapsedMs": 4360,
+      "usage": {
+        "completion_tokens": 19,
+        "prompt_tokens": 62,
+        "total_tokens": 81,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      }
+    },
+    {
+      "input": "Retrieval-augmented generation uses external documents.",
+      "output": "검색-증강 생성은 외부 문서를 사용합니다.",
+      "finish": "stop",
+      "elapsedMs": 3619,
+      "usage": {
+        "completion_tokens": 12,
+        "prompt_tokens": 58,
+        "total_tokens": 70,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      }
+    }
+  ]
+}

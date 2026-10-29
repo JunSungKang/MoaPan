@@ -88,3 +88,7 @@ JSON 입력: search(필수 문자열, 최대100자), category(필수 문자열, 
 
 ## 카드 번역
 뉴스 DTO는 translations: {ko|en: {title,summaryBullets}}를 추가한다. 현재 입력 hash·공개 상태·출처 display/summary/translation 권리를 확인한 저장 결과만 포함한다. 원문 title/summaryBullets는 보존하며 provider·내부 해시는 공개하지 않는다. 번역이 없거나 유효하지 않으면 원문 표시. 검색은 허용된 저장 번역도 검색하며 검색어는 보관하지 않는다.
+
+
+### 관리자 번역 상태
+GET /api/v1/admin/translations (ADMIN): runtime(state,failures,next_probe_at,checked_at,error_code), counts(state,count), failures(error_code,count), recent(최근20개 article_id,state,error_code,attempts,infra_failures,updated_at). 회원정보·원문·실패 번역 전문·secret 제외. 관리자 화면 새로고침으로 관측하며 작업 승인 없이 자동 처리한다.
