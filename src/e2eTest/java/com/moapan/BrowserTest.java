@@ -365,7 +365,7 @@ class BrowserTest {
             Page p=context.newPage();var pending=new java.util.concurrent.atomic.AtomicReference<Route>();
             p.route("**/api/v1/news/edition*",pending::set);
             p.navigate(origin+"/index.html",new Page.NavigateOptions().setWaitUntil(com.microsoft.playwright.options.WaitUntilState.COMMIT));
-            p.waitForFunction("document.querySelector('[role=status]').textContent.includes('불러오는 중')");assertNotNull(pending.get());
+            p.waitForFunction("document.querySelector('[role=status]').textContent.includes('불러오는 중')");p.waitForCondition(()->pending.get()!=null);assertNotNull(pending.get());
             pending.get().fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"editionId\":\"empty-fixture\",\"editionAt\":\"2026-10-28T00:00:00Z\",\"periodDays\":7,\"candidateCount\":0,\"items\":[],\"nextCursor\":null}"));
             p.waitForSelector("#paper p");assertEquals(0,p.locator("#paper article").count());assertTrue(p.locator("#paper").textContent().contains("표시할 기사가 없습니다"));
             p.keyboard().press("Tab");assertEquals("#main",p.evaluate("document.activeElement.getAttribute('href')"));
@@ -414,6 +414,20 @@ class BrowserTest {
             p.evaluate("async()=>{try{await(await import('/assets/js/api.js')).account();}catch(e){if(e.status!==401)throw e;}}");
             assertEquals(5,((Number)p.evaluate("async id=>(await(await import('/assets/js/preferences.js')).loadPreferences(id)).weights.ai",A)).intValue());
             assertNull(p.evaluate("sessionStorage.getItem('moapan-account')"));
+        }
+    }
+    @Test void administratorCanEditBoundedClassificationTopics(){
+        try(var context=browser.newContext()){
+            var writes=new ArrayList<String>();
+            context.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\"synthetic_admin\",\"role\":\"ADMIN\"}")));
+            context.route("**/api/v1/admin/**",r->{String body="[]";String path=URI.create(r.request().url()).getPath();
+                if(path.equals("/api/v1/admin/interests"))body="{\"version\":0,\"weights\":{\"ai\":3}}";
+                if(path.equals("/api/v1/admin/classification"))body="{\"catalog\":{\"version\":0,\"topics\":[{\"id\":\"ai\",\"definition\":\"Model evaluation only\"}]},\"counts\":[],\"runtime\":{},\"recent\":[]}";
+                if(path.endsWith("/classification/topics")){assertEquals("PUT",r.request().method());writes.add(r.request().postData());body="{}";}
+                r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(body));});
+            var p=context.newPage();p.navigate(origin+"/admin.html");p.locator("#refresh-classification").click();p.waitForFunction("document.querySelectorAll('#classification-topics textarea').length===2");
+            assertTrue(p.locator("#classify-ai").isChecked());assertEquals("200",p.locator("#classification-topics textarea").first().getAttribute("maxlength"));
+            p.locator("#classification-topics textarea").first().fill("LLM evaluation; exclude unrelated applications");p.locator("#classification-form button[type=submit]").click();p.waitForFunction("document.querySelector('#classification-message').textContent.includes('저장했습니다')");assertEquals(1,writes.size());assertTrue(writes.getFirst().contains("LLM evaluation"));assertTrue(writes.getFirst().contains("\"version\":0"));
         }
     }
 }

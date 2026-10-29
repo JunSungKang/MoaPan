@@ -14,6 +14,7 @@ import tools.jackson.databind.json.JsonMapper;
 @Component
 public class Worker {
     public record Counts(int created,int updated){}
+    @org.springframework.beans.factory.annotation.Value("${MOAPAN_CLASSIFICATION_URL:}") private String classificationUrl="";
     private final CatalogRepository repo;private final SafeFetch fetch;private final TransactionTemplate tx;private final String worker=UUID.randomUUID().toString();private final JsonMapper json=JsonMapper.builder().build();
     public Worker(CatalogRepository repo,SafeFetch fetch,PlatformTransactionManager tm){this.repo=repo;this.fetch=fetch;tx=new TransactionTemplate(tm);}
     @Scheduled(fixedDelay=5000)public void tick(){
@@ -58,6 +59,7 @@ public class Worker {
             repo.db().sql("INSERT INTO article_revisions(id,article_id,input_hash,change_kind) VALUES(:rev,:id,:hash,'SOURCE_CHANGED')").param("rev",UUID.randomUUID()).param("id",id).param("hash",previous.get("input_hash")).update();
             repo.db().sql("UPDATE articles SET author=:author,processing_version='research-v2',title=:title,summary_bullets=CASE WHEN summary_locked THEN summary_bullets ELSE CAST(:summary AS jsonb) END,summary_mode=CASE WHEN summary_locked THEN summary_mode ELSE :mode END,input_hash=:hash,published_at=:published,updated_at=now() WHERE id=:id").param("id",id).param("title",item.title()).param("author",item.author()).param("summary",summary).param("mode",mode).param("hash",hash).param("published",item.publishedAt()==null?null:item.publishedAt().atOffset(ZoneOffset.UTC)).update();
         }
+        if(!classificationUrl.isBlank())return isNew?1:2;
         if(Boolean.TRUE.equals(previous.get("tags_locked")))return 2;
         repo.db().sql("DELETE FROM article_tags WHERE article_id=:id AND NOT locked").param("id",id).update();Set<UUID> tagged=new HashSet<>();
         for(var alias:aliases){UUID tag=(UUID)alias.get("tag_id");if(tagged.size()>=6)break;if(ContentProcessor.matches(item.title()+" "+item.description(),alias.get("alias").toString())&&tagged.add(tag))repo.db().sql("INSERT INTO article_tags VALUES(:id,:tag,1,'RULE',false) ON CONFLICT DO NOTHING").param("id",id).param("tag",tag).update();}

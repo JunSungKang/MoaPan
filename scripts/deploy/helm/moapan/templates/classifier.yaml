@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: {namespace: {{ .Release.Namespace | quote }}, name: classifier}
+spec:
+  replicas: 1
+  strategy: {type: Recreate}
+  selector: {matchLabels: {app: moapan, component: classifier}}
+  template:
+    metadata: {labels: {app: moapan, component: classifier}}
+    spec:
+      automountServiceAccountToken: false
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets: {{ toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext: {runAsUser: 10001, runAsGroup: 10001, runAsNonRoot: true, fsGroup: 10001, seccompProfile: {type: RuntimeDefault}}
+      initContainers:
+        - name: download-verified-huggingface-model
+          image: {{ include "moapan.image" .Values.images.classifier }}
+          command: [/opt/classification/model-init.sh]
+          securityContext: {readOnlyRootFilesystem: true, allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}}
+          resources: {requests: {cpu: 100m, memory: 128Mi}, limits: {cpu: '0.5', memory: 192Mi}}
+          volumeMounts: [{name: model, mountPath: /models}, {name: tmp, mountPath: /tmp}]
+      containers:
+        - name: classifier
+          image: {{ include "moapan.image" .Values.images.classifier }}
+          env: [{name: CLASSIFICATION_THREADS, value: {{ .Values.classificationThreads | quote }}}]
+          ports: [{containerPort: 11436}]
+          securityContext: {readOnlyRootFilesystem: true, allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}}
+          resources: {requests: {cpu: '1', memory: 3Gi}, limits: {cpu: '2', memory: 4Gi}}
+          readinessProbe: {httpGet: {path: /health, port: 11436}, periodSeconds: 15}
+          startupProbe: {httpGet: {path: /health, port: 11436}, periodSeconds: 10, failureThreshold: 30}
+          livenessProbe: {httpGet: {path: /health, port: 11436}, periodSeconds: 15, failureThreshold: 12}
+          volumeMounts: [{name: model, mountPath: /models, readOnly: true}, {name: tmp, mountPath: /tmp}, {name: key, mountPath: /run/secrets, readOnly: true}]
+      volumes:
+        - {name: model, persistentVolumeClaim: {claimName: moapan-classification-model}}
+        - {name: tmp, emptyDir: {sizeLimit: 128Mi}}
+        - name: key
+          secret:
+            secretName: {{ .Values.existingSecret | quote }}
+            items: [{key: CLASSIFICATION_KEY, path: classification_key}]

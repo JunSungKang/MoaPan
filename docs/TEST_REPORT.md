@@ -105,3 +105,11 @@ Helm4.3.1 공식 archive checksum검증 후 lint/template 및 필수값·unpinne
 최종 clean 전체검증: 173 PASS(단위124/통합29/E2E20), FAIL0/ERROR0/SKIP0, 모든16 Gradle task 실제 실행 성공(1분3초). 소스/JAR/SBOM 보안 gate PASS. Node12 tests PASS. 비밀값/캐시 추적경로 없음 및 필수 빌드/Wrapper/lock/verification 파일 존재 확인.
 
 독립 리뷰4건 수정 후 clean 전체검증 176 PASS(단위124/통합30/E2E22), FAIL0/ERROR0/SKIP0. scripts/build 실행기 추적 확인, 소스/JAR/SBOM 보안 gate 및 앱 이미지 검사 통과. 현재 head 재리뷰 후 develop 병합 예정.
+
+
+## Qwen3.5-4B 주제 분류 적용 (2026-10-29)
+Q4_K_M 고정 HF revision/download SHA 검증, Linux CPU classifier 별도 Compose 서비스와 worker 비동기 분류를 적용했다. V10/V11 migration 성공, 기사191/계정2 보존 및 사전 암호화 백업 완료. 허용된 제목·요약만 입력하고 원문/모델 출력 전문을 추가 저장하지 않는다. 관리자 고정 주제 편집(ADMIN/CSRF/version), 단일 lease/재시도/늦은 결과 거부, 수동 잠금과 총6태그 보호 구현.
+
+최종 테스트190 PASS(단위127/통합40/E2E23), FAIL0/ERROR0/SKIP0. 중간 독립 리뷰2건(잠금 태그 삭제/총태그 초과)을 V11/서비스 및 회귀로 수정했다. 기존 E2E 로딩 문구와 네트워크 요청 도착 순서의 race를 요청 도착 대기로 수정했고 검증 항목은 유지했다. 소스/JAR/SBOM/앱·classifier 이미지 보안 gate PASS. HTTPS200/비회원 분류관리API401. 실제 LLM 태그 DB 저장 확인, 증빙 시점 분류가능136건 중2건 DONE/1 RUNNING/133 PENDING이며 전체 분류 완료를 뜻하지 않는다.
+
+Helm classifier Deployment·PVC·ClusterIP·worker Secret·NetworkPolicy 및 migrationVersion11 준비. lint/template/부적합 입력3건 거부 PASS. 렌더링 스캔 HIGH0/CRITICAL0/MEDIUM13/LOW2. 실제 클러스터 설치·원격 Linux AMD64/GPU는 NOT_RUN. CI/CD 미추가. 증빙 docs/evidence/qwen-classification.json.

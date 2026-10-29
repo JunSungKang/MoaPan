@@ -18,3 +18,5 @@ worker → 전용 internal network → translator(CPU)로 제목·요약을 전�
 
 ## Kubernetes 배치 추가
 최신 사용자 요청으로 초기 V1의 Kubernetes 제외를 변경했다. scripts/deploy/helm/moapan에 전체 역할용 chart를 제공한다. Compose는 현 실행 경로, Helm은 향후 서버 배치 경로다. DB StatefulSet/PVC, migrate Job, web/worker/proxy/translator Deployment, 모델 init 다운로드/PVC, ClusterIP/Ingress/NetworkPolicy로 분리한다. 실클러스터·egress 제한·TLS 운영 조건은 차트 README의 미검증 범위를 따른다. CI/CD는 계속 제외한다.
+
+분류: Java worker의 별도 비동기 PostgreSQL 큐 → 내부 classifier:11436(Qwen3.5-4B Q4_K_M) → hash/권리/잠금 재검증 → article_tags. 번역 서비스와 이미지·키·볼륨을 분리한다. 모델이 선택할 주제 목록은 관리자가 운영 DB에 정의한다. 상세 설계와 Compose/Helm 경계는 CLASSIFICATION.md.

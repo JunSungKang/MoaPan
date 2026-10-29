@@ -135,3 +135,9 @@ Sprint Delivery 유지. src 정적 모듈·설정 화면에 WebCrypto 암호화 
 
 ## develop 통합 승인
 사용자가 현재 작업의 develop 반영을 승인했다. 기존 develop 기준 squash integration 계약, 보호검증, 독립 에이전트 read-only 리뷰와 App current-head formal approval 후 human merge wrapper를 사용한다. main 반영은 범위 밖이다. 성공 후 head의 원격/로컬/추적 branch 부재와 develop tree를 확인한다.
+
+## 25. Qwen 고정 주제 분류
+### 25.1 분류와 무결성
+Qwen3.5-4B Q4_K_M 선택. 저장된 제목/요약만 내부 모델에 전달하는 별도 PostgreSQL 작업 큐, 단일 추론 lease, 제한 재시도, 입력/주제 정책 변경 및 수동 잠금에 대한 늦은 반영 차단을 구현한다. 관리자 정의 주제만 선택하며 주제 목록은 운영 DB에서 편집한다. 초기 5개는 비교용 기본값이며 관리자 변경 가능. 원문/회원정보/모델 응답 전문 저장 금지.
+### 25.2 실행과 전달
+분류 전용 이미지·모델 초기화·내부 Compose 서비스·고정 HF revision/checksum·비밀키를 구성한다. Helm은 별도 PVC/초기화/Deployment/Service/정책과 문서만 준비하고 배포하지 않는다. 외부 포트·CI/CD 없음. 단위/PG/화면 회귀, Compose 및 Helm 정적 검사, 스캔, 실제 모델 소수 smoke로 확인한다. 30회 비교 실험을 다시 실행하지 않는다. 허용 경로와 Git 계약은 qwen-classification.json.

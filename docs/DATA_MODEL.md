@@ -27,3 +27,5 @@ V8: article_translations는 기사별 대상 언어·현재 제목/요약 hash·
 
 ### V9 번역 자동화
 article_translation_jobs: state,policy_version,progress(jsonb 검증된 번역 checkpoint),field_attempts,updated_at,infra_failures. PENDING/RUNNING/RETRY/DONE/ORIGINAL/CANCELLED. translation_runtime singleton은 readiness/backoff 집계만 저장한다. checkpoint는 종결 시 삭제한다. V9는 기존 파생 번역만 재검사 목적으로 삭제하며 기사·회원은 유지한다.
+
+V10: classification_config(낙관적 version), classification_topics(기존 tag_id와 정의), article_classification_jobs(기사ID/입력hash/정책hash/상태/lease/최대3시도), classification_runtime(전역 추론 lease). 입력 전문·모델 출력·회원정보는 저장하지 않는다. articles 제목/요약 변경 trigger는 분류 결과를 무효화한다. article_tags.method=LLM은 고정 목록 선택 결과이며 confidence=1은 확률 추정이 아니다.

@@ -41,6 +41,8 @@ spec:
             - {name: MOAPAN_TRANSLATION_URL, value: 'http://translator:11435/v1/chat/completions'}
             - {name: MOAPAN_TRANSLATION_KEY_FILE, value: /run/secrets/translation_key}
             - {name: TRANSLATION_TIMEOUT_SECONDS, value: '300'}
+            - {name: MOAPAN_CLASSIFICATION_URL, value: 'http://classifier:11436/v1/chat/completions'}
+            - {name: MOAPAN_CLASSIFICATION_KEY_FILE, value: /run/secrets/classification_key}
           securityContext: {readOnlyRootFilesystem: true, allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}}
           resources: {requests: {cpu: 100m, memory: 256Mi}, limits: {cpu: '1.5', memory: 768Mi}}
           volumeMounts:
@@ -51,4 +53,4 @@ spec:
         - name: key
           secret:
             secretName: {{ .Values.existingSecret | quote }}
-            items: [{key: TRANSLATION_KEY, path: translation_key}]
+            items: [{key: TRANSLATION_KEY, path: translation_key}, {key: CLASSIFICATION_KEY, path: classification_key}]

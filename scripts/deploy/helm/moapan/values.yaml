@@ -6,14 +6,18 @@ images:
   database: ""
   proxy: ""
   translator: ""
+  classifier: ""
 imagePullSecrets: []
 webReplicas: 1
 storageClass: ""
 databaseStorage: 10Gi
 modelStorage: 5Gi
-migrationVersion: "9"
+migrationVersion: "11"
 translationThreads: "2"
 ingress:
   enabled: true
   className: ""
   tlsSecret: ""
+
+classificationThreads: "2"
+classificationModelStorage: 5Gi

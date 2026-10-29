@@ -94,3 +94,6 @@ JSON 입력: search(필수 문자열, 최대100자), category(필수 문자열, 
 GET /api/v1/admin/translations (ADMIN): runtime(state,failures,next_probe_at,checked_at,error_code), counts(state,count), failures(error_code,count), recent(최근20개 article_id,state,error_code,attempts,infra_failures,updated_at). 회원정보·원문·실패 번역 전문·secret 제외. 관리자 화면 새로고침으로 관측하며 작업 승인 없이 자동 처리한다.
 
 관리 기사 편집: GET /api/v1/admin/articles의 tag_ids는 현재 태그 UUID JSON 문자열이다. PATCH tagIds=null/미지정은 기존 연결을 보존하고, []는 명시적 전체 제거, UUID 목록은 교체한다.
+
+## 분류 운영
+ADMIN GET `/api/v1/admin/classification`: policy/catalog(version/topics/hash), 상태별 counts, runtime, 최근20개 작업. ADMIN+CSRF PUT `/api/v1/admin/classification/topics`: `{version,topics:[{tagId,definition}]}`. 1~8개/중복ID 금지/활성태그/정의1~200자. 400 입력오류,409 version충돌. 뉴스 응답 필드는 변경하지 않는다.

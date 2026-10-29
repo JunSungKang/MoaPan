@@ -1,4 +1,13 @@
 export default {
+"LLM 모델·성능":"LLM models & performance",
+"데이터베이스":"Databases",
+"검색 기술·속도":"Search technology & performance",
+"기사 주제 분류":"Article topic classification",
+"분류 현황·주제 불러오기":"Load classification status and topics",
+"분류 주제 저장":"Save classification topics",
+"먼저 주제 목록을 불러오세요.":"Load the topic list first.",
+"저장했습니다. 기존 기사는 순차 재분류됩니다.":"Saved. Existing articles will be reclassified in sequence.",
+"모델은 아래 목록 안에서만 주제를 고릅니다. 사용할 태그를 최대 8개 선택하고, 각 주제에 포함할 내용과 제외할 내용을 200자 이내로 정의하세요. 저장하면 기존 기사를 순차 재분류합니다. 수동 태그 잠금은 유지됩니다.":"The model selects only from this list. Choose up to 8 tags and define inclusions and exclusions in up to 200 characters each. Saving schedules reclassification of existing articles. Manual tag locks are preserved.",
 "자동 번역 현황":"Automatic translation status",
 "번역 현황 새로고침":"Refresh translation status",
 "검사를 통과한 번역만 표시합니다. 최종 실패한 기사는 원문으로 제공되며 다른 기사는 계속 처리됩니다.":"Only translations that pass automated checks are shown. Failed articles remain in their original language while other articles continue processing.",

@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 4,
+  "workSlug": "moapan-qwen-classification",
+  "flowType": "integration",
+  "branch": "codex/qwen-classification",
+  "targetBranch": "develop",
+  "baseSha": "60dfd5b8ebb17f8107d3df8bc311b4e0405de6c7",
+  "mergeMethod": "squash",
+  "governance": {
+    "prAuthorLogin": "JunSungKang",
+    "assigneeLogin": "JunSungKang",
+    "reviewerLogin": "junsung-bot[bot]",
+    "requiredChecks": [],
+    "commitAuthor": {
+      "name": "jun-sung, Kang",
+      "email": "kjuns1@naver.com"
+    },
+    "coAuthors": [
+      {
+        "name": "Codex",
+        "email": "codex@openai.com"
+      },
+      {
+        "name": "junsung-bot[bot]",
+        "email": "302617028+junsung-bot[bot]@users.noreply.github.com"
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "classification",
+      "expectedPaths": [
+        "src/**",
+        "scripts/**",
+        "docs/**",
+        "README.md",
+        ".env.example",
+        ".github/workflow-plans/qwen-classification.json"
+      ],
+      "forbiddenPaths": [
+        ".github/workflows/**",
+        ".env",
+        "**/*.key",
+        "**/*.pem"
+      ],
+      "acceptanceCriteria": [
+        "Qwen3.5-4B pinned GGUF download/verification and internal Compose service",
+        "Asynchronous fixed-taxonomy classification with bounded output, leases, retries, manual tag protection and stale result rejection",
+        "Helm lint/template only; no Kubernetes deployment",
+        "No article original text or personal interest persistence; no CI/CD"
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest",
+        "docker compose -f compose.yaml -f scripts/deploy/compose-classification.yaml config --quiet",
+        "HELM_BIN=\"$PWD/.local/helm/darwin-arm64/helm\" sh scripts/test/helm-check.sh"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/PLAN.md",
+          "docs/PROGRESS.md",
+          "docs/CLASSIFICATION.md",
+          "docs/TEST_REPORT.md"
+        ]
+      }
+    }
+  ]
+}
