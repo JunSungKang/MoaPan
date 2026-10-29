@@ -29,7 +29,8 @@ export async function requireAccount(role){const a=await viewer;if(!a){location.
 window.addEventListener('moapan-auth-lost',()=>{guestMenu();const main=document.querySelector('[data-protected]');if(main)main.hidden=true;window.dispatchEvent(new Event('moapan-clear'));});
 
 const searchButton=document.querySelector('#open-search');
-if(searchButton){const tools=document.createElement('div');tools.className='header-tools';searchButton.before(tools);tools.append(languagePicker(),searchButton);}else{const header=document.querySelector('.masthead,.auth-brand');if(header)header.prepend(languagePicker());}
+const languageSlot=document.querySelector('[data-language-slot]');
+if(languageSlot){languageSlot.append(languagePicker());}else if(searchButton){const tools=document.createElement('div');tools.className='header-tools';searchButton.before(tools);tools.append(languagePicker(),searchButton);}else{const header=document.querySelector('.masthead,.auth-brand');if(header)header.prepend(languagePicker());}
 window.addEventListener('moapan-language',()=>{renderIssueDate();setPageMetadata();});
 
 const adSlot=document.querySelector('[data-ad-slot]');

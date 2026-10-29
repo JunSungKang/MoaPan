@@ -133,3 +133,6 @@ E2E24 PASS, FAIL/ERROR/SKIP0. 390px에서 모든 카드와 지면폭 일치(0.5p
 
 ## 로그인·탭 제목·SEO/HTML 표준
 197 PASS(단위130/통합41/E2E26), FAIL/ERROR/SKIP0. 정적9페이지 Nu26.10.12 검사 messages0. 초기 빈 time/heading 수정, DB중단 테스트 후 실행되어503을 받은 신규 통합케이스는 DB중단 전에 검증하도록 순서를 수정한 뒤 재검증. 초기 누락된 영문 제목 번역을 추가했고 최종 모든9페이지 탭 제목/로그인390·1440중앙정렬 검증 PASS. 소스/JAR/SBOM/이미지 gatePASS. 공식문서·범위·남은조건은 seo-web-audit.md, 증빙 evidence/login-seo.json.
+
+## 로그인 언어 선택 재배치
+E2E26 PASS, 오류/건너뜀0. 390/1440px에서 header언어선택0/footer언어선택1 및 약관 아래 배치/언어전환 확인. Nu9HTML messages0. 소스/JAR/SBOM 및 최종 앱 이미지 gatePASS: sha256:b48680e08e4d908ffaaadc2a12f3ebe2cde84ad0f062f388889732bb689393f8.
