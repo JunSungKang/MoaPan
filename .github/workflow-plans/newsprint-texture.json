@@ -32,13 +32,15 @@
       "expectedPaths": [
         "src/main/resources/static/**",
         "docs/**",
-        ".github/workflow-plans/newsprint-texture.json"
+        ".github/workflow-plans/newsprint-texture.json",
+        "src/e2eTest/**"
       ],
       "forbiddenPaths": [
         ".env"
       ],
       "acceptanceCriteria": [
-        "Subtle gray paper texture with readable text, responsive layout and clean print"
+        "Reference-led continuous newspaper sheet, centered masthead, prominent lead story and ruled columns",
+        "Readable responsive and print layouts; preserve seven-item pagination and language/search behavior"
       ],
       "validationCommands": [
         "sh scripts/build/gradle-local.sh e2eTest bootJar sbom securityCheck"

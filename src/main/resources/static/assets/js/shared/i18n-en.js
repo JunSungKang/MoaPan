@@ -1,4 +1,6 @@
 export default {
+"광고":"Advertisement",
+"광고 문의":"Advertise here",
 "LLM 모델·성능":"LLM models & performance",
 "데이터베이스":"Databases",
 "검색 기술·속도":"Search technology & performance",

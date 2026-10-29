@@ -22,3 +22,6 @@ worker → 전용 internal network → translator(CPU)로 제목·요약을 전�
 최신 사용자 요청으로 초기 V1의 Kubernetes 제외를 변경했다. scripts/deploy/helm/moapan에 전체 역할용 chart를 제공한다. Compose는 현 실행 경로, Helm은 향후 서버 배치 경로다. DB StatefulSet/PVC, migrate Job, web/worker/proxy/translator Deployment, 모델 init 다운로드/PVC, ClusterIP/Ingress/NetworkPolicy로 분리한다. 실클러스터·egress 제한·TLS 운영 조건은 차트 README의 미검증 범위를 따른다. CI/CD는 계속 제외한다.
 
 분류: Java worker의 별도 비동기 PostgreSQL 큐 → 내부 classifier:11436(Qwen3.5-4B Q4_K_M) → hash/권리/잠금 재검증 → article_tags. 번역 서비스와 이미지·키·볼륨을 분리한다. 모델이 선택할 주제 목록은 관리자가 운영 DB에 정의한다. 상세 설계와 Compose/Helm 경계는 [분류 설계](classification.md), [도메인 상세설계](domain-design.md)를 따른다.
+
+## 신문 지면과 광고 자리
+정적 index는 중앙 제호·넓은 머리기사·선으로 구분한 다단 지면을 사용한다. 7개 기사 슬라이드와 검색은 유지한다. 우측상단 광고영역 아래에 언어 선택과 검색을 배치한다. assets/js/shared/config.js의 advertisement.imageUrl(같은 origin /assets/ 경로), linkUrl(HTTPS), alt로 교체한다. 미설정은 비클릭 광고문의 자리다. 광고 추적 SDK/클릭 중계/원격 이미지 호출은 사용하지 않는다. 광고이미지의 이용권리와 목적지 정책은 등록자가 확인한다. 사용자 요청에 따라 기존 V1의 광고 제외에서 정적 광고 자리만 추가한 범위다.

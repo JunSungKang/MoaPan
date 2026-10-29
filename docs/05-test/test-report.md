@@ -121,3 +121,6 @@ Helm classifier Deployment·PVC·ClusterIP·worker Secret·NetworkPolicy 및 mig
 
 ## 회색 신문지 질감
 CSS gradient 기반 종이 질감과 중립색 기사 조각 적용. E2E23 PASS/실패0/건너뜀0, 390·768·1440px 합성 화면과 print 확인. SVG 방식에서 언어 전환 시 이미지 추가 요청이 발생해 순수CSS로 수정했고 기존 무통신 검증을 유지했다. JAR/SBOM/소스·최종 앱 이미지 보안 gate PASS. 앱sha256:2584ff56ac496eaca9199f7526d5732c256f0447d0d44c0b8c98374d0fa764bb.
+
+## 연속 신문 지면·광고 영역
+E2E24 PASS, FAIL/ERROR/SKIP0. 390/768/1440px에서1/2/6열 그리드와 넘침 없음, 카드 그림자·회전 제거, 인쇄 확인. 합성 광고 이미지 및 HTTPS 링크/rel, 도구가 광고 아래에 있는지와 외부 요청 없음·영문 광고 표시 검증. 소스/JAR/SBOM/앱이미지 gate PASS. 최종앱sha256:35596a2e85b6194e220611e33e3a2f31077595bbc832b41ef0f48d96c8185a82.
