@@ -16,6 +16,7 @@ images:
   database: registry.example.test/db@sha256:$digest
   proxy: registry.example.test/proxy@sha256:$digest
   translator: registry.example.test/translator@sha256:$digest
+  classifier: registry.example.test/classifier@sha256:$digest
 ingress:
   className: nginx
   tlsSecret: synthetic-tls

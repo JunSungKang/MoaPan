@@ -10,7 +10,8 @@ case "$mode" in
   server) set -- -f compose.yaml -f scripts/deploy/compose-server.yaml ;;
   *) echo 'Usage: sh scripts/deploy/start.sh local|public|server' >&2; exit 1 ;;
 esac
-docker compose "$@" -f scripts/deploy/compose-translation.yaml config --quiet
+docker compose "$@" -f scripts/deploy/compose-translation.yaml -f scripts/deploy/compose-classification.yaml config --quiet
 sh scripts/translation/translation-prepare.sh
-docker compose "$@" -f scripts/deploy/compose-translation.yaml up -d --build
-docker compose "$@" -f scripts/deploy/compose-translation.yaml ps -a
+sh scripts/classification/classification-prepare.sh
+docker compose "$@" -f scripts/deploy/compose-translation.yaml -f scripts/deploy/compose-classification.yaml up -d --build
+docker compose "$@" -f scripts/deploy/compose-translation.yaml -f scripts/deploy/compose-classification.yaml ps -a

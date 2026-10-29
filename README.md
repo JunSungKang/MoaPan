@@ -106,3 +106,8 @@ Linux 서버에서는 `compose-public.yaml` 대신 `scripts/deploy/compose-serve
 사용 모델은 **IndexTeam/Index-Translate-2B-GGUF · Q8_0**, 고정 revision `3a0eca6ce931d88d00614d427ab3ed8ff0743902`다. 약2.08GB 모델 파일은 Git/이미지에 넣지 않고 실행 시 전용 볼륨에 저장한다. [다운로드 구현](scripts/translation/model-init.sh).
 
 [Helm 차트](scripts/deploy/helm/moapan/README.md)는 전체 이미지 역할을 Kubernetes로 배치한다. Secret·registry digest·Ingress·StorageClass는 실제 클러스터 값으로 설정해야 한다. lint/template 검증과 실제 클러스터 실행은 구분하며 현재 클러스터 실행은 미검증이다.
+
+## Qwen 기사 주제 분류
+`sh scripts/deploy/start.sh local|public|server`는 기존 번역과 별개로 Qwen3.5-4B Q4_K_M도 Hugging Face에서 고정 revision으로 다운로드·SHA256 검증 후 내부 Compose 서비스로 실행한다. classifier는 외부 포트를 열지 않으며 Java worker가 저장된 제목·요약을 비동기 분류한다. 관리자 화면 **기사 주제 분류**에서 1~8개 태그와 포함/제외 기준을 편집할 수 있다. 초기 5개 주제는 시작용 기본값이다. 수동 잠금은 유지하며 기존 기사는 순차 처리한다.
+
+구성·정책·자원·실패 처리: [docs/CLASSIFICATION.md](docs/CLASSIFICATION.md). 수동 Compose 명령에도 `-f scripts/deploy/compose-classification.yaml`을 포함한다. Helm은 classifier 이미지 digest·전용 PVC·Secret·내부 Service를 미리 준비했으며 실제 Kubernetes 설치는 수행하지 않았다.

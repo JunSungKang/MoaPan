@@ -29,3 +29,12 @@ spec:
   type: ClusterIP
   selector: {app: moapan, component: proxy}
   ports: [{name: service, port: 8080, targetPort: 8080}]
+
+---
+apiVersion: v1
+kind: Service
+metadata: {namespace: {{ .Release.Namespace | quote }}, name: classifier}
+spec:
+  type: ClusterIP
+  selector: {app: moapan, component: classifier}
+  ports: [{name: service, port: 11436, targetPort: 11436}]

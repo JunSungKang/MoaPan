@@ -79,3 +79,8 @@ Trivy0.76.1 최종 앱/translator 이미지 검사 gate 통과. 앱59f4c97c8c7ee
 
 ### Helm 설정 검사 경계
 실행 가능한 구성은 scripts/deploy/helm/moapan. Trivy 렌더링 검사 HIGH0/CRITICAL0/MEDIUM11/LOW2. synthetic registry 검사10건은 실제 승인registry 지정 후 재검사 필요. ConfigMap DATABASE_URL/USER는 비밀값을 포함하지 않는다(credential은 기존Secret에서 주입). PostgreSQL alpine UID/GID70은 비루트이나 scanner >10000 권고와 차이가 있다. 경고를 전역 ignore하지 않았다. 최초 readOnlyRootFilesystem 누락2건은 수정·재검증했다. 모델 다운로드 init와 실행 Pod의 egress 공유 한계 때문에 실클러스터 운영 보안 승인으로 간주하지 않는다. Caddy VEX 참조만 새 경로로 갱신했고 기존4파일 SHA256이 동일함을 확인했으며 만료일/영향 판정은 연장하지 않았다.
+
+
+### Qwen 분류 최종 산출물 (2026-10-29)
+Trivy0.76.1 소스/비밀값/설정·JAR91패키지·SBOM100컴포넌트·최종 앱 및 classifier 이미지 gate PASS. DB sync2026-10-28T21:57:31.453891Z. 실행 앱sha256:53ac07cd61fc5cfa35626b12e1946428a3fa62946d98ec663ec59314b633f41b, classifier sha256:d5f131bce43adfd3fd776ac58e481268ad23594a4bc80b316ded4e930599bdad로 검사 대상과 일치. HF 모델 SHA 검증 및 기존 llama.cpp 고정 소스 보안 검토를 재사용하며 새 의존성 추가 없음. native 모델 의미 정확성을 scanner로 입증했다고 주장하지 않는다.
+Helm 기본값은 필수 registry/host/Secret 미입력으로 소스 스캔에서 skip되어 별도로 실제 합성값 렌더링을 검사했다. HIGH0/CRITICAL0/MEDIUM13/LOW2: 합성 registry 허용목록 경고12, 비밀값 없는 DB 연결 ConfigMap1, PostgreSQL UID/GID70 경고2. 실제 배포 registry/클러스터 egress 정책 검증은 남아 있다. 기존 Caddy 조건부 VEX 판단/만료와 기타 잔여 위험을 유지한다. 전체 환경 취약점0으로 선언하지 않는다.

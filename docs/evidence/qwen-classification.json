@@ -1,0 +1,74 @@
+{
+  "checkedAt": "2026-10-29T05:10:09.031Z",
+  "model": "Qwen3.5-4B Q4_K_M",
+  "revision": "e87f176479d0855a907a41277aca2f8ee7a09523",
+  "modelSha256": "00fe7986ff5f6b463e62455821146049db6f9313603938a70800d1fb69ef11a4",
+  "tests": {
+    "test": {
+      "tests": 127,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "integrationTest": {
+      "tests": 40,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "e2eTest": {
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "runtime": {
+    "articles": 191,
+    "accounts": 2,
+    "eligible": 136,
+    "states": {
+      "RUNNING": 1,
+      "PENDING": 133,
+      "DONE": 2
+    },
+    "llmTags": 2
+  },
+  "images": {
+    "app": "sha256:53ac07cd61fc5cfa35626b12e1946428a3fa62946d98ec663ec59314b633f41b",
+    "classifier": "sha256:d5f131bce43adfd3fd776ac58e481268ad23594a4bc80b316ded4e930599bdad"
+  },
+  "security": {
+    "sourceJarSbom": "PASS",
+    "imageGates": "PASS",
+    "trivy": "0.76.1",
+    "databaseSyncedAt": "2026-10-28T21:57:31.453891Z",
+    "helmRenderedFindings": {
+      "LOW": 2,
+      "MEDIUM": 13
+    }
+  },
+  "compose": {
+    "migration": "11 PASS",
+    "https": 200,
+    "unauthenticatedAdmin": 401,
+    "modelHostPorts": [],
+    "databasePreserved": true
+  },
+  "helm": {
+    "lint": "PASS",
+    "render": "PASS",
+    "negativeChecks": 3,
+    "clusterDeployment": "NOT_RUN"
+  },
+  "limitations": [
+    "Background backfill still running; count is a point-in-time snapshot.",
+    "Linux ARM64 Docker VM verified; remote Linux AMD64/GPU not executed.",
+    "Model semantics are not guaranteed by schema validation.",
+    "Helm runtime egress needs cluster-specific provisioning policy."
+  ],
+  "intermediateFailures": [
+    "Initial implementation review: locked tags deleted on summary change and combined tags exceeding six; fixed with V11 and regression tests.",
+    "Existing loading-state E2E raced request arrival; fixed by waiting for intercepted request, without weakening assertions."
+  ]
+}
