@@ -166,3 +166,5 @@ E2E26 PASS(390/1440px 우측24px 여백/제호 위 배치/푸터선택없음/중
 - 최종 Compose6개 서비스 정상, 초기화/마이그레이션 종료0. DB V15, 기사270·발간1 보존, 검증 계정/격리 복원 DB0. HTTPS/로그인/비밀번호 교체/삭제/권한19개 통과. 실제 실행 JAR SHA와 검사 JAR SHA 일치.
 - 최종7개 이미지 보고서 SHA·실행 digest·DB freshness·truststore14개 거부는 [증빙](evidence/security-ai-oss-validation-20261031.json). 전체20항목 미완료 사유는 동일 체크리스트에 유지.
 - 보안 PR은 뉴스레터 PR8의 V14가 선행하는 V15 릴리스 순서를 명시한다. 기존 서비스에는 이 둘을 함께 검증한 조합을 사용했다. 병합은 미수행.
+
+보안 단독 전달: [PR9](https://github.com/JunSungKang/MoaPan/pull/9), 원래20개 중17개 검증/2개 공급자 미패치/1개 사용자 정책 유지, AI·OSS6개 검증. 정의 해시는 변경하지 않았다. 전체 보안 게이트는 BLOCKED이며 실제 병합은 하지 않았다.

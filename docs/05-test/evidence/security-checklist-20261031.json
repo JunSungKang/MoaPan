@@ -21,7 +21,8 @@
       "checked": true,
       "status": "VERIFIED",
       "evidence": [
-        "security-remediation-20261031.json and referenced execution evidence"
+        "security-remediation-20261031.json and referenced execution evidence",
+        "security-ai-oss-validation-20261031.json"
       ]
     },
     {
@@ -31,7 +32,8 @@
       "checked": true,
       "status": "VERIFIED",
       "evidence": [
-        "security-remediation-20261031.json and referenced execution evidence"
+        "security-remediation-20261031.json and referenced execution evidence",
+        "security-ai-oss-validation-20261031.json"
       ]
     },
     {
@@ -161,7 +163,8 @@
       "checked": true,
       "status": "VERIFIED",
       "evidence": [
-        "security-remediation-20261031.json and referenced execution evidence"
+        "security-remediation-20261031.json and referenced execution evidence",
+        "security-ai-oss-validation-20261031.json"
       ]
     },
     {
@@ -171,7 +174,8 @@
       "checked": true,
       "status": "VERIFIED",
       "evidence": [
-        "security-remediation-20261031.json and referenced execution evidence"
+        "security-remediation-20261031.json and referenced execution evidence",
+        "security-ai-oss-validation-20261031.json"
       ]
     },
     {
@@ -191,17 +195,21 @@
       "checked": true,
       "status": "VERIFIED",
       "evidence": [
-        "security-remediation-20261031.json and referenced execution evidence"
+        "security-remediation-20261031.json and referenced execution evidence",
+        "security-ai-oss-validation-20261031.json"
       ]
     },
     {
       "id": "S20",
       "title": "전달·운영 확인",
       "criterion": "전체 회귀·독립 리뷰·동일 검증 digest Compose 반영·실제 HTTPS 및 guarded commit/push",
-      "checked": false,
-      "status": "DELIVERY_PENDING",
-      "evidence": []
+      "checked": true,
+      "status": "VERIFIED",
+      "evidence": [
+        "security-ai-oss-validation-20261031.json",
+        "security-delivery-20261031.json"
+      ]
     }
   ],
-  "updatedAt": "2026-10-30T22:46:46.317Z"
+  "updatedAt": "2026-10-30T23:27:23.808Z"
 }

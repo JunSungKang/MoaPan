@@ -1,0 +1,33 @@
+{
+  "checkedAt": "2026-10-30T23:27:23.809Z",
+  "pullRequest": "https://github.com/JunSungKang/MoaPan/pull/9",
+  "base": "develop",
+  "branch": "codex/security-hardening-20261031",
+  "verifiedPushedCodeHead": "9e0913506ea5e9306616b01ec0b6234de0626172",
+  "independentCodeReview": {
+    "head": "9e0913506ea5e9306616b01ec0b6234de0626172",
+    "result": "APPROVE",
+    "limits": "read-only code review; execution evidence reviewed, not independently rerun"
+  },
+  "formalReviewAuthority": "Current-head App formal review must be read from the linked PR after final evidence push; no merge authorized",
+  "securityChecklist": {
+    "items": 20,
+    "definitionSha256": "f384230f986f9c79327b7c932994ba47c8ce6811136e2f7a788511d4b2c4ba2b",
+    "verified": 17,
+    "blockedNoVendorPatch": [
+      "S05",
+      "S06"
+    ],
+    "userPolicyUnchanged": [
+      "S07"
+    ]
+  },
+  "additionalAIOSS": {
+    "items": 6,
+    "verified": 6
+  },
+  "pushCorrection": "Previous newsletter hook was still selected; installed official pre-push hook for current security contract and retried guarded human push successfully",
+  "releaseGate": "BLOCKED: upstream unresolved findings and password policy below OWASP/NIST single-factor guidance; PR8/V14 must precede V15 release",
+  "merge": "NOT_PERFORMED",
+  "ciCd": "EXCLUDED_BY_USER"
+}

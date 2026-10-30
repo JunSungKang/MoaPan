@@ -61,13 +61,14 @@
       "id": "A06",
       "title": "가드레일 회귀·전달",
       "criterion": "악성 입력/출력/장애/자원 공격 회귀·실모델 최소smoke·기능회귀·보안 단독PR/기존기능 유지 증빙",
-      "checked": false,
-      "status": "PR_DELIVERY_PENDING",
+      "checked": true,
+      "status": "VERIFIED",
       "evidence": [
         "security-ai-oss-validation-20261031.json",
-        "../../07-operation/ai-security-and-licenses.md"
+        "../../07-operation/ai-security-and-licenses.md",
+        "security-delivery-20261031.json"
       ]
     }
   ],
-  "updatedAt": "2026-10-30T23:22:26.067Z"
+  "updatedAt": "2026-10-30T23:27:23.809Z"
 }
