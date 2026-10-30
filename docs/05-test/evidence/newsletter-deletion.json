@@ -1,0 +1,115 @@
+{
+  "checkedAt": "2026-10-30T07:59:33.099Z",
+  "tests": {
+    "test": {
+      "tests": 132,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "integrationTest": {
+      "tests": 47,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "e2eTest": {
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "htmlMessages": 0,
+  "checks": [
+    "admin-only DELETE",
+    "CSRF and invalid token rejected",
+    "stale version409",
+    "missing version400",
+    "missing/deleted404",
+    "draft and published content removed",
+    "initial PUT replay after deletion409",
+    "cancellation makes no request",
+    "conflict preserves editor",
+    "pending deletion blocks new selection",
+    "success clears editor and draft list",
+    "unsaved new manuscript clears locally",
+    "API dates include UTCZ",
+    "390/768/1440 no overflow and correct issue label"
+  ],
+  "security": {
+    "tool": "Trivy0.76.1",
+    "image": "sha256:cf3e54452b050c43db1096772762ef3d6c75b6c65d6c9ca2a378032df6cc187b",
+    "findings": {
+      "HIGH": 0,
+      "CRITICAL": 0,
+      "MEDIUM": 23,
+      "LOW": 4
+    },
+    "sourceJarSbom": "PASS",
+    "database": {
+      "Version": 2,
+      "NextUpdate": "2026-10-30T19:18:50.969126577Z",
+      "UpdatedAt": "2026-10-29T19:18:50.96912695Z",
+      "DownloadedAt": "2026-10-29T22:52:43.958399Z"
+    }
+  },
+  "jarSha256": "1f3a5434c408768665017400cdad884adeb1c2bf174b91f9f1aaa3f4eb3351a6",
+  "liveAssetHashes": {
+    "/assets/css/newsletter.css": "8d406b820edaf83dc0df56e70c13a39dc6fc4b61df83780c184db2262b8bd8d7",
+    "/assets/js/newsletter/read.js": "97f5e839ea70585de565651fa2395bb086604338a62760ffd8ee3907fea005b5",
+    "/assets/js/newsletter/edit.js": "dd1301574c417096efdb81c9e47e5530ceec0d24507456de4c0a043af1c93f7b",
+    "/assets/js/shared/i18n.js": "434896a502ede3c5a7d294a3b30cd83d6028a2e108abe470d200cc69d2008332"
+  },
+  "independentReview": "APPROVE after delete resurrection and timestamp fixes",
+  "limitations": [
+    "Proxy unchanged; existing conditional JOSE non-exposure assessment and OS residual advisories retained",
+    "No original article or paper text stored",
+    "Existing backups follow their retention policy; no claim of instantaneous backup erasure"
+  ],
+  "initialFindings": [
+    "Review found initial PUT replay could recreate deleted UUID; shared transaction lock and durable content-free deletion marker added",
+    "Live first publication revealed timezone-less timestamp; all newsletter dates now explicit UTC ISOZ",
+    "First live visual proof failed without a retained root-cause diagnostic; read-only retry succeeded before timestamp correction, then final proof rerun"
+  ],
+  "firstIssue": {
+    "checkedAt": "2026-10-30T07:59:12.920Z",
+    "id": "2fc4f08d-b76a-48db-bc77-bf0b6104a2c1",
+    "issueCode": "2026-001",
+    "title": "더 큰 AI보다, 덜 낭비하는 AI",
+    "publishedAt": "2026-10-30T07:23:17.220855Z",
+    "period": [
+      "2026-10-26",
+      "2026-10-30"
+    ],
+    "sourceCount": 5,
+    "blocks": 24,
+    "imageCount": 1,
+    "sources": [
+      {
+        "title": "GistRank · Guo Chen 외 · 2026-10-29",
+        "url": "https://arxiv.org/abs/2610.39610v1"
+      },
+      {
+        "title": "Glance: The Generator Is Its Own Reranker · Adilet Metinov·Chingiz Arziev · 2026-10-29",
+        "url": "https://arxiv.org/abs/2610.40454v1"
+      },
+      {
+        "title": "Tessera · Gyuyeong Kim · 2026-10-29",
+        "url": "https://arxiv.org/abs/2610.40620v1"
+      },
+      {
+        "title": "The Privacy and Security Risks of Edge LLM Optimization · Mingchen Li 외 · 2026-10-29",
+        "url": "https://arxiv.org/abs/2610.40543v1"
+      },
+      {
+        "title": "Can We Rely on Language Models to Orchestrate Services across the Edge-Cloud Continuum? · Zhenghao Wu 외 · 2026-10-29",
+        "url": "https://arxiv.org/abs/2610.40477v1"
+      }
+    ],
+    "url": "https://175.195.62.165/newsletter.html?id=2fc4f08d-b76a-48db-bc77-bf0b6104a2c1",
+    "visualCheck": true
+  },
+  "liveJarMatches": true,
+  "temporaryAccountsRemaining": 0
+}

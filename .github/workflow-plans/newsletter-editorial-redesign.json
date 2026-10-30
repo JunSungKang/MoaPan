@@ -52,6 +52,36 @@
           "docs/05-test/test-report.md"
         ]
       }
+    },
+    {
+      "id": "newsletter-delete",
+      "expectedPaths": [
+        "src/main/java/com/moapan/newsletter/**",
+        "src/main/resources/static/**",
+        "src/integrationTest/**",
+        "src/e2eTest/**",
+        "docs/**",
+        ".github/workflow-plans/newsletter-editorial-redesign.json"
+      ],
+      "forbiddenPaths": [
+        ".env"
+      ],
+      "acceptanceCriteria": [
+        "Administrator-only version-checked atomic deletion removes draft, owned images and publication; audit keeps metadata only",
+        "Confirmation can be cancelled; unsaved draft clears locally; saving and deleting cannot race",
+        "PostgreSQL authentication/CSRF/conflict/publication absence and browser deletion/error/cancel regression tests pass",
+        "User-authorized first weekly issue is published from verified current-week sources and displayed as2026-001; no original paper text stored"
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh check integrationTest e2eTest bootJar sbom securityCheck"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/progress.md",
+          "docs/03-design/api.md",
+          "docs/05-test/test-report.md"
+        ]
+      }
     }
   ]
 }

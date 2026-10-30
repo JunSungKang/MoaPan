@@ -506,4 +506,34 @@ class SecurityIntegrationTest {
   mvc.perform(put("/api/v1/admin/newsletters/"+id).cookie(cookie).with(csrf()).contentType("application/json").content(body.replace("\"version\":0","\"version\":2").replace("Synthetic future","Unpublished revision"))).andExpect(status().isOk());
   mvc.perform(get("/api/v1/newsletters/"+id).cookie(cookie)).andExpect(jsonPath("$.manuscript.title").value("Synthetic future"));
  }
+
+ @Test @Order(18) void newsletterDeletionRequiresAdminCsrfAndCurrentVersion()throws Exception{
+  signup("letter_deleter");var actor=accounts.findByUsername("letter_deleter").orElseThrow();actor.role="ADMIN";accounts.save(actor);var admin=login("letter_deleter");
+  signup("letter_reader");var reader=login("letter_reader");
+  var picture=new java.awt.image.BufferedImage(2,2,java.awt.image.BufferedImage.TYPE_INT_RGB);var bytes=new java.io.ByteArrayOutputStream();javax.imageio.ImageIO.write(picture,"png",bytes);
+  var mapper=tools.jackson.databind.json.JsonMapper.builder().build();
+  String image="data:image/png;base64,"+Base64.getEncoder().encodeToString(bytes.toByteArray());
+  var manuscript=Map.of("title","Synthetic disposable issue","introduction","Test fixture only","topic","AI","blocks",List.of(Map.of("type","image","text","Synthetic picture","url",image,"caption","Owned fixture")));
+  UUID id=UUID.randomUUID();String body=mapper.writeValueAsString(Map.of("version",0,"manuscript",manuscript));
+  mvc.perform(put("/api/v1/admin/newsletters/"+id).cookie(admin).with(csrf()).contentType("application/json").content(body)).andExpect(status().isOk());
+  mvc.perform(post("/api/v1/admin/newsletters/"+id+"/publication").cookie(admin).with(csrf()).contentType("application/json").content("{\"version\":1,\"visible\":true}")).andExpect(status().isOk());
+  mvc.perform(delete("/api/v1/admin/newsletters/"+id).with(csrf()).contentType("application/json").content("{\"version\":2}")).andExpect(status().isUnauthorized());
+  mvc.perform(delete("/api/v1/admin/newsletters/"+id).cookie(reader).with(csrf()).contentType("application/json").content("{\"version\":2}")).andExpect(status().isForbidden());
+  mvc.perform(delete("/api/v1/admin/newsletters/"+id).cookie(admin).contentType("application/json").content("{\"version\":2}")).andExpect(status().isForbidden());
+  mvc.perform(delete("/api/v1/admin/newsletters/"+id).cookie(admin).with(csrf().useInvalidToken()).contentType("application/json").content("{\"version\":2}")).andExpect(status().isForbidden());
+  for(String invalid:List.of("{}","{\"version\":0}","{\"version\":-1}","{\"version\":2,\"role\":\"ADMIN\"}"))mvc.perform(delete("/api/v1/admin/newsletters/"+id).cookie(admin).with(csrf()).contentType("application/json").content(invalid)).andExpect(status().isBadRequest());
+  mvc.perform(delete("/api/v1/admin/newsletters/"+id).cookie(admin).with(csrf()).contentType("application/json").content("{\"version\":1}")).andExpect(status().isConflict());
+  mvc.perform(get("/api/v1/newsletters/"+id).cookie(reader)).andExpect(status().isOk()).andExpect(jsonPath("$.publishedAt").value(org.hamcrest.Matchers.endsWith("Z")));
+  var listed=mapper.readTree(mvc.perform(get("/api/v1/newsletters").cookie(reader)).andReturn().getResponse().getContentAsString());for(var row:listed)assertTrue(row.get("published_at").asText().endsWith("Z"));
+  var drafts=mapper.readTree(mvc.perform(get("/api/v1/admin/newsletters").cookie(admin)).andReturn().getResponse().getContentAsString());for(var row:drafts)assertTrue(row.get("updated_at").asText().endsWith("Z"));
+  mvc.perform(delete("/api/v1/admin/newsletters/"+id).cookie(admin).with(csrf()).contentType("application/json").content("{\"version\":2}")).andExpect(status().isNoContent());
+  mvc.perform(get("/api/v1/newsletters/"+id).cookie(reader)).andExpect(status().isNotFound());
+  mvc.perform(get("/api/v1/admin/newsletters/"+id).cookie(admin)).andExpect(status().isNotFound());
+  mvc.perform(delete("/api/v1/admin/newsletters/"+id).cookie(admin).with(csrf()).contentType("application/json").content("{\"version\":2}")).andExpect(status().isNotFound());
+  mvc.perform(put("/api/v1/admin/newsletters/"+id).cookie(admin).with(csrf()).contentType("application/json").content(body)).andExpect(status().isConflict()).andExpect(jsonPath("$.error").value("newsletter_deleted"));
+  assertEquals(0,repo.db().sql("SELECT count(*) FROM newsletters WHERE id=:id").param("id",id).query(Integer.class).single());
+  assertEquals(1,repo.db().sql("SELECT count(*) FROM admin_actions WHERE target_id=:id AND action='newsletter_delete'").param("id",id).query(Integer.class).single());
+  UUID draft=UUID.randomUUID();mvc.perform(put("/api/v1/admin/newsletters/"+draft).cookie(admin).with(csrf()).contentType("application/json").content(body)).andExpect(status().isOk());
+  mvc.perform(delete("/api/v1/admin/newsletters/"+draft).cookie(admin).with(csrf()).contentType("application/json").content("{\"version\":1}")).andExpect(status().isNoContent());
+ }
 }

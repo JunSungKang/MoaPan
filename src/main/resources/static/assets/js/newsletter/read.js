@@ -1,13 +1,15 @@
 import{request}from'../shared/api.js';
 import{requireAccount,el,date,report}from'../shared/common.js';
 import{render}from'./render.js';
+import{language}from'../shared/i18n.js';
+export function issueLabel(number,publishedAt){if(!Number.isSafeInteger(number)||number<1||!Number.isFinite(Date.parse(publishedAt)))return '';const year=new Intl.DateTimeFormat('en',{timeZone:'Asia/Seoul',year:'numeric'}).format(new Date(publishedAt));const code=year+'-'+String(number).padStart(3,'0');return language==='en'?'Issue '+code:code+'호';}
 const target=document.querySelector('#letters'),filter=document.querySelector('#letter-filter');
 const href=id=>'/newsletter.html?id='+encodeURIComponent(id);
 function teaser(row,index){
  const item=el('article',undefined,'letter-teaser'+(index===0?' latest-letter':''));item.dataset.topic=row.topic;
  const content=el('div',undefined,'teaser-content'),title=el('h2'),link=el('a',row.title);link.href=href(row.id);title.append(link);
  link.textContent=row.title;link.dataset.originalContent='';
- const meta=el('div',undefined,'teaser-meta');meta.append(el('span',date(row.published_at)),el('span','모아판 편집부'));
+ const meta=el('div',undefined,'teaser-meta');const issue=el('span',issueLabel(row.issue_number,row.published_at));if(issue.textContent)meta.append(issue);meta.append(el('span',date(row.published_at)),el('span','모아판 편집부'));
  const read=el('a','읽어보기 ↗','read-letter');read.href=href(row.id);
  content.append(el('p',row.topic,'eyebrow'),title,el('p',row.introduction,'teaser-description'),meta,read);item.append(content);
  if(index===0){const cover=el('div',undefined,'teaser-cover placeholder');cover.setAttribute('aria-hidden','true');cover.append(el('strong','MoA-PaN'),el('span','THE LETTER'));item.append(cover);}
@@ -21,7 +23,7 @@ try{
   for(const selector of ['#letters','#letter-archive-heading','#letter-archive-tools'])document.querySelector(selector).hidden=true;
   const heading=el('h1');heading.id='letter-title';heading.dataset.originalContent='';heading.textContent=m.title;document.querySelector('#letter-title').replaceWith(heading);
   document.querySelector('#letter-introduction').textContent=m.introduction;
-  document.querySelector('#letter-meta').textContent=m.topic+' · 제 '+(data.issueNumber||'—')+'호 · '+date(data.publishedAt);
+  const setMeta=()=>document.querySelector('#letter-meta').textContent=[m.topic,issueLabel(data.issueNumber,data.publishedAt),date(data.publishedAt)].filter(Boolean).join(' · ');setMeta();window.addEventListener('moapan-language',setMeta);
   const setTitle=()=>document.title=m.title+' | MoA-PaN';setTitle();window.addEventListener('moapan-language',setTitle);render(document.querySelector('#letter-body'),m);document.querySelector('#letter-detail').hidden=false;
   const index=list.findIndex(x=>x.id===id);
   if(index>=0)for(const offset of [-1,1]){const row=list[index+offset];if(row){const link=el('a',(offset<0?'더 최근 발간물: ':'이전 발간물: ')+row.title);link.href=href(row.id);document.querySelector('#letter-neighbours').append(link);}}

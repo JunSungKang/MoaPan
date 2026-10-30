@@ -108,3 +108,7 @@ HTTPS 목적지·서버 /assets/images/의 PNG/JPEG/WebP/GIF 파일만 허용한
 GET /api/v1/advertisements: 회원만 접근. 활성 BANNER의 enabled/title/description/targetUrl/imagePath만 반환하고 비활성·ADSENSE 준비 상태는 enabled=false와 빈 표시값을 반환한다. 모든 응답은 no-store. 모아판의 클릭 추적/집계/중계 API는 없다.
 
 뉴스레터 추가(승인 범위): 회원 GET /api/v1/newsletters 및 /{id}는 발간본만 조회한다. ADMIN GET /api/v1/admin/newsletters 및 /{id}, PUT /{id}(version/manuscript), POST /{id}/publication(version/visible). 상태 변경에는 CSRF, 서비스 권한과 version을 적용한다. 원고는 title/introduction/topic/blocks이며 블록은 paragraph/heading/quote/image/reference다. 이미지는 브라우저에서 JPEG 압축 후 DB의 원고와 발간 스냅샷에 포함하므로 기존 DB volume/암호화 백업이 보존한다. 미리보기나 초안 저장은 발간본을 변경하지 않는다. PUT 원고만 최대1MiB, 나머지 API16KiB. 프록시는1MB 상한, 최종 앱 경계에서 경로별 제한을 강제한다.
+
+뉴스레터 삭제: ADMIN DELETE /api/v1/admin/newsletters/{id}, JSON {"version":현재버전}, CSRF 필수. 성공204(응답본문없음), 버전 누락/0/음수400, 미인증401, 비관리자/CSRF403, 현재버전 불일치409, 이미 삭제되었거나 없는 ID404. 단일 트랜잭션에서 원고·자체 그림·발간 스냅샷을 담은 행을 제거하고 최소 관리자 감사 정보만 남긴다. 저장/삭제는 동일 UUID의 PostgreSQL advisory transaction lock을 공유하고 newsletter_delete 감사 표식이 있는 ID의 신규저장(version0) 재전송도409로 막는다. 삭제 표식은 콘텐츠를 포함하지 않으며 재생성 차단을 위해 보존한다. 삭제한 원고는 UI로 복원할 수 없다. 이전 백업은 기존 보관/접근통제 정책을 따르며 삭제즉시 백업까지 소거했다고 보장하지 않는다. 화면의 미저장 신규 원고는 확인 후 브라우저에서만 비운다.
+
+뉴스레터 시각은 목록의 published_at, 관리자 목록의 published_at/updated_at, 상세의 publishedAt 모두 UTC ISO8601(Z 포함) 문자열로 제공한다. 브라우저는 Asia/Seoul로 표시한다. DB Timestamp.toString()의 시간대 없는 문자열을 API에 직접 내보내지 않는다.

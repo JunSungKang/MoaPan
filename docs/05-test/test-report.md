@@ -159,3 +159,10 @@ E2E26 PASS(390/1440px 우측24px 여백/제호 위 배치/푸터선택없음/중
 합성 발간물3개와 긴 한국어 원고·그림·인용·링크를 사용해390/768/1440의 목록/상세/편집/미리보기12장 및 빈 목록1장을 생성하고 직접 확인했다. 필터, 상세의 목록 소개 숨김, 관련 블록 필드만 표시, 미리보기 소개/본문 일치, 가로넘침 없음, 파일 입력 키보드 포커스와 기존 지연저장 경합을 검증했다. 최초 태블릿 표지의 min-height/aspect-ratio 넘침을 실패로 검출하고 폭 제한 후 재검증했다. 독립 리뷰의 보이지 않는 업로드 포커스 지적을 수정했다.
 
 소스/JAR/SBOM 및 최종 앱이미지 gate PASS. 앱 HIGH0/CRITICAL0, MEDIUM23/LOW4 잔여 OS 공지는 기존 보안 검토를 유지한다. 실제 HTTPS 정적 자산4개 hash 일치, 비회원 HTML302/API401, 실행 JAR와 검증 JAR SHA256 일치. Compose web healthy, worker 실행 확인. DB·원고·실발간물은 UI 테스트로 변경하지 않았다. 증빙 [newsletter-redesign.json](evidence/newsletter-redesign.json), 스크린샷 build/reports/screenshots/newsletter-*.png.
+
+## 뉴스레터 전체 삭제와 첫 주간호
+최종 단위132/통합47/E2E32=211 PASS, 실패·오류·skip0. check integrationTest e2eTest bootJar sbom securityCheck 단일 실행 완료. Nu11페이지 메시지0. 관리자/CSRF·잘못된 토큰·일반회원 거부, 버전 누락/음수400, 충돌409, 삭제/없는ID404, 초안·발간본·그림 행 제거와 감사1건을 PostgreSQL에서 검증했다. 삭제 후 version0 생성 PUT 재전송은409로 거부한다. 브라우저 확인 취소/충돌 시 입력 보존/삭제 중 원고전환 차단/성공 시 편집기 정리/미저장 신규 원고의 로컬 삭제를 확인했다. 기존390/768/1440 화면·미리보기·키보드 회귀도 유지했다.
+
+독립 리뷰가 발견한 지연 초기 PUT의 삭제 후 부활은 공통 UUID 트랜잭션 잠금과 영속 삭제 감사 표식으로 수정했다. 실발간 검수에서 발견한 시간대 누락도 목록/상세/관리자 목록의 UTC ISOZ 변환과 API 회귀로 수정했다. 최종 소스/JAR/SBOM/앱이미지 보안 gate PASS, HIGH0/CRITICAL0/MEDIUM23/LOW4. 앱 sha256:cf3e54452b050c43db1096772762ef3d6c75b6c65d6c9ca2a378032df6cc187b. 실제HTTPS정적자산4개 일치, 실행JAR와검증JAR SHA256일치. 삭제 증빙 [newsletter-deletion.json](evidence/newsletter-deletion.json).
+
+사용자가 명시 요청한 실제 첫 호2026-001 「더 큰 AI보다, 덜 낭비하는 AI」를 발간했다. 이번 주10/26~30 범위의 실제 수집 arXiv 연구5편을 공식 공개 페이지에서 확인하고 독자적인 해설·출처링크5개·자체 개념도1개, 총24블록으로 작성했다. 원문/초록 전문을 별도 저장하지 않았다. 첫 실발간 화면 검사1회는 실패했고 당시 원인 진단을 남기지 못했으므로 성공으로 세지 않았다. 읽기 전용 재검증 후 시간대 수정까지 반영한 최종 실제HTTPS브라우저 검사에서390/768/1440 본문/호수/참고링크/넘침/관리자 삭제버튼을 확인했다. 원고 재발간 없이 최초시각을 유지했다. 임시 편집 계정·세션 삭제 및 잔존 계정0 확인. 실제 발간 증빙 [newsletter-first-issue.json](evidence/newsletter-first-issue.json).

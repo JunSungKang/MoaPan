@@ -17,3 +17,5 @@
 .teaser-cover{width:100%;min-height:0}
 
 .manuscript-canvas{width:100%}.letter-teaser h2{word-break:keep-all;overflow-wrap:anywhere}
+
+.editor-actionbar .delete-action{color:#803d33;border-color:#cbb4ac}.editor-actionbar .delete-action:hover{background:#f3e6df}
