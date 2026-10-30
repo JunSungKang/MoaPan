@@ -1,0 +1,30 @@
+{
+  "checkedAt": "2026-10-29T23:27:46.124Z",
+  "tests": {
+    "test": {
+      "tests": 130,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "integrationTest": {
+      "tests": 43,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "e2eTest": {
+      "tests": 27,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "implementation": "Spring Session JDBC with opt-in cookie Max-Age and server absolute expiration",
+  "durationSeconds": 2592000,
+  "cookie": "Secure/HttpOnly/SameSite=Strict/Path=/ host-only",
+  "logout": "current browser session revoked; other browser session survives",
+  "passwordAndDeletion": "all account sessions revoked",
+  "limits": "Bearer cookie, not hardware binding. Cookie theft remains a risk; no device fingerprint added.",
+  "image": "sha256:5bb36be6e4798cf015150a991b16f6a8be35ff1802633652d45ca1c5b95c95fe"
+}

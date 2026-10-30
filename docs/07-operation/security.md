@@ -9,3 +9,5 @@
 서명 cursor는 계정·edition·위치·만료·size를 검증한다. quota는 DB 원자 업데이트로 분60·일6000·동시3 제한. 카운터 확인 실패는 허용하지 않는다. 로그인 식별자는 keyed HMAC만, global limiter로 임의 식별자 폭증을 제한한다.
 
 공식 JDK/Gradle/Spring/파서/DB/Caddy 공지와 CISA KEV를 다시 조회한다. Trivy 실제 JAR/SBOM·최종 이미지·소스/설정/secret 검사와 DB 최신성을 기록한다. scanner 오류·고위험 UNKNOWN·미해결 영향 HIGH/CRITICAL·알려진 악용은 외부 배포 차단이다. 다운로드 파일·lock checksum 자동생성만으로 신뢰 검증을 완료했다고 표시하지 않는다.
+
+자동 로그인 선택 시 SESSION은 현재 브라우저에 최대30일 저장되며 서버가 동일한 절대만료를 검증한다. Spring Session JDBC를 재사용하고 쿠키는 Secure/HttpOnly/Strict/host-only/Path=/다. 선택하지 않은 로그인은30분유휴/12시간절대. 로그아웃은 현재세션만 제거, 비밀번호변경/탈퇴는 모든세션 제거. 쿠키는 bearer 자격증명이므로 복사·탈취 시 위험이 있으며 하드웨어에 결속된 인증이라고 주장하지 않는다. 장치지문/IP추적이나 JS 저장소 토큰을 추가하지 않는다.

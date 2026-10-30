@@ -48,3 +48,5 @@ Caddy2.11.7/Go1.27.3 및 Java27.0.1.0.2+1 유지. go-jose/v4 4.1.6, x/net0.62.0�
 
 ### Linux CPU 번역 runtime 추가
 llama.cpp b11960 공식 commit 8642541b255bfb5dc39cd351a178be09013a55d6, source archive SHA256 1688a167a8edd9499cdd0c19b8bd044f0fa184b466981977bbf2222d884953a4. 공식 server 문서 https://github.com/ggml-org/llama.cpp/blob/8642541b255bfb5dc39cd351a178be09013a55d6/tools/server/README.md 확인. 모델 revision 3a0eca6ce931d88d00614d427ab3ed8ff0743902/Q8_0, SHA256 a09d287f41d297206947a2e51acc29dd03c8b22356111fdb1e289c0c97c173f3. aarch64 Temurin27.0.1.0.2+1 공식 archive SHA256 5ddacf925244a00b60cac828b61ff2f67a68cd32b8dfe5cee1405e333b4589e5 추가 검증. 실제 Linux ARM64 실행, AMD64 build 경로 미실행.
+
+2026-10-30 재확인: 공급자최신정식버전은security-refresh.json 참조. Temurin27.0.1.0.2+1의기본cacerts에공식ops.java/emudhra4루트완화책추가(G1 1개제거). 바이너리버전동일/신뢰저장소SHA변경을구분하며Dockerfile에재현절차고정.

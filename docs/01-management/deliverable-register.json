@@ -206,5 +206,13 @@
     "status": "유지관리",
     "owner": "개발 담당",
     "reviewer": "독립 리뷰 담당"
+  },
+  {
+    "id": "MP-DOC-027",
+    "path": "docs/05-test/seo-web-audit.md",
+    "title": "SEO·웹 표준 점검 결과서",
+    "status": "유지관리",
+    "owner": "개발 담당",
+    "reviewer": "독립 리뷰 담당"
   }
 ]

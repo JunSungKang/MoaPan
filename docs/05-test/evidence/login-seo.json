@@ -1,0 +1,34 @@
+{
+  "checkedAt": "2026-10-29T22:53:56.019Z",
+  "tests": {
+    "test": {
+      "tests": 130,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "integrationTest": {
+      "tests": 41,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "e2eTest": {
+      "tests": 26,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "htmlValidator": {
+    "version": "26.10.12 (0a70d65)",
+    "sha256": "19f89e204cb881e2d88c5d0cd451df6c1ee8334e7fe626f6694b64a129f6a813",
+    "pages": 9,
+    "messages": 0,
+    "scope": "static HTML only"
+  },
+  "image": "sha256:9b8e0ac991670d71e71d4ca6135358883600b299e447fd7257791aae0d4e4f49",
+  "securityDatabaseSyncedAt": "2026-10-29T22:52:34.504227Z",
+  "searchConsole": "NOT_RUN",
+  "ranking": "NOT_GUARANTEED"
+}

@@ -124,3 +124,27 @@ CSS gradient 기반 종이 질감과 중립색 기사 조각 적용. E2E23 PASS/
 
 ## 연속 신문 지면·광고 영역
 E2E24 PASS, FAIL/ERROR/SKIP0. 390/768/1440px에서1/2/6열 그리드와 넘침 없음, 카드 그림자·회전 제거, 인쇄 확인. 합성 광고 이미지 및 HTTPS 링크/rel, 도구가 광고 아래에 있는지와 외부 요청 없음·영문 광고 표시 검증. 소스/JAR/SBOM/앱이미지 gate PASS. 최종앱sha256:35596a2e85b6194e220611e33e3a2f31077595bbc832b41ef0f48d96c8185a82.
+
+## 모바일 블로그 카드
+E2E24 PASS, FAIL/ERROR/SKIP0. 390px에서 모든 카드와 지면폭 일치(0.5px 허용), 카드배경·제목크기 일관·가로넘침 없음 확인. 768/1440px와 print 기존배치 검증. 소스/JAR/SBOM/최종앱이미지 gate PASS: sha256:ea29796215f16f356c9b2ffa05d87c2c6cd953b238308bfd27410caafc2c7728.
+
+## 지면 발행시각과 모바일 메타
+단일 재실행 E2E25 PASS/FAIL0/ERROR0/SKIP0. 최근수집 순서와 발행순서가 다른 고정fixture, 분단위 표시/언어전환/발행미상시수집기준/모바일세로우측정렬 검증. 초기 두 검증 프로세스의 결과파일 충돌(EOF/NoSuchFile)은 성공으로 세지 않았고 종료 후 --rerun-tasks 단일실행으로 재검증. 소스/JAR/SBOM 및 앱이미지 gate PASS, sha256:b8b5dbcbafa3a528993850385a025fe56cda795bfa6268a63faea774749688d9.
+
+## 로그인·탭 제목·SEO/HTML 표준
+197 PASS(단위130/통합41/E2E26), FAIL/ERROR/SKIP0. 정적9페이지 Nu26.10.12 검사 messages0. 초기 빈 time/heading 수정, DB중단 테스트 후 실행되어503을 받은 신규 통합케이스는 DB중단 전에 검증하도록 순서를 수정한 뒤 재검증. 초기 누락된 영문 제목 번역을 추가했고 최종 모든9페이지 탭 제목/로그인390·1440중앙정렬 검증 PASS. 소스/JAR/SBOM/이미지 gatePASS. 공식문서·범위·남은조건은 seo-web-audit.md, 증빙 evidence/login-seo.json.
+
+## 로그인 언어 선택 재배치
+E2E26 PASS, 오류/건너뜀0. 390/1440px에서 header언어선택0/footer언어선택1 및 약관 아래 배치/언어전환 확인. Nu9HTML messages0. 소스/JAR/SBOM 및 최종 앱 이미지 gatePASS: sha256:b48680e08e4d908ffaaadc2a12f3ebe2cde84ad0f062f388889732bb689393f8.
+
+## 로그인 언어 도구 상단 분리
+E2E26 PASS(390/1440px 우측24px 여백/제호 위 배치/푸터선택없음/중앙정렬), Nu9HTML messages0. 소스/JAR/SBOM/이미지 gatePASS. 앱sha256:f4da0654b5ac212a4540c77c3e9a77e5b49553c217bed78976fbec23aff1e95e.
+
+## 로그인 필수 및 선택적 자동 로그인
+최종200 PASS(단위130/통합43/E2E27), FAIL/ERROR/SKIP0. CookieMaxAge·HttpOnly·Strict, sessionfixation교체, 기존쿠키로그아웃후401, 타브라우저유지,30일absolute/pw/delete검증. 비회원뉴스API401/HTMLredirect, legacypublic경로계정quota강제. 기존 비회원검색 검증은 최신인증계약에 맞춰 로그인 세션으로 실행하고 무인증거부검증을 추가했다. Nu9HTML messages0, 소스/JAR/SBOM/앱이미지 gate PASS.
+
+실제 HTTPS 자동 로그인 smoke PASS: 로그인 필수 이동·영속 쿠키·로그아웃 이전 쿠키 무효·별도 브라우저 유지 확인. 합성 계정 삭제. evidence/remember-https.json 참조.
+
+아이디 저장 UI: 단위130/E2E27 PASS(실패·skip0), Nu9페이지 메시지0, 소스/JAR/SBOM/최종 이미지 gate PASS. 증빙 saved-username.json. 백엔드 변경이 없어 통합테스트는 재실행하지 않음.
+
+2026-10-30 보안재검증: truststore조치후 --rerun-tasks check integrationTest e2eTest bootJar sbom securityCheck 실행. 단위132/통합44/E2E27=203 PASS, 실패·skip0. scanner정책4PASS별도. 정상TLS/14문제체인거부/실제HTTPS·401·chunked413확인. 최초새테스트구현전미정의클래스컴파일실패는성공으로세지않고구현후전체재실행완료. 증빙evidence/security-refresh.json.

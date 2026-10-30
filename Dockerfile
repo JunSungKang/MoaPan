@@ -10,6 +10,8 @@ RUN case "$TARGETARCH" in amd64) jdk_arch=x64; checksum=30cb129f6cf299c852cec0fe
     && rm -rf /opt/java/openjdk && mkdir -p /opt/java/openjdk \
     && tar --no-same-owner -xzf /jdk.tar.gz -C /opt/java/openjdk --strip-components=1 && rm /jdk.tar.gz \
     && java -version 2>&1 | grep -F '27.0.1.0.2+1'
+COPY scripts/security/TrustStorePatch.java /security/TrustStorePatch.java
+RUN java /security/TrustStorePatch.java "$JAVA_HOME/lib/security/cacerts" && rm -rf /security
 FROM patched-jdk AS build
 WORKDIR /workspace
 ENV GRADLE_USER_HOME=/workspace/.gradle-home

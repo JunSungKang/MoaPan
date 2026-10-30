@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 4,
+  "workSlug": "moapan-mobile-article-cards",
+  "flowType": "integration",
+  "branch": "codex/mobile-article-cards",
+  "targetBranch": "develop",
+  "baseSha": "09c2721cf0a7ff5b1e117d01a37150830df213f1",
+  "mergeMethod": "squash",
+  "governance": {
+    "prAuthorLogin": "JunSungKang",
+    "assigneeLogin": "JunSungKang",
+    "reviewerLogin": "junsung-bot[bot]",
+    "requiredChecks": [],
+    "commitAuthor": {
+      "name": "jun-sung, Kang",
+      "email": "kjuns1@naver.com"
+    },
+    "coAuthors": [
+      {
+        "name": "Codex",
+        "email": "codex@openai.com"
+      },
+      {
+        "name": "junsung-bot[bot]",
+        "email": "302617028+junsung-bot[bot]@users.noreply.github.com"
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "design",
+      "expectedPaths": [
+        "src/main/resources/static/**",
+        "docs/**",
+        ".github/workflow-plans/mobile-article-cards.json",
+        "src/e2eTest/**",
+        "src/main/java/com/moapan/discovery/**",
+        "src/integrationTest/**",
+        "src/test/**",
+        "scripts/test/**",
+        "src/main/java/**",
+        "src/main/resources/**",
+        "AGENTS.md"
+      ],
+      "forbiddenPaths": [
+        ".env"
+      ],
+      "acceptanceCriteria": [
+        "Mobile articles use full-width blog cards; preserve desktop newspaper and print",
+        "Responsive, pagination, language, ad and search regressions pass",
+        "Centered login, correct static and localized titles, public discovery and private noindex boundaries",
+        "Authenticated news gate and opt-in 30-day browser session, same-browser logout revocation, all-session password/delete revocation",
+        "Remember username locally; auto-login forces checked disabled username option; clearing removes stored username; no password persistence"
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh check integrationTest e2eTest bootJar sbom securityCheck"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/progress.md"
+        ]
+      }
+    },
+    {
+      "id": "security-refresh",
+      "expectedPaths": [
+        "scripts/security/**",
+        "scripts/deploy/**",
+        "scripts/model/**",
+        "Dockerfile",
+        "compose.yaml",
+        "build.gradle",
+        "gradle/**",
+        "gradle.lockfile",
+        "gradle.properties",
+        "src/**",
+        "docs/**",
+        ".github/workflow-plans/mobile-article-cards.json"
+      ],
+      "forbiddenPaths": [
+        ".env"
+      ],
+      "acceptanceCriteria": [
+        "Review current official advisories and KEV against installed artifacts",
+        "Patch confirmed affected components without broad suppressions",
+        "Refresh vulnerability databases, scan every deployed project image, verify exact runtime identity",
+        "Run regression tests for changes and record residual findings without calling them fixed"
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh check integrationTest e2eTest bootJar sbom securityCheck",
+        "sh scripts/security/image-scan.sh <verified-image-digests>"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/07-operation/security-review.md",
+          "docs/01-management/progress.md"
+        ]
+      }
+    }
+  ]
+}

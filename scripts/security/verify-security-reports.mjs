@@ -1,3 +1,4 @@
+import {verifyScanFreshness} from './scan-freshness.mjs';
 import {documentedNonExposure} from './security-applicability.mjs';
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
@@ -8,6 +9,7 @@ const bom=read('build/reports/sbom.cdx.json');
 assert(bom.components?.length>0,'Empty SBOM');
 for(const f of ['source','jar','sbom']){
  const report=read(`build/reports/security/${f}.json`);
+ verifyScanFreshness(report,read('.local/trivy/db/metadata.json'));
  assert(Array.isArray(report.Results),`Missing scanner results: ${f}`);
  assert.equal(report.Results.flatMap(r=>r.Vulnerabilities||[]).filter(v=>['HIGH','CRITICAL'].includes(v.Severity)&&!documentedNonExposure(v)).length,0,`High risk findings: ${f}`);
  assert.equal(report.Results.flatMap(r=>r.Misconfigurations||[]).filter(v=>['HIGH','CRITICAL'].includes(v.Severity)&&v.Status==='FAIL').length,0,`High risk configuration: ${f}`);

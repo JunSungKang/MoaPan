@@ -2,7 +2,7 @@ import {language,t} from '../shared/i18n.js';
 import {articleText} from '../article/article-text.js';
 import {slideWindow} from './slides.js';
 import {request} from '../shared/api.js';
-import {el,report,date,viewer} from '../shared/common.js';
+import {el,report,date,viewer,setIssueDate} from '../shared/common.js';
 import {loadPreferences,canonicalize,defaults} from '../personalization/preferences.js';
 import {rank,effectivePreferences} from '../personalization/ranking.js';
 const paper=document.querySelector('#paper'),status=document.querySelector('[role="status"]'),more=document.querySelector('#more');
@@ -10,8 +10,9 @@ const dialog=document.querySelector('#search-dialog');
 let candidates=[],prefs=defaults(),user=null,next,tagData,representative,filters={search:'',category:'',day:''};
 let generation=0,slide=0,searchActive=false,searchPage=null,searchBusy=false,searchTicket=0;
 const effective=()=>effectivePreferences(prefs,representative.weights);
-window.addEventListener('moapan-clear',()=>{generation++;searchTicket++;searchActive=false;searchPage=null;searchBusy=false;candidates=[];user=null;next=null;prefs=defaults();filters={search:'',category:'',day:''};for(const id of ['search','category','day'])document.querySelector('#'+id).value='';document.querySelector('#search-summary').textContent='';document.querySelector('#clear-search').hidden=true;paper.replaceChildren();more.hidden=true;dialog.close();status.textContent='로그인 상태가 만료되었습니다. 새로고침하면 대표 관심사 지면을 읽을 수 있습니다.';});
+window.addEventListener('moapan-clear',()=>{generation++;searchTicket++;searchActive=false;searchPage=null;searchBusy=false;candidates=[];user=null;next=null;prefs=defaults();filters={search:'',category:'',day:''};for(const id of ['search','category','day'])document.querySelector('#'+id).value='';document.querySelector('#search-summary').textContent='';document.querySelector('#clear-search').hidden=true;paper.replaceChildren();setIssueDate([]);more.hidden=true;dialog.close();status.textContent='로그인 상태가 만료되었습니다. 새로고침하면 대표 관심사 지면을 읽을 수 있습니다.';});
 function render(){
+ setIssueDate(candidates);
  const window=searchActive?{items:searchPage?.items||[],page:searchPage?.page||0,pages:searchPage?.pages||0}:slideWindow(rank(candidates,effective()),slide);
  slide=window.page;
  paper.replaceChildren();if(!window.items.length&&!searchBusy)paper.append(el('p',searchActive?'검색 조건에 맞는 기사가 없습니다.':'표시할 기사가 없습니다.'));
@@ -30,7 +31,7 @@ function articleNode(a,index){
  const heading=el('h2'),link=el('a',text.title);link.href=safeUrl(a.originalUrl);link.target='_blank';link.rel='noopener noreferrer';link.dataset.originalContent='';link.lang=text.language;heading.append(link);article.append(heading);
  const line=el('div',undefined,'article-meta-line');
  const subjects=el('span',a.tags.map(tag=>t(tag.name)).join(' · ')||'미분류','article-subjects');subjects.setAttribute('aria-label','주제');
- const written=el('span',a.publishedAt?new Intl.DateTimeFormat(language==='en'?'en-GB':'ko-KR',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(a.publishedAt)):'정보 없음');written.setAttribute('aria-label','작성일');
+ const written=el('span',a.publishedAt?new Intl.DateTimeFormat(language==='en'?'en-GB':'ko-KR',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}).format(new Date(a.publishedAt)):'정보 없음');written.className='article-written';written.setAttribute('aria-label','작성일');
  const author=el('span',a.author||'정보 없음','article-author');if(a.author)author.dataset.originalContent='';author.title=a.author||'';subjects.title=a.tags.map(t=>t.name).join(' · ');author.setAttribute('aria-label','작성자');
  line.append(subjects,written,author);article.append(line);
  const source=el('p',a.source.site,'article-source');source.setAttribute('aria-label','출처');article.append(source);

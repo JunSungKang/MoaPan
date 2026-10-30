@@ -1,3 +1,17 @@
 .auth-page{min-height:100vh;display:flex;flex-direction:column;margin:0;padding:0 24px}.auth-brand{text-align:center;padding:64px 0 32px;font-family:serif;font-weight:900;font-size:36px}.auth-brand a{text-decoration:none}.auth-main{width:100%;max-width:360px;margin:0 auto;padding:0}.auth-main h1{font-size:24px;text-align:center;margin:0 0 32px}.auth-main form{display:flex;flex-direction:column;gap:8px}.auth-main label{font-size:14px;font-weight:600}.auth-main input:not([type=checkbox]){width:100%;min-height:46px;box-sizing:border-box;margin:0}.auth-main label[for=password]{margin-top:14px}.auth-main small{font-size:12px;color:#625e56}.auth-main .field-error{color:#9b2525}.field-error:empty{display:none}.auth-main input[aria-invalid=true]{border-color:#9b2525}.auth-main button{width:100%;min-height:48px;margin-top:16px;background:#252722;color:#fff;border:1px solid #252722;font-weight:700}.auth-main button:disabled{opacity:.6}.agreement{margin-top:20px;display:grid;gap:8px}.agreement label{display:flex;align-items:center;gap:8px;font-weight:400}.agreement input{width:18px;height:18px;margin:0;accent-color:#252722}.agreement a{font-size:12px;margin-left:26px}.auth-main .recovery-hint{font-size:12px;color:#625e56;margin:12px 0 0}.auth-main [role=status]{font-size:14px;margin:0;color:#9b2525}.auth-main [role=status]:empty{display:none}.auth-switch{text-align:center;font-size:14px;margin:28px 0}.auth-footer{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:20px;border:0;font-size:12px;margin:24px 0;padding:16px 0}.auth-page :focus-visible{outline:2px solid #315747;outline-offset:4px}@media(max-width:480px){.auth-brand{padding-top:40px}.auth-main h1{margin-bottom:24px}}
 
 .login-limit{border-top:1px solid #c8c3b8;padding-top:16px;margin-top:12px;font-size:14px}.login-limit p{margin:0 0 8px}.login-limit strong{font-variant-numeric:tabular-nums;font-size:20px}.login-limit[hidden]{display:none}
+
+/* One centered account column, unaffected by the language switch width. */
+.auth-brand{width:100%;max-width:360px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:1.5rem;padding:40px 0 32px}
+.auth-brand>.language-picker{float:none;align-self:flex-end;margin:0;font-weight:400;font-size:.8rem;line-height:1.5}
+.auth-wordmark{font:900 36px/1.2 Georgia,serif;margin:0;text-align:center;width:100%}
+.auth-footer{width:100%;max-width:360px;margin:0 auto 24px;justify-content:center;text-align:center;padding:12px 0}
+
+/* Page-level language utility, separate from the centered login column. */
+.auth-language-top{width:100%;display:flex;justify-content:flex-end;padding-top:8px;min-height:52px}
+.auth-language-top .language-picker{float:none;margin:0;font:.75rem/1.5 system-ui;color:var(--muted)}
+.auth-language-top select{min-height:44px;min-width:88px;border:0;padding:.5rem .4rem;background:transparent;cursor:pointer}
+.auth-page:has(>.auth-language-top) .auth-brand{padding-top:12px}
+
+.auth-main .remember-option{display:flex;align-items:center;gap:.5rem;margin-top:.85rem;font-size:.85rem;font-weight:400}.remember-option input{width:18px;height:18px;margin:0;accent-color:#252722}.auth-main .remember-hint{margin:0;font:.72rem/1.6 system-ui;color:var(--muted)}
