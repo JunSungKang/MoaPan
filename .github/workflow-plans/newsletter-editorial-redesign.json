@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 4,
+  "workSlug": "newsletter-editorial-redesign",
+  "flowType": "integration",
+  "branch": "codex/newsletter-editorial-redesign",
+  "targetBranch": "develop",
+  "baseSha": "a4643be581e31ceb20e05d1791bfb6731135980c",
+  "mergeMethod": "squash",
+  "governance": {
+    "prAuthorLogin": "JunSungKang",
+    "assigneeLogin": "JunSungKang",
+    "reviewerLogin": "junsung-bot[bot]",
+    "requiredChecks": [],
+    "commitAuthor": {
+      "name": "jun-sung, Kang",
+      "email": "kjuns1@naver.com"
+    },
+    "coAuthors": [
+      {
+        "name": "Codex",
+        "email": "codex@openai.com"
+      },
+      {
+        "name": "junsung-bot[bot]",
+        "email": "302617028+junsung-bot[bot]@users.noreply.github.com"
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "editorial-redesign",
+      "expectedPaths": [
+        "src/main/resources/static/**",
+        "src/e2eTest/**",
+        "docs/**",
+        ".github/workflow-plans/newsletter-editorial-redesign.json"
+      ],
+      "forbiddenPaths": [
+        ".env"
+      ],
+      "acceptanceCriteria": [
+        "Magazine archive and publication typography with explicit latest/empty/error states",
+        "Focused administrator workspace with draft sidebar, relevant block fields and full-width preview",
+        "Actual screenshot inspection at390/768/1440 with meaningful populated/empty fixtures, no regressions to save/publish permissions"
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh check e2eTest bootJar sbom securityCheck"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/progress.md",
+          "docs/05-test/test-report.md"
+        ]
+      }
+    }
+  ]
+}

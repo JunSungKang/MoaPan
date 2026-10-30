@@ -152,3 +152,10 @@ E2E26 PASS(390/1440px 우측24px 여백/제호 위 배치/푸터선택없음/중
 로그인 옵션·광고 관리 최종 검증: 단위132/통합45/E2E28=205 PASS, 실패·skip0. 초기 통합 fixture의 Jackson JsonNode 컴파일 오류는 ObjectNode로 수정 후 통과. HTML9페이지 Nu0, Helm lint/render 및 잘못된 입력3거부, 소스/JAR/SBOM/최종이미지 gate PASS. 390/768/1440 가로정렬·헤드라인여백·추적요청없음·관리자저장/미리보기·AdSense비활성 검증. HTTPS합성회원1회 생성/삭제로 API401/403/최소출력 확인. 증빙evidence/layout-advertising.json.
 
 트렌드 뉴스레터 최종: 단위132/통합46/E2E30=208 PASS, 실패·skip0. 정책4, Nu11페이지 메시지0, Helm lint/render·잘못된 설정 거부, 소스/JAR/SBOM/최종 앱·변경 proxy 이미지 gate PASS. 초안 비공개/발간 후 초안 수정 분리, 안전한 블록 출력, 390/768/1440, 지연 저장 중 원고 전환 차단·편집 유지 확인. 실제HTTPS 회원 접근·관리권한·합성계정정리 및 V13·실행JAR일치 확인. 초기 병렬 테스트 결과 파일 충돌은 실패로 기록하고 단일 실행으로 재검증했다. evidence/newsletter.json 참조.
+
+## 뉴스레터 편집 지면 재구성
+최종 단위132/E2E31 PASS, 실패·오류·skip0. check·e2eTest·bootJar·sbom·securityCheck를 단일 Gradle 실행으로 검증했다. Nu11페이지 메시지0. 백엔드 미변경으로 PostgreSQL 통합테스트는 이번에 재실행하지 않았다(직전 뉴스레터 증빙46 PASS와 구분).
+
+합성 발간물3개와 긴 한국어 원고·그림·인용·링크를 사용해390/768/1440의 목록/상세/편집/미리보기12장 및 빈 목록1장을 생성하고 직접 확인했다. 필터, 상세의 목록 소개 숨김, 관련 블록 필드만 표시, 미리보기 소개/본문 일치, 가로넘침 없음, 파일 입력 키보드 포커스와 기존 지연저장 경합을 검증했다. 최초 태블릿 표지의 min-height/aspect-ratio 넘침을 실패로 검출하고 폭 제한 후 재검증했다. 독립 리뷰의 보이지 않는 업로드 포커스 지적을 수정했다.
+
+소스/JAR/SBOM 및 최종 앱이미지 gate PASS. 앱 HIGH0/CRITICAL0, MEDIUM23/LOW4 잔여 OS 공지는 기존 보안 검토를 유지한다. 실제 HTTPS 정적 자산4개 hash 일치, 비회원 HTML302/API401, 실행 JAR와 검증 JAR SHA256 일치. Compose web healthy, worker 실행 확인. DB·원고·실발간물은 UI 테스트로 변경하지 않았다. 증빙 [newsletter-redesign.json](evidence/newsletter-redesign.json), 스크린샷 build/reports/screenshots/newsletter-*.png.
