@@ -115,3 +115,42 @@ Helm 기본값은 필수 registry/host/Secret 미입력으로 소스 스캔에�
 관리자 광고 추가: 외부 SDK·추적·서버 URL fetch·CSP 변경 없음. ADMIN/서비스권한·CSRF·version·감사, HTTPS 링크와 서버 raster이미지 경로제한, DOM textContent 적용. ADSENSE는 정보 저장만 가능하고 서비스409/DB CHECK로 활성화차단(사용자 승인범위). V12 후 이미지03f8084c9d35ccbe5b25e2a3dd93f89433fce8f43cddb8ef471cf56547a1f0d7 검사를 통과해 같은 digest배포. 기존 proxy한정VEX·OS잔여위험은 그대로 유지한다.
 
 뉴스레터 변경: 기존 JOSE 비노출 VEX는 독립 검토 후 request_body 상한이 바뀐 두 Caddyfile hash만 갱신했다. 만료2026-11-05와 라이브러리 미패치 판정은 유지한다. 실제 실행 Caddy adapt에서 admin disabled, http/tls만 확인했다. 본문1MiB는 관리자 UUID 원고PUT에만 허용하며 일반 API16KiB는 유지한다. 외부 iframe/스크립트/뉴스 원문 수집 추가 없음. 이미지 data URI·형식·크기·메타데이터 치수 검사, textContent, ADMIN/CSRF/version 감사 적용. 앱/프록시 이미지 gate 통과는 기존 OS MEDIUM/LOW와 조건부 proxy HIGH를 제거했다는 뜻이 아니다.
+
+
+
+## 2026-10-31 고정 보안 체크리스트
+초기 공식 공지·코드·전체 실행이미지 조사 후20개 ID/완료 기준을 고정했다. 정의 SHA256: `f384230f986f9c79327b7c932994ba47c8ce6811136e2f7a788511d4b2c4ba2b`. 항목을 추가/삭제/완화하지 않고 상태·근거만 갱신한다. 미패치·UNKNOWN·검사실패는 체크하지 않는다.
+
+- [ ] S01 구성요소·공식 공지·KEV — 실제 버전/이미지와 공식 advisory·KEV 스냅샷 대조 및 영향 기록
+- [ ] S02 JDK·인증서·TLS — 고정 JDK 및 실제 cacerts 4루트 부재·정상 HTTPS·문제 체인 거부
+- [ ] S03 Java 의존성 — Spring/Servlet/JDBC/피드·암호 라이브러리의 적용 가능한 공식 패치와 lock/verification·JAR/SBOM 검증
+- [ ] S04 빌드·검사 공급망 — Gradle Wrapper/도구 체크섬 검증과 Trivy 공급망 사고 영향 대조·정상 최신 DB 검사
+- [ ] S05 프록시 JOSE 잔여 취약점 — go-jose/v3 적용 패치 또는 취약 구성요소 제거 검증; 기존 비노출 VEX만으로 완료 처리 금지
+- [ ] S06 컨테이너 OS 잔여 취약점 — 공식 제공 보안 업데이트 적용·재검사; 실제 영향 미해결/패치 미제공 건은 체크 금지
+- [ ] S07 비밀번호 정책 — OWASP 단독 인증 최소15자 권고와 기존6자 요구 충돌 해소·가입/변경/유니코드/해시/입력 검증
+- [ ] S08 세션 폐기 경쟁 — 비밀번호 변경 후 지연 로그인·늦은 세션 저장으로 이전 인증이 살아남지 않음
+- [ ] S09 계정 변경 경쟁 — 비밀번호 변경/탈퇴의 최신 자격증명 확인과 동시 변경 조건부 반영·세션 폐기
+- [ ] S10 대입 공격 제한 — 계정/전체 제한·HMAC/TTL·횟수/Retry-After·동시성·카운터 장애 fail closed
+- [ ] S11 인증·인가·CSRF — 비회원/일반/ADMIN 경계·JSON 필드 주입·CSRF/Origin·구독 혜택 경계 검증
+- [ ] S12 브라우저 보호 — CSP/XSS/외부링크/프레임·no-store·쿠키 Secure/HttpOnly/SameSite·로그아웃/자동로그인 폐기
+- [ ] S13 외부 입력 수집 — SSRF/DNS pinning/리다이렉트/XXE/압축·크기/악성 HTML·비신뢰 프롬프트 경계
+- [ ] S14 API 자원·무결성 — 요청 실바이트 제한·SQL 바인딩·검색/edition/cursor/quota·동시성/삭제 안전성
+- [ ] S15 개인정보·비밀값 — 비밀값 검사·관심사/검색/원문 비저장·로그 본문/암호/쿠키 비노출·계정 삭제 정리
+- [ ] S16 로컬 모델 — 공식 llama.cpp advisory·고정 모델/revision/SHA·API key/내부 네트워크/읽기 전용/무도구 검증
+- [ ] S17 실행 설정 — Compose/Helm 설정검사·비루트/권한/DB·web 비공개·secret·정적 검사와 실클러스터 미실행 구분
+- [ ] S18 영속성·복원 — 비파괴 마이그레이션/복원 후 계정 비활성·세션 제거 정책과 변경 스키마 회귀
+- [ ] S19 최종 검사 — 최신 DB로 최종 소스/JAR/SBOM/전체 프로젝트 이미지·도구 검사; 실패/UNKNOWN/잔여를 숨기지 않음
+- [ ] S20 전달·운영 확인 — 전체 회귀·독립 리뷰·동일 검증 digest Compose 반영·실제 HTTPS 및 guarded commit/push
+
+상태 원본: [고정 체크리스트](../05-test/evidence/security-checklist-20261031.json).
+
+### 동결 항목 내 발견·조치
+- S08 / SEC-LOCAL-003: 비밀번호 인증 후 지연된 로그인에 변경 전 자격증명으로 세션을 발급할 수 있었다. UUID+auth_version snapshot과 인증 후 DB 재확인·매요청 버전 검사를 적용했다. 인증 버전 없는 기존 세션은 재로그인한다.
+- S09 / SEC-LOCAL-004: 동시에 같은 이전 비밀번호로 요청한 두 변경이 모두 성공했다. SQL CAS로 하나만 반영하며 다른 요청은409다.
+- S09 / SEC-LOCAL-005: 이전 비밀번호 확인 후 대기한 탈퇴가 비밀번호 변경 뒤에도 계정을 삭제했다. 동일 UUID/version 조건부 삭제 및 단일 트랜잭션 rollback으로 거부한다.
+- S08 / SEC-LOCAL-006: 초기 수정의 version만 비교하면 삭제·동일이름 재가입(version0) 시 이전 인증이 새 UUID로 이어질 수 있었다. 독립 리뷰 지적을 재현하고 UUID/version을 함께 캡처하도록 수정했다.
+위 네 건은 프로젝트 로컬 결함 ID이며 CVE가 아니다. 원문/회원행위를 추가 저장하지 않는다. PostgreSQL 재현3건이 수정 전 모두 실패하고 수정 후 통과했으며, 추가 재가입401·늦은 세션401 회귀와 전체235건이 통과했다.
+- S04: 공식Trivy0.76.1 체크섬은 일치하지만 바이너리 자체에 go-jose/v4@4.1.5 HIGH(CVE-2026-116587), x/net0.60.0(CVE-2026-78661/97045)이 남았다. 최신 버전·공식 체크섬이 모든 전이 취약점 수정을 의미하지 않는다. signed release commit 소스에서 수정 의존성으로 재빌드하고 별도 후보를 자체검증한 뒤 사용한다. 재현 스크립트는 scripts/security/build-trivy.sh.
+- S05: 공식 go-jose advisory는 v3<=3.0.5의 patched version=None이다. smallstep crypto최신0.91.1도 v3.0.5를 사용하며 Caddy TLS internalissuer가 해당 PKI에 컴파일 의존한다. 단순 모듈등록 제외로 제거할 수 없다. 임의 암호 라이브러리 fork로 체크를 채우지 않고 미체크로 남긴다. 기존 설정한정VEX의 만료/범위는 연장하지 않는다.
+- S06: 현재22개 Ubuntu CVE공식JSON 재조회 및 noble 상태를 기록했다. 임시컨테이너 apt update/upgrade 시뮬레이션은 업데이트0건이다. 공급자 needed/deferred 상태가 남으므로 패치 완료로 표시하지 않는다.
+- S07: 최신 사용자 재확인으로아이디1~128/비밀번호6~128 유지. NIST2025-07정식판15자단독/8자MFA와의차이는여전히존재하므로동결기준을바꾸지않고미체크/USER_POLICY로기록한다.

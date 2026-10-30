@@ -35,3 +35,8 @@ V10: classification_config(낙관적 version), classification_topics(기존 tag_
 advertising_settings: singleton CHECK(true) PK, provider BANNER/ADSENSE, enabled, title/description/target_url/image_path/publisher_id/slot_id, version. V12에서 비활성 BANNER 1행 생성. 활성은 BANNER만 가능하며 version 조건 UPDATE와 최소 admin_actions 감사를 한 트랜잭션에서 처리한다. 회원별 광고·클릭 데이터는 생성하지 않는다.
 
 newsletters(V13): UUID、issue_number(고유 호수)、draft/published JSONB、version、published_at/updated_at. 발간 스냅샷은 초안 저장과 별개로 한 트랜잭션에서 교체한다. 발간 취소는 published만 비우고 초안과 호수는 유지한다. 자체 원고와 압축 이미지가 같은 스냅샷에 있으므로 파일 이동·볼륨 누락으로 그림이 사라지지 않으며 기존 PostgreSQL 백업이 함께 보관한다. 뉴스 원문·회원 관심사·열람 이벤트를 저장하지 않는다.
+
+
+
+## V15 인증 버전
+users.auth_version bigint NOT NULL DEFAULT0 CHECK>=0. 비밀번호 변경은 현재 UUID/version 조건부 UPDATE로 증가시키고 세션을 삭제한다. 탈퇴는 현재 UUID/version 조건부 DELETE다. 로그인은 인증 전 UUID+version을 함께 보관하고 인증 후 동일 UUID와 현재 DB version을 재검사한다. 세션에는 MOAPAN_CREDENTIAL_VERSION 숫자만 추가하고 요청마다 계정 버전과 비교한다. 늦은 세션 저장·동일아이디 재가입의 이전 인증을 거부한다. 기존 회원·암호해시·아이디는 유지되며 기존 version 속성이 없는 로그인 세션은 재로그인이 필요하다.

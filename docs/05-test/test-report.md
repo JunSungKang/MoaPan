@@ -152,3 +152,8 @@ E2E26 PASS(390/1440px 우측24px 여백/제호 위 배치/푸터선택없음/중
 로그인 옵션·광고 관리 최종 검증: 단위132/통합45/E2E28=205 PASS, 실패·skip0. 초기 통합 fixture의 Jackson JsonNode 컴파일 오류는 ObjectNode로 수정 후 통과. HTML9페이지 Nu0, Helm lint/render 및 잘못된 입력3거부, 소스/JAR/SBOM/최종이미지 gate PASS. 390/768/1440 가로정렬·헤드라인여백·추적요청없음·관리자저장/미리보기·AdSense비활성 검증. HTTPS합성회원1회 생성/삭제로 API401/403/최소출력 확인. 증빙evidence/layout-advertising.json.
 
 트렌드 뉴스레터 최종: 단위132/통합46/E2E30=208 PASS, 실패·skip0. 정책4, Nu11페이지 메시지0, Helm lint/render·잘못된 설정 거부, 소스/JAR/SBOM/최종 앱·변경 proxy 이미지 gate PASS. 초안 비공개/발간 후 초안 수정 분리, 안전한 블록 출력, 390/768/1440, 지연 저장 중 원고 전환 차단·편집 유지 확인. 실제HTTPS 회원 접근·관리권한·합성계정정리 및 V13·실행JAR일치 확인. 초기 병렬 테스트 결과 파일 충돌은 실패로 기록하고 단일 실행으로 재검증했다. evidence/newsletter.json 참조.
+
+
+
+## 고정 보안 체크리스트 인증 경합 회귀
+초기3개 latch PG재현은 기대401/409/단일성공과 달리200/200/동시200으로 모두 실패했다. V15 인증버전·SQLCAS·세션검사 후 통과했다. 독립 리뷰의 삭제/동일아이디재가입 문제도 실패재현 후 UUID+version snapshot으로 수정했다. 버전이 늦은 세션은 다음 요청401/서버세션삭제를 검증한다. 최종 clean 단위141/PG56/Playwright38=235건 PASS, 실패/오류/skip0. 정책4/Nu0/Helm lint·render·부정3 PASS. 실제V15 마이그레이션, 합성HTTPS19동작·회원삭제, 암호화V15복원 후 active_accounts0/sessions0 및 격리DB삭제 확인. 검사도구전이취약점수정후최종재검사를별도증빙에기록한다.

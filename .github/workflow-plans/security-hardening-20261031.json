@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 4,
+  "workSlug": "security-hardening-20261031",
+  "flowType": "integration",
+  "branch": "codex/security-hardening-20261031",
+  "targetBranch": "develop",
+  "baseSha": "a4643be581e31ceb20e05d1791bfb6731135980c",
+  "mergeMethod": "squash",
+  "governance": {
+    "prAuthorLogin": "JunSungKang",
+    "assigneeLogin": "JunSungKang",
+    "reviewerLogin": "junsung-bot[bot]",
+    "requiredChecks": [],
+    "commitAuthor": {
+      "name": "jun-sung, Kang",
+      "email": "kjuns1@naver.com"
+    },
+    "coAuthors": [
+      {
+        "name": "Codex",
+        "email": "codex@openai.com"
+      },
+      {
+        "name": "junsung-bot[bot]",
+        "email": "302617028+junsung-bot[bot]@users.noreply.github.com"
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "security-foundation-and-ai-oss-followup",
+      "expectedPaths": [
+        "src/**",
+        "scripts/**",
+        "docs/**",
+        "licenses/**",
+        "THIRD_PARTY_NOTICES.md",
+        "README.md",
+        "Dockerfile",
+        "compose.yaml",
+        "gradle/**",
+        "gradle.lockfile",
+        "build.gradle",
+        "gradle.properties",
+        ".github/workflow-plans/security-hardening-20261031.json"
+      ],
+      "forbiddenPaths": [
+        ".env",
+        ".github/workflows/**"
+      ],
+      "acceptanceCriteria": [
+        "Keep frozen20 checklist definitions unchanged; fix applicable security defects, record unpatched/unknown/user-excluded items honestly",
+        "Preserve username1..128/password6..128; prevent credential/session lifecycle races with UUID+epoch and SQL CAS",
+        "Research actual OSS/model licenses and disclosure duties for SaaS/image redistribution; preserve notices and do not select a license for proprietary MOAPAN code without authorization",
+        "Add bounded prompt/input/output/resource/privacy protections and AI transparency using current local models; no new agent tools, external AI or profiling",
+        "Split security-only PR from unmerged newsletter PR; keep current service features through composite validation; no merge/CI/CD/payment",
+        "Security-only PR must exclude newsletter/product redesign; production V14 newsletter migration precedes V15 credentials, no Flyway ignore/repair or migration rewriting"
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh --no-daemon clean check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest",
+        "node scripts/test/docs-check.mjs",
+        "git diff --check"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/plan.md",
+          "docs/01-management/progress.md",
+          "docs/07-operation/security-review.md",
+          "docs/05-test/test-report.md"
+        ]
+      }
+    }
+  ]
+}

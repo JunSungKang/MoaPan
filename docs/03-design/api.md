@@ -108,3 +108,6 @@ HTTPS 목적지·서버 /assets/images/의 PNG/JPEG/WebP/GIF 파일만 허용한
 GET /api/v1/advertisements: 회원만 접근. 활성 BANNER의 enabled/title/description/targetUrl/imagePath만 반환하고 비활성·ADSENSE 준비 상태는 enabled=false와 빈 표시값을 반환한다. 모든 응답은 no-store. 모아판의 클릭 추적/집계/중계 API는 없다.
 
 뉴스레터 추가(승인 범위): 회원 GET /api/v1/newsletters 및 /{id}는 발간본만 조회한다. ADMIN GET /api/v1/admin/newsletters 및 /{id}, PUT /{id}(version/manuscript), POST /{id}/publication(version/visible). 상태 변경에는 CSRF, 서비스 권한과 version을 적용한다. 원고는 title/introduction/topic/blocks이며 블록은 paragraph/heading/quote/image/reference다. 이미지는 브라우저에서 JPEG 압축 후 DB의 원고와 발간 스냅샷에 포함하므로 기존 DB volume/암호화 백업이 보존한다. 미리보기나 초안 저장은 발간본을 변경하지 않는다. PUT 원고만 최대1MiB, 나머지 API16KiB. 프록시는1MB 상한, 최종 앱 경계에서 경로별 제한을 강제한다.
+
+
+보안 경합 보완(V15): 비밀번호 변경·탈퇴의 확인 이후 계정 인증 버전이 변경되면409 credential_changed. 인증 중 비밀번호 변경·계정 교체가 발생하면401 invalid_credentials. 일반 응답에 인증 버전·해시를 반환하지 않는다. 현재 아이디1~128자/비밀번호6~128자는 사용자 명시 지시로 유지한다.

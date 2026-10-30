@@ -6,6 +6,7 @@ public class Account {
     @Id public UUID id;
     @Column(nullable=false,unique=true,length=128) public String username;
     @Column(name="password_hash",nullable=false,length=255) public String passwordHash;
+    @Column(name="auth_version",nullable=false) public long authVersion;
     @Column(nullable=false) public boolean active=true;
     @Column(nullable=false,length=5) public String role="USER";
     @Column(name="terms_version",length=32) public String termsVersion;

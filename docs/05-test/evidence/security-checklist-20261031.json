@@ -1,0 +1,207 @@
+{
+  "frozenAt": "2026-10-30T22:23:25.128Z",
+  "scope": "Current MOAPAN repository and its own app/db/proxy/translator/classifier/build tools. No other projects or host-wide upgrades, CI/CD, payment or merge.",
+  "immutableDefinitionSha256": "f384230f986f9c79327b7c932994ba47c8ce6811136e2f7a788511d4b2c4ba2b",
+  "rule": "Exactly20 IDs/criteria are frozen. Only result/status/evidence may change. Unpatched applicable, unknown or failed checks remain unchecked; no vulnerability-free claim.",
+  "items": [
+    {
+      "id": "S01",
+      "title": "구성요소·공식 공지·KEV",
+      "criterion": "실제 버전/이미지와 공식 advisory·KEV 스냅샷 대조 및 영향 기록",
+      "checked": true,
+      "status": "VERIFIED",
+      "evidence": [
+        "security-remediation-20261031.json and referenced execution evidence"
+      ]
+    },
+    {
+      "id": "S02",
+      "title": "JDK·인증서·TLS",
+      "criterion": "고정 JDK 및 실제 cacerts 4루트 부재·정상 HTTPS·문제 체인 거부",
+      "checked": true,
+      "status": "VERIFIED",
+      "evidence": [
+        "security-remediation-20261031.json and referenced execution evidence"
+      ]
+    },
+    {
+      "id": "S03",
+      "title": "Java 의존성",
+      "criterion": "Spring/Servlet/JDBC/피드·암호 라이브러리의 적용 가능한 공식 패치와 lock/verification·JAR/SBOM 검증",
+      "checked": true,
+      "status": "VERIFIED",
+      "evidence": [
+        "security-remediation-20261031.json and referenced execution evidence"
+      ]
+    },
+    {
+      "id": "S04",
+      "title": "빌드·검사 공급망",
+      "criterion": "Gradle Wrapper/도구 체크섬 검증과 Trivy 공급망 사고 영향 대조·정상 최신 DB 검사",
+      "checked": true,
+      "status": "VERIFIED",
+      "evidence": [
+        "security-remediation-20261031.json and referenced execution evidence"
+      ]
+    },
+    {
+      "id": "S05",
+      "title": "프록시 JOSE 잔여 취약점",
+      "criterion": "go-jose/v3 적용 패치 또는 취약 구성요소 제거 검증; 기존 비노출 VEX만으로 완료 처리 금지",
+      "checked": false,
+      "status": "BLOCKED_NO_VENDOR_PATCH",
+      "evidence": [
+        "Official go-jose advisory patched versionNone; smallstep crypto0.91.1 still v3.0.5; Caddy TLS internalissuer compiler dependency. Existing hash-bound VEX not promoted to patch."
+      ]
+    },
+    {
+      "id": "S06",
+      "title": "컨테이너 OS 잔여 취약점",
+      "criterion": "공식 제공 보안 업데이트 적용·재검사; 실제 영향 미해결/패치 미제공 건은 체크 금지",
+      "checked": false,
+      "status": "BLOCKED_NO_VENDOR_PATCH",
+      "evidence": [
+        "22 official Ubuntu noble reports retain needed/deferred; apt update+upgrade simulation reports0 available upgrades."
+      ]
+    },
+    {
+      "id": "S07",
+      "title": "비밀번호 정책",
+      "criterion": "OWASP 단독 인증 최소15자 권고와 기존6자 요구 충돌 해소·가입/변경/유니코드/해시/입력 검증",
+      "checked": false,
+      "status": "USER_POLICY_UNCHANGED",
+      "evidence": [
+        "User explicitly requires current1..128 username/6..128 password; current NIST2025-07/OWASP15-char single-factor gap remains; no criterion change."
+      ]
+    },
+    {
+      "id": "S08",
+      "title": "세션 폐기 경쟁",
+      "criterion": "비밀번호 변경 후 지연 로그인·늦은 세션 저장으로 이전 인증이 살아남지 않음",
+      "checked": true,
+      "status": "VERIFIED",
+      "evidence": [
+        "security-remediation-20261031.json and referenced execution evidence"
+      ]
+    },
+    {
+      "id": "S09",
+      "title": "계정 변경 경쟁",
+      "criterion": "비밀번호 변경/탈퇴의 최신 자격증명 확인과 동시 변경 조건부 반영·세션 폐기",
+      "checked": true,
+      "status": "VERIFIED",
+      "evidence": [
+        "security-remediation-20261031.json and referenced execution evidence"
+      ]
+    },
+    {
+      "id": "S10",
+      "title": "대입 공격 제한",
+      "criterion": "계정/전체 제한·HMAC/TTL·횟수/Retry-After·동시성·카운터 장애 fail closed",
+      "checked": true,
+      "status": "VERIFIED",
+      "evidence": [
+        "security-remediation-20261031.json and referenced execution evidence"
+      ]
+    },
+    {
+      "id": "S11",
+      "title": "인증·인가·CSRF",
+      "criterion": "비회원/일반/ADMIN 경계·JSON 필드 주입·CSRF/Origin·구독 혜택 경계 검증",
+      "checked": true,
+      "status": "VERIFIED",
+      "evidence": [
+        "security-remediation-20261031.json and referenced execution evidence"
+      ]
+    },
+    {
+      "id": "S12",
+      "title": "브라우저 보호",
+      "criterion": "CSP/XSS/외부링크/프레임·no-store·쿠키 Secure/HttpOnly/SameSite·로그아웃/자동로그인 폐기",
+      "checked": true,
+      "status": "VERIFIED",
+      "evidence": [
+        "security-remediation-20261031.json and referenced execution evidence"
+      ]
+    },
+    {
+      "id": "S13",
+      "title": "외부 입력 수집",
+      "criterion": "SSRF/DNS pinning/리다이렉트/XXE/압축·크기/악성 HTML·비신뢰 프롬프트 경계",
+      "checked": true,
+      "status": "VERIFIED",
+      "evidence": [
+        "security-remediation-20261031.json and referenced execution evidence"
+      ]
+    },
+    {
+      "id": "S14",
+      "title": "API 자원·무결성",
+      "criterion": "요청 실바이트 제한·SQL 바인딩·검색/edition/cursor/quota·동시성/삭제 안전성",
+      "checked": true,
+      "status": "VERIFIED",
+      "evidence": [
+        "security-remediation-20261031.json and referenced execution evidence"
+      ]
+    },
+    {
+      "id": "S15",
+      "title": "개인정보·비밀값",
+      "criterion": "비밀값 검사·관심사/검색/원문 비저장·로그 본문/암호/쿠키 비노출·계정 삭제 정리",
+      "checked": true,
+      "status": "VERIFIED",
+      "evidence": [
+        "security-remediation-20261031.json and referenced execution evidence"
+      ]
+    },
+    {
+      "id": "S16",
+      "title": "로컬 모델",
+      "criterion": "공식 llama.cpp advisory·고정 모델/revision/SHA·API key/내부 네트워크/읽기 전용/무도구 검증",
+      "checked": true,
+      "status": "VERIFIED",
+      "evidence": [
+        "security-remediation-20261031.json and referenced execution evidence"
+      ]
+    },
+    {
+      "id": "S17",
+      "title": "실행 설정",
+      "criterion": "Compose/Helm 설정검사·비루트/권한/DB·web 비공개·secret·정적 검사와 실클러스터 미실행 구분",
+      "checked": true,
+      "status": "VERIFIED",
+      "evidence": [
+        "security-remediation-20261031.json and referenced execution evidence"
+      ]
+    },
+    {
+      "id": "S18",
+      "title": "영속성·복원",
+      "criterion": "비파괴 마이그레이션/복원 후 계정 비활성·세션 제거 정책과 변경 스키마 회귀",
+      "checked": true,
+      "status": "VERIFIED",
+      "evidence": [
+        "security-remediation-20261031.json and referenced execution evidence"
+      ]
+    },
+    {
+      "id": "S19",
+      "title": "최종 검사",
+      "criterion": "최신 DB로 최종 소스/JAR/SBOM/전체 프로젝트 이미지·도구 검사; 실패/UNKNOWN/잔여를 숨기지 않음",
+      "checked": true,
+      "status": "VERIFIED",
+      "evidence": [
+        "security-remediation-20261031.json and referenced execution evidence"
+      ]
+    },
+    {
+      "id": "S20",
+      "title": "전달·운영 확인",
+      "criterion": "전체 회귀·독립 리뷰·동일 검증 digest Compose 반영·실제 HTTPS 및 guarded commit/push",
+      "checked": false,
+      "status": "DELIVERY_PENDING",
+      "evidence": []
+    }
+  ],
+  "updatedAt": "2026-10-30T22:46:46.317Z"
+}
