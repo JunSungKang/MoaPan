@@ -74,3 +74,22 @@ tasks.withType(AbstractArchiveTask).configureEach {
 
 tasks.register('docsCheck', Exec) { commandLine 'node','scripts/test/docs-check.mjs' }
 check.dependsOn docsCheck
+
+// A dependency change must update its reviewed license inventory and retained notices.
+tasks.register('licenseCheck') {
+    doLast {
+        def inventory = new groovy.json.JsonSlurper().parse(file('licenses/java-inventory.json'))
+        def expected = inventory.components.collectEntries { c -> [(c.group + ':' + c.name + ':' + c.version):c.jarSha256] }
+        def actual = configurations.runtimeClasspath.resolvedConfiguration.resolvedArtifacts.collectEntries { a ->
+            def digest = java.security.MessageDigest.getInstance('SHA-256').digest(a.file.bytes).encodeHex().toString()
+            [(a.moduleVersion.id.group + ':' + a.name + ':' + a.moduleVersion.id.version):digest]
+        }
+        if (expected != actual) throw new GradleException('Runtime dependency license inventory does not match resolved artifacts; review licenses before updating it')
+        inventory.components.each { c -> c.embeddedNotices.each { n ->
+            def notice = file(n.path).canonicalFile
+            if (!notice.toPath().startsWith(file('licenses/java').canonicalFile.toPath()) || !notice.isFile()) throw new GradleException('Missing retained third-party notice')
+            if (java.security.MessageDigest.getInstance('SHA-256').digest(notice.bytes).encodeHex().toString() != n.sha256) throw new GradleException('Retained third-party notice changed')
+        }}
+    }
+}
+check.dependsOn licenseCheck

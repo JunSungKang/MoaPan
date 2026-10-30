@@ -11,6 +11,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates
     && groupadd -g 10001 classifier && useradd -u 10001 -g 10001 --no-create-home classifier && mkdir /models && chown 10001:10001 /models
 COPY --from=build /source/build/bin/llama-server /usr/local/bin/llama-server
 COPY --chmod=0555 scripts/classification/model-init.sh scripts/classification/serve.sh /opt/classification/
+COPY licenses/models/qwen/ /opt/classification/licenses/model/
+COPY licenses/native/llama.cpp/ /opt/classification/licenses/runtime/
+COPY THIRD_PARTY_NOTICES.md /opt/classification/THIRD_PARTY_NOTICES.md
 USER 10001:10001
 ENV LLAMA_CACHE=/tmp/cache XDG_CONFIG_HOME=/tmp/config
 ENTRYPOINT ["/opt/classification/serve.sh"]

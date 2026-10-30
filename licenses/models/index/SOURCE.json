@@ -1,0 +1,9 @@
+{
+  "repo": "IndexTeam/Index-Translate-2B-GGUF",
+  "revision": "3a0eca6ce931d88d00614d427ab3ed8ff0743902",
+  "baseModel": "IndexTeam/Index-Translate-2B",
+  "declaredLicense": "apache-2.0",
+  "source": "https://huggingface.co/IndexTeam/Index-Translate-2B-GGUF/blob/3a0eca6ce931d88d00614d427ab3ed8ff0743902/README.md",
+  "modification": "GGUF quantization; current pinned conversion; no project fine-tuning",
+  "checkedAt": "2026-10-30T22:59:38.899Z"
+}

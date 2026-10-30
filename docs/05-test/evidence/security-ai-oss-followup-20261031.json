@@ -1,0 +1,54 @@
+{
+  "approvedAt": "2026-10-30T22:51:15.761Z",
+  "originalChecklistUnchanged": "security-checklist-20261031.json:20 IDs remain unchanged; follow-up explicitly authorized by user afterward",
+  "items": [
+    {
+      "id": "A01",
+      "title": "실제 오픈소스·모델 라이선스 목록",
+      "criterion": "runtime JAR·실행기·모델의 고정 버전/라이선스/근거/미확인 항목 기록",
+      "checked": false,
+      "status": "PENDING",
+      "evidence": []
+    },
+    {
+      "id": "A02",
+      "title": "고지·소스 제공 의무",
+      "criterion": "SaaS/이미지 재배포 조건 구분·저작권/라이선스 보존·공개 필요 범위 보고; 프로젝트 자체 라이선스 임의 선택 금지",
+      "checked": false,
+      "status": "PENDING",
+      "evidence": []
+    },
+    {
+      "id": "A03",
+      "title": "LLM 신뢰 경계",
+      "criterion": "기사 입력과 지시 분리·구조화 출력/중복키/도구호출·모델 결과 검증 및 실패 시 미반영",
+      "checked": false,
+      "status": "PENDING",
+      "evidence": []
+    },
+    {
+      "id": "A04",
+      "title": "모델 자원 제한",
+      "criterion": "입력/출력/JSON 복잡도/동시 요청/재시도/timeout·취소 한도 검증",
+      "checked": false,
+      "status": "PENDING",
+      "evidence": []
+    },
+    {
+      "id": "A05",
+      "title": "AI 윤리·정보 보호",
+      "criterion": "회원정보/관심사 비전송·기사 분류만 허용·오류/편향/한계 안내·관리자 수정 보호·실패fallback 유지",
+      "checked": false,
+      "status": "PENDING",
+      "evidence": []
+    },
+    {
+      "id": "A06",
+      "title": "가드레일 회귀·전달",
+      "criterion": "악성 입력/출력/장애/자원 공격 회귀·실모델 최소smoke·기능회귀·보안 단독PR/기존기능 유지 증빙",
+      "checked": false,
+      "status": "PENDING",
+      "evidence": []
+    }
+  ]
+}

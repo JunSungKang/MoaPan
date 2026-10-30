@@ -1,0 +1,52 @@
+{
+  "checkedAt": "2026-10-30T23:11:25.701Z",
+  "standalone": {
+    "branch": "codex/security-hardening-20261031",
+    "base": "a4643be581e31ceb20e05d1791bfb6731135980c",
+    "command": "sh scripts/build/gradle-local.sh --no-daemon clean check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest",
+    "tests": {
+      "unit": {
+        "tests": 137,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "integration": {
+        "tests": 51,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "e2e": {
+        "tests": 30,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "licenseCheck": "PASS: actual runtime artifacts match 100 reviewed component SHAs and retained notice SHAs"
+  },
+  "models": {
+    "scope": "new application boundary classes; existing pinned CPU model runtimes, synthetic input only; no article/account changes",
+    "translation": {
+      "task": "translation",
+      "requests": 1,
+      "validated": true,
+      "characters": 18,
+      "durationMillis": 7267
+    },
+    "classification": {
+      "task": "classification",
+      "requests": 1,
+      "validated": true,
+      "durationMillis": 19474
+    }
+  },
+  "composite": {
+    "status": "PENDING"
+  },
+  "limitations": [
+    "synthetic smoke validates execution and fixture expectations, not general semantic accuracy or fairness",
+    "external redistribution of images remains gated on corresponding source and notice obligations; no project license chosen"
+  ]
+}
