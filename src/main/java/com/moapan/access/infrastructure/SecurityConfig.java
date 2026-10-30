@@ -44,6 +44,7 @@ public class SecurityConfig {
             .headers(h->h.contentSecurityPolicy(c->c.policyDirectives("default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'"))
                 .referrerPolicy(c->c.policy(org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER))
                 .permissionsPolicyHeader(c->c.policy("camera=(), microphone=(), geolocation=()")))
+            .addFilterBefore(new RequestBodyLimitFilter(),CsrfFilter.class)
             .addFilterBefore(new Boundary(accounts,limits,base),AnonymousAuthenticationFilter.class);
         return http.build();
     }
@@ -55,7 +56,6 @@ public class SecurityConfig {
             if(!requests.tryAcquire()){r.setHeader("Retry-After","1");error(r,503);return;}
             try{
                 if(!Objects.equals(q.getServerName(),origin.getHost())){error(r,403);return;}
-                if(q.getContentLengthLong()>16384){r.setStatus(413);return;}
                 String supplied=q.getHeader("Origin");
                 if(supplied!=null&&!Set.of("GET","HEAD","OPTIONS").contains(q.getMethod())&&!supplied.equals(origin.toString())){error(r,403);return;}
                 if("cross-site".equals(q.getHeader("Sec-Fetch-Site"))&&q.getRequestURI().startsWith("/api/")){error(r,403);return;}

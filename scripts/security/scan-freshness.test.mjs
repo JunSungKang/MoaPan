@@ -1,0 +1,10 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {verifyScanFreshness} from './scan-freshness.mjs';
+const now=Date.parse('2026-10-30T00:00:00Z');
+const db={Version:2,UpdatedAt:'2026-10-29T19:00:00Z',DownloadedAt:'2026-10-29T23:00:00Z',NextUpdate:'2026-10-30T19:00:00Z'};
+const report={CreatedAt:'2026-10-29T23:30:00Z'};
+test('accept fresh recognized database and corresponding recent scan',()=>verifyScanFreshness(report,db,now));
+test('reject stale, malformed and future scan timestamps',()=>{for(const CreatedAt of ['2026-10-28T23:30:00Z','invalid','2026-10-30T01:00:00Z'])assert.throws(()=>verifyScanFreshness({CreatedAt},db,now));});
+test('recent download cannot disguise outdated publication or expired vendor update deadline',()=>{assert.throws(()=>verifyScanFreshness(report,{...db,UpdatedAt:'2026-10-28T00:00:00Z'},now));assert.throws(()=>verifyScanFreshness(report,{...db,NextUpdate:'2026-10-29T23:59:00Z'},now));});
+test('reject unsupported database, failed sync metadata and reports from older DB',()=>{assert.throws(()=>verifyScanFreshness(report,{...db,Version:3},now));assert.throws(()=>verifyScanFreshness(report,{...db,DownloadedAt:'invalid'},now));assert.throws(()=>verifyScanFreshness({CreatedAt:'2026-10-29T18:00:00Z'},db,now));});

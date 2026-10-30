@@ -29,3 +29,7 @@ SI 산출물 체계와 도메인 리팩토링 구현 및 회귀 검증 완료. �
 아이디 저장 추가 Sprint: 1) 독립 opt-in 아이디 보관/해제 2) 자동 로그인 체크 연동/비활성화 3) 새 페이지 복원·비밀번호 미보관·해제 삭제 E2E 검증 4) 이미지 재검사·Compose 반영.
 
 아이디 저장 회귀 검증 완료: opt-in·자동 로그인 강제 체크/비활성·페이지 재진입 복원·해제 삭제·비밀번호 미복원 확인. 단위130/E2E27, Nu0, 보안 gate PASS.
+
+보안 재검토 Sprint: 1) 실제 런타임/도구/DB 식별 및 공식 advisory·KEV 갱신 2) 영향분석과 패치 3) 회귀 및 모든 프로젝트 이미지 검사 4) 실행 digest 대조·잔여위험·GitHub 검토. 외부 다른 프로젝트 컨테이너는 변경하지 않는다.
+
+보안Sprint구현·검증: 앱실제본문16KB제한, 검사보고서/DB최신성gate, 공식4rootcacerts조치완료. truststore후203회귀+정책4PASS, 모든실행image+build스캔, 실제HTTPS와실행digest대조. proxy기존HIGH1조건부비노출·OS미수정경고유지; security-review/evidence참조. Compose서비스적용완료.

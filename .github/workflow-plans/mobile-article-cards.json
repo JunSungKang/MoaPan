@@ -60,6 +60,42 @@
           "docs/01-management/progress.md"
         ]
       }
+    },
+    {
+      "id": "security-refresh",
+      "expectedPaths": [
+        "scripts/security/**",
+        "scripts/deploy/**",
+        "scripts/model/**",
+        "Dockerfile",
+        "compose.yaml",
+        "build.gradle",
+        "gradle/**",
+        "gradle.lockfile",
+        "gradle.properties",
+        "src/**",
+        "docs/**",
+        ".github/workflow-plans/mobile-article-cards.json"
+      ],
+      "forbiddenPaths": [
+        ".env"
+      ],
+      "acceptanceCriteria": [
+        "Review current official advisories and KEV against installed artifacts",
+        "Patch confirmed affected components without broad suppressions",
+        "Refresh vulnerability databases, scan every deployed project image, verify exact runtime identity",
+        "Run regression tests for changes and record residual findings without calling them fixed"
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh check integrationTest e2eTest bootJar sbom securityCheck",
+        "sh scripts/security/image-scan.sh <verified-image-digests>"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/07-operation/security-review.md",
+          "docs/01-management/progress.md"
+        ]
+      }
     }
   ]
 }

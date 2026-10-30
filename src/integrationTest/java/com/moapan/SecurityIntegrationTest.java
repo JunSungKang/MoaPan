@@ -474,4 +474,8 @@ class SecurityIntegrationTest {
         mvc.perform(get("/login.html")).andExpect(header().string("X-Robots-Tag","noindex, follow"));
         mvc.perform(get("/api/v1/account")).andExpect(status().isUnauthorized()).andExpect(header().string("X-Robots-Tag","noindex, follow"));
     }
+    @Test @Order(15) void oversizedJsonIsRejectedBeforeCsrfAndController()throws Exception{
+        mvc.perform(post("/api/v1/auth/login").contentType("application/json").content("{\"padding\":\""+"x".repeat(17000)+"\"}"))
+            .andExpect(status().isPayloadTooLarge()).andExpect(header().string("Cache-Control","no-store")).andExpect(jsonPath("$.error").value("request_too_large"));
+    }
 }

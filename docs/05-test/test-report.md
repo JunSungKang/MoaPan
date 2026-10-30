@@ -146,3 +146,5 @@ E2E26 PASS(390/1440px 우측24px 여백/제호 위 배치/푸터선택없음/중
 실제 HTTPS 자동 로그인 smoke PASS: 로그인 필수 이동·영속 쿠키·로그아웃 이전 쿠키 무효·별도 브라우저 유지 확인. 합성 계정 삭제. evidence/remember-https.json 참조.
 
 아이디 저장 UI: 단위130/E2E27 PASS(실패·skip0), Nu9페이지 메시지0, 소스/JAR/SBOM/최종 이미지 gate PASS. 증빙 saved-username.json. 백엔드 변경이 없어 통합테스트는 재실행하지 않음.
+
+2026-10-30 보안재검증: truststore조치후 --rerun-tasks check integrationTest e2eTest bootJar sbom securityCheck 실행. 단위132/통합44/E2E27=203 PASS, 실패·skip0. scanner정책4PASS별도. 정상TLS/14문제체인거부/실제HTTPS·401·chunked413확인. 최초새테스트구현전미정의클래스컴파일실패는성공으로세지않고구현후전체재실행완료. 증빙evidence/security-refresh.json.

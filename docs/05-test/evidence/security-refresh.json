@@ -1,0 +1,1657 @@
+{
+  "checkedAt": "2026-10-29T23:59:14.100Z",
+  "versions": {
+    "jdk": "Eclipse Temurin 27.0.1.0.2+1 + explicit official four-root keystore mitigation",
+    "boot": "4.1.2",
+    "security": "7.1.2",
+    "tomcat": "11.0.27",
+    "gradle": "9.8.2",
+    "postgres": "18.6",
+    "jdbc": "42.7.14",
+    "caddy": "2.11.7",
+    "llama": "v0.8.0/b11960",
+    "trivy": "0.76.1"
+  },
+  "database": {
+    "Version": 2,
+    "NextUpdate": "2026-10-30T19:18:50.969126577Z",
+    "UpdatedAt": "2026-10-29T19:18:50.96912695Z",
+    "DownloadedAt": "2026-10-29T22:52:43.958399Z"
+  },
+  "scannerOrigin": {
+    "checkedAt": "2026-10-29T23:54:53.817Z",
+    "version": "v0.76.1",
+    "officialUrl": "https://github.com/aquasecurity/trivy/releases/download/v0.76.1/trivy_0.76.1_macOS-ARM64.tar.gz",
+    "archiveSha": "11a9b6cd2752011b54f01ea4bd0dbfa9f0c41dc6538d5a3f9d23955f471bf4e5",
+    "binarySha": "5c03401caf9d3cc04d9e0c7f3abd102e97518e8237465cce702162b605535e8d",
+    "verification": "Installed binary matches official checksummed release archive",
+    "initialAttempt": "Output buffer limit exceeded; reverified with streamed hash successfully"
+  },
+  "kev": {
+    "url": "https://github.com/cisagov/kev-data",
+    "version": "2026.10.29",
+    "released": "2026-10-29T19:09:34.4003Z",
+    "matchedFindings": []
+  },
+  "images": [
+    {
+      "image": "moapan-local:1.0.0",
+      "digest": "sha256:60547f2cb05daf699e1c9b99e64ff7b2fa647d029b498f0eb2c40a3699bd1f6f",
+      "scannedAt": "2026-10-30T08:54:53.009815+09:00",
+      "reportSha256": "1d3769f89db0e97613962bdcfcf2b0ecb1ee260fe9f2eb01d8ec9a78d38a994f",
+      "counts": {
+        "CRITICAL": 0,
+        "HIGH": 0,
+        "MEDIUM": 23,
+        "LOW": 4,
+        "UNKNOWN": 0
+      },
+      "findings": [
+        {
+          "id": "CVE-2026-102473",
+          "pkg": "dash",
+          "version": "0.5.12-6ubuntu5",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-102474",
+          "pkg": "dash",
+          "version": "0.5.12-6ubuntu5",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-18374",
+          "pkg": "libc-bin",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89092",
+          "pkg": "libc-bin",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-18374",
+          "pkg": "libc6",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89092",
+          "pkg": "libc6",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-67693",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-88647",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-88648",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-95184",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-95209",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-95210",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-103111",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-86145",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89156",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89157",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89158",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89160",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89161",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-107161",
+          "pkg": "libsasl2-2",
+          "version": "2.1.28+dfsg1-5ubuntu3.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-107161",
+          "pkg": "libsasl2-modules-db",
+          "version": "2.1.28+dfsg1-5ubuntu3.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-40228",
+          "pkg": "libsystemd0",
+          "version": "255.4-1ubuntu8.18",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2026-40228",
+          "pkg": "libudev1",
+          "version": "255.4-1ubuntu8.18",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2024-56433",
+          "pkg": "login",
+          "version": "1:4.13+dfsg1-4ubuntu3.2",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2024-56433",
+          "pkg": "passwd",
+          "version": "1:4.13+dfsg1-4ubuntu3.2",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2026-18477",
+          "pkg": "tar",
+          "version": "1.35+dfsg-3ubuntu0.4",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-18508",
+          "pkg": "tar",
+          "version": "1.35+dfsg-3ubuntu0.4",
+          "fixed": null,
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "image": "moapan-proxy-public:2.11.7",
+      "digest": "sha256:7c09475aad80645b36ea2a18c00cdb7871ecc64f64e85c0d68c3d89684461970",
+      "scannedAt": "2026-10-30T08:48:38.049749+09:00",
+      "reportSha256": "f5d41f3313797fb32306580f8ba4e2afdec85dc7cb47d91706e567f5f03a27e3",
+      "counts": {
+        "CRITICAL": 0,
+        "HIGH": 1,
+        "MEDIUM": 25,
+        "LOW": 4,
+        "UNKNOWN": 1
+      },
+      "findings": [
+        {
+          "id": "CVE-2026-102473",
+          "pkg": "dash",
+          "version": "0.5.12-6ubuntu5",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-102474",
+          "pkg": "dash",
+          "version": "0.5.12-6ubuntu5",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-18374",
+          "pkg": "libc-bin",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89092",
+          "pkg": "libc-bin",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-18374",
+          "pkg": "libc6",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89092",
+          "pkg": "libc6",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-67693",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-88647",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-88648",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-95184",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-95209",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-95210",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-103111",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-86145",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89156",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89157",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89158",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89160",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89161",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-107161",
+          "pkg": "libsasl2-2",
+          "version": "2.1.28+dfsg1-5ubuntu3.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-107161",
+          "pkg": "libsasl2-modules-db",
+          "version": "2.1.28+dfsg1-5ubuntu3.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-40228",
+          "pkg": "libsystemd0",
+          "version": "255.4-1ubuntu8.18",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2026-40228",
+          "pkg": "libudev1",
+          "version": "255.4-1ubuntu8.18",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2024-56433",
+          "pkg": "login",
+          "version": "1:4.13+dfsg1-4ubuntu3.2",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2024-56433",
+          "pkg": "passwd",
+          "version": "1:4.13+dfsg1-4ubuntu3.2",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2026-18477",
+          "pkg": "tar",
+          "version": "1.35+dfsg-3ubuntu0.4",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-18508",
+          "pkg": "tar",
+          "version": "1.35+dfsg-3ubuntu0.4",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-116587",
+          "pkg": "github.com/go-jose/go-jose/v3",
+          "version": "v3.0.5",
+          "fixed": null,
+          "severity": "HIGH"
+        },
+        {
+          "id": "CVE-2026-116585",
+          "pkg": "github.com/go-jose/go-jose/v3",
+          "version": "v3.0.5",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-116586",
+          "pkg": "github.com/go-jose/go-jose/v3",
+          "version": "v3.0.5",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "GO-2026-5932",
+          "pkg": "golang.org/x/crypto",
+          "version": "v0.58.0",
+          "fixed": null,
+          "severity": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "image": "moapan-db-local:18.6",
+      "digest": "sha256:43853516f9d452497377625b7a608974a04dc416ab4b4faa8cbc4ab6d70726be",
+      "scannedAt": "2026-10-30T08:48:38.287386+09:00",
+      "reportSha256": "84d3ebea34de069a5173e28cd1de17e7fd2a5d0f3b2d8c3f87ca2d3c92fef636",
+      "counts": {
+        "CRITICAL": 0,
+        "HIGH": 0,
+        "MEDIUM": 0,
+        "LOW": 0,
+        "UNKNOWN": 0
+      },
+      "findings": []
+    },
+    {
+      "image": "moapan-translator:cpu-b11960",
+      "digest": "sha256:33589c1edc5f6b67a3eebd165b6d1e78230aa1e3835baec73fadcc34bad51a06",
+      "scannedAt": "2026-10-30T08:48:38.491218+09:00",
+      "reportSha256": "862fdd8d3b26089ec70b75774dd50751662000750f98a6793f4d856ce820b4de",
+      "counts": {
+        "CRITICAL": 0,
+        "HIGH": 0,
+        "MEDIUM": 23,
+        "LOW": 4,
+        "UNKNOWN": 0
+      },
+      "findings": [
+        {
+          "id": "CVE-2026-102473",
+          "pkg": "dash",
+          "version": "0.5.12-6ubuntu5",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-102474",
+          "pkg": "dash",
+          "version": "0.5.12-6ubuntu5",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-18374",
+          "pkg": "libc-bin",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89092",
+          "pkg": "libc-bin",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-18374",
+          "pkg": "libc6",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89092",
+          "pkg": "libc6",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-67693",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-88647",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-88648",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-95184",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-95209",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-95210",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-103111",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-86145",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89156",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89157",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89158",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89160",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89161",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-107161",
+          "pkg": "libsasl2-2",
+          "version": "2.1.28+dfsg1-5ubuntu3.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-107161",
+          "pkg": "libsasl2-modules-db",
+          "version": "2.1.28+dfsg1-5ubuntu3.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-40228",
+          "pkg": "libsystemd0",
+          "version": "255.4-1ubuntu8.18",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2026-40228",
+          "pkg": "libudev1",
+          "version": "255.4-1ubuntu8.18",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2024-56433",
+          "pkg": "login",
+          "version": "1:4.13+dfsg1-4ubuntu3.2",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2024-56433",
+          "pkg": "passwd",
+          "version": "1:4.13+dfsg1-4ubuntu3.2",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2026-18477",
+          "pkg": "tar",
+          "version": "1.35+dfsg-3ubuntu0.4",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-18508",
+          "pkg": "tar",
+          "version": "1.35+dfsg-3ubuntu0.4",
+          "fixed": null,
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "image": "moapan-classifier:cpu-b11960",
+      "digest": "sha256:d5f131bce43adfd3fd776ac58e481268ad23594a4bc80b316ded4e930599bdad",
+      "scannedAt": "2026-10-30T08:48:38.690991+09:00",
+      "reportSha256": "727644ab09ebd71ba14fc73178fba6f935387caba3ec1b4b2b0535ae329a98b8",
+      "counts": {
+        "CRITICAL": 0,
+        "HIGH": 0,
+        "MEDIUM": 23,
+        "LOW": 4,
+        "UNKNOWN": 0
+      },
+      "findings": [
+        {
+          "id": "CVE-2026-102473",
+          "pkg": "dash",
+          "version": "0.5.12-6ubuntu5",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-102474",
+          "pkg": "dash",
+          "version": "0.5.12-6ubuntu5",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-18374",
+          "pkg": "libc-bin",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89092",
+          "pkg": "libc-bin",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-18374",
+          "pkg": "libc6",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89092",
+          "pkg": "libc6",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-67693",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-88647",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-88648",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-95184",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-95209",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-95210",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-103111",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-86145",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89156",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89157",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89158",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89160",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89161",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-107161",
+          "pkg": "libsasl2-2",
+          "version": "2.1.28+dfsg1-5ubuntu3.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-107161",
+          "pkg": "libsasl2-modules-db",
+          "version": "2.1.28+dfsg1-5ubuntu3.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-40228",
+          "pkg": "libsystemd0",
+          "version": "255.4-1ubuntu8.18",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2026-40228",
+          "pkg": "libudev1",
+          "version": "255.4-1ubuntu8.18",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2024-56433",
+          "pkg": "login",
+          "version": "1:4.13+dfsg1-4ubuntu3.2",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2024-56433",
+          "pkg": "passwd",
+          "version": "1:4.13+dfsg1-4ubuntu3.2",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2026-18477",
+          "pkg": "tar",
+          "version": "1.35+dfsg-3ubuntu0.4",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-18508",
+          "pkg": "tar",
+          "version": "1.35+dfsg-3ubuntu0.4",
+          "fixed": null,
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "image": "moapan-security-build:20261030",
+      "digest": "sha256:0a0e9d35f89a6e0a4ca559b6d91d861a2b8e6ee70d002c74651cb07edbf497ad",
+      "scannedAt": "2026-10-30T08:56:10.50626+09:00",
+      "reportSha256": "52df2d575a8c8898737375264ef64a458d4e36cd5fca823d65b45a0419515c48",
+      "counts": {
+        "CRITICAL": 0,
+        "HIGH": 0,
+        "MEDIUM": 23,
+        "LOW": 4,
+        "UNKNOWN": 0
+      },
+      "findings": [
+        {
+          "id": "CVE-2026-102473",
+          "pkg": "dash",
+          "version": "0.5.12-6ubuntu5",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-102474",
+          "pkg": "dash",
+          "version": "0.5.12-6ubuntu5",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-18374",
+          "pkg": "libc-bin",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89092",
+          "pkg": "libc-bin",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-18374",
+          "pkg": "libc6",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89092",
+          "pkg": "libc6",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-67693",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-88647",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-88648",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-95184",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-95209",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-95210",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-103111",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-86145",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89156",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89157",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89158",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89160",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89161",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-107161",
+          "pkg": "libsasl2-2",
+          "version": "2.1.28+dfsg1-5ubuntu3.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-107161",
+          "pkg": "libsasl2-modules-db",
+          "version": "2.1.28+dfsg1-5ubuntu3.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-40228",
+          "pkg": "libsystemd0",
+          "version": "255.4-1ubuntu8.18",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2026-40228",
+          "pkg": "libudev1",
+          "version": "255.4-1ubuntu8.18",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2024-56433",
+          "pkg": "login",
+          "version": "1:4.13+dfsg1-4ubuntu3.2",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2024-56433",
+          "pkg": "passwd",
+          "version": "1:4.13+dfsg1-4ubuntu3.2",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2026-18477",
+          "pkg": "tar",
+          "version": "1.35+dfsg-3ubuntu0.4",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-18508",
+          "pkg": "tar",
+          "version": "1.35+dfsg-3ubuntu0.4",
+          "fixed": null,
+          "severity": "MEDIUM"
+        }
+      ]
+    }
+  ],
+  "tests": {
+    "test": {
+      "tests": 132,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "integrationTest": {
+      "tests": 44,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "e2eTest": {
+      "tests": 27,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "gateTests": {
+    "passed": 4,
+    "failed": 0
+  },
+  "tls": {
+    "official": "https://ops.java/emudhra",
+    "jdkRootsAfter": 117,
+    "additionalRemovedRoot": "emSign Root CA - G1",
+    "removedSha256": "40f6af0346a99aa1cd1d555a4e9cce62c7f9634603ee406615833dc8c8d00367",
+    "hostResult": "runtime=27.0.1.0.2+1 vendor=Eclipse Adoptium\nroots=117 official-four-roots=absent\nordinary-https=PASS\ndv-g3b=TLS_REJECTED\ndv-g3c=TLS_REJECTED\nov-g3b=TLS_REJECTED\nov-g3c=TLS_REJECTED\nev-g3b=TLS_REJECTED\nev-g3c=TLS_REJECTED\ndv-g3b-aaa=TLS_REJECTED\ndv-g3c-aaa=TLS_REJECTED\nov-g3b-aaa=TLS_REJECTED\nov-g3c-aaa=TLS_REJECTED\nev-g3b-aaa=TLS_REJECTED\nev-g3c-aaa=TLS_REJECTED\ndv-g3b-noct=TLS_REJECTED\ndv-g3b-aaa-noct=TLS_REJECTED\n",
+    "runtimeImageResult": "runtime=27.0.1.0.2+1 vendor=Eclipse Adoptium\nroots=117 official-four-roots=absent\nordinary-https=PASS\ndv-g3b=TLS_REJECTED\ndv-g3c=TLS_REJECTED\nov-g3b=TLS_REJECTED\nov-g3c=TLS_REJECTED\nev-g3b=TLS_REJECTED\nev-g3c=TLS_REJECTED\ndv-g3b-aaa=TLS_REJECTED\ndv-g3c-aaa=TLS_REJECTED\nov-g3b-aaa=TLS_REJECTED\nov-g3c-aaa=TLS_REJECTED\nev-g3b-aaa=TLS_REJECTED\nev-g3c-aaa=TLS_REJECTED\ndv-g3b-noct=TLS_REJECTED\ndv-g3b-aaa-noct=TLS_REJECTED\n",
+    "keystoreSha256": "873dfdb867a573a85a3df93de3913943086259db608b530913efe99572ede59c"
+  },
+  "https": {
+    "checkedAt": "2026-10-29T23:57:21.258Z",
+    "login200": 200,
+    "news401": 401,
+    "chunkedOversize413": 413,
+    "tlsValidation": "enabled",
+    "csp": true,
+    "hsts": true
+  },
+  "ubuntu": [
+    {
+      "id": "CVE-2026-89092",
+      "url": "https://ubuntu.com/security/cves/CVE-2026-89092.json",
+      "noble": [
+        {
+          "package": "glibc",
+          "status": "needed",
+          "detail": ""
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-18374",
+      "url": "https://ubuntu.com/security/cves/CVE-2026-18374.json",
+      "noble": [
+        {
+          "package": "glibc",
+          "status": "needed",
+          "detail": ""
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-102474",
+      "url": "https://ubuntu.com/security/cves/CVE-2026-102474.json",
+      "noble": [
+        {
+          "package": "dash",
+          "status": "deferred",
+          "detail": "2026-10-15"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-102473",
+      "url": "https://ubuntu.com/security/cves/CVE-2026-102473.json",
+      "noble": [
+        {
+          "package": "dash",
+          "status": "deferred",
+          "detail": "2026-10-15"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-95184",
+      "url": "https://ubuntu.com/security/cves/CVE-2026-95184.json",
+      "noble": [
+        {
+          "package": "gnutls28",
+          "status": "deferred",
+          "detail": "2026-10-15"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-67693",
+      "url": "https://ubuntu.com/security/cves/CVE-2026-67693.json",
+      "noble": [
+        {
+          "package": "gnutls28",
+          "status": "deferred",
+          "detail": "2026-10-15"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-88648",
+      "url": "https://ubuntu.com/security/cves/CVE-2026-88648.json",
+      "noble": [
+        {
+          "package": "gnutls28",
+          "status": "deferred",
+          "detail": "2026-10-15"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-88647",
+      "url": "https://ubuntu.com/security/cves/CVE-2026-88647.json",
+      "noble": [
+        {
+          "package": "gnutls28",
+          "status": "deferred",
+          "detail": "2026-10-15"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-95210",
+      "url": "https://ubuntu.com/security/cves/CVE-2026-95210.json",
+      "noble": [
+        {
+          "package": "gnutls28",
+          "status": "deferred",
+          "detail": "2026-10-15"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-95209",
+      "url": "https://ubuntu.com/security/cves/CVE-2026-95209.json",
+      "noble": [
+        {
+          "package": "gnutls28",
+          "status": "deferred",
+          "detail": "2026-10-15"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-103111",
+      "url": "https://ubuntu.com/security/cves/CVE-2026-103111.json",
+      "noble": [
+        {
+          "package": "pcre2",
+          "status": "needed",
+          "detail": ""
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-86145",
+      "url": "https://ubuntu.com/security/cves/CVE-2026-86145.json",
+      "noble": [
+        {
+          "package": "pcre2",
+          "status": "needed",
+          "detail": ""
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-89158",
+      "url": "https://ubuntu.com/security/cves/CVE-2026-89158.json",
+      "noble": [
+        {
+          "package": "pcre2",
+          "status": "needed",
+          "detail": ""
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-89157",
+      "url": "https://ubuntu.com/security/cves/CVE-2026-89157.json",
+      "noble": [
+        {
+          "package": "pcre2",
+          "status": "needed",
+          "detail": ""
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-89156",
+      "url": "https://ubuntu.com/security/cves/CVE-2026-89156.json",
+      "noble": [
+        {
+          "package": "pcre2",
+          "status": "needed",
+          "detail": ""
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-89160",
+      "url": "https://ubuntu.com/security/cves/CVE-2026-89160.json",
+      "noble": [
+        {
+          "package": "pcre2",
+          "status": "needed",
+          "detail": ""
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-89161",
+      "url": "https://ubuntu.com/security/cves/CVE-2026-89161.json",
+      "noble": [
+        {
+          "package": "pcre2",
+          "status": "needed",
+          "detail": ""
+        }
+      ]
+    },
+    {
+      "id": "CVE-2024-56433",
+      "url": "https://ubuntu.com/security/cves/CVE-2024-56433.json",
+      "noble": [
+        {
+          "package": "shadow",
+          "status": "deferred",
+          "detail": "2026-08-31"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-40228",
+      "url": "https://ubuntu.com/security/cves/CVE-2026-40228.json",
+      "noble": [
+        {
+          "package": "systemd",
+          "status": "deferred",
+          "detail": "2026-06-05"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-107161",
+      "url": "https://ubuntu.com/security/cves/CVE-2026-107161.json",
+      "noble": [
+        {
+          "package": "cyrus-sasl2",
+          "status": "deferred",
+          "detail": "2026-10-14"
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-18477",
+      "url": "https://ubuntu.com/security/cves/CVE-2026-18477.json",
+      "noble": [
+        {
+          "package": "tar",
+          "status": "needed",
+          "detail": ""
+        }
+      ]
+    },
+    {
+      "id": "CVE-2026-18508",
+      "url": "https://ubuntu.com/security/cves/CVE-2026-18508.json",
+      "noble": [
+        {
+          "package": "tar",
+          "status": "needed",
+          "detail": ""
+        }
+      ]
+    }
+  ],
+  "upgradeSimulation": "Reading package lists...\nBuilding dependency tree...\nReading state information...\nCalculating upgrade...\n0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.",
+  "proxy": {
+    "admin": {
+      "disabled": true
+    },
+    "apps": [
+      "http",
+      "tls"
+    ],
+    "handlers": [
+      "subroute",
+      "reverse_proxy",
+      "static_response",
+      "headers",
+      "request_body"
+    ],
+    "issuers": [
+      "acme"
+    ],
+    "v3Decision": "Existing hash-bound, expires 2026-11-05, NOT_AFFECTED for this configuration; no v3 patch available. Not suppressed or extended.",
+    "otherFindings": "go-jose/v3 CBC/JWE and nested JSON require untrusted JOSE input; no exposed JOSE endpoint. GO-2026-5932 OpenPGP has no OpenPGP use/import in current service; no fixed version; not classified safe merely because UNKNOWN."
+  },
+  "jarSha256": "2b635a08a30b37f9677b406bc542037a4885a26f9e5c515c07c6d5934b6aa255",
+  "sbomSha256": "1ad74a0dc59e1c37447a0d4496fcbe280394be7ddb7a0328ac5655b21c962b63",
+  "limitations": [
+    "Native C++ parsers require separate advisory/source review; OS/JAR scanner alone is insufficient",
+    "Helm uses synthetic deployment values; no live Kubernetes deployment/registry approval",
+    "Unreleased vulnerabilities and host/browser compromise are not excluded",
+    "MEDIUM/LOW and conditional proxy HIGH remain visible"
+  ],
+  "helm": {
+    "namespace": "moapan",
+    "counts": {
+      "CRITICAL": 0,
+      "HIGH": 0,
+      "MEDIUM": 13,
+      "LOW": 2
+    },
+    "note": "Synthetic registry warnings12, DB URL/username ConfigMap contains no credential1, PostgreSQL UID/GID70 low2; no live deployment. First render missing ingress field failed; rerendered correct fields and namespace; empty scan not accepted."
+  },
+  "runtimeIdentity": {
+    "allServiceImagesMatchScanned": true,
+    "jarSha256MatchesHost": true,
+    "patchedAppImage": "sha256:60547f2cb05daf699e1c9b99e64ff7b2fa647d029b498f0eb2c40a3699bd1f6f"
+  },
+  "nativeReview": {
+    "checkedAt": "2026-10-29T23:57:02.274Z",
+    "runtime": "llama.cpp v0.8.0/b11960",
+    "commit": "8642541b255bfb5dc39cd351a178be09013a55d6",
+    "advisories": [
+      {
+        "id": "CVE-2026-27940",
+        "url": "https://github.com/ggml-org/llama.cpp/security/advisories/GHSA-3p4r-fq3f-q74v",
+        "publishedAt": "2026-03-12T11:17:52Z",
+        "vulnerabilities": [
+          {
+            "package": {
+              "ecosystem": "",
+              "name": "llama.cpp"
+            },
+            "vulnerable_version_range": "<= b8145",
+            "patched_versions": ">= b8146",
+            "vulnerable_functions": []
+          }
+        ]
+      },
+      {
+        "id": "CVE-2026-34159",
+        "url": "https://github.com/ggml-org/llama.cpp/security/advisories/GHSA-j8rj-fmpv-wcxw",
+        "publishedAt": "2026-03-26T09:59:34Z",
+        "vulnerabilities": [
+          {
+            "package": {
+              "ecosystem": "other",
+              "name": "llama.cpp"
+            },
+            "vulnerable_version_range": "<= b7991",
+            "patched_versions": "",
+            "vulnerable_functions": []
+          }
+        ]
+      },
+      {
+        "id": "CVE-2026-33298",
+        "url": "https://github.com/ggml-org/llama.cpp/security/advisories/GHSA-96jg-mvhq-q7q7",
+        "publishedAt": "2026-03-18T18:37:01Z",
+        "vulnerabilities": [
+          {
+            "package": {
+              "ecosystem": "",
+              "name": "ggml-org/llama.cpp"
+            },
+            "vulnerable_version_range": "< b7437",
+            "patched_versions": "b7824",
+            "vulnerable_functions": []
+          }
+        ]
+      },
+      {
+        "id": "CVE-2026-21869",
+        "url": "https://github.com/ggml-org/llama.cpp/security/advisories/GHSA-8947-pfff-2f3c",
+        "publishedAt": "2026-01-05T14:00:09Z",
+        "vulnerabilities": [
+          {
+            "package": {
+              "ecosystem": "ggml-org/llama.cpp",
+              "name": "llama.cpp"
+            },
+            "vulnerable_version_range": "<= 55d4206c8",
+            "patched_versions": ">= c78fb90",
+            "vulnerable_functions": []
+          }
+        ]
+      },
+      {
+        "id": "CVE-2025-53630",
+        "url": "https://github.com/ggml-org/llama.cpp/security/advisories/GHSA-vgg9-87g3-85w8",
+        "publishedAt": "2025-07-10T05:22:33Z",
+        "vulnerabilities": [
+          {
+            "package": {
+              "ecosystem": "llama.cpp",
+              "name": ""
+            },
+            "vulnerable_version_range": "<26a48ad",
+            "patched_versions": "26a48ad",
+            "vulnerable_functions": []
+          }
+        ]
+      },
+      {
+        "id": "CVE-2025-52566",
+        "url": "https://github.com/ggml-org/llama.cpp/security/advisories/GHSA-7rxv-5jhh-j6xx",
+        "publishedAt": "2025-06-23T16:04:05Z",
+        "vulnerabilities": [
+          {
+            "package": {
+              "ecosystem": "llama.cpp",
+              "name": ""
+            },
+            "vulnerable_version_range": "<b5721",
+            "patched_versions": "b5721",
+            "vulnerable_functions": []
+          }
+        ]
+      },
+      {
+        "id": "GHSA-g4cc-763q-h9h6",
+        "url": "https://github.com/ggml-org/llama.cpp/security/advisories/GHSA-g4cc-763q-h9h6",
+        "publishedAt": "2025-06-25T06:26:17Z",
+        "vulnerabilities": [
+          {
+            "package": {
+              "ecosystem": "llama.cpp",
+              "name": ""
+            },
+            "vulnerable_version_range": "c33fe8b8",
+            "patched_versions": "c33fe8b8",
+            "vulnerable_functions": []
+          }
+        ]
+      },
+      {
+        "id": "CVE-2025-49847",
+        "url": "https://github.com/ggml-org/llama.cpp/security/advisories/GHSA-8wwf-w4qm-gpqr",
+        "publishedAt": "2025-06-14T09:55:24Z",
+        "vulnerabilities": [
+          {
+            "package": {
+              "ecosystem": "",
+              "name": "llama.cpp"
+            },
+            "vulnerable_version_range": "All versions before patch",
+            "patched_versions": ">= b5662",
+            "vulnerable_functions": []
+          }
+        ]
+      },
+      {
+        "id": "CVE-2024-42479",
+        "url": "https://github.com/ggml-org/llama.cpp/security/advisories/GHSA-wcr5-566p-9cwj",
+        "publishedAt": "2024-08-12T14:18:18Z",
+        "vulnerabilities": [
+          {
+            "package": {
+              "ecosystem": "",
+              "name": ""
+            },
+            "vulnerable_version_range": "< b3561",
+            "patched_versions": ">= b3561",
+            "vulnerable_functions": []
+          }
+        ]
+      },
+      {
+        "id": "CVE-2024-42478",
+        "url": "https://github.com/ggml-org/llama.cpp/security/advisories/GHSA-5vm9-p64x-gqw9",
+        "publishedAt": "2024-08-12T14:18:08Z",
+        "vulnerabilities": [
+          {
+            "package": {
+              "ecosystem": "",
+              "name": ""
+            },
+            "vulnerable_version_range": "< b3561",
+            "patched_versions": ">= b3561",
+            "vulnerable_functions": []
+          }
+        ]
+      },
+      {
+        "id": "CVE-2024-42477",
+        "url": "https://github.com/ggml-org/llama.cpp/security/advisories/GHSA-mqp6-7pv6-fqjf",
+        "publishedAt": "2024-08-12T14:17:57Z",
+        "vulnerabilities": [
+          {
+            "package": {
+              "ecosystem": "",
+              "name": ""
+            },
+            "vulnerable_version_range": "< b3561",
+            "patched_versions": ">= b3561",
+            "vulnerable_functions": []
+          }
+        ]
+      },
+      {
+        "id": "CVE-2024-41130",
+        "url": "https://github.com/ggml-org/llama.cpp/security/advisories/GHSA-49q7-2jmh-92fp",
+        "publishedAt": "2024-07-22T16:22:34Z",
+        "vulnerabilities": [
+          {
+            "package": {
+              "ecosystem": "",
+              "name": ""
+            },
+            "vulnerable_version_range": "<=b3426",
+            "patched_versions": "b3427",
+            "vulnerable_functions": []
+          }
+        ]
+      },
+      {
+        "id": "CVE-2024-32878",
+        "url": "https://github.com/ggml-org/llama.cpp/security/advisories/GHSA-p5mv-gjc5-mwqv",
+        "publishedAt": "2024-04-26T10:17:10Z",
+        "vulnerabilities": [
+          {
+            "package": {
+              "ecosystem": "",
+              "name": "llama.cpp"
+            },
+            "vulnerable_version_range": "b2715",
+            "patched_versions": "b2740",
+            "vulnerable_functions": []
+          }
+        ]
+      }
+    ],
+    "ancestry": {
+      "patch": "c78fb90",
+      "status": "ahead",
+      "apiStatus": 200
+    },
+    "limits": "Native parser is not fully represented in container scanner; fixed verified weights, no RPC server, API key/internal network, no tools/web UI"
+  },
+  "host": {
+    "dockerDesktop": "4.97.0",
+    "engine": "29.9.2",
+    "releaseNotes": "https://docs.docker.com/desktop/release-notes/"
+  }
+}

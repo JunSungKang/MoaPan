@@ -86,3 +86,28 @@ Trivy0.76.1 최종 앱/translator 이미지 검사 gate 통과. 앱59f4c97c8c7ee
 ### Qwen 분류 최종 산출물 (2026-10-29)
 Trivy0.76.1 소스/비밀값/설정·JAR91패키지·SBOM100컴포넌트·최종 앱 및 classifier 이미지 gate PASS. DB sync2026-10-28T21:57:31.453891Z. 실행 앱sha256:53ac07cd61fc5cfa35626b12e1946428a3fa62946d98ec663ec59314b633f41b, classifier sha256:d5f131bce43adfd3fd776ac58e481268ad23594a4bc80b316ded4e930599bdad로 검사 대상과 일치. HF 모델 SHA 검증 및 기존 llama.cpp 고정 소스 보안 검토를 재사용하며 새 의존성 추가 없음. native 모델 의미 정확성을 scanner로 입증했다고 주장하지 않는다.
 Helm 기본값은 필수 registry/host/Secret 미입력으로 소스 스캔에서 skip되어 별도로 실제 합성값 렌더링을 검사했다. HIGH0/CRITICAL0/MEDIUM13/LOW2: 합성 registry 허용목록 경고12, 비밀값 없는 DB 연결 ConfigMap1, PostgreSQL UID/GID70 경고2. 실제 배포 registry/클러스터 egress 정책 검증은 남아 있다. 기존 Caddy 조건부 VEX 판단/만료와 기타 잔여 위험을 유지한다. 전체 환경 취약점0으로 선언하지 않는다.
+
+## 2026-10-30 보안 재검토와 패치
+
+공식 Spring·Tomcat·pgJDBC·Oracle/Temurin·Gradle·Caddy·llama.cpp·Trivy 공지와 KEV 2026.10.29를 재조회했다. Temurin27.0.1.0.2+1, Boot4.1.2/Security7.1.2, Gradle9.8.2, Tomcat11.0.27, PostgreSQL18.6/JDBC42.7.14, Caddy2.11.7, llama.cpp v0.8.0/b11960, Trivy0.76.1은 현재 확인한 정식 릴리스/수정 범위다. 의존성 버전을 이유 없이 변경하지 않았다. 자세한 확인시각·보고서 SHA·실제 이미지별 발견은 [security-refresh.json](../05-test/evidence/security-refresh.json).
+
+수정 사항:
+- SEC-LOCAL-001: 앱이 Content-Length만 검사해 길이 없는 요청에서는 앱 자체16KB 제한이 보장되지 않았다. 기존 Caddy16KB 제한은 유지하며, CSRF/JSON 파싱 전 실제 바이트16385개까지만 읽고 초과 요청을413/no-store로 종료한다. 길이 없는 입력·정확한16KB경계·전체필터체인 거부를 테스트했다. 새 CVE를 부여하지 않는다.
+- SEC-LOCAL-002: 이미지 게이트에 DB/보고서 최신성 검사가 없었다. 소스/JAR/SBOM/이미지 모두 DBschema2, 발행·동기화·검사24시간, 공급자NextUpdate, 현재DB보다 오래된 보고서 여부를 검사한다. 오류·만료·미인식 형식은 실패한다.4개 회귀 테스트 통과.
+- TLS 추가 조치: [공식4루트 지침](https://ops.java/emudhra/)과 [공식 검사기](https://cr.openjdk.org/~mr/CheckCerts.java)를 확인하니 기존 TrustAudit는2개만 검사했다. 실제 선택 JDK에는 추가 G1루트1개가 남았다. G1은 공식 문서상 침해된 중간인증서와 직접 관련 없는 추가 eMudhra 루트이며, 이를 침해 확정으로 분류하지 않는다. 공식4루트 목록의 정확한 CN과 자체서명 CA 여부로 식별해 G1(SHA256 40f6af0346a99aa1cd1d555a4e9cce62c7f9634603ee406615833dc8c8d00367)만 제거했다. 공급자 바이너리 버전은 같고 cacerts에 명시적 공식 완화책을 추가했다. workspace JDK 및 Docker build/runtime 공통stage에 적용해117루트/4대상없음/정상HTTPS/문제체인14개TLS거부를 재검증했다. 사용자 truststore나 TLS 우회는 추가하지 않았다.
+
+공식 공지 대조:
+- [CVE-2026-91403](https://www.oracle.com/security-alerts/alert-cve-2026-91403.html), [CVE-2026-114820](https://www.oracle.com/security-alerts/alert-cve-2026-114820.html): 버전문자열 대신 위 실제 신뢰 저장소·연결 검증으로 판정.
+- [Spring CVE-2026-41707](https://spring.io/security/cve-2026-41707/)·[CVE-2026-47841](https://spring.io/security/cve-2026-47841/):7.1.1에서 수정, 설치7.1.2. DPoP/WebAuthn도 사용하지 않음.
+- [pgJDBC CVE-2026-107314](https://jdbc.postgresql.org/security/):42.7.14수정 포함. [PostgreSQL 공식 보안목록](https://www.postgresql.org/support/security/)의18.6수정 포함.
+- [Caddy 공지](https://github.com/caddyserver/caddy/security/advisories): 최신 게시된CVE-2026-55458의수정2.11.5를설치2.11.7이포함.
+- [Oracle PHP 긴급공지](https://www.oracle.com/security-alerts/alert-cve-2026-109618.html):PHP/영향Oracle제품은 미사용.
+- [llama.cpp 공지](https://github.com/ggml-org/llama.cpp/security/advisories):13공개건 범위 재확인, 고정commit은CVE-2026-21869 수정commit보다3052커밋후행. 기존GGUF/RPC수정 검토 유지. CPU실행기두개SHA동일확인, RPC·외부모델다운로드·도구실행미제공.
+- [Trivy 공지](https://github.com/aquasecurity/trivy/security/advisories):0.76.1은열거된공급망/DB경로/플러그인/Helm파서수정버전이후. 공식릴리스archive체크섬과설치binarySHA직접일치검증. 최초버퍼초과검사는미완료로처리하고streamSHA로재검증성공.
+
+잔여 위험/배포 판정:
+- 앱/DB/번역/분류/앱빌드이미지HIGH0·CRITICAL0. 프록시는기존go-jose/v3 CVE-2026-116587 HIGH1이남는다. 공식v3패치없음. 실제adapt는admin비활성·http/tls만·외부ACME이며JWK/JOSE서버없음을재확인했다. 기존구성SHA와2026-11-05만료VEX를유지하고예외확대·기간연장없음. 패치완료가아니다.
+- 프록시go-jose/v3 MEDIUM2는비신뢰JOSE입력이필요하며같은노출제약이적용된다. [GO-2026-5932](https://pkg.go.dev/vuln/GO-2026-5932)는x/crypto/openpgp 전체버전미수정공지다. 현재서비스는OpenPGP를사용하지않고의존소스의해당패키지외부import를찾지못했다. UNKNOWN이라는이유로자동안전판정하지않으며기능추가시재검토.
+- Ubuntu기존22CVE의noble공식JSON을모두재조회:needed/deferred유지,격리된임시컨테이너의apt시뮬레이션추가업데이트0. [기존노출검토](../05-test/evidence/ubuntu-review.md)를유지하고미해결MEDIUM/LOW를숨기지않음. 신규공격전제노출없음,현재발견과KEV일치0.
+- Helm은필수배포값없음으로원본scanner가skip하므로합성값렌더를별도검사했다.클러스터·실제registry·egress운영검증은미수행. 최초namespace미지정렌더경고와누락필드실패는증빙에서구분한다.
+- 검사게이트통과는전체환경무취약보증이아니다. 최종runtime이미지60547f2cb05daf699e1c9b99e64ff7b2fa647d029b498f0eb2c40a3699bd1f6f(sha256)를검사후Composeweb/worker에적용했다.
