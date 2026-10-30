@@ -111,3 +111,5 @@ Linux 서버에서는 `compose-public.yaml` 대신 `scripts/deploy/compose-serve
 `sh scripts/deploy/start.sh local|public|server`는 기존 번역과 별개로 Qwen3.5-4B Q4_K_M도 Hugging Face에서 고정 revision으로 다운로드·SHA256 검증 후 내부 Compose 서비스로 실행한다. classifier는 외부 포트를 열지 않으며 Java worker가 저장된 제목·요약을 비동기 분류한다. 관리자 화면 **기사 주제 분류**에서 1~8개 태그와 포함/제외 기준을 편집할 수 있다. 초기 5개 주제는 시작용 기본값이다. 수동 잠금은 유지하며 기존 기사는 순차 처리한다.
 
 구성·정책·자원·실패 처리: [docs/03-design/classification.md](docs/03-design/classification.md). 수동 Compose 명령에도 `-f scripts/deploy/compose-classification.yaml`을 포함한다. Helm은 classifier 이미지 digest·전용 PVC·Secret·내부 Service를 미리 준비했으며 실제 Kubernetes 설치는 수행하지 않았다.
+
+광고는 관리자 → 광고 관리에서 직접 링크 배너를 저장하면 지면 재조회 시 반영됩니다. 애드센스는 승인/식별자 미보유 상태에 맞춰 연결 정보 등록만 지원하며 실제 송출은 연결되지 않았습니다. 상세 절차는 [배포·운영 안내](docs/06-transition/deployment.md#광고-등록-방법)를 참조하세요.

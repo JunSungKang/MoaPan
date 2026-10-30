@@ -1,7 +1,8 @@
 import basic from './i18n-en.js';
+import advertising from './i18n-advertising.js';
 import pages from './i18n-pages.js';
 import statuses from './i18n-status.js';
-const messages={...basic,...pages,...statuses};
+const messages={...basic,...pages,...statuses,...advertising};
 const reverse=new Map(Object.entries(messages).map(([ko,en])=>[en,ko]));
 export let language='ko';
 try{language=localStorage.getItem('moapan-language')==='en'?'en':'ko';}catch{}

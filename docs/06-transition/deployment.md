@@ -49,3 +49,11 @@ Caddyfile과 scripts/deploy/db-init.sh는 이미지에 포함된다. 수정 후 
 현재 운영 번역은 Linux CPU 컨테이너 방식으로 전환했다. 준비·실행·서버 이관·자동 복구 절차는 [LINUX_TRANSLATION.md](linux-translation.md)를 따른다. host.docker.internal이나 Mac native 모델 시작은 필요하지 않다.
 
 선택 모델 Index Translate 2B Q8_0와 glossary-v1 유지. scripts/experiments/translation-local.sh는 과거 비교 실험용이며 현재 운영 경로가 아니다. Docker daemon이 시작돼야 restart 정책이 동작한다.
+
+## 광고 등록 방법
+1. 관리자 계정으로 로그인하고 관리 → 광고 관리에서 직접 링크 배너를 선택한다.
+2. 광고 문구와 광고주가 제공한 HTTPS 목적지 링크를 입력한다. 이미 서버에 준비한 이미지가 있을 때만 이미지 경로를 입력한다. 이미지 업로드 기능은 없으며 문구만으로도 배너가 표시된다.
+3. 미리보기로 확인하고 지면에 광고 표시를 선택해 저장한다. 지면을 다시 열면 우측 상단에 반영된다. 표시 해제 후 저장하면 광고 문의 자리로 돌아간다.
+4. CPC 계약 링크도 같은 목적지 필드에 입력한다. 모아판은 클릭을 기록하지 않으므로 집계·수익·정산은 계약한 공급자에서 확인한다.
+5. 애드센스는 연결 정보로 전환해 ca-pub-로 시작하는 공개 게시자 ID와 광고 단위 ID를 저장한다. 현재는 준비 상태이며 실제 광고 요청과 수익은 발생하지 않는다. 승인 계정·사이트·광고 단위와 동의 관리/CSP 설계를 확보한 뒤 별도 송출 연결이 필요하다.
+공식 근거(2026-10-30 확인): [광고 단위 생성](https://support.google.com/adsense/answer/9274025), [strict CSP 통합](https://support.google.com/adsense/answer/16283098), [동의 관리](https://support.google.com/adsense/answer/7670013). 계정 승인/게시자 ID가 없어 실광고 송출·수익 검증은 하지 않았다. V12 마이그레이션 추가 및 Helm migrationVersion=12.

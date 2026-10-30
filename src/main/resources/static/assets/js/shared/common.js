@@ -1,5 +1,6 @@
 import {language,t,languagePicker} from './i18n.js';
-import {brand,advertisement} from './config.js';
+import {brand} from './config.js';
+import {renderBanner} from '../advertising/banner.js';
 import {request,account} from './api.js';
 export function el(tag,text,className){const node=document.createElement(tag);if(text!==undefined)node.textContent=t(text);if(className)node.className=className;return node;}
 export function report(error){const node=document.querySelector('[role="status"]');if(node)node.textContent=error.message||String(error);}
@@ -34,10 +35,4 @@ if(languageSlot){languageSlot.append(languagePicker());}else if(searchButton){co
 window.addEventListener('moapan-language',()=>{renderIssueDate();setPageMetadata();});
 
 const adSlot=document.querySelector('[data-ad-slot]');
-if(adSlot&&advertisement.imageUrl){
- try{const imageUrl=new URL(advertisement.imageUrl,location.origin);if(imageUrl.origin!==location.origin||!imageUrl.pathname.startsWith('/assets/'))throw new Error('invalid_ad_image');
- const img=document.createElement('img');img.src=imageUrl.href;img.alt=advertisement.alt||'광고';img.width=220;img.height=80;img.decoding='async';
- let content=img;if(advertisement.linkUrl){const target=new URL(advertisement.linkUrl);if(target.protocol!=='https:')throw new Error('invalid_ad_link');const link=document.createElement('a');link.href=target.href;link.target='_blank';link.rel='sponsored noopener noreferrer';link.append(img);content=link;}
- adSlot.replaceChildren(content);
- }catch{/* Keep a static placeholder when an operator config is invalid. */}
-}
+if(adSlot)viewer.then(async a=>{if(!a)return;try{const config=await request('/api/v1/advertisements');renderBanner(adSlot,config);}catch{/* An unavailable ad must not stop the newspaper. */}});

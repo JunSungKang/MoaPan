@@ -25,3 +25,5 @@ worker → 전용 internal network → translator(CPU)로 제목·요약을 전�
 
 ## 신문 지면과 광고 자리
 정적 index는 중앙 제호·넓은 머리기사·선으로 구분한 다단 지면을 사용한다. 7개 기사 슬라이드와 검색은 유지한다. 우측상단 광고영역 아래에 언어 선택과 검색을 배치한다. assets/js/shared/config.js의 advertisement.imageUrl(같은 origin /assets/ 경로), linkUrl(HTTPS), alt로 교체한다. 미설정은 비클릭 광고문의 자리다. 광고 추적 SDK/클릭 중계/원격 이미지 호출은 사용하지 않는다. 광고이미지의 이용권리와 목적지 정책은 등록자가 확인한다. 사용자 요청에 따라 기존 V1의 광고 제외에서 정적 광고 자리만 추가한 범위다.
+
+advertising 기능은 api/AdvertisingController → application/AdvertisingSettings → PostgreSQL 설정 1행으로 구성한다. 브라우저 advertising/banner.js는 검증된 설정으로 DOM만 생성하며 추적·원격 SDK 의존성이 없다. administration.js는 관리자 설정/미리보기 담당이다. 기존 config.js 광고 설정은 DB로 대체했다.

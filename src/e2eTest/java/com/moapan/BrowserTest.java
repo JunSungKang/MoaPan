@@ -19,6 +19,8 @@ class BrowserTest {
             if(path.equals("/api/v1/account"))response="{\"id\":\""+active+"\",\"username\":\"synthetic_user\",\"role\":\"USER\"}";
             else if((path.equals("/api/v1/tags")||path.equals("/api/v1/public/tags")))response="{\"tags\":[{\"id\":\"ai\",\"slug\":\"ai\",\"name\":\"인공지능\",\"category\":\"기술\"},{\"id\":\"space\",\"slug\":\"space\",\"name\":\"우주\",\"category\":\"과학\"}],\"aliases\":[{\"alias\":\"인공지능\",\"tagId\":\"ai\"},{\"alias\":\"AI\",\"tagId\":\"ai\"}],\"redirects\":[]}";
             else if(path.equals("/api/v1/public/interests"))response="{\"version\":0,\"weights\":{\"space\":3}}";
+            else if(path.equals("/api/v1/advertisements"))response="{\"enabled\":false}";
+            else if(path.equals("/api/v1/admin/advertisements"))response="{\"version\":0,\"enabled\":false,\"provider\":\"BANNER\",\"title\":\"\",\"description\":\"\",\"targetUrl\":\"\",\"imagePath\":\"\",\"publisherId\":\"\",\"slotId\":\"\"}";
             else if(path.equals("/api/v1/sources"))response="[]";
             else if((path.equals("/api/v1/news/edition")||path.equals("/api/v1/public/news/edition")))response=edition();
             else if(path.endsWith("/news/search"))response="{\"items\":[],\"page\":0,\"pages\":0,\"total\":0}";
@@ -206,7 +208,7 @@ class BrowserTest {
     @Test void responsivePaperHasNoOverflowAndNoTracking()throws Exception{
         Path dir=Path.of("build/reports/screenshots");Files.createDirectories(dir);
         try(var context=browser.newContext()){Page p=context.newPage();List<String>outbound=new ArrayList<>();p.onRequest(r->{if(!r.url().startsWith(origin))outbound.add(r.url());});
-            for(int width:new int[]{390,768,1440}){p.setViewportSize(width,1000);p.navigate(origin+"/index.html");p.waitForSelector("#paper article");assertEquals(7,p.locator("#paper article").count());assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth <= window.innerWidth"));p.screenshot(new Page.ScreenshotOptions().setPath(dir.resolve("newspaper-"+width+".png")).setFullPage(true));}
+            for(int width:new int[]{390,768,1440}){p.setViewportSize(width,1000);p.navigate(origin+"/index.html");p.waitForSelector("#paper article");assertEquals(7,p.locator("#paper article").count());assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth <= window.innerWidth"));var leadBox=p.locator("#paper article").first().boundingBox();var following=p.locator("#paper article").nth(width>1000?2:1).boundingBox();assertTrue(following.y-leadBox.y-leadBox.height>=20);p.screenshot(new Page.ScreenshotOptions().setPath(dir.resolve("newspaper-"+width+".png")).setFullPage(true));}
             p.locator("#open-search").click();p.locator("#search").fill("synthetic-search-private-phrase");p.locator("#search-form [type=submit]").click();p.waitForFunction("document.querySelector('[role=status]').textContent==='' && document.querySelector('#paper article')===null");assertEquals(0,p.locator("#paper article").count());assertTrue(outbound.isEmpty());assertEquals(0,p.locator("script:not([type=module])").count());p.emulateMedia(new Page.EmulateMediaOptions().setMedia(com.microsoft.playwright.options.Media.PRINT));assertFalse(p.locator("#more").isVisible());
         }
     }
@@ -218,6 +220,7 @@ class BrowserTest {
             for(int width:new int[]{390,768,1440})for(String mode:List.of("login","signup")){
                 p.setViewportSize(width,900);p.navigate(origin+"/"+mode+".html");
                 assertEquals(2,p.locator("input:not([type=checkbox])").count());assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth <= innerWidth"));
+                if(mode.equals("login")){var saved=p.locator("#save-username").boundingBox();var automatic=p.locator("#remember-me").boundingBox();assertEquals(saved.y,automatic.y,1);assertTrue(automatic.x>saved.x);assertEquals("자동로그인",p.locator("label:has(#remember-me)").textContent());}
                 p.screenshot(new Page.ScreenshotOptions().setPath(dir.resolve(mode+"-"+width+".png")).setFullPage(true));
             }
             p.locator("#username").fill("synthetic_terms");p.locator("#password").fill("synthetic password 12345");
@@ -342,8 +345,8 @@ class BrowserTest {
 
     @Test void mastheadAdUsesLocalImageAndToolsBelowIt(){
         try(var context=browser.newContext()){
-            context.route("**/assets/js/shared/config.js",r->r.fulfill(new Route.FulfillOptions().setContentType("text/javascript").setBody("export const brand={name:'모아판',english:'MoA-PaN',mastheadQuote:'합성 제호 안내'};export const advertisement={imageUrl:'/assets/synthetic-ad.svg',linkUrl:'https://sponsor.example.test/',alt:'합성 광고'};")));
-            context.route("**/assets/synthetic-ad.svg",r->r.fulfill(new Route.FulfillOptions().setContentType("image/svg+xml").setBody("<svg xmlns='http://www.w3.org/2000/svg' width='220' height='80'><rect width='220' height='80' fill='#ddd'/></svg>")));
+            context.route("**/api/v1/advertisements",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"enabled\":true,\"title\":\"Synthetic sponsor\",\"description\":\"\",\"targetUrl\":\"https://sponsor.example.test/\",\"imagePath\":\"/assets/images/synthetic-ad.png\"}")));
+            context.route("**/assets/images/synthetic-ad.png",r->r.fulfill(new Route.FulfillOptions().setContentType("image/png").setBodyBytes(Base64.getDecoder().decode("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+j3ioAAAAASUVORK5CYII="))));
             List<String> outgoing=new ArrayList<>();Page p=context.newPage();p.onRequest(r->{if(!r.url().startsWith(origin))outgoing.add(r.url());});p.navigate(origin+"/index.html");p.waitForSelector("[data-ad-slot] img");
             var ad=p.locator(".masthead-ad");var tools=p.locator(".masthead-sidebar .header-tools");assertTrue(tools.boundingBox().y>=ad.boundingBox().y+ad.boundingBox().height);
             assertEquals("https://sponsor.example.test/",p.locator("[data-ad-slot] a").getAttribute("href"));assertTrue(p.locator("[data-ad-slot] a").getAttribute("rel").contains("sponsored"));assertTrue(outgoing.isEmpty());
@@ -499,6 +502,16 @@ class BrowserTest {
             var p=context.newPage();p.navigate(origin+"/admin.html");p.locator("#refresh-classification").click();p.waitForFunction("document.querySelectorAll('#classification-topics textarea').length===2");
             assertTrue(p.locator("#classify-ai").isChecked());assertEquals("200",p.locator("#classification-topics textarea").first().getAttribute("maxlength"));
             p.locator("#classification-topics textarea").first().fill("LLM evaluation; exclude unrelated applications");p.locator("#classification-form button[type=submit]").click();p.waitForFunction("document.querySelector('#classification-message').textContent.includes('저장했습니다')");assertEquals(1,writes.size());assertTrue(writes.getFirst().contains("LLM evaluation"));assertTrue(writes.getFirst().contains("\"version\":0"));
+        }
+    }
+    @Test void advertisingAdminPreviewsAndSavesWithoutThirdPartyScripts(){
+        try(var context=browser.newContext()){
+            context.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\"synthetic_admin\",\"role\":\"ADMIN\"}")));
+            List<String> saved=new ArrayList<>();context.route("**/api/v1/admin/advertisements",r->{if(r.request().method().equals("PUT")){saved.add(r.request().postData());r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(r.request().postData()));}else r.resume();});
+            Page p=context.newPage();List<String> external=new ArrayList<>();p.onRequest(r->{if(!r.url().startsWith(origin))external.add(r.url());});p.navigate(origin+"/admin.html");p.waitForSelector("#advertising-form");p.waitForCondition(()->p.locator("#advertising-form [type=submit]").isEnabled());
+            p.locator("#advertising-form [name=title]").fill("Synthetic sponsor <script>");p.locator("#advertising-form [name=targetUrl]").fill("https://sponsor.example.test/");p.locator("#preview-advertising").click();p.waitForSelector("#advertising-preview a");assertEquals("Synthetic sponsor <script>",p.locator("#advertising-preview strong").textContent());assertEquals(0,p.locator("#advertising-preview script").count());assertTrue(p.locator("#advertising-preview a").getAttribute("rel").contains("sponsored"));
+            p.locator("#advertising-form [name=enabled]").check();p.locator("#advertising-form [type=submit]").click();p.waitForCondition(()->saved.size()==1);assertTrue(saved.getFirst().contains("\"enabled\":true"));
+            p.locator("#advertising-form [name=provider]").selectOption("ADSENSE");assertTrue(p.locator("#advertising-form [name=enabled]").isDisabled());assertFalse(p.locator("#advertising-form [name=enabled]").isChecked());p.locator("#advertising-form [name=publisherId]").fill("ca-pub-1234567890123456");p.locator("#advertising-form [name=slotId]").fill("1234567890");p.locator("#advertising-form [type=submit]").click();p.waitForCondition(()->saved.size()==2);assertTrue(saved.getLast().contains("\"enabled\":false"));assertTrue(external.isEmpty());
         }
     }
 }

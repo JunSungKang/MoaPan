@@ -478,4 +478,22 @@ class SecurityIntegrationTest {
         mvc.perform(post("/api/v1/auth/login").contentType("application/json").content("{\"padding\":\""+"x".repeat(17000)+"\"}"))
             .andExpect(status().isPayloadTooLarge()).andExpect(header().string("Cache-Control","no-store")).andExpect(jsonPath("$.error").value("request_too_large"));
     }
+    @Test @Order(16) void advertisingRequiresAdminCsrfAndVersionWithoutClickTracking()throws Exception{
+        mvc.perform(get("/api/v1/advertisements")).andExpect(status().isUnauthorized());
+        signup("synthetic_ad_reader");var reader=login("synthetic_ad_reader");
+        mvc.perform(get("/api/v1/admin/advertisements").cookie(reader)).andExpect(status().isForbidden());
+        signup("synthetic_ad_admin");var admin=accounts.findByUsername("synthetic_ad_admin").orElseThrow();admin.role="ADMIN";accounts.save(admin);var cookie=login("synthetic_ad_admin");
+        mvc.perform(get("/api/v1/advertisements").cookie(reader)).andExpect(jsonPath("$.enabled").value(false));
+        String body="{\"version\":0,\"enabled\":true,\"provider\":\"BANNER\",\"title\":\"Synthetic sponsor\",\"description\":\"Synthetic banner\",\"targetUrl\":\"https://example.org/sponsor\",\"imagePath\":\"\",\"publisherId\":\"\",\"slotId\":\"\"}";
+        mvc.perform(put("/api/v1/admin/advertisements").cookie(cookie).contentType("application/json").content(body)).andExpect(status().isForbidden());
+        mvc.perform(put("/api/v1/admin/advertisements").cookie(cookie).with(csrf().asHeader()).contentType("application/json").content(body.replace("https://example.org/sponsor","javascript:alert(1)"))).andExpect(status().isBadRequest());
+        mvc.perform(put("/api/v1/admin/advertisements").cookie(cookie).with(csrf().asHeader()).contentType("application/json").content(body)).andExpect(status().isOk()).andExpect(jsonPath("$.version").value(1));
+        mvc.perform(put("/api/v1/admin/advertisements").cookie(cookie).with(csrf().asHeader()).contentType("application/json").content(body)).andExpect(status().isConflict());
+        mvc.perform(get("/api/v1/advertisements").cookie(reader)).andExpect(status().isOk()).andExpect(header().string("Cache-Control","no-store")).andExpect(jsonPath("$.enabled").value(true)).andExpect(jsonPath("$.targetUrl").value("https://example.org/sponsor")).andExpect(jsonPath("$.publisherId").doesNotExist()).andExpect(jsonPath("$.version").doesNotExist());
+        var mapper=tools.jackson.databind.json.JsonMapper.builder().build();var input=(tools.jackson.databind.node.ObjectNode)mapper.readTree(body);input.put("version",1);input.put("provider","ADSENSE");input.put("enabled",false);input.put("publisherId","ca-pub-1234567890123456");input.put("slotId","1234567890");
+        mvc.perform(put("/api/v1/admin/advertisements").cookie(cookie).with(csrf().asHeader()).contentType("application/json").content(mapper.writeValueAsString(input))).andExpect(status().isOk()).andExpect(jsonPath("$.version").value(2));
+        mvc.perform(get("/api/v1/advertisements").cookie(reader)).andExpect(jsonPath("$.enabled").value(false)).andExpect(jsonPath("$.title").value(""));
+        input.put("version",2);input.put("enabled",true);mvc.perform(put("/api/v1/admin/advertisements").cookie(cookie).with(csrf().asHeader()).contentType("application/json").content(mapper.writeValueAsString(input))).andExpect(status().isConflict()).andExpect(jsonPath("$.error").value("adsense_connection_required"));
+        input.put("enabled",false);input.put("publisherId","<script>");mvc.perform(put("/api/v1/admin/advertisements").cookie(cookie).with(csrf().asHeader()).contentType("application/json").content(mapper.writeValueAsString(input))).andExpect(status().isBadRequest());
+    }
 }

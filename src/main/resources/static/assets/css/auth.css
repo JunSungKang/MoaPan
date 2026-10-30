@@ -15,3 +15,5 @@
 .auth-page:has(>.auth-language-top) .auth-brand{padding-top:12px}
 
 .auth-main .remember-option{display:flex;align-items:center;gap:.5rem;margin-top:.85rem;font-size:.85rem;font-weight:400}.remember-option input{width:18px;height:18px;margin:0;accent-color:#252722}.auth-main .remember-hint{margin:0;font:.72rem/1.6 system-ui;color:var(--muted)}
+
+.auth-main .login-options{display:flex;align-items:center;gap:1.25rem;margin-top:.85rem}.auth-main .login-options .remember-option{margin:0;white-space:nowrap}

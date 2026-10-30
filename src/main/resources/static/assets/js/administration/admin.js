@@ -1,3 +1,4 @@
+import {initializeAdvertising} from '../advertising/administration.js';
 import {account,request} from '../shared/api.js';import {el,report,date,requireAccount} from '../shared/common.js';
 let representativeVersion;
 let selectionEpoch=0,sourceEpoch=0;
@@ -21,7 +22,7 @@ document.querySelector('#refresh-articles').addEventListener('click',()=>action(
 document.querySelector('#tag-form').addEventListener('submit',e=>{e.preventDefault();const f=e.currentTarget;action(async()=>{document.querySelector('#tag-result').textContent=JSON.stringify(await request('/api/v1/admin/tags'+(f.elements.tagId.value?'/'+f.elements.tagId.value:''),{method:f.elements.tagId.value?'PATCH':'POST',body:{slug:f.elements.slug.value,name:f.elements.name.value,category:f.elements.category.value}}));}).catch(()=>{});});
 document.querySelector('#merge-form').addEventListener('submit',e=>{e.preventDefault();const f=e.currentTarget;action(()=>request(`/api/v1/admin/tags/${f.elements.oldId.value}/merge`,{method:'POST',body:{canonicalId:f.elements.canonicalId.value}})).catch(()=>{});});
 document.querySelector('#alias-form').addEventListener('submit',e=>{e.preventDefault();const f=e.currentTarget;action(()=>request(`/api/v1/admin/tags/${f.elements.tagId.value}/aliases`,{method:'POST',body:{alias:f.elements.alias.value}})).catch(()=>{});});
-try{await requireAccount('ADMIN');await representativeSettings();await sites();document.querySelector('#workers').textContent=JSON.stringify(await request('/api/v1/admin/workers'),null,2);}catch(e){report(e);}
+try{await requireAccount('ADMIN');await initializeAdvertising();await representativeSettings();await sites();document.querySelector('#workers').textContent=JSON.stringify(await request('/api/v1/admin/workers'),null,2);}catch(e){report(e);}
 
 
 async function representativeSettings(){const [config,dictionary]=await Promise.all([request('/api/v1/admin/interests'),request('/api/v1/tags')]);representativeVersion=config.version;const list=document.querySelector('#representative-tags');list.replaceChildren();for(const tag of dictionary.tags){const row=el('div',undefined,'setting-row');const check=el('input');check.type='checkbox';check.value=tag.id;check.checked=!!config.weights[tag.id];check.id='representative-'+tag.id;const label=el('label',tag.name);label.htmlFor=check.id;const weight=el('input');weight.type='number';weight.min='1';weight.max='5';weight.value=config.weights[tag.id]||3;weight.setAttribute('aria-label',tag.name+' 대표 관심 정도');row.append(check,label,weight);list.append(row);}}

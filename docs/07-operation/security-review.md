@@ -111,3 +111,5 @@ Helm 기본값은 필수 registry/host/Secret 미입력으로 소스 스캔에�
 - Ubuntu기존22CVE의noble공식JSON을모두재조회:needed/deferred유지,격리된임시컨테이너의apt시뮬레이션추가업데이트0. [기존노출검토](../05-test/evidence/ubuntu-review.md)를유지하고미해결MEDIUM/LOW를숨기지않음. 신규공격전제노출없음,현재발견과KEV일치0.
 - Helm은필수배포값없음으로원본scanner가skip하므로합성값렌더를별도검사했다.클러스터·실제registry·egress운영검증은미수행. 최초namespace미지정렌더경고와누락필드실패는증빙에서구분한다.
 - 검사게이트통과는전체환경무취약보증이아니다. 최종runtime이미지60547f2cb05daf699e1c9b99e64ff7b2fa647d029b498f0eb2c40a3699bd1f6f(sha256)를검사후Composeweb/worker에적용했다.
+
+관리자 광고 추가: 외부 SDK·추적·서버 URL fetch·CSP 변경 없음. ADMIN/서비스권한·CSRF·version·감사, HTTPS 링크와 서버 raster이미지 경로제한, DOM textContent 적용. ADSENSE는 정보 저장만 가능하고 서비스409/DB CHECK로 활성화차단(사용자 승인범위). V12 후 이미지03f8084c9d35ccbe5b25e2a3dd93f89433fce8f43cddb8ef471cf56547a1f0d7 검사를 통과해 같은 digest배포. 기존 proxy한정VEX·OS잔여위험은 그대로 유지한다.

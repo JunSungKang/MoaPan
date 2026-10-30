@@ -63,3 +63,5 @@ FS-23/AC-22 상단 보완: 검색 버튼 채움 제거·모바일 구분선/메�
 
 ### 중간 정리/Helm 추가
 README 최신화·스크립트 분류·실행 참조·Compose 기동/데이터 보존: PASS. Helm lint/render/3가지 부정입력: PASS. Kubernetes 실제 설치·이미지pull·PVC·Ingress TLS·egress 운영 제한: NOT_RUN/추가 구성 필요.
+
+AC-26 추가 범위: REQ-13 → FS-27 → advertising api/application + V12 + advertising/*.js → SecurityIntegrationTest.advertisingRequiresAdminCsrfAndVersionWithoutClickTracking / BrowserTest.advertisingAdminPreviewsAndSavesWithoutThirdPartyScripts → PASS. AdSense 실송출은 승인 범위 밖. 증빙evidence/layout-advertising.json.
