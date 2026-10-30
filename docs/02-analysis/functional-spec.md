@@ -56,3 +56,11 @@ FS-28(REQ-14): 회원 목록/주제 필터/상세/이전·다음, 최신호 지�
 
 ## 공개 뉴스·회원 콘텐츠 접근 변경
 FS-15/16/17/24/28(REQ-07/08/14): 비회원은 오늘의 지면 최대42개(7개씩6장)와 공개 수집 기사 검색 최대140개(7개씩20장)를 이용한다. 비회원은 대표 관심사만 사용하고 이전 계정의 IndexedDB 설정은 읽지 않는다. 회원은 기존 계정별 quota·서명 cursor·로컬 개인화를 유지한다. 뉴스레터 목록/본문은 인증, 편집기는 ADMIN이 필요하며 비회원은 관련 콘텐츠를 요청하지 않는다. 기본 소개·인증·정책 페이지를 제외한 계정/설정/관리 화면의 직접 접근도 서버에서 차단한다. 공개 GET query 조작400, 공개 검색 CSRF403, 전역 한도429/장애503, 보호 API401/권한403을 검증한다.
+
+## 승인된 사업화 기반
+| FS | REQ | 입력·처리 | 출력·권한·예외 | 검증 |
+|---|---|---|---|---|
+| FS-29 주간 근거·발간 |15|원고와 dossier를 같은version으로 저장; 최초발간주/선택기사collected_at/권리/확인·전망완결성·참고URL 검사|ADMIN+CSRF;400형식/409미충족·충돌. 수정된원고는점검안내폐기|PublicationResearchTest, SecurityIntegrationTest newsletterResearchGatesSnapshotsReuseAndRevisionIdentity, BrowserTest oldDraftCanMoveWeekAndStaleReviewCannotShowSuccess|
+| FS-30 재게재·업무양식 |16,17|발간본 snapshot·근거·무료/유료 출처만 사용; DOM안전 HTML과 로컬텍스트파일 생성|인증+별도혜택;미검토409/근거철회404;뉴스 원문 제외|publicationOutputsPreserveTruthfulCreditAndSafeOwnedContent, newsletterReaderCopiesAndDownloadsEnterpriseOutputs|
+| FS-31 페르소나 평가 |17|집단별초대/완료/향상/다음호/귀속/시범논의 정수집계, 스키마검사, 준비도수준 수동입력|ADMIN화면;서버저장/요청없음;미실행과표본미달 구분, 시장확률미출력|personaEvaluationStaysLocalAndRejectsIdentityFields|
+| FS-32 구독 port |18|EntitlementProvider가 혜택과유효기간 제공;운영역할과독립검사|현재무료preview모든회원;미연결paid모드시작실패,결제API없음|EntitlementPolicyTest|

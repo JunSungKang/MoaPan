@@ -1,0 +1,140 @@
+{
+  "checkedAt": "2026-10-30T18:12:31.079Z",
+  "approval": "User explicitly approved all remaining combined-plan implementation after correcting premature execution; future implementation requires explicit approval",
+  "tests": {
+    "test": {
+      "tests": 140,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "integrationTest": {
+      "tests": 50,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "e2eTest": {
+      "tests": 39,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "htmlMessages": 0,
+  "security": {
+    "tool": "Trivy0.76.1",
+    "image": "sha256:db82be6087ffea3ffa11b38a2dbb6930833734b7cab1b047d2199380d6ae9b98",
+    "findings": {
+      "CRITICAL": 0,
+      "HIGH": 0,
+      "MEDIUM": 23,
+      "LOW": 4,
+      "UNKNOWN": 0
+    },
+    "sourceJarSbom": "PASS",
+    "database": {
+      "Version": 2,
+      "NextUpdate": "2026-10-30T19:18:50.969126577Z",
+      "UpdatedAt": "2026-10-29T19:18:50.96912695Z",
+      "DownloadedAt": "2026-10-29T22:52:43.958399Z"
+    }
+  },
+  "jarSha256": "e8f5b146c80f761ce8b9495f6ee11de9dc7c2273134a655c2de5140a06533edc",
+  "running": {
+    "web": "sha256:db82be6087ffea3ffa11b38a2dbb6930833734b7cab1b047d2199380d6ae9b98",
+    "worker": "sha256:db82be6087ffea3ffa11b38a2dbb6930833734b7cab1b047d2199380d6ae9b98"
+  },
+  "live": {
+    "checkedAt": "2026-10-30T18:06:21.547Z",
+    "checks": [
+      "authenticated /reuse",
+      "authenticated /worksheet",
+      "guest401 /api/v1/newsletters",
+      "guest401 /api/v1/newsletters/2fc4f08d-b76a-48db-bc77-bf0b6104a2c1",
+      "guest401 /api/v1/newsletters/2fc4f08d-b76a-48db-bc77-bf0b6104a2c1/reuse",
+      "guest401 /api/v1/newsletters/2fc4f08d-b76a-48db-bc77-bf0b6104a2c1/worksheet",
+      "guest401 /api/v1/admin/newsletters",
+      "guest302 /newsletter.html",
+      "guest302 /newsletter-editor.html",
+      "guest302 /research-evaluation.html",
+      "guest302 /account.html",
+      "guest302 /settings.html"
+    ],
+    "publication": {
+      "existingStructuredRevisionReused": true,
+      "id": "2fc4f08d-b76a-48db-bc77-bf0b6104a2c1",
+      "issueNumber": 1,
+      "revision": 2,
+      "firstPublishedAt": "2026-10-30T07:23:17.220855Z",
+      "publishedAt": "2026-10-30T18:03:49.746863Z",
+      "evidenceCount": 5,
+      "forecastCount": 3,
+      "bodySha256": "eb039438a885bc7186bd7660288ab2ea1dc244f5ac7ce0a2910e91b5b779fb63",
+      "distribution": "FREE_PREVIEW"
+    },
+    "backup": {
+      "encryptedRoundTrip": true,
+      "schema14Present": true,
+      "restoredAccountsDisabled": true,
+      "restoredSessionsCleared": true,
+      "temporaryKeyAndBackupRemoved": true,
+      "scheduledBackupConfigured": false
+    },
+    "browser": true,
+    "originalBodyUnchanged": true,
+    "schemaVersion": 14,
+    "publicNewsItems": 42,
+    "accountCounts": {
+      "before": 2,
+      "after": 2
+    },
+    "temporaryAccountsRemaining": 0,
+    "completedAt": "2026-10-30T18:06:36.608Z"
+  },
+  "helm": {
+    "migrationVersion": 14,
+    "lintAndRender": "PASS",
+    "invalidInputs": 3,
+    "realClusterDeployment": "NOT_RUN",
+    "renderScan": {
+      "CRITICAL": 0,
+      "HIGH": 0,
+      "MEDIUM": 13,
+      "LOW": 2
+    },
+    "review": [
+      {
+        "id": "KSV-01010",
+        "classification": "false positive",
+        "evidence": "The only flagged ConfigMap key is SOURCE_MIN_INTERVAL_SECONDS; its value is the non-secret collection interval300, not a credential; no ignore added"
+      },
+      {
+        "id": "KSV-0020/KSV-0021",
+        "classification": "retained LOW compatibility constraint",
+        "evidence": "Database uses the existing vendor non-root UID/GID70; changing ownership requires a PVC migration; cluster execution not claimed"
+      },
+      {
+        "id": "KSV-0125",
+        "classification": "real deployment prerequisite",
+        "evidence": "12 occurrences use registry.example.test synthetic digest placeholders for static rendering; a trusted production registry and policy remain required before Helm deployment; no global suppression"
+      }
+    ]
+  },
+  "independentReview": "APPROVE working tree after weekly rollover, historical cutoff and stale review fixes; exact commit review follows",
+  "initialFindings": [
+    "First compilation used a compound var declaration; corrected without changing criteria",
+    "New integration tests were accidentally ordered after the intentional database-shutdown test; moved before it, keeping the outage test",
+    "Independent review found historical cutoff, unpublished-week rollover and stale review results; all corrected with regressions",
+    "New English transition test found the evidence-week label stayed Korean; locale-event refresh added and all tests rerun",
+    "First live proof attempted string JavaScript evaluation blocked by production CSP; retried using normal browser interactions without weakening CSP; existing structured revision reused without another publication",
+    "Initial Helm invocation lacked PATH; rerun with the verified workspace Helm binary and rendered-config scanning"
+  ],
+  "limitations": [
+    "Actual customer recruitment/evaluation, paid purchases/renewals, prices and billing have not occurred; readiness24→68 is a conditional target, not earned score or market-success probability",
+    "Organization SaaS and production Helm rollout remain subsequent decisions after real evaluation/approved infrastructure",
+    "Only application image changed; unchanged proxy retains existing hash-bound JOSE non-exposure assessment expiring2026-11-05 and OS residual risk",
+    "No original collected article or paper text stored/exported; reuse covers only reviewed original editorial material",
+    "No scheduled backups configured; encrypted schema14 round-trip was a one-time test with temporary key/backup and isolated database removed"
+  ]
+}

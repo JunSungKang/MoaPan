@@ -112,3 +112,10 @@ GET /api/v1/advertisements: 회원만 접근. 활성 BANNER의 enabled/title/des
 뉴스레터 삭제: ADMIN DELETE /api/v1/admin/newsletters/{id}, JSON {"version":현재버전}, CSRF 필수. 성공204(응답본문없음), 버전 누락/0/음수400, 미인증401, 비관리자/CSRF403, 현재버전 불일치409, 이미 삭제되었거나 없는 ID404. 단일 트랜잭션에서 원고·자체 그림·발간 스냅샷을 담은 행을 제거하고 최소 관리자 감사 정보만 남긴다. 저장/삭제는 동일 UUID의 PostgreSQL advisory transaction lock을 공유하고 newsletter_delete 감사 표식이 있는 ID의 신규저장(version0) 재전송도409로 막는다. 삭제 표식은 콘텐츠를 포함하지 않으며 재생성 차단을 위해 보존한다. 삭제한 원고는 UI로 복원할 수 없다. 이전 백업은 기존 보관/접근통제 정책을 따르며 삭제즉시 백업까지 소거했다고 보장하지 않는다. 화면의 미저장 신규 원고는 확인 후 브라우저에서만 비운다.
 
 뉴스레터 시각은 목록의 published_at, 관리자 목록의 published_at/updated_at, 상세의 publishedAt 모두 UTC ISO8601(Z 포함) 문자열로 제공한다. 브라우저는 Asia/Seoul로 표시한다. DB Timestamp.toString()의 시간대 없는 문자열을 API에 직접 내보내지 않는다.
+
+## 주간 연구·재게재·업무양식
+PUT /api/v1/admin/newsletters/{id}: {version,manuscript,dossier}. dossier는draft에서null허용하며발간시필수다. schema는DATA_MODEL V14,예상밖필드400. 초안/발간본문과분리하여edit는dossier,evidence,revision,expectedWeek를추가반환한다. version규약은기존과동일하다.
+POST /api/v1/admin/newsletters/evidence: ADMIN+CSRF, {search(문자열0~100),weekStart(빈문자열또는월요일YYYY-MM-DD)}. 선택주에수집된표시/메타데이터허용자료를최대100개반환한다. {weekStart,cutoff,items:[{id,title,url,collectedAt,visible}]}. 기사원문/요약/검색이력없음,검색조건은처리중만사용한다. 과거주cutoff는주말직전으로제한한다.
+GET /api/v1/admin/newsletters/{id}/review: ADMIN; {version,expectedWeek,blockers,evidence}. 미발간초안은현재주,정정판은최초발간주다. GET은상태를바꾸지않는다. 발간POST는동일검사를서버에서다시실행한다. 오류409: research_required,invalid_evidence_period,evidence_required,evidence_unavailable,evidence_outside_week,uncollected_reference,forecast_required,forecast_incomplete,forecast_evidence_required,reuse_rights_review_required,editorial_review_required,correction_note_required,manuscript_incomplete.
+발간본문GET은기존필드에firstPublishedAt,revision,distribution,dossier,evidence,reuseAllowed를추가한다. 모든독자경로는로그인필수이며결제와무관한현재무료preview다. GET /api/v1/newsletters/{id}/reuse는REUSE_NEWSLETTER혜택과rightsConfirmed를추가검사하고미검토409, GET /api/v1/newsletters/{id}/worksheet는RESEARCH_WORKSHEET혜택을검사한다. 두경로는발간snapshot만반환하며초안/비공개근거가포함되지않는다. 원문복사/exportAPI가아니고자체원고에대한출력이다. 응답no-store,쿠키인증/401/403/404규약유지.
+/research-evaluation.html은ADMIN정적페이지이며보호직접접근을검사한다. 익명평가집계API/회원프로필/API결제/가격/기업회원/연락처수집은추가하지않았다.

@@ -122,3 +122,8 @@ Helm 기본값은 필수 registry/host/Secret 미입력으로 소스 스캔에�
 
 
 수집 뉴스 공개 (2026-10-30T17:11:40.413Z): 사용자 승인으로GET공개지면/태그/대표관심사, POST공개검색만명시적으로허용했다. 뉴스레터·계정·회원전용API401, 관리는ADMIN을유지하며 CSRF/동일origin/no-store/전역PostgreSQL한도·회원quota를검증했다. 인증해제시회원뉴스레터소개제거/지연응답폐기, 고정상대Location302로HTTPS다운그레이드방지수정. 214회귀/소스·secret·설정/JAR/SBOM/최종앱이미지gate PASS, Trivy0.76.1, 이미지 sha256:47b30aaf13c58138e0e46324c0f0ab328c34316300accf1768694b4db3d529c3, HIGH0/CRITICAL0/MEDIUM23/LOW4. DB동기화/생성시각은 [증빙](../05-test/evidence/public-newspaper.json)에기록했고최신성gate통과. JDK/의존성/proxy/truststore변경은없으며공식advisory전체재검토를이번작업에서수행했다고주장하지않는다. 기존proxy의2026-11-05만료/hash제한JOSE비노출판정과OS잔여위험은유지한다. 실제HTTPS24개접근/CSRF/상한/자산검증과실행JAR·이미지일치확인.
+
+
+승인된 뉴스레터 제품 기반 (2026-10-30T18:12:31.079Z): 역할과분리한무료preview혜택, ADMIN/CSRF/version/공통UUID잠금·source→article 공유잠금·발간근거현재상태검사·미수집링크/시각제한. 출력은자체원고만DOM으로구성하고CSP/본문크기/로그/회원개인화경계를유지한다. 평가자료는ADMIN의익명집계만로컬메모리,추가프로필·결제·추적테이블없음. 실제기존본문변경없이주간근거연결/권리재검토·개정, 임시계정삭제확인.
+Trivy0.76.1 소스/비밀값/설정/JAR/SBOM/최종앱 gate PASS, 이미지 sha256:db82be6087ffea3ffa11b38a2dbb6930833734b7cab1b047d2199380d6ae9b98, HIGH0/CRITICAL0/MEDIUM23/LOW4; scannerDB시각과실행일치는 [증빙](../05-test/evidence/newsletter-product.json). 기존proxy JOSE비노출조건/만료와OS잔여위험을해결했다고주장하지않는다. JDK/직접·전이의존성/truststore/proxy변경없으며이번변경에서공식공지를전부재조사했다고표시하지않는다.
+Helm 합성렌더구성검사: HIGH0/CRITICAL0/MEDIUM13/LOW2. KSV-01010은SOURCE_MIN_INTERVAL_SECONDS=300만탐지한비밀값오탐, KSV-0020/21은기존vendor DB 비root UID/GID70 호환성제약, KSV-0125 12건은registry.example.test가실제신뢰registry가아닌준비용표시임을확인했다. 전역ignore추가없음. 실제registry/namespace/PVC/네트워크/배포정책확정전클러스터배포를완료로표시하지않는다.

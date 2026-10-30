@@ -151,6 +151,47 @@
           "README.md"
         ]
       }
+    },
+    {
+      "id": "approved-newsletter-product-plan",
+      "expectedPaths": [
+        "src/**",
+        "scripts/deploy/helm/**",
+        "scripts/backup/**",
+        "docs/**",
+        "AGENTS.md",
+        "README.md",
+        ".github/workflow-plans/newsletter-editorial-redesign.json"
+      ],
+      "forbiddenPaths": [
+        ".env",
+        ".github/workflows/**"
+      ],
+      "acceptanceCriteria": [
+        "Explicit user approval now covers remaining combined personal/enterprise/attribution plan; future plan-only requests wait for implementation approval",
+        "Published newsletters have week/cutoff/collected article evidence, fact versus forecast/experiment/stop criteria, rights/editorial review gates, revision identity and stale-write protection",
+        "Authenticated readers can copy/download original newsletter with required truthful free or paid-origin attribution and use evidence-based research/meeting/decision worksheets; no collected original article export",
+        "Individual and enterprise value is explained without invented prices or paid activation; all non-newsletter-content public news boundaries remain intact",
+        "Persona-diverse evaluation protocol, anonymous local-only aggregate workbook/calculator, observed results vs targets and conditional score improvement are explicit; no synthetic people counted as customers",
+        "Entitlement provider/capabilities are separated from USER/ADMIN and payment is unavailable in preview; no billing, organization SaaS, email delivery or profile tracking",
+        "Database upgrade/backup compatibility, meaningful unit/PostgreSQL/browser/privacy/security tests, real Compose HTTPS proof and guarded commit/push/review completed"
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest",
+        "node scripts/test/docs-check.mjs",
+        "git diff --check"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/plan.md",
+          "docs/01-management/progress.md",
+          "docs/02-analysis/business-validation.md",
+          "docs/03-design/api.md",
+          "docs/03-design/data-model.md",
+          "docs/05-test/test-report.md",
+          "docs/07-operation/security-review.md"
+        ]
+      }
     }
   ]
 }

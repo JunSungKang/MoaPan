@@ -59,3 +59,5 @@
 - `i18n-en.js` → `src/main/resources/static/assets/js/shared/i18n-en.js`
 - `i18n-pages.js` → `src/main/resources/static/assets/js/shared/i18n-pages.js`
 - `i18n-status.js` → `src/main/resources/static/assets/js/shared/i18n-status.js`
+
+뉴스레터사업화기반: PublicationResearch, PublicationEvidence, ContentAccess, EntitlementProvider, EntitlementPolicy, PreviewEntitlements 및 정적research-editor/reader-tools/publication-output/evaluation-policy/evaluation 모듈. V14 dossier/최초발간/개정snapshot. 명세는MP-DOC-028 및API/도메인설계서를따른다.

@@ -65,3 +65,5 @@ FS-23/AC-22 상단 보완: 검색 버튼 채움 제거·모바일 구분선/메�
 README 최신화·스크립트 분류·실행 참조·Compose 기동/데이터 보존: PASS. Helm lint/render/3가지 부정입력: PASS. Kubernetes 실제 설치·이미지pull·PVC·Ingress TLS·egress 운영 제한: NOT_RUN/추가 구성 필요.
 
 AC-26 추가 범위: REQ-13 → FS-27 → advertising api/application + V12 + advertising/*.js → SecurityIntegrationTest.advertisingRequiresAdminCsrfAndVersionWithoutClickTracking / BrowserTest.advertisingAdminPreviewsAndSavesWithoutThirdPartyScripts → PASS. AdSense 실송출은 승인 범위 밖. 증빙evidence/layout-advertising.json.
+
+사업화 기반 추적: REQ15→FS29→PublicationResearch/NewsletterService/PublicationEvidence→PublicationResearchTest 및newsletterResearchGatesSnapshotsReuseAndRevisionIdentity/oldDraftCanMoveWeekAndStaleReviewCannotShowSuccess PASS. REQ16→FS30→publication-output/reader-tools→출처/안전출력/실다운로드 PASS. REQ17→FS30/31→양식/evaluation-policy/evaluation→서버비전송·스키마·수치·실행미완료구분 PASS. REQ18→FS32→EntitlementPolicy/ContentAccess/PreviewEntitlements→기간/혜택/ADMIN우회불가/paid시작거부 PASS. 고객평가/유료구매는NOT_RUN으로남기며통과에합산하지않는다. 증빙 evidence/newsletter-product.json.

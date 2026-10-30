@@ -176,3 +176,9 @@ E2E26 PASS(390/1440px 우측24px 여백/제호 위 배치/푸터선택없음/중
 ## 수집 뉴스 비회원 공개 (2026-10-30T17:11:40.413Z)
 단위132/통합48/E2E34=214건 PASS, 실패/오류/skipped0. scanner정책4건과 Nu HTML검사0메시지, 문서검사통과. 실제Testcontainers PostgreSQL에서 공개edition42/no cursor·조작400·숨김/권리철회·익명전역600/분429·회원quota유지·CSRF/동일origin·뉴스레터401/보호화면302를 확인했다. Playwright는 대표관심사와이전회원IndexedDB분리·비회원메뉴·공개검색·390/768/1440넘침없음·인증해제시뉴스레터소개제거/지연응답폐기를검증했다.
 최초독립리뷰의소개잔존지적과첫HTTPS검사의HTTP리다이렉트실패를수정하고전체회귀/보안/이미지검사를재실행했다. 실제HTTPS24개검증PASS, 지면42개/검색7개/최대140개, 비회원뉴스레터목록·실제발간본문401, 보호화면상대Location으로HTTPS로그인유지. 실제브라우저에서도비회원기사표시와HTTPS로그인전환을확인했다. JAR 102506508af4a808c0ce7eb07cc2d48c12f17db7471ae82e8a3df10948a1e5ac, 이미지 sha256:47b30aaf13c58138e0e46324c0f0ab328c34316300accf1768694b4db3d529c3 검사/실행일치. 기존OS와proxy조건부잔여위험은유지한다. 증빙 [public-newspaper.json](evidence/public-newspaper.json).
+
+
+## 승인된 뉴스레터 사업화 기반 (2026-10-30T18:12:31.079Z)
+전체229건: 단위140/PG통합50/Playwright39 PASS, 실패·오류·skip0. 별도scanner정책4 PASS, Nu HTML0메시지, 문서28개등록/참조검사PASS. 신규주간/기준시각·권리·근거·개정·구독혜택정책, 서버발간/권한/CSRF/정정ID유지, 출처무료/유료문구·안전HTML·양식·로컬익명집계·주간전환·점검경합·영문전환을검증했다. 초기컴파일/테스트순서/언어전환실패를수정했고기준을낮추지않았다.
+실제V14마이그레이션성공, 실행이미지 sha256:db82be6087ffea3ffa11b38a2dbb6930833734b7cab1b047d2199380d6ae9b98, JAR e8f5b146c80f761ce8b9495f6ee11de9dc7c2273134a655c2de5140a06533edc 동일. 기존2026-001본문SHA유지/근거5/전망3/개정2, 최초발간시각을기존첫호증빙07:23:17.220855Z로복원(버전충돌검사·최소감사). 실제HTTPS보호/공개12검사, 실브라우저390/768/1440 독자/관리/평가화면·출처복사·그림포함HTML·업무양식3종확인PASS. 최초Live CSP평가스크립트실패는보안정책을완화하지않고일반UI조작으로수정했다. 임시계정0, 암호화V14백업복원/복원계정비활성·세션제거/임시DB·키·backup정리PASS. 자동백업이나실제고객조사성공을뜻하지않는다.
+Helm migrationVersion14 lint/render/부정입력3PASS, 합성값렌더Trivy HIGH0/CRITICAL0/MEDIUM13/LOW2. registry예시12건은실배포전제, interval300 ConfigMap경고는credential아님, 기존vendor DB UID/GID70 LOW2는PVC호환이유로유지한다. 실제클러스터배포는미실행. 자세한결과 [newsletter-product.json](evidence/newsletter-product.json).
