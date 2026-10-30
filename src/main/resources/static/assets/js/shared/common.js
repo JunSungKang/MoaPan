@@ -1,5 +1,6 @@
 import {language,t,languagePicker} from './i18n.js';
-import {brand,advertisement} from './config.js';
+import {brand} from './config.js';
+import {renderBanner} from '../advertising/banner.js';
 import {request,account} from './api.js';
 export function el(tag,text,className){const node=document.createElement(tag);if(text!==undefined)node.textContent=t(text);if(className)node.className=className;return node;}
 export function report(error){const node=document.querySelector('[role="status"]');if(node)node.textContent=error.message||String(error);}
@@ -24,7 +25,7 @@ if(today)today.textContent='';
 const menu=document.querySelector('#account-menu');
 function guestMenu(){if(menu){menu.replaceChildren();for(const [name,href] of [['로그인','/login.html'],['회원가입','/signup.html']]){const link=el('a',name);link.href=href;menu.append(link);}}for(const node of document.querySelectorAll('[data-auth]'))node.hidden=true;}
 export const viewer=account().catch(error=>{if(error.status!==401)throw error;return null;});
-viewer.then(a=>{if(!a){guestMenu();if(document.body.hasAttribute('data-requires-login'))location.replace('/login.html');return;}for(const node of document.querySelectorAll('[data-auth]'))node.hidden=node.dataset.auth==='admin'&&a.role!=='ADMIN';if(!menu)return;const name=el('span',a.username);name.dataset.originalContent='';menu.replaceChildren(name);const settings=el('a','관심사 설정');settings.href='/settings.html';const accountLink=el('a','계정 관리');accountLink.href='/account.html';menu.append(settings,accountLink);if(a.role==='ADMIN'){const admin=el('a','관리');admin.href='/admin.html';menu.append(admin);}const logout=el('button','로그아웃');logout.type='button';logout.addEventListener('click',async()=>{try{await request('/api/v1/auth/logout',{method:'POST'});sessionStorage.removeItem('moapan-account');window.dispatchEvent(new Event('moapan-clear'));location.assign('/login.html');}catch(e){report(e);}});menu.append(logout);}).catch(error=>{guestMenu();report(error);});
+viewer.then(a=>{if(!a){guestMenu();if(document.body.hasAttribute('data-requires-login'))location.replace('/login.html');return;}for(const node of document.querySelectorAll('[data-auth]'))node.hidden=node.dataset.auth==='admin'&&a.role!=='ADMIN';if(!menu)return;const name=el('span',a.username);name.dataset.originalContent='';menu.replaceChildren(name);const settings=el('a','관심사 설정');settings.href='/settings.html';const accountLink=el('a','계정 관리');accountLink.href='/account.html';menu.append(settings,accountLink);if(a.role==='ADMIN'){const admin=el('a','관리');admin.href='/admin.html';menu.append(admin);const letters=el('a','뉴스레터 관리');letters.href='/newsletter-editor.html';menu.append(letters);}const logout=el('button','로그아웃');logout.type='button';logout.addEventListener('click',async()=>{try{await request('/api/v1/auth/logout',{method:'POST'});sessionStorage.removeItem('moapan-account');window.dispatchEvent(new Event('moapan-clear'));location.assign('/login.html');}catch(e){report(e);}});menu.append(logout);}).catch(error=>{guestMenu();report(error);});
 export async function requireAccount(role){const a=await viewer;if(!a){location.replace('/login.html');throw new Error('로그인이 필요합니다.');}if(role&&a.role!==role){location.replace('/index.html');throw new Error('관리자 권한이 필요합니다.');}const main=document.querySelector('[data-protected]');if(main)main.hidden=false;return a;}
 window.addEventListener('moapan-auth-lost',()=>{guestMenu();const main=document.querySelector('[data-protected]');if(main)main.hidden=true;window.dispatchEvent(new Event('moapan-clear'));if(document.body.hasAttribute('data-requires-login'))location.replace('/login.html');});
 
@@ -34,10 +35,8 @@ if(languageSlot){languageSlot.append(languagePicker());}else if(searchButton){co
 window.addEventListener('moapan-language',()=>{renderIssueDate();setPageMetadata();});
 
 const adSlot=document.querySelector('[data-ad-slot]');
-if(adSlot&&advertisement.imageUrl){
- try{const imageUrl=new URL(advertisement.imageUrl,location.origin);if(imageUrl.origin!==location.origin||!imageUrl.pathname.startsWith('/assets/'))throw new Error('invalid_ad_image');
- const img=document.createElement('img');img.src=imageUrl.href;img.alt=advertisement.alt||'광고';img.width=220;img.height=80;img.decoding='async';
- let content=img;if(advertisement.linkUrl){const target=new URL(advertisement.linkUrl);if(target.protocol!=='https:')throw new Error('invalid_ad_link');const link=document.createElement('a');link.href=target.href;link.target='_blank';link.rel='sponsored noopener noreferrer';link.append(img);content=link;}
- adSlot.replaceChildren(content);
- }catch{/* Keep a static placeholder when an operator config is invalid. */}
-}
+if(adSlot)viewer.then(async a=>{if(!a)return;try{const config=await request('/api/v1/advertisements');renderBanner(adSlot,config);}catch{/* An unavailable ad must not stop the newspaper. */}});
+
+if(document.body.hasAttribute('data-requires-login')){const nav=el('nav',undefined,'content-menu');nav.setAttribute('aria-label','콘텐츠 메뉴');for(const [title,url]of [['오늘의 지면','/index.html'],['트렌드 뉴스레터','/newsletter.html']]){const a=el('a',title);a.href=url;if(location.pathname===url)a.setAttribute('aria-current','page');nav.append(a);}document.querySelector('header')?.append(nav);}
+
+if(document.querySelector('#paper'))viewer.then(async a=>{if(!a)return;try{const rows=await request('/api/v1/newsletters');if(!rows.length)return;const section=el('section');const h=el('h2','트렌드 뉴스레터');const link=el('a',rows[0].title);link.href='/newsletter.html?id='+rows[0].id;section.append(h,link,el('p',rows[0].introduction));document.querySelector('main').append(section);}catch{}});

@@ -15,7 +15,7 @@ https://{$MOAPAN_PUBLIC_HOST} {
  respond @internal 404
  header Strict-Transport-Security "max-age=86400"
  request_body {
-  max_size 16KB
+  max_size 1MB
  }
  reverse_proxy web:8080 {
   header_up -X-Forwarded-For

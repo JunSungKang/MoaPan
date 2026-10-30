@@ -31,3 +31,7 @@ V8: article_translations는 기사별 대상 언어·현재 제목/요약 hash·
 article_translation_jobs: state,policy_version,progress(jsonb 검증된 번역 checkpoint),field_attempts,updated_at,infra_failures. PENDING/RUNNING/RETRY/DONE/ORIGINAL/CANCELLED. translation_runtime singleton은 readiness/backoff 집계만 저장한다. checkpoint는 종결 시 삭제한다. V9는 기존 파생 번역만 재검사 목적으로 삭제하며 기사·회원은 유지한다.
 
 V10: classification_config(낙관적 version), classification_topics(기존 tag_id와 정의), article_classification_jobs(기사ID/입력hash/정책hash/상태/lease/최대3시도), classification_runtime(전역 추론 lease). 입력 전문·모델 출력·회원정보는 저장하지 않는다. articles 제목/요약 변경 trigger는 분류 결과를 무효화한다. article_tags.method=LLM은 고정 목록 선택 결과이며 confidence=1은 확률 추정이 아니다.
+
+advertising_settings: singleton CHECK(true) PK, provider BANNER/ADSENSE, enabled, title/description/target_url/image_path/publisher_id/slot_id, version. V12에서 비활성 BANNER 1행 생성. 활성은 BANNER만 가능하며 version 조건 UPDATE와 최소 admin_actions 감사를 한 트랜잭션에서 처리한다. 회원별 광고·클릭 데이터는 생성하지 않는다.
+
+newsletters(V13): UUID、issue_number(고유 호수)、draft/published JSONB、version、published_at/updated_at. 발간 스냅샷은 초안 저장과 별개로 한 트랜잭션에서 교체한다. 발간 취소는 published만 비우고 초안과 호수는 유지한다. 자체 원고와 압축 이미지가 같은 스냅샷에 있으므로 파일 이동·볼륨 누락으로 그림이 사라지지 않으며 기존 PostgreSQL 백업이 함께 보관한다. 뉴스 원문·회원 관심사·열람 이벤트를 저장하지 않는다.

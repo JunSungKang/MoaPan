@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 4,
+  "workSlug": "auth-layout-spacing",
+  "flowType": "integration",
+  "branch": "codex/auth-layout-spacing",
+  "targetBranch": "develop",
+  "baseSha": "cf242db2c07c6213b67fcf3de29d352aec14401c",
+  "mergeMethod": "squash",
+  "governance": {
+    "prAuthorLogin": "JunSungKang",
+    "assigneeLogin": "JunSungKang",
+    "reviewerLogin": "junsung-bot[bot]",
+    "requiredChecks": [],
+    "commitAuthor": {
+      "name": "jun-sung, Kang",
+      "email": "kjuns1@naver.com"
+    },
+    "coAuthors": [
+      {
+        "name": "Codex",
+        "email": "codex@openai.com"
+      },
+      {
+        "name": "junsung-bot[bot]",
+        "email": "302617028+junsung-bot[bot]@users.noreply.github.com"
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "layout",
+      "expectedPaths": [
+        "src/main/resources/static/**",
+        "src/e2eTest/**",
+        "docs/**",
+        ".github/workflow-plans/auth-layout-spacing.json"
+      ],
+      "forbiddenPaths": [
+        ".env"
+      ],
+      "acceptanceCriteria": [
+        "Username save and automatic login options share a row at 390/768/1440; Korean label is 자동로그인 and English label localized",
+        "Separate headline row from following stories with whitespace; preserve responsive layout, print and checkbox coupling"
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh check e2eTest bootJar sbom securityCheck",
+        "JAVA_HOME=\"$PWD/.local/jdk-27.0.1.0.2+1/Contents/Home\" sh scripts/test/html-check.sh"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/progress.md",
+          "docs/05-test/test-report.md"
+        ]
+      }
+    },
+    {
+      "id": "managed-advertising",
+      "expectedPaths": [
+        "src/**",
+        "scripts/deploy/helm/moapan/values.yaml",
+        "scripts/deploy/helm/moapan/README.md",
+        "docs/**",
+        ".github/workflow-plans/auth-layout-spacing.json",
+        "README.md"
+      ],
+      "forbiddenPaths": [
+        ".env"
+      ],
+      "acceptanceCriteria": [
+        "ADMIN+CSRF+version enforced DB advertising settings with audit; direct banner display without click tracking",
+        "Register and validate AdSense public IDs as disabled connection preparation; no unapproved external SDK or false claim of live AdSense delivery",
+        "Default disabled and strict URL validation; preserve static UI, privacy and account protections",
+        "Flyway schema and Helm migration version agree; test roles, conflict, unsafe input, display and tracking-free fallback"
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh check integrationTest e2eTest bootJar sbom securityCheck"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/03-design/api.md",
+          "docs/03-design/decisions.md",
+          "docs/01-management/progress.md"
+        ]
+      }
+    },
+    {
+      "id": "newsletter",
+      "expectedPaths": [
+        "src/**",
+        "Caddyfile",
+        "scripts/**",
+        "docs/**",
+        ".github/workflow-plans/auth-layout-spacing.json",
+        "README.md"
+      ],
+      "forbiddenPaths": [
+        ".env"
+      ],
+      "acceptanceCriteria": [
+        "Admin-only newsletter draft/edit/publish with isolated published snapshots and optimistic versions",
+        "Member list/detail, responsive magazine reading, safe blocks and embedded owned images",
+        "No email collection, tracking, raw article replication or external embeds"
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh check integrationTest e2eTest bootJar sbom securityCheck"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/progress.md",
+          "docs/03-design/api.md"
+        ]
+      }
+    }
+  ]
+}

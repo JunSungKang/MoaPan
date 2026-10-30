@@ -148,3 +148,7 @@ E2E26 PASS(390/1440px 우측24px 여백/제호 위 배치/푸터선택없음/중
 아이디 저장 UI: 단위130/E2E27 PASS(실패·skip0), Nu9페이지 메시지0, 소스/JAR/SBOM/최종 이미지 gate PASS. 증빙 saved-username.json. 백엔드 변경이 없어 통합테스트는 재실행하지 않음.
 
 2026-10-30 보안재검증: truststore조치후 --rerun-tasks check integrationTest e2eTest bootJar sbom securityCheck 실행. 단위132/통합44/E2E27=203 PASS, 실패·skip0. scanner정책4PASS별도. 정상TLS/14문제체인거부/실제HTTPS·401·chunked413확인. 최초새테스트구현전미정의클래스컴파일실패는성공으로세지않고구현후전체재실행완료. 증빙evidence/security-refresh.json.
+
+로그인 옵션·광고 관리 최종 검증: 단위132/통합45/E2E28=205 PASS, 실패·skip0. 초기 통합 fixture의 Jackson JsonNode 컴파일 오류는 ObjectNode로 수정 후 통과. HTML9페이지 Nu0, Helm lint/render 및 잘못된 입력3거부, 소스/JAR/SBOM/최종이미지 gate PASS. 390/768/1440 가로정렬·헤드라인여백·추적요청없음·관리자저장/미리보기·AdSense비활성 검증. HTTPS합성회원1회 생성/삭제로 API401/403/최소출력 확인. 증빙evidence/layout-advertising.json.
+
+트렌드 뉴스레터 최종: 단위132/통합46/E2E30=208 PASS, 실패·skip0. 정책4, Nu11페이지 메시지0, Helm lint/render·잘못된 설정 거부, 소스/JAR/SBOM/최종 앱·변경 proxy 이미지 gate PASS. 초안 비공개/발간 후 초안 수정 분리, 안전한 블록 출력, 390/768/1440, 지연 저장 중 원고 전환 차단·편집 유지 확인. 실제HTTPS 회원 접근·관리권한·합성계정정리 및 V13·실행JAR일치 확인. 초기 병렬 테스트 결과 파일 충돌은 실패로 기록하고 단일 실행으로 재검증했다. evidence/newsletter.json 참조.

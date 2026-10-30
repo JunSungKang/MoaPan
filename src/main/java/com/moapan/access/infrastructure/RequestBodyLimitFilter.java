@@ -10,9 +10,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public final class RequestBodyLimitFilter extends OncePerRequestFilter {
     private static final int MAX_BYTES=16384;
     @Override protected void doFilterInternal(HttpServletRequest request,HttpServletResponse response,FilterChain chain)throws ServletException,IOException{
-        if(request.getContentLengthLong()>MAX_BYTES){reject(response);return;}
-        byte[] body=request.getInputStream().readNBytes(MAX_BYTES+1);
-        if(body.length>MAX_BYTES){reject(response);return;}
+        int limit=request.getMethod().equals("PUT")&&request.getRequestURI().matches("/api/v1/admin/newsletters/[0-9a-fA-F-]{36}")?1048576:MAX_BYTES;
+        if(request.getContentLengthLong()>limit){reject(response);return;}
+        byte[] body=request.getInputStream().readNBytes(limit+1);
+        if(body.length>limit){reject(response);return;}
         chain.doFilter(new HttpServletRequestWrapper(request){
             @Override public ServletInputStream getInputStream(){
                 var bytes=new ByteArrayInputStream(body);

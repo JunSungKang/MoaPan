@@ -1,7 +1,9 @@
 import basic from './i18n-en.js';
+import advertising from './i18n-advertising.js';
 import pages from './i18n-pages.js';
 import statuses from './i18n-status.js';
-const messages={...basic,...pages,...statuses};
+const newsletter={"트렌드 뉴스레터":"Trend newsletter","뉴스레터 관리":"Newsletter management","오늘의 지면":"Today’s edition","새 원고":"New manuscript","제목":"Title","소개 문장":"Introduction","주제":"Topic","문단":"Paragraph","소제목":"Heading","강조문":"Pull quote","참고 뉴스·논문":"References","그림 추가":"Add image","이미지 대체 설명":"Image description","그림 설명·출처":"Caption and attribution","내용":"Content","초안 저장":"Save draft","발간":"Publish","발간 취소":"Withdraw","편집":"Edit","발간물 목록":"All issues","아직 발간된 뉴스레터가 없습니다.":"No newsletter has been published yet.","본문은 작성 언어로 제공됩니다.":"The manuscript is provided in its written language.","참고 자료 검색":"Find references","뉴스·논문 찾기":"Find news and papers"};
+const messages={...newsletter,...basic,...pages,...statuses,...advertising};
 const reverse=new Map(Object.entries(messages).map(([ko,en])=>[en,ko]));
 export let language='ko';
 try{language=localStorage.getItem('moapan-language')==='en'?'en':'ko';}catch{}

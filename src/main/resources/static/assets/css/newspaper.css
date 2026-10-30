@@ -110,3 +110,9 @@ body{background-image:radial-gradient(#30382a08 .35px,transparent .6px),radial-g
  .newspaper-sheet .article-meta-line>span+span::before{display:none}
  .newspaper-sheet .article-source{text-align:right}
 }
+
+/* Give the headline tier breathing room before the next group of stories. */
+@media screen and (min-width:601px){.paper.newspaper-sheet{row-gap:1.5rem}}
+@media screen and (max-width:600px){.newspaper-sheet article.lead{margin-bottom:.5rem}}
+
+[data-ad-slot]>a:not(:has(img)),#advertising-preview>a:not(:has(img)){display:flex;flex-direction:column;justify-content:center;align-items:center;gap:.25rem;padding:.8rem .5rem .35rem;text-decoration:none;overflow-wrap:anywhere}[data-ad-slot] strong,#advertising-preview strong{font-size:.85rem}[data-ad-slot]>a>span,#advertising-preview>a>span{font-size:.65rem}#advertising-form{max-width:650px}#advertising-form label{display:block;margin:.7rem 0}#advertising-form label.check{display:flex}#advertising-form label input:not([type=checkbox]),#advertising-form select{display:block;width:100%;min-width:0;margin-top:.25rem}.advertising-preview{width:220px;margin-top:1rem}

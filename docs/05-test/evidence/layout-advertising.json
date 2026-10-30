@@ -1,0 +1,63 @@
+{
+  "checkedAt": "2026-10-30T00:22:15.784Z",
+  "tests": {
+    "test": {
+      "tests": 132,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "integrationTest": {
+      "tests": 45,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "e2eTest": {
+      "tests": 28,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "policyTests": 4,
+  "htmlMessages": 0,
+  "viewports": [
+    390,
+    768,
+    1440
+  ],
+  "layout": "Login options same row, short translated label; headline-to-next-row gap >=20px; screenshots manually inspected",
+  "advertising": "ADMIN+CSRF+version+audit; direct banner; no click tracking or external SDK; AdSense registration-only per explicit user reply",
+  "live": {
+    "checkedAt": "2026-10-30T00:21:31.014Z",
+    "https": "trusted",
+    "loginLayout": "PASS",
+    "anonymous401": true,
+    "memberDisplayDisabled": true,
+    "adminForbidden": true,
+    "syntheticAccountDeleted": true
+  },
+  "migration": 12,
+  "migrationApplied": true,
+  "adDefaultDisabled": true,
+  "backup": "Encrypted pre-migration backup created inside ignored workspace; no plaintext dump; initial recipient-prefix failure retried with correctly derived public recipient",
+  "image": "sha256:03f8084c9d35ccbe5b25e2a3dd93f89433fce8f43cddb8ef471cf56547a1f0d7",
+  "jarSha256": "545d38cbb2390243d1b8ab32f232f3fca0b69e6d1ce93133b06a4b938348eb38",
+  "jarMatchesRunning": true,
+  "imageCounts": {
+    "HIGH": 0,
+    "CRITICAL": 0,
+    "MEDIUM": 23,
+    "LOW": 4,
+    "UNKNOWN": 0
+  },
+  "db": {
+    "Version": 2,
+    "NextUpdate": "2026-10-30T19:18:50.969126577Z",
+    "UpdatedAt": "2026-10-29T19:18:50.96912695Z",
+    "DownloadedAt": "2026-10-29T22:52:43.958399Z"
+  },
+  "helm": "Lint/render and invalid-input rejection passed; no cluster deployed",
+  "limits": "AdSense live serving, account approval, consent/CSP integration and revenue not implemented or claimed; user explicitly requested registration preparation only"
+}

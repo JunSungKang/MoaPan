@@ -6,7 +6,7 @@
     @internal path /internal/* /actuator/*
     respond @internal 404
     request_body {
-        max_size 16KB
+        max_size 1MB
     }
     reverse_proxy web:8080 {
         header_up -X-Forwarded-For
