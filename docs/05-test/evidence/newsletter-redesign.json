@@ -1,0 +1,95 @@
+{
+  "checkedAt": "2026-10-30T06:56:00.186Z",
+  "tests": {
+    "test": {
+      "tests": 132,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "e2eTest": {
+      "tests": 31,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "integration": {
+    "status": "NOT_RERUN",
+    "reason": "Static UI and browser tests only; prior newsletter implementation evidence records46 passing PostgreSQL integration tests."
+  },
+  "html": [],
+  "viewports": [
+    390,
+    768,
+    1440
+  ],
+  "screenshots": [
+    "newsletter-archive-1440.png",
+    "newsletter-archive-390.png",
+    "newsletter-archive-768.png",
+    "newsletter-detail-1440.png",
+    "newsletter-detail-390.png",
+    "newsletter-detail-768.png",
+    "newsletter-editor-1440.png",
+    "newsletter-editor-390.png",
+    "newsletter-editor-768.png",
+    "newsletter-empty-1440.png",
+    "newsletter-preview-1440.png",
+    "newsletter-preview-390.png",
+    "newsletter-preview-768.png"
+  ],
+  "visualInspection": "Archive/detail/editor/preview populated at390/768/1440; empty archive1440. Synthetic fixtures only; no production publication.",
+  "references": [
+    "https://www.noemamag.com/",
+    "https://www.astralcodexten.com/",
+    "https://ghost.org/help/using-the-editor/"
+  ],
+  "security": {
+    "tool": "Trivy0.76.1",
+    "sourceJarSbom": "PASS",
+    "image": "sha256:c6eb6ded500d4f2f2887a9f985b2d0d86d28a76c0e47fac924fbb6bca38a23c6",
+    "findings": {
+      "HIGH": 0,
+      "CRITICAL": 0,
+      "MEDIUM": 23,
+      "LOW": 4
+    },
+    "db": {
+      "Version": 2,
+      "NextUpdate": "2026-10-30T19:18:50.969126577Z",
+      "UpdatedAt": "2026-10-29T19:18:50.96912695Z",
+      "DownloadedAt": "2026-10-29T22:52:43.958399Z"
+    },
+    "unchangedProxy": "Existing expiring hash-bound JOSE non-exposure assessment remains; proxy not modified."
+  },
+  "jarSha256": "f82d0fff5a382f05b1262775f69223442e5869a2c34cf8a444cade5543158901",
+  "live": {
+    "checkedAt": "2026-10-30T06:55:26.417Z",
+    "hashes": {
+      "/assets/css/newsletter.css": "8462485df3c40a1e7340954ec520223f3e1f9a598f28b57daffba3b328e9c052",
+      "/assets/js/newsletter/read.js": "3cc40f1cec68c9c3a6386b519fd83f17e85b1afb3df179ca7c7d0d60fb58c2c8",
+      "/assets/js/newsletter/edit.js": "ea939e921dd601379cce1f6e916020d4c85801480fcf9f51a34e998df95bacbf",
+      "/assets/js/shared/i18n.js": "af854f635abd438463726c88951c8fadc18c487e34df8091ca5ed6b10ee6613b"
+    },
+    "restricted": {
+      "/newsletter.html": {
+        "status": 302,
+        "location": "http://175.195.62.165/login.html"
+      },
+      "/newsletter-editor.html": {
+        "status": 302,
+        "location": "http://175.195.62.165/login.html"
+      },
+      "/api/v1/newsletters": {
+        "status": 401,
+        "location": null
+      },
+      "/api/v1/admin/newsletters": {
+        "status": 401,
+        "location": null
+      }
+    }
+  },
+  "initialFailures": "Tablet cover minimum height plus aspect ratio overflow detected by new test; removed minimum and constrained width; rerun passed. Independent review keyboard upload focus issue fixed and regression added."
+}

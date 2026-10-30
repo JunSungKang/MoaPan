@@ -1,0 +1,72 @@
+{
+  "checkedAt": "2026-10-30T08:33:26.892Z",
+  "id": "2fc4f08d-b76a-48db-bc77-bf0b6104a2c1",
+  "issueCode": "2026-001",
+  "title": "AI의 다음 3년, 모델보다 시스템을 연구하라",
+  "publishedAt": "2026-10-30T08:33:20.992852Z",
+  "version": 4,
+  "collectionWindow": {
+    "weekStart": "2026-10-26T00:00:00+09:00",
+    "cutoff": "2026-10-30T08:33:11.930Z"
+  },
+  "sources": [
+    {
+      "id": "a158cd2d-4271-4f00-8048-a015c8bb1b4f",
+      "canonical_url": "https://arxiv.org/abs/2610.39610v1",
+      "collected_at": "2026-10-30T06:19:54.397349+00:00",
+      "published_at": "2026-10-29T08:43:43+00:00"
+    },
+    {
+      "id": "f6872e4c-14f4-4c53-8e35-e05e5184e3f3",
+      "canonical_url": "https://arxiv.org/abs/2610.40454v1",
+      "collected_at": "2026-10-30T06:19:36.423944+00:00",
+      "published_at": "2026-10-29T17:01:22+00:00"
+    },
+    {
+      "id": "9f245e50-a4a1-415e-bc63-caf476663b9e",
+      "canonical_url": "https://arxiv.org/abs/2610.40477v1",
+      "collected_at": "2026-10-30T06:19:47.83786+00:00",
+      "published_at": "2026-10-29T17:10:52+00:00"
+    },
+    {
+      "id": "1b769f24-d174-44bf-b008-d3bed96cd31a",
+      "canonical_url": "https://arxiv.org/abs/2610.40543v1",
+      "collected_at": "2026-10-30T06:19:47.83786+00:00",
+      "published_at": "2026-10-29T17:36:37+00:00"
+    },
+    {
+      "id": "93b5c2d5-c805-49f7-a168-827eed4a02ae",
+      "canonical_url": "https://arxiv.org/abs/2610.40620v1",
+      "collected_at": "2026-10-30T06:19:42.248015+00:00",
+      "published_at": "2026-10-29T17:55:38+00:00"
+    }
+  ],
+  "referenceUrls": [
+    "https://arxiv.org/abs/2610.39610v1",
+    "https://arxiv.org/abs/2610.40454v1",
+    "https://arxiv.org/abs/2610.40620v1",
+    "https://arxiv.org/abs/2610.40543v1",
+    "https://arxiv.org/abs/2610.40477v1"
+  ],
+  "blocks": 42,
+  "imageCount": 1,
+  "editorialRules": [
+    "This-week collected sources only; no external historical/market evidence",
+    "Three forecasts explicitly linked to the five papers",
+    "Horizons and numerical gates are proposed research criteria, not paper predictions/results",
+    "Failure conditions and alternate directions included"
+  ],
+  "viewports": [
+    390,
+    768,
+    1440
+  ],
+  "liveReader": "PASS",
+  "imageSha256": "c85ee9c00e5437cb1a66b995b79540735a6f6ea6e4d8a8303ba107d84e56e2ff",
+  "url": "https://175.195.62.165/newsletter.html?id=2fc4f08d-b76a-48db-bc77-bf0b6104a2c1",
+  "applicationImageUnchanged": true,
+  "temporaryAccountsRemaining": 0,
+  "independentEditorialReview": "APPROVE; clarified proposed quality metric after optional feedback",
+  "regressionSuite": "NOT_RERUN: editorial data and documentation only; application code/dependencies/image unchanged",
+  "applicationImage": "sha256:cf3e54452b050c43db1096772762ef3d6c75b6c65d6c9ca2a378032df6cc187b"
+}

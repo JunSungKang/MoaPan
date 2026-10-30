@@ -31,3 +31,4 @@
 | MP-DOC-025 | 도메인 상세설계서 | 개발 담당 | [문서](../../docs/03-design/domain-design.md) |
 | MP-DOC-026 | 프로그램목록 | 개발 담당 | [문서](../../docs/04-implementation/program-inventory.md) |
 | MP-DOC-027 | SEO·웹 표준 점검 결과서 | 개발 담당 | [문서](../05-test/seo-web-audit.md) |
+| MP-DOC-028 | 구독 뉴스레터 사업화 기반·실무 검증 계획서 | 개발 담당 | [문서](../02-analysis/business-validation.md) |

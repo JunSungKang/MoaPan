@@ -54,6 +54,10 @@ class SecurityIntegrationTest {
         for(int i=0;i<100;i++){var job=worker.claim();if(job!=null)return job;try{Thread.sleep(20);}catch(InterruptedException e){Thread.currentThread().interrupt();throw new AssertionError(e);}}
         throw new AssertionError("Queued job not ready within 2 seconds: "+repo.db().sql("SELECT status,available_at,now() db_now FROM content_jobs WHERE status='QUEUED'").query().listOfRows());
     }
+    @Test @Order(1) void missingStaticResourcesReturn404WithoutDetails()throws Exception{
+        for(String path:List.of("/nonexistent-page.html","/assets/js/nonexistent-module.js"))mvc.perform(get(path)).andExpect(status().isNotFound()).andExpect(header().string("Cache-Control","no-store")).andExpect(content().json("{\"error\":\"not_found\"}"));
+        mvc.perform(get("/api/v1/nonexistent")).andExpect(status().isUnauthorized());
+    }
     @Test @Order(1) void unauthenticatedAndCsrf()throws Exception{
         mvc.perform(get("/api/v1/private.html")).andExpect(status().isUnauthorized()).andExpect(content().contentType("application/json"));
         mvc.perform(get("/api/v1/news/edition").header("Referer","http://localhost").header("User-Agent","browser")).andExpect(status().isUnauthorized());
@@ -130,6 +134,13 @@ class SecurityIntegrationTest {
     }
     @Test @Order(4) void disabledSessionRejected()throws Exception{
         signup("synthetic_disabled");var cookie=login("synthetic_disabled");var user=accounts.findByUsername("synthetic_disabled").orElseThrow();user.active=false;accounts.save(user);mvc.perform(get("/api/v1/account").cookie(cookie)).andExpect(status().isUnauthorized());
+    }
+    @Test @Order(4) void revokedSessionFallsBackToAnonymousOnlyForPublicNews()throws Exception{
+        signup("synthetic_revoked_guest");var cookie=login("synthetic_revoked_guest");
+        var a=accounts.findByUsername("synthetic_revoked_guest").orElseThrow();a.active=false;accounts.saveAndFlush(a);
+        mvc.perform(get("/api/v1/public/news/edition").cookie(cookie)).andExpect(status().isOk()).andExpect(jsonPath("$.nextCursor").isEmpty());
+        mvc.perform(get("/api/v1/account").cookie(cookie)).andExpect(status().isUnauthorized());
+        mvc.perform(get("/newsletter.html").cookie(cookie)).andExpect(redirectedUrl("/login.html"));
     }
     @Test @Order(5) void quotaConcurrencyAndNoReloginReset()throws Exception{
         UUID user=accounts.findByUsername("synthetic_a").orElseThrow().id;
@@ -328,18 +339,25 @@ class SecurityIntegrationTest {
 
 
     @Test @Order(80) void publicEditionIsBoundedAndProtectedPagesStayPrivate()throws Exception{
-        for(String page:List.of("index","settings","account","admin"))mvc.perform(get("/"+page+".html")).andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("/login.html"));
+        for(String path:List.of("/","/index.html"))mvc.perform(get(path)).andExpect(status().isOk());
+        for(String page:List.of("settings","account","admin","newsletter","newsletter-editor"))mvc.perform(get("/"+page+".html")).andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("/login.html"));
         mvc.perform(get("/api/v1/account")).andExpect(status().isUnauthorized());
         UUID site=UUID.randomUUID(),source=UUID.randomUUID();
         repo.db().sql("INSERT INTO sites(id,name,homepage_url,normalized_homepage_url,status) VALUES(:id,'Public synthetic','https://public.example.org/','https://public.example.org/','ACTIVE')").param("id",site).update();
         repo.db().sql("INSERT INTO sources(id,site_id,label,type,endpoint_url,normalized_endpoint_url,rights_status,allow_display) VALUES(:id,:site,'Public synthetic','RSS','https://public.example.org/feed','https://public.example.org/feed','APPROVED',true)").param("id",source).param("site",site).update();
         for(int i=0;i<55;i++)repo.db().sql("INSERT INTO articles(id,source_id,source_guid,canonical_url,title,summary_mode,language,input_hash,collected_at) VALUES(:id,:source,:guid,:url,'Public synthetic','INSUFFICIENT','en',:hash,now())").param("id",UUID.randomUUID()).param("source",source).param("guid","public-"+i).param("url","https://public.example.org/"+i).param("hash","b".repeat(64)).update();
         repo.db().sql("UPDATE news_editions SET expires_at=now()-interval '1 second'").update();
-        mvc.perform(get("/api/v1/public/news/edition")).andExpect(status().isUnauthorized());signup("synthetic_gate");var gateCookie=login("synthetic_gate");String response=mvc.perform(get("/api/v1/public/news/edition").cookie(gateCookie)).andExpect(status().isOk()).andExpect(header().string("Cache-Control","no-store")).andExpect(jsonPath("$.items.length()").value(42)).andReturn().getResponse().getContentAsString();
+        for(String path:List.of("/api/v1/newsletters","/api/v1/newsletters/"+UUID.randomUUID(),"/api/v1/admin/newsletters","/api/v1/tags","/api/v1/sources"))mvc.perform(get(path)).andExpect(status().isUnauthorized());
+        signup("synthetic_gate");var gateCookie=login("synthetic_gate");String response=mvc.perform(get("/api/v1/public/news/edition")).andExpect(status().isOk()).andExpect(header().string("Cache-Control","no-store")).andExpect(jsonPath("$.items.length()").value(42)).andExpect(jsonPath("$.nextCursor").isEmpty()).andReturn().getResponse().getContentAsString();
         assertFalse(response.contains("admin_note"));assertFalse(response.contains("password"));
         var page=news.publicEdition();UUID hidden=page.items().getFirst().id();repo.db().sql("UPDATE articles SET public=false WHERE id=:id").param("id",hidden).update();assertTrue(news.publicEdition().items().stream().noneMatch(a->a.id().equals(hidden)));
-        for(String query:List.of("?size=300","?cursor=x","?limit=-1"))mvc.perform(get("/api/v1/public/news/edition"+query).cookie(gateCookie)).andExpect(status().isBadRequest());
+        for(String query:List.of("?size=300","?cursor=x","?limit=-1","?size=1&size=2"))mvc.perform(get("/api/v1/public/news/edition"+query)).andExpect(status().isBadRequest());
         mvc.perform(get("/api/v1/public/news/page?cursor=x")).andExpect(status().isUnauthorized());
+        mvc.perform(get("/api/v1/public/news/edition").cookie(gateCookie)).andExpect(status().isOk());
+        repo.db().sql("UPDATE sources SET allow_display=false WHERE id=:id").param("id",source).update();
+        String revoked=mvc.perform(get("/api/v1/public/news/edition")).andExpect(status().isOk()).andReturn().getResponse().getContentAsString();assertFalse(revoked.contains(source.toString()));
+        repo.db().sql("UPDATE auth_rate_limits SET used=600 WHERE bucket='public_news'").update();
+        mvc.perform(get("/api/v1/public/news/edition")).andExpect(status().isTooManyRequests()).andExpect(header().exists("Retry-After"));
         UUID gateUser=accounts.findByUsername("synthetic_gate").orElseThrow().id;repo.db().sql("UPDATE api_quotas SET used=60 WHERE user_id=:u AND bucket LIKE 'minute:%'").param("u",gateUser).update();
         mvc.perform(get("/api/v1/public/news/edition").cookie(gateCookie)).andExpect(status().isTooManyRequests()).andExpect(header().exists("Retry-After"));
         repo.db().sql("DELETE FROM auth_rate_limits WHERE bucket='public_news'").update();
@@ -352,7 +370,9 @@ class SecurityIntegrationTest {
         signup("synthetic_search_gate");var searchCookie=login("synthetic_search_gate");String endpoint="/api/v1/public/news/search",body="{\"search\":\"synthetic-search-fixture\",\"category\":\"\",\"day\":null,\"page\":0}";
         mvc.perform(post(endpoint).contentType("application/json").content(body)).andExpect(status().isForbidden());
         mvc.perform(post("/api/v1/news/search").with(csrf().asHeader()).contentType("application/json").content(body)).andExpect(status().isUnauthorized());
-        mvc.perform(post(endpoint).with(csrf().asHeader()).contentType("application/json").content(body)).andExpect(status().isUnauthorized());
+        mvc.perform(post(endpoint).with(csrf().useInvalidToken()).contentType("application/json").content(body)).andExpect(status().isForbidden());
+        mvc.perform(post(endpoint).with(csrf().asHeader()).contentType("application/json").content(body)).andExpect(status().isOk()).andExpect(jsonPath("$.items.length()").value(7)).andExpect(jsonPath("$.pages").value(20));
+        mvc.perform(post(endpoint).with(csrf().asHeader()).header("Sec-Fetch-Site","cross-site").contentType("application/json").content(body)).andExpect(status().isForbidden());
         mvc.perform(post(endpoint).cookie(searchCookie).with(csrf().asHeader()).contentType("application/json").content(body)).andExpect(status().isOk()).andExpect(header().string("Cache-Control","no-store")).andExpect(jsonPath("$.items.length()").value(7)).andExpect(jsonPath("$.total").value(140)).andExpect(jsonPath("$.pages").value(20)).andExpect(jsonPath("$.items[0].title").value("synthetic-search-fixture-0"));
         mvc.perform(post(endpoint).cookie(searchCookie).with(csrf().asHeader()).contentType("application/json").content(body.replace("\"page\":0","\"page\":19"))).andExpect(status().isOk()).andExpect(jsonPath("$.items[0].title").value("synthetic-search-fixture-133"));
         for(int page:List.of(-1,20,1000))mvc.perform(post(endpoint).cookie(searchCookie).with(csrf().asHeader()).contentType("application/json").content(body.replace("\"page\":0","\"page\":"+page))).andExpect(status().isBadRequest());
@@ -454,7 +474,7 @@ class SecurityIntegrationTest {
         assertNotEquals(initial.getValue(),remembered.getValue());assertTrue(remembered.getMaxAge()>2500000);assertTrue(remembered.isHttpOnly());assertEquals("Strict",remembered.getAttribute("SameSite"));
         mvc.perform(get("/api/v1/account").cookie(remembered)).andExpect(status().isOk());
         mvc.perform(post("/api/v1/auth/logout").cookie(remembered).with(csrf())).andExpect(status().isOk()).andExpect(cookie().maxAge("SESSION",0));
-        mvc.perform(get("/api/v1/account").cookie(remembered)).andExpect(status().isUnauthorized());mvc.perform(get("/index.html").cookie(remembered)).andExpect(redirectedUrl("/login.html"));
+        mvc.perform(get("/api/v1/account").cookie(remembered)).andExpect(status().isUnauthorized());mvc.perform(get("/index.html").cookie(remembered)).andExpect(status().isOk());
         mvc.perform(get("/api/v1/account").cookie(normal)).andExpect(status().isOk());
     }
     @Test @Order(14) @SuppressWarnings({"rawtypes","unchecked"}) void rememberedSessionHasAbsoluteExpiryAndPasswordChangeRevokesIt()throws Exception{
@@ -469,8 +489,9 @@ class SecurityIntegrationTest {
     @Test @Order(82) void discoveryIsPublicAndSensitivePagesStayOutOfIndex()throws Exception{
         mvc.perform(get("/robots.txt")).andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.containsString("Sitemap: http://localhost/sitemap.xml")));
         var xml=mvc.perform(get("/sitemap.xml")).andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
-        assertTrue(xml.contains("http://localhost/about.html"));for(String name:List.of("index","admin","account","settings","login","signup"))assertFalse(xml.contains(name+".html"));
+        assertTrue(xml.contains("http://localhost/about.html"));assertTrue(xml.contains("http://localhost/index.html"));for(String name:List.of("newsletter","newsletter-editor","admin","account","settings","login","signup"))assertFalse(xml.contains(name+".html"));
         mvc.perform(get("/about.html")).andExpect(header().string("Link","<http://localhost/about.html>; rel=\"canonical\""));
+        mvc.perform(get("/index.html")).andExpect(status().isOk()).andExpect(header().string("Link","<http://localhost/index.html>; rel=\"canonical\"")).andExpect(header().doesNotExist("X-Robots-Tag"));
         mvc.perform(get("/login.html")).andExpect(header().string("X-Robots-Tag","noindex, follow"));
         mvc.perform(get("/api/v1/account")).andExpect(status().isUnauthorized()).andExpect(header().string("X-Robots-Tag","noindex, follow"));
     }
@@ -499,6 +520,7 @@ class SecurityIntegrationTest {
  @Test @Order(17) void newsletterSnapshotsStayPrivateUntilPublished()throws Exception{
   signup("letter_writer");var account=accounts.findByUsername("letter_writer").orElseThrow();account.role="ADMIN";accounts.save(account);var cookie=login("letter_writer");UUID id=UUID.randomUUID();
   String body="{\"version\":0,\"manuscript\":{\"title\":\"Synthetic future\",\"introduction\":\"Synthetic editorial\",\"topic\":\"AI\",\"blocks\":[{\"type\":\"paragraph\",\"text\":\"A considered scenario\",\"url\":\"\",\"caption\":\"\"}]}}";
+  body=withNewsletterDossier(body,newsletterDossier());
   mvc.perform(get("/api/v1/newsletters")).andExpect(status().isUnauthorized());
   mvc.perform(put("/api/v1/admin/newsletters/"+id).cookie(cookie).with(csrf()).contentType("application/json").content(body)).andExpect(status().isOk());
   mvc.perform(get("/api/v1/newsletters/"+id).cookie(cookie)).andExpect(status().isNotFound());
@@ -506,4 +528,81 @@ class SecurityIntegrationTest {
   mvc.perform(put("/api/v1/admin/newsletters/"+id).cookie(cookie).with(csrf()).contentType("application/json").content(body.replace("\"version\":0","\"version\":2").replace("Synthetic future","Unpublished revision"))).andExpect(status().isOk());
   mvc.perform(get("/api/v1/newsletters/"+id).cookie(cookie)).andExpect(jsonPath("$.manuscript.title").value("Synthetic future"));
  }
+
+ @Test @Order(18) void newsletterDeletionRequiresAdminCsrfAndCurrentVersion()throws Exception{
+  signup("letter_deleter");var actor=accounts.findByUsername("letter_deleter").orElseThrow();actor.role="ADMIN";accounts.save(actor);var admin=login("letter_deleter");
+  signup("letter_reader");var reader=login("letter_reader");
+  var picture=new java.awt.image.BufferedImage(2,2,java.awt.image.BufferedImage.TYPE_INT_RGB);var bytes=new java.io.ByteArrayOutputStream();javax.imageio.ImageIO.write(picture,"png",bytes);
+  var mapper=tools.jackson.databind.json.JsonMapper.builder().build();
+  String image="data:image/png;base64,"+Base64.getEncoder().encodeToString(bytes.toByteArray());
+  var manuscript=Map.of("title","Synthetic disposable issue","introduction","Test fixture only","topic","AI","blocks",List.of(Map.of("type","image","text","Synthetic picture","url",image,"caption","Owned fixture"),Map.of("type","paragraph","text","Synthetic considered scenario","url","","caption","")));
+  UUID id=UUID.randomUUID();String body=mapper.writeValueAsString(Map.of("version",0,"manuscript",manuscript,"dossier",newsletterDossier()));
+  mvc.perform(put("/api/v1/admin/newsletters/"+id).cookie(admin).with(csrf()).contentType("application/json").content(body)).andExpect(status().isOk());
+  mvc.perform(post("/api/v1/admin/newsletters/"+id+"/publication").cookie(admin).with(csrf()).contentType("application/json").content("{\"version\":1,\"visible\":true}")).andExpect(status().isOk());
+  mvc.perform(delete("/api/v1/admin/newsletters/"+id).with(csrf()).contentType("application/json").content("{\"version\":2}")).andExpect(status().isUnauthorized());
+  mvc.perform(delete("/api/v1/admin/newsletters/"+id).cookie(reader).with(csrf()).contentType("application/json").content("{\"version\":2}")).andExpect(status().isForbidden());
+  mvc.perform(delete("/api/v1/admin/newsletters/"+id).cookie(admin).contentType("application/json").content("{\"version\":2}")).andExpect(status().isForbidden());
+  mvc.perform(delete("/api/v1/admin/newsletters/"+id).cookie(admin).with(csrf().useInvalidToken()).contentType("application/json").content("{\"version\":2}")).andExpect(status().isForbidden());
+  for(String invalid:List.of("{}","{\"version\":0}","{\"version\":-1}","{\"version\":2,\"role\":\"ADMIN\"}"))mvc.perform(delete("/api/v1/admin/newsletters/"+id).cookie(admin).with(csrf()).contentType("application/json").content(invalid)).andExpect(status().isBadRequest());
+  mvc.perform(delete("/api/v1/admin/newsletters/"+id).cookie(admin).with(csrf()).contentType("application/json").content("{\"version\":1}")).andExpect(status().isConflict());
+  mvc.perform(get("/api/v1/newsletters/"+id).cookie(reader)).andExpect(status().isOk()).andExpect(jsonPath("$.publishedAt").value(org.hamcrest.Matchers.endsWith("Z")));
+  var listed=mapper.readTree(mvc.perform(get("/api/v1/newsletters").cookie(reader)).andReturn().getResponse().getContentAsString());for(var row:listed)assertTrue(row.get("published_at").asText().endsWith("Z"));
+  var drafts=mapper.readTree(mvc.perform(get("/api/v1/admin/newsletters").cookie(admin)).andReturn().getResponse().getContentAsString());for(var row:drafts)assertTrue(row.get("updated_at").asText().endsWith("Z"));
+  mvc.perform(delete("/api/v1/admin/newsletters/"+id).cookie(admin).with(csrf()).contentType("application/json").content("{\"version\":2}")).andExpect(status().isNoContent());
+  mvc.perform(get("/api/v1/newsletters/"+id).cookie(reader)).andExpect(status().isNotFound());
+  mvc.perform(get("/api/v1/admin/newsletters/"+id).cookie(admin)).andExpect(status().isNotFound());
+  mvc.perform(delete("/api/v1/admin/newsletters/"+id).cookie(admin).with(csrf()).contentType("application/json").content("{\"version\":2}")).andExpect(status().isNotFound());
+  mvc.perform(put("/api/v1/admin/newsletters/"+id).cookie(admin).with(csrf()).contentType("application/json").content(body)).andExpect(status().isConflict()).andExpect(jsonPath("$.error").value("newsletter_deleted"));
+  assertEquals(0,repo.db().sql("SELECT count(*) FROM newsletters WHERE id=:id").param("id",id).query(Integer.class).single());
+  assertEquals(1,repo.db().sql("SELECT count(*) FROM admin_actions WHERE target_id=:id AND action='newsletter_delete'").param("id",id).query(Integer.class).single());
+  UUID draft=UUID.randomUUID();mvc.perform(put("/api/v1/admin/newsletters/"+draft).cookie(admin).with(csrf()).contentType("application/json").content(body)).andExpect(status().isOk());
+  mvc.perform(delete("/api/v1/admin/newsletters/"+draft).cookie(admin).with(csrf()).contentType("application/json").content("{\"version\":1}")).andExpect(status().isNoContent());
+ }
+ private Map<String,Object> newsletterDossier(){
+  UUID site=UUID.randomUUID(),source=UUID.randomUUID(),article=UUID.randomUUID();
+  repo.db().sql("INSERT INTO sites(id,name,homepage_url,normalized_homepage_url,status) VALUES(:id,'Synthetic research evidence',:url,:url,'ACTIVE')").param("id",site).param("url","https://research-"+site+".example.org/").update();
+  repo.db().sql("INSERT INTO sources(id,site_id,label,type,endpoint_url,normalized_endpoint_url,rights_status,allow_metadata,allow_display) VALUES(:id,:site,'Synthetic research','RSS',:url,:url,'APPROVED',true,true)").param("id",source).param("site",site).param("url","https://research.example.org/"+source).update();
+  repo.db().sql("INSERT INTO articles(id,source_id,source_guid,canonical_url,title,summary_mode,language,input_hash,collected_at) VALUES(:id,:source,:guid,:url,'Synthetic weekly research','INSUFFICIENT','en',:hash,now()-interval '1 minute')").param("id",article).param("source",source).param("guid",article.toString()).param("url","https://research.example.org/paper/"+article).param("hash","a".repeat(64)).update();
+  return Map.of("weekStart",com.moapan.newsletter.domain.PublicationResearch.week(Instant.now()).toString(),"cutoff",Instant.now().toString(),"articleIds",List.of(article),"forecasts",List.of(Map.of("question","Synthetic research question","observation","Observed fixture evidence","outlook","Conditional editorial scenario","horizon","Proposed 3 months","experiment","Compare a baseline","successCriteria","Proposed noninferiority threshold","stopCondition","Stop if evidence contradicts hypothesis","evidenceIds",List.of(article))),"rightsConfirmed",true,"editorialReviewed",true,"correctionNote","");
+ }
+ private String withNewsletterDossier(String body,Map<String,Object> dossier){var mapper=tools.jackson.databind.json.JsonMapper.builder().build();var tree=(tools.jackson.databind.node.ObjectNode)mapper.readTree(body);tree.set("dossier",mapper.valueToTree(dossier));return mapper.writeValueAsString(tree);}
+ @Test @Order(90) void newsletterResearchGatesSnapshotsReuseAndRevisionIdentity()throws Exception{
+  signup("product_editor");var actor=accounts.findByUsername("product_editor").orElseThrow();actor.role="ADMIN";accounts.saveAndFlush(actor);var cookie=login(actor.username);
+  signup("product_member");var member=login("product_member");UUID id=UUID.randomUUID();
+  String body="{\"version\":0,\"manuscript\":{\"title\":\"Synthetic grounded issue\",\"introduction\":\"Editorial fixture\",\"topic\":\"AI\",\"blocks\":[{\"type\":\"paragraph\",\"text\":\"A conditional scenario\",\"url\":\"\",\"caption\":\"\"}]}}";
+  String endpoint="/api/v1/admin/newsletters/"+id;
+  mvc.perform(put(endpoint).cookie(cookie).with(csrf()).contentType("application/json").content(body)).andExpect(status().isOk());
+  mvc.perform(get(endpoint+"/review").cookie(cookie)).andExpect(jsonPath("$.blockers[0]").value("research_required"));
+  mvc.perform(post(endpoint+"/publication").cookie(cookie).with(csrf()).contentType("application/json").content("{\"version\":1,\"visible\":true}")).andExpect(status().isConflict()).andExpect(jsonPath("$.error").value("research_required"));
+  var dossier=new HashMap<>(newsletterDossier());var invalid=new HashMap<>(dossier);invalid.put("weekStart","1970-01-05");
+  mvc.perform(put(endpoint).cookie(cookie).with(csrf()).contentType("application/json").content(withNewsletterDossier(body.replace("\"version\":0","\"version\":1"),invalid))).andExpect(status().isOk());
+  mvc.perform(post(endpoint+"/publication").cookie(cookie).with(csrf()).contentType("application/json").content("{\"version\":2,\"visible\":true}")).andExpect(status().isConflict()).andExpect(jsonPath("$.error").value("invalid_evidence_period"));
+  mvc.perform(put(endpoint).cookie(cookie).with(csrf()).contentType("application/json").content(withNewsletterDossier(body.replace("\"version\":0","\"version\":2"),dossier))).andExpect(status().isOk());
+  mvc.perform(post(endpoint+"/publication").cookie(cookie).contentType("application/json").content("{\"version\":3,\"visible\":true}")).andExpect(status().isForbidden());
+  mvc.perform(post(endpoint+"/publication").cookie(cookie).with(csrf()).contentType("application/json").content("{\"version\":3,\"visible\":true}")).andExpect(status().isOk());
+  for(String suffix:List.of("","/reuse","/worksheet"))mvc.perform(get("/api/v1/newsletters/"+id+suffix)).andExpect(status().isUnauthorized());
+  String first=mvc.perform(get("/api/v1/newsletters/"+id+"/reuse").cookie(member)).andExpect(status().isOk()).andExpect(jsonPath("$.reuseAllowed").value(true)).andExpect(jsonPath("$.distribution").value("FREE_PREVIEW")).andExpect(jsonPath("$.revision").value(1)).andReturn().getResponse().getContentAsString();
+  var mapper=tools.jackson.databind.json.JsonMapper.builder().build();String firstDate=mapper.readTree(first).get("firstPublishedAt").asText();int issue=mapper.readTree(first).get("issueNumber").asInt();
+  mvc.perform(get("/api/v1/newsletters/"+id+"/worksheet").cookie(member)).andExpect(status().isOk()).andExpect(jsonPath("$.evidence.length()").value(1));
+  dossier.put("rightsConfirmed",false);String revised=body.replace("\"version\":0","\"version\":4").replace("Synthetic grounded issue","Synthetic corrected issue");
+  mvc.perform(put(endpoint).cookie(cookie).with(csrf()).contentType("application/json").content(withNewsletterDossier(revised,dossier))).andExpect(status().isOk());
+  mvc.perform(get("/api/v1/newsletters/"+id+"/reuse").cookie(member)).andExpect(jsonPath("$.manuscript.title").value("Synthetic grounded issue"));
+  mvc.perform(post(endpoint+"/publication").cookie(cookie).with(csrf()).contentType("application/json").content("{\"version\":5,\"visible\":true}")).andExpect(status().isConflict()).andExpect(jsonPath("$.error").value("reuse_rights_review_required"));
+  dossier.put("rightsConfirmed",true);dossier.put("correctionNote","Clarified a proposed criterion");
+  mvc.perform(put(endpoint).cookie(cookie).with(csrf()).contentType("application/json").content(withNewsletterDossier(revised.replace("\"version\":4","\"version\":5"),dossier))).andExpect(status().isOk());
+  mvc.perform(post(endpoint+"/publication").cookie(cookie).with(csrf()).contentType("application/json").content("{\"version\":6,\"visible\":true}")).andExpect(status().isOk());
+  mvc.perform(get("/api/v1/newsletters/"+id+"/reuse").cookie(member)).andExpect(jsonPath("$.revision").value(2)).andExpect(jsonPath("$.firstPublishedAt").value(firstDate)).andExpect(jsonPath("$.issueNumber").value(issue)).andExpect(jsonPath("$.manuscript.title").value("Synthetic corrected issue"));
+  UUID article=UUID.fromString(((List<?>)dossier.get("articleIds")).getFirst().toString());repo.db().sql("UPDATE articles SET public=false WHERE id=:id").param("id",article).update();
+  mvc.perform(get("/api/v1/newsletters/"+id+"/reuse").cookie(member)).andExpect(status().isNotFound());
+  assertFalse(mvc.perform(get("/api/v1/newsletters").cookie(member)).andReturn().getResponse().getContentAsString().contains(id.toString()));
+ }
+ @Test @Order(91) void newsletterEvidenceSearchRequiresAdminCsrfAndBoundedWeeklyMetadata()throws Exception{
+  var dossier=newsletterDossier();var admin=login("product_editor");var member=login("product_member");String input="{\"search\":\"Synthetic weekly\",\"weekStart\":\""+dossier.get("weekStart")+"\"}";String path="/api/v1/admin/newsletters/evidence";
+  mvc.perform(post(path).with(csrf()).contentType("application/json").content(input)).andExpect(status().isUnauthorized());
+  mvc.perform(post(path).cookie(member).with(csrf()).contentType("application/json").content(input)).andExpect(status().isForbidden());
+  mvc.perform(post(path).cookie(admin).contentType("application/json").content(input)).andExpect(status().isForbidden());
+  String result=mvc.perform(post(path).cookie(admin).with(csrf()).contentType("application/json").content(input)).andExpect(status().isOk()).andExpect(jsonPath("$.items[0].collectedAt").isString()).andReturn().getResponse().getContentAsString();assertFalse(result.contains("summaryBullets"));assertFalse(result.contains("description"));
+  mvc.perform(post(path).cookie(admin).with(csrf()).contentType("application/json").content(input.replace("Synthetic weekly","x".repeat(101)))).andExpect(status().isBadRequest());
+ }
+
 }

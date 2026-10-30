@@ -298,16 +298,54 @@ class BrowserTest {
             Page p=context.newPage();List<String> traffic=new ArrayList<>();p.onRequest(r->traffic.add(r.url()+" "+Objects.toString(r.postData(),"")));
             for(String page:List.of("index","about","terms","privacy","login","signup")){
                 p.navigate(origin+"/"+page+".html");p.waitForLoadState(com.microsoft.playwright.options.LoadState.NETWORKIDLE);
-                for(String destination:List.of("settings","account","admin"))assertEquals(0,p.locator("a[href='/"+destination+".html']:visible").count(),page+" leaks "+destination);
+                for(String destination:List.of("settings","account","admin","newsletter","newsletter-editor"))assertEquals(0,p.locator("a[href='/"+destination+".html']:visible").count(),page+" leaks "+destination);
             }
-            for(String page:List.of("settings","account","admin")){p.navigate(origin+"/"+page+".html");p.waitForURL("**/login.html");}
-            p.navigate(origin+"/index.html");p.waitForURL("**/login.html");assertEquals(0,p.locator("#paper article").count());context.unroute("**/api/v1/account");p.navigate(origin+"/index.html");p.waitForSelector("#paper article");assertEquals(0,p.locator("#interest-basis,#range").count());assertEquals(0,p.locator("#paper .reason").count());
+            for(String page:List.of("settings","account","admin","newsletter","newsletter-editor")){p.navigate(origin+"/"+page+".html");p.waitForURL("**/login.html");}
+            p.navigate(origin+"/index.html");p.waitForSelector("#paper article");assertTrue(p.url().endsWith("/index.html"));assertEquals(0,p.locator("a[href='/newsletter.html']:visible").count());assertEquals(0,p.locator("#interest-basis,#range").count());assertEquals(0,p.locator("#paper .reason").count());
             assertEquals(0,p.locator("[data-view],#latest,.tags button").count());assertFalse(p.locator("#search").isVisible());
             p.locator("#open-search").click();assertTrue(p.locator("#search").isVisible());p.locator("#search").fill("synthetic-popup-private-query");p.keyboard().press("Escape");assertEquals(7,p.locator("#paper article").count());
             p.locator("#open-search").click();assertEquals("",p.locator("#search").inputValue());p.locator("#search").fill("synthetic-popup-private-query");p.locator("#search-form [type=submit]").click();p.waitForFunction("document.querySelector('[role=status]').textContent==='' && document.querySelector('#paper article')===null");assertEquals(0,p.locator("#paper article").count());assertFalse(p.locator("#search-dialog").isVisible());
             p.locator("#clear-search").click();assertEquals(7,p.locator("#paper article").count());
             for(int width:new int[]{390,768,1440}){p.setViewportSize(width,1000);p.locator("#open-search").click();assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth<=innerWidth"));p.screenshot(new Page.ScreenshotOptions().setPath(Path.of("build/reports/screenshots/search-dialog-"+width+".png")));p.locator("#cancel-search").click();}
-            assertEquals(1,traffic.stream().filter(v->v.contains("synthetic-popup-private-query")).count());assertTrue(traffic.stream().filter(v->v.contains("synthetic-popup-private-query")).allMatch(v->v.startsWith(origin+"/api/v1/news/search ")));assertTrue(traffic.stream().anyMatch(v->v.contains("/api/v1/news/edition")));
+            assertEquals(1,traffic.stream().filter(v->v.contains("synthetic-popup-private-query")).count());assertTrue(traffic.stream().filter(v->v.contains("synthetic-popup-private-query")).allMatch(v->v.startsWith(origin+"/api/v1/public/news/search ")));assertTrue(traffic.stream().anyMatch(v->v.contains("/api/v1/public/news/edition")));assertTrue(traffic.stream().noneMatch(v->v.contains("/api/v1/newsletters")||v.contains("/api/v1/admin/")));
+        }
+    }
+
+    @Test void authenticationLossRemovesNewsletterTeaserAndRejectsLateResponse(){
+        for(boolean late:List.of(false,true))try(var context=browser.newContext()){
+            var pending=new java.util.concurrent.atomic.AtomicReference<Route>();
+            String teaser="[{\"id\":\"synthetic-letter\",\"title\":\"PRIVATE LETTER TITLE\",\"introduction\":\"PRIVATE LETTER INTRO\"}]";
+            context.route("**/api/v1/newsletters",r->{if(late)pending.set(r);else r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(teaser));});
+            Page p=context.newPage();List<String> paths=new ArrayList<>();p.onRequest(r->paths.add(r.url()));
+            p.navigate(origin+"/index.html");p.waitForSelector("#paper article");
+            if(late)p.waitForCondition(()->pending.get()!=null);else p.waitForSelector("[data-member-content]");
+            context.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setStatus(401).setContentType("application/json").setBody("{}")));
+            p.evaluate("async()=>{try{await(await import('/assets/js/shared/api.js')).request('/api/v1/account');}catch{}}");
+            p.waitForCondition(()->paths.stream().anyMatch(v->v.endsWith("/api/v1/public/news/edition")));
+            if(late)pending.get().fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(teaser));
+            p.waitForLoadState(com.microsoft.playwright.options.LoadState.NETWORKIDLE);p.waitForSelector("#paper article");
+            assertEquals(0,p.locator("[data-member-content]").count());assertFalse(p.locator("main").textContent().contains("PRIVATE LETTER"));
+            assertTrue(p.url().endsWith("/index.html"));assertEquals(0,p.locator("a[href='/newsletter.html']:visible").count());
+        }
+    }
+
+    @Test void guestUsesRepresentativeInterestsWithoutReadingSavedMemberSettings(){
+        try(var context=browser.newContext()){
+            context.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setStatus(401).setContentType("application/json").setBody("{}")));
+            context.route("**/api/v1/public/news/edition",r->{
+                var mapper=tools.jackson.databind.json.JsonMapper.builder().build();var root=mapper.readTree(edition());
+                var item=(tools.jackson.databind.node.ObjectNode)root.get("items").get(1);item.put("title","대표 관심사 합성 기사");
+                item.set("tags",mapper.valueToTree(List.of(Map.of("id","space","name","우주","confidence",1))));
+                r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(mapper.writeValueAsString(root)));
+            });
+            Page p=context.newPage();p.navigate(origin+"/about.html");
+            p.evaluate("async id=>{const m=await import('/assets/js/personalization/preferences.js');await m.savePreferences(id,{...m.defaults(),weights:{ai:5},excludedSources:['source-1']});sessionStorage.setItem('moapan-account',id);}",A);
+            p.navigate(origin+"/index.html");p.waitForSelector("#paper article");
+            assertEquals("대표 관심사 합성 기사",p.locator("#paper h2 a").first().textContent());
+            assertEquals(true,p.evaluate("async id=>(await(await import('/assets/js/personalization/preferences.js')).loadPreferences(id)).weights.ai===5",A));
+            assertEquals(1,p.locator("#account-menu a[href='/login.html']").count());
+            assertFalse((boolean)p.evaluate("sessionStorage.getItem('moapan-account')!==null"));
+            for(int width:new int[]{390,768,1440}){p.setViewportSize(width,1000);assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth<=innerWidth"));p.screenshot(new Page.ScreenshotOptions().setPath(Path.of("build/reports/screenshots/public-newspaper-"+width+".png")).setFullPage(true));}
         }
     }
 
@@ -526,4 +564,99 @@ class BrowserTest {
  var pending=new java.util.concurrent.atomic.AtomicReference<Route>();context.route("**/api/v1/admin/newsletters/*",r->{if(r.request().method().equals("PUT"))pending.set(r);else r.resume();});
  Page p=context.newPage();p.navigate(origin+"/newsletter-editor.html");p.waitForSelector("#letter-form");p.locator("[name=title]").fill("Pending manuscript");p.locator("[data-add=paragraph]").click();p.locator("#blocks textarea").first().fill("Before save");p.locator("#letter-form [type=submit]").click();p.waitForCondition(()->pending.get()!=null);p.locator("#new-letter").click();assertEquals("Pending manuscript",p.locator("[name=title]").inputValue());p.locator("#blocks textarea").first().fill("Edited during save");pending.get().fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"version\":1}"));p.waitForFunction("document.querySelector('[role=status]').textContent.includes('초안을 저장')");assertEquals("Edited during save",p.locator("#blocks textarea").first().inputValue());
  }}
+
+ @Test void newsletterEditorialLayoutsWithPopulatedManuscripts()throws Exception{
+  var mapper=tools.jackson.databind.json.JsonMapper.builder().build();
+  String id="20000000-0000-0000-0000-000000000010";
+  var picture=new java.awt.image.BufferedImage(800,600,java.awt.image.BufferedImage.TYPE_INT_RGB);
+  var g=picture.createGraphics();g.setColor(new java.awt.Color(205,212,195));g.fillRect(0,0,800,600);g.setColor(new java.awt.Color(96,115,87));for(int i=0;i<7;i++)g.fillRect(70+i*95,400-i*38,55,150+i*38);g.dispose();
+  var bytes=new java.io.ByteArrayOutputStream();javax.imageio.ImageIO.write(picture,"png",bytes);String image="data:image/png;base64,"+Base64.getEncoder().encodeToString(bytes.toByteArray());
+  String title="작은 모델이 바꾸는 지식의 풍경, 검색의 다음 장을 읽다";
+  var blocks=List.of(Map.of("type","paragraph","text","[합성 화면 검증 원고] 기술의 변화는 거대한 발표보다 작은 실험에서 먼저 드러납니다. 모델이 작아지는 지금, 우리가 다시 살펴볼 질문은 무엇일까요. 비용과 응답 속도, 신뢰성 사이에서 다음의 기회를 살펴봅니다.","url","","caption",""),Map.of("type","image","text","합성 그래프 이미지","url",image,"caption","화면 검증용으로 직접 만든 합성 이미지"),Map.of("type","heading","text","더 작은 도구, 더 넓은 가능성","url","","caption",""),Map.of("type","paragraph","text","새로운 가능성을 평가할 때는 성능 수치 하나만으로 판단할 수 없습니다. 실제 작업에 필요한 정보의 범위와 운영 조건을 함께 검토해야 합니다. 이 글은 실제 전망을 제시하지 않는 화면 검증용 원고입니다.","url","","caption",""),Map.of("type","quote","text","변화의 방향은 답보다 좋은 질문에서 시작됩니다.","url","","caption",""),Map.of("type","reference","text","검증용 참고 자료","url","https://example.org/research","caption",""));
+  var manuscript=Map.of("title",title,"introduction","뉴스와 연구의 신호를 연결하며, 다음 변화를 위한 질문을 던집니다. 화면 검증용 합성 원고입니다.","topic","인공지능", "blocks",blocks);
+  var rows=List.of(Map.of("id",id,"title",title,"introduction",manuscript.get("introduction"),"topic","인공지능","published_at","2026-10-30T00:00:00Z"),Map.of("id","older","title","데이터베이스의 변화에서 발견한 세 가지 질문","introduction","운영의 현장에서 바라본 새로운 검색의 조건. 합성 원고입니다.","topic","데이터베이스","published_at","2026-10-29T00:00:00Z"),Map.of("id","draft","title","보안과 신뢰 사이, 우리가 놓치기 쉬운 신호","introduction","기술을 읽는 또 다른 관점을 정리했습니다.","topic","보안","published_at","2026-10-28T00:00:00Z"));
+  Files.createDirectories(Path.of("build/reports/screenshots"));
+  try(var context=browser.newContext()){
+   context.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(mapper.writeValueAsString(Map.of("id",A,"username","synthetic_admin","role","ADMIN")))));
+   context.route("**/api/v1/newsletters",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(mapper.writeValueAsString(rows))));
+   context.route("**/api/v1/newsletters/"+id,r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(mapper.writeValueAsString(Map.of("manuscript",manuscript,"issueNumber",3,"publishedAt","2026-10-30T00:00:00Z")))));
+   context.route("**/api/v1/admin/newsletters",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(mapper.writeValueAsString(rows))));
+   context.route("**/api/v1/admin/newsletters/"+id,r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(mapper.writeValueAsString(Map.of("version",1,"manuscript",manuscript)))));
+   Page page=context.newPage();
+   for(int width:new int[]{390,768,1440}){
+    page.setViewportSize(width,1100);page.navigate(origin+"/newsletter.html");page.waitForSelector(".letter-cover");assertEquals(3,page.locator(".letter-teaser").count());assertTrue((boolean)page.evaluate("document.documentElement.scrollWidth<=innerWidth"), ()->page.evaluate("[...document.querySelectorAll('*')].filter(n=>n.getBoundingClientRect().right>innerWidth).map(n=>n.tagName+':'+n.className+':'+n.getBoundingClientRect().width).join(',')").toString());page.screenshot(new Page.ScreenshotOptions().setPath(Path.of("build/reports/screenshots/newsletter-archive-"+width+".png")).setFullPage(true));
+    page.locator("#letter-filter").selectOption("보안");assertEquals(1,page.locator(".letter-teaser:visible").count());
+    page.navigate(origin+"/newsletter.html?id="+id);page.waitForSelector("#letter-body figure img");assertTrue(page.locator("#letter-meta").textContent().contains("2026-003호"));assertTrue(page.locator("#letter-archive-heading").isHidden());assertTrue((boolean)page.evaluate("document.documentElement.scrollWidth<=innerWidth"));page.screenshot(new Page.ScreenshotOptions().setPath(Path.of("build/reports/screenshots/newsletter-detail-"+width+".png")).setFullPage(true));
+    page.navigate(origin+"/newsletter-editor.html");page.locator("#drafts button").first().click();page.waitForFunction("document.querySelector('[name=title]').value.includes('작은 모델')");assertEquals(1,page.locator("#blocks section").first().locator("textarea").count());assertTrue(page.locator(".letter-preview").isHidden());page.locator("#letter-image").focus();assertTrue((boolean)page.locator(".image-upload").evaluate("n=>getComputedStyle(n).outlineStyle==='solid'&&parseInt(getComputedStyle(n).outlineWidth)>=3"));assertTrue((boolean)page.evaluate("document.documentElement.scrollWidth<=innerWidth"));page.evaluate("window.scrollTo(0,0)");page.evaluate("()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))");page.screenshot(new Page.ScreenshotOptions().setPath(Path.of("build/reports/screenshots/newsletter-editor-"+width+".png")).setFullPage(true));
+    page.locator("#show-preview").click();assertEquals("true",page.locator("#show-preview").getAttribute("aria-pressed"));assertTrue(page.locator("#letter-form").isHidden());assertEquals(manuscript.get("introduction"),page.locator("#preview-introduction").textContent());assertEquals(6,page.locator("#preview-body > *").count());assertTrue((boolean)page.evaluate("document.documentElement.scrollWidth<=innerWidth"));page.screenshot(new Page.ScreenshotOptions().setPath(Path.of("build/reports/screenshots/newsletter-preview-"+width+".png")).setFullPage(true));
+   }
+   context.route("**/api/v1/newsletters",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("[]")));page.navigate(origin+"/newsletter.html");page.waitForSelector(".archive-empty");assertTrue(page.locator("#letter-archive-tools").isHidden());page.screenshot(new Page.ScreenshotOptions().setPath(Path.of("build/reports/screenshots/newsletter-empty-1440.png")).setFullPage(true));
+  }
+ }
+
+ @Test void newsletterDeleteConfirmsPreservesConflictsAndClearsOnlyOnSuccess(){try(var context=browser.newContext()){
+  String id="20000000-0000-0000-0000-000000000020";
+  var deleted=new java.util.concurrent.atomic.AtomicBoolean();var calls=new java.util.concurrent.atomic.AtomicInteger();var pending=new java.util.concurrent.atomic.AtomicReference<Route>();
+  context.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\"synthetic_admin\",\"role\":\"ADMIN\"}")));
+  context.route("**/api/v1/admin/newsletters",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(deleted.get()?"[]":"[{\"id\":\""+id+"\",\"title\":\"Disposable manuscript\",\"published_at\":\"2026-10-30T00:00:00Z\"}]")));
+  context.route("**/api/v1/admin/newsletters/"+id,r->{
+   if(r.request().method().equals("DELETE")){
+    assertEquals("{\"version\":3}",r.request().postData());assertEquals("synthetic-csrf",r.request().headers().get("x-csrf-token"));
+    if(calls.incrementAndGet()==1)r.fulfill(new Route.FulfillOptions().setStatus(409).setContentType("application/json").setBody("{\"error\":\"version_conflict\"}"));else pending.set(r);
+   }else r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"version\":3,\"manuscript\":{\"title\":\"Disposable manuscript\",\"introduction\":\"Synthetic introduction\",\"topic\":\"AI\",\"blocks\":[{\"type\":\"paragraph\",\"text\":\"Fixture paragraph\",\"url\":\"\",\"caption\":\"\"}]}}"));
+  });
+  Page p=context.newPage();p.navigate(origin+"/newsletter-editor.html");p.locator("#drafts button").click();p.waitForFunction("document.querySelector('[name=title]').value==='Disposable manuscript'");
+  p.onceDialog(Dialog::dismiss);p.locator("#delete-letter").click();assertEquals(0,calls.get());assertEquals("Disposable manuscript",p.locator("[name=title]").inputValue());
+  p.onceDialog(Dialog::accept);p.locator("#delete-letter").click();p.waitForFunction("document.querySelector('[role=status]').textContent.includes('상태가 변경')");assertEquals("Disposable manuscript",p.locator("[name=title]").inputValue());assertEquals(1,p.locator("#blocks section").count());
+  p.onceDialog(Dialog::accept);p.locator("#delete-letter").click();p.waitForCondition(()->pending.get()!=null);p.locator("#new-letter").click();assertEquals("Disposable manuscript",p.locator("[name=title]").inputValue());
+  deleted.set(true);pending.get().fulfill(new Route.FulfillOptions().setStatus(204));p.waitForFunction("document.querySelector('[role=status]').textContent==='원고를 삭제했습니다.'");assertEquals("",p.locator("[name=title]").inputValue());assertEquals(0,p.locator("#blocks section").count());assertEquals(0,p.locator("#drafts button").count());assertEquals(0,p.locator("#preview-body > *").count());
+  p.locator("[name=title]").fill("Unsaved local manuscript");p.onceDialog(Dialog::accept);p.locator("#delete-letter").click();p.waitForFunction("document.querySelector('[name=title]').value===''");assertEquals(2,calls.get());
+ }}
+ static Map<String,Object> productIssue(){
+  var forecast=Map.of("question","Synthetic research question","observation","Observed fixture fact","outlook","Conditional fixture scenario","horizon","Proposed 3 months","experiment","Compare a baseline","successCriteria","Proposed threshold","stopCondition","Stop on contradiction","evidenceIds",List.of(B));
+  var dossier=Map.of("weekStart","2026-10-26","cutoff","2026-10-30T08:00:00Z","articleIds",List.of(B),"forecasts",List.of(forecast),"rightsConfirmed",true,"editorialReviewed",true,"correctionNote","Clarified a proposal");
+  return Map.of("id",A,"issueNumber",1,"revision",2,"distribution","FREE_PREVIEW","publishedAt","2026-10-30T08:00:00Z","firstPublishedAt","2026-10-30T07:00:00Z","manuscript",Map.of("title","Synthetic product issue","introduction","Editorial example","topic","AI","blocks",List.of(Map.of("type","paragraph","text","Editorial <script>not executable</script>","url","","caption",""))),"dossier",dossier,"evidence",List.of(Map.of("id",B,"title","Synthetic evidence","url","https://example.org/paper","collectedAt","2026-10-30T06:00:00Z","visible",true)),"reuseAllowed",true);
+ }
+ @Test void publicationOutputsPreserveTruthfulCreditAndSafeOwnedContent(){try(var context=browser.newContext()){
+  Page p=context.newPage();p.navigate(origin+"/about.html");p.waitForLoadState(com.microsoft.playwright.options.LoadState.NETWORKIDLE);
+  var traffic=new ArrayList<String>();p.onRequest(r->traffic.add(r.url()));
+  assertEquals(true,p.evaluate("""
+   async data=>{const m=await import('/assets/js/newsletter/publication-output.js');const url=location.origin+'/newsletter.html?id='+data.id;const free=m.plainNewsletter(data,'2026-001호',url);if(!free.includes('무료 열람 뉴스레터')||free.includes('유료 구독 뉴스레터')||!free.includes(url))return false;const paid=m.plainNewsletter({...data,distribution:'PAID_SUBSCRIPTION'},'2026-001호',url);if(!paid.includes('이 콘텐츠는 모아판(MoA-PaN)의 유료 구독 뉴스레터를 통해 제공되었습니다.'))return false;const html=m.htmlNewsletter(data,'2026-001호',url);const doc=new DOMParser().parseFromString(html,'text/html');if(doc.querySelector('meta[charset]')?.getAttribute('charset')!=='utf-8'||!doc.querySelector('meta[name=viewport]')?.content.includes('width=device-width'))return false;if(doc.querySelectorAll('script').length||!doc.querySelector('footer').textContent.includes(url)||!doc.querySelector('p').textContent.includes('Editorial'))return false;for(const kind of ['meeting','priority','experiment']){const text=m.worksheet(data,'2026-001호',url,kind);if(!text.includes('Conditional fixture scenario')||!text.includes('https://example.org/paper')||!text.includes(url))return false;}return true;}
+   """,productIssue()));
+  assertTrue(traffic.stream().allMatch(v->v.startsWith(origin+"/assets/js/")));
+ }}
+ @Test void newsletterReaderCopiesAndDownloadsEnterpriseOutputs()throws Exception{try(var context=browser.newContext()){
+  var mapper=tools.jackson.databind.json.JsonMapper.builder().build();String data=mapper.writeValueAsString(productIssue());
+  context.route("**/api/v1/newsletters",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("[]")));
+  context.route("**/api/v1/newsletters/**",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(data)));
+  Page p=context.newPage();p.navigate(origin+"/newsletter.html?id="+A);p.waitForSelector(".publication-tools");
+  p.evaluate("Object.defineProperty(navigator,'clipboard',{value:{writeText:async text=>{window.syntheticClipboard=text;}}})");p.getByRole(com.microsoft.playwright.options.AriaRole.BUTTON,new Page.GetByRoleOptions().setName("출처 포함 복사").setExact(true)).click();p.waitForFunction("window.syntheticClipboard?.includes('무료 열람 뉴스레터')");assertTrue(p.evaluate("window.syntheticClipboard").toString().contains("newsletter.html?id="+A));
+  Path output=Path.of("build/reports/newsletter-reuse.html");Download html=p.waitForDownload(()->p.getByRole(com.microsoft.playwright.options.AriaRole.BUTTON,new Page.GetByRoleOptions().setName("재게재용 파일").setExact(true)).click());html.saveAs(output);String text=Files.readString(output);assertTrue(text.contains("&lt;script&gt;not executable&lt;/script&gt;"));assertTrue(text.contains("무료 열람 뉴스레터"));assertFalse(text.contains("synthetic_user"));Files.delete(output);
+  Path worksheet=Path.of("build/reports/newsletter-worksheet.txt");Download plain=p.waitForDownload(()->p.getByRole(com.microsoft.playwright.options.AriaRole.BUTTON,new Page.GetByRoleOptions().setName("실험·평가 양식").setExact(true)).click());plain.saveAs(worksheet);String work=Files.readString(worksheet);assertTrue(work.contains("Stop on contradiction"));assertTrue(work.contains("측정 결과"));assertTrue(work.contains("https://example.org/paper"));Files.delete(worksheet);p.locator("[data-language-select]").selectOption("en");p.waitForFunction("document.querySelector('.research-notes summary').textContent.includes('Evidence')");assertFalse(p.locator(".research-notes").textContent().contains("근거 주간"));
+  for(int width:new int[]{390,768,1440}){p.setViewportSize(width,1000);assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth<=innerWidth"));p.screenshot(new Page.ScreenshotOptions().setPath(Path.of("build/reports/screenshots/newsletter-product-"+width+".png")));}
+ }}
+ @Test void editorialDossierLinksWeeklyEvidenceAndClearsReviewOnEdit(){try(var context=browser.newContext()){
+  context.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\"synthetic_editor\",\"role\":\"ADMIN\"}")));
+  context.route("**/api/v1/admin/newsletters",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("[]")));
+  var writes=new ArrayList<String>();context.route("**/api/v1/admin/newsletters/*",r->{if(r.request().method().equals("PUT")){writes.add(r.request().postData());r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"version\":1}"));}else r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{}"));});
+  context.route("**/api/v1/admin/newsletters/evidence",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"weekStart\":\"2026-10-26\",\"cutoff\":\"2026-10-30T08:00:00Z\",\"items\":[{\"id\":\""+B+"\",\"title\":\"Weekly synthetic evidence\",\"url\":\"https://example.org/paper\",\"collectedAt\":\"2026-10-30T06:00:00Z\",\"visible\":true}]}")));
+  Page p=context.newPage();p.navigate(origin+"/newsletter-editor.html");p.waitForSelector("#letter-form");p.locator("[name=title]").fill("Synthetic grounded manuscript");p.locator("[name=introduction]").fill("Fixture introduction");p.locator("[name=topic]").fill("AI");p.locator("[data-add=paragraph]").click();p.locator("#blocks textarea").first().fill("Conditional editorial text");
+  p.locator(".reference-panel summary").first().click();p.locator("#reference-search").fill("synthetic-admin-transient-query");p.locator("#find-reference").click();p.locator("#reference-results button").click();p.locator("#add-forecast").click();
+  var fields=p.locator(".forecast-editor > label textarea");for(int i=0;i<7;i++)fields.nth(i).fill("Synthetic research field "+i);p.locator(".forecast-editor input[type=checkbox]").check();p.locator("#rights-confirmed").check();p.locator("#editorial-reviewed").check();assertTrue(p.locator("#editorial-reviewed").isChecked());
+  p.locator("#blocks textarea").first().fill("Revised conditional text");assertFalse(p.locator("#editorial-reviewed").isChecked());p.locator("#rights-confirmed").check();p.locator("#editorial-reviewed").check();p.locator("#letter-form [type=submit]").click();p.waitForCondition(()->writes.size()==1);
+  var json=tools.jackson.databind.json.JsonMapper.builder().build().readTree(writes.getFirst());assertEquals(B,json.get("dossier").get("articleIds").get(0).asText());assertEquals(B,json.get("dossier").get("forecasts").get(0).get("evidenceIds").get(0).asText());assertTrue(json.get("dossier").get("editorialReviewed").asBoolean());assertFalse(writes.getFirst().contains("synthetic-admin-transient-query"));
+ }}
+ @Test void oldDraftCanMoveWeekAndStaleReviewCannotShowSuccess(){try(var context=browser.newContext()){
+  var mapper=tools.jackson.databind.json.JsonMapper.builder().build();var week=com.moapan.newsletter.domain.PublicationResearch.week(java.time.Instant.now());var old=week.minusWeeks(1);
+  var dossier=new HashMap<String,Object>((Map<String,Object>)productIssue().get("dossier"));dossier.put("weekStart",old.toString());dossier.put("cutoff",com.moapan.newsletter.domain.PublicationResearch.start(week).minusSeconds(1).toString());
+  context.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\"synthetic_editor\",\"role\":\"ADMIN\"}")));
+  context.route("**/api/v1/admin/newsletters",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("[{\"id\":\""+A+"\",\"title\":\"Older draft\",\"published_at\":null}]")));
+  var saves=new java.util.concurrent.atomic.AtomicInteger(1);context.route("**/api/v1/admin/newsletters/"+A,r->{if(r.request().method().equals("PUT"))r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"version\":"+saves.incrementAndGet()+"}"));else r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(mapper.writeValueAsString(Map.of("version",1,"revision",0,"expectedWeek",week.toString(),"manuscript",productIssue().get("manuscript"),"dossier",dossier,"evidence",productIssue().get("evidence")))));});
+  var pending=new java.util.concurrent.atomic.AtomicReference<Route>();context.route("**/api/v1/admin/newsletters/"+A+"/review",pending::set);
+  Page p=context.newPage();p.navigate(origin+"/newsletter-editor.html");p.locator("#drafts button").click();p.waitForFunction("document.querySelector('[name=title]').value==='Synthetic product issue'");p.locator("#research-panel summary").click();assertTrue(p.locator("#roll-research-week").isVisible());p.onceDialog(com.microsoft.playwright.Dialog::accept);p.locator("#roll-research-week").click();assertEquals(week.toString(),p.locator("#research-week").inputValue());assertEquals(0,p.locator("#research-evidence .evidence-row").count());assertFalse(p.locator("#editorial-reviewed").isChecked());
+  p.locator("#review-letter").click();p.waitForCondition(()->pending.get()!=null);p.locator("[name=title]").fill("Edited while review pending");pending.get().fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"version\":2,\"blockers\":[],\"evidence\":[]}"));p.waitForLoadState(com.microsoft.playwright.options.LoadState.NETWORKIDLE);assertEquals("",p.locator("#publication-review").textContent());
+  pending.set(null);p.locator("#rights-confirmed").check();p.locator("#editorial-reviewed").check();p.locator("#review-letter").click();p.waitForCondition(()->pending.get()!=null);pending.get().fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"version\":3,\"blockers\":[],\"evidence\":[]}"));p.waitForFunction("document.querySelector('#publication-review').textContent.includes('발간 조건')");p.locator("#editorial-reviewed").uncheck();assertEquals("",p.locator("#publication-review").textContent());p.locator("#blocks textarea").first().fill("Edited after review");assertEquals("",p.locator("#publication-review").textContent());
+  assertEquals(true,p.evaluate("async week=>{const m=await import('/assets/js/newsletter/research-editor.js');const d=m.blankDossier(week);return Date.parse(d.cutoff)<Date.parse(week+'T00:00:00+09:00')+7*86400000;}",old.toString()));
+ }}
+
 }

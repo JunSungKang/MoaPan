@@ -29,3 +29,7 @@ worker → 전용 internal network → translator(CPU)로 제목·요약을 전�
 advertising 기능은 api/AdvertisingController → application/AdvertisingSettings → PostgreSQL 설정 1행으로 구성한다. 브라우저 advertising/banner.js는 검증된 설정으로 DOM만 생성하며 추적·원격 SDK 의존성이 없다. administration.js는 관리자 설정/미리보기 담당이다. 기존 config.js 광고 설정은 DB로 대체했다.
 
 newsletter: NewsletterController → NewsletterService → PostgreSQL newsletters. 정적 newsletter.html/list·detail과 newsletter-editor.html/admin block editor를 분리한다. newsletter/render.js가 안전한 텍스트 DOM과 제한된 자체 이미지·HTTPS 원문 링크만 출력한다. 개인화·수집·번역 모델의 실행과 독립된 관리자 집필 기능이다. 업로드 이미지는 브라우저 JPEG 변환·축소 후 JSONB snapshot에 포함하므로 DB 백업과 함께 이관한다.
+
+
+## 공개 뉴스 경계
+GET / 및 /index.html과 명시적 공개 edition/tags/interests, POST 공개 검색만 비회원 뉴스 경로다. 서버는 뉴스레터·계정·회원 전용 뉴스 API의 인증과 관리자 권한을 계속 검사한다. 공개 edition은 전역600회/분과 전체 API3000회/분, 검색은 전체120회/분을 PostgreSQL로 제한한다. 회원이 공개 경로를 호출해도 회원 quota를 적용한다. 폐기/만료 계정의 세션은 공개 뉴스 요청에서 익명으로 전환하고 보호 요청에서401 또는 로그인 이동으로 거부한다. 브라우저는 로그인 확인 후 비회원에게 공통 관심사만 적용하고 뉴스레터의 소개·본문을 요청하지 않는다.
