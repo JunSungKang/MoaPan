@@ -82,6 +82,34 @@
           "docs/01-management/progress.md"
         ]
       }
+    },
+    {
+      "id": "newsletter",
+      "expectedPaths": [
+        "src/**",
+        "Caddyfile",
+        "scripts/**",
+        "docs/**",
+        ".github/workflow-plans/auth-layout-spacing.json",
+        "README.md"
+      ],
+      "forbiddenPaths": [
+        ".env"
+      ],
+      "acceptanceCriteria": [
+        "Admin-only newsletter draft/edit/publish with isolated published snapshots and optimistic versions",
+        "Member list/detail, responsive magazine reading, safe blocks and embedded owned images",
+        "No email collection, tracking, raw article replication or external embeds"
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh check integrationTest e2eTest bootJar sbom securityCheck"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/progress.md",
+          "docs/03-design/api.md"
+        ]
+      }
     }
   ]
 }

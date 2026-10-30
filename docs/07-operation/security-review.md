@@ -113,3 +113,5 @@ Helm 기본값은 필수 registry/host/Secret 미입력으로 소스 스캔에�
 - 검사게이트통과는전체환경무취약보증이아니다. 최종runtime이미지60547f2cb05daf699e1c9b99e64ff7b2fa647d029b498f0eb2c40a3699bd1f6f(sha256)를검사후Composeweb/worker에적용했다.
 
 관리자 광고 추가: 외부 SDK·추적·서버 URL fetch·CSP 변경 없음. ADMIN/서비스권한·CSRF·version·감사, HTTPS 링크와 서버 raster이미지 경로제한, DOM textContent 적용. ADSENSE는 정보 저장만 가능하고 서비스409/DB CHECK로 활성화차단(사용자 승인범위). V12 후 이미지03f8084c9d35ccbe5b25e2a3dd93f89433fce8f43cddb8ef471cf56547a1f0d7 검사를 통과해 같은 digest배포. 기존 proxy한정VEX·OS잔여위험은 그대로 유지한다.
+
+뉴스레터 변경: 기존 JOSE 비노출 VEX는 독립 검토 후 request_body 상한이 바뀐 두 Caddyfile hash만 갱신했다. 만료2026-11-05와 라이브러리 미패치 판정은 유지한다. 실제 실행 Caddy adapt에서 admin disabled, http/tls만 확인했다. 본문1MiB는 관리자 UUID 원고PUT에만 허용하며 일반 API16KiB는 유지한다. 외부 iframe/스크립트/뉴스 원문 수집 추가 없음. 이미지 data URI·형식·크기·메타데이터 치수 검사, textContent, ADMIN/CSRF/version 감사 적용. 앱/프록시 이미지 gate 통과는 기존 OS MEDIUM/LOW와 조건부 proxy HIGH를 제거했다는 뜻이 아니다.

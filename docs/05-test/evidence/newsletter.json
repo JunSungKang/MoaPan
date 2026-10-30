@@ -1,0 +1,59 @@
+{
+  "checkedAt": "2026-10-30T06:33:50.845Z",
+  "tests": {
+    "test": {
+      "tests": 132,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "integrationTest": {
+      "tests": 46,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "e2eTest": {
+      "tests": 30,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "policyTests": 4,
+  "htmlMessages": 0,
+  "viewports": [
+    390,
+    768,
+    1440
+  ],
+  "migration": 13,
+  "live": {
+    "checkedAt": "2026-10-30T06:29:37.455Z",
+    "reader200": true,
+    "anonymous302": true,
+    "memberAdmin403": true,
+    "memberEditor302": true,
+    "syntheticDeleted": true
+  },
+  "images": {
+    "moapan-web-1": "sha256:02ac132a87762f753cb58b413e83951e29099bd7a5771801727db61b81f83560",
+    "moapan-worker-1": "sha256:02ac132a87762f753cb58b413e83951e29099bd7a5771801727db61b81f83560",
+    "moapan-proxy-1": "sha256:55f0915c6be86026d07419b8f8f21374d1febfd9046955bf010fdb9c68f8bafa"
+  },
+  "jarSha256": "2512ec1e3f8fffdd5c339f8a1a707326cad451687b64ca86317fb3a3ed0cad0d",
+  "proxy": {
+    "adminDisabled": true,
+    "apps": [
+      "http",
+      "tls"
+    ],
+    "vexScope": "Unchanged; body-limit hashes updated only after independent review; expires2026-11-05"
+  },
+  "workflow": "ADMIN drafts and snapshots; first publication assigns stable issue number; member reads published only; no email/remote embeds",
+  "storage": "DB JSONB includes resized owned JPEG images; existing DB backup/volume persists all assets",
+  "verification": "PostgreSQL snapshot integration and XSS/responsive/delayed-save E2E passed. Initial EOF from concurrent test output writers invalidated and rerun sequentially. Initial compile/metadata errors fixed, not counted as PASS.",
+  "limits": "No original news bodies copied, no AI authorship, no newsletter machine translation, no live Kubernetes deployment",
+  "latestEditorHttps": true,
+  "jarMatchesRunning": true
+}

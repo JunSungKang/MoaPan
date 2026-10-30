@@ -496,4 +496,14 @@ class SecurityIntegrationTest {
         input.put("version",2);input.put("enabled",true);mvc.perform(put("/api/v1/admin/advertisements").cookie(cookie).with(csrf().asHeader()).contentType("application/json").content(mapper.writeValueAsString(input))).andExpect(status().isConflict()).andExpect(jsonPath("$.error").value("adsense_connection_required"));
         input.put("enabled",false);input.put("publisherId","<script>");mvc.perform(put("/api/v1/admin/advertisements").cookie(cookie).with(csrf().asHeader()).contentType("application/json").content(mapper.writeValueAsString(input))).andExpect(status().isBadRequest());
     }
+ @Test @Order(17) void newsletterSnapshotsStayPrivateUntilPublished()throws Exception{
+  signup("letter_writer");var account=accounts.findByUsername("letter_writer").orElseThrow();account.role="ADMIN";accounts.save(account);var cookie=login("letter_writer");UUID id=UUID.randomUUID();
+  String body="{\"version\":0,\"manuscript\":{\"title\":\"Synthetic future\",\"introduction\":\"Synthetic editorial\",\"topic\":\"AI\",\"blocks\":[{\"type\":\"paragraph\",\"text\":\"A considered scenario\",\"url\":\"\",\"caption\":\"\"}]}}";
+  mvc.perform(get("/api/v1/newsletters")).andExpect(status().isUnauthorized());
+  mvc.perform(put("/api/v1/admin/newsletters/"+id).cookie(cookie).with(csrf()).contentType("application/json").content(body)).andExpect(status().isOk());
+  mvc.perform(get("/api/v1/newsletters/"+id).cookie(cookie)).andExpect(status().isNotFound());
+  mvc.perform(post("/api/v1/admin/newsletters/"+id+"/publication").cookie(cookie).with(csrf()).contentType("application/json").content("{\"version\":1,\"visible\":true}")).andExpect(status().isOk());
+  mvc.perform(put("/api/v1/admin/newsletters/"+id).cookie(cookie).with(csrf()).contentType("application/json").content(body.replace("\"version\":0","\"version\":2").replace("Synthetic future","Unpublished revision"))).andExpect(status().isOk());
+  mvc.perform(get("/api/v1/newsletters/"+id).cookie(cookie)).andExpect(jsonPath("$.manuscript.title").value("Synthetic future"));
+ }
 }

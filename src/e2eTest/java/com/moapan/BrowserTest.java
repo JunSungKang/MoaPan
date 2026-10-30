@@ -514,4 +514,16 @@ class BrowserTest {
             p.locator("#advertising-form [name=provider]").selectOption("ADSENSE");assertTrue(p.locator("#advertising-form [name=enabled]").isDisabled());assertFalse(p.locator("#advertising-form [name=enabled]").isChecked());p.locator("#advertising-form [name=publisherId]").fill("ca-pub-1234567890123456");p.locator("#advertising-form [name=slotId]").fill("1234567890");p.locator("#advertising-form [type=submit]").click();p.waitForCondition(()->saved.size()==2);assertTrue(saved.getLast().contains("\"enabled\":false"));assertTrue(external.isEmpty());
         }
     }
+ @Test void newsletterReaderUsesSafeMagazineBlocks(){try(var context=browser.newContext()){
+ String id="20000000-0000-0000-0000-000000000001";
+ context.route("**/api/v1/newsletters",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("[{\"id\":\""+id+"\",\"title\":\"Synthetic outlook\",\"introduction\":\"Synthetic introduction\",\"topic\":\"AI\",\"published_at\":\"2026-10-30T00:00:00Z\"}]")));
+ context.route("**/api/v1/newsletters/"+id,r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"publishedAt\":\"2026-10-30T00:00:00Z\",\"manuscript\":{\"title\":\"Synthetic outlook\",\"introduction\":\"Synthetic introduction\",\"topic\":\"AI\",\"blocks\":[{\"type\":\"paragraph\",\"text\":\"A scenario <script>example</script>\",\"url\":\"\",\"caption\":\"\"}]}}")));
+ Page p=context.newPage();for(int width:new int[]{390,768,1440}){p.setViewportSize(width,1000);p.navigate(origin+"/newsletter.html?id="+id);p.waitForSelector("#letter-body p");assertTrue(p.locator("#letter-body").textContent().contains("<script>"));assertEquals(0,p.locator("#letter-body script").count());assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth<=innerWidth"));}
+ }}
+ @Test void newsletterSaveBlocksSwitchingWhileResponseIsPending(){try(var context=browser.newContext()){
+ context.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\"synthetic_admin\",\"role\":\"ADMIN\"}")));
+ context.route("**/api/v1/admin/newsletters",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("[]")));
+ var pending=new java.util.concurrent.atomic.AtomicReference<Route>();context.route("**/api/v1/admin/newsletters/*",r->{if(r.request().method().equals("PUT"))pending.set(r);else r.resume();});
+ Page p=context.newPage();p.navigate(origin+"/newsletter-editor.html");p.waitForSelector("#letter-form");p.locator("[name=title]").fill("Pending manuscript");p.locator("[data-add=paragraph]").click();p.locator("#blocks textarea").first().fill("Before save");p.locator("#letter-form [type=submit]").click();p.waitForCondition(()->pending.get()!=null);p.locator("#new-letter").click();assertEquals("Pending manuscript",p.locator("[name=title]").inputValue());p.locator("#blocks textarea").first().fill("Edited during save");pending.get().fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"version\":1}"));p.waitForFunction("document.querySelector('[role=status]').textContent.includes('초안을 저장')");assertEquals("Edited during save",p.locator("#blocks textarea").first().inputValue());
+ }}
 }

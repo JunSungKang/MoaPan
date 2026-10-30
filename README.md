@@ -113,3 +113,5 @@ Linux 서버에서는 `compose-public.yaml` 대신 `scripts/deploy/compose-serve
 구성·정책·자원·실패 처리: [docs/03-design/classification.md](docs/03-design/classification.md). 수동 Compose 명령에도 `-f scripts/deploy/compose-classification.yaml`을 포함한다. Helm은 classifier 이미지 digest·전용 PVC·Secret·내부 Service를 미리 준비했으며 실제 Kubernetes 설치는 수행하지 않았다.
 
 광고는 관리자 → 광고 관리에서 직접 링크 배너를 저장하면 지면 재조회 시 반영됩니다. 애드센스는 승인/식별자 미보유 상태에 맞춰 연결 정보 등록만 지원하며 실제 송출은 연결되지 않았습니다. 상세 절차는 [배포·운영 안내](docs/06-transition/deployment.md#광고-등록-방법)를 참조하세요.
+
+트렌드 뉴스레터: 로그인 후 콘텐츠 메뉴에서 목록/본문을 읽습니다. 관리자 계정 메뉴 → 뉴스레터 관리에서 새 원고·글/그림·참고 자료를 편집하고 초안 저장/미리보기/발간/발간 취소를 할 수 있습니다. 원고 수정은 재발간 전까지 기존 발간본에 영향을 주지 않습니다. 이메일 발송은 없습니다.
