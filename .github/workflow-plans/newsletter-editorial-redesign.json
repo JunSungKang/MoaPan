@@ -109,6 +109,48 @@
           "AGENTS.md"
         ]
       }
+    },
+    {
+      "id": "public-newspaper-member-newsletter",
+      "expectedPaths": [
+        "src/main/java/com/moapan/access/**",
+        "src/main/java/com/moapan/edition/**",
+        "src/main/java/com/moapan/discovery/**",
+        "src/main/resources/static/**",
+        "src/integrationTest/**",
+        "src/e2eTest/**",
+        "src/test/**",
+        "docs/**",
+        "README.md",
+        "AGENTS.md",
+        ".github/workflow-plans/newsletter-editorial-redesign.json"
+      ],
+      "forbiddenPaths": [
+        ".env"
+      ],
+      "acceptanceCriteria": [
+        "Anonymous visitors can read today's collected-news edition and search, using representative interests and bounded public DTOs without a member cursor",
+        "Newsletter archive/detail, preferences, account and administration stay authenticated; public news does not load newsletter content for guests",
+        "Anonymous CSRF, rate limits, invalid parameters, hidden and rights-withdrawn articles are enforced; member quota/cursor and preferences remain intact",
+        "PostgreSQL and browser regressions, final artifact/image security checks and actual Compose HTTPS checks are recorded"
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest",
+        "node scripts/test/docs-check.mjs",
+        "git diff --check"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/plan.md",
+          "docs/01-management/progress.md",
+          "docs/03-design/api.md",
+          "docs/03-design/decisions.md",
+          "docs/05-test/test-report.md",
+          "docs/07-operation/security-review.md",
+          "AGENTS.md",
+          "README.md"
+        ]
+      }
     }
   ]
 }

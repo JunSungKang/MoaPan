@@ -1,0 +1,185 @@
+{
+  "checkedAt": "2026-10-30T17:11:40.413Z",
+  "tests": {
+    "test": {
+      "tests": 132,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "integrationTest": {
+      "tests": 48,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "e2eTest": {
+      "tests": 34,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "htmlMessages": 0,
+  "security": {
+    "tool": "Trivy0.76.1",
+    "image": "sha256:47b30aaf13c58138e0e46324c0f0ab328c34316300accf1768694b4db3d529c3",
+    "findings": {
+      "CRITICAL": 0,
+      "HIGH": 0,
+      "MEDIUM": 23,
+      "LOW": 4,
+      "UNKNOWN": 0
+    },
+    "sourceJarSbom": "PASS",
+    "completedAt": "2026-10-30T17:09:45Z",
+    "database": {
+      "Version": 2,
+      "NextUpdate": "2026-10-30T19:18:50.969126577Z",
+      "UpdatedAt": "2026-10-29T19:18:50.96912695Z",
+      "DownloadedAt": "2026-10-29T22:52:43.958399Z"
+    }
+  },
+  "jarSha256": "102506508af4a808c0ce7eb07cc2d48c12f17db7471ae82e8a3df10948a1e5ac",
+  "running": {
+    "web": "sha256:47b30aaf13c58138e0e46324c0f0ab328c34316300accf1768694b4db3d529c3",
+    "worker": "sha256:47b30aaf13c58138e0e46324c0f0ab328c34316300accf1768694b4db3d529c3"
+  },
+  "liveJarMatches": true,
+  "live": {
+    "checkedAt": "2026-10-30T17:10:37.641Z",
+    "base": "https://175.195.62.165",
+    "tls": "normal certificate verification; no bypass",
+    "checks": [
+      {
+        "path": "/",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/public/news/edition",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/account",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/news/edition",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/news/page?cursor=x",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/newsletters",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/newsletters/2fc4f08d-b76a-48db-bc77-bf0b6104a2c1",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/admin/newsletters",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/admin/sites",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/sources",
+        "status": 401
+      },
+      {
+        "path": "/newsletter.html",
+        "status": 302
+      },
+      {
+        "path": "/newsletter-editor.html",
+        "status": 302
+      },
+      {
+        "path": "/settings.html",
+        "status": 302
+      },
+      {
+        "path": "/account.html",
+        "status": 302
+      },
+      {
+        "path": "/admin.html",
+        "status": 302
+      },
+      {
+        "path": "/api/v1/public/news/edition?size=999",
+        "status": 400
+      },
+      {
+        "path": "/api/v1/public/news/edition?cursor=x",
+        "status": 400
+      },
+      {
+        "path": "/api/v1/public/news/search",
+        "status": 403
+      },
+      {
+        "path": "/api/v1/auth/csrf",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/public/news/search",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/public/news/search",
+        "status": 403
+      },
+      {
+        "path": "/index.html",
+        "status": 200
+      },
+      {
+        "path": "/assets/js/shared/common.js",
+        "status": 200
+      },
+      {
+        "path": "/assets/js/edition/news.js",
+        "status": 200
+      }
+    ],
+    "editionItems": 42,
+    "candidateCount": 198,
+    "searchItems": 7,
+    "searchTotal": 140,
+    "liveAssetHashes": {
+      "/index.html": "0791cabd3ee842f08295e72e8f54aaf108579cc633415f447a2d92e15077b831",
+      "/assets/js/shared/common.js": "ead9e7f94e6520d2991575f214e69ea99b729e916141e21ac4656a4a109b62ec",
+      "/assets/js/edition/news.js": "04f2dcf851901b88e7418b0da402fb7cd8e87130f4b69ac099708863335a06aa"
+    }
+  },
+  "browser": {
+    "actualHttpsGuestNewspaper": true,
+    "actualHttpsNewsletterRedirect": "https://175.195.62.165/login.html",
+    "syntheticScreenshots": [
+      390,
+      768,
+      1440
+    ],
+    "noOverflow": true,
+    "guestUsesRepresentativeNotSavedMemberPreferences": true,
+    "newsletterTeaserRemovedOnAuthLoss": true,
+    "lateNewsletterResponseRejected": true
+  },
+  "independentReview": "APPROVE after fixes; formal current-head review follows commit",
+  "initialFindings": [
+    "Independent review found newsletter teaser remained after authentication loss or could be appended by a late response; member-content cleanup and generation check plus both browser regressions added",
+    "First live HTTPS check rejected absolute HTTP login Location emitted behind proxy; fixed relative302 Location and reran all tests/scans/live checks"
+  ],
+  "limitations": [
+    "News is intentionally accessible to anonymous visitors within public edition/search limits; no complete scraping prevention claimed",
+    "Only app image changed; unchanged proxy retains existing hash-bound conditional JOSE non-exposure assessment expiring2026-11-05 and existing OS residual risks",
+    "No pricing, payment, enterprise, republishing or other business-plan features implemented in this change",
+    "No database migration, membership change or article deletion"
+  ]
+}

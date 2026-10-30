@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.web.bind.annotation.*;
 @RestController @ConditionalOnWebApplication
 public class DiscoveryController {
-    static final List<String> PUBLIC_PAGES=List.of("/about.html","/privacy.html","/terms.html");
+    static final List<String> PUBLIC_PAGES=List.of("/index.html","/about.html","/privacy.html","/terms.html");
     private final String origin;
     public DiscoveryController(@Value("${moapan.public-base-url}") String base){origin=origin(base);}
     static String origin(String value){

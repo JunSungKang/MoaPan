@@ -69,7 +69,7 @@ JSON_API는 단일 GET 응답의 제한된 점 구분 경로만 지원: items,id
 로그인 실패1~4회:401 invalid_credentials.5~9회:같은401 응답에 attemptsRemaining(5~1) 추가.10회부터429 login_limited와 실제 DB 제한 만료까지의 Retry-After(초)를 반환한다. 전역 로그인 횟수 제한은429 rate_limited로 구분한다. 존재하지 않는 아이디도 같은 실패 카운터 정책을 따른다. 제한된 요청은 만료를 연장하지 않는다.
 
 ## 공개 지면과 대표 관심사 (최신 사용자 변경)
-GET /api/v1/public/news/edition: 인증 필수인 호환 경로, query 불허, 최근 공통 edition에서 최대42개. 회원 cursor와 계정 quota를 동일 적용한다. 공개 상태·출처 권리·요약 허용 여부 재검사. 계정 분당60/일일6000항목/동시3 및 전체 API분당3000 제한과 실패 시503을 적용한다. IP·기기 식별자 추가 없음.
+GET /api/v1/public/news/edition: 비회원 공개, query 불허, 최근 공통 edition에서 최대42개, 비회원 nextCursor=null. 공개 상태·출처 권리·요약 허용 여부·유효 번역을 재검사한다. 비회원은 전역600회/분, 전체 API3000회/분 제한. 인증된 회원은 같은 경로에서도 계정 분당60/일일6000항목/동시3 및 서명 cursor 적용. 제한429+Retry-After, 확인 장애503. IP·기기 식별자 추가 없음.
 GET /api/v1/public/interests: version,weights(UUID:1~5). 개인 설정이 아닌 관리자 공통 대표값.
 GET /api/v1/public/tags: 공개 태그·별칭·병합 매핑.
 GET /api/v1/admin/interests 및 PUT /api/v1/admin/interests: ADMIN; PUT은 CSRF, {version,weights}필수, 활성 태그1~30개, 가중치1~5, version 불일치409. 감사 action은 representative_interests이며 개인 관심사 API는 아님.
@@ -82,7 +82,7 @@ SourceInput에 publishedSince(YYYY-MM-DD 또는null), topicTerms(최대40개·�
 뉴스 DTO에 `author` 문자열(출처 제공 작성자, 최대 2,000자)을 추가한다. 미제공은 빈 문자열이며 UI에서 `정보 없음`으로 표시한다. `publishedAt`이 없으면 작성일도 `정보 없음`이다. 수집시각으로 작성일을 대체하지 않는다. 제목은 원문 링크이며 카드에는 작성일·작성자·출처·태그·R&D 중심 추출 요약만 표시한다. JSON_API 매핑에 선택 `author` 경로를 지원한다.
 
 ## 승인된 서버 기사 검색
-POST /api/v1/public/news/search와 POST /api/v1/news/search 모두 회원 인증 필수. 두 경로 모두 CSRF 필수, 동일 origin, no-store. 공개 경로도 인증된 회원이면 계정 quota 적용.
+POST /api/v1/public/news/search는 비회원 공개, POST /api/v1/news/search는 회원 인증 필수. 두 경로 모두 CSRF 필수, 동일 origin, no-store. 공개 경로도 인증된 회원이면 계정 quota 적용.
 JSON 입력: search(필수 문자열, 최대100자), category(필수 문자열, 최대80자), day(null 또는 YYYY-MM-DD, KST 기준), page(0..19). 빈 검색/카테고리는 전체 공개자료. size/offset/추가 필드/URL 파라미터 거부.
 응답: items(공개 ArticleView 최대7개), page, pages(최대20), total(최대140). 최근7일/지면42개 밖의 저장 공개기사도 포함한다. 발행시각 또는 수집시각 내림차순/ID로 정렬하며 미래자료 제외. 개인 관심사/제외조건은 적용하지 않는다. 제목·표시 허용 요약·활성 태그의 문자 일치 검색이며 SQL 와일드카드를 문자로 취급한다. 카테고리는 정확 일치.
 공개 권리와 공개상태를 매 요청 재확인한다. 요청 하나 안의 count/items는 repeatable-read. 페이지 간 새 수집·숨김·정정으로 결과가 달라질 수 있으며 검색 스냅샷이나 검색어를 영속 보관하지 않는다.
@@ -100,7 +100,7 @@ GET /api/v1/admin/translations (ADMIN): runtime(state,failures,next_probe_at,che
 ## 분류 운영
 ADMIN GET `/api/v1/admin/classification`: policy/catalog(version/topics/hash), 상태별 counts, runtime, 최근20개 작업. ADMIN+CSRF PUT `/api/v1/admin/classification/topics`: `{version,topics:[{tagId,definition}]}`. 1~8개/중복ID 금지/활성태그/정의1~200자. 400 입력오류,409 version충돌. 뉴스 응답 필드는 변경하지 않는다.
 
-로그인 JSON은 username/password와 선택 Boolean rememberMe를 받는다. true일 때 현재 브라우저 SESSION을 최대30일 보관하고, 기본 false는30분유휴/12시간절대다. / 및 /index.html도 인증 필수이며 미로그인은 /login.html로 이동한다. 공개 sitemap은 /about.html,/privacy.html,/terms.html만 제공한다.
+로그인 JSON은 username/password와 선택 Boolean rememberMe를 받는다. true일 때 현재 브라우저 SESSION을 최대30일 보관하고, 기본 false는30분유휴/12시간절대다. / 및 /index.html은 공개하며 뉴스레터/설정/계정/관리 화면의 미로그인은 /login.html로 이동한다. 공개 sitemap은 /index.html,/about.html,/privacy.html,/terms.html을 제공하며 보호 화면·API는 noindex다.
 
 ## 관리자 광고 설정
 GET /api/v1/admin/advertisements 및 PUT 동일 경로: ADMIN만 허용하고 PUT에는 CSRF가 필요하다. 입력/관리응답은 version, enabled, provider(BANNER/ADSENSE), title(80), description(160), targetUrl(2048), imagePath(240), publisherId, slotId다. provider의 모든 ID는 공개 식별자이며 비밀번호/API키 입력 기능이 아니다.

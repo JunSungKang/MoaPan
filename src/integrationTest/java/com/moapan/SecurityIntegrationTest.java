@@ -131,6 +131,13 @@ class SecurityIntegrationTest {
     @Test @Order(4) void disabledSessionRejected()throws Exception{
         signup("synthetic_disabled");var cookie=login("synthetic_disabled");var user=accounts.findByUsername("synthetic_disabled").orElseThrow();user.active=false;accounts.save(user);mvc.perform(get("/api/v1/account").cookie(cookie)).andExpect(status().isUnauthorized());
     }
+    @Test @Order(4) void revokedSessionFallsBackToAnonymousOnlyForPublicNews()throws Exception{
+        signup("synthetic_revoked_guest");var cookie=login("synthetic_revoked_guest");
+        var a=accounts.findByUsername("synthetic_revoked_guest").orElseThrow();a.active=false;accounts.saveAndFlush(a);
+        mvc.perform(get("/api/v1/public/news/edition").cookie(cookie)).andExpect(status().isOk()).andExpect(jsonPath("$.nextCursor").isEmpty());
+        mvc.perform(get("/api/v1/account").cookie(cookie)).andExpect(status().isUnauthorized());
+        mvc.perform(get("/newsletter.html").cookie(cookie)).andExpect(redirectedUrl("/login.html"));
+    }
     @Test @Order(5) void quotaConcurrencyAndNoReloginReset()throws Exception{
         UUID user=accounts.findByUsername("synthetic_a").orElseThrow().id;
         Limits secondInstance=new Limits(repo.db(),tm,"synthetic-only-test-secret-32-characters");
@@ -328,18 +335,25 @@ class SecurityIntegrationTest {
 
 
     @Test @Order(80) void publicEditionIsBoundedAndProtectedPagesStayPrivate()throws Exception{
-        for(String page:List.of("index","settings","account","admin"))mvc.perform(get("/"+page+".html")).andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("/login.html"));
+        for(String path:List.of("/","/index.html"))mvc.perform(get(path)).andExpect(status().isOk());
+        for(String page:List.of("settings","account","admin","newsletter","newsletter-editor"))mvc.perform(get("/"+page+".html")).andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("/login.html"));
         mvc.perform(get("/api/v1/account")).andExpect(status().isUnauthorized());
         UUID site=UUID.randomUUID(),source=UUID.randomUUID();
         repo.db().sql("INSERT INTO sites(id,name,homepage_url,normalized_homepage_url,status) VALUES(:id,'Public synthetic','https://public.example.org/','https://public.example.org/','ACTIVE')").param("id",site).update();
         repo.db().sql("INSERT INTO sources(id,site_id,label,type,endpoint_url,normalized_endpoint_url,rights_status,allow_display) VALUES(:id,:site,'Public synthetic','RSS','https://public.example.org/feed','https://public.example.org/feed','APPROVED',true)").param("id",source).param("site",site).update();
         for(int i=0;i<55;i++)repo.db().sql("INSERT INTO articles(id,source_id,source_guid,canonical_url,title,summary_mode,language,input_hash,collected_at) VALUES(:id,:source,:guid,:url,'Public synthetic','INSUFFICIENT','en',:hash,now())").param("id",UUID.randomUUID()).param("source",source).param("guid","public-"+i).param("url","https://public.example.org/"+i).param("hash","b".repeat(64)).update();
         repo.db().sql("UPDATE news_editions SET expires_at=now()-interval '1 second'").update();
-        mvc.perform(get("/api/v1/public/news/edition")).andExpect(status().isUnauthorized());signup("synthetic_gate");var gateCookie=login("synthetic_gate");String response=mvc.perform(get("/api/v1/public/news/edition").cookie(gateCookie)).andExpect(status().isOk()).andExpect(header().string("Cache-Control","no-store")).andExpect(jsonPath("$.items.length()").value(42)).andReturn().getResponse().getContentAsString();
+        for(String path:List.of("/api/v1/newsletters","/api/v1/newsletters/"+UUID.randomUUID(),"/api/v1/admin/newsletters","/api/v1/tags","/api/v1/sources"))mvc.perform(get(path)).andExpect(status().isUnauthorized());
+        signup("synthetic_gate");var gateCookie=login("synthetic_gate");String response=mvc.perform(get("/api/v1/public/news/edition")).andExpect(status().isOk()).andExpect(header().string("Cache-Control","no-store")).andExpect(jsonPath("$.items.length()").value(42)).andExpect(jsonPath("$.nextCursor").isEmpty()).andReturn().getResponse().getContentAsString();
         assertFalse(response.contains("admin_note"));assertFalse(response.contains("password"));
         var page=news.publicEdition();UUID hidden=page.items().getFirst().id();repo.db().sql("UPDATE articles SET public=false WHERE id=:id").param("id",hidden).update();assertTrue(news.publicEdition().items().stream().noneMatch(a->a.id().equals(hidden)));
-        for(String query:List.of("?size=300","?cursor=x","?limit=-1"))mvc.perform(get("/api/v1/public/news/edition"+query).cookie(gateCookie)).andExpect(status().isBadRequest());
+        for(String query:List.of("?size=300","?cursor=x","?limit=-1","?size=1&size=2"))mvc.perform(get("/api/v1/public/news/edition"+query)).andExpect(status().isBadRequest());
         mvc.perform(get("/api/v1/public/news/page?cursor=x")).andExpect(status().isUnauthorized());
+        mvc.perform(get("/api/v1/public/news/edition").cookie(gateCookie)).andExpect(status().isOk());
+        repo.db().sql("UPDATE sources SET allow_display=false WHERE id=:id").param("id",source).update();
+        String revoked=mvc.perform(get("/api/v1/public/news/edition")).andExpect(status().isOk()).andReturn().getResponse().getContentAsString();assertFalse(revoked.contains(source.toString()));
+        repo.db().sql("UPDATE auth_rate_limits SET used=600 WHERE bucket='public_news'").update();
+        mvc.perform(get("/api/v1/public/news/edition")).andExpect(status().isTooManyRequests()).andExpect(header().exists("Retry-After"));
         UUID gateUser=accounts.findByUsername("synthetic_gate").orElseThrow().id;repo.db().sql("UPDATE api_quotas SET used=60 WHERE user_id=:u AND bucket LIKE 'minute:%'").param("u",gateUser).update();
         mvc.perform(get("/api/v1/public/news/edition").cookie(gateCookie)).andExpect(status().isTooManyRequests()).andExpect(header().exists("Retry-After"));
         repo.db().sql("DELETE FROM auth_rate_limits WHERE bucket='public_news'").update();
@@ -352,7 +366,9 @@ class SecurityIntegrationTest {
         signup("synthetic_search_gate");var searchCookie=login("synthetic_search_gate");String endpoint="/api/v1/public/news/search",body="{\"search\":\"synthetic-search-fixture\",\"category\":\"\",\"day\":null,\"page\":0}";
         mvc.perform(post(endpoint).contentType("application/json").content(body)).andExpect(status().isForbidden());
         mvc.perform(post("/api/v1/news/search").with(csrf().asHeader()).contentType("application/json").content(body)).andExpect(status().isUnauthorized());
-        mvc.perform(post(endpoint).with(csrf().asHeader()).contentType("application/json").content(body)).andExpect(status().isUnauthorized());
+        mvc.perform(post(endpoint).with(csrf().useInvalidToken()).contentType("application/json").content(body)).andExpect(status().isForbidden());
+        mvc.perform(post(endpoint).with(csrf().asHeader()).contentType("application/json").content(body)).andExpect(status().isOk()).andExpect(jsonPath("$.items.length()").value(7)).andExpect(jsonPath("$.pages").value(20));
+        mvc.perform(post(endpoint).with(csrf().asHeader()).header("Sec-Fetch-Site","cross-site").contentType("application/json").content(body)).andExpect(status().isForbidden());
         mvc.perform(post(endpoint).cookie(searchCookie).with(csrf().asHeader()).contentType("application/json").content(body)).andExpect(status().isOk()).andExpect(header().string("Cache-Control","no-store")).andExpect(jsonPath("$.items.length()").value(7)).andExpect(jsonPath("$.total").value(140)).andExpect(jsonPath("$.pages").value(20)).andExpect(jsonPath("$.items[0].title").value("synthetic-search-fixture-0"));
         mvc.perform(post(endpoint).cookie(searchCookie).with(csrf().asHeader()).contentType("application/json").content(body.replace("\"page\":0","\"page\":19"))).andExpect(status().isOk()).andExpect(jsonPath("$.items[0].title").value("synthetic-search-fixture-133"));
         for(int page:List.of(-1,20,1000))mvc.perform(post(endpoint).cookie(searchCookie).with(csrf().asHeader()).contentType("application/json").content(body.replace("\"page\":0","\"page\":"+page))).andExpect(status().isBadRequest());
@@ -454,7 +470,7 @@ class SecurityIntegrationTest {
         assertNotEquals(initial.getValue(),remembered.getValue());assertTrue(remembered.getMaxAge()>2500000);assertTrue(remembered.isHttpOnly());assertEquals("Strict",remembered.getAttribute("SameSite"));
         mvc.perform(get("/api/v1/account").cookie(remembered)).andExpect(status().isOk());
         mvc.perform(post("/api/v1/auth/logout").cookie(remembered).with(csrf())).andExpect(status().isOk()).andExpect(cookie().maxAge("SESSION",0));
-        mvc.perform(get("/api/v1/account").cookie(remembered)).andExpect(status().isUnauthorized());mvc.perform(get("/index.html").cookie(remembered)).andExpect(redirectedUrl("/login.html"));
+        mvc.perform(get("/api/v1/account").cookie(remembered)).andExpect(status().isUnauthorized());mvc.perform(get("/index.html").cookie(remembered)).andExpect(status().isOk());
         mvc.perform(get("/api/v1/account").cookie(normal)).andExpect(status().isOk());
     }
     @Test @Order(14) @SuppressWarnings({"rawtypes","unchecked"}) void rememberedSessionHasAbsoluteExpiryAndPasswordChangeRevokesIt()throws Exception{
@@ -469,8 +485,9 @@ class SecurityIntegrationTest {
     @Test @Order(82) void discoveryIsPublicAndSensitivePagesStayOutOfIndex()throws Exception{
         mvc.perform(get("/robots.txt")).andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.containsString("Sitemap: http://localhost/sitemap.xml")));
         var xml=mvc.perform(get("/sitemap.xml")).andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
-        assertTrue(xml.contains("http://localhost/about.html"));for(String name:List.of("index","admin","account","settings","login","signup"))assertFalse(xml.contains(name+".html"));
+        assertTrue(xml.contains("http://localhost/about.html"));assertTrue(xml.contains("http://localhost/index.html"));for(String name:List.of("newsletter","newsletter-editor","admin","account","settings","login","signup"))assertFalse(xml.contains(name+".html"));
         mvc.perform(get("/about.html")).andExpect(header().string("Link","<http://localhost/about.html>; rel=\"canonical\""));
+        mvc.perform(get("/index.html")).andExpect(status().isOk()).andExpect(header().string("Link","<http://localhost/index.html>; rel=\"canonical\"")).andExpect(header().doesNotExist("X-Robots-Tag"));
         mvc.perform(get("/login.html")).andExpect(header().string("X-Robots-Tag","noindex, follow"));
         mvc.perform(get("/api/v1/account")).andExpect(status().isUnauthorized()).andExpect(header().string("X-Robots-Tag","noindex, follow"));
     }
