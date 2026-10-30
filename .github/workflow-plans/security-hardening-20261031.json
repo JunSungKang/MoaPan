@@ -42,7 +42,8 @@
         "gradle.lockfile",
         "build.gradle",
         "gradle.properties",
-        ".github/workflow-plans/security-hardening-20261031.json"
+        ".github/workflow-plans/security-hardening-20261031.json",
+        ".gitattributes"
       ],
       "forbiddenPaths": [
         ".env",

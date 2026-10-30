@@ -34,7 +34,14 @@
         ]
       },
       "status": "DECLARED_REQUIRES_REVIEW",
-      "embeddedNotices": []
+      "embeddedNotices": [],
+      "externalNotices": [
+        {
+          "url": "https://raw.githubusercontent.com/qos-ch/logback/v_1.5.38/LICENSE.txt",
+          "path": "licenses/java/ch.qos.logback/logback-classic/1.5.38/UPSTREAM-LICENSE.txt",
+          "sha256": "f1eedf4f2cb9e901d6ae549a06d0c20dcde0136d37e38b50adaf51d4673f66d2"
+        }
+      ]
     },
     {
       "group": "ch.qos.logback",
@@ -68,7 +75,14 @@
         ]
       },
       "status": "DECLARED_REQUIRES_REVIEW",
-      "embeddedNotices": []
+      "embeddedNotices": [],
+      "externalNotices": [
+        {
+          "url": "https://raw.githubusercontent.com/qos-ch/logback/v_1.5.38/LICENSE.txt",
+          "path": "licenses/java/ch.qos.logback/logback-core/1.5.38/UPSTREAM-LICENSE.txt",
+          "sha256": "f1eedf4f2cb9e901d6ae549a06d0c20dcde0136d37e38b50adaf51d4673f66d2"
+        }
+      ]
     },
     {
       "group": "com.fasterxml.jackson.core",
@@ -138,7 +152,14 @@
         }
       ],
       "status": "DECLARED_REQUIRES_REVIEW",
-      "embeddedNotices": []
+      "embeddedNotices": [],
+      "externalNotices": [
+        {
+          "url": "https://raw.githubusercontent.com/rometools/rome/2.1.0/LICENSE",
+          "path": "licenses/java/com.rometools/rome-utils/2.1.0/UPSTREAM-LICENSE.txt",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        }
+      ]
     },
     {
       "group": "com.rometools",
@@ -154,7 +175,14 @@
         }
       ],
       "status": "DECLARED_REQUIRES_REVIEW",
-      "embeddedNotices": []
+      "embeddedNotices": [],
+      "externalNotices": [
+        {
+          "url": "https://raw.githubusercontent.com/rometools/rome/2.1.0/LICENSE",
+          "path": "licenses/java/com.rometools/rome/2.1.0/UPSTREAM-LICENSE.txt",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        }
+      ]
     },
     {
       "group": "com.sun.istack",
@@ -180,7 +208,19 @@
         ]
       },
       "status": "DECLARED_REQUIRES_REVIEW",
-      "embeddedNotices": []
+      "embeddedNotices": [],
+      "externalNotices": [
+        {
+          "url": "https://raw.githubusercontent.com/eclipse-ee4j/jaxb-istack-commons/4.1.2/LICENSE.md",
+          "path": "licenses/java/com.sun.istack/istack-commons-runtime/4.1.2/UPSTREAM-LICENSE.txt",
+          "sha256": "525447f3da8d1e96f48760714de8b27fbc5c5452b5283c9d74dfde810d95f30a"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/eclipse-ee4j/jaxb-istack-commons/4.1.2/NOTICE.md",
+          "path": "licenses/java/com.sun.istack/istack-commons-runtime/4.1.2/UPSTREAM-NOTICE.txt",
+          "sha256": "47c2e638db178ecd17f586cc2ec464f4c886b2354b619b839d6b80d4ed0a1807"
+        }
+      ]
     },
     {
       "group": "com.zaxxer",
@@ -196,7 +236,14 @@
         }
       ],
       "status": "DECLARED_REQUIRES_REVIEW",
-      "embeddedNotices": []
+      "embeddedNotices": [],
+      "externalNotices": [
+        {
+          "url": "https://raw.githubusercontent.com/brettwooldridge/HikariCP/HikariCP-7.0.2/LICENSE",
+          "path": "licenses/java/com.zaxxer/HikariCP/7.0.2/UPSTREAM-LICENSE.txt",
+          "sha256": "73ba74dfaa520b49a401b5d21459a8523a146f3b7518a833eea5efa85130bf68"
+        }
+      ]
     },
     {
       "group": "commons-logging",
@@ -460,7 +507,14 @@
         }
       ],
       "status": "DECLARED_REQUIRES_REVIEW",
-      "embeddedNotices": []
+      "embeddedNotices": [],
+      "externalNotices": [
+        {
+          "url": "https://raw.githubusercontent.com/jakartaee/validation/3.1.1/license.txt",
+          "path": "licenses/java/jakarta.validation/jakarta.validation-api/3.1.1/UPSTREAM-LICENSE.txt",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        }
+      ]
     },
     {
       "group": "jakarta.xml.bind",
@@ -560,7 +614,14 @@
         ]
       },
       "status": "DECLARED_REQUIRES_REVIEW",
-      "embeddedNotices": []
+      "embeddedNotices": [],
+      "externalNotices": [
+        {
+          "url": "https://raw.githubusercontent.com/antlr/antlr4/4.13.2/LICENSE.txt",
+          "path": "licenses/java/org.antlr/antlr4-runtime/4.13.2/UPSTREAM-LICENSE.txt",
+          "sha256": "3db1fb3ee79a4b4f9918fc4d0f6133bf18a3cf787f126cd22f8aa9b862281c0c"
+        }
+      ]
     },
     {
       "group": "org.apache.httpcomponents.client5",
@@ -882,7 +943,14 @@
         }
       ],
       "status": "DECLARED_REQUIRES_REVIEW",
-      "embeddedNotices": []
+      "embeddedNotices": [],
+      "externalNotices": [
+        {
+          "url": "https://raw.githubusercontent.com/eclipse-aspectj/aspectj/V1_9_25_1/LICENSE",
+          "path": "licenses/java/org.aspectj/aspectjweaver/1.9.25.1/UPSTREAM-LICENSE.txt",
+          "sha256": "7ded76ccd844011e271a8f026c37c331d935103e30085cbf663554cee06a15d8"
+        }
+      ]
     },
     {
       "group": "org.bouncycastle",
@@ -1021,7 +1089,14 @@
         ]
       },
       "status": "DECLARED_REQUIRES_REVIEW",
-      "embeddedNotices": []
+      "embeddedNotices": [],
+      "externalNotices": [
+        {
+          "url": "https://raw.githubusercontent.com/flyway/flyway/flyway-12.4.0/LICENSE.txt",
+          "path": "licenses/java/org.flywaydb/flyway-database-postgresql/12.4.0/UPSTREAM-LICENSE.txt",
+          "sha256": "6707b7b3ba3220ab64a81a5ab869ffecc3a6a023e9488ea08b897471b069c078"
+        }
+      ]
     },
     {
       "group": "org.glassfish.jaxb",
@@ -1234,7 +1309,14 @@
         }
       ],
       "status": "DECLARED_REQUIRES_REVIEW",
-      "embeddedNotices": []
+      "embeddedNotices": [],
+      "externalNotices": [
+        {
+          "url": "https://raw.githubusercontent.com/jboss-logging/jboss-logging/v3.6.3.Final/LICENSE.txt",
+          "path": "licenses/java/org.jboss.logging/jboss-logging/3.6.3.Final/UPSTREAM-LICENSE.txt",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        }
+      ]
     },
     {
       "group": "org.jdom",
@@ -1272,7 +1354,14 @@
         }
       ],
       "status": "DECLARED_REQUIRES_REVIEW",
-      "embeddedNotices": []
+      "embeddedNotices": [],
+      "externalNotices": [
+        {
+          "url": "https://raw.githubusercontent.com/jhy/jsoup/jsoup-1.23.2/LICENSE",
+          "path": "licenses/java/org.jsoup/jsoup/1.23.2/UPSTREAM-LICENSE.txt",
+          "sha256": "f5d724c5818010c61bff2e177f5b6452434bc054807522bf241940bca8b1d6b1"
+        }
+      ]
     },
     {
       "group": "org.jspecify",
@@ -1288,7 +1377,14 @@
         }
       ],
       "status": "DECLARED_REQUIRES_REVIEW",
-      "embeddedNotices": []
+      "embeddedNotices": [],
+      "externalNotices": [
+        {
+          "url": "https://raw.githubusercontent.com/jspecify/jspecify/v1.0.1/LICENSE",
+          "path": "licenses/java/org.jspecify/jspecify/1.0.1/UPSTREAM-LICENSE.txt",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        }
+      ]
     },
     {
       "group": "org.postgresql",
@@ -2772,7 +2868,14 @@
         }
       ],
       "status": "DECLARED_REQUIRES_REVIEW",
-      "embeddedNotices": []
+      "embeddedNotices": [],
+      "externalNotices": [
+        {
+          "url": "https://bitbucket.org/snakeyaml/snakeyaml/raw/snakeyaml-2.6/LICENSE.txt",
+          "path": "licenses/java/org.yaml/snakeyaml/2.6/UPSTREAM-LICENSE.txt",
+          "sha256": "a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9"
+        }
+      ]
     },
     {
       "group": "tools.jackson.core",

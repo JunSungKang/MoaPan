@@ -154,3 +154,8 @@ Helm 기본값은 필수 registry/host/Secret 미입력으로 소스 스캔에�
 - S05: 공식 go-jose advisory는 v3<=3.0.5의 patched version=None이다. smallstep crypto최신0.91.1도 v3.0.5를 사용하며 Caddy TLS internalissuer가 해당 PKI에 컴파일 의존한다. 단순 모듈등록 제외로 제거할 수 없다. 임의 암호 라이브러리 fork로 체크를 채우지 않고 미체크로 남긴다. 기존 설정한정VEX의 만료/범위는 연장하지 않는다.
 - S06: 현재22개 Ubuntu CVE공식JSON 재조회 및 noble 상태를 기록했다. 임시컨테이너 apt update/upgrade 시뮬레이션은 업데이트0건이다. 공급자 needed/deferred 상태가 남으므로 패치 완료로 표시하지 않는다.
 - S07: 최신 사용자 재확인으로아이디1~128/비밀번호6~128 유지. NIST2025-07정식판15자단독/8자MFA와의차이는여전히존재하므로동결기준을바꾸지않고미체크/USER_POLICY로기록한다.
+
+## AI 가드레일·OSS 추가 승인 검토 — 2026-10-31
+원래20항목의 정의와 해시는 유지했다. 별도A01~A06의 실행 근거는 [AI/OSS 검증](../05-test/evidence/security-ai-oss-validation-20261031.json), [관리서](ai-security-and-licenses.md), [제3자 고지](../../THIRD_PARTY_NOTICES.md)에 있다. runtime100개와 test-only51개 좌표의 선언을 확인했으며 현재 모델2개는 Apache2.0이다. runtime의 내장 고지86개와 별도 공식 버전 고지14개, Go163개 모듈/표준라이브러리 고지 및 EPL 소스3개를 보존했다. 이 범위에서 단순 SaaS에 따른 자체 코드 전체 공개 의무는 확인되지 않았다. 외부 이미지 배포의 GPL/EPL 대응 소스 의무를 면제한 것은 아니다.
+모델은 기사 전용·고정 내부망·도구 실행 권한 없음. JSON 중복키/후행문서/복잡도·출력 형식·허용 주제·입력/응답/토큰/동시성 제한과 기존 사실 보존 검사를 결합했다. 소개에 자동 처리의 오류·편향 한계와 원문 확인·관리자 수정 가능성을 안내했다. 자동 의미 검증의 완전성을 주장하지 않는다.
+최종 runtime과 builder7개 이미지를 패치한 Trivy로 검사했다. 원본 보고서에는 proxy/Go builder JOSE HIGH가 남아 있고 Ubuntu 미패치 항목도 남는다. 제한된 config-bound VEX에 의한 기술 검사 통과를 원래20항목의 전체 완료나 보안 배포 게이트 통과로 표시하지 않는다. 별도 외부 이미지 공개 배포는 수행하지 않았다.

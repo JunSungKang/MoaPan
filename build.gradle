@@ -85,7 +85,7 @@ tasks.register('licenseCheck') {
             [(a.moduleVersion.id.group + ':' + a.name + ':' + a.moduleVersion.id.version):digest]
         }
         if (expected != actual) throw new GradleException('Runtime dependency license inventory does not match resolved artifacts; review licenses before updating it')
-        inventory.components.each { c -> c.embeddedNotices.each { n ->
+        inventory.components.each { c -> (c.embeddedNotices + (c.externalNotices ?: [])).each { n ->
             def notice = file(n.path).canonicalFile
             if (!notice.toPath().startsWith(file('licenses/java').canonicalFile.toPath()) || !notice.isFile()) throw new GradleException('Missing retained third-party notice')
             if (java.security.MessageDigest.getInstance('SHA-256').digest(notice.bytes).encodeHex().toString() != n.sha256) throw new GradleException('Retained third-party notice changed')

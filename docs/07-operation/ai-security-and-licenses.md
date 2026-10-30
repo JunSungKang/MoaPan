@@ -1,6 +1,6 @@
 # AI 보안·윤리 및 오픈소스 관리서
 
-문서번호 MP-DOC-028. 대상은 현재 고정된 Index-Translate-2B 번역기와 Qwen3.5-4B 기사 분류기다. 최초 20개 보안 항목은 수정하지 않으며 추가 승인 범위는 [A01~A06](../05-test/evidence/security-ai-oss-followup-20261031.json)으로 구분한다.
+문서번호 MP-DOC-029. 대상은 현재 고정된 Index-Translate-2B 번역기와 Qwen3.5-4B 기사 분류기다. 최초 20개 보안 항목은 수정하지 않으며 추가 승인 범위는 [A01~A06](../05-test/evidence/security-ai-oss-followup-20261031.json)으로 구분한다.
 
 ## 1. 데이터와 권한 경계
 
