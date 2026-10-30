@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-30T18:12:31.079Z",
+  "checkedAt": "2026-10-30T18:24:36.339Z",
   "approval": "User explicitly approved all remaining combined-plan implementation after correcting premature execution; future implementation requires explicit approval",
   "tests": {
     "test": {
@@ -24,7 +24,7 @@
   "htmlMessages": 0,
   "security": {
     "tool": "Trivy0.76.1",
-    "image": "sha256:db82be6087ffea3ffa11b38a2dbb6930833734b7cab1b047d2199380d6ae9b98",
+    "image": "sha256:433f4af4bfaceecb8c74059c5ea3a12a4e1e0bf43c690e1788c4680394038011",
     "findings": {
       "CRITICAL": 0,
       "HIGH": 0,
@@ -40,10 +40,10 @@
       "DownloadedAt": "2026-10-29T22:52:43.958399Z"
     }
   },
-  "jarSha256": "e8f5b146c80f761ce8b9495f6ee11de9dc7c2273134a655c2de5140a06533edc",
+  "jarSha256": "6d216668118b46b78da963622288eca4543de82c85aea08254f274294b577865",
   "running": {
-    "web": "sha256:db82be6087ffea3ffa11b38a2dbb6930833734b7cab1b047d2199380d6ae9b98",
-    "worker": "sha256:db82be6087ffea3ffa11b38a2dbb6930833734b7cab1b047d2199380d6ae9b98"
+    "web": "sha256:433f4af4bfaceecb8c74059c5ea3a12a4e1e0bf43c690e1788c4680394038011",
+    "worker": "sha256:433f4af4bfaceecb8c74059c5ea3a12a4e1e0bf43c690e1788c4680394038011"
   },
   "live": {
     "checkedAt": "2026-10-30T18:06:21.547Z",
@@ -90,7 +90,8 @@
       "after": 2
     },
     "temporaryAccountsRemaining": 0,
-    "completedAt": "2026-10-30T18:06:36.608Z"
+    "completedAt": "2026-10-30T18:06:36.608Z",
+    "validatedScenarioImage": "sha256:db82be6087ffea3ffa11b38a2dbb6930833734b7cab1b047d2199380d6ae9b98"
   },
   "helm": {
     "migrationVersion": 14,
@@ -128,7 +129,8 @@
     "Independent review found historical cutoff, unpublished-week rollover and stale review results; all corrected with regressions",
     "New English transition test found the evidence-week label stayed Korean; locale-event refresh added and all tests rerun",
     "First live proof attempted string JavaScript evaluation blocked by production CSP; retried using normal browser interactions without weakening CSP; existing structured revision reused without another publication",
-    "Initial Helm invocation lacked PATH; rerun with the verified workspace Helm binary and rendered-config scanning"
+    "Initial Helm invocation lacked PATH; rerun with the verified workspace Helm binary and rendered-config scanning",
+    "Final export standards check added explicit UTF8 and responsive viewport to standalone HTML; all229 tests and new final JAR/image scans rerun, then current HTTPS/assets/runtime hashes rechecked"
   ],
   "limitations": [
     "Actual customer recruitment/evaluation, paid purchases/renewals, prices and billing have not occurred; readiness24→68 is a conditional target, not earned score or market-success probability",
@@ -136,5 +138,34 @@
     "Only application image changed; unchanged proxy retains existing hash-bound JOSE non-exposure assessment expiring2026-11-05 and OS residual risk",
     "No original collected article or paper text stored/exported; reuse covers only reviewed original editorial material",
     "No scheduled backups configured; encrypted schema14 round-trip was a one-time test with temporary key/backup and isolated database removed"
-  ]
+  ],
+  "exportMetadataPostCheck": {
+    "checkedAt": "2026-10-30T18:24:36.335Z",
+    "image": "sha256:433f4af4bfaceecb8c74059c5ea3a12a4e1e0bf43c690e1788c4680394038011",
+    "checks": [
+      {
+        "path": "/",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/public/news/edition",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/newsletters",
+        "status": 401
+      },
+      {
+        "path": "/newsletter.html",
+        "status": 302
+      },
+      {
+        "path": "/research-evaluation.html",
+        "status": 302
+      }
+    ],
+    "liveAssetSha256": "488a541c52bf756b0e120d0c59f57e73f3f30341e81381611e2ff4d3c577b502",
+    "utf8AndViewportBrowserAssertions": "PASS in final229-test suite",
+    "earlierRealAuthenticatedFlow": "Same implementation except unconditional UTF8/viewport head metadata; full original live scenario retained separately"
+  }
 }

@@ -13,6 +13,7 @@ export function plainNewsletter(data,code,url,lang='ko'){
 export function htmlNewsletter(data,code,url,lang='ko'){
  if(!data.reuseAllowed)throw Error('재게재 권한 확인이 필요합니다.');
  const doc=document.implementation.createHTMLDocument(data.manuscript.title);doc.documentElement.lang=lang;
+ const encoding=doc.querySelector('meta[charset]')||doc.createElement('meta');encoding.setAttribute('charset','utf-8');doc.head.prepend(encoding);const viewport=doc.createElement('meta');viewport.name='viewport';viewport.content='width=device-width,initial-scale=1';doc.head.append(viewport);
  const meta=doc.createElement('meta');meta.httpEquiv='Content-Security-Policy';meta.content="default-src 'none'; img-src data:; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'";doc.head.append(meta);
  const css=doc.createElement('style');css.textContent='body{max-width:760px;margin:3rem auto;padding:0 1rem;font-family:Georgia,serif;line-height:1.9;color:#252525}img{max-width:100%;height:auto}blockquote{border-left:2px solid;padding-left:1rem}footer{border-top:1px solid;margin-top:3rem;white-space:pre-wrap}a{overflow-wrap:anywhere}';doc.head.append(css);
  const article=doc.createElement('article'),heading=doc.createElement('h1'),intro=doc.createElement('p');heading.textContent=data.manuscript.title;intro.textContent=data.manuscript.introduction;const body=doc.createElement('div');render(body,data.manuscript);article.append(heading,intro,body);
