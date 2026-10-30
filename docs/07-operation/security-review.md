@@ -129,3 +129,6 @@ Trivy0.76.1 소스/비밀값/설정/JAR/SBOM/최종앱 gate PASS, 이미지 sha2
 Helm 합성렌더구성검사: HIGH0/CRITICAL0/MEDIUM13/LOW2. KSV-01010은SOURCE_MIN_INTERVAL_SECONDS=300만탐지한비밀값오탐, KSV-0020/21은기존vendor DB 비root UID/GID70 호환성제약, KSV-0125 12건은registry.example.test가실제신뢰registry가아닌준비용표시임을확인했다. 전역ignore추가없음. 실제registry/namespace/PVC/네트워크/배포정책확정전클러스터배포를완료로표시하지않는다.
 
 최종독립HTML출력보완: UTF-8/모바일viewport를명시하고기존출처/CSP구성을유지했다. 전체229회귀/최종JAR·SBOM·이미지검사재실행PASS. 최종앱 sha256:433f4af4bfaceecb8c74059c5ea3a12a4e1e0bf43c690e1788c4680394038011, JAR 6d216668118b46b78da963622288eca4543de82c85aea08254f274294b577865; Compose동일digest와추가HTTPS5경계·실제output모듈hash를확인했다. 앞선실인증브라우저/다운로드/복원증빙은직전이미지의전체시나리오이며최종변경은head메타데이터만으로분리기록했다.
+
+
+평가 기능 제거 재검증 (2026-10-30T18:47:53.314Z): 실행 화면/모듈/경로/번역/스타일을 제거하고 파일 부재를404/no-store/최소본문으로 응답한다. 삭제 화면을 다른 권한으로 공개하는 fallback을 만들지 않았다. JDK·의존성·truststore·proxy는 변경하지 않았으며 기존 공식공지를 모두 새로 조사했다고 표시하지 않는다. Trivy0.76.1 소스/비밀값/설정/JAR/SBOM/최종이미지 gate PASS. 소스 raw HIGH1·UNKNOWN2는 기존검토범위이며 JOSE조건부비노출 검토/만료를 유지한다. 앱이미지 HIGH0/CRITICAL0/MEDIUM23/LOW4, JAR/SBOM0. DB동기화 2026-10-29T22:52:43.958399Z, 다음갱신 2026-10-30T19:18:50.969126577Z. 최종 sha256:0e5fb08c841e7adddf8b5084fa9be617614c43f5feab99e6435a1e724431ac3a, JAR 7821ef88de0c0a118a4a4d06a38c42dca7b5c32a3341d85882c69953490c9058 검사·실행동일. 새 예외/ignore는 추가하지 않았다. 상세 [증빙](../05-test/evidence/newsletter-evaluator-removal.json).

@@ -13,5 +13,14 @@ class StaticMetadataTest {
    boolean indexable=Set.of("index.html","about.html","privacy.html","terms.html").contains(p.getFileName().toString());assertEquals(indexable?"index, follow":"noindex, follow",d.selectFirst("meta[name=robots]").attr("content"));assertEquals(indexable?1:0,d.select("link[rel=canonical]").size());
   }}
  }
+ @Test void localPageNavigationHasExistingTargets()throws Exception{
+  Path root=Path.of("src/main/resources/static").toAbsolutePath().normalize();
+  try(var paths=Files.list(root)){for(var page:paths.filter(x->x.toString().endsWith(".html")).toList()){
+   var document=Jsoup.parse(page.toFile(),"UTF-8");for(var link:document.select("a[href]")){
+    String href=link.attr("href").split("[?#]",2)[0];if(!href.startsWith("/")||href.startsWith("//")||!href.endsWith(".html"))continue;
+    Path target=root.resolve(href.substring(1)).normalize();assertTrue(target.startsWith(root)&&Files.isRegularFile(target),()->page.getFileName()+" links to missing page "+href);
+   }
+  }}
+ }
  @Test void originRejectsUntrustedComponents(){for(String value:List.of("https://user:secret@example.test","https://example.test/a","https://example.test/?q=1","https://example.test/#x","javascript:foo"))assertThrows(RuntimeException.class,()->DiscoveryController.origin(value));assertEquals("https://example.test",DiscoveryController.origin("https://example.test/"));}
 }

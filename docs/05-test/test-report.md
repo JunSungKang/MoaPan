@@ -184,3 +184,8 @@ E2E26 PASS(390/1440px 우측24px 여백/제호 위 배치/푸터선택없음/중
 Helm migrationVersion14 lint/render/부정입력3PASS, 합성값렌더Trivy HIGH0/CRITICAL0/MEDIUM13/LOW2. registry예시12건은실배포전제, interval300 ConfigMap경고는credential아님, 기존vendor DB UID/GID70 LOW2는PVC호환이유로유지한다. 실제클러스터배포는미실행. 자세한결과 [newsletter-product.json](evidence/newsletter-product.json).
 
 최종독립HTML출력보완: UTF-8/모바일viewport를명시하고기존출처/CSP구성을유지했다. 전체229회귀/최종JAR·SBOM·이미지검사재실행PASS. 최종앱 sha256:433f4af4bfaceecb8c74059c5ea3a12a4e1e0bf43c690e1788c4680394038011, JAR 6d216668118b46b78da963622288eca4543de82c85aea08254f274294b577865; Compose동일digest와추가HTTPS5경계·실제output모듈hash를확인했다. 앞선실인증브라우저/다운로드/복원증빙은직전이미지의전체시나리오이며최종변경은head메타데이터만으로분리기록했다.
+
+
+## 오해로 추가한 제품 평가 기능 제거
+사용자 재평가 요청을 서비스 기능으로 잘못 구현한 부분을 삭제했다. 평가 전용1개 E2E와3개 관련 접근 assertion을 제거했고 연구 gate·재게재·양식 테스트는 유지했다. 정적 링크 무결성 단위1건과 일반 파일404 PG회귀1건을 추가했다. 최초 운영 확인에서는 부재 파일이503으로 반환되어 NoResourceFoundException 전용404/no-store 처리를 추가했다. 새 PG시험의 초기1건 실패는 DB중단99 뒤 실행된 순서 문제였으며 Order1로 수정한 뒤 clean 전체를 재실행했다.
+최종 단위141/PG51/Playwright38 =230 PASS, 실패/오류/skip0. Nu0·정책4·문서28 PASS. 로컬 및 운영 JAR에 삭제 파일/참조 없음, 보존 모듈 있음, 운영 이미지/JAR 일치. HTTPS 삭제 HTML/JS3개404 및 기존 뉴스/인증 경계·정적hash까지12건 확인했다. 과거229건 증빙은 당시 결과로 보존하고 현행 제거 결과는 [제거 증빙](evidence/newsletter-evaluator-removal.json)으로 대체한다.

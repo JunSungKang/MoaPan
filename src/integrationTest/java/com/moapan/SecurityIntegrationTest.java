@@ -54,6 +54,10 @@ class SecurityIntegrationTest {
         for(int i=0;i<100;i++){var job=worker.claim();if(job!=null)return job;try{Thread.sleep(20);}catch(InterruptedException e){Thread.currentThread().interrupt();throw new AssertionError(e);}}
         throw new AssertionError("Queued job not ready within 2 seconds: "+repo.db().sql("SELECT status,available_at,now() db_now FROM content_jobs WHERE status='QUEUED'").query().listOfRows());
     }
+    @Test @Order(1) void missingStaticResourcesReturn404WithoutDetails()throws Exception{
+        for(String path:List.of("/nonexistent-page.html","/assets/js/nonexistent-module.js"))mvc.perform(get(path)).andExpect(status().isNotFound()).andExpect(header().string("Cache-Control","no-store")).andExpect(content().json("{\"error\":\"not_found\"}"));
+        mvc.perform(get("/api/v1/nonexistent")).andExpect(status().isUnauthorized());
+    }
     @Test @Order(1) void unauthenticatedAndCsrf()throws Exception{
         mvc.perform(get("/api/v1/private.html")).andExpect(status().isUnauthorized()).andExpect(content().contentType("application/json"));
         mvc.perform(get("/api/v1/news/edition").header("Referer","http://localhost").header("User-Agent","browser")).andExpect(status().isUnauthorized());
@@ -599,7 +603,6 @@ class SecurityIntegrationTest {
   mvc.perform(post(path).cookie(admin).contentType("application/json").content(input)).andExpect(status().isForbidden());
   String result=mvc.perform(post(path).cookie(admin).with(csrf()).contentType("application/json").content(input)).andExpect(status().isOk()).andExpect(jsonPath("$.items[0].collectedAt").isString()).andReturn().getResponse().getContentAsString();assertFalse(result.contains("summaryBullets"));assertFalse(result.contains("description"));
   mvc.perform(post(path).cookie(admin).with(csrf()).contentType("application/json").content(input.replace("Synthetic weekly","x".repeat(101)))).andExpect(status().isBadRequest());
-  mvc.perform(get("/research-evaluation.html")).andExpect(redirectedUrl("/login.html"));mvc.perform(get("/research-evaluation.html").cookie(member)).andExpect(redirectedUrl("/index.html"));mvc.perform(get("/research-evaluation.html").cookie(admin)).andExpect(status().isOk());
  }
 
 }

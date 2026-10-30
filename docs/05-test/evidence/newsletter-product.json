@@ -167,5 +167,6 @@
     "liveAssetSha256": "488a541c52bf756b0e120d0c59f57e73f3f30341e81381611e2ff4d3c577b502",
     "utf8AndViewportBrowserAssertions": "PASS in final229-test suite",
     "earlierRealAuthenticatedFlow": "Same implementation except unconditional UTF8/viewport head metadata; full original live scenario retained separately"
-  }
+  },
+  "historicalNotice": "This file records the actual earlier product build. Its business evaluation UI was mistakenly included and is superseded by newsletter-evaluator-removal.json. It is not the current runtime or feature inventory."
 }

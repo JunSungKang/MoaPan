@@ -1,0 +1,165 @@
+{
+  "checkedAt": "2026-10-30T18:47:53.314Z",
+  "scope": "Remove mistakenly implemented business evaluation UI and all current code references. Reassessment belongs only in analysis documentation.",
+  "tests": {
+    "test": {
+      "tests": 141,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "integrationTest": {
+      "tests": 51,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "e2eTest": {
+      "tests": 38,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "htmlMessages": 0,
+  "artifact": {
+    "image": "sha256:0e5fb08c841e7adddf8b5084fa9be617614c43f5feab99e6435a1e724431ac3a",
+    "jarSha256": "7821ef88de0c0a118a4a4d06a38c42dca7b5c32a3341d85882c69953490c9058",
+    "removedResourcesAndClassReferencesAbsent": true,
+    "preservedResources": [
+      "newsletter-editor.html",
+      "newsletter/research-editor.js",
+      "newsletter/reader-tools.js",
+      "newsletter/publication-output.js"
+    ]
+  },
+  "source": "No evaluator HTML/JS, menu, security matcher, CSS, translations or feature-only tests remain in src. No DB migration, account or publication data edit was performed.",
+  "initialFailures": [
+    {
+      "check": "First live absence verification",
+      "result": "Missing HTML/JS incorrectly returned503",
+      "fix": "Map NoResourceFoundException narrowly to404/no-store/minimal not_found; preserve other failures/authentication."
+    },
+    {
+      "check": "First integration run after adding404 regression",
+      "result": "51 tests,1 failure because default-order test ran after DB-stop99",
+      "fix": "Move new regression to Order1; keep all assertions; rerun clean full suite."
+    }
+  ],
+  "liveChecks": [
+    {
+      "path": "/research-evaluation.html",
+      "status": 404,
+      "passed": true
+    },
+    {
+      "path": "/assets/js/newsletter/evaluation.js",
+      "status": 404,
+      "passed": true
+    },
+    {
+      "path": "/assets/js/newsletter/evaluation-policy.js",
+      "status": 404,
+      "passed": true
+    },
+    {
+      "path": "/",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "path": "/api/v1/public/news/edition",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "path": "/newsletter-editor.html",
+      "status": 302,
+      "passed": true
+    },
+    {
+      "path": "/newsletter.html",
+      "status": 302,
+      "passed": true
+    },
+    {
+      "path": "/api/v1/newsletters",
+      "status": 401,
+      "passed": true
+    },
+    {
+      "path": "/api/v1/account",
+      "status": 401,
+      "passed": true
+    },
+    {
+      "path": "/api/v1/admin/newsletters",
+      "status": 401,
+      "passed": true
+    },
+    {
+      "path": "/assets/js/shared/i18n-product.js",
+      "status": 200,
+      "sha256": "97bfd646427b1854f9a772432be88912d08394dc202f699fdb7a8955b15a2bce",
+      "matchesSource": true
+    },
+    {
+      "path": "/assets/css/newsletter.css",
+      "status": 200,
+      "sha256": "48f6c225df3a81fa305b0001c5394cb3227d34c65514391cfd3de384129ab026",
+      "matchesSource": true
+    }
+  ],
+  "runtime": {
+    "web": {
+      "image": "sha256:0e5fb08c841e7adddf8b5084fa9be617614c43f5feab99e6435a1e724431ac3a",
+      "jarSha256": "7821ef88de0c0a118a4a4d06a38c42dca7b5c32a3341d85882c69953490c9058",
+      "removedFilesAbsent": true
+    },
+    "worker": {
+      "image": "sha256:0e5fb08c841e7adddf8b5084fa9be617614c43f5feab99e6435a1e724431ac3a",
+      "jarSha256": "7821ef88de0c0a118a4a4d06a38c42dca7b5c32a3341d85882c69953490c9058",
+      "removedFilesAbsent": true
+    }
+  },
+  "security": {
+    "tool": "Trivy0.76.1",
+    "scanDb": {
+      "Version": 2,
+      "NextUpdate": "2026-10-30T19:18:50.969126577Z",
+      "UpdatedAt": "2026-10-29T19:18:50.96912695Z",
+      "DownloadedAt": "2026-10-29T22:52:43.958399Z"
+    },
+    "scans": {
+      "source": {
+        "UNKNOWN": 2,
+        "LOW": 3,
+        "MEDIUM": 2,
+        "HIGH": 1,
+        "CRITICAL": 0
+      },
+      "jar": {
+        "UNKNOWN": 0,
+        "LOW": 0,
+        "MEDIUM": 0,
+        "HIGH": 0,
+        "CRITICAL": 0
+      },
+      "sbom": {
+        "UNKNOWN": 0,
+        "LOW": 0,
+        "MEDIUM": 0,
+        "HIGH": 0,
+        "CRITICAL": 0
+      },
+      "image": {
+        "UNKNOWN": 0,
+        "LOW": 4,
+        "MEDIUM": 23,
+        "HIGH": 0,
+        "CRITICAL": 0
+      }
+    },
+    "residualRisk": "Unchanged proxy JOSE hash-bound conditional non-exposure assessment and existing OS MEDIUM/LOW risk remain. No claim that all software is vulnerability-free."
+  }
+}

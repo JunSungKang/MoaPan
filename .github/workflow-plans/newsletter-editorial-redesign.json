@@ -172,7 +172,7 @@
         "Published newsletters have week/cutoff/collected article evidence, fact versus forecast/experiment/stop criteria, rights/editorial review gates, revision identity and stale-write protection",
         "Authenticated readers can copy/download original newsletter with required truthful free or paid-origin attribution and use evidence-based research/meeting/decision worksheets; no collected original article export",
         "Individual and enterprise value is explained without invented prices or paid activation; all non-newsletter-content public news boundaries remain intact",
-        "Persona-diverse evaluation protocol, anonymous local-only aggregate workbook/calculator, observed results vs targets and conditional score improvement are explicit; no synthetic people counted as customers",
+        "Reassessment is analyst-only documentation with evidence and limitations; no evaluation preparation screen, aggregate calculator or runtime survey feature",
         "Entitlement provider/capabilities are separated from USER/ADMIN and payment is unavailable in preview; no billing, organization SaaS, email delivery or profile tracking",
         "Database upgrade/backup compatibility, meaningful unit/PostgreSQL/browser/privacy/security tests, real Compose HTTPS proof and guarded commit/push/review completed"
       ],
@@ -188,6 +188,38 @@
           "docs/02-analysis/business-validation.md",
           "docs/03-design/api.md",
           "docs/03-design/data-model.md",
+          "docs/05-test/test-report.md",
+          "docs/07-operation/security-review.md"
+        ]
+      }
+    },
+    {
+      "id": "remove-misinterpreted-business-evaluator",
+      "expectedPaths": [
+        "src/**",
+        "docs/**",
+        "README.md",
+        ".github/workflow-plans/newsletter-editorial-redesign.json"
+      ],
+      "forbiddenPaths": [
+        ".env",
+        ".github/workflows/**"
+      ],
+      "acceptanceCriteria": [
+        "Remove the business evaluator HTML, JavaScript, navigation, security matchers, translations, styles and feature-only tests from current source and final runtime artifact",
+        "Retain newsletter evidence/research publication controls, attribution exports and research worksheets; no database or publication changes",
+        "Clean-build and verify absent resources in JAR, final image and live HTTPS; reassessment remains outside service; correct current specifications and preserve historical verification as superseded"
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh clean check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest",
+        "node scripts/test/docs-check.mjs",
+        "git diff --check"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/plan.md",
+          "docs/01-management/progress.md",
+          "docs/02-analysis/business-validation.md",
           "docs/05-test/test-report.md",
           "docs/07-operation/security-review.md"
         ]
