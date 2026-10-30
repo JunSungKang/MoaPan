@@ -82,6 +82,33 @@
           "docs/05-test/test-report.md"
         ]
       }
+    },
+    {
+      "id": "weekly-rd-editorial-rewrite",
+      "expectedPaths": [
+        "docs/**",
+        ".github/workflow-plans/newsletter-editorial-redesign.json",
+        "AGENTS.md"
+      ],
+      "forbiddenPaths": [
+        ".env"
+      ],
+      "acceptanceCriteria": [
+        "Rewrite and republish existing2026-001 using only five verified papers collected this week",
+        "Each forecast is traced to collected evidence and separated from editorial hypotheses, time horizons and proposed metrics",
+        "Reader/API verification preserves issue identity, five references and owned roadmap figure; remove temporary account/session"
+      ],
+      "validationCommands": [
+        "node scripts/test/docs-check.mjs",
+        "git diff --check"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/progress.md",
+          "docs/05-test/test-report.md",
+          "AGENTS.md"
+        ]
+      }
     }
   ]
 }
