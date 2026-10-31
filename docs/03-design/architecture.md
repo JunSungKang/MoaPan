@@ -33,3 +33,8 @@ newsletter: NewsletterController → NewsletterService → PostgreSQL newsletter
 
 ## 공개 뉴스 경계
 GET / 및 /index.html과 명시적 공개 edition/tags/interests, POST 공개 검색만 비회원 뉴스 경로다. 서버는 뉴스레터·계정·회원 전용 뉴스 API의 인증과 관리자 권한을 계속 검사한다. 공개 edition은 전역600회/분과 전체 API3000회/분, 검색은 전체120회/분을 PostgreSQL로 제한한다. 회원이 공개 경로를 호출해도 회원 quota를 적용한다. 폐기/만료 계정의 세션은 공개 뉴스 요청에서 익명으로 전환하고 보호 요청에서401 또는 로그인 이동으로 거부한다. 브라우저는 로그인 확인 후 비회원에게 공통 관심사만 적용하고 뉴스레터의 소개·본문을 요청하지 않는다.
+
+## 전 페이지 공통 UI 계층
+newspaper.css는 신문 지면·기본 폼, auth.css는 간결한 인증 컬럼, newsletter.css는 잡지 본문/원고 작업 배치를 담당한다. 모든11개 HTML의 마지막 stylesheet인 site.css가 사이트 공통 글꼴 토큰·콘텐츠 메뉴·계정 메뉴·언어 선택·보조 헤더·푸터를 소유한다. 페이지 전용 CSS에 공통 콘텐츠 메뉴의 font/display/gap를 다시 정의하지 않는다. 공통 UI는 system-ui 계열, 읽기 본문/제목은 명조 계열, 브랜드는 Georgia 계열로 역할을 구분한다. 메인은 큰 제호/광고/검색을 유지하고 비인증 폼은 중앙 정렬을 유지하며, 나머지8개 페이지는 동일 compact header 구조를 쓴다. 인증에 따른 링크 생성/삭제와 로그아웃 처리는 shared/common.js, 언어 변환은 shared/i18n.js에 있다. 외부 폰트·UI 프레임워크·템플릿을 추가하지 않는다.
+
+새 페이지는 동일 header/footer 구성과 site.css를 마지막에 연결하고, H1/하위 제목 순서·본문 건너뛰기·공통 메뉴의 실제 간격/글꼴·guest/member/admin·한/영·390/768/1440 검증 행렬에 포함한다. 링크 간격 회귀의 하한은12px이고 현재 설계의 실측 최솟값은16px이다. 신문/잡지/작업 화면의 본문 배치를 동일하게 만드는 규칙은 아니다.

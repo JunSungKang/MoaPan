@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 4,
+  "workSlug": "design-consistency-seo-20261101",
+  "flowType": "integration",
+  "branch": "codex/design-consistency-seo-20261101",
+  "targetBranch": "develop",
+  "baseSha": "b6026110eae5d463426b5e27f04a003302dfc3a8",
+  "mergeMethod": "squash",
+  "governance": {
+    "prAuthorLogin": "JunSungKang",
+    "assigneeLogin": "JunSungKang",
+    "reviewerLogin": "junsung-bot[bot]",
+    "requiredChecks": [],
+    "commitAuthor": {
+      "name": "jun-sung, Kang",
+      "email": "kjuns1@naver.com"
+    },
+    "coAuthors": [
+      {
+        "name": "Codex",
+        "email": "codex@openai.com"
+      },
+      {
+        "name": "junsung-bot[bot]",
+        "email": "302617028+junsung-bot[bot]@users.noreply.github.com"
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "site-design-consistency-and-independent-seo-audit",
+      "expectedPaths": [
+        "src/main/resources/static/**",
+        "src/e2eTest/**",
+        "scripts/test/**",
+        "docs/**",
+        "README.md",
+        ".github/workflow-plans/design-consistency-seo-20261101.json"
+      ],
+      "forbiddenPaths": [
+        ".env",
+        ".github/workflows/**",
+        "src/main/resources/db/**",
+        "src/main/java/**",
+        "build.gradle",
+        "gradle.lockfile",
+        "Dockerfile",
+        "scripts/deploy/**",
+        "scripts/translation/**",
+        "scripts/classification/**"
+      ],
+      "acceptanceCriteria": [
+        "Audit all11 HTML pages and dynamic newsletter detail/admin/member/guest and Korean/English states; central UI typography/navigation styles eliminate touching links without changing protected page access",
+        "Newspaper hero retains approved layout; compact secondary mastheads/controls/footer share tokens; auth pages stay simple and centered; mobile390/tablet768/desktop1440 no horizontal overflow",
+        "Validate visible menu spacing/fonts/active state/keyboard focus/print and synthetic screenshots; preserve source text and local-only preferences/no tracking",
+        "Separate SEO agent read-only audit allpages/liveHTTP/officialprimaryguidance; report crawltechnicalreadiness distinct actualportalindexandranking unknown; do not implement new SEO indexing/auth policy without further user authorization",
+        "Keep DB/models/JDK/dependencies/credential lengths/CI-CD unchanged; inspect finalJAR/image before existinglocalCompose runtime replacement; preserve previous verified image if checks fail",
+        "Guarded human commit/push/PR and independent currenthead App review; do not merge main or develop without task-specific merge authorization"
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh --no-daemon check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest",
+        "sh scripts/test/html-check.sh",
+        "sh scripts/security/image-scan.sh <final-app-image>",
+        "git diff --check"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/plan.md",
+          "docs/01-management/progress.md",
+          "docs/05-test/seo-web-audit.md",
+          "docs/05-test/test-report.md",
+          "docs/03-design/decisions.md"
+        ]
+      }
+    }
+  ]
+}

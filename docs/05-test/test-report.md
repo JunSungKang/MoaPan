@@ -208,3 +208,13 @@ Helm migrationVersion14 lint/render/부정입력3PASS, 합성값렌더Trivy HIGH
 
 ### 2026-10-31 런타임·백포트 최종 검증
 최종 clean 전체256건(단위154/PG63/브라우저39), 실패/오류/skip0. source/JAR/SBOM/렌더Helm/8개 runtime·builder 이미지 검사와 Node 보안5건 통과. JOSE 전체5패키지와 미패치 공격5실패→패치 후 통과를 별도로 검증했다. 실제 경량모델 정상2/공격6보류/취소1, OS8개/JDK TLS14차단, 격리 복원300/2/1, 실제HTTPS 합성계정21검사를 완료했다. 시험 중 발견한 취소 실패와 source-version gate 실패는 성공에 포함하지 않고 조치 후 재실행했다. 검사된 동일 digest로 운영6개 컨테이너를 교체했으며 원문·개인 관심사를 추가 저장하지 않았고 기존 기사·계정·발간물 수300/2/1을 보존했다. 임시환경은 종료·정리했다. Linux/amd64 실행·실제 Kubernetes 배포는 미실행이다. [증빙](evidence/runtime-security-followup-20261031.json), [백포트 근거](evidence/jose-v3-backport.json). 최종 GitHub 전달은 증빙의 delivery/PR 현재 상태를 따른다.
+
+## 2026-11-01 전 페이지 디자인 통일·독립 SEO 감사
+
+단위154·PostgreSQL 통합63·Playwright41 = **258건 PASS**, 실패·오류·skip0. 전체 계약 명령을 실행한 뒤 시각 검수에서 발견한 모바일 영문 검색 줄바꿈, 뉴스레터 복귀 링크 번역, 인증 푸터 글꼴을 수정하고 E2E41건을 다시 실행했다. 최종 favicon 링크2개 추가 뒤 Nu11페이지 메시지0·정적 자산 검사를 수행했다. 마지막 변경은 HTML head의 기존 자체 아이콘 연결뿐이며 브라우저 본문 레이아웃 변경과 구분한다.
+
+새 SiteDesignAuditTest는 HTML11개+뉴스레터 상세 × 한국어/영어 ×390/768/1440px, 총72상태를 검사하고 합성 화면72장을 생성한다. 모든 상태에서 가로 넘침0·보이는 H1 1개·메뉴14px/21px/system-ui·푸터13px을 확인했다. 링크 hit area 간격의 시험 하한은12px, 실제 최솟값은16px이다. guest/member/admin 메뉴 경계와 키보드 포커스·인쇄 숨김도 통과했다. 기존 BrowserTest39건을 보존했다. 합성 영문 화면에 남은 한글 기사 내용은 시험 fixture이며 실제 번역 품질 측정 자료로 사용하지 않는다.
+
+최종 앱/빌드 이미지 취약점·secret 발견0, 실제 최종 JAR·SBOM·소스 보안 gate를 검사했다. 기존 JOSE 백포트의 source scanner 해석과 사용자 비밀번호 정책에 관한 잔여 사항은 보안 검토서에 유지하며 모든 보안 위험이 사라졌다고 주장하지 않는다. Compose web/worker만 검증한 이미지로 교체했다. 실행 JAR와 검사 JAR의 SHA256이 같고, 실제 HTTPS 자산11개가 로컬과 일치한다. 공개4페이지·인증2페이지200, 보호5페이지302, 보호 API2개401, 없는 페이지404, robots/sitemap200을 확인했다. 교체 전후 기사300·계정2·뉴스레터1, DB/모델/proxy 이미지 보존을 확인했다. 실제 운영 계정으로 로그인하거나 시험 계정을 추가하지 않았다.
+
+별도 SEO 에이전트가 읽기 전용으로 전수 감사했다. 기본 메타11/11·공개 접근4/4·HTTP 절대 canonical4/4·원본 HTML 절대 canonical0/4, sitemap 공개4개다. 공개 검색 표본6개에서 자체 URL 일치0건이며, 이는 세 포털의 실제 미색인 판정이 아니다. Google/네이버/Bing 관리 도구의 색인·순위·필드 Core Web Vitals는 미확인이다. 원본 canonical·슬라이드 뒷면 발견성·공유 메타 보완은 감사 권고로 남겼다. [감사 결과서](seo-web-audit.md), [실행 증빙](evidence/design-seo-20261101.json).
