@@ -121,3 +121,6 @@ GET /api/v1/admin/newsletters/{id}/review: ADMIN; {version,expectedWeek,blockers
 제품 재평가는 분석 문서에서 수행한다. 평가 전용 화면·API·데이터 저장 기능은 없다.
 
 보안 경합 보완(V15): 비밀번호 변경·탈퇴의 확인 이후 계정 인증 버전이 변경되면409 credential_changed. 인증 중 비밀번호 변경·계정 교체가 발생하면401 invalid_credentials. 일반 응답에 인증 버전·해시를 반환하지 않는다. 현재 아이디1~128자/비밀번호6~128자는 사용자 명시 지시로 유지한다.
+
+### 관리자 번역 수정·잠금
+GET/PUT `/api/v1/admin/translations/{id}/{language}` (ko/en), ADMIN 및 상태변경 CSRF. GET: contentHash,version,title,summaryBullets,locked. PUT: 동일 필드, 최초version=-1. 현재 원문/요약 hash 및 수정 version 불일치409, 권리 미허용409, 잘못된 입력400, 비회원401, 일반회원/CSRF403. API는 원문 전문을 제공하지 않는다.

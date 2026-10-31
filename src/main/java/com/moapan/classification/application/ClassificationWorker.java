@@ -18,7 +18,7 @@ public class ClassificationWorker {
     private final JdbcClient db;private final TopicCatalog catalog;private final ClassificationModel classifier;private final TransactionTemplate tx;
     private static final JsonMapper JSON=JsonMapper.builder().build();
     public ClassificationWorker(JdbcClient db,TopicCatalog catalog,ClassificationModel classifier,PlatformTransactionManager tm){this.db=db;this.catalog=catalog;this.classifier=classifier;tx=new TransactionTemplate(tm);}
-    public record Job(UUID id,UUID token,String hash,String title,List<String> summary,com.moapan.classification.domain.TopicTaxonomy.Snapshot topics){}
+    public record Job(UUID id,UUID token,String hash,String title,List<String> summary,com.moapan.classification.domain.TopicTaxonomy.Snapshot topics,UUID source,java.time.LocalDate budgetDay){}
     @Scheduled(fixedDelay=1000) public void tick(){
         if(!"worker".equals(System.getenv("MOAPAN_ROLE"))||!classifier.enabled())return;
         try{processOne();}catch(Exception ignored){/* Only bounded error codes persist, never article/model text or credentials. */}
@@ -30,28 +30,33 @@ public class ClassificationWorker {
         var pending=db.sql("SELECT a.id,a.title,a.summary_bullets FROM articles a JOIN sources s ON s.id=a.source_id LEFT JOIN article_classification_jobs j ON j.article_id=a.id WHERE "+PERMITTED+" AND (j.article_id IS NULL OR j.policy_hash<>:policy OR j.content_hash=repeat('0',64) OR j.state='CANCELLED') ORDER BY COALESCE(a.published_at,a.collected_at) DESC,a.id LIMIT 50")
             .param("policy",topics.hash()).query().listOfRows();
         for(var a:pending){String hash=ArticleFingerprint.contentHash(a.get("title").toString(),bullets(a));
-            db.sql("INSERT INTO article_classification_jobs(article_id,content_hash,policy_hash) VALUES(:id,:hash,:policy) ON CONFLICT(article_id) DO UPDATE SET content_hash=EXCLUDED.content_hash,policy_hash=EXCLUDED.policy_hash,state='PENDING',attempts=0,available_at=now(),lease_token=NULL,lease_until=NULL,error_code=NULL,updated_at=now()")
+            db.sql("INSERT INTO article_classification_jobs(article_id,content_hash,policy_hash) VALUES(:id,:hash,:policy) ON CONFLICT(article_id) DO UPDATE SET content_hash=EXCLUDED.content_hash,policy_hash=EXCLUDED.policy_hash,state='PENDING',attempts=0,available_at=now(),lease_token=NULL,lease_until=NULL,error_code=NULL,updated_at=now(),started_at=now()")
                 .param("id",a.get("id")).param("hash",hash).param("policy",topics.hash()).update();
         }
         db.sql("UPDATE article_classification_jobs SET state=CASE WHEN attempts>=3 THEN 'FAILED' ELSE 'RETRY' END,error_code='classification_lease_expired',lease_token=NULL,lease_until=NULL,available_at=now()+interval '30 seconds' WHERE state='RUNNING' AND lease_until<now()").update();
-        var rows=db.sql("SELECT j.*,a.title,a.summary_bullets FROM article_classification_jobs j JOIN articles a ON a.id=j.article_id JOIN sources s ON s.id=a.source_id WHERE "+PERMITTED+" AND j.policy_hash=:policy AND j.state IN ('PENDING','RETRY') AND j.attempts<3 AND j.available_at<=now() ORDER BY COALESCE(a.published_at,a.collected_at) DESC,a.id LIMIT 1 FOR UPDATE OF j SKIP LOCKED").param("policy",topics.hash()).query().listOfRows();
+        db.sql("UPDATE article_classification_jobs SET state='FAILED',error_code='classification_deadline',lease_token=NULL,lease_until=NULL WHERE state IN ('PENDING','RETRY') AND started_at<now()-interval '48 hours'").update();
+        var rows=db.sql("SELECT j.*,a.source_id,a.title,a.summary_bullets FROM article_classification_jobs j JOIN articles a ON a.id=j.article_id JOIN sources s ON s.id=a.source_id WHERE "+PERMITTED+" AND j.policy_hash=:policy AND j.state IN ('PENDING','RETRY') AND j.attempts<3 AND j.available_at<=now() ORDER BY COALESCE(a.published_at,a.collected_at) DESC,a.id LIMIT 1 FOR UPDATE OF j SKIP LOCKED").param("policy",topics.hash()).query().listOfRows();
         if(rows.isEmpty())return null;var row=rows.getFirst();UUID token=UUID.randomUUID(),id=(UUID)row.get("article_id");
+        String text=row.get("title")+"\n"+String.join("\n",bullets(row));String risk=com.moapan.ai.domain.ArticleGuard.risk(text);
+        if(risk!=null){db.sql("UPDATE article_classification_jobs SET state='FAILED',error_code=:code WHERE article_id=:id").param("code",risk).param("id",id).update();return null;}
+        if(!com.moapan.ai.application.InferenceBudget.reserve(db,(UUID)row.get("source_id"),"classification",text.length(),205)){
+            db.sql("UPDATE article_classification_jobs SET available_at=date_trunc('day',now())+interval '1 day',error_code='ai_source_budget' WHERE article_id=:id").param("id",id).update();return null;
+        }
         db.sql("UPDATE article_classification_jobs SET state='RUNNING',attempts=attempts+1,lease_token=:token,lease_until=now()+interval '4 minutes',updated_at=now() WHERE article_id=:id").param("token",token).param("id",id).update();
         db.sql("UPDATE classification_runtime SET lease_token=:token,lease_until=now()+interval '4 minutes',checked_at=now(),error_code=NULL WHERE id=1").param("token",token).update();
-        return new Job(id,token,row.get("content_hash").toString(),row.get("title").toString(),bullets(row),topics);
+        return new Job(id,token,row.get("content_hash").toString(),row.get("title").toString(),bullets(row),topics,(UUID)row.get("source_id"),db.sql("SELECT current_date").query(java.time.LocalDate.class).single());
     });}
     private static List<String> bullets(Map<String,Object> a){return List.of(JSON.readValue(a.get("summary_bullets").toString(),String[].class));}
     public boolean heartbeat(Job job){return Boolean.TRUE.equals(tx.execute(s->{
         if(db.sql("UPDATE classification_runtime SET lease_until=now()+interval '4 minutes',checked_at=now() WHERE id=1 AND lease_token=:token AND lease_until>now()").param("token",job.token()).update()!=1)return false;
-        return db.sql("UPDATE article_classification_jobs SET lease_until=now()+interval '4 minutes' WHERE article_id=:id AND lease_token=:token AND state='RUNNING' AND lease_until>now()").param("id",job.id()).param("token",job.token()).update()==1;
+        if(!catalog.snapshot(false).hash().equals(job.topics().hash()))return false;
+        return db.sql("UPDATE article_classification_jobs j SET lease_until=now()+interval '4 minutes' WHERE article_id=:id AND lease_token=:token AND state='RUNNING' AND lease_until>now() AND EXISTS(SELECT 1 FROM articles a JOIN sources s ON s.id=a.source_id WHERE a.id=j.article_id AND "+PERMITTED+")").param("id",job.id()).param("token",job.token()).update()==1;
     }));}
-    public boolean processOne(){var job=claim();if(job==null)return false;
-        try(var heartbeats=Executors.newSingleThreadScheduledExecutor(Thread.ofVirtual().factory())){
-            heartbeats.scheduleAtFixedRate(()->{try{heartbeat(job);}catch(Exception ignored){}},30,30,TimeUnit.SECONDS);
-            try{finish(job,classifier.classify(job.title(),job.summary(),job.topics()));}
+    public boolean processOne(){var job=claim();if(job==null)return false;long started=System.nanoTime();
+            try{finish(job,com.moapan.ai.application.InferenceControl.run(()->heartbeat(job),20000,205000,()->classifier.classify(job.title(),job.summary(),job.topics())));}
             catch(Exception e){if(e instanceof InterruptedException)Thread.currentThread().interrupt();fail(job,e instanceof IllegalArgumentException?"classification_invalid_output":"classification_request_failed");}
-            finally{heartbeats.shutdownNow();}
-        }return true;
+            finally{com.moapan.ai.application.InferenceBudget.settle(db,job.source(),"classification",job.budgetDay(),205,(int)Math.min(205,Math.max(1,(System.nanoTime()-started+999999999L)/1000000000L)));}
+        return true;
     }
     public boolean finish(Job job,Set<UUID> selected){return Boolean.TRUE.equals(tx.execute(status->{
         if(!ownsRuntime(job))return false;

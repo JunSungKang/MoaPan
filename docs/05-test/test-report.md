@@ -202,3 +202,6 @@ Helm migrationVersion14 lint/render/부정입력3PASS, 합성값렌더Trivy HIGH
 - 최종 Compose6개 서비스 정상, 초기화/마이그레이션 종료0. DB V15, 기사270·발간1 보존, 검증 계정/격리 복원 DB0. HTTPS/로그인/비밀번호 교체/삭제/권한19개 통과. 실제 실행 JAR SHA와 검사 JAR SHA 일치.
 - 최종7개 이미지 보고서 SHA·실행 digest·DB freshness·truststore14개 거부는 [증빙](evidence/security-ai-oss-validation-20261031.json). 전체20항목 미완료 사유는 동일 체크리스트에 유지.
 - 보안 PR은 뉴스레터 PR8의 V14가 선행하는 V15 릴리스 순서를 명시한다. 기존 서비스에는 이 둘을 함께 검증한 조합을 사용했다. 병합은 미수행.
+
+## G01~G11 가드레일 후속 검증
+2026-10-31: clean check/integrationTest/e2eTest/bootJar/sbom/securityCheck/acceptanceTest 실제 성공. 단위153/PG63/Playwright39, 실패·오류·skip0. 실모델 공격6개 추론 전 보류, 정상2건, 취소1건 성공. HTTPS 합성 계정20검사 성공 후 삭제. Helm lint/render/부정3개·동노드/selector/다운로드·egress 경계와 렌더된 manifest Trivy config 검사 성공; 실클러스터 미제공. [실행 증빙](evidence/ai-guardrail-followup-20261031.json). 원래20개 정의는 유지하며 S05/S06/S07은 미완료다. 새 G01~G11의 구현·범위 검증 통과가 모든 취약점 제거를 의미하지 않는다.

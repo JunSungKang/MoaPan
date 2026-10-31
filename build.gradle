@@ -93,3 +93,11 @@ tasks.register('licenseCheck') {
     }
 }
 check.dependsOn licenseCheck
+
+tasks.register('modelSmokeClasspath') {
+    dependsOn testClasses
+    doLast {
+        def out = layout.buildDirectory.file('reports/model-smoke.classpath').get().asFile
+        out.parentFile.mkdirs(); out.text = sourceSets.test.runtimeClasspath.asPath
+    }
+}

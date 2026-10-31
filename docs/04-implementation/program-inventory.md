@@ -61,3 +61,6 @@
 - `i18n-status.js` → `src/main/resources/static/assets/js/shared/i18n-status.js`
 
 뉴스레터사업화기반: PublicationResearch, PublicationEvidence, ContentAccess, EntitlementProvider, EntitlementPolicy, PreviewEntitlements 및 정적research-editor/reader-tools/publication-output 모듈. V14 dossier/최초발간/개정snapshot. 명세는MP-DOC-028 및API/도메인설계서를따른다.
+
+### AI 경계 후속 프로그램
+`ai/domain`의 ArticleGuard/AiPolicy는 비신뢰 입력 보류와 실행 정책 식별을 담당한다. `ai/application`의 InferenceControl/InferenceBudget은 취소와 출처 집계 정책이다. `ai/infrastructure`의 ModelTokenBudget/ModelStream/ModelJson은 고정 로컬 모델의 토큰·전송·출력 경계다. 번역 편집 API/정적 모듈은 translation에 유지한다. 새로운 외부 모델·서비스·개인정보 저장소는 추가하지 않았다.

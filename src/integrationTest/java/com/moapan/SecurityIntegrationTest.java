@@ -207,10 +207,10 @@ class SecurityIntegrationTest {
         repo.db().sql("INSERT INTO articles(id,source_id,source_guid,canonical_url,title,summary_bullets,summary_mode,language,input_hash) VALUES(:id,:source,'translate-fixture','https://translation.example.org/article','Synthetic retrieval','[\"A synthetic retrieval algorithm.\"]','EXTRACTIVE_ORIGINAL_LANGUAGE','en',:hash)").param("id",id).param("source",source).param("hash","e".repeat(64)).update();
         String hash=com.moapan.translation.infrastructure.ArticleTranslations.contentHash("Synthetic retrieval",List.of("A synthetic retrieval algorithm."));
         var text=new com.moapan.translation.infrastructure.ArticleTranslations.Text("합성 검색",List.of("합성 검색 알고리즘입니다."));
-        assertFalse(translations.store(id,hash,"ko",text,"synthetic-test"));
+        assertFalse(translations.store(id,hash,"ko",text,com.moapan.translation.application.TranslationWorker.PROVIDER));
         repo.db().sql("UPDATE sources SET allow_translation=true WHERE id=:id").param("id",source).update();
-        assertFalse(translations.store(id,"wrong-hash","ko",text,"synthetic-test"));
-        assertTrue(translations.store(id,hash,"ko",text,"synthetic-test"));
+        assertFalse(translations.store(id,"wrong-hash","ko",text,com.moapan.translation.application.TranslationWorker.PROVIDER));
+        assertTrue(translations.store(id,hash,"ko",text,com.moapan.translation.application.TranslationWorker.PROVIDER));
         repo.db().sql("UPDATE news_editions SET expires_at=now()-interval '1 second'").update();
         var article=news.publicEdition().items().stream().filter(a->a.id().equals(id)).findFirst().orElseThrow();
         assertEquals("Synthetic retrieval",article.title());assertEquals(text,article.translations().get("ko"));
@@ -222,11 +222,12 @@ class SecurityIntegrationTest {
         repo.db().sql("UPDATE sources SET allow_translation=true WHERE id=:id").param("id",source).update();
         repo.db().sql("UPDATE articles SET title='Changed synthetic retrieval' WHERE id=:id").param("id",id).update();
         assertEquals(0,repo.db().sql("SELECT count(*) FROM article_translations WHERE article_id=:id").param("id",id).query(Integer.class).single());
-        assertFalse(translations.store(id,hash,"ko",text,"synthetic-test"));
+        assertFalse(translations.store(id,hash,"ko",text,com.moapan.translation.application.TranslationWorker.PROVIDER));
         var engine=new com.moapan.translation.infrastructure.LocalTranslator("",""){@Override public String translate(String input,String language,int attempt,String reason){return "합성 번역";}};
         var translationWorker=new com.moapan.translation.application.TranslationWorker(repo.db(),engine,translations,tm);
         var first=translationWorker.claim();assertEquals(id,first.get("article_id"));assertNull(translationWorker.claim());
         repo.db().sql("UPDATE article_translation_jobs SET lease_until=now()-interval '1 second' WHERE article_id=:id").param("id",id).update();
+        assertFalse(translationWorker.processOne());repo.db().sql("UPDATE translation_runtime SET lease_until=now()-interval '1 second'").update();
         assertTrue(translationWorker.processOne());
         assertTrue(translationWorker.processOne());
         assertEquals(1,repo.db().sql("SELECT count(*) FROM article_translations WHERE article_id=:id").param("id",id).query(Integer.class).single());
@@ -255,6 +256,7 @@ class SecurityIntegrationTest {
         assertTrue(recovered.heartbeat(id,(UUID)leased.get("token")));
         assertFalse(recovered.heartbeat(id,UUID.randomUUID()));
         repo.db().sql("UPDATE sources SET allow_translation=false WHERE id=:id").param("id",source).update();
+        assertFalse(recovered.heartbeat(id,(UUID)leased.get("token")));repo.db().sql("UPDATE translation_runtime SET lease_until=now()-interval '1 second'").update();
         assertNull(recovered.claim());
         assertEquals("CANCELLED",repo.db().sql("SELECT state FROM article_translation_jobs WHERE article_id=:id").param("id",id).query(String.class).single());
         repo.db().sql("UPDATE sources SET allow_translation=true WHERE id=:id").param("id",source).update();

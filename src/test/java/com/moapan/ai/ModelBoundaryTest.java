@@ -43,6 +43,7 @@ class ModelBoundaryTest {
         assertThrows(IllegalArgumentException.class,()->LocalClassifier.body("title",Collections.nCopies(7,"x"),taxonomy));
         assertThrows(IllegalArgumentException.class,()->LocalClassifier.body("title",Arrays.asList("x",null),taxonomy));
         var request=JsonMapper.builder().build().readTree(LocalClassifier.body("title",List.of("😀".repeat(2000)),taxonomy));
+        assertTrue(request.path("stream").asBoolean());
         var input=JsonMapper.builder().build().readTree(request.path("messages").path(1).path("content").asText());String text=input.path("summary").asText();assertEquals(1600,text.codePointCount(0,text.length()));
     }
     @Test void translationSingleFlightReleasesAfterFailureAndDoesNotQueueExtraWork()throws Exception{
@@ -51,8 +52,10 @@ class ModelBoundaryTest {
         var server=HttpServer.create(new InetSocketAddress("127.0.0.1",11435),0);
         server.createContext("/v1/chat/completions",exchange->{
             requests.incrementAndGet();entered.countDown();try{if(!release.await(10,TimeUnit.SECONDS))throw new AssertionError("fixture deadline");}catch(InterruptedException e){Thread.currentThread().interrupt();throw new java.io.IOException(e);}
-            byte[] body=failed.get()?bytes("{}"):bytes(reply("\"role\":\"assistant\",\"content\":\"지연 시간이 32% 감소했습니다.\""));exchange.sendResponseHeaders(failed.get()?503:200,body.length);exchange.getResponseBody().write(body);exchange.close();
+            byte[] body=failed.get()?bytes("{}"):bytes("data: {\"choices\":[{\"delta\":{\"content\":\"지연 시간이 32% 감소했습니다.\"},\"finish_reason\":\"stop\"}]}\n\ndata: [DONE]\n\n");exchange.sendResponseHeaders(failed.get()?503:200,body.length);exchange.getResponseBody().write(body);exchange.close();
         });server.start();
+        server.createContext("/apply-template",exchange->{byte[] body=bytes("{\"prompt\":\"synthetic\"}");exchange.sendResponseHeaders(200,body.length);exchange.getResponseBody().write(body);exchange.close();});
+        server.createContext("/tokenize",exchange->{byte[] body=bytes("{\"tokens\":[1,2,3]}");exchange.sendResponseHeaders(200,body.length);exchange.getResponseBody().write(body);exchange.close();});
         try(var pool=Executors.newSingleThreadExecutor()){
             var client=new LocalTranslator("http://127.0.0.1:11435/v1/chat/completions",key.toString());
             var first=pool.submit(()->client.translate("Latency fell by 32%.","ko"));

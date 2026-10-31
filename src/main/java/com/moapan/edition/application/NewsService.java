@@ -19,9 +19,9 @@ public class NewsService {
     public record TagView(UUID id,String slug,String name,String category,double confidence){}
     public record ArticleView(UUID id,String title,List<String>summaryBullets,SourceView source,Instant publishedAt,Instant collectedAt,List<TagView>tags,String originalUrl,String summaryMode,String author,Map<String,ArticleTranslations.Text> translations){}
     public record Page(UUID editionId,Instant editionAt,int candidateCount,int periodDays,List<ArticleView>items,String nextCursor){}
-    private final ArticleTranslations translations;private final JdbcClient db;private final Limits limits;private final TransactionTemplate tx;private final Clock clock;private final JsonMapper json=JsonMapper.builder().build();
+    private final com.moapan.classification.application.TopicCatalog topicCatalog;private final ArticleTranslations translations;private final JdbcClient db;private final Limits limits;private final TransactionTemplate tx;private final Clock clock;private final JsonMapper json=JsonMapper.builder().build();
     private static final String VISIBLE="a.public AND s.allow_display AND s.rights_status IN ('APPROVED','RESTRICTED')";
-    public NewsService(JdbcClient db,Limits limits,PlatformTransactionManager tm,Clock clock,ArticleTranslations translations){this.translations=translations;this.db=db;this.limits=limits;tx=new TransactionTemplate(tm);this.clock=clock;}
+    public NewsService(JdbcClient db,Limits limits,PlatformTransactionManager tm,Clock clock,ArticleTranslations translations,com.moapan.classification.application.TopicCatalog topicCatalog){this.topicCatalog=topicCatalog;this.translations=translations;this.db=db;this.limits=limits;tx=new TransactionTemplate(tm);this.clock=clock;}
     public Page publicEdition(){limits.auth("public_news",600,60);return page(null,edition(),0,42);}
     public Page first(UUID user,int size){validateSize(size);UUID lease=limits.beginNews(user);try{UUID edition=edition();return page(user,edition,0,size);}finally{limits.endNews(lease);}}
     public Page next(UUID user,String token){UUID lease=limits.beginNews(user);try{
@@ -39,10 +39,11 @@ public class NewsService {
     }
     List<ArticleView> articleViews(List<Map<String,Object>> rows){
         List<UUID> ids=rows.stream().map(r->(UUID)r.get("id")).toList();Map<UUID,List<TagView>>tags=new HashMap<>();
-        if(!ids.isEmpty())for(var t:db.sql("SELECT at.article_id,t.id,t.slug,t.name,t.category,at.confidence FROM article_tags at JOIN tags t ON t.id=at.tag_id WHERE at.article_id IN (:ids) AND t.active ORDER BY t.slug").param("ids",ids).query().listOfRows())tags.computeIfAbsent((UUID)t.get("article_id"),k->new ArrayList<>()).add(new TagView((UUID)t.get("id"),t.get("slug").toString(),t.get("name").toString(),t.get("category").toString(),((Number)t.get("confidence")).doubleValue()));
+        if(!ids.isEmpty())for(var t:db.sql("SELECT at.article_id,t.id,t.slug,t.name,t.category,at.confidence FROM article_tags at JOIN tags t ON t.id=at.tag_id WHERE at.article_id IN (:ids) AND t.active AND (at.method<>'LLM' OR at.locked OR EXISTS(SELECT 1 FROM article_classification_jobs j WHERE j.article_id=at.article_id AND j.policy_hash=:policy AND j.state='DONE')) ORDER BY t.slug").param("ids",ids).param("policy",classificationPolicy()).query().listOfRows())tags.computeIfAbsent((UUID)t.get("article_id"),k->new ArrayList<>()).add(new TagView((UUID)t.get("id"),t.get("slug").toString(),t.get("name").toString(),t.get("category").toString(),((Number)t.get("confidence")).doubleValue()));
         List<ArticleView> items=rows.stream().map(r->new ArticleView((UUID)r.get("id"),(String)r.get("title"),bullets(r.get("summary_bullets").toString()),new SourceView((UUID)r.get("source_id"),(String)r.get("source_name"),(String)r.get("site_name"),(String)r.get("language")),instant(r.get("published_at")),instant(r.get("collected_at")),tags.getOrDefault((UUID)r.get("id"),List.of()),(String)r.get("canonical_url"),(String)r.get("summary_mode"),(String)r.get("author"),Map.of())).toList();
         var localized=translations.read(items.stream().map(a->new ArticleTranslations.Original(a.id(),a.title(),a.summaryBullets())).toList());return items.stream().map(a->new ArticleView(a.id(),a.title(),a.summaryBullets(),a.source(),a.publishedAt(),a.collectedAt(),a.tags(),a.originalUrl(),a.summaryMode(),a.author(),localized.getOrDefault(a.id(),Map.of()))).toList();
     }
+    String classificationPolicy(){return topicCatalog.snapshot(false).hash();}
     @SuppressWarnings("unchecked") private List<String>bullets(String value){return json.readValue(value,List.class);}
     private static void validateSize(int size){if(size<1||size>50)throw new ApiError(400,"invalid_size");}
     private static Instant instant(Object value){if(value==null)return null;if(value instanceof java.sql.Timestamp t)return t.toInstant();if(value instanceof OffsetDateTime t)return t.toInstant();return Instant.parse(value.toString());}

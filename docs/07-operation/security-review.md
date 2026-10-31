@@ -175,3 +175,6 @@ Helm 합성렌더구성검사: HIGH0/CRITICAL0/MEDIUM13/LOW2. KSV-01010은SOURCE
 원래20항목의 정의와 해시는 유지했다. 별도A01~A06의 실행 근거는 [AI/OSS 검증](../05-test/evidence/security-ai-oss-validation-20261031.json), [관리서](ai-security-and-licenses.md), [제3자 고지](../../THIRD_PARTY_NOTICES.md)에 있다. runtime100개와 test-only51개 좌표의 선언을 확인했으며 현재 모델2개는 Apache2.0이다. runtime의 내장 고지86개와 별도 공식 버전 고지14개, Go163개 모듈/표준라이브러리 고지 및 EPL 소스3개를 보존했다. 이 범위에서 단순 SaaS에 따른 자체 코드 전체 공개 의무는 확인되지 않았다. 외부 이미지 배포의 GPL/EPL 대응 소스 의무를 면제한 것은 아니다.
 모델은 기사 전용·고정 내부망·도구 실행 권한 없음. JSON 중복키/후행문서/복잡도·출력 형식·허용 주제·입력/응답/토큰/동시성 제한과 기존 사실 보존 검사를 결합했다. 소개에 자동 처리의 오류·편향 한계와 원문 확인·관리자 수정 가능성을 안내했다. 자동 의미 검증의 완전성을 주장하지 않는다.
 최종 runtime과 builder7개 이미지를 패치한 Trivy로 검사했다. 원본 보고서에는 proxy/Go builder JOSE HIGH가 남아 있고 Ubuntu 미패치 항목도 남는다. 제한된 config-bound VEX에 의한 기술 검사 통과를 원래20항목의 전체 완료나 보안 배포 게이트 통과로 표시하지 않는다. 별도 외부 이미지 공개 배포는 수행하지 않았다.
+
+### 2026-10-31 G01~G11 후속 결과
+[추가 가드레일 증빙](../05-test/evidence/ai-guardrail-followup-20261031.json): 구현·회귀 완료, V16/실행이미지 갱신. 초기 실제 취소 실패와 SSE 수정, 독립 리뷰의 category구정책/RWO/정산/selector/SSE객체 도구호출 결함을 수정하고 재검증했다. 검사 DB 다운로드 중복과 실행 중 스크립트 변경으로 난 검사 실패는 PASS로 합산하지 않았고 마지막 clean 명령으로 재실행했다. 공식 go-jose/v3 수정None 및Ubuntu22개 필요/유보 상태를 재확인했고 apt신규업그레이드0. S05/S06/S07은 계속 미완료이며 전체 보안패치완료를 선언하지 않는다.

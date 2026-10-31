@@ -35,17 +35,16 @@ public class LocalTranslator implements com.moapan.translation.application.Trans
         if(endpoint==null||!Set.of("ko","en").contains(language)||input==null||input.isBlank()||input.length()>1500)throw new IllegalArgumentException("invalid_translation_input");
         if(!inference.tryAcquire())throw new TranslationFailure("translation_busy",true);
         try{
+        com.moapan.ai.domain.ArticleGuard.requireSafe(input);
         var protectedInput=attempt>0?TranslationValidator.protect(input):new TranslationValidator.Protected(input,Map.of());
         var body=body(protectedInput.text(),language,attempt,reason);
+        com.moapan.ai.infrastructure.ModelTokenBudget.check(http,endpoint,key,body,1200);
         var request=HttpRequest.newBuilder(endpoint).timeout(Duration.ofSeconds(timeoutSeconds())).header("Content-Type","application/json").header("Authorization","Bearer "+key).POST(HttpRequest.BodyPublishers.ofString(json.writeValueAsString(body))).build();
-        HttpResponse<byte[]> response;
-        try{response=http.send(request,HttpResponse.BodyHandlers.limiting(HttpResponse.BodyHandlers.ofByteArray(),32768));}
+        String result;
+        try{result=com.moapan.ai.infrastructure.ModelStream.request(http,request,524288,1500,timeoutSeconds());}
+        catch(com.moapan.ai.infrastructure.ModelStream.Invalid e){throw new TranslationFailure("translation_invalid_reply",false);}
         catch(java.io.IOException e){throw new TranslationFailure("translation_transport",true);}
         catch(InterruptedException e){Thread.currentThread().interrupt();throw new TranslationFailure("translation_interrupted",true);}
-        byte[] bytes=response.body();
-        if(response.statusCode()!=200)throw new TranslationFailure("translation_http_unavailable",true);
-        if(bytes.length>32768)throw new TranslationFailure("translation_oversized",false);
-        String result;try{result=com.moapan.ai.infrastructure.ModelJson.content(bytes,32768);}catch(IllegalArgumentException e){throw new TranslationFailure("translation_invalid_reply",false);}
         result=protectedInput.restore(result);validate(input,result,language);return result;
         }finally{inference.release();}
     }
@@ -61,7 +60,7 @@ public class LocalTranslator implements com.moapan.translation.application.Trans
             default -> "Return only the complete translation without commentary or markdown headings.";
         };
         if(attempt>1)prompt+="\nTranslate each sentence in source order. Preserve factual relationships exactly.";
-        return Map.of("model","moapan-translation","messages",List.of(Map.of("role","system","content",prompt),Map.of("role","user","content",new JsonMapper().writeValueAsString(Map.of("source_text",input)))),"temperature",0,"max_tokens",1200,"stream",false,"chat_template_kwargs",Map.of("enable_thinking",false));
+        return Map.of("model","moapan-translation","messages",List.of(Map.of("role","system","content",prompt),Map.of("role","user","content",new JsonMapper().writeValueAsString(Map.of("source_text",input)))),"temperature",0,"max_tokens",1200,"stream",true,"chat_template_kwargs",Map.of("enable_thinking",false));
     }
     public static String prompt(String input,String language){
         String target=language.equals("ko")?"韩语":"英语";

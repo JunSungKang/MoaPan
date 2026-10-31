@@ -44,3 +44,6 @@ dossier={weekStart,cutoff,articleIds[UUID],forecasts[{question,observation,outlo
 
 ## V15 인증 버전
 users.auth_version bigint NOT NULL DEFAULT0 CHECK>=0. 비밀번호 변경은 현재 UUID/version 조건부 UPDATE로 증가시키고 세션을 삭제한다. 탈퇴는 현재 UUID/version 조건부 DELETE다. 로그인은 인증 전 UUID+version을 함께 보관하고 인증 후 동일 UUID와 현재 DB version을 재검사한다. 세션에는 MOAPAN_CREDENTIAL_VERSION 숫자만 추가하고 요청마다 계정 버전과 비교한다. 늦은 세션 저장·동일아이디 재가입의 이전 인증을 거부한다. 기존 회원·암호해시·아이디는 유지되며 기존 version 속성이 없는 로그인 세션은 재로그인이 필요하다.
+
+### V16 AI 작업·편집 경계
+translation_runtime 분산 lease, 두 모델 작업 started_at, article_translations locked/version, ai_source_budgets(source_id,model,day/calls/characters/seconds). 개인 데이터나 기사별 회원 행위는 추가하지 않는다. 원문 변경 시 기존 V8 trigger로 번역/잠금을 무효화하며 새 내용으로 다시 검토한다.
