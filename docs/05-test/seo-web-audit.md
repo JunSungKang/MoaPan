@@ -95,3 +95,5 @@ User-Agent를 Googlebot/Yeti/bingbot 문자열로 바꾼 요청도 home/robots/e
 - 실제 최종 결과·JAR/이미지 digest·보안 DB 시각·화면 해시는 [실행 증빙](evidence/design-seo-20261101.json)과 [시험 결과서](test-report.md)에 기록한다. 실패·미실행은 PASS로 합산하지 않는다. 화면·포털 검색 표본과 운영 HTTP 검사의 시각을 구분한다.
 
 기존의9페이지/sitemap3개/index로그인필수 기록은 당시 결과이며, 현재 공개 정책·11페이지 감사로 대체한다.
+
+관리자 화면 추가 요청은6개 주메뉴와 하위탭으로 반영했다. 검색 접근·noindex·공개 문서 수·canonical은 변경하지 않았다. 관리자54상태·전체 페이지72상태 및 실제 HTTPS 경계의 후속 결과는 [관리자 실행 증빙](evidence/admin-navigation-20261101.json)으로 대체·보완한다. 이번 UI 후속 작업에서 포털 검색 표본이나 실제 색인을 새로 측정했다고 세지 않는다.

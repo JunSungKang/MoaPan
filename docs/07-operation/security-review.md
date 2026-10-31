@@ -194,3 +194,5 @@ Helm 합성렌더구성검사: HIGH0/CRITICAL0/MEDIUM13/LOW2. KSV-01010은SOURCE
 이번 변경은 정적 화면·공유 스타일·동일 origin 메뉴와 검증/감사 문서에 한정된다. JDK/직접·전이 의존성/모델/DB/인증/배포 설정을 변경하지 않았다. 실제 최종 JAR·SBOM·소스 및 최종 앱/빌드 이미지의 취약점·secret 검사를 실행했다. 앱 sha256:d4d31075e0acc9e261674dd2935274bb730fbd58d7988bb55d3cd9bdb1655444와 빌드 sha256:78e5fe913338266748ea791ab8ffa49ed1db54462833fd8e24f0d3223bf9a51b는 원본 이미지 보고서상 취약점·secret 발견0이다. 검사 DB 시각과 보고서 해시·실행 digest/JAR 대조는 [이번 증빙](../05-test/evidence/design-seo-20261101.json)에 기록한다.
 
 이는 알려지지 않은 취약점 부재 보장이 아니다. 기존 source scanner의 정확한 JOSE 백포트 근거/만료2026-11-07·OpenPGP 코드 부재 판단·S07 사용자 유지 정책은 앞선 검토 그대로다. 원래20개 체크리스트를 추가·변경하거나 다시 모두 체크하지 않았다. proxy/DB/모델은 같은 이미지를 유지했고 이번에 해당 이미지의 전체 재검사나 실모델 성능·취소 시험을 새로 수행했다고 세지 않는다.
+
+관리자 작업영역 분리 후 최종 현재 앱은 sha256:af492f8866e4a708afd859adec8704ad16d42e0efa9c3ad1309bc41ec53bb892, 빌드는 sha256:29a7e3daf67b2340cfccd5def799e5b2f50d2d6d9fc065ec28d37da6ca661c6c다. 둘 다 원본 이미지 보고서상 취약점·secret 발견0이며 source/JAR/SBOM gate를 다시 통과했다. [최신 증빙](../05-test/evidence/admin-navigation-20261101.json)의 검사/실행 대조가 앞선 디자인 이미지 기록을 대체한다. 나머지 보안 범위와 잔여 사항은 그대로다.

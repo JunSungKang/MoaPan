@@ -1,0 +1,20 @@
+export default {
+  '관리 메뉴': 'Management sections',
+  '수집 사이트': 'Collection sites',
+  '기사 검토': 'Article review',
+  '주제·태그': 'Topics and tags',
+  '광고': 'Advertising',
+  '처리 현황': 'Processing status',
+  '사이트 목록': 'Site list',
+  '사이트 정보': 'Site details',
+  '수집 주소': 'Feeds',
+  '수집 사이트 메뉴': 'Collection site sections',
+  '주제·태그 메뉴': 'Topic and tag sections',
+  '분류 설정': 'Classification',
+  '태그 사전': 'Tag dictionary',
+  '선택한 사이트': 'Selected site',
+  '수집 주소 관리': 'Manage feeds',
+  '수집 작업 조회': 'Collection job lookup',
+  '수집 처리 상태': 'Collection worker status',
+  '뉴스레터 관리 ↗': 'Newsletter management ↗'
+};
