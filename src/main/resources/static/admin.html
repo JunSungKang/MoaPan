@@ -46,7 +46,10 @@
 </section>
 </section>
 <section id="sections-panel-articles" class="admin-workspace" role="tabpanel" aria-labelledby="sections-tab-articles" tabindex="0" data-admin-panel-group="sections" data-admin-panel="articles" hidden>
-<h2>기사·요약 검토</h2><p>아래 내용은 관리자 편집입니다. 근거에 맞는 요약만 작성하세요. 태그 UUID는 /api/v1/tags에서 확인할 수 있습니다.</p><button id="refresh-articles">최근 기사 100개 조회</button><div id="article-list"></div>
+<h2>기사·요약 검토</h2>
+<p>원문 근거와 비교해 요약·태그·공개 여부를 검토하세요.</p>
+<button type="button" id="refresh-articles">최근 기사 100개 조회</button>
+<div id="article-review"><p id="article-review-status" aria-live="polite">최근 기사를 불러오세요.</p><div id="article-list"></div></div>
 </section>
 <section id="sections-panel-topics" class="admin-workspace" role="tabpanel" aria-labelledby="sections-tab-topics" tabindex="0" data-admin-panel-group="sections" data-admin-panel="topics" hidden>
 <h2>주제·태그</h2>

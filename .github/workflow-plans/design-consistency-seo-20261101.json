@@ -56,7 +56,8 @@
         "Separate SEO agent read-only audit allpages/liveHTTP/officialprimaryguidance; report crawltechnicalreadiness distinct actualportalindexandranking unknown; do not implement new SEO indexing/auth policy without further user authorization",
         "Keep DB/models/JDK/dependencies/credential lengths/CI-CD unchanged; inspect finalJAR/image before existinglocalCompose runtime replacement; preserve previous verified image if checks fail",
         "Guarded human commit/push/PR and independent currenthead App review; do not merge main or develop without task-specific merge authorization",
-        "User followup: split admin into six sections and nested collection/topics tabs; show one work area at a time, preserve unsaved DOM fields, support keyboard and safe hash navigation, retain ADMIN/CSRF/version/API contracts."
+        "User followup: split admin into six sections and nested collection/topics tabs; show one work area at a time, preserve unsaved DOM fields, support keyboard and safe hash navigation, retain ADMIN/CSRF/version/API contracts.",
+        "User followup: article review shows one article at a time with strong title/border,previous/next and title picker; lazily cache editor DOM and preserve summary/tag/translation drafts across navigation; guard list refresh during saves and confirm discarding drafts. Retain existing article/translation APIs and auth."
       ],
       "validationCommands": [
         "sh scripts/build/gradle-local.sh --no-daemon check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest",

@@ -40,3 +40,5 @@ newspaper.css는 신문 지면·기본 폼, auth.css는 간결한 인증 컬럼,
 새 페이지는 동일 header/footer 구성과 site.css를 마지막에 연결하고, H1/하위 제목 순서·본문 건너뛰기·공통 메뉴의 실제 간격/글꼴·guest/member/admin·한/영·390/768/1440 검증 행렬에 포함한다. 링크 간격 회귀의 하한은12px이고 현재 설계의 실측 최솟값은16px이다. 신문/잡지/작업 화면의 본문 배치를 동일하게 만드는 규칙은 아니다.
 
 관리자 작업 화면은 admin.css와 administration/navigation.js가 소유한다.6개 주메뉴와 수집/주제의 하위탭은 기존 form·입력·저장 handler를 유지한 채 hidden/ARIA 선택 상태만 바꾼다. URL 해시는 정해진 화면 식별자만 사용하고 미저장 내용은 DOM 메모리에만 남긴다. 새로고침 복구·서버 설정 저장이나 추가 권한을 제공하는 기능은 아니다. 기술 점검/미리보기/수집 접수 결과는 수집주소 작업영역에서 접힘 바깥에 표시한다.
+
+기사 검토 화면은 administration/article-review.js가 목록/활성기사/방문편집기/미저장상태를 문서 메모리에서 관리한다. translation/administration.js의 선택적 저장상태 callback으로 목록 교체를 저장완료 뒤로 제한하며 기본 standalone 사용은 유지한다. API와 개인화 저장 구조는 변경하지 않는다.
