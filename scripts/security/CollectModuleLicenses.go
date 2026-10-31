@@ -23,7 +23,12 @@ func main(){
  target,err:=filepath.Abs(os.Args[1]);must(err);must(os.MkdirAll(target,0755))
  raw,err:=exec.Command("go","list","-m","-json","all").Output();must(err)
  decoder:=json.NewDecoder(strings.NewReader(string(raw)));var entries []component
- for {var m module;err=decoder.Decode(&m);if err==io.EOF{break};must(err);if m.Main{continue};if m.Replace!=nil{panic("unreviewed module replacement")};if m.Dir==""{continue};entries=append(entries,collect(target,m.Path,m.Version,m.Dir))}
+ for {var m module;err=decoder.Decode(&m);if err==io.EOF{break};must(err);if m.Main{continue};if m.Replace!=nil{
+  // Exactly one source-verified local backport is allowed; other replacements fail closed.
+  if m.Path!="github.com/go-jose/go-jose/v3"||m.Version!="v3.0.5"||m.Replace.Path!="./patched-jose"||m.Replace.Dir!="/proxy/patched-jose"{panic("unreviewed module replacement")}
+  verify:=exec.Command("sha256sum","-c","/proxy/patches/modified.sha256");verify.Dir=m.Replace.Dir;if output,err:=verify.CombinedOutput();err!=nil{panic(fmt.Sprintf("backport source mismatch: %v %s",err,output))}
+  m.Dir=m.Replace.Dir;m.Version+="+moapan.security.1"
+ };if m.Dir==""{continue};entries=append(entries,collect(target,m.Path,m.Version,m.Dir))}
  goroot,err:=exec.Command("go","env","GOROOT").Output();must(err);entries=append(entries,collect(target,"Go standard library","1.27.3",strings.TrimSpace(string(goroot))))
  sort.Slice(entries,func(i,j int)bool{return entries[i].Module<entries[j].Module})
  data,err:=json.MarshalIndent(entries,"","  ");must(err);must(os.WriteFile(filepath.Join(target,"modules.json"),data,0644));fmt.Println("Module notice inventory:",len(entries))

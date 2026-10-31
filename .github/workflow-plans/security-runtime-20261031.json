@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 4,
+  "workSlug": "security-runtime-20261031",
+  "flowType": "integration",
+  "branch": "codex/security-runtime-20261031",
+  "targetBranch": "develop",
+  "baseSha": "018c3acec1a6aa1ed0240c847a5cf65e4d2b6595",
+  "mergeMethod": "squash",
+  "governance": {
+    "prAuthorLogin": "JunSungKang",
+    "assigneeLogin": "JunSungKang",
+    "reviewerLogin": "junsung-bot[bot]",
+    "requiredChecks": [],
+    "commitAuthor": {
+      "name": "jun-sung, Kang",
+      "email": "kjuns1@naver.com"
+    },
+    "coAuthors": [
+      {
+        "name": "Codex",
+        "email": "codex@openai.com"
+      },
+      {
+        "name": "junsung-bot[bot]",
+        "email": "302617028+junsung-bot[bot]@users.noreply.github.com"
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "remove-vulnerable-runtime-os-packages",
+      "expectedPaths": [
+        "Dockerfile",
+        "scripts/**",
+        "docs/**",
+        "licenses/**",
+        "README.md",
+        ".github/workflow-plans/security-runtime-20261031.json",
+        "compose.yaml",
+        "THIRD_PARTY_NOTICES.md",
+        "src/main/java/com/moapan/ai/infrastructure/ModelStream.java",
+        "src/test/java/com/moapan/ai/**"
+      ],
+      "forbiddenPaths": [
+        ".env",
+        ".github/workflows/**",
+        "src/main/resources/db/migration/V1*"
+      ],
+      "acceptanceCriteria": [
+        "Keep chosen Temurin27.0.1.0.2+1 and exact verified official musl binaries on amd64/arm64; no language or model changes",
+        "Replace Ubuntu package set with supported stable Alpine only if final runtime/build image scans and actual JVM/model/TLS/DB/API tests pass",
+        "Keep original20 definitions fixed; S06 checked only after vulnerable components removed and new OS findings reviewed; S05/S07 remain honest",
+        "Preserve actual member/newsletter/article DB; candidate images remain separate until verified digest promotion",
+        "No CI/CD, paid resources, raw source article persistence or new personal data; current model weights and username/password lengths unchanged",
+        "Guarded commit/push/independent current-head App review and existing authorized develop merge with verified branch cleanup"
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh --no-daemon check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest",
+        "sh scripts/security/image-scan.sh <exact-candidate-images>",
+        "git diff --check"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/progress.md",
+          "docs/07-operation/security-review.md",
+          "docs/06-transition/versions.md",
+          "docs/05-test/test-report.md"
+        ]
+      }
+    }
+  ]
+}

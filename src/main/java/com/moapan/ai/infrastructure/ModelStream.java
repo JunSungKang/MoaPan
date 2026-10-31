@@ -14,6 +14,8 @@ public final class ModelStream {
         var response=http.send(request,HttpResponse.BodyHandlers.ofInputStream());
         try(var body=response.body();var timer=Executors.newSingleThreadScheduledExecutor(Thread.ofVirtual().factory())){
             if(response.statusCode()!=200)throw new IOException("model_stream_unavailable");
+            // InputStream.read need not react to Thread.interrupt; close it from another thread.
+            timer.scheduleAtFixedRate(()->{if(caller.isInterrupted())try{body.close();}catch(IOException ignored){}},25,25,TimeUnit.MILLISECONDS);
             timer.schedule(()->{expired.set(true);try{body.close();}catch(IOException ignored){}caller.interrupt();},seconds,TimeUnit.SECONDS);
             try{return read(body,byteLimit,characterLimit);}finally{timer.shutdownNow();if(expired.get())Thread.interrupted();}
         }

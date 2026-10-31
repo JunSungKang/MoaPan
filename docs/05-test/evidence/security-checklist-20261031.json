@@ -50,20 +50,22 @@
       "id": "S05",
       "title": "프록시 JOSE 잔여 취약점",
       "criterion": "go-jose/v3 적용 패치 또는 취약 구성요소 제거 검증; 기존 비노출 VEX만으로 완료 처리 금지",
-      "checked": false,
-      "status": "BLOCKED_NO_VENDOR_PATCH",
+      "checked": true,
+      "status": "VERIFIED_UPSTREAM_BACKPORT",
       "evidence": [
-        "Official go-jose advisory patched versionNone; smallstep crypto0.91.1 still v3.0.5; Caddy TLS internalissuer compiler dependency. Existing hash-bound VEX not promoted to patch."
+        "Official go-jose advisory patched versionNone; smallstep crypto0.91.1 still v3.0.5; Caddy TLS internalissuer compiler dependency. Existing hash-bound VEX not promoted to patch.",
+        "runtime-security-followup-20261031.json"
       ]
     },
     {
       "id": "S06",
       "title": "컨테이너 OS 잔여 취약점",
       "criterion": "공식 제공 보안 업데이트 적용·재검사; 실제 영향 미해결/패치 미제공 건은 체크 금지",
-      "checked": false,
-      "status": "BLOCKED_NO_VENDOR_PATCH",
+      "checked": true,
+      "status": "VERIFIED_VULNERABLE_OS_COMPONENTS_REMOVED",
       "evidence": [
-        "22 official Ubuntu noble reports retain needed/deferred; apt update+upgrade simulation reports0 available upgrades."
+        "22 official Ubuntu noble reports retain needed/deferred; apt update+upgrade simulation reports0 available upgrades.",
+        "runtime-security-followup-20261031.json"
       ]
     },
     {
@@ -207,9 +209,10 @@
       "status": "VERIFIED",
       "evidence": [
         "security-ai-oss-validation-20261031.json",
-        "security-delivery-20261031.json"
+        "security-delivery-20261031.json",
+        "runtime-security-followup-20261031.json; PR10 guarded push and independent code review, live current-head approval/merge authority"
       ]
     }
   ],
-  "updatedAt": "2026-10-30T23:27:23.808Z"
+  "updatedAt": "2026-10-31T11:32:17.027Z"
 }

@@ -16,6 +16,22 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GuardrailFollowupTest {
+    @Test void cancellationClosesBodyEvenWhenReadDoesNotReactToThreadInterrupt()throws Exception{
+        var entered=new java.util.concurrent.CountDownLatch(1);var closed=new java.util.concurrent.CountDownLatch(1);
+        var body=new java.io.InputStream(){
+            public int read()throws java.io.IOException{entered.countDown();while(closed.getCount()>0)java.util.concurrent.locks.LockSupport.parkNanos(1_000_000);throw new java.io.IOException("synthetic_closed");}
+            public void close(){closed.countDown();}
+        };
+        var http=org.mockito.Mockito.mock(HttpClient.class);
+        @SuppressWarnings("unchecked") var response=(java.net.http.HttpResponse<java.io.InputStream>)org.mockito.Mockito.mock(java.net.http.HttpResponse.class);
+        org.mockito.Mockito.when(response.statusCode()).thenReturn(200);org.mockito.Mockito.when(response.body()).thenReturn(body);
+        org.mockito.Mockito.when(http.send(org.mockito.ArgumentMatchers.any(),org.mockito.ArgumentMatchers.<java.net.http.HttpResponse.BodyHandler<java.io.InputStream>>any())).thenReturn(response);
+        try(var executor=java.util.concurrent.Executors.newSingleThreadExecutor(Thread.ofVirtual().factory())){
+            var task=executor.submit(()->com.moapan.ai.infrastructure.ModelStream.request(http,java.net.http.HttpRequest.newBuilder(URI.create("http://localhost/")).build(),4096,20,30));
+            try{assertTrue(entered.await(1,java.util.concurrent.TimeUnit.SECONDS));task.cancel(true);assertTrue(closed.await(1,java.util.concurrent.TimeUnit.SECONDS),"cancelled blocking response body must be closed promptly");}
+            finally{body.close();}
+        }
+    }
     @Test void hiddenHtmlNeverEntersSummaryWhileVisibleResearchRemains(){
         String html="<p>Visible benchmark result.</p><script>secret()</script><style>hidden</style><span hidden>HIDDEN1</span><span style='display: /*x*/ none!important'>HIDDEN2</span><span style='opacity:0'>HIDDEN3</span><template>HIDDEN4</template><span aria-hidden='true'>HIDDEN5</span>";
         assertEquals("Visible benchmark result.",SafeFetch.clean(html,8000));

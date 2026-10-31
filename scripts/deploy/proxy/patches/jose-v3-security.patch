@@ -1,0 +1,149 @@
+diff --git a/jwk.go b/jwk.go
+index e402195..fd74c17 100644
+--- a/jwk.go
++++ b/jwk.go
+@@ -0,0 +1 @@
++// Modified by MOAPAN: upstream security fixes backported; see /opt/moapan/security/jose-backport.md.
+@@ -178 +179,3 @@ func (k JSONWebKey) MarshalJSON() ([]byte, error) {
+-func (k *JSONWebKey) UnmarshalJSON(data []byte) (err error) {
++func (k *JSONWebKey) UnmarshalJSON(data []byte) error { return k.unmarshalJSON(data, true) }
++
++func (k *JSONWebKey) unmarshalJSON(data []byte, allowPrivate bool) (err error) {
+@@ -184,0 +188,4 @@ func (k *JSONWebKey) UnmarshalJSON(data []byte) (err error) {
++	if !allowPrivate && (raw.K != nil || raw.D != nil || raw.P != nil || raw.Q != nil || raw.Dp != nil || raw.Dq != nil || raw.Qi != nil) {
++		return errors.New("go-jose/go-jose: JWK contains private parameters")
++	}
++
+@@ -483,0 +491,5 @@ func (k *JSONWebKey) Valid() bool {
++// Backported from upstream v4.1.6, commit a0111f82742fa92bceec9ede40845e73319e6230.
++const MoapanSecurityBackport = "jose-v3-20261031.1"
++
++var MaxRSAModulusBits = 4096
++
+@@ -488,0 +501,5 @@ func (key rawJSONWebKey) rsaPublicKey() (*rsa.PublicKey, error) {
++	n := key.N.bigInt()
++	if n.BitLen() > MaxRSAModulusBits {
++		return nil, fmt.Errorf("go-jose/go-jose: invalid RSA key, modulus too large")
++	}
++
+@@ -490 +507 @@ func (key rawJSONWebKey) rsaPublicKey() (*rsa.PublicKey, error) {
+-		N: key.N.bigInt(),
++		N: n,
+@@ -614,2 +631 @@ func (key rawJSONWebKey) rsaPrivateKey() (*rsa.PrivateKey, error) {
+-	switch {
+-	case key.N == nil:
++	if key.N == nil {
+@@ -617 +633,2 @@ func (key rawJSONWebKey) rsaPrivateKey() (*rsa.PrivateKey, error) {
+-	case key.E == nil:
++	}
++	if key.E == nil {
+@@ -619 +636,2 @@ func (key rawJSONWebKey) rsaPrivateKey() (*rsa.PrivateKey, error) {
+-	case key.D == nil:
++	}
++	if key.D == nil {
+@@ -621 +639,2 @@ func (key rawJSONWebKey) rsaPrivateKey() (*rsa.PrivateKey, error) {
+-	case key.P == nil:
++	}
++	if key.P == nil {
+@@ -623 +642,2 @@ func (key rawJSONWebKey) rsaPrivateKey() (*rsa.PrivateKey, error) {
+-	case key.Q == nil:
++	}
++	if key.Q == nil {
+@@ -626 +645,0 @@ func (key rawJSONWebKey) rsaPrivateKey() (*rsa.PrivateKey, error) {
+-
+@@ -630,0 +650,10 @@ func (key rawJSONWebKey) rsaPrivateKey() (*rsa.PrivateKey, error) {
++	n := key.N.bigInt()
++	if n.BitLen() > MaxRSAModulusBits {
++		return nil, fmt.Errorf("go-jose/go-jose: invalid RSA key, modulus too large")
++	}
++
++	p, q := key.P.bigInt(), key.Q.bigInt()
++	if p.BitLen()+q.BitLen() > n.BitLen()+1 || new(big.Int).Mul(p, q).Cmp(n) != 0 {
++		return nil, errors.New("go-jose/go-jose: invalid RSA private key, p * q != n")
++	}
++
+@@ -633 +662 @@ func (key rawJSONWebKey) rsaPrivateKey() (*rsa.PrivateKey, error) {
+-			N: key.N.bigInt(),
++			N: n,
+@@ -636,5 +665,2 @@ func (key rawJSONWebKey) rsaPrivateKey() (*rsa.PrivateKey, error) {
+-		D: key.D.bigInt(),
+-		Primes: []*big.Int{
+-			key.P.bigInt(),
+-			key.Q.bigInt(),
+-		},
++		D:      key.D.bigInt(),
++		Primes: []*big.Int{p, q},
+diff --git a/shared.go b/shared.go
+index 489a04e..02cd646 100644
+--- a/shared.go
++++ b/shared.go
+@@ -0,0 +1 @@
++// Modified by MOAPAN: upstream security fixes backported; see /opt/moapan/security/jose-backport.md.
+@@ -285,2 +286,2 @@ func (parsed rawHeader) getEPK() (*JSONWebKey, error) {
+-	var epk *JSONWebKey
+-	err := json.Unmarshal(*v, &epk)
++	epk := new(JSONWebKey)
++	err := epk.unmarshalJSON(*v, false)
+@@ -386,2 +387,2 @@ func (parsed rawHeader) sanitized() (h Header, err error) {
+-			var jwk *JSONWebKey
+-			err = json.Unmarshal(*v, &jwk)
++			jwk := new(JSONWebKey)
++			err = jwk.unmarshalJSON(*v, false)
+@@ -389 +390 @@ func (parsed rawHeader) sanitized() (h Header, err error) {
+-				err = fmt.Errorf("failed to unmarshal JWK: %v: %#v", err, string(*v))
++				err = fmt.Errorf("failed to unmarshal JWK: %w", err)
+diff --git a/jws.go b/jws.go
+index 401fc18..4888927 100644
+--- a/jws.go
++++ b/jws.go
+@@ -0,0 +1 @@
++// Modified by MOAPAN: upstream security fixes backported; see /opt/moapan/security/jose-backport.md.
+@@ -237,0 +239 @@ func (parsed *rawJSONWebSignature) sanitized() (*JSONWebSignature, error) {
++		obj.Signatures[i].header = sig.Header
+diff --git a/json/scanner.go b/json/scanner.go
+index ee6622e..f170d86 100644
+--- a/json/scanner.go
++++ b/json/scanner.go
+@@ -0,0 +1 @@
++// Modified by MOAPAN: upstream security fixes backported; see /opt/moapan/security/jose-backport.md.
+@@ -173,2 +174,8 @@ func (s *scanner) eof() int {
+-func (s *scanner) pushParseState(p int) {
+-	s.parseState = append(s.parseState, p)
++const maxNestingDepth = 10000
++
++func (s *scanner) pushParseState(c byte, newParseState int, successState int) int {
++	s.parseState = append(s.parseState, newParseState)
++	if len(s.parseState) <= maxNestingDepth {
++		return successState
++	}
++	return s.error(c, "exceeded max depth")
+@@ -214,2 +221 @@ func stateBeginValue(s *scanner, c byte) int {
+-		s.pushParseState(parseObjectKey)
+-		return scanBeginObject
++		return s.pushParseState(c, parseObjectKey, scanBeginObject)
+@@ -218,2 +224 @@ func stateBeginValue(s *scanner, c byte) int {
+-		s.pushParseState(parseArrayValue)
+-		return scanBeginArray
++		return s.pushParseState(c, parseArrayValue, scanBeginArray)
+diff --git a/cipher/cbc_hmac.go b/cipher/cbc_hmac.go
+index af029ce..f36fefb 100644
+--- a/cipher/cbc_hmac.go
++++ b/cipher/cbc_hmac.go
+@@ -0,0 +1 @@
++// Modified by MOAPAN: upstream security fixes backported; see /opt/moapan/security/jose-backport.md.
+@@ -53,0 +55,2 @@ func NewCBCHMAC(key []byte, newBlockCipher func([]byte) (cipher.Block, error)) (
++	default:
++		return nil, errors.New("go-jose/go-jose: invalid key size for CBC-HMAC")
+@@ -179 +182 @@ func unpadBuffer(buffer []byte, blockSize int) ([]byte, error) {
+-	if len(buffer)%blockSize != 0 {
++	if len(buffer) == 0 || len(buffer)%blockSize != 0 {
+diff --git a/crypter.go b/crypter.go
+index 8870e89..79b7825 100644
+--- a/crypter.go
++++ b/crypter.go
+@@ -0,0 +1 @@
++// Modified by MOAPAN: upstream security fixes backported; see /opt/moapan/security/jose-backport.md.
+@@ -490,0 +492 @@ func (obj JSONWebEncryption) Decrypt(decryptionKey interface{}) ([]byte, error)
++		if len(cek) != cipher.keySize() { return nil, ErrCryptoFailure }
+@@ -564,0 +567 @@ func (obj JSONWebEncryption) DecryptMulti(decryptionKey interface{}) (int, Heade
++			if len(cek) != cipher.keySize() { continue }
