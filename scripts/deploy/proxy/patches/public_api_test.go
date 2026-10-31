@@ -324,4 +324,3 @@ func cbcTagLength(t *testing.T, enc ContentEncryption) int {
 		return 0
 	}
 }
-

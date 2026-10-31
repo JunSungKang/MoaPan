@@ -2,87 +2,56 @@ diff --git a/jwk.go b/jwk.go
 index e402195..fd74c17 100644
 --- a/jwk.go
 +++ b/jwk.go
-@@ -1,3 +1,4 @@
+@@ -0,0 +1 @@
 +// Modified by MOAPAN: upstream security fixes backported; see /opt/moapan/security/jose-backport.md.
- /*-
-  * Copyright 2014 Square Inc.
-  *
-@@ -175,13 +176,19 @@ func (k JSONWebKey) MarshalJSON() ([]byte, error) {
- }
- 
- // UnmarshalJSON reads a key from its JSON representation.
+@@ -178 +179,3 @@ func (k JSONWebKey) MarshalJSON() ([]byte, error) {
 -func (k *JSONWebKey) UnmarshalJSON(data []byte) (err error) {
 +func (k *JSONWebKey) UnmarshalJSON(data []byte) error { return k.unmarshalJSON(data, true) }
 +
 +func (k *JSONWebKey) unmarshalJSON(data []byte, allowPrivate bool) (err error) {
- 	var raw rawJSONWebKey
- 	err = json.Unmarshal(data, &raw)
- 	if err != nil {
- 		return err
- 	}
- 
+@@ -184,0 +188,4 @@ func (k *JSONWebKey) UnmarshalJSON(data []byte) (err error) {
 +	if !allowPrivate && (raw.K != nil || raw.D != nil || raw.P != nil || raw.Q != nil || raw.Dp != nil || raw.Dq != nil || raw.Qi != nil) {
 +		return errors.New("go-jose/go-jose: JWK contains private parameters")
 +	}
 +
- 	certs, err := parseCertificateChain(raw.X5c)
- 	if err != nil {
- 		return fmt.Errorf("go-jose/go-jose: failed to unmarshal x5c field: %s", err)
-@@ -481,13 +488,23 @@ func (k *JSONWebKey) Valid() bool {
- 	return true
- }
- 
+@@ -483,0 +491,5 @@ func (k *JSONWebKey) Valid() bool {
 +// Backported from upstream v4.1.6, commit a0111f82742fa92bceec9ede40845e73319e6230.
 +const MoapanSecurityBackport = "jose-v3-20261031.1"
 +
 +var MaxRSAModulusBits = 4096
 +
- func (key rawJSONWebKey) rsaPublicKey() (*rsa.PublicKey, error) {
- 	if key.N == nil || key.E == nil {
- 		return nil, fmt.Errorf("go-jose/go-jose: invalid RSA key, missing n/e values")
- 	}
- 
+@@ -488,0 +501,5 @@ func (key rawJSONWebKey) rsaPublicKey() (*rsa.PublicKey, error) {
 +	n := key.N.bigInt()
 +	if n.BitLen() > MaxRSAModulusBits {
 +		return nil, fmt.Errorf("go-jose/go-jose: invalid RSA key, modulus too large")
 +	}
 +
- 	return &rsa.PublicKey{
+@@ -490 +507 @@ func (key rawJSONWebKey) rsaPublicKey() (*rsa.PublicKey, error) {
 -		N: key.N.bigInt(),
 +		N: n,
- 		E: key.E.toInt(),
- 	}, nil
- }
-@@ -611,33 +628,42 @@ func (key rawJSONWebKey) edPublicKey() (ed25519.PublicKey, error) {
- 
- func (key rawJSONWebKey) rsaPrivateKey() (*rsa.PrivateKey, error) {
- 	var missing []string
+@@ -614,2 +631 @@ func (key rawJSONWebKey) rsaPrivateKey() (*rsa.PrivateKey, error) {
 -	switch {
 -	case key.N == nil:
 +	if key.N == nil {
- 		missing = append(missing, "N")
+@@ -617 +633,2 @@ func (key rawJSONWebKey) rsaPrivateKey() (*rsa.PrivateKey, error) {
 -	case key.E == nil:
 +	}
 +	if key.E == nil {
- 		missing = append(missing, "E")
+@@ -619 +636,2 @@ func (key rawJSONWebKey) rsaPrivateKey() (*rsa.PrivateKey, error) {
 -	case key.D == nil:
 +	}
 +	if key.D == nil {
- 		missing = append(missing, "D")
+@@ -621 +639,2 @@ func (key rawJSONWebKey) rsaPrivateKey() (*rsa.PrivateKey, error) {
 -	case key.P == nil:
 +	}
 +	if key.P == nil {
- 		missing = append(missing, "P")
+@@ -623 +642,2 @@ func (key rawJSONWebKey) rsaPrivateKey() (*rsa.PrivateKey, error) {
 -	case key.Q == nil:
 +	}
 +	if key.Q == nil {
- 		missing = append(missing, "Q")
- 	}
+@@ -626 +645,0 @@ func (key rawJSONWebKey) rsaPrivateKey() (*rsa.PrivateKey, error) {
 -
- 	if len(missing) > 0 {
- 		return nil, fmt.Errorf("go-jose/go-jose: invalid RSA private key, missing %s value(s)", strings.Join(missing, ", "))
- 	}
- 
+@@ -630,0 +650,10 @@ func (key rawJSONWebKey) rsaPrivateKey() (*rsa.PrivateKey, error) {
 +	n := key.N.bigInt()
 +	if n.BitLen() > MaxRSAModulusBits {
 +		return nil, fmt.Errorf("go-jose/go-jose: invalid RSA key, modulus too large")
@@ -93,12 +62,10 @@ index e402195..fd74c17 100644
 +		return nil, errors.New("go-jose/go-jose: invalid RSA private key, p * q != n")
 +	}
 +
- 	rv := &rsa.PrivateKey{
- 		PublicKey: rsa.PublicKey{
+@@ -633 +662 @@ func (key rawJSONWebKey) rsaPrivateKey() (*rsa.PrivateKey, error) {
 -			N: key.N.bigInt(),
 +			N: n,
- 			E: key.E.toInt(),
- 		},
+@@ -636,5 +665,2 @@ func (key rawJSONWebKey) rsaPrivateKey() (*rsa.PrivateKey, error) {
 -		D: key.D.bigInt(),
 -		Primes: []*big.Int{
 -			key.P.bigInt(),
@@ -106,73 +73,40 @@ index e402195..fd74c17 100644
 -		},
 +		D:      key.D.bigInt(),
 +		Primes: []*big.Int{p, q},
- 	}
- 
- 	if key.Dp != nil {
 diff --git a/shared.go b/shared.go
 index 489a04e..02cd646 100644
 --- a/shared.go
 +++ b/shared.go
-@@ -1,3 +1,4 @@
+@@ -0,0 +1 @@
 +// Modified by MOAPAN: upstream security fixes backported; see /opt/moapan/security/jose-backport.md.
- /*-
-  * Copyright 2014 Square Inc.
-  *
-@@ -282,8 +283,8 @@ func (parsed rawHeader) getEPK() (*JSONWebKey, error) {
- 	if v == nil {
- 		return nil, nil
- 	}
+@@ -285,2 +286,2 @@ func (parsed rawHeader) getEPK() (*JSONWebKey, error) {
 -	var epk *JSONWebKey
 -	err := json.Unmarshal(*v, &epk)
 +	epk := new(JSONWebKey)
 +	err := epk.unmarshalJSON(*v, false)
- 	if err != nil {
- 		return nil, err
- 	}
-@@ -383,10 +384,10 @@ func (parsed rawHeader) sanitized() (h Header, err error) {
- 		}
- 		switch k {
- 		case headerJWK:
+@@ -386,2 +387,2 @@ func (parsed rawHeader) sanitized() (h Header, err error) {
 -			var jwk *JSONWebKey
 -			err = json.Unmarshal(*v, &jwk)
 +			jwk := new(JSONWebKey)
 +			err = jwk.unmarshalJSON(*v, false)
- 			if err != nil {
+@@ -389 +390 @@ func (parsed rawHeader) sanitized() (h Header, err error) {
 -				err = fmt.Errorf("failed to unmarshal JWK: %v: %#v", err, string(*v))
 +				err = fmt.Errorf("failed to unmarshal JWK: %w", err)
- 				return
- 			}
- 			h.JSONWebKey = jwk
 diff --git a/jws.go b/jws.go
 index 401fc18..4888927 100644
 --- a/jws.go
 +++ b/jws.go
-@@ -1,3 +1,4 @@
+@@ -0,0 +1 @@
 +// Modified by MOAPAN: upstream security fixes backported; see /opt/moapan/security/jose-backport.md.
- /*-
-  * Copyright 2014 Square Inc.
-  *
-@@ -235,6 +236,7 @@ func (parsed *rawJSONWebSignature) sanitized() (*JSONWebSignature, error) {
- 			return nil, ErrUnprotectedNonce
- 		}
- 
+@@ -237,0 +239 @@ func (parsed *rawJSONWebSignature) sanitized() (*JSONWebSignature, error) {
 +		obj.Signatures[i].header = sig.Header
- 		var err error
- 		obj.Signatures[i].Header, err = obj.Signatures[i].mergedHeaders().sanitized()
- 		if err != nil {
 diff --git a/json/scanner.go b/json/scanner.go
 index ee6622e..f170d86 100644
 --- a/json/scanner.go
 +++ b/json/scanner.go
-@@ -1,3 +1,4 @@
+@@ -0,0 +1 @@
 +// Modified by MOAPAN: upstream security fixes backported; see /opt/moapan/security/jose-backport.md.
- // Copyright 2010 The Go Authors.  All rights reserved.
- // Use of this source code is governed by a BSD-style
- // license that can be found in the LICENSE file.
-@@ -170,8 +171,14 @@ func (s *scanner) eof() int {
- }
- 
- // pushParseState pushes a new parse state p onto the parse stack.
+@@ -173,2 +174,8 @@ func (s *scanner) eof() int {
 -func (s *scanner) pushParseState(p int) {
 -	s.parseState = append(s.parseState, p)
 +const maxNestingDepth = 10000
@@ -183,73 +117,33 @@ index ee6622e..f170d86 100644
 +		return successState
 +	}
 +	return s.error(c, "exceeded max depth")
- }
- 
- // popParseState pops a parse state (already obtained) off the stack
-@@ -211,12 +218,10 @@ func stateBeginValue(s *scanner, c byte) int {
- 	switch c {
- 	case '{':
- 		s.step = stateBeginStringOrEmpty
+@@ -214,2 +221 @@ func stateBeginValue(s *scanner, c byte) int {
 -		s.pushParseState(parseObjectKey)
 -		return scanBeginObject
 +		return s.pushParseState(c, parseObjectKey, scanBeginObject)
- 	case '[':
- 		s.step = stateBeginValueOrEmpty
+@@ -218,2 +224 @@ func stateBeginValue(s *scanner, c byte) int {
 -		s.pushParseState(parseArrayValue)
 -		return scanBeginArray
 +		return s.pushParseState(c, parseArrayValue, scanBeginArray)
- 	case '"':
- 		s.step = stateInString
- 		return scanBeginLiteral
 diff --git a/cipher/cbc_hmac.go b/cipher/cbc_hmac.go
 index af029ce..f36fefb 100644
 --- a/cipher/cbc_hmac.go
 +++ b/cipher/cbc_hmac.go
-@@ -1,3 +1,4 @@
+@@ -0,0 +1 @@
 +// Modified by MOAPAN: upstream security fixes backported; see /opt/moapan/security/jose-backport.md.
- /*-
-  * Copyright 2014 Square Inc.
-  *
-@@ -51,6 +52,8 @@ func NewCBCHMAC(key []byte, newBlockCipher func([]byte) (cipher.Block, error)) (
- 		hash = sha512.New384
- 	case 32:
- 		hash = sha512.New
+@@ -53,0 +55,2 @@ func NewCBCHMAC(key []byte, newBlockCipher func([]byte) (cipher.Block, error)) (
 +	default:
 +		return nil, errors.New("go-jose/go-jose: invalid key size for CBC-HMAC")
- 	}
- 
- 	return &cbcAEAD{
-@@ -176,7 +179,7 @@ func padBuffer(buffer []byte, blockSize int) []byte {
- 
- // Remove padding
- func unpadBuffer(buffer []byte, blockSize int) ([]byte, error) {
+@@ -179 +182 @@ func unpadBuffer(buffer []byte, blockSize int) ([]byte, error) {
 -	if len(buffer)%blockSize != 0 {
 +	if len(buffer) == 0 || len(buffer)%blockSize != 0 {
- 		return nil, errors.New("go-jose/go-jose: invalid padding")
- 	}
- 
 diff --git a/crypter.go b/crypter.go
 index 8870e89..79b7825 100644
 --- a/crypter.go
 +++ b/crypter.go
-@@ -1,3 +1,4 @@
+@@ -0,0 +1 @@
 +// Modified by MOAPAN: upstream security fixes backported; see /opt/moapan/security/jose-backport.md.
- /*-
-  * Copyright 2014 Square Inc.
-  *
-@@ -488,6 +489,7 @@ func (obj JSONWebEncryption) Decrypt(decryptionKey interface{}) ([]byte, error)
- 
- 	cek, err := decrypter.decryptKey(recipientHeaders, &recipient, generator)
- 	if err == nil {
+@@ -490,0 +492 @@ func (obj JSONWebEncryption) Decrypt(decryptionKey interface{}) ([]byte, error)
 +		if len(cek) != cipher.keySize() { return nil, ErrCryptoFailure }
- 		// Found a valid CEK -- let's try to decrypt.
- 		plaintext, err = cipher.decrypt(cek, authData, parts)
- 	}
-@@ -562,6 +564,7 @@ func (obj JSONWebEncryption) DecryptMulti(decryptionKey interface{}) (int, Heade
- 
- 		cek, err := decrypter.decryptKey(recipientHeaders, &recipient, generator)
- 		if err == nil {
+@@ -564,0 +567 @@ func (obj JSONWebEncryption) DecryptMulti(decryptionKey interface{}) (int, Heade
 +			if len(cek) != cipher.keySize() { continue }
- 			// Found a valid CEK -- let's try to decrypt.
- 			plaintext, err = cipher.decrypt(cek, authData, parts)
- 			if err == nil {

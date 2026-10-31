@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-10-31T11:11:53.963Z",
+  "reviewedAt": "2026-10-31T11:30:40.204Z",
   "expiresAt": "2026-11-07T00:00:00Z",
   "status": "fixed",
   "package": "github.com/go-jose/go-jose/v3",
@@ -11,7 +11,7 @@
     "CVE-2026-116586"
   ],
   "scope": "Source version scanner cannot model checksum-verified local backport. Runtime local-module analyzer incompleteness is not treated as proof.",
-  "image": "sha256:a726330cd65b8e35938813a526ce7b55ff12168a9f83e077b4afb9e4ce23c6fd",
+  "image": "sha256:e4b645df85f6e31cae7eabadaf6a9482e0d199fa1444f57a22e6c7198640bad6",
   "sourceSha256": {
     "Dockerfile": "d7d67589f89970e073bd97d233bae8be0f6d698a6bb042860a8dcbc9fc7ff017",
     "scripts/deploy/proxy/main.go": "e9a0d7c3e4e96ff8793e45bd461e6dade9ab9ceb38afeefd666061ccff6ad79b",
@@ -19,19 +19,20 @@
     "scripts/deploy/proxy/go.sum": "d83a996a47268b1ea9f2c91af433cf509f3bb222272fe4e65a9b12c5ade3b462",
     "scripts/deploy/proxy/patches/README.md": "fbb232ab37d76b309c14f23d54c8b36b119ba2d8ffd253225f32caa376e8ddf2",
     "scripts/deploy/proxy/patches/cipher_security_test.go": "f4822f4e98f00cce33f23017d9e97e65b1fddf526d93490aad5a8c24dbad8b42",
-    "scripts/deploy/proxy/patches/jose-v3-security.patch": "8501ac4620f5c6962ddb72950e07ce486c64b2d807f2c1e62cd480eaf13f6112",
+    "scripts/deploy/proxy/patches/jose-v3-security.patch": "6b13fc0d0ca177022057ab886633b73ab5318037d86feae680a94b7cc48281d1",
     "scripts/deploy/proxy/patches/jose_security_test.go": "0162aa0f5a3cb5ff75b63c4bca606954432caace7015098ad2fc357a22724525",
     "scripts/deploy/proxy/patches/json_security_test.go": "b4b21c60f36681be721d4482b94936a926ce313a9889a56917ff6ed08ed8c238",
     "scripts/deploy/proxy/patches/modified.sha256": "5503258badff0a457f5eb5775f02f2b544486bb845f1ef86fe270108a7e3034f",
     "scripts/deploy/proxy/patches/original.sha256": "73d53867d005a46b993d6f039272bbd5ecb616d9bb30554d01a27645242b256d",
-    "scripts/deploy/proxy/patches/public_api_test.go": "4f3fcf53773da1c3b5e1dc77d2a7677f48db4a449069957c4168e3c41c0dc477"
+    "scripts/deploy/proxy/patches/public_api_test.go": "7b9eac3f12848e9be343893113603e452e9ff45e0bd4643bf13f8ed0f1ed8b66"
   },
   "binarySha256": "0d42db0cb578655050325ba625310f95e16a42ffda0142f2e3ca0542c0b3550f",
   "tests": {
     "upstreamPackages": 5,
     "unpatchedPublicApiFailures": 5,
-    "sourceLogSha256": "78af2f702812a1f0abe47f6204e8357c91280a9de3bdb1fc0499ffbc9322ee52",
+    "sourceLogSha256": "7efd081333f3db886e13b35eb1f7dc1ad43d8807ed1bf20df3e51b2dffc11057",
     "unpatchedLogSha256": "af42573f95174c005e4678dd234c6b15840f18fef5e646652ac39dbcf9526664"
   },
-  "runtimeSourceChecksumsVerified": 6
+  "runtimeSourceChecksumsVerified": 6,
+  "formatting": "Zero-context unified diff; exact original and modified checksums unchanged. Caddy executable identical."
 }
