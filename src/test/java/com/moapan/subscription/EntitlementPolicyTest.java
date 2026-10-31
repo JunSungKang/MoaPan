@@ -1,0 +1,11 @@
+package com.moapan.subscription;
+import com.moapan.subscription.domain.EntitlementPolicy;import com.moapan.subscription.domain.EntitlementPolicy.*;import com.moapan.subscription.application.*;import com.moapan.subscription.infrastructure.PreviewEntitlements;import com.moapan.shared.api.ApiError;
+import java.time.*;import java.util.*;import org.junit.jupiter.api.*;import static org.junit.jupiter.api.Assertions.*;
+import org.springframework.security.core.context.SecurityContextHolder;import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;import org.springframework.security.core.authority.SimpleGrantedAuthority;
+class EntitlementPolicyTest {
+ final Instant now=Instant.parse("2026-10-30T08:00:00Z");
+ @AfterEach void clear(){SecurityContextHolder.clearContext();}
+ @Test void expirationAndBenefitsAreIndependentOfOperationalRole(){var grants=List.of(new Grant(Set.of(Benefit.READ_NEWSLETTER),now,now.plusSeconds(60)));assertFalse(EntitlementPolicy.allows(grants,Benefit.READ_NEWSLETTER,now.minusNanos(1)));assertTrue(EntitlementPolicy.allows(grants,Benefit.READ_NEWSLETTER,now));assertFalse(EntitlementPolicy.allows(grants,Benefit.READ_NEWSLETTER,now.plusSeconds(60)));assertFalse(EntitlementPolicy.allows(grants,Benefit.REUSE_NEWSLETTER,now));}
+ @Test void adminDoesNotBypassMissingProductBenefit(){var provider=new EntitlementProvider(){public Collection<Grant> grants(UUID u,Instant t){return List.of(new Grant(Set.of(Benefit.READ_NEWSLETTER),now,null));}public String distribution(){return "FREE_PREVIEW";}};var access=new ContentAccess(provider,Clock.fixed(now,ZoneOffset.UTC));assertEquals(401,assertThrows(ApiError.class,()->access.require(Benefit.READ_NEWSLETTER)).statusCode());SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(UUID.randomUUID().toString(),null,List.of(new SimpleGrantedAuthority("ROLE_ADMIN"))));assertDoesNotThrow(()->access.require(Benefit.READ_NEWSLETTER));assertEquals(403,assertThrows(ApiError.class,()->access.require(Benefit.REUSE_NEWSLETTER)).statusCode());}
+ @Test void previewCannotSilentlyEnablePaymentMode(){assertThrows(IllegalStateException.class,()->new PreviewEntitlements().entitlementProvider("paid"));}
+}

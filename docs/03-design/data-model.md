@@ -36,6 +36,10 @@ advertising_settings: singleton CHECK(true) PK, provider BANNER/ADSENSE, enabled
 
 newsletters(V13): UUID、issue_number(고유 호수)、draft/published JSONB、version、published_at/updated_at. 발간 스냅샷은 초안 저장과 별개로 한 트랜잭션에서 교체한다. 발간 취소는 published만 비우고 초안과 호수는 유지한다. 자체 원고와 압축 이미지가 같은 스냅샷에 있으므로 파일 이동·볼륨 누락으로 그림이 사라지지 않으며 기존 PostgreSQL 백업이 함께 보관한다. 뉴스 원문·회원 관심사·열람 이벤트를 저장하지 않는다.
 
+## V14 뉴스레터 연구·개정
+newsletters에 draft_dossier/published_dossier(JSONB nullable), publication_revision(nonnegative), first_published_at(timestamptz), distribution(FREE_PREVIEW/PAID_SUBSCRIPTION)을 추가했다. 기존 발간본문/원고/호수/시각은 보존하고 최초시각·개정1로 기준선을 잡는다. 새마이그레이션은additive이며원래V13데이터를삭제하지않는다.
+dossier={weekStart,cutoff,articleIds[UUID],forecasts[{question,observation,outlook,horizon,experiment,successCriteria,stopCondition,evidenceIds[UUID]}],rightsConfirmed,editorialReviewed,correctionNote}. 기사ID와편집부의독자적연구메모이며기사원문/초록/회원개인정보가아니다. 최대40근거/8전망,필드별길이제한. publication은draft본문+dossier를같은트랜잭션에snapshot하고 개정수/시각/감사갱신, 최초호수/시각은유지한다.
+저장·삭제·발간은동일newsletter UUID advisory lock, 선택source→article 공유잠금과권리재검사로오래된공개를방지한다. 숨김/권리철회된근거는독자목록·본문·출력에서다시검사한다. 실제구독·기업·평가참가자용테이블은만들지않았다.
 
 
 ## V15 인증 버전

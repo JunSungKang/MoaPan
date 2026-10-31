@@ -59,3 +59,5 @@ Caddyfile과 scripts/deploy/db-init.sh는 이미지에 포함된다. 수정 후 
 공식 근거(2026-10-30 확인): [광고 단위 생성](https://support.google.com/adsense/answer/9274025), [strict CSP 통합](https://support.google.com/adsense/answer/16283098), [동의 관리](https://support.google.com/adsense/answer/7670013). 계정 승인/게시자 ID가 없어 실광고 송출·수익 검증은 하지 않았다. V12 마이그레이션 추가 및 Helm migrationVersion=12.
 
 뉴스레터: /newsletter.html은 회원용 목록·본문, /newsletter-editor.html은 관리자 원고 편집이다. 관리자 계정 메뉴의 뉴스레터 관리에서 제목·소개·주제를 입력하고 문단/소제목/강조문/그림/참고 자료를 조합한다. 뉴스·논문 찾기로 기존 뉴스의 제목과 원문 링크만 참고 자료에 연결할 수 있다. PNG/JPEG/WebP 5MB 이하 파일을 브라우저에서 최대1200px JPEG로 압축하며 그림당 약220KiB, 원고 API 전체1MiB를 제한한다. 초안 저장은 발간본에 영향을 주지 않으며 발간 버튼과 확인 후에만 회원에게 보인다. 발간 취소 시 초안은 유지한다. 그림 대체 설명과 출처는 관리자가 작성하고 이용 권리를 확인한다. 자동 이메일 발송·이메일 수집·AI 원고 생성은 없다. UI 번역과 원고 번역은 구분하며 원고는 작성 언어 그대로다. V13 및 Helm migrationVersion13을 적용한다.
+
+V14 전환: newsletters에 nullable dossier와최초발간/개정필드를추가하며기존본문/그림/회원/기사삭제없음. migrate역할을먼저한번실행한후동일검증이미지web/worker를재생성한다. 이전V13앱은추가컬럼을사용하지않으므로스키마를파괴적으로되돌리지않는다. 기존발간본은구조화근거·권리재검토전에는재게재도구가없고본문열람은유지한다. Helm migrationVersion=14이며실클러스터배포는검증범위밖이다. 백업은기존DB전체dump/암호화/접근통제절차로새컬럼도포함한다. 실제고객평가/가격/결제를운영중이라고표시하지않는다.

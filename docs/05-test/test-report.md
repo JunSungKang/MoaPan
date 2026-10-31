@@ -153,6 +153,42 @@ E2E26 PASS(390/1440px 우측24px 여백/제호 위 배치/푸터선택없음/중
 
 트렌드 뉴스레터 최종: 단위132/통합46/E2E30=208 PASS, 실패·skip0. 정책4, Nu11페이지 메시지0, Helm lint/render·잘못된 설정 거부, 소스/JAR/SBOM/최종 앱·변경 proxy 이미지 gate PASS. 초안 비공개/발간 후 초안 수정 분리, 안전한 블록 출력, 390/768/1440, 지연 저장 중 원고 전환 차단·편집 유지 확인. 실제HTTPS 회원 접근·관리권한·합성계정정리 및 V13·실행JAR일치 확인. 초기 병렬 테스트 결과 파일 충돌은 실패로 기록하고 단일 실행으로 재검증했다. evidence/newsletter.json 참조.
 
+## 뉴스레터 편집 지면 재구성
+최종 단위132/E2E31 PASS, 실패·오류·skip0. check·e2eTest·bootJar·sbom·securityCheck를 단일 Gradle 실행으로 검증했다. Nu11페이지 메시지0. 백엔드 미변경으로 PostgreSQL 통합테스트는 이번에 재실행하지 않았다(직전 뉴스레터 증빙46 PASS와 구분).
+
+합성 발간물3개와 긴 한국어 원고·그림·인용·링크를 사용해390/768/1440의 목록/상세/편집/미리보기12장 및 빈 목록1장을 생성하고 직접 확인했다. 필터, 상세의 목록 소개 숨김, 관련 블록 필드만 표시, 미리보기 소개/본문 일치, 가로넘침 없음, 파일 입력 키보드 포커스와 기존 지연저장 경합을 검증했다. 최초 태블릿 표지의 min-height/aspect-ratio 넘침을 실패로 검출하고 폭 제한 후 재검증했다. 독립 리뷰의 보이지 않는 업로드 포커스 지적을 수정했다.
+
+소스/JAR/SBOM 및 최종 앱이미지 gate PASS. 앱 HIGH0/CRITICAL0, MEDIUM23/LOW4 잔여 OS 공지는 기존 보안 검토를 유지한다. 실제 HTTPS 정적 자산4개 hash 일치, 비회원 HTML302/API401, 실행 JAR와 검증 JAR SHA256 일치. Compose web healthy, worker 실행 확인. DB·원고·실발간물은 UI 테스트로 변경하지 않았다. 증빙 [newsletter-redesign.json](evidence/newsletter-redesign.json), 스크린샷 build/reports/screenshots/newsletter-*.png.
+
+## 뉴스레터 전체 삭제와 첫 주간호
+최종 단위132/통합47/E2E32=211 PASS, 실패·오류·skip0. check integrationTest e2eTest bootJar sbom securityCheck 단일 실행 완료. Nu11페이지 메시지0. 관리자/CSRF·잘못된 토큰·일반회원 거부, 버전 누락/음수400, 충돌409, 삭제/없는ID404, 초안·발간본·그림 행 제거와 감사1건을 PostgreSQL에서 검증했다. 삭제 후 version0 생성 PUT 재전송은409로 거부한다. 브라우저 확인 취소/충돌 시 입력 보존/삭제 중 원고전환 차단/성공 시 편집기 정리/미저장 신규 원고의 로컬 삭제를 확인했다. 기존390/768/1440 화면·미리보기·키보드 회귀도 유지했다.
+
+독립 리뷰가 발견한 지연 초기 PUT의 삭제 후 부활은 공통 UUID 트랜잭션 잠금과 영속 삭제 감사 표식으로 수정했다. 실발간 검수에서 발견한 시간대 누락도 목록/상세/관리자 목록의 UTC ISOZ 변환과 API 회귀로 수정했다. 최종 소스/JAR/SBOM/앱이미지 보안 gate PASS, HIGH0/CRITICAL0/MEDIUM23/LOW4. 앱 sha256:cf3e54452b050c43db1096772762ef3d6c75b6c65d6c9ca2a378032df6cc187b. 실제HTTPS정적자산4개 일치, 실행JAR와검증JAR SHA256일치. 삭제 증빙 [newsletter-deletion.json](evidence/newsletter-deletion.json).
+
+사용자가 명시 요청한 실제 첫 호2026-001 「더 큰 AI보다, 덜 낭비하는 AI」를 발간했다. 이번 주10/26~30 범위의 실제 수집 arXiv 연구5편을 공식 공개 페이지에서 확인하고 독자적인 해설·출처링크5개·자체 개념도1개, 총24블록으로 작성했다. 원문/초록 전문을 별도 저장하지 않았다. 첫 실발간 화면 검사1회는 실패했고 당시 원인 진단을 남기지 못했으므로 성공으로 세지 않았다. 읽기 전용 재검증 후 시간대 수정까지 반영한 최종 실제HTTPS브라우저 검사에서390/768/1440 본문/호수/참고링크/넘침/관리자 삭제버튼을 확인했다. 원고 재발간 없이 최초시각을 유지했다. 임시 편집 계정·세션 삭제 및 잔존 계정0 확인. 실제 발간 증빙 [newsletter-first-issue.json](evidence/newsletter-first-issue.json).
+
+## 2026-001호 주간 수집 근거 한정 R&D 개정
+본문/자체그림 개정만 수행했고 애플리케이션 코드는 변경하지 않았다. 기존5근거의DB collected_at이2026-10-30로모두이번주범위임을검사하고,미공개초안과발간본이같은지확인후현재version으로PUT/발간했다. 같은호수1/동일UUID, version4, 42블록/참조5/그림1의모든필드를API에서대조했다. 본문은연구결과/세전망/제안기간·수치/전환·중단조건을구분한다. 독립원고검토에서확인한지표모호성은‘정답근거를정확히포함한답변의비율’로명시하고검색nDCG·DB성능에그대로적용하지않도록보완했다.
+
+실제HTTPS Playwright Java390/768/1440에서제목·2026-001호·세전망·세연구기간·참고링크5·그림·가로넘침없음확인PASS,PC/모바일및로드맵그림스크린샷검수. 임시계정·세션제거/잔존0확인. 동일운영앱cf3e54452b050c43db1096772762ef3d6c75b6c65d6c9ca2a378032df6cc187b를유지한다. 전체Gradle211개테스트·취약점스캔은코드/의존성/이미지변경이없어이번콘텐츠개정에서는재실행하지않았으며직전결과와구분한다. 증빙 [newsletter-rd-rewrite.json](evidence/newsletter-rd-rewrite.json).
+
+
+## 수집 뉴스 비회원 공개 (2026-10-30T17:11:40.413Z)
+단위132/통합48/E2E34=214건 PASS, 실패/오류/skipped0. scanner정책4건과 Nu HTML검사0메시지, 문서검사통과. 실제Testcontainers PostgreSQL에서 공개edition42/no cursor·조작400·숨김/권리철회·익명전역600/분429·회원quota유지·CSRF/동일origin·뉴스레터401/보호화면302를 확인했다. Playwright는 대표관심사와이전회원IndexedDB분리·비회원메뉴·공개검색·390/768/1440넘침없음·인증해제시뉴스레터소개제거/지연응답폐기를검증했다.
+최초독립리뷰의소개잔존지적과첫HTTPS검사의HTTP리다이렉트실패를수정하고전체회귀/보안/이미지검사를재실행했다. 실제HTTPS24개검증PASS, 지면42개/검색7개/최대140개, 비회원뉴스레터목록·실제발간본문401, 보호화면상대Location으로HTTPS로그인유지. 실제브라우저에서도비회원기사표시와HTTPS로그인전환을확인했다. JAR 102506508af4a808c0ce7eb07cc2d48c12f17db7471ae82e8a3df10948a1e5ac, 이미지 sha256:47b30aaf13c58138e0e46324c0f0ab328c34316300accf1768694b4db3d529c3 검사/실행일치. 기존OS와proxy조건부잔여위험은유지한다. 증빙 [public-newspaper.json](evidence/public-newspaper.json).
+
+
+## 승인된 뉴스레터 사업화 기반 (2026-10-30T18:12:31.079Z)
+전체229건: 단위140/PG통합50/Playwright39 PASS, 실패·오류·skip0. 별도scanner정책4 PASS, Nu HTML0메시지, 문서28개등록/참조검사PASS. 신규주간/기준시각·권리·근거·개정·구독혜택정책, 서버발간/권한/CSRF/정정ID유지, 출처무료/유료문구·안전HTML·양식·로컬익명집계·주간전환·점검경합·영문전환을검증했다. 초기컴파일/테스트순서/언어전환실패를수정했고기준을낮추지않았다.
+실제V14마이그레이션성공, 실행이미지 sha256:db82be6087ffea3ffa11b38a2dbb6930833734b7cab1b047d2199380d6ae9b98, JAR e8f5b146c80f761ce8b9495f6ee11de9dc7c2273134a655c2de5140a06533edc 동일. 기존2026-001본문SHA유지/근거5/전망3/개정2, 최초발간시각을기존첫호증빙07:23:17.220855Z로복원(버전충돌검사·최소감사). 실제HTTPS보호/공개12검사, 실브라우저390/768/1440 독자/관리/평가화면·출처복사·그림포함HTML·업무양식3종확인PASS. 최초Live CSP평가스크립트실패는보안정책을완화하지않고일반UI조작으로수정했다. 임시계정0, 암호화V14백업복원/복원계정비활성·세션제거/임시DB·키·backup정리PASS. 자동백업이나실제고객조사성공을뜻하지않는다.
+Helm migrationVersion14 lint/render/부정입력3PASS, 합성값렌더Trivy HIGH0/CRITICAL0/MEDIUM13/LOW2. registry예시12건은실배포전제, interval300 ConfigMap경고는credential아님, 기존vendor DB UID/GID70 LOW2는PVC호환이유로유지한다. 실제클러스터배포는미실행. 자세한결과 [newsletter-product.json](evidence/newsletter-product.json).
+
+최종독립HTML출력보완: UTF-8/모바일viewport를명시하고기존출처/CSP구성을유지했다. 전체229회귀/최종JAR·SBOM·이미지검사재실행PASS. 최종앱 sha256:433f4af4bfaceecb8c74059c5ea3a12a4e1e0bf43c690e1788c4680394038011, JAR 6d216668118b46b78da963622288eca4543de82c85aea08254f274294b577865; Compose동일digest와추가HTTPS5경계·실제output모듈hash를확인했다. 앞선실인증브라우저/다운로드/복원증빙은직전이미지의전체시나리오이며최종변경은head메타데이터만으로분리기록했다.
+
+
+## 오해로 추가한 제품 평가 기능 제거
+사용자 재평가 요청을 서비스 기능으로 잘못 구현한 부분을 삭제했다. 평가 전용1개 E2E와3개 관련 접근 assertion을 제거했고 연구 gate·재게재·양식 테스트는 유지했다. 정적 링크 무결성 단위1건과 일반 파일404 PG회귀1건을 추가했다. 최초 운영 확인에서는 부재 파일이503으로 반환되어 NoResourceFoundException 전용404/no-store 처리를 추가했다. 새 PG시험의 초기1건 실패는 DB중단99 뒤 실행된 순서 문제였으며 Order1로 수정한 뒤 clean 전체를 재실행했다.
+최종 단위141/PG51/Playwright38 =230 PASS, 실패/오류/skip0. Nu0·정책4·문서28 PASS. 로컬 및 운영 JAR에 삭제 파일/참조 없음, 보존 모듈 있음, 운영 이미지/JAR 일치. HTTPS 삭제 HTML/JS3개404 및 기존 뉴스/인증 경계·정적hash까지12건 확인했다. 과거229건 증빙은 당시 결과로 보존하고 현행 제거 결과는 [제거 증빙](evidence/newsletter-evaluator-removal.json)으로 대체한다.
 
 
 ## 고정 보안 체크리스트 인증 경합 회귀
@@ -166,5 +202,3 @@ E2E26 PASS(390/1440px 우측24px 여백/제호 위 배치/푸터선택없음/중
 - 최종 Compose6개 서비스 정상, 초기화/마이그레이션 종료0. DB V15, 기사270·발간1 보존, 검증 계정/격리 복원 DB0. HTTPS/로그인/비밀번호 교체/삭제/권한19개 통과. 실제 실행 JAR SHA와 검사 JAR SHA 일치.
 - 최종7개 이미지 보고서 SHA·실행 digest·DB freshness·truststore14개 거부는 [증빙](evidence/security-ai-oss-validation-20261031.json). 전체20항목 미완료 사유는 동일 체크리스트에 유지.
 - 보안 PR은 뉴스레터 PR8의 V14가 선행하는 V15 릴리스 순서를 명시한다. 기존 서비스에는 이 둘을 함께 검증한 조합을 사용했다. 병합은 미수행.
-
-보안 단독 전달: [PR9](https://github.com/JunSungKang/MoaPan/pull/9), 원래20개 중17개 검증/2개 공급자 미패치/1개 사용자 정책 유지, AI·OSS6개 검증. 정의 해시는 변경하지 않았다. 전체 보안 게이트는 BLOCKED이며 실제 병합은 하지 않았다.

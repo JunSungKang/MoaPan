@@ -37,10 +37,10 @@ public class SecurityConfig {
         var handler=new CsrfTokenRequestAttributeHandler();
         http.csrf(c->c.csrfTokenRepository(csrf).csrfTokenRequestHandler(handler))
             .securityContext(c->c.securityContextRepository(repository))
-            .authorizeHttpRequests(a->a.requestMatchers("/api/v1/auth/csrf","/api/v1/auth/signup","/api/v1/auth/login","/internal/live").permitAll().requestMatchers(org.springframework.http.HttpMethod.GET,"/api/v1/public/interests","/api/v1/public/tags").permitAll().requestMatchers("/api/v1/admin/**","/admin.html","/newsletter-editor.html").hasRole("ADMIN").requestMatchers("/","/index.html","/settings.html","/account.html","/newsletter.html").authenticated().requestMatchers("/api/**").authenticated().anyRequest().permitAll())
+            .authorizeHttpRequests(a->a.requestMatchers("/api/v1/auth/csrf","/api/v1/auth/signup","/api/v1/auth/login","/internal/live").permitAll().requestMatchers(org.springframework.http.HttpMethod.GET,"/api/v1/public/interests","/api/v1/public/tags","/api/v1/public/news/edition","/","/index.html").permitAll().requestMatchers(org.springframework.http.HttpMethod.POST,"/api/v1/public/news/search").permitAll().requestMatchers("/api/v1/admin/**","/admin.html","/newsletter-editor.html").hasRole("ADMIN").requestMatchers("/settings.html","/account.html","/newsletter.html").authenticated().requestMatchers("/api/**").authenticated().anyRequest().permitAll())
             .requestCache(c->c.disable()).formLogin(c->c.disable()).httpBasic(c->c.disable())
             .logout(c->c.disable())
-            .exceptionHandling(e->e.authenticationEntryPoint((q,r,x)->{if(Set.of("/","/index.html","/settings.html","/account.html","/admin.html","/newsletter.html","/newsletter-editor.html").contains(q.getRequestURI()))r.sendRedirect("/login.html");else error(r,401);}).accessDeniedHandler((q,r,x)->{if(Set.of("/settings.html","/account.html","/admin.html","/newsletter-editor.html").contains(q.getRequestURI()))r.sendRedirect("/index.html");else error(r,403);}))
+            .exceptionHandling(e->e.authenticationEntryPoint((q,r,x)->{if(Set.of("/","/index.html","/settings.html","/account.html","/admin.html","/newsletter.html","/newsletter-editor.html").contains(q.getRequestURI()))redirect(r,"/login.html");else error(r,401);}).accessDeniedHandler((q,r,x)->{if(Set.of("/settings.html","/account.html","/admin.html","/newsletter-editor.html").contains(q.getRequestURI()))redirect(r,"/index.html");else error(r,403);}))
             .headers(h->h.contentSecurityPolicy(c->c.policyDirectives("default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'"))
                 .referrerPolicy(c->c.policy(org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER))
                 .permissionsPolicyHeader(c->c.policy("camera=(), microphone=(), geolocation=()")))
@@ -48,7 +48,12 @@ public class SecurityConfig {
             .addFilterBefore(new Boundary(accounts,limits,base),AnonymousAuthenticationFilter.class);
         return http.build();
     }
+    // A relative Location keeps the browser on HTTPS without trusting forwarded headers.
+    static void redirect(HttpServletResponse response,String path){response.setStatus(302);response.setHeader("Location",path);response.setHeader("Cache-Control","no-store");}
     static void error(HttpServletResponse response,int status)throws IOException{response.setStatus(status);if(status==503&&response.getHeader("Retry-After")==null)response.setHeader("Retry-After","60");response.setContentType("application/json");response.setHeader("Cache-Control","no-store");response.getWriter().write("{\"error\":\""+(status==401?"authentication_required":status==429?"rate_limited":status==503?"temporarily_unavailable":"forbidden")+"\"}");}
+    private static boolean publicNewsRequest(HttpServletRequest q){
+        return "GET".equals(q.getMethod())&&Set.of("/","/index.html","/api/v1/public/news/edition","/api/v1/public/interests","/api/v1/public/tags").contains(q.getRequestURI())||"POST".equals(q.getMethod())&&q.getRequestURI().equals("/api/v1/public/news/search");
+    }
     static class Boundary extends OncePerRequestFilter {
         final Accounts accounts;final Limits limits;final URI origin;final Semaphore requests=new Semaphore(100);
         Boundary(Accounts a,Limits l,URI u){accounts=a;limits=l;origin=u;}
@@ -65,7 +70,7 @@ public class SecurityConfig {
                 if(session!=null&&auth!=null&&auth.isAuthenticated()){
                     boolean valid=RememberedSession.valid(session);
                     try{valid&=accounts.findById(UUID.fromString(auth.getName())).filter(a->a.active&&Objects.equals(session.getAttribute(RememberedSession.CREDENTIAL_VERSION),a.authVersion)&&auth.getAuthorities().stream().anyMatch(p->p.getAuthority().equals("ROLE_"+a.role))).isPresent();}catch(IllegalArgumentException e){valid=false;}
-                    if(!valid){session.invalidate();org.springframework.security.core.context.SecurityContextHolder.clearContext();if(q.getRequestURI().equals("/")||q.getRequestURI().endsWith(".html"))r.sendRedirect("/login.html");else error(r,401);return;}
+                    if(!valid){session.invalidate();org.springframework.security.core.context.SecurityContextHolder.clearContext();if(!publicNewsRequest(q)){if(q.getRequestURI().endsWith(".html"))redirect(r,"/login.html");else error(r,401);return;}}
                 }
                 if(q.getRequestURI().equals("/api/v1/auth/csrf")&&session==null)limits.auth("anonymous_sessions",600,60);
                 chain.doFilter(q,r);

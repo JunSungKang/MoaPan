@@ -2,7 +2,7 @@
 
 > 문서번호: MP-DOC-008 · 기준: 저장소 현재 리비전 · 상태: 유지관리 · 작성: 개발 담당 · 검토: 독립 리뷰 담당
 
-동일 origin의 JSON API. 알려지지 않은 JSON 필드는400, 인증401, 권한/CSRF403, 입력400, 상태/버전/중복409, 제한429+Retry-After, DB/제한 확인 장애503. 상태 변경은 `X-CSRF-TOKEN` 필수. 쿠키는 HttpOnly·SameSite=Strict, 운영 Secure. 응답은 no-store. SQL·스택·요청 본문을 오류로 반환하지 않는다.
+동일 origin의 JSON API. 알려지지 않은 JSON 필드는400, 인증401, 권한/CSRF403, 입력400, 상태/버전/중복409, 제한429+Retry-After, DB/제한 확인 장애503. 존재하지 않는 정적 자원은404 및 최소 not_found 응답이며 no-store다. 상태 변경은 `X-CSRF-TOKEN` 필수. 쿠키는 HttpOnly·SameSite=Strict, 운영 Secure. 응답은 no-store. SQL·스택·요청 본문을 오류로 반환하지 않는다.
 
 ## 인증·계정
 
@@ -69,7 +69,7 @@ JSON_API는 단일 GET 응답의 제한된 점 구분 경로만 지원: items,id
 로그인 실패1~4회:401 invalid_credentials.5~9회:같은401 응답에 attemptsRemaining(5~1) 추가.10회부터429 login_limited와 실제 DB 제한 만료까지의 Retry-After(초)를 반환한다. 전역 로그인 횟수 제한은429 rate_limited로 구분한다. 존재하지 않는 아이디도 같은 실패 카운터 정책을 따른다. 제한된 요청은 만료를 연장하지 않는다.
 
 ## 공개 지면과 대표 관심사 (최신 사용자 변경)
-GET /api/v1/public/news/edition: 인증 필수인 호환 경로, query 불허, 최근 공통 edition에서 최대42개. 회원 cursor와 계정 quota를 동일 적용한다. 공개 상태·출처 권리·요약 허용 여부 재검사. 계정 분당60/일일6000항목/동시3 및 전체 API분당3000 제한과 실패 시503을 적용한다. IP·기기 식별자 추가 없음.
+GET /api/v1/public/news/edition: 비회원 공개, query 불허, 최근 공통 edition에서 최대42개, 비회원 nextCursor=null. 공개 상태·출처 권리·요약 허용 여부·유효 번역을 재검사한다. 비회원은 전역600회/분, 전체 API3000회/분 제한. 인증된 회원은 같은 경로에서도 계정 분당60/일일6000항목/동시3 및 서명 cursor 적용. 제한429+Retry-After, 확인 장애503. IP·기기 식별자 추가 없음.
 GET /api/v1/public/interests: version,weights(UUID:1~5). 개인 설정이 아닌 관리자 공통 대표값.
 GET /api/v1/public/tags: 공개 태그·별칭·병합 매핑.
 GET /api/v1/admin/interests 및 PUT /api/v1/admin/interests: ADMIN; PUT은 CSRF, {version,weights}필수, 활성 태그1~30개, 가중치1~5, version 불일치409. 감사 action은 representative_interests이며 개인 관심사 API는 아님.
@@ -82,7 +82,7 @@ SourceInput에 publishedSince(YYYY-MM-DD 또는null), topicTerms(최대40개·�
 뉴스 DTO에 `author` 문자열(출처 제공 작성자, 최대 2,000자)을 추가한다. 미제공은 빈 문자열이며 UI에서 `정보 없음`으로 표시한다. `publishedAt`이 없으면 작성일도 `정보 없음`이다. 수집시각으로 작성일을 대체하지 않는다. 제목은 원문 링크이며 카드에는 작성일·작성자·출처·태그·R&D 중심 추출 요약만 표시한다. JSON_API 매핑에 선택 `author` 경로를 지원한다.
 
 ## 승인된 서버 기사 검색
-POST /api/v1/public/news/search와 POST /api/v1/news/search 모두 회원 인증 필수. 두 경로 모두 CSRF 필수, 동일 origin, no-store. 공개 경로도 인증된 회원이면 계정 quota 적용.
+POST /api/v1/public/news/search는 비회원 공개, POST /api/v1/news/search는 회원 인증 필수. 두 경로 모두 CSRF 필수, 동일 origin, no-store. 공개 경로도 인증된 회원이면 계정 quota 적용.
 JSON 입력: search(필수 문자열, 최대100자), category(필수 문자열, 최대80자), day(null 또는 YYYY-MM-DD, KST 기준), page(0..19). 빈 검색/카테고리는 전체 공개자료. size/offset/추가 필드/URL 파라미터 거부.
 응답: items(공개 ArticleView 최대7개), page, pages(최대20), total(최대140). 최근7일/지면42개 밖의 저장 공개기사도 포함한다. 발행시각 또는 수집시각 내림차순/ID로 정렬하며 미래자료 제외. 개인 관심사/제외조건은 적용하지 않는다. 제목·표시 허용 요약·활성 태그의 문자 일치 검색이며 SQL 와일드카드를 문자로 취급한다. 카테고리는 정확 일치.
 공개 권리와 공개상태를 매 요청 재확인한다. 요청 하나 안의 count/items는 repeatable-read. 페이지 간 새 수집·숨김·정정으로 결과가 달라질 수 있으며 검색 스냅샷이나 검색어를 영속 보관하지 않는다.
@@ -100,7 +100,7 @@ GET /api/v1/admin/translations (ADMIN): runtime(state,failures,next_probe_at,che
 ## 분류 운영
 ADMIN GET `/api/v1/admin/classification`: policy/catalog(version/topics/hash), 상태별 counts, runtime, 최근20개 작업. ADMIN+CSRF PUT `/api/v1/admin/classification/topics`: `{version,topics:[{tagId,definition}]}`. 1~8개/중복ID 금지/활성태그/정의1~200자. 400 입력오류,409 version충돌. 뉴스 응답 필드는 변경하지 않는다.
 
-로그인 JSON은 username/password와 선택 Boolean rememberMe를 받는다. true일 때 현재 브라우저 SESSION을 최대30일 보관하고, 기본 false는30분유휴/12시간절대다. / 및 /index.html도 인증 필수이며 미로그인은 /login.html로 이동한다. 공개 sitemap은 /about.html,/privacy.html,/terms.html만 제공한다.
+로그인 JSON은 username/password와 선택 Boolean rememberMe를 받는다. true일 때 현재 브라우저 SESSION을 최대30일 보관하고, 기본 false는30분유휴/12시간절대다. / 및 /index.html은 공개하며 뉴스레터/설정/계정/관리 화면의 미로그인은 /login.html로 이동한다. 공개 sitemap은 /index.html,/about.html,/privacy.html,/terms.html을 제공하며 보호 화면·API는 noindex다.
 
 ## 관리자 광고 설정
 GET /api/v1/admin/advertisements 및 PUT 동일 경로: ADMIN만 허용하고 PUT에는 CSRF가 필요하다. 입력/관리응답은 version, enabled, provider(BANNER/ADSENSE), title(80), description(160), targetUrl(2048), imagePath(240), publisherId, slotId다. provider의 모든 ID는 공개 식별자이며 비밀번호/API키 입력 기능이 아니다.
@@ -109,5 +109,15 @@ GET /api/v1/advertisements: 회원만 접근. 활성 BANNER의 enabled/title/des
 
 뉴스레터 추가(승인 범위): 회원 GET /api/v1/newsletters 및 /{id}는 발간본만 조회한다. ADMIN GET /api/v1/admin/newsletters 및 /{id}, PUT /{id}(version/manuscript), POST /{id}/publication(version/visible). 상태 변경에는 CSRF, 서비스 권한과 version을 적용한다. 원고는 title/introduction/topic/blocks이며 블록은 paragraph/heading/quote/image/reference다. 이미지는 브라우저에서 JPEG 압축 후 DB의 원고와 발간 스냅샷에 포함하므로 기존 DB volume/암호화 백업이 보존한다. 미리보기나 초안 저장은 발간본을 변경하지 않는다. PUT 원고만 최대1MiB, 나머지 API16KiB. 프록시는1MB 상한, 최종 앱 경계에서 경로별 제한을 강제한다.
 
+뉴스레터 삭제: ADMIN DELETE /api/v1/admin/newsletters/{id}, JSON {"version":현재버전}, CSRF 필수. 성공204(응답본문없음), 버전 누락/0/음수400, 미인증401, 비관리자/CSRF403, 현재버전 불일치409, 이미 삭제되었거나 없는 ID404. 단일 트랜잭션에서 원고·자체 그림·발간 스냅샷을 담은 행을 제거하고 최소 관리자 감사 정보만 남긴다. 저장/삭제는 동일 UUID의 PostgreSQL advisory transaction lock을 공유하고 newsletter_delete 감사 표식이 있는 ID의 신규저장(version0) 재전송도409로 막는다. 삭제 표식은 콘텐츠를 포함하지 않으며 재생성 차단을 위해 보존한다. 삭제한 원고는 UI로 복원할 수 없다. 이전 백업은 기존 보관/접근통제 정책을 따르며 삭제즉시 백업까지 소거했다고 보장하지 않는다. 화면의 미저장 신규 원고는 확인 후 브라우저에서만 비운다.
+
+뉴스레터 시각은 목록의 published_at, 관리자 목록의 published_at/updated_at, 상세의 publishedAt 모두 UTC ISO8601(Z 포함) 문자열로 제공한다. 브라우저는 Asia/Seoul로 표시한다. DB Timestamp.toString()의 시간대 없는 문자열을 API에 직접 내보내지 않는다.
+
+## 주간 연구·재게재·업무양식
+PUT /api/v1/admin/newsletters/{id}: {version,manuscript,dossier}. dossier는draft에서null허용하며발간시필수다. schema는DATA_MODEL V14,예상밖필드400. 초안/발간본문과분리하여edit는dossier,evidence,revision,expectedWeek를추가반환한다. version규약은기존과동일하다.
+POST /api/v1/admin/newsletters/evidence: ADMIN+CSRF, {search(문자열0~100),weekStart(빈문자열또는월요일YYYY-MM-DD)}. 선택주에수집된표시/메타데이터허용자료를최대100개반환한다. {weekStart,cutoff,items:[{id,title,url,collectedAt,visible}]}. 기사원문/요약/검색이력없음,검색조건은처리중만사용한다. 과거주cutoff는주말직전으로제한한다.
+GET /api/v1/admin/newsletters/{id}/review: ADMIN; {version,expectedWeek,blockers,evidence}. 미발간초안은현재주,정정판은최초발간주다. GET은상태를바꾸지않는다. 발간POST는동일검사를서버에서다시실행한다. 오류409: research_required,invalid_evidence_period,evidence_required,evidence_unavailable,evidence_outside_week,uncollected_reference,forecast_required,forecast_incomplete,forecast_evidence_required,reuse_rights_review_required,editorial_review_required,correction_note_required,manuscript_incomplete.
+발간본문GET은기존필드에firstPublishedAt,revision,distribution,dossier,evidence,reuseAllowed를추가한다. 모든독자경로는로그인필수이며결제와무관한현재무료preview다. GET /api/v1/newsletters/{id}/reuse는REUSE_NEWSLETTER혜택과rightsConfirmed를추가검사하고미검토409, GET /api/v1/newsletters/{id}/worksheet는RESEARCH_WORKSHEET혜택을검사한다. 두경로는발간snapshot만반환하며초안/비공개근거가포함되지않는다. 원문복사/exportAPI가아니고자체원고에대한출력이다. 응답no-store,쿠키인증/401/403/404규약유지.
+제품 재평가는 분석 문서에서 수행한다. 평가 전용 화면·API·데이터 저장 기능은 없다.
 
 보안 경합 보완(V15): 비밀번호 변경·탈퇴의 확인 이후 계정 인증 버전이 변경되면409 credential_changed. 인증 중 비밀번호 변경·계정 교체가 발생하면401 invalid_credentials. 일반 응답에 인증 버전·해시를 반환하지 않는다. 현재 아이디1~128자/비밀번호6~128자는 사용자 명시 지시로 유지한다.

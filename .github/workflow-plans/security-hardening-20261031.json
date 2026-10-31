@@ -4,7 +4,7 @@
   "flowType": "integration",
   "branch": "codex/security-hardening-20261031",
   "targetBranch": "develop",
-  "baseSha": "a4643be581e31ceb20e05d1791bfb6731135980c",
+  "baseSha": "0ce47ba9dd1bfb1294756733de124c92101a3042",
   "mergeMethod": "squash",
   "governance": {
     "prAuthorLogin": "JunSungKang",

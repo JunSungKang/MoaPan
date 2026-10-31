@@ -1,0 +1,38 @@
+{
+  "checkedAt": "2026-10-30T07:59:12.920Z",
+  "id": "2fc4f08d-b76a-48db-bc77-bf0b6104a2c1",
+  "issueCode": "2026-001",
+  "title": "더 큰 AI보다, 덜 낭비하는 AI",
+  "publishedAt": "2026-10-30T07:23:17.220855Z",
+  "period": [
+    "2026-10-26",
+    "2026-10-30"
+  ],
+  "sourceCount": 5,
+  "blocks": 24,
+  "imageCount": 1,
+  "sources": [
+    {
+      "title": "GistRank · Guo Chen 외 · 2026-10-29",
+      "url": "https://arxiv.org/abs/2610.39610v1"
+    },
+    {
+      "title": "Glance: The Generator Is Its Own Reranker · Adilet Metinov·Chingiz Arziev · 2026-10-29",
+      "url": "https://arxiv.org/abs/2610.40454v1"
+    },
+    {
+      "title": "Tessera · Gyuyeong Kim · 2026-10-29",
+      "url": "https://arxiv.org/abs/2610.40620v1"
+    },
+    {
+      "title": "The Privacy and Security Risks of Edge LLM Optimization · Mingchen Li 외 · 2026-10-29",
+      "url": "https://arxiv.org/abs/2610.40543v1"
+    },
+    {
+      "title": "Can We Rely on Language Models to Orchestrate Services across the Edge-Cloud Continuum? · Zhenghao Wu 외 · 2026-10-29",
+      "url": "https://arxiv.org/abs/2610.40477v1"
+    }
+  ],
+  "url": "https://175.195.62.165/newsletter.html?id=2fc4f08d-b76a-48db-bc77-bf0b6104a2c1",
+  "visualCheck": true
+}

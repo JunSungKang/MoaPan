@@ -24,6 +24,8 @@ public class ApiError extends RuntimeException {
         ResponseEntity<?> input(Exception e) { return ResponseEntity.badRequest().body(java.util.Map.of("error","invalid_input")); }
         @ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
         ResponseEntity<?> denied(Exception e) { return ResponseEntity.status(403).body(java.util.Map.of("error","forbidden")); }
+        @ExceptionHandler(org.springframework.web.servlet.resource.NoResourceFoundException.class)
+        ResponseEntity<?> missingResource(Exception e) { return ResponseEntity.status(404).cacheControl(CacheControl.noStore()).body(java.util.Map.of("error","not_found")); }
         @ExceptionHandler(Exception.class) ResponseEntity<?> failure(Exception e) { return ResponseEntity.status(503).body(java.util.Map.of("error","temporarily_unavailable")); }
     }
 }

@@ -1,0 +1,229 @@
+{
+  "schemaVersion": 4,
+  "workSlug": "newsletter-editorial-redesign",
+  "flowType": "integration",
+  "branch": "codex/newsletter-editorial-redesign",
+  "targetBranch": "develop",
+  "baseSha": "a4643be581e31ceb20e05d1791bfb6731135980c",
+  "mergeMethod": "squash",
+  "governance": {
+    "prAuthorLogin": "JunSungKang",
+    "assigneeLogin": "JunSungKang",
+    "reviewerLogin": "junsung-bot[bot]",
+    "requiredChecks": [],
+    "commitAuthor": {
+      "name": "jun-sung, Kang",
+      "email": "kjuns1@naver.com"
+    },
+    "coAuthors": [
+      {
+        "name": "Codex",
+        "email": "codex@openai.com"
+      },
+      {
+        "name": "junsung-bot[bot]",
+        "email": "302617028+junsung-bot[bot]@users.noreply.github.com"
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "editorial-redesign",
+      "expectedPaths": [
+        "src/main/resources/static/**",
+        "src/e2eTest/**",
+        "docs/**",
+        ".github/workflow-plans/newsletter-editorial-redesign.json"
+      ],
+      "forbiddenPaths": [
+        ".env"
+      ],
+      "acceptanceCriteria": [
+        "Magazine archive and publication typography with explicit latest/empty/error states",
+        "Focused administrator workspace with draft sidebar, relevant block fields and full-width preview",
+        "Actual screenshot inspection at390/768/1440 with meaningful populated/empty fixtures, no regressions to save/publish permissions"
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh check e2eTest bootJar sbom securityCheck"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/progress.md",
+          "docs/05-test/test-report.md"
+        ]
+      }
+    },
+    {
+      "id": "newsletter-delete",
+      "expectedPaths": [
+        "src/main/java/com/moapan/newsletter/**",
+        "src/main/resources/static/**",
+        "src/integrationTest/**",
+        "src/e2eTest/**",
+        "docs/**",
+        ".github/workflow-plans/newsletter-editorial-redesign.json"
+      ],
+      "forbiddenPaths": [
+        ".env"
+      ],
+      "acceptanceCriteria": [
+        "Administrator-only version-checked atomic deletion removes draft, owned images and publication; audit keeps metadata only",
+        "Confirmation can be cancelled; unsaved draft clears locally; saving and deleting cannot race",
+        "PostgreSQL authentication/CSRF/conflict/publication absence and browser deletion/error/cancel regression tests pass",
+        "User-authorized first weekly issue is published from verified current-week sources and displayed as2026-001; no original paper text stored"
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh check integrationTest e2eTest bootJar sbom securityCheck"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/progress.md",
+          "docs/03-design/api.md",
+          "docs/05-test/test-report.md"
+        ]
+      }
+    },
+    {
+      "id": "weekly-rd-editorial-rewrite",
+      "expectedPaths": [
+        "docs/**",
+        ".github/workflow-plans/newsletter-editorial-redesign.json",
+        "AGENTS.md"
+      ],
+      "forbiddenPaths": [
+        ".env"
+      ],
+      "acceptanceCriteria": [
+        "Rewrite and republish existing2026-001 using only five verified papers collected this week",
+        "Each forecast is traced to collected evidence and separated from editorial hypotheses, time horizons and proposed metrics",
+        "Reader/API verification preserves issue identity, five references and owned roadmap figure; remove temporary account/session"
+      ],
+      "validationCommands": [
+        "node scripts/test/docs-check.mjs",
+        "git diff --check"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/progress.md",
+          "docs/05-test/test-report.md",
+          "AGENTS.md"
+        ]
+      }
+    },
+    {
+      "id": "public-newspaper-member-newsletter",
+      "expectedPaths": [
+        "src/main/java/com/moapan/access/**",
+        "src/main/java/com/moapan/edition/**",
+        "src/main/java/com/moapan/discovery/**",
+        "src/main/resources/static/**",
+        "src/integrationTest/**",
+        "src/e2eTest/**",
+        "src/test/**",
+        "docs/**",
+        "README.md",
+        "AGENTS.md",
+        ".github/workflow-plans/newsletter-editorial-redesign.json"
+      ],
+      "forbiddenPaths": [
+        ".env"
+      ],
+      "acceptanceCriteria": [
+        "Anonymous visitors can read today's collected-news edition and search, using representative interests and bounded public DTOs without a member cursor",
+        "Newsletter archive/detail, preferences, account and administration stay authenticated; public news does not load newsletter content for guests",
+        "Anonymous CSRF, rate limits, invalid parameters, hidden and rights-withdrawn articles are enforced; member quota/cursor and preferences remain intact",
+        "PostgreSQL and browser regressions, final artifact/image security checks and actual Compose HTTPS checks are recorded"
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest",
+        "node scripts/test/docs-check.mjs",
+        "git diff --check"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/plan.md",
+          "docs/01-management/progress.md",
+          "docs/03-design/api.md",
+          "docs/03-design/decisions.md",
+          "docs/05-test/test-report.md",
+          "docs/07-operation/security-review.md",
+          "AGENTS.md",
+          "README.md"
+        ]
+      }
+    },
+    {
+      "id": "approved-newsletter-product-plan",
+      "expectedPaths": [
+        "src/**",
+        "scripts/deploy/helm/**",
+        "scripts/backup/**",
+        "docs/**",
+        "AGENTS.md",
+        "README.md",
+        ".github/workflow-plans/newsletter-editorial-redesign.json"
+      ],
+      "forbiddenPaths": [
+        ".env",
+        ".github/workflows/**"
+      ],
+      "acceptanceCriteria": [
+        "Explicit user approval now covers remaining combined personal/enterprise/attribution plan; future plan-only requests wait for implementation approval",
+        "Published newsletters have week/cutoff/collected article evidence, fact versus forecast/experiment/stop criteria, rights/editorial review gates, revision identity and stale-write protection",
+        "Authenticated readers can copy/download original newsletter with required truthful free or paid-origin attribution and use evidence-based research/meeting/decision worksheets; no collected original article export",
+        "Individual and enterprise value is explained without invented prices or paid activation; all non-newsletter-content public news boundaries remain intact",
+        "Reassessment is analyst-only documentation with evidence and limitations; no evaluation preparation screen, aggregate calculator or runtime survey feature",
+        "Entitlement provider/capabilities are separated from USER/ADMIN and payment is unavailable in preview; no billing, organization SaaS, email delivery or profile tracking",
+        "Database upgrade/backup compatibility, meaningful unit/PostgreSQL/browser/privacy/security tests, real Compose HTTPS proof and guarded commit/push/review completed"
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest",
+        "node scripts/test/docs-check.mjs",
+        "git diff --check"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/plan.md",
+          "docs/01-management/progress.md",
+          "docs/02-analysis/business-validation.md",
+          "docs/03-design/api.md",
+          "docs/03-design/data-model.md",
+          "docs/05-test/test-report.md",
+          "docs/07-operation/security-review.md"
+        ]
+      }
+    },
+    {
+      "id": "remove-misinterpreted-business-evaluator",
+      "expectedPaths": [
+        "src/**",
+        "docs/**",
+        "README.md",
+        ".github/workflow-plans/newsletter-editorial-redesign.json"
+      ],
+      "forbiddenPaths": [
+        ".env",
+        ".github/workflows/**"
+      ],
+      "acceptanceCriteria": [
+        "Remove the business evaluator HTML, JavaScript, navigation, security matchers, translations, styles and feature-only tests from current source and final runtime artifact",
+        "Retain newsletter evidence/research publication controls, attribution exports and research worksheets; no database or publication changes",
+        "Clean-build and verify absent resources in JAR, final image and live HTTPS; reassessment remains outside service; correct current specifications and preserve historical verification as superseded"
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh clean check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest",
+        "node scripts/test/docs-check.mjs",
+        "git diff --check"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/plan.md",
+          "docs/01-management/progress.md",
+          "docs/02-analysis/business-validation.md",
+          "docs/05-test/test-report.md",
+          "docs/07-operation/security-review.md"
+        ]
+      }
+    }
+  ]
+}

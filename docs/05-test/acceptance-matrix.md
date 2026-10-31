@@ -42,7 +42,7 @@ CI/CD는 사용자 명시 제외. PASS는 아래 실제 시험 범위의 통과�
 
 기기 간 이전 추가: REQ-04/05 → FS-21 → preferences-transfer.js/preferences-transfer-ui.js/settings.html → BrowserTest의 encryptedPreferencesTransferBetweenIndependentBrowsers 및 portableSettingsRejectTamperingOtherAccountsAndInvalidSchemas PASS. AC-20/21/22 회귀 포함. 이는 서버 저장 없는 수동 이전이며 자동 동기화 인수로 간주하지 않는다.
 
-공개 지면 변경(최신 사용자 요청): AC-08의 비회원 뉴스 일괄 차단은 회원 전용 API에 유지하고 별도 공개 edition은30개/no cursor로 허용한다. publicEditionIsBoundedAndProtectedPagesStayPrivate, representativeInterestsRequireAdminCsrfAndCurrentVersion, guestMenusProtectedPagesAndSearchDialog, memberAndAdminMenusAndRepresentativeEditor, defaultInterestsAndPolicyEditionsAreExplicit로 검증한다. 기존 판별 기준을 몰래 완화하지 않고 명시적 정책 변경으로 기록한다.
+공개 지면 변경(최신 사용자 요청): AC-08의 비회원 뉴스 일괄 차단은 회원 전용 API에 유지하고 별도 공개 edition은42개/no cursor로 허용하고 공개 기사 검색은140개/CSRF/전역 한도로 제한한다. 뉴스레터 목록·본문/계정/개인 설정은 인증, 관리는 ADMIN을 유지한다. publicEditionIsBoundedAndProtectedPagesStayPrivate, representativeInterestsRequireAdminCsrfAndCurrentVersion, guestMenusProtectedPagesAndSearchDialog, memberAndAdminMenusAndRepresentativeEditor, defaultInterestsAndPolicyEditionsAreExplicit로 검증한다. 기존 판별 기준을 몰래 완화하지 않고 명시적 정책 변경으로 기록한다.
 
 최초판·스크랩 사용자 변경: FS-23 → config.js/common.js/index.html/news.js/newspaper.css → BrowserTest.editorialScrapGalleryAndInitialPolicies 및 기존 popup/메뉴 테스트 PASS. FS-25/AC-06 → terms/privacy/signup/AuthController → signupRequiresCurrentExplicitConsent/simpleAuthFormsRequireConsentAndShowReadableTerms PASS. 기존 정책 이력 제공 요구는 이번 명시적 삭제 요청으로 대체했다. AC-22의4/2/1단·키보드·인쇄·검색·넘침 검증 유지. 최신 총48 PASS, 공개 실행 evidence/scrap-layout.json.
 
@@ -65,3 +65,7 @@ FS-23/AC-22 상단 보완: 검색 버튼 채움 제거·모바일 구분선/메�
 README 최신화·스크립트 분류·실행 참조·Compose 기동/데이터 보존: PASS. Helm lint/render/3가지 부정입력: PASS. Kubernetes 실제 설치·이미지pull·PVC·Ingress TLS·egress 운영 제한: NOT_RUN/추가 구성 필요.
 
 AC-26 추가 범위: REQ-13 → FS-27 → advertising api/application + V12 + advertising/*.js → SecurityIntegrationTest.advertisingRequiresAdminCsrfAndVersionWithoutClickTracking / BrowserTest.advertisingAdminPreviewsAndSavesWithoutThirdPartyScripts → PASS. AdSense 실송출은 승인 범위 밖. 증빙evidence/layout-advertising.json.
+
+사업화 기반 추적: REQ15→FS29→PublicationResearch/NewsletterService/PublicationEvidence→PublicationResearchTest 및newsletterResearchGatesSnapshotsReuseAndRevisionIdentity/oldDraftCanMoveWeekAndStaleReviewCannotShowSuccess PASS. REQ16→FS30→publication-output/reader-tools→출처/안전출력/실다운로드 PASS. REQ17→FS30→publication-output/reader-tools→연구 업무 양식 PASS. 제품 재평가는 MP-DOC-028의 분석 기록으로만 수행하며 평가 전용 서비스는 제거한다. REQ18→FS32→EntitlementPolicy/ContentAccess/PreviewEntitlements→기간/혜택/ADMIN우회불가/paid시작거부 PASS. 고객평가/유료구매는NOT_RUN으로남기며통과에합산하지않는다. 증빙 evidence/newsletter-product.json.
+
+평가 기능 제거 인수: 현행소스·빌드/운영JAR 잔재0, 메뉴/보안경로/번역/스타일 제거, 삭제3주소 HTTPS404 PASS. REQ17은 연구업무양식만 제품범위이며 사업재평가는 MP-DOC-028의 내부진단이다. StaticMetadataTest.localPageNavigationHasExistingTargets 및 SecurityIntegrationTest.missingStaticResourcesReturn404WithoutDetails PASS. 최종230(141/51/38) PASS, 뉴스/발간/재게재 회귀 유지. 증빙 evidence/newsletter-evaluator-removal.json.

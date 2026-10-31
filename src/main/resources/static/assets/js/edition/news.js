@@ -10,7 +10,7 @@ const dialog=document.querySelector('#search-dialog');
 let candidates=[],prefs=defaults(),user=null,next,tagData,representative,filters={search:'',category:'',day:''};
 let generation=0,slide=0,searchActive=false,searchPage=null,searchBusy=false,searchTicket=0;
 const effective=()=>effectivePreferences(prefs,representative.weights);
-window.addEventListener('moapan-clear',()=>{generation++;searchTicket++;searchActive=false;searchPage=null;searchBusy=false;candidates=[];user=null;next=null;prefs=defaults();filters={search:'',category:'',day:''};for(const id of ['search','category','day'])document.querySelector('#'+id).value='';document.querySelector('#search-summary').textContent='';document.querySelector('#clear-search').hidden=true;paper.replaceChildren();setIssueDate([]);more.hidden=true;dialog.close();status.textContent='로그인 상태가 만료되었습니다. 새로고침하면 대표 관심사 지면을 읽을 수 있습니다.';});
+window.addEventListener('moapan-clear',()=>{generation++;searchTicket++;searchActive=false;searchPage=null;searchBusy=false;candidates=[];user=null;next=null;prefs=defaults();filters={search:'',category:'',day:''};for(const id of ['search','category','day'])document.querySelector('#'+id).value='';document.querySelector('#search-summary').textContent='';document.querySelector('#clear-search').hidden=true;paper.replaceChildren();setIssueDate([]);more.hidden=true;dialog.close();status.textContent='';if(representative)load(true);});
 function render(){
  setIssueDate(candidates);
  const window=searchActive?{items:searchPage?.items||[],page:searchPage?.page||0,pages:searchPage?.pages||0}:slideWindow(rank(candidates,effective()),slide);
