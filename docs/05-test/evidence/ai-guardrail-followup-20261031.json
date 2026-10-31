@@ -1,0 +1,348 @@
+{
+  "scope": "User-approved eleven follow-ups; original frozen20 and A01-A06 definitions unchanged",
+  "checkedAt": "2026-10-31T10:28:14.626Z",
+  "items": [
+    {
+      "id": "G01",
+      "title": "숨김 내용 제거와 추론 전 입력 보류",
+      "checked": true,
+      "status": "VERIFIED",
+      "evidence": "ArticleGuard, SafeFetch, GuardrailFollowupTest, maliciousStoredArticleIsHeldBeforeEitherModelCanBeCalled"
+    },
+    {
+      "id": "G02",
+      "title": "모델 템플릿·실제 토큰 예산",
+      "checked": true,
+      "status": "VERIFIED",
+      "evidence": "ModelTokenBudget, actualTokenizerCountNotCharacterEstimateAndNoInferenceOnFailure"
+    },
+    {
+      "id": "G03",
+      "title": "지원 비교관계 보존과 불확실 원문 처리",
+      "checked": true,
+      "status": "VERIFIED",
+      "evidence": "TranslationValidator, relationReversalRejectedAndEquivalentWordOrderAccepted"
+    },
+    {
+      "id": "G04",
+      "title": "실모델 정상·공격·취소 검증",
+      "checked": true,
+      "status": "VERIFIED",
+      "evidence": "ModelGuardrailSmoke, scripts/test/model-guardrail-smoke.sh"
+    },
+    {
+      "id": "G05",
+      "title": "출처별 원자적 예산·기한·정산",
+      "checked": true,
+      "status": "VERIFIED",
+      "evidence": "InferenceBudget, sourceBudgetsAreAtomicAndExpireWithoutUserOrArticleEvents, budgetSettlementUsesReservationDateAcrossMidnight"
+    },
+    {
+      "id": "G06",
+      "title": "소유권 상실 취소·SSE 강제 경계",
+      "checked": true,
+      "status": "VERIFIED",
+      "evidence": "InferenceControl, ModelStream, failedLeaseAndDatabaseExceptionInterruptWork, streamingRejectsToolsTruncationMalformedAndOversizedData"
+    },
+    {
+      "id": "G07",
+      "title": "worker 전체 번역 선점 잠금",
+      "checked": true,
+      "status": "VERIFIED",
+      "evidence": "TranslationWorker, translationClaimIsExclusiveAcrossWorkerInstancesAndExpiredOwnerCannotRenew"
+    },
+    {
+      "id": "G08",
+      "title": "장애 재시도·처리 수명 상한",
+      "checked": true,
+      "status": "VERIFIED",
+      "evidence": "TranslationWorker, ClassificationWorker, translationInfrastructureFailuresStopAtEightAndHealthDoesNotEraseFailures"
+    },
+    {
+      "id": "G09",
+      "title": "실행 정책 fingerprint와 오래된 결과 차단",
+      "checked": true,
+      "status": "VERIFIED",
+      "evidence": "AiPolicy, TopicCatalog, ArticleTranslations, NewsService, NewsSearch, staleTranslationPolicyIsNeverReturned"
+    },
+    {
+      "id": "G10",
+      "title": "관리자 번역 수정·잠금·경쟁 제어",
+      "checked": true,
+      "status": "VERIFIED",
+      "evidence": "ArticleTranslations.manual, TranslationStatusController, translationEditorEnforcesRoleCsrfVersionContentAndManualLock, translationEditorLoadsVersionLocksAndClearsOnLanguageChange"
+    },
+    {
+      "id": "G11",
+      "title": "모델 다운로드 Job·egress 차단·RWO 배치",
+      "checked": true,
+      "status": "VERIFIED_STATIC_CLUSTER_UNAVAILABLE",
+      "evidence": "Helm translator/classifier/download/network templates; scripts/test/helm-check.sh"
+    }
+  ],
+  "remainingSupplierAndPolicy": [
+    "S05",
+    "S06",
+    "S07"
+  ],
+  "limits": [
+    "Partial semantic validation only",
+    "Actual Kubernetes cluster/CNI not supplied; static lint/render/config tests only",
+    "No CI/CD; no external AI; username/password lengths preserved"
+  ],
+  "tests": {
+    "test": {
+      "tests": 153,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "integrationTest": {
+      "tests": 63,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "e2eTest": {
+      "tests": 39,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "modelSmoke": {
+    "checkedAt": "2026-10-31T10:24:07.844619047Z",
+    "checks": [
+      {
+        "inferenceRequests": 0,
+        "held": 6,
+        "check": "known-adversarial-inputs"
+      },
+      {
+        "validated": true,
+        "millis": 6445,
+        "check": "benign-translation"
+      },
+      {
+        "validated": true,
+        "millis": 19375,
+        "check": "benign-classification"
+      },
+      {
+        "validated": true,
+        "check": "client-cancellation-stops-real-inference"
+      }
+    ],
+    "realInferenceRequests": 3,
+    "limits": "Synthetic smoke only; not proof against unknown prompt injection or all semantic errors."
+  },
+  "https": {
+    "checkedAt": "2026-10-31T10:26:31.409Z",
+    "origin": "https://175.195.62.165",
+    "tlsVerification": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "/about.html",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/news/edition",
+        "status": 401
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/admin/translations",
+        "status": 401
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/auth/csrf",
+        "status": 200
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/auth/signup",
+        "status": 400
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/auth/signup",
+        "status": 200
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/auth/login",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/auth/csrf",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/account",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/news/edition?size=51",
+        "status": 400
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/admin/translations",
+        "status": 403
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/news/edition?size=7",
+        "status": 200
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/v1/account/password",
+        "status": 403
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/v1/account/password",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/account",
+        "status": 401
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/auth/csrf",
+        "status": 200
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/auth/login",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/auth/csrf",
+        "status": 200
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/v1/account",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/account",
+        "status": 401
+      }
+    ],
+    "syntheticAccountRemoved": true
+  },
+  "runtime": {
+    "schema": 16,
+    "articlesBefore": 300,
+    "articlesAfter": 300,
+    "usersBefore": 2,
+    "usersAfter": 2,
+    "newslettersBefore": 1,
+    "newslettersAfter": 1,
+    "jarSha256": "d499cf608d4fcc71839ffd9afc80499d2aafc4e3f36dfe07f51cb27bb60a2bd6",
+    "jarInsideImageMatches": true,
+    "images": [
+      {
+        "name": "moapan-local:1.0.0",
+        "id": "sha256:a10049c04e6a41be040049573e5971b717a1cb3dddb137c1a0c768c1b96043e1",
+        "reportSha256": "bbc5503457441345204aea1935252eb7ef3c27b7b7488d889b85e220e92fa455",
+        "rawHighCritical": [],
+        "secrets": 0
+      },
+      {
+        "name": "moapan-proxy-public:2.11.7",
+        "id": "sha256:84c8930f52bff49ab8e554baf2b627eff7a1cc4029cc9f943f5411cef9b0c93c",
+        "reportSha256": "79d0dc979ac9d983dba268837aec9b821cbdfec2dc508f5fbd620a83638b2676",
+        "rawHighCritical": [
+          {
+            "id": "CVE-2026-116587",
+            "package": "github.com/go-jose/go-jose/v3",
+            "version": "v3.0.5"
+          }
+        ],
+        "secrets": 0
+      },
+      {
+        "name": "moapan-db-local:18.6",
+        "id": "sha256:fa1fb307429996cb25149232eace6f3e1d2a46d32c241138996b3500862b93f7",
+        "reportSha256": "fef8f859f312c577d103c7d13ba00a45a66a1ed67b06cadb0984afcc193d8cff",
+        "rawHighCritical": [],
+        "secrets": 0
+      },
+      {
+        "name": "moapan-translator:cpu-b11960",
+        "id": "sha256:db6ef6a4ac7a9e21cbe5dffeb7c940726b2690102ed795752a719da3ffb16aa2",
+        "reportSha256": "cc6dbd559af6700e7b3c9f09835fd34dea4ec3f8759d4578327d3c4d0bb5fe43",
+        "rawHighCritical": [],
+        "secrets": 0
+      },
+      {
+        "name": "moapan-classifier:cpu-b11960",
+        "id": "sha256:e846ce8a733d94f5600e3080d58b8d5e0a40d1bd5b10319991e5d2abe32a40b7",
+        "reportSha256": "c36d7afe8262637365fa0491bdfec33bfa9278d35d4d7b3a04fb5c36e06d0391",
+        "rawHighCritical": [],
+        "secrets": 0
+      }
+    ],
+    "jdk": "Eclipse Adoptium Temurin 27.0.1.0.2+1",
+    "cacertsSha256": "873dfdb867a573a85a3df93de3913943086259db608b530913efe99572ede59c"
+  },
+  "scanner": {
+    "Version": 2,
+    "NextUpdate": "2026-10-31T19:07:50.77378224Z",
+    "UpdatedAt": "2026-10-30T19:07:50.77378237Z",
+    "DownloadedAt": "2026-10-30T22:21:32.692522Z",
+    "javaDb": {
+      "Version": 1,
+      "NextUpdate": "2026-11-03T01:06:44.904950452Z",
+      "UpdatedAt": "2026-10-31T01:06:44.904950573Z",
+      "DownloadedAt": "2026-10-31T10:20:40.233553Z"
+    },
+    "tool": [
+      "Version: 0.76.1+moapan-security.1"
+    ]
+  },
+  "guardRefresh": {
+    "file": "~/.codex/scripts/github-app-contract.mjs",
+    "userExplicitlyApproved": true,
+    "sha256": "ac303e94e0aa8d6b51b91cf8494153803a750b1e0f6074cef9b77ff8c9521a94",
+    "localRegressionChecks": 8,
+    "normalServerGuard": "PASS",
+    "integrationCommit": "37db8a7221c914884e60934c3058686d417e63ea"
+  },
+  "supplierRecheck": {
+    "checkedAt": "2026-10-31T09:39:37.848Z",
+    "joseV3": "Official advisory still patched versions None; no unsupported crypto fork applied",
+    "joseUrl": "https://github.com/go-jose/go-jose/security/advisories/GHSA-mgcc-cww5-fp2q",
+    "ubuntuCvesRechecked": 22,
+    "ubuntuAvailableUpgrades": 0,
+    "password": "User-required6..128 unchanged; S07 remains unchecked"
+  },
+  "releaseGate": "BLOCKED_S05_S06_S07_NOT_ALL_PATCHED",
+  "buildImage": {
+    "id": "sha256:a3f6740dcc36ac48899ff47a908ed6731d079f981726684ae0e779edb3beb59f",
+    "rawHighCritical": []
+  },
+  "html": {
+    "validator": "Nu26.10.12",
+    "messages": 0
+  },
+  "backup": {
+    "encryptedBeforeMigration": true,
+    "rawDumpPersisted": false,
+    "temporaryBackupAndKeyRemovedAfterValidation": true
+  }
+}

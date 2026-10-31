@@ -222,5 +222,13 @@
     "status": "유지관리",
     "owner": "개발 담당",
     "reviewer": "독립 리뷰 담당"
+  },
+  {
+    "id": "MP-DOC-029",
+    "path": "docs/07-operation/ai-security-and-licenses.md",
+    "title": "AI 보안·윤리 및 오픈소스 관리서",
+    "status": "유지관리",
+    "owner": "보안 담당",
+    "reviewer": "독립 리뷰 담당"
   }
 ]

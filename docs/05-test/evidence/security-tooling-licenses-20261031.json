@@ -1,0 +1,845 @@
+{
+  "checkedAt": "2026-10-30T23:18:31.236Z",
+  "scope": "testRuntimeClasspath-only locked declarations, including BOM metadata; not shipped in production images; not a complete OS/browser binary license audit",
+  "components": [
+    {
+      "coordinate": "com.github.docker-java:docker-java-api:3.7.1",
+      "url": "https://repo.maven.apache.org/maven2/com/github/docker-java/docker-java-api/3.7.1/docker-java-api-3.7.1.pom",
+      "pomSha256": "8d3586d7080e0787a7212bed4f6fe11a54d52f9abeeca5f89bee208c6308b16c",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "parent": {
+        "coordinate": "com.github.docker-java:docker-java-parent:3.7.1",
+        "url": "https://repo.maven.apache.org/maven2/com/github/docker-java/docker-java-parent/3.7.1/docker-java-parent-3.7.1.pom",
+        "pomSha256": "78e673434e0e1a4b825863a8fe4d6417f495affdce7b4d308f3774447a73b0ff",
+        "licenses": [
+          {
+            "name": "The Apache Software License, Version 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+          }
+        ],
+        "status": "DECLARED_REVIEWED_NON_RUNTIME"
+      },
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "com.github.docker-java:docker-java-transport-zerodep:3.7.1",
+      "url": "https://repo.maven.apache.org/maven2/com/github/docker-java/docker-java-transport-zerodep/3.7.1/docker-java-transport-zerodep-3.7.1.pom",
+      "pomSha256": "d72f69b2f40ba791f3b32cab4f165ccc11836ff1811d0533751cf2dcc57495ed",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "parent": {
+        "coordinate": "com.github.docker-java:docker-java-parent:3.7.1",
+        "url": "https://repo.maven.apache.org/maven2/com/github/docker-java/docker-java-parent/3.7.1/docker-java-parent-3.7.1.pom",
+        "pomSha256": "78e673434e0e1a4b825863a8fe4d6417f495affdce7b4d308f3774447a73b0ff",
+        "licenses": [
+          {
+            "name": "The Apache Software License, Version 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+          }
+        ],
+        "status": "DECLARED_REVIEWED_NON_RUNTIME"
+      },
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "com.github.docker-java:docker-java-transport:3.7.1",
+      "url": "https://repo.maven.apache.org/maven2/com/github/docker-java/docker-java-transport/3.7.1/docker-java-transport-3.7.1.pom",
+      "pomSha256": "3baef9998eeea238ef4432fe2ce0ff0eeaf90fe8d3a03fd06a5e224814be4916",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "parent": {
+        "coordinate": "com.github.docker-java:docker-java-parent:3.7.1",
+        "url": "https://repo.maven.apache.org/maven2/com/github/docker-java/docker-java-parent/3.7.1/docker-java-parent-3.7.1.pom",
+        "pomSha256": "78e673434e0e1a4b825863a8fe4d6417f495affdce7b4d308f3774447a73b0ff",
+        "licenses": [
+          {
+            "name": "The Apache Software License, Version 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+          }
+        ],
+        "status": "DECLARED_REVIEWED_NON_RUNTIME"
+      },
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "com.google.code.gson:gson:2.14.0",
+      "url": "https://repo.maven.apache.org/maven2/com/google/code/gson/gson/2.14.0/gson-2.14.0.pom",
+      "pomSha256": "1fa0122c0e3733192642861c36be4c6f799a795327a23bdd2922691b6e9ba480",
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "com.google.errorprone:error_prone_annotations:2.48.0",
+      "url": "https://repo.maven.apache.org/maven2/com/google/errorprone/error_prone_annotations/2.48.0/error_prone_annotations-2.48.0.pom",
+      "pomSha256": "189e09ad0489c325e90daaa9d5c8f406330602fa366609bca07cbcdad03ab9da",
+      "licenses": [
+        {
+          "name": "Apache 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "com.jayway.jsonpath:json-path:2.10.0",
+      "url": "https://repo.maven.apache.org/maven2/com/jayway/jsonpath/json-path/2.10.0/json-path-2.10.0.pom",
+      "pomSha256": "68caa1e4610b9657ca9a3cb8ee6a6f92be3223197dfa1aa4f2a98c2f4f5f04e5",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "com.microsoft.playwright:driver-bundle:1.64.0",
+      "url": "https://repo.maven.apache.org/maven2/com/microsoft/playwright/driver-bundle/1.64.0/driver-bundle-1.64.0.pom",
+      "pomSha256": "48f53e7ca7f2f108b255cda0276d25f663dc3bf3e3f03e7c8ebe5419414374a2",
+      "licenses": [
+        {
+          "name": "Apache License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "parent": {
+        "coordinate": "com.microsoft.playwright:parent-pom:1.64.0",
+        "url": "https://repo.maven.apache.org/maven2/com/microsoft/playwright/parent-pom/1.64.0/parent-pom-1.64.0.pom",
+        "pomSha256": "e54855c42e251d3931d8a27070cf12518a37e4d2e0ce148dcbb31ba201480b0a",
+        "licenses": [
+          {
+            "name": "Apache License, Version 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+          }
+        ],
+        "status": "DECLARED_REVIEWED_NON_RUNTIME"
+      },
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "com.microsoft.playwright:driver:1.64.0",
+      "url": "https://repo.maven.apache.org/maven2/com/microsoft/playwright/driver/1.64.0/driver-1.64.0.pom",
+      "pomSha256": "6305228b5c176607a35c01e0d638eebfe37c1c3278dc7c31a3250af0981febed",
+      "licenses": [
+        {
+          "name": "Apache License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "parent": {
+        "coordinate": "com.microsoft.playwright:parent-pom:1.64.0",
+        "url": "https://repo.maven.apache.org/maven2/com/microsoft/playwright/parent-pom/1.64.0/parent-pom-1.64.0.pom",
+        "pomSha256": "e54855c42e251d3931d8a27070cf12518a37e4d2e0ce148dcbb31ba201480b0a",
+        "licenses": [
+          {
+            "name": "Apache License, Version 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+          }
+        ],
+        "status": "DECLARED_REVIEWED_NON_RUNTIME"
+      },
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "com.microsoft.playwright:playwright:1.64.0",
+      "url": "https://repo.maven.apache.org/maven2/com/microsoft/playwright/playwright/1.64.0/playwright-1.64.0.pom",
+      "pomSha256": "3c11c81b2c5ad4a10f393a2529c8b6d24d6695ff4ca986027051054bfd8c996a",
+      "licenses": [
+        {
+          "name": "Apache License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "parent": {
+        "coordinate": "com.microsoft.playwright:parent-pom:1.64.0",
+        "url": "https://repo.maven.apache.org/maven2/com/microsoft/playwright/parent-pom/1.64.0/parent-pom-1.64.0.pom",
+        "pomSha256": "e54855c42e251d3931d8a27070cf12518a37e4d2e0ce148dcbb31ba201480b0a",
+        "licenses": [
+          {
+            "name": "Apache License, Version 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+          }
+        ],
+        "status": "DECLARED_REVIEWED_NON_RUNTIME"
+      },
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "com.vaadin.external.google:android-json:0.0.20131108.vaadin1",
+      "url": "https://repo.maven.apache.org/maven2/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.pom",
+      "pomSha256": "2ff6c17d9c060b89cd7ef18fa480ae2446eba86855a633f3892837fc3b848fef",
+      "licenses": [
+        {
+          "name": "Apache License 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "commons-codec:commons-codec:1.21.0",
+      "url": "https://repo.maven.apache.org/maven2/commons-codec/commons-codec/1.21.0/commons-codec-1.21.0.pom",
+      "pomSha256": "b230416ba6f5bf9df8fcb6e7f4a6c26b8fb0fe85ce371d13d5846ed3768309b7",
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "parent": {
+        "coordinate": "org.apache.commons:commons-parent:96",
+        "url": "https://repo.maven.apache.org/maven2/org/apache/commons/commons-parent/96/commons-parent-96.pom",
+        "pomSha256": "2cd3289b44efa53052d9cdaf3f05544833a520a682f9c7ffd403a00bbb157f9a",
+        "licenses": [
+          {
+            "name": "Apache-2.0",
+            "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+          }
+        ],
+        "parent": {
+          "coordinate": "org.apache:apache:37",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/apache/37/apache-37.pom",
+          "pomSha256": "524ec4787aff73af6b3a9fafa154c7f1881b648299b663fdbfcadda1286f2353",
+          "licenses": [
+            {
+              "name": "Apache-2.0",
+              "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+            }
+          ],
+          "status": "DECLARED_REVIEWED_NON_RUNTIME"
+        },
+        "status": "DECLARED_REVIEWED_NON_RUNTIME"
+      },
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "commons-io:commons-io:2.20.0",
+      "url": "https://repo.maven.apache.org/maven2/commons-io/commons-io/2.20.0/commons-io-2.20.0.pom",
+      "pomSha256": "bdbdf81072c190ee9a8b181a5c58f5bd917a750fb13a256debbf53f5dbd33a2a",
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "parent": {
+        "coordinate": "org.apache.commons:commons-parent:85",
+        "url": "https://repo.maven.apache.org/maven2/org/apache/commons/commons-parent/85/commons-parent-85.pom",
+        "pomSha256": "d189ff2c0027e96bb65d31e6f227ed2af966169b36af1e973dd5ba08926dc7b5",
+        "licenses": [
+          {
+            "name": "Apache-2.0",
+            "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+          }
+        ],
+        "parent": {
+          "coordinate": "org.apache:apache:35",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/apache/35/apache-35.pom",
+          "pomSha256": "ea297dcd114136e8b8e8b630230d52a76c2fc69f6c5db25d672b1857000728b8",
+          "licenses": [
+            {
+              "name": "Apache-2.0",
+              "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+            }
+          ],
+          "status": "DECLARED_REVIEWED_NON_RUNTIME"
+        },
+        "status": "DECLARED_REVIEWED_NON_RUNTIME"
+      },
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "net.bytebuddy:byte-buddy-agent:1.18.15",
+      "url": "https://repo.maven.apache.org/maven2/net/bytebuddy/byte-buddy-agent/1.18.15/byte-buddy-agent-1.18.15.pom",
+      "pomSha256": "af165d655a38cb22a26387e52c0717980911b2e3ff16e0b11bdaf946def9dc79",
+      "licenses": [
+        {
+          "name": "Apache License, Version 2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "parent": {
+        "coordinate": "net.bytebuddy:byte-buddy-parent:1.18.15",
+        "url": "https://repo.maven.apache.org/maven2/net/bytebuddy/byte-buddy-parent/1.18.15/byte-buddy-parent-1.18.15.pom",
+        "pomSha256": "1ac39a980826c076a149dfd140452fd0a2fa6b754032e854df72d3e2532dd8b0",
+        "licenses": [
+          {
+            "name": "Apache License, Version 2.0",
+            "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+          }
+        ],
+        "status": "DECLARED_REVIEWED_NON_RUNTIME"
+      },
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "net.java.dev.jna:jna:5.18.1",
+      "url": "https://repo.maven.apache.org/maven2/net/java/dev/jna/jna/5.18.1/jna-5.18.1.pom",
+      "pomSha256": "98b62ae6ff280d747fb359fc42e48fed113d45bc3729a823dc30b8308a806645",
+      "licenses": [
+        {
+          "name": "LGPL-2.1-or-later",
+          "url": "https://www.gnu.org/licenses/old-licenses/lgpl-2.1"
+        },
+        {
+          "name": "Apache-2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "net.minidev:accessors-smart:2.6.0",
+      "url": "https://repo.maven.apache.org/maven2/net/minidev/accessors-smart/2.6.0/accessors-smart-2.6.0.pom",
+      "pomSha256": "268315791ec661e28614f461212c06181c06a042733428d8ba711f0aad56e9f9",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "net.minidev:json-smart:2.6.0",
+      "url": "https://repo.maven.apache.org/maven2/net/minidev/json-smart/2.6.0/json-smart-2.6.0.pom",
+      "pomSha256": "83f193cfaef334ee79a249453042ed5f084db8cd9c916a2387b436e9a8fb73a7",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.apache.commons:commons-compress:1.28.0",
+      "url": "https://repo.maven.apache.org/maven2/org/apache/commons/commons-compress/1.28.0/commons-compress-1.28.0.pom",
+      "pomSha256": "033f4c78d632da88d0eb8ead974fc14a264392cebf12ab6c68d6cea7adf0c64a",
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "parent": {
+        "coordinate": "org.apache.commons:commons-parent:85",
+        "url": "https://repo.maven.apache.org/maven2/org/apache/commons/commons-parent/85/commons-parent-85.pom",
+        "pomSha256": "d189ff2c0027e96bb65d31e6f227ed2af966169b36af1e973dd5ba08926dc7b5",
+        "licenses": [
+          {
+            "name": "Apache-2.0",
+            "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+          }
+        ],
+        "parent": {
+          "coordinate": "org.apache:apache:35",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/apache/35/apache-35.pom",
+          "pomSha256": "ea297dcd114136e8b8e8b630230d52a76c2fc69f6c5db25d672b1857000728b8",
+          "licenses": [
+            {
+              "name": "Apache-2.0",
+              "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+            }
+          ],
+          "status": "DECLARED_REVIEWED_NON_RUNTIME"
+        },
+        "status": "DECLARED_REVIEWED_NON_RUNTIME"
+      },
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.apache.commons:commons-lang3:3.20.0",
+      "url": "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.20.0/commons-lang3-3.20.0.pom",
+      "pomSha256": "7ca83b2709c1e7a9e03b576cd41422190379489a80866e542f8c8b955411a2aa",
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "parent": {
+        "coordinate": "org.apache.commons:commons-parent:92",
+        "url": "https://repo.maven.apache.org/maven2/org/apache/commons/commons-parent/92/commons-parent-92.pom",
+        "pomSha256": "94f6c027b15f6402995dd1b2c7ea35bfe1ebc88b6832b3134368b41998721953",
+        "licenses": [
+          {
+            "name": "Apache-2.0",
+            "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+          }
+        ],
+        "parent": {
+          "coordinate": "org.apache:apache:35",
+          "url": "https://repo.maven.apache.org/maven2/org/apache/apache/35/apache-35.pom",
+          "pomSha256": "ea297dcd114136e8b8e8b630230d52a76c2fc69f6c5db25d672b1857000728b8",
+          "licenses": [
+            {
+              "name": "Apache-2.0",
+              "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+            }
+          ],
+          "status": "DECLARED_REVIEWED_NON_RUNTIME"
+        },
+        "status": "DECLARED_REVIEWED_NON_RUNTIME"
+      },
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.assertj:assertj-core:3.27.7",
+      "url": "https://repo.maven.apache.org/maven2/org/assertj/assertj-core/3.27.7/assertj-core-3.27.7.pom",
+      "pomSha256": "95a10dcfb3ba9aad4d0b5e9c523a8d583377bee5ecd4ba37e19e55a34667f079",
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.awaitility:awaitility:4.3.0",
+      "url": "https://repo.maven.apache.org/maven2/org/awaitility/awaitility/4.3.0/awaitility-4.3.0.pom",
+      "pomSha256": "ec817516c83141a33f695ff8f4d73ca6df3af268c3ab377e5cee7effccca8140",
+      "licenses": [
+        {
+          "name": "Apache 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "parent": {
+        "coordinate": "org.awaitility:awaitility-parent:4.3.0",
+        "url": "https://repo.maven.apache.org/maven2/org/awaitility/awaitility-parent/4.3.0/awaitility-parent-4.3.0.pom",
+        "pomSha256": "7af9ce8a09581211557e6cc8e2909bd80666b34e922a28587c773096c1022093",
+        "licenses": [
+          {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+          }
+        ],
+        "status": "DECLARED_REVIEWED_NON_RUNTIME"
+      },
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.hamcrest:hamcrest:3.0",
+      "url": "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest/3.0/hamcrest-3.0.pom",
+      "pomSha256": "4a04a68133bf32461f47b8a53c8ee9df4ce2f49a0dad9794bce8717bee5bac31",
+      "licenses": [
+        {
+          "name": "BSD-3-Clause",
+          "url": "https://raw.githubusercontent.com/hamcrest/JavaHamcrest/master/LICENSE"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.jetbrains:annotations:17.0.0",
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/annotations/17.0.0/annotations-17.0.0.pom",
+      "pomSha256": "8390ee0b4dff7f568b1336e061f694e77d761a505169aed8964e75482c990eed",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.junit.jupiter:junit-jupiter-api:6.0.3",
+      "url": "https://repo.maven.apache.org/maven2/org/junit/jupiter/junit-jupiter-api/6.0.3/junit-jupiter-api-6.0.3.pom",
+      "pomSha256": "766c80fb318e1600ebf6c9a921de801887b1548aa282d6ad69188b7608d56d47",
+      "licenses": [
+        {
+          "name": "Eclipse Public License v2.0",
+          "url": "https://www.eclipse.org/legal/epl-v20.html"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.junit.jupiter:junit-jupiter-engine:6.0.3",
+      "url": "https://repo.maven.apache.org/maven2/org/junit/jupiter/junit-jupiter-engine/6.0.3/junit-jupiter-engine-6.0.3.pom",
+      "pomSha256": "bafbc099326c1883f0ee1cb056d31b4222e26165f9f9aa9b896f3d3f78a31538",
+      "licenses": [
+        {
+          "name": "Eclipse Public License v2.0",
+          "url": "https://www.eclipse.org/legal/epl-v20.html"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.junit.jupiter:junit-jupiter-params:6.0.3",
+      "url": "https://repo.maven.apache.org/maven2/org/junit/jupiter/junit-jupiter-params/6.0.3/junit-jupiter-params-6.0.3.pom",
+      "pomSha256": "995b64ecaa2227c4b55f3eb8e77735f544434a2ec2cfeed0605e8baf108263de",
+      "licenses": [
+        {
+          "name": "Eclipse Public License v2.0",
+          "url": "https://www.eclipse.org/legal/epl-v20.html"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.junit.jupiter:junit-jupiter:6.0.3",
+      "url": "https://repo.maven.apache.org/maven2/org/junit/jupiter/junit-jupiter/6.0.3/junit-jupiter-6.0.3.pom",
+      "pomSha256": "bced20e91aaa5677f1ba96fa6f718100ab83e894a52e9961b6004c056a1845ec",
+      "licenses": [
+        {
+          "name": "Eclipse Public License v2.0",
+          "url": "https://www.eclipse.org/legal/epl-v20.html"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.junit.platform:junit-platform-commons:6.0.3",
+      "url": "https://repo.maven.apache.org/maven2/org/junit/platform/junit-platform-commons/6.0.3/junit-platform-commons-6.0.3.pom",
+      "pomSha256": "bdb8e24be97e0e59769f2164b5361f55227958df4103d68682f8779ad2ca8d7d",
+      "licenses": [
+        {
+          "name": "Eclipse Public License v2.0",
+          "url": "https://www.eclipse.org/legal/epl-v20.html"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.junit.platform:junit-platform-engine:6.0.3",
+      "url": "https://repo.maven.apache.org/maven2/org/junit/platform/junit-platform-engine/6.0.3/junit-platform-engine-6.0.3.pom",
+      "pomSha256": "7a87d8c6a0a7db0260b00ce303180f6f41d040562895d6804619d5db6ee232be",
+      "licenses": [
+        {
+          "name": "Eclipse Public License v2.0",
+          "url": "https://www.eclipse.org/legal/epl-v20.html"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.junit.platform:junit-platform-launcher:6.0.3",
+      "url": "https://repo.maven.apache.org/maven2/org/junit/platform/junit-platform-launcher/6.0.3/junit-platform-launcher-6.0.3.pom",
+      "pomSha256": "4d39e03f2093776f4193071c8cdf198136b96166c7b43b5e37e7d6156b9d98ed",
+      "licenses": [
+        {
+          "name": "Eclipse Public License v2.0",
+          "url": "https://www.eclipse.org/legal/epl-v20.html"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.junit:junit-bom:6.0.3",
+      "url": "https://repo.maven.apache.org/maven2/org/junit/junit-bom/6.0.3/junit-bom-6.0.3.pom",
+      "pomSha256": "a655b6a5dc00d1bebc91fb2b15c0c7e8aeac9d6bdcf879595505370e27530287",
+      "licenses": [
+        {
+          "name": "Eclipse Public License v2.0",
+          "url": "https://www.eclipse.org/legal/epl-v20.html"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.mockito:mockito-core:5.23.0",
+      "url": "https://repo.maven.apache.org/maven2/org/mockito/mockito-core/5.23.0/mockito-core-5.23.0.pom",
+      "pomSha256": "c02e2900b9277adbfe12756d7d0b9472e6b9e5972ae1f28d19a41aa6513777e3",
+      "licenses": [
+        {
+          "name": "MIT",
+          "url": "https://opensource.org/licenses/MIT"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.mockito:mockito-junit-jupiter:5.23.0",
+      "url": "https://repo.maven.apache.org/maven2/org/mockito/mockito-junit-jupiter/5.23.0/mockito-junit-jupiter-5.23.0.pom",
+      "pomSha256": "b66d0df81aab2ed2fa53c990ea90c2f1f915031bc85e418602de4cfb8d2ad7e8",
+      "licenses": [
+        {
+          "name": "MIT",
+          "url": "https://opensource.org/licenses/MIT"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.objenesis:objenesis:3.3",
+      "url": "https://repo.maven.apache.org/maven2/org/objenesis/objenesis/3.3/objenesis-3.3.pom",
+      "pomSha256": "ba0c40da2669a048b6e24ef7066a471f0fbcbfcc509e6a3e856ca4ddfa614ad3",
+      "licenses": [
+        {
+          "name": "Apache License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "parent": {
+        "coordinate": "org.objenesis:objenesis-parent:3.3",
+        "url": "https://repo.maven.apache.org/maven2/org/objenesis/objenesis-parent/3.3/objenesis-parent-3.3.pom",
+        "pomSha256": "305c384aa2f1e1c7fe53a96da41c3ec35243b97d428d24a8f779818cc10be4ff",
+        "licenses": [
+          {
+            "name": "Apache License, Version 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+          }
+        ],
+        "status": "DECLARED_REVIEWED_NON_RUNTIME"
+      },
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.opentest4j:opentest4j:1.3.0",
+      "url": "https://repo.maven.apache.org/maven2/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.pom",
+      "pomSha256": "9bf7cffc410f3e8372c2522578df9ca56d9d43bd937e30948706c232a943b355",
+      "licenses": [
+        {
+          "name": "The Apache License, Version 2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.ow2.asm:asm:9.7.1",
+      "url": "https://repo.maven.apache.org/maven2/org/ow2/asm/asm/9.7.1/asm-9.7.1.pom",
+      "pomSha256": "7229b03b30a73ee91008072d9e4569a51d8547fae8c50f527841aef4c1b0baa8",
+      "licenses": [
+        {
+          "name": "BSD-3-Clause",
+          "url": "https://asm.ow2.io/license.html"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.rnorth.duct-tape:duct-tape:1.0.8",
+      "url": "https://repo.maven.apache.org/maven2/org/rnorth/duct-tape/duct-tape/1.0.8/duct-tape-1.0.8.pom",
+      "pomSha256": "2636f66debe6e12437632f23a67b9bc961b03633009e52527a3bbc871f4069b4",
+      "licenses": [
+        {
+          "name": "MIT",
+          "url": "http://opensource.org/licenses/MIT"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.skyscreamer:jsonassert:1.5.3",
+      "url": "https://repo.maven.apache.org/maven2/org/skyscreamer/jsonassert/1.5.3/jsonassert-1.5.3.pom",
+      "pomSha256": "c6a880737b6b3c8a27d9a05c6048536a7a70bb350cb91dce2336b6710a2ba628",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.springframework.boot:spring-boot-resttestclient:4.1.2",
+      "url": "https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-resttestclient/4.1.2/spring-boot-resttestclient-4.1.2.pom",
+      "pomSha256": "33a95edc83a666cafa6d3534e4525f05762051f3f831cd38a3064c5ac8cf090c",
+      "licenses": [
+        {
+          "name": "Apache License, Version 2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.springframework.boot:spring-boot-starter-jackson-test:4.1.2",
+      "url": "https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-starter-jackson-test/4.1.2/spring-boot-starter-jackson-test-4.1.2.pom",
+      "pomSha256": "256c622b4af719d564ff1cbcf702a07cdd8153cf09e865cac656c63b8904dbbb",
+      "licenses": [
+        {
+          "name": "Apache License, Version 2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.springframework.boot:spring-boot-starter-test:4.1.2",
+      "url": "https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-starter-test/4.1.2/spring-boot-starter-test-4.1.2.pom",
+      "pomSha256": "bcccba642e733288a39e8aee99fe05bd8f6dafd7bc5f68d68b6e54aafcc0f13f",
+      "licenses": [
+        {
+          "name": "Apache License, Version 2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.springframework.boot:spring-boot-starter-webmvc-test:4.1.2",
+      "url": "https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-starter-webmvc-test/4.1.2/spring-boot-starter-webmvc-test-4.1.2.pom",
+      "pomSha256": "c4ab068d670a1de4c6480f22b525bf7fb8983b7915945f85ebdab006279a1605",
+      "licenses": [
+        {
+          "name": "Apache License, Version 2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.springframework.boot:spring-boot-test-autoconfigure:4.1.2",
+      "url": "https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-test-autoconfigure/4.1.2/spring-boot-test-autoconfigure-4.1.2.pom",
+      "pomSha256": "b8ca7a7897af90b7b2f9df1f4b7bdb2cd7aeaabd8948444d9a48ac12c3b1ffbe",
+      "licenses": [
+        {
+          "name": "Apache License, Version 2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.springframework.boot:spring-boot-test:4.1.2",
+      "url": "https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-test/4.1.2/spring-boot-test-4.1.2.pom",
+      "pomSha256": "9e8e1965e6025d0282be00535b93391cfa60b44ac3ef91dc809a35aed957c48d",
+      "licenses": [
+        {
+          "name": "Apache License, Version 2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.springframework.boot:spring-boot-webmvc-test:4.1.2",
+      "url": "https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-webmvc-test/4.1.2/spring-boot-webmvc-test-4.1.2.pom",
+      "pomSha256": "42a827788fb9440130219e78b09e93a2e606d5088897602bb3c1d03853c3df81",
+      "licenses": [
+        {
+          "name": "Apache License, Version 2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.springframework.security:spring-security-test:7.1.2",
+      "url": "https://repo.maven.apache.org/maven2/org/springframework/security/spring-security-test/7.1.2/spring-security-test-7.1.2.pom",
+      "pomSha256": "ff1dfe1efe28f3880121b4c1e7ae6b2dc349e37b015d8ccc88626b0894338857",
+      "licenses": [
+        {
+          "name": "Apache License, Version 2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.springframework:spring-test:7.0.10",
+      "url": "https://repo.maven.apache.org/maven2/org/springframework/spring-test/7.0.10/spring-test-7.0.10.pom",
+      "pomSha256": "79af2d7dc77330846db05f344cd8c46d94a7c0e11676d4ce92169d328521e6c7",
+      "licenses": [
+        {
+          "name": "Apache License, Version 2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.testcontainers:database-commons:1.21.4",
+      "url": "https://repo.maven.apache.org/maven2/org/testcontainers/database-commons/1.21.4/database-commons-1.21.4.pom",
+      "pomSha256": "feb165b2f07bc26e4ff6d0200dbf4093048383c26e786ec70f203ad63170717b",
+      "licenses": [
+        {
+          "name": "MIT",
+          "url": "http://opensource.org/licenses/MIT"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.testcontainers:jdbc:1.21.4",
+      "url": "https://repo.maven.apache.org/maven2/org/testcontainers/jdbc/1.21.4/jdbc-1.21.4.pom",
+      "pomSha256": "dd0a2244720e7d59a9cea01ad8513b7c403eebf850d9dd311514b379a0e69460",
+      "licenses": [
+        {
+          "name": "MIT",
+          "url": "http://opensource.org/licenses/MIT"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.testcontainers:postgresql:1.21.4",
+      "url": "https://repo.maven.apache.org/maven2/org/testcontainers/postgresql/1.21.4/postgresql-1.21.4.pom",
+      "pomSha256": "a02db4b931f80d9590535d267e5338767d083528c23d30c43f8ed1441e926bba",
+      "licenses": [
+        {
+          "name": "MIT",
+          "url": "http://opensource.org/licenses/MIT"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.testcontainers:testcontainers:2.0.5",
+      "url": "https://repo.maven.apache.org/maven2/org/testcontainers/testcontainers/2.0.5/testcontainers-2.0.5.pom",
+      "pomSha256": "78839aaa8e34da1c483deb57e4f383a8045abacda5549bc79840f25794963103",
+      "licenses": [
+        {
+          "name": "MIT",
+          "url": "http://opensource.org/licenses/MIT"
+        }
+      ],
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    },
+    {
+      "coordinate": "org.xmlunit:xmlunit-core:2.11.0",
+      "url": "https://repo.maven.apache.org/maven2/org/xmlunit/xmlunit-core/2.11.0/xmlunit-core-2.11.0.pom",
+      "pomSha256": "b6ba473c8f8e98baee71963949ec47538f696fdd206289e4962f5eb4ecfe7640",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "parent": {
+        "coordinate": "org.xmlunit:xmlunit-parent:2.11.0",
+        "url": "https://repo.maven.apache.org/maven2/org/xmlunit/xmlunit-parent/2.11.0/xmlunit-parent-2.11.0.pom",
+        "pomSha256": "2effb33e41b5b0899bf4b7c8889ae20810f80c8aebee1844935758842527a4c2",
+        "licenses": [
+          {
+            "name": "The Apache Software License, Version 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+          }
+        ],
+        "status": "DECLARED_REVIEWED_NON_RUNTIME"
+      },
+      "status": "DECLARED_REVIEWED_NON_RUNTIME"
+    }
+  ],
+  "review": {
+    "testOnly": true,
+    "agplDeclarations": 0,
+    "unknownDeclarations": 0,
+    "jnaChoice": "net.java.dev.jna:jna5.18.1 dual Apache-2.0/LGPL-2.1-or-later; choose Apache-2.0 for current unmodified test usage",
+    "distribution": "Test runtimes and browser binaries are not included in production images; review their embedded notices before separate redistribution"
+  }
+}

@@ -19,7 +19,7 @@ public class TopicCatalog {
     public TopicTaxonomy.Snapshot snapshot(boolean lock){
         long version=db.sql("SELECT version FROM classification_config WHERE id=1"+(lock?" FOR SHARE":"")).query(Long.class).single();
         var topics=db.sql("SELECT t.id,t.slug,t.name,c.definition FROM classification_topics c JOIN tags t ON t.id=c.tag_id WHERE t.active ORDER BY t.id"+(lock?" FOR SHARE OF t,c":"")).query((r,n)->new TopicTaxonomy.Topic(r.getObject("id",UUID.class),r.getString("slug"),r.getString("name"),r.getString("definition"))).list();
-        String hash=ArticleFingerprint.contentHash(ClassificationPolicy.VERSION+":"+version,topics.stream().map(t->t.id()+"|"+t.slug()+"|"+t.name()+"|"+t.definition()).toList());
+        String hash=ArticleFingerprint.contentHash(com.moapan.classification.infrastructure.LocalClassifier.POLICY+":"+version,topics.stream().map(t->t.id()+"|"+t.slug()+"|"+t.name()+"|"+t.definition()).toList());
         return new TopicTaxonomy.Snapshot(version,topics,hash);
     }
     @Transactional @PreAuthorize("hasRole('ADMIN')")

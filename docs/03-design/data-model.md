@@ -40,3 +40,10 @@ newsletters(V13): UUID、issue_number(고유 호수)、draft/published JSONB、v
 newsletters에 draft_dossier/published_dossier(JSONB nullable), publication_revision(nonnegative), first_published_at(timestamptz), distribution(FREE_PREVIEW/PAID_SUBSCRIPTION)을 추가했다. 기존 발간본문/원고/호수/시각은 보존하고 최초시각·개정1로 기준선을 잡는다. 새마이그레이션은additive이며원래V13데이터를삭제하지않는다.
 dossier={weekStart,cutoff,articleIds[UUID],forecasts[{question,observation,outlook,horizon,experiment,successCriteria,stopCondition,evidenceIds[UUID]}],rightsConfirmed,editorialReviewed,correctionNote}. 기사ID와편집부의독자적연구메모이며기사원문/초록/회원개인정보가아니다. 최대40근거/8전망,필드별길이제한. publication은draft본문+dossier를같은트랜잭션에snapshot하고 개정수/시각/감사갱신, 최초호수/시각은유지한다.
 저장·삭제·발간은동일newsletter UUID advisory lock, 선택source→article 공유잠금과권리재검사로오래된공개를방지한다. 숨김/권리철회된근거는독자목록·본문·출력에서다시검사한다. 실제구독·기업·평가참가자용테이블은만들지않았다.
+
+
+## V15 인증 버전
+users.auth_version bigint NOT NULL DEFAULT0 CHECK>=0. 비밀번호 변경은 현재 UUID/version 조건부 UPDATE로 증가시키고 세션을 삭제한다. 탈퇴는 현재 UUID/version 조건부 DELETE다. 로그인은 인증 전 UUID+version을 함께 보관하고 인증 후 동일 UUID와 현재 DB version을 재검사한다. 세션에는 MOAPAN_CREDENTIAL_VERSION 숫자만 추가하고 요청마다 계정 버전과 비교한다. 늦은 세션 저장·동일아이디 재가입의 이전 인증을 거부한다. 기존 회원·암호해시·아이디는 유지되며 기존 version 속성이 없는 로그인 세션은 재로그인이 필요하다.
+
+### V16 AI 작업·편집 경계
+translation_runtime 분산 lease, 두 모델 작업 started_at, article_translations locked/version, ai_source_budgets(source_id,model,day/calls/characters/seconds). 개인 데이터나 기사별 회원 행위는 추가하지 않는다. 원문 변경 시 기존 V8 trigger로 번역/잠금을 무효화하며 새 내용으로 다시 검토한다.

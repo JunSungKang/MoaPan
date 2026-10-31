@@ -132,3 +132,49 @@ Helm 합성렌더구성검사: HIGH0/CRITICAL0/MEDIUM13/LOW2. KSV-01010은SOURCE
 
 
 평가 기능 제거 재검증 (2026-10-30T18:47:53.314Z): 실행 화면/모듈/경로/번역/스타일을 제거하고 파일 부재를404/no-store/최소본문으로 응답한다. 삭제 화면을 다른 권한으로 공개하는 fallback을 만들지 않았다. JDK·의존성·truststore·proxy는 변경하지 않았으며 기존 공식공지를 모두 새로 조사했다고 표시하지 않는다. Trivy0.76.1 소스/비밀값/설정/JAR/SBOM/최종이미지 gate PASS. 소스 raw HIGH1·UNKNOWN2는 기존검토범위이며 JOSE조건부비노출 검토/만료를 유지한다. 앱이미지 HIGH0/CRITICAL0/MEDIUM23/LOW4, JAR/SBOM0. DB동기화 2026-10-29T22:52:43.958399Z, 다음갱신 2026-10-30T19:18:50.969126577Z. 최종 sha256:0e5fb08c841e7adddf8b5084fa9be617614c43f5feab99e6435a1e724431ac3a, JAR 7821ef88de0c0a118a4a4d06a38c42dca7b5c32a3341d85882c69953490c9058 검사·실행동일. 새 예외/ignore는 추가하지 않았다. 상세 [증빙](../05-test/evidence/newsletter-evaluator-removal.json).
+
+
+## 2026-10-31 고정 보안 체크리스트
+초기 공식 공지·코드·전체 실행이미지 조사 후20개 ID/완료 기준을 고정했다. 정의 SHA256: `f384230f986f9c79327b7c932994ba47c8ce6811136e2f7a788511d4b2c4ba2b`. 항목을 추가/삭제/완화하지 않고 상태·근거만 갱신한다. 미패치·UNKNOWN·검사실패는 체크하지 않는다.
+
+- [ ] S01 구성요소·공식 공지·KEV — 실제 버전/이미지와 공식 advisory·KEV 스냅샷 대조 및 영향 기록
+- [ ] S02 JDK·인증서·TLS — 고정 JDK 및 실제 cacerts 4루트 부재·정상 HTTPS·문제 체인 거부
+- [ ] S03 Java 의존성 — Spring/Servlet/JDBC/피드·암호 라이브러리의 적용 가능한 공식 패치와 lock/verification·JAR/SBOM 검증
+- [ ] S04 빌드·검사 공급망 — Gradle Wrapper/도구 체크섬 검증과 Trivy 공급망 사고 영향 대조·정상 최신 DB 검사
+- [ ] S05 프록시 JOSE 잔여 취약점 — go-jose/v3 적용 패치 또는 취약 구성요소 제거 검증; 기존 비노출 VEX만으로 완료 처리 금지
+- [ ] S06 컨테이너 OS 잔여 취약점 — 공식 제공 보안 업데이트 적용·재검사; 실제 영향 미해결/패치 미제공 건은 체크 금지
+- [ ] S07 비밀번호 정책 — OWASP 단독 인증 최소15자 권고와 기존6자 요구 충돌 해소·가입/변경/유니코드/해시/입력 검증
+- [ ] S08 세션 폐기 경쟁 — 비밀번호 변경 후 지연 로그인·늦은 세션 저장으로 이전 인증이 살아남지 않음
+- [ ] S09 계정 변경 경쟁 — 비밀번호 변경/탈퇴의 최신 자격증명 확인과 동시 변경 조건부 반영·세션 폐기
+- [ ] S10 대입 공격 제한 — 계정/전체 제한·HMAC/TTL·횟수/Retry-After·동시성·카운터 장애 fail closed
+- [ ] S11 인증·인가·CSRF — 비회원/일반/ADMIN 경계·JSON 필드 주입·CSRF/Origin·구독 혜택 경계 검증
+- [ ] S12 브라우저 보호 — CSP/XSS/외부링크/프레임·no-store·쿠키 Secure/HttpOnly/SameSite·로그아웃/자동로그인 폐기
+- [ ] S13 외부 입력 수집 — SSRF/DNS pinning/리다이렉트/XXE/압축·크기/악성 HTML·비신뢰 프롬프트 경계
+- [ ] S14 API 자원·무결성 — 요청 실바이트 제한·SQL 바인딩·검색/edition/cursor/quota·동시성/삭제 안전성
+- [ ] S15 개인정보·비밀값 — 비밀값 검사·관심사/검색/원문 비저장·로그 본문/암호/쿠키 비노출·계정 삭제 정리
+- [ ] S16 로컬 모델 — 공식 llama.cpp advisory·고정 모델/revision/SHA·API key/내부 네트워크/읽기 전용/무도구 검증
+- [ ] S17 실행 설정 — Compose/Helm 설정검사·비루트/권한/DB·web 비공개·secret·정적 검사와 실클러스터 미실행 구분
+- [ ] S18 영속성·복원 — 비파괴 마이그레이션/복원 후 계정 비활성·세션 제거 정책과 변경 스키마 회귀
+- [ ] S19 최종 검사 — 최신 DB로 최종 소스/JAR/SBOM/전체 프로젝트 이미지·도구 검사; 실패/UNKNOWN/잔여를 숨기지 않음
+- [ ] S20 전달·운영 확인 — 전체 회귀·독립 리뷰·동일 검증 digest Compose 반영·실제 HTTPS 및 guarded commit/push
+
+상태 원본: [고정 체크리스트](../05-test/evidence/security-checklist-20261031.json).
+
+### 동결 항목 내 발견·조치
+- S08 / SEC-LOCAL-003: 비밀번호 인증 후 지연된 로그인에 변경 전 자격증명으로 세션을 발급할 수 있었다. UUID+auth_version snapshot과 인증 후 DB 재확인·매요청 버전 검사를 적용했다. 인증 버전 없는 기존 세션은 재로그인한다.
+- S09 / SEC-LOCAL-004: 동시에 같은 이전 비밀번호로 요청한 두 변경이 모두 성공했다. SQL CAS로 하나만 반영하며 다른 요청은409다.
+- S09 / SEC-LOCAL-005: 이전 비밀번호 확인 후 대기한 탈퇴가 비밀번호 변경 뒤에도 계정을 삭제했다. 동일 UUID/version 조건부 삭제 및 단일 트랜잭션 rollback으로 거부한다.
+- S08 / SEC-LOCAL-006: 초기 수정의 version만 비교하면 삭제·동일이름 재가입(version0) 시 이전 인증이 새 UUID로 이어질 수 있었다. 독립 리뷰 지적을 재현하고 UUID/version을 함께 캡처하도록 수정했다.
+위 네 건은 프로젝트 로컬 결함 ID이며 CVE가 아니다. 원문/회원행위를 추가 저장하지 않는다. PostgreSQL 재현3건이 수정 전 모두 실패하고 수정 후 통과했으며, 추가 재가입401·늦은 세션401 회귀와 전체235건이 통과했다.
+- S04: 공식Trivy0.76.1 체크섬은 일치하지만 바이너리 자체에 go-jose/v4@4.1.5 HIGH(CVE-2026-116587), x/net0.60.0(CVE-2026-78661/97045)이 남았다. 최신 버전·공식 체크섬이 모든 전이 취약점 수정을 의미하지 않는다. signed release commit 소스에서 수정 의존성으로 재빌드하고 별도 후보를 자체검증한 뒤 사용한다. 재현 스크립트는 scripts/security/build-trivy.sh.
+- S05: 공식 go-jose advisory는 v3<=3.0.5의 patched version=None이다. smallstep crypto최신0.91.1도 v3.0.5를 사용하며 Caddy TLS internalissuer가 해당 PKI에 컴파일 의존한다. 단순 모듈등록 제외로 제거할 수 없다. 임의 암호 라이브러리 fork로 체크를 채우지 않고 미체크로 남긴다. 기존 설정한정VEX의 만료/범위는 연장하지 않는다.
+- S06: 현재22개 Ubuntu CVE공식JSON 재조회 및 noble 상태를 기록했다. 임시컨테이너 apt update/upgrade 시뮬레이션은 업데이트0건이다. 공급자 needed/deferred 상태가 남으므로 패치 완료로 표시하지 않는다.
+- S07: 최신 사용자 재확인으로아이디1~128/비밀번호6~128 유지. NIST2025-07정식판15자단독/8자MFA와의차이는여전히존재하므로동결기준을바꾸지않고미체크/USER_POLICY로기록한다.
+
+## AI 가드레일·OSS 추가 승인 검토 — 2026-10-31
+원래20항목의 정의와 해시는 유지했다. 별도A01~A06의 실행 근거는 [AI/OSS 검증](../05-test/evidence/security-ai-oss-validation-20261031.json), [관리서](ai-security-and-licenses.md), [제3자 고지](../../THIRD_PARTY_NOTICES.md)에 있다. runtime100개와 test-only51개 좌표의 선언을 확인했으며 현재 모델2개는 Apache2.0이다. runtime의 내장 고지86개와 별도 공식 버전 고지14개, Go163개 모듈/표준라이브러리 고지 및 EPL 소스3개를 보존했다. 이 범위에서 단순 SaaS에 따른 자체 코드 전체 공개 의무는 확인되지 않았다. 외부 이미지 배포의 GPL/EPL 대응 소스 의무를 면제한 것은 아니다.
+모델은 기사 전용·고정 내부망·도구 실행 권한 없음. JSON 중복키/후행문서/복잡도·출력 형식·허용 주제·입력/응답/토큰/동시성 제한과 기존 사실 보존 검사를 결합했다. 소개에 자동 처리의 오류·편향 한계와 원문 확인·관리자 수정 가능성을 안내했다. 자동 의미 검증의 완전성을 주장하지 않는다.
+최종 runtime과 builder7개 이미지를 패치한 Trivy로 검사했다. 원본 보고서에는 proxy/Go builder JOSE HIGH가 남아 있고 Ubuntu 미패치 항목도 남는다. 제한된 config-bound VEX에 의한 기술 검사 통과를 원래20항목의 전체 완료나 보안 배포 게이트 통과로 표시하지 않는다. 별도 외부 이미지 공개 배포는 수행하지 않았다.
+
+### 2026-10-31 G01~G11 후속 결과
+[추가 가드레일 증빙](../05-test/evidence/ai-guardrail-followup-20261031.json): 구현·회귀 완료, V16/실행이미지 갱신. 초기 실제 취소 실패와 SSE 수정, 독립 리뷰의 category구정책/RWO/정산/selector/SSE객체 도구호출 결함을 수정하고 재검증했다. 검사 DB 다운로드 중복과 실행 중 스크립트 변경으로 난 검사 실패는 PASS로 합산하지 않았고 마지막 clean 명령으로 재실행했다. 공식 go-jose/v3 수정None 및Ubuntu22개 필요/유보 상태를 재확인했고 apt신규업그레이드0. S05/S06/S07은 계속 미완료이며 전체 보안패치완료를 선언하지 않는다.

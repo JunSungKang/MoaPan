@@ -1,0 +1,9 @@
+{
+  "repo": "unsloth/Qwen3.5-4B-GGUF",
+  "revision": "e87f176479d0855a907a41277aca2f8ee7a09523",
+  "baseModel": "Qwen/Qwen3.5-4B",
+  "declaredLicense": "apache-2.0",
+  "source": "https://huggingface.co/unsloth/Qwen3.5-4B-GGUF/blob/e87f176479d0855a907a41277aca2f8ee7a09523/README.md",
+  "modification": "GGUF quantization; current pinned conversion; no project fine-tuning",
+  "checkedAt": "2026-10-30T22:59:39.117Z"
+}

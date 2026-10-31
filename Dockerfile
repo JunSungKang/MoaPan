@@ -20,11 +20,15 @@ COPY gradle ./gradle
 RUN echo '3b8a25775a69158b5ad2b1d17a80a88dc7b40a352a73eb27d06c612a7ce68e98  gradle/wrapper/gradle-wrapper.jar' | sha256sum -c -
 COPY scripts ./scripts
 COPY src ./src
-RUN --mount=type=cache,id=moapan-gradle-9.8.2,target=/workspace/.gradle-home,sharing=locked mkdir -p /workspace/.local/tmp && ./gradlew --no-daemon -Djava.io.tmpdir=/workspace/.local/tmp bootJar
+COPY licenses ./licenses
+RUN --mount=type=cache,id=moapan-gradle-9.8.2,target=/workspace/.gradle-home,sharing=locked mkdir -p /workspace/.local/tmp && ./gradlew --no-daemon -Djava.io.tmpdir=/workspace/.local/tmp bootJar && sh scripts/security/fetch-thirdparty-sources.sh
 FROM patched-jdk AS runtime
 WORKDIR /app
 RUN groupadd --gid 10001 moapan && useradd --uid 10001 --gid 10001 --no-create-home moapan
 COPY --from=build --chown=10001:10001 /workspace/build/libs/moapan-1.0.0.jar /app/moapan.jar
+COPY THIRD_PARTY_NOTICES.md /opt/moapan/THIRD_PARTY_NOTICES.md
+COPY licenses /opt/moapan/licenses
+COPY --from=build /workspace/build/third-party-sources /opt/moapan/third-party-sources
 USER 10001:10001
 ENV MOAPAN_ROLE=web JAVA_TOOL_OPTIONS='-XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp -Duser.timezone=UTC'
 ENTRYPOINT ["java","-jar","/app/moapan.jar"]
@@ -38,17 +42,24 @@ RUN case "$TARGETARCH" in amd64) checksum=65efbc80fdc1fa2cd2631cad5b481777a68e87
 ENV PATH="/usr/local/go/bin:${PATH}" GOTOOLCHAIN=local CGO_ENABLED=0
 WORKDIR /proxy
 COPY scripts/deploy/proxy/ ./
+COPY scripts/security/CollectModuleLicenses.go /license-tools/collect.go
 RUN --mount=type=cache,id=moapan-go-mod,target=/root/go/pkg/mod --mount=type=cache,id=moapan-go-build,target=/root/.cache/go-build go build -mod=readonly -trimpath -o /caddy . \
-    && go build -mod=readonly -trimpath -o /gosu github.com/tianon/gosu
+    && go build -mod=readonly -trimpath -o /gosu github.com/tianon/gosu \
+    && go run -mod=readonly /license-tools/collect.go /third-party-notices
 FROM postgres:18.6-alpine@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5 AS database
 RUN apk upgrade --no-cache
 COPY --from=proxy-build /gosu /usr/local/bin/gosu
 COPY --chmod=0555 scripts/deploy/db-init.sh /docker-entrypoint-initdb.d/10-app-user.sh
+COPY --from=proxy-build /third-party-notices /opt/moapan/licenses/go
+COPY THIRD_PARTY_NOTICES.md /opt/moapan/THIRD_PARTY_NOTICES.md
 FROM ubuntu:24.04@sha256:24737cef17f4e22b1977df7d9a05e77c4e28b7da5b8911f8d8ccda136bf3573c AS proxy
 RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates curl && rm -rf /var/lib/apt/lists/* \
     && mkdir -p /data /config && chown -R 10001:10001 /data /config
 COPY --from=proxy-build /caddy /usr/bin/caddy
 COPY Caddyfile /etc/caddy/Caddyfile
+COPY --from=proxy-build /third-party-notices /opt/moapan/licenses/go
+COPY licenses/native/caddy /opt/moapan/licenses/caddy
+COPY THIRD_PARTY_NOTICES.md /opt/moapan/THIRD_PARTY_NOTICES.md
 RUN chmod 0755 /etc/caddy && chmod 0444 /etc/caddy/Caddyfile
 USER 10001:10001
 ENV HOME=/tmp XDG_DATA_HOME=/data XDG_CONFIG_HOME=/config

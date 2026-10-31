@@ -513,8 +513,24 @@ class BrowserTest {
             assertEquals("",p.locator("#source-form [name=label]").inputValue());assertEquals("",p.locator("#source-form [name=endpointUrl]").inputValue());
             p.locator("#refresh-articles").click();p.waitForSelector("#article-list form");
             assertEquals("tag-A",p.getByLabel("수동 태그 UUID 목록").inputValue());
-            p.getByLabel("수동 요약 (한 줄 한 항목)").fill("Changed summary");p.locator("#article-list button").click();
+            p.getByLabel("수동 요약 (한 줄 한 항목)").fill("Changed summary");p.getByRole(com.microsoft.playwright.options.AriaRole.BUTTON,new Page.GetByRoleOptions().setName("요약·태그·공개 상태 저장").setExact(true)).click();
             p.waitForCondition(()->!writes.isEmpty());assertTrue(writes.getFirst().contains("\"tagIds\":null"));
+        }
+    }
+
+    @Test void translationEditorLoadsVersionLocksAndClearsOnLanguageChange(){
+        try(var context=browser.newContext()){
+            var writes=new java.util.concurrent.CopyOnWriteArrayList<String>();
+            context.route("**/api/v1/admin/translations/**",route->{
+                if(route.request().method().equals("PUT")){writes.add(route.request().postData());route.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{}"));}
+                else route.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"contentHash\":\""+"a".repeat(64)+"\",\"version\":7,\"title\":\"합성 제목\",\"summaryBullets\":[\"합성 요약\"],\"locked\":false}"));
+            });
+            Page p=context.newPage();p.navigate(origin+"/about.html");p.evaluate("async()=>{const m=await import('/assets/js/translation/administration.js');document.querySelector('main').replaceChildren(m.translationEditor('synthetic-article'));}");
+            p.getByText("번역 수정·잠금",new Page.GetByTextOptions().setExact(true)).click();
+            assertTrue(p.getByText("번역 저장",new Page.GetByTextOptions().setExact(true)).isDisabled());p.getByText("번역 불러오기",new Page.GetByTextOptions().setExact(true)).click();
+            p.waitForFunction("document.querySelector('input[aria-label=\"번역 제목\"]').value==='합성 제목'");p.getByLabel("번역 제목").fill("수정한 합성 제목");p.getByLabel("자동 처리로 덮어쓰지 않기").check();p.getByText("번역 저장",new Page.GetByTextOptions().setExact(true)).click();
+            p.waitForCondition(()->writes.size()==1);assertTrue(writes.getFirst().contains("\"version\":7"));assertTrue(writes.getFirst().contains("\"locked\":true"));assertTrue(writes.getFirst().contains("수정한 합성 제목"));
+            p.getByLabel("번역 언어").selectOption("en");assertEquals("",p.getByLabel("번역 제목").inputValue());assertTrue(p.getByText("번역 저장",new Page.GetByTextOptions().setExact(true)).isDisabled());
         }
     }
 

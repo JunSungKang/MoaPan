@@ -1,0 +1,433 @@
+{
+  "checkedAt": "2026-10-30T23:21:34.093Z",
+  "standalone": {
+    "branch": "codex/security-hardening-20261031",
+    "base": "a4643be581e31ceb20e05d1791bfb6731135980c",
+    "command": "sh scripts/build/gradle-local.sh --no-daemon clean check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest",
+    "tests": {
+      "unit": {
+        "tests": 137,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "integration": {
+        "tests": 51,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "e2e": {
+        "tests": 30,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "licenseCheck": "PASS: actual runtime artifacts match 100 reviewed component SHAs and retained notice SHAs",
+    "finalVerificationAt": "2026-10-30T23:24:50.084Z",
+    "jarSha256": "d817f503788b74358b4df36efd503f5499876c8ee7c715abb4c2ed963c9e90fb",
+    "sbomSha256": "1ad74a0dc59e1c37447a0d4496fcbe280394be7ddb7a0328ac5655b21c962b63",
+    "reportSha256": {
+      "source": "ccacc9ae2e1ccfebdd339d587cefc29ddf58ce951915b5a1afaf96b9af7d87ca",
+      "jar": "0e86fac36c0162281079ad565e327214a999fc78cac4dce771a6c65ada4fc0a5",
+      "sbom": "0d1a334b747e4dc33430514d486186701c9e7eea1947014f18ce8e57482b50f6"
+    }
+  },
+  "models": {
+    "scope": "new application boundary classes; existing pinned CPU model runtimes, synthetic input only; no article/account changes",
+    "translation": {
+      "task": "translation",
+      "requests": 1,
+      "validated": true,
+      "characters": 18,
+      "durationMillis": 7267
+    },
+    "classification": {
+      "task": "classification",
+      "requests": 1,
+      "validated": true,
+      "durationMillis": 19474
+    }
+  },
+  "composite": {
+    "status": "VERIFIED_LOCAL_COMPOSE_HTTPS",
+    "branch": "codex/security-integration-20261031",
+    "featureHead": "c60e8a9e34fa42e34ff20dc0489eafe94dcecddd",
+    "tests": {
+      "test": {
+        "tests": 146,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "integrationTest": {
+        "tests": 56,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "e2eTest": {
+        "tests": 38,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "html": "Nu26.10.12:0messages",
+    "helm": "lint/render/3invalid-inputs passed; actual cluster not provisioned",
+    "correctedFailure": "First composite E2E found missing AI English dictionary during branch conflict resolution; restored dictionary with existing product/newsletter entries and reran all suites successfully",
+    "commit": "277699e862011e5a260f6cb367f6929856b4bd93",
+    "jarSha256": "3e454abea64c56bb21c9479dfb59a8dcb399332da8b53d171ca9f8151d1d8d9b",
+    "sbomSha256": "1ad74a0dc59e1c37447a0d4496fcbe280394be7ddb7a0328ac5655b21c962b63",
+    "live": {
+      "checkedAt": "2026-10-30T23:20:47.776Z",
+      "origin": "https://175.195.62.165",
+      "tlsVerification": true,
+      "checks": [
+        {
+          "method": "GET",
+          "path": "/",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/public/news/edition",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/newsletter.html",
+          "status": 302
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/newsletters",
+          "status": 401
+        },
+        {
+          "method": "GET",
+          "path": "/internal/live",
+          "status": 404
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/auth/csrf",
+          "status": 200
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/auth/signup",
+          "status": 200
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/auth/login",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/auth/csrf",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/account",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/admin/sites",
+          "status": 403
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/newsletters",
+          "status": 200
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/v1/account/password",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/account",
+          "status": 401
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/auth/csrf",
+          "status": 200
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/auth/login",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/auth/csrf",
+          "status": 200
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/v1/account",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/account",
+          "status": 401
+        }
+      ],
+      "secureRememberCookie": true,
+      "syntheticAccountDeleted": true,
+      "publicNewsItems": 42,
+      "newsletterAuthenticated": true
+    },
+    "truststore": "Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp -Duser.timezone=UTC\nruntime=27.0.1.0.2+1 vendor=Eclipse Adoptium\nroots=117 official-four-roots=absent\nordinary-https=PASS\ndv-g3b=TLS_REJECTED\ndv-g3c=TLS_REJECTED\nov-g3b=TLS_REJECTED\nov-g3c=TLS_REJECTED\nev-g3b=TLS_REJECTED\nev-g3c=TLS_REJECTED\ndv-g3b-aaa=TLS_REJECTED\ndv-g3c-aaa=TLS_REJECTED\nov-g3b-aaa=TLS_REJECTED\nov-g3c-aaa=TLS_REJECTED\nev-g3b-aaa=TLS_REJECTED\nev-g3c-aaa=TLS_REJECTED\ndv-g3b-noct=TLS_REJECTED\ndv-g3b-aaa-noct=TLS_REJECTED",
+    "runtime": {
+      "web": {
+        "image": "sha256:ce8149cd747a2b523d83e55661dc6edd76edac15241b4ba4103f3a61397609e9",
+        "healthy": "healthy",
+        "user": "10001:10001",
+        "readOnly": true,
+        "networks": [
+          "moapan_backend"
+        ],
+        "publishedPorts": {}
+      },
+      "worker": {
+        "image": "sha256:ce8149cd747a2b523d83e55661dc6edd76edac15241b4ba4103f3a61397609e9",
+        "healthy": "running",
+        "user": "10001:10001",
+        "readOnly": true,
+        "networks": [
+          "moapan_backend",
+          "moapan_classification",
+          "moapan_translation"
+        ],
+        "publishedPorts": {}
+      },
+      "proxy": {
+        "image": "sha256:84c8930f52bff49ab8e554baf2b627eff7a1cc4029cc9f943f5411cef9b0c93c",
+        "healthy": "healthy",
+        "user": "10001:10001",
+        "readOnly": true,
+        "networks": [
+          "moapan_backend"
+        ],
+        "publishedPorts": {
+          "8080/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "8080"
+            }
+          ],
+          "8081/tcp": [
+            {
+              "HostIp": "175.195.62.165",
+              "HostPort": "80"
+            }
+          ],
+          "8443/tcp": [
+            {
+              "HostIp": "175.195.62.165",
+              "HostPort": "443"
+            }
+          ]
+        }
+      },
+      "db": {
+        "image": "sha256:fa1fb307429996cb25149232eace6f3e1d2a46d32c241138996b3500862b93f7",
+        "healthy": "healthy",
+        "user": "",
+        "readOnly": false,
+        "networks": [
+          "moapan_backend"
+        ],
+        "publishedPorts": {}
+      },
+      "translator": {
+        "image": "sha256:db6ef6a4ac7a9e21cbe5dffeb7c940726b2690102ed795752a719da3ffb16aa2",
+        "healthy": "healthy",
+        "user": "10001:10001",
+        "readOnly": true,
+        "networks": [
+          "moapan_translation"
+        ],
+        "publishedPorts": {}
+      },
+      "classifier": {
+        "image": "sha256:e846ce8a733d94f5600e3080d58b8d5e0a40d1bd5b10319991e5d2abe32a40b7",
+        "healthy": "healthy",
+        "user": "10001:10001",
+        "readOnly": true,
+        "networks": [
+          "moapan_classification"
+        ],
+        "publishedPorts": {}
+      }
+    }
+  },
+  "limitations": [
+    "synthetic smoke validates execution and fixture expectations, not general semantic accuracy or fairness",
+    "external redistribution of images remains gated on corresponding source and notice obligations; no project license chosen"
+  ],
+  "notices": {
+    "javaComponents": 100,
+    "jarEmbeddedNotices": 86,
+    "additionalExactVersionUpstreamNotices": 14,
+    "goModulesAndStdlib": 163,
+    "goMissingRootNotices": 0,
+    "sourceArchives": [
+      "logback-classic1.5.38",
+      "logback-core1.5.38",
+      "aspectjweaver1.9.25.1"
+    ]
+  },
+  "images": [
+    {
+      "role": "app",
+      "name": "moapan-local:1.0.0",
+      "digest": "sha256:ce8149cd747a2b523d83e55661dc6edd76edac15241b4ba4103f3a61397609e9",
+      "reportSha256": "4082f04901b05e030c09dbd627f1e2f56e8fb4abadb74a5ba5050e83764240ea",
+      "scannedAt": "2026-10-31T08:18:46.784444+09:00",
+      "severityCounts": {
+        "MEDIUM": 23,
+        "LOW": 4
+      },
+      "unresolvedHigh": [],
+      "secrets": 0
+    },
+    {
+      "role": "proxy",
+      "name": "moapan-proxy-public:2.11.7",
+      "digest": "sha256:84c8930f52bff49ab8e554baf2b627eff7a1cc4029cc9f943f5411cef9b0c93c",
+      "reportSha256": "0ed1e43faf38d098ff27e98958b6c8f7734de1bce038c3593ba6571e648a8e70",
+      "scannedAt": "2026-10-31T08:18:47.926588+09:00",
+      "severityCounts": {
+        "MEDIUM": 25,
+        "LOW": 4,
+        "HIGH": 1,
+        "UNKNOWN": 1
+      },
+      "unresolvedHigh": [
+        {
+          "id": "CVE-2026-116587",
+          "component": "github.com/go-jose/go-jose/v3",
+          "version": "v3.0.5",
+          "fixed": null
+        }
+      ],
+      "secrets": 0
+    },
+    {
+      "role": "db",
+      "name": "moapan-db-local:18.6",
+      "digest": "sha256:fa1fb307429996cb25149232eace6f3e1d2a46d32c241138996b3500862b93f7",
+      "reportSha256": "caaf27149f1d5d082ca8e774b5cce82dc63e225ba754057d84666135f2cf183b",
+      "scannedAt": "2026-10-31T08:18:48.174442+09:00",
+      "severityCounts": {},
+      "unresolvedHigh": [],
+      "secrets": 0
+    },
+    {
+      "role": "translator",
+      "name": "moapan-translator:cpu-b11960",
+      "digest": "sha256:db6ef6a4ac7a9e21cbe5dffeb7c940726b2690102ed795752a719da3ffb16aa2",
+      "reportSha256": "c6251b9f8d34052e30f4c33ed2431586b7d6aa723c7500440999db1109d8ddc9",
+      "scannedAt": "2026-10-31T08:18:48.971807+09:00",
+      "severityCounts": {
+        "MEDIUM": 23,
+        "LOW": 4
+      },
+      "unresolvedHigh": [],
+      "secrets": 0
+    },
+    {
+      "role": "classifier",
+      "name": "moapan-classifier:cpu-b11960",
+      "digest": "sha256:e846ce8a733d94f5600e3080d58b8d5e0a40d1bd5b10319991e5d2abe32a40b7",
+      "reportSha256": "e8959b20ebed9d99040dc602f714c91e517abbfa1327b30084ea2795a0afd943",
+      "scannedAt": "2026-10-31T08:18:49.756816+09:00",
+      "severityCounts": {
+        "MEDIUM": 23,
+        "LOW": 4
+      },
+      "unresolvedHigh": [],
+      "secrets": 0
+    },
+    {
+      "role": "jdkBuilder",
+      "name": "moapan-build:1.0.0",
+      "digest": "sha256:4247e6195a1a3c6da81874ac4f6194e353543bf8f957d3f4041a3ca6092288d6",
+      "reportSha256": "feebd4c96f7b9fe301d1a13a050655985d7bb7d8d3aef2acb1d1468d83cad455",
+      "scannedAt": "2026-10-31T08:18:54.774236+09:00",
+      "severityCounts": {
+        "MEDIUM": 23,
+        "LOW": 4
+      },
+      "unresolvedHigh": [],
+      "secrets": 0
+    },
+    {
+      "role": "goBuilder",
+      "name": "moapan-proxy-build:2.11.7",
+      "digest": "sha256:2cdea017aaba3e93410d84e4a421a8d2c65dae8f28816b2354c5c88d3ed71f18",
+      "reportSha256": "fb42d3bcac979740914961f9684275164d34352504d0aefe99c0e4a434997fed",
+      "scannedAt": "2026-10-31T08:18:55.068971+09:00",
+      "severityCounts": {
+        "MEDIUM": 25,
+        "LOW": 4,
+        "HIGH": 1,
+        "UNKNOWN": 1
+      },
+      "unresolvedHigh": [
+        {
+          "id": "CVE-2026-116587",
+          "component": "github.com/go-jose/go-jose/v3",
+          "version": "v3.0.5",
+          "fixed": null
+        }
+      ],
+      "secrets": 0
+    }
+  ],
+  "scanner": {
+    "version": "0.76.1+moapan-security.1",
+    "database": {
+      "Version": 2,
+      "NextUpdate": "2026-10-31T19:07:50.77378224Z",
+      "UpdatedAt": "2026-10-30T19:07:50.77378237Z",
+      "DownloadedAt": "2026-10-30T22:21:32.692522Z"
+    }
+  },
+  "licenseScope": {
+    "runtimeJars": 100,
+    "embeddedNotices": 86,
+    "versionedUpstreamNotices": 14,
+    "testOnlyLockedCoordinates": 51,
+    "unknownRuntimeOrTestDeclarations": 0,
+    "models": 2,
+    "goModulesAndStdlib": 163,
+    "wholeOwnCodeDisclosure": "not identified for current independent application SaaS usage",
+    "externalImages": "GPL/EPL corresponding-source and notice gate remains required before separate distribution"
+  },
+  "releaseGate": {
+    "status": "BLOCKED_NOT_ALL20_CHECKED",
+    "reason": [
+      "S05 no vendor v3 JOSE patch; expiring non-exposure VEX is not actual remediation",
+      "S06 Ubuntu needed/deferred findings have no available fix",
+      "S07 user explicitly retains password6..128 without MFA; OWASP/NIST15 guidance unmet"
+    ],
+    "externalImageRedistribution": "Not performed; corresponding source and notices review required"
+  },
+  "cleanup": {
+    "taskOwnedBackupIdentityAndEncryptedBackupsRemoved": true,
+    "temporaryRestoreDatabaseRemoved": true,
+    "syntheticAccountsRemaining": 0,
+    "extractedModelProbeAndScannerSourceRemoved": true
+  }
+}

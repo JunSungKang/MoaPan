@@ -189,3 +189,19 @@ Helm migrationVersion14 lint/render/부정입력3PASS, 합성값렌더Trivy HIGH
 ## 오해로 추가한 제품 평가 기능 제거
 사용자 재평가 요청을 서비스 기능으로 잘못 구현한 부분을 삭제했다. 평가 전용1개 E2E와3개 관련 접근 assertion을 제거했고 연구 gate·재게재·양식 테스트는 유지했다. 정적 링크 무결성 단위1건과 일반 파일404 PG회귀1건을 추가했다. 최초 운영 확인에서는 부재 파일이503으로 반환되어 NoResourceFoundException 전용404/no-store 처리를 추가했다. 새 PG시험의 초기1건 실패는 DB중단99 뒤 실행된 순서 문제였으며 Order1로 수정한 뒤 clean 전체를 재실행했다.
 최종 단위141/PG51/Playwright38 =230 PASS, 실패/오류/skip0. Nu0·정책4·문서28 PASS. 로컬 및 운영 JAR에 삭제 파일/참조 없음, 보존 모듈 있음, 운영 이미지/JAR 일치. HTTPS 삭제 HTML/JS3개404 및 기존 뉴스/인증 경계·정적hash까지12건 확인했다. 과거229건 증빙은 당시 결과로 보존하고 현행 제거 결과는 [제거 증빙](evidence/newsletter-evaluator-removal.json)으로 대체한다.
+
+
+## 고정 보안 체크리스트 인증 경합 회귀
+초기3개 latch PG재현은 기대401/409/단일성공과 달리200/200/동시200으로 모두 실패했다. V15 인증버전·SQLCAS·세션검사 후 통과했다. 독립 리뷰의 삭제/동일아이디재가입 문제도 실패재현 후 UUID+version snapshot으로 수정했다. 버전이 늦은 세션은 다음 요청401/서버세션삭제를 검증한다. 최종 clean 단위141/PG56/Playwright38=235건 PASS, 실패/오류/skip0. 정책4/Nu0/Helm lint·render·부정3 PASS. 실제V15 마이그레이션, 합성HTTPS19동작·회원삭제, 암호화V15복원 후 active_accounts0/sessions0 및 격리DB삭제 확인. 검사도구전이취약점수정후최종재검사를별도증빙에기록한다.
+
+## 보안 단독 PR 및 기능 유지 조합 검증 — 2026-10-31
+- 보안 단독 develop 기준:218 PASS(단위137/PG통합51/브라우저30), FAIL0/SKIP0. licenseCheck 포함 전체 계약 task 실행.
+- 현재 서비스 기능을 보존한 composite:240 PASS(단위146/PG통합56/브라우저38), FAIL0/SKIP0. 첫 조합의 영어 안내 사전 누락을 E2E가 검출해 수정 후 재실행했다. 단독/조합 결과를 합산하지 않는다.
+- 실제 CPU 모델:번역1회/분류1회 합성 입력 smoke 성공. 모델 성능의 일반 평가가 아니다. 새 경계 회귀5개 및 기존 번역/분류 검사를 유지했다.
+- Nu HTML:메시지0. Helm:lint/render/부정3개 통과, 실제 클러스터 설치 없음. 최초 helm 경로 미설정을 workspace 기존 바이너리 지정으로 수정했다.
+- 최종 Compose6개 서비스 정상, 초기화/마이그레이션 종료0. DB V15, 기사270·발간1 보존, 검증 계정/격리 복원 DB0. HTTPS/로그인/비밀번호 교체/삭제/권한19개 통과. 실제 실행 JAR SHA와 검사 JAR SHA 일치.
+- 최종7개 이미지 보고서 SHA·실행 digest·DB freshness·truststore14개 거부는 [증빙](evidence/security-ai-oss-validation-20261031.json). 전체20항목 미완료 사유는 동일 체크리스트에 유지.
+- 보안 PR은 뉴스레터 PR8의 V14가 선행하는 V15 릴리스 순서를 명시한다. 기존 서비스에는 이 둘을 함께 검증한 조합을 사용했다. 병합은 미수행.
+
+## G01~G11 가드레일 후속 검증
+2026-10-31: clean check/integrationTest/e2eTest/bootJar/sbom/securityCheck/acceptanceTest 실제 성공. 단위153/PG63/Playwright39, 실패·오류·skip0. 실모델 공격6개 추론 전 보류, 정상2건, 취소1건 성공. HTTPS 합성 계정20검사 성공 후 삭제. Helm lint/render/부정3개·동노드/selector/다운로드·egress 경계와 렌더된 manifest Trivy config 검사 성공; 실클러스터 미제공. [실행 증빙](evidence/ai-guardrail-followup-20261031.json). 원래20개 정의는 유지하며 S05/S06/S07은 미완료다. 새 G01~G11의 구현·범위 검증 통과가 모든 취약점 제거를 의미하지 않는다.

@@ -1,0 +1,45 @@
+{
+  "checkedAt": "2026-10-30T22:59:39.118Z",
+  "files": [
+    {
+      "path": "licenses/common/Apache-2.0.txt",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "path": "licenses/models/qwen/LICENSE.txt",
+      "url": "https://huggingface.co/Qwen/Qwen3.5-4B/resolve/851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a/LICENSE",
+      "sha256": "bbedc3fda3305820b977265f01b8619d87570a6739de3a5582c3464840f1e57a"
+    },
+    {
+      "path": "licenses/native/llama.cpp/LICENSE.txt",
+      "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8642541b255bfb5dc39cd351a178be09013a55d6/LICENSE",
+      "sha256": "94f29bbed6a22c35b992c5c6ebf0e7c92f13b836b90f36f461c9cf2f0f1d010d"
+    },
+    {
+      "path": "licenses/native/caddy/LICENSE.txt",
+      "url": "https://raw.githubusercontent.com/caddyserver/caddy/v2.11.7/LICENSE",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "path": "licenses/common/EPL-2.0.txt",
+      "url": "https://raw.githubusercontent.com/spdx/license-list-data/main/text/EPL-2.0.txt",
+      "sha256": "61616a4066701bc7888ad910de1633dbc55eb4d4d30d930feef55afb9492e33c"
+    },
+    {
+      "path": "licenses/common/LGPL-2.1-only.txt",
+      "url": "https://raw.githubusercontent.com/spdx/license-list-data/main/text/LGPL-2.1-only.txt",
+      "sha256": "5749785c8bdefafcb5d798270ed0a967036fe2ca63dcedade1627565dfef81d2"
+    },
+    {
+      "path": "licenses/common/GPL-2.0-only.txt",
+      "url": "https://raw.githubusercontent.com/spdx/license-list-data/main/text/GPL-2.0-only.txt",
+      "sha256": "aaf135472f81c5b4a0dca9367e5bb5e9750032b5bebe5442b36e4c0a47430df3"
+    },
+    {
+      "path": "licenses/common/Classpath-exception-2.0.txt",
+      "url": "https://raw.githubusercontent.com/spdx/license-list-data/main/text/Classpath-exception-2.0.txt",
+      "sha256": "f36ecd7d28dc3c49854d3908a3824696972aed34f5ffe426174f35fb03c5f194"
+    }
+  ]
+}

@@ -32,3 +32,4 @@
 | MP-DOC-026 | 프로그램목록 | 개발 담당 | [문서](../../docs/04-implementation/program-inventory.md) |
 | MP-DOC-027 | SEO·웹 표준 점검 결과서 | 개발 담당 | [문서](../05-test/seo-web-audit.md) |
 | MP-DOC-028 | 구독 뉴스레터 사업화 기반·실무 검증 계획서 | 개발 담당 | [문서](../02-analysis/business-validation.md) |
+| MP-DOC-029 | AI 보안·윤리 및 오픈소스 관리서 | 보안 담당 | [문서](../07-operation/ai-security-and-licenses.md) |

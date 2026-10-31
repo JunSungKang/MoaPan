@@ -99,7 +99,15 @@ public class SafeFetch {
         }return result;
     }
     private static JsonNode path(JsonNode node,String path){if(path.equals("$"))return node;for(String key:path.split("\\."))node=node.path(key);return node;}
-    public static String clean(String s,int max){return trim(Jsoup.parse(s==null?"":s).text(),max);}
+    public static String clean(String s,int max){
+        var document=Jsoup.parse(s==null?"":s);
+        document.select("script,style,noscript,template,iframe,object,embed,svg,math,[hidden],[aria-hidden=true],input[type=hidden]").remove();
+        for(var element:document.select("[style]")){
+            String css=element.attr("style").replaceAll("(?s)/\\*.*?\\*/","").replaceAll("\\s+","").toLowerCase(Locale.ROOT);
+            if(css.matches("(?s).*(?:display:none|visibility:hidden|visibility:collapse|opacity:0(?:[;!]|$)|font-size:0(?:px|em|rem|[;!]|$)).*"))element.remove();
+        }
+        return trim(document.text(),max);
+    }
     static String trim(String s,int max){return s.length()>max?s.substring(0,max):s;}
     static Instant instant(String s){try{return future(Instant.parse(s));}catch(Exception e){return null;}}
     static Instant future(Instant t){return t.isAfter(Instant.now().plusSeconds(300))?null:t;}

@@ -6,20 +6,25 @@ spec:
   strategy: {type: Recreate}
   selector: {matchLabels: {app: moapan, component: classifier}}
   template:
-    metadata: {labels: {app: moapan, component: classifier}}
+    metadata: {labels: {app: moapan, component: classifier, model-volume: classifier}}
     spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector: {matchLabels: {app: moapan, model-volume: classifier}}
+              topologyKey: kubernetes.io/hostname
       automountServiceAccountToken: false
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets: {{ toYaml . | nindent 8 }}
       {{- end }}
       securityContext: {runAsUser: 10001, runAsGroup: 10001, runAsNonRoot: true, fsGroup: 10001, seccompProfile: {type: RuntimeDefault}}
       initContainers:
-        - name: download-verified-huggingface-model
+        - name: wait-for-verified-model
           image: {{ include "moapan.image" .Values.images.classifier }}
-          command: [/opt/classification/model-init.sh]
+          command: [sh, -ec, 'for attempt in $(seq 1 360); do if test -s /models/qwen3.5-4b-q4.gguf; then echo "00fe7986ff5f6b463e62455821146049db6f9313603938a70800d1fb69ef11a4  /models/qwen3.5-4b-q4.gguf" | sha256sum -c -; exit; fi; sleep 10; done; exit 1']
           securityContext: {readOnlyRootFilesystem: true, allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}}
           resources: {requests: {cpu: 100m, memory: 128Mi}, limits: {cpu: '0.5', memory: 192Mi}}
-          volumeMounts: [{name: model, mountPath: /models}, {name: tmp, mountPath: /tmp}]
+          volumeMounts: [{name: model, mountPath: /models, readOnly: true}, {name: tmp, mountPath: /tmp}]
       containers:
         - name: classifier
           image: {{ include "moapan.image" .Values.images.classifier }}

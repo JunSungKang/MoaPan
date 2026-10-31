@@ -119,3 +119,8 @@ Linux 서버에서는 `compose-public.yaml` 대신 `scripts/deploy/compose-serve
 ## 뉴스레터 연구·업무 활용
 관리자는 뉴스레터 관리에서 발간 주의 수집 자료와 전망/실험/중단 조건을 연결하고 발간 전 점검을 실행한다. 발간본은 최초호수/시각과 개정내용을 구분한다. 회원은 권리 확인된 원고를 출처 포함 복사·HTML로 내보내고 회의 요약·연구 우선순위·실험 양식으로 활용할 수 있다. 수집 기사 전문을 내보내지 않는다.
 제품 재평가는 서비스 밖의 분석 문서로만 관리합니다. 실제 고객 조사는 아직 수행하지 않았습니다. 개인/기업 유료 구독은 준비 중이고 현재 모든 회원은 무료 preview입니다. 가격·실결제·자동청구·조직 SaaS는 아직 없습니다. 내부 진단과 외부 검증의 차이는 [사업화·실무 검증 계획서](docs/02-analysis/business-validation.md)를 참고하세요.
+
+보안·모델 관리: [AI 가드레일·윤리·라이선스](docs/07-operation/ai-security-and-licenses.md), [제3자 고지와 소스 제공 조건](THIRD_PARTY_NOTICES.md). `check`에는 실제 의존성·보존 고지 SHA를 대조하는 `licenseCheck`가 포함됩니다.
+
+### AI 가드레일 후속 운영
+현재 Index-Translate-2B 번역과 Qwen3.5-4B 분류를 유지한다. 입력 보류, 실제4096토큰 예산, SSE 취소, 출처별 일일 집계 한도와 유한 재시도, 관리자 번역 수정·잠금을 추가했다. 상세 범위·한계·운영 지침은 [AI 보안](docs/07-operation/ai-security-and-licenses.md), [검증 증빙](docs/05-test/evidence/ai-guardrail-followup-20261031.json)을 따른다. Helm은 모델 다운로드 Job과 실행 Pod의 외부 통신 차단을 분리하며 실클러스터 설치는 별도다.

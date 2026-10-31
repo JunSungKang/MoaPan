@@ -29,6 +29,7 @@ public class AuthController {
     record Change(@NotNull String currentPassword,@NotNull @Size(min=6,max=256)String newPassword){}
     record Confirm(@NotNull String currentPassword){}
     record View(UUID id,String username,String role){}
+    private record CredentialSnapshot(UUID id,long version){}
     private final Accounts users;private final PasswordEncoder encoder;private final AuthenticationManager manager;private final SecurityContextRepository contexts;private final Limits limits;private final JdbcClient db;private final TransactionTemplate tx;private final Semaphore hashes=new Semaphore(4);
     public AuthController(Accounts users,PasswordEncoder encoder,AuthenticationManager manager,SecurityContextRepository contexts,Limits limits,JdbcClient db,PlatformTransactionManager tm){this.users=users;this.encoder=encoder;this.manager=manager;this.contexts=contexts;this.limits=limits;this.db=db;this.tx=new TransactionTemplate(tm);}
     @GetMapping("/api/v1/auth/csrf") Object csrf(CsrfToken token){return Map.of("token",token.getToken(),"headerName",token.getHeaderName());}
@@ -40,9 +41,14 @@ public class AuthController {
     @PostMapping("/api/v1/auth/login") View login(@Valid @RequestBody Credentials input,HttpServletRequest request,HttpServletResponse response){
         passwordLength(input.password());limits.auth("login_global",300,900);String username=normalize(input.username());String bucket="login:"+limits.fingerprint(username);limits.checkAuth(bucket,10);
         return hash(()->{
+            CredentialSnapshot authenticated=users.findByUsername(username).map(a->new CredentialSnapshot(a.id,a.authVersion)).orElse(null);
             try{manager.authenticate(new UsernamePasswordAuthenticationToken(username,input.password()));}catch(AuthenticationException e){int failures=limits.auth(bucket,10,900);limits.checkAuth(bucket,10);throw new ApiError(401,"invalid_credentials",null,failures>=5?10-failures:null);}
             Account user=users.findByUsername(username).filter(a->a.active).orElseThrow(()->new ApiError(401,"invalid_credentials"));
+            if(authenticated==null||!user.id.equals(authenticated.id()))throw new ApiError(401,"invalid_credentials");
+            limits.checkAuth(bucket,10);
+            if(!db.sql("SELECT EXISTS(SELECT 1 FROM users WHERE id=:id AND active AND auth_version=:v)").param("id",authenticated.id()).param("v",authenticated.version()).query(Boolean.class).single())throw new ApiError(401,"invalid_credentials");
             if(request.getSession(false)!=null)request.changeSessionId();else request.getSession(true);
+            request.getSession().setAttribute(com.moapan.access.infrastructure.RememberedSession.CREDENTIAL_VERSION,authenticated.version());
             com.moapan.access.infrastructure.RememberedSession.configure(request.getSession(),Boolean.TRUE.equals(input.rememberMe()));
             var auth=UsernamePasswordAuthenticationToken.authenticated(user.id.toString(),null,List.of(new SimpleGrantedAuthority("ROLE_"+user.role)));
             var context=SecurityContextHolder.createEmptyContext();context.setAuthentication(auth);SecurityContextHolder.setContext(context);contexts.saveContext(context,request,response);
@@ -54,12 +60,12 @@ public class AuthController {
     @GetMapping("/api/v1/account") View account(Authentication auth){return view(current(auth));}
     @PatchMapping("/api/v1/account/password") void password(Authentication auth,@Valid @RequestBody Change change,HttpServletRequest q){
         passwordLength(change.newPassword());Account user=current(auth);limits.auth("password:"+user.id,10,900);
-        hash(()->{if(!encoder.matches(change.currentPassword(),user.passwordHash))throw new ApiError(403,"invalid_credentials");tx.executeWithoutResult(s->{user.passwordHash=encoder.encode(change.newPassword());users.saveAndFlush(user);db.sql("DELETE FROM spring_session WHERE principal_name=:p").param("p",user.id.toString()).update();});return null;});
+        hash(()->{if(!encoder.matches(change.currentPassword(),user.passwordHash))throw new ApiError(403,"invalid_credentials");tx.executeWithoutResult(s->{String encoded=encoder.encode(change.newPassword());if(db.sql("UPDATE users SET password_hash=:hash,auth_version=auth_version+1 WHERE id=:id AND active AND auth_version=:v").param("hash",encoded).param("id",user.id).param("v",user.authVersion).update()!=1)throw new ApiError(409,"credential_changed");db.sql("DELETE FROM spring_session WHERE principal_name=:p").param("p",user.id.toString()).update();});return null;});
         if(q.getSession(false)!=null)q.getSession(false).invalidate();SecurityContextHolder.clearContext();
     }
     @DeleteMapping("/api/v1/account") void delete(Authentication auth,@Valid @RequestBody Confirm confirm,HttpServletRequest q){
         Account user=current(auth);limits.auth("password:"+user.id,10,900);
-        hash(()->{if(!encoder.matches(confirm.currentPassword(),user.passwordHash))throw new ApiError(403,"invalid_credentials");tx.executeWithoutResult(s->{db.sql("DELETE FROM spring_session WHERE principal_name=:p").param("p",user.id.toString()).update();db.sql("DELETE FROM auth_rate_limits WHERE bucket=:b").param("b","password:"+user.id).update();db.sql("DELETE FROM auth_rate_limits WHERE bucket=:b").param("b","login:"+limits.fingerprint(user.username)).update();users.delete(user);});return null;});
+        hash(()->{if(!encoder.matches(confirm.currentPassword(),user.passwordHash))throw new ApiError(403,"invalid_credentials");tx.executeWithoutResult(s->{db.sql("DELETE FROM spring_session WHERE principal_name=:p").param("p",user.id.toString()).update();db.sql("DELETE FROM auth_rate_limits WHERE bucket=:b").param("b","password:"+user.id).update();db.sql("DELETE FROM auth_rate_limits WHERE bucket=:b").param("b","login:"+limits.fingerprint(user.username)).update();if(db.sql("DELETE FROM users WHERE id=:id AND active AND auth_version=:v").param("id",user.id).param("v",user.authVersion).update()!=1)throw new ApiError(409,"credential_changed");});return null;});
         if(q.getSession(false)!=null)q.getSession(false).invalidate();SecurityContextHolder.clearContext();
     }
     private static void passwordLength(String password){int n=password.codePointCount(0,password.length());if(n<6||n>128)throw new ApiError(400,"invalid_password_length");}

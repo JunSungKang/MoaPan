@@ -8,7 +8,7 @@ import java.util.regex.*;
 
 /** Deterministic partial checks, not a proof of translation equivalence. */
 public final class TranslationValidator {
-    public static final String VERSION="rules-v2";
+    public static final String VERSION="rules-v3";
     private TranslationValidator() {}
     private static final Pattern IDENTIFIERS=Pattern.compile("`[^`]+`|https?://[^\\s<>]+|(?i:CVE-\\d{4}-\\d+|GHSA-[a-z0-9-]+)|(?<![\\w.])v?\\d+\\.\\d+\\.\\d+(?:[-+][\\w.-]+)?");
     private static final Pattern NUMBER=Pattern.compile("(?<![\\d.])[-+]?\\d+(?:,\\d{3})*(?:\\.\\d+)?(?:[eE][-+]?\\d+)?(?:\\s*(?:million|billion|thousand|백만|천만|억|만|천))?(?:\\s*(?:percentage points?|percent|%p|%|milliseconds?|seconds?|minutes?|hours?|ms|Mbps|Gbps|MiB|GiB|KiB|MB|GB|KB|밀리초|초|분|시간|퍼센트포인트|퍼센트))?",Pattern.CASE_INSENSITIVE);
@@ -19,11 +19,23 @@ public final class TranslationValidator {
         if(!identifiers(input).equals(identifiers(output)))fail("translation_identifier_changed");
         if(!facts(input).equals(facts(output)))fail("translation_numbers_changed");
         if(!comparisons(input,language.equals("ko")?"en":"ko").equals(comparisons(output,language)))fail("translation_comparison_changed");
+        if(!relations(input).equals(relations(output)))fail("translation_relationship_changed");
+        if(Pattern.compile("(?iu)outperform|surpass|우수|뛰어나다").matcher(input).find()&&relations(input).isEmpty())fail("translation_relationship_unverified");
         // Only conservative, explicitly supported danger signals; arbitrary semantics remain unverified.
         if(negative(input,language.equals("ko")?"en":"ko")!=negative(output,language))fail("translation_negation_changed");
         if(increases(input,language.equals("ko")?"en":"ko")!=increases(output,language)||decreases(input,language.equals("ko")?"en":"ko")!=decreases(output,language))fail("translation_direction_changed");
         String[][] critical={{"median","중앙값"},{"throughput","처리량"},{"snapshot isolation","스냅샷 격리"},{"without authentication","인증 없이"}};
         for(var pair:critical){String from=language.equals("ko")?pair[0]:pair[1],to=language.equals("ko")?pair[1]:pair[0];if(ContentProcessor.matches(input,from)&&!ContentProcessor.matches(output,to))fail("translation_term_changed");}
+    }
+    private static List<String> relations(String text){
+        String entity="(?:[Mm]odel\\s+|모델\\s*)?([A-Z][A-Za-z0-9_-]{0,50})";
+        var direct=Pattern.compile(entity+"\\s+(?i:outperforms?|surpasses?)\\s+"+entity).matcher(text);
+        List<String> result=new ArrayList<>();while(direct.find())result.add(direct.group(1)+">"+direct.group(2));
+        var korean=Pattern.compile(entity+"(?:이|가|는|은)?\\s*"+entity+"보다\\s*(?:더\\s*)?(?:우수|뛰어|높|좋)").matcher(text);
+        while(korean.find())result.add(korean.group(1)+">"+korean.group(2));
+        var reversed=Pattern.compile(entity+"보다\\s*"+entity+"(?:이|가|는|은)?\\s*(?:더\\s*)?(?:우수|뛰어|높|좋)").matcher(text);
+        while(reversed.find())result.add(reversed.group(2)+">"+reversed.group(1));
+        Collections.sort(result);return result;
     }
     private static List<String> comparisons(String text,String lang){
         String clean=IDENTIFIERS.matcher(text).replaceAll(" ");

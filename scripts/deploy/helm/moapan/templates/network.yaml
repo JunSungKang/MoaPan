@@ -1,4 +1,4 @@
-# Requires a NetworkPolicy-capable CNI. Ingress-only policy: see README for egress boundary.
+# Requires a NetworkPolicy-capable CNI. Model runtime pods cannot initiate any connections.
 {{- range $component, $port := dict "db" 5432 "web" 8080 "translator" 11435 "classifier" 11436 }}
 ---
 apiVersion: networking.k8s.io/v1
@@ -17,4 +17,15 @@ spec:
         - podSelector: {matchLabels: {app: moapan, component: worker}}
       {{- end }}
       ports: [{protocol: TCP, port: {{ $port }}}]
+{{- end }}
+
+{{- range $component := list "translator" "classifier" }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: {namespace: {{ $.Release.Namespace | quote }}, name: {{ $component }}-egress-deny}
+spec:
+  podSelector: {matchLabels: {app: moapan, component: {{ $component }}}}
+  policyTypes: [Egress]
+  egress: []
 {{- end }}

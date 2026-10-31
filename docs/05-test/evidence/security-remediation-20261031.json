@@ -1,0 +1,2906 @@
+{
+  "checkedAt": "2026-10-30T22:48:58.413Z",
+  "scope": "Original frozen20 security checklist; composite includes newsletter PR8 for production regression",
+  "tests": {
+    "test": {
+      "tests": 141,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "integrationTest": {
+      "tests": 56,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "e2eTest": {
+      "tests": 38,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "tool": {
+    "checkedAt": "2026-10-30T22:41:07.145Z",
+    "version": "Version: 0.76.1+moapan-security.1",
+    "sourceCommit": "e713f67f7d54decdcd9b3132c9751833dcced698",
+    "githubCommitSignatureVerified": true,
+    "sourceSha256": "5bcd06d8bdae338978b8ef597cb23cd0ff2e710d1ea9097c1143ec6b07d362d6",
+    "binarySha256": "e03dd18760769d22350cf0d9f0098ebcd8eef9726a243107585a18f7dd48b2f2",
+    "modules": {
+      "jose": "v4.1.6",
+      "net": "v0.62.0",
+      "crypto": "v0.58.0"
+    },
+    "candidateFindings": [
+      {
+        "id": "GO-2026-5932",
+        "pkg": "golang.org/x/crypto",
+        "version": "v0.58.0",
+        "severity": "UNKNOWN"
+      }
+    ],
+    "openPgpPackageImported": false,
+    "failedBuildPreservesCandidate": true,
+    "reproScriptExecutedSuccessfully": true
+  },
+  "database": {
+    "Version": 2,
+    "NextUpdate": "2026-10-31T19:07:50.77378224Z",
+    "UpdatedAt": "2026-10-30T19:07:50.77378237Z",
+    "DownloadedAt": "2026-10-30T22:21:32.692522Z"
+  },
+  "research": {
+    "checkedAt": "2026-10-30T22:24:52.374Z",
+    "kev": {
+      "catalogVersion": "2026.10.30",
+      "dateReleased": "2026-10-30T17:02:45.3665Z",
+      "count": 1766,
+      "matches": []
+    },
+    "jdkReleaseNames": [
+      "jdk-27.0.1.0.2+1",
+      "jdk-27+35"
+    ],
+    "advisories": {
+      "go-jose/go-jose": [
+        {
+          "id": "GHSA-p9j4-2j95-j4rv",
+          "cve": null,
+          "url": "https://github.com/go-jose/go-jose/security/advisories/GHSA-p9j4-2j95-j4rv",
+          "publishedAt": "2026-10-30T19:20:54Z",
+          "updatedAt": "2026-10-30T19:21:29Z",
+          "severity": "medium",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/go-jose/go-jose/v4"
+              },
+              "vulnerable_version_range": "<= v4.1.6",
+              "patched_versions": "v4.1.7",
+              "vulnerable_functions": []
+            },
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/go-jose/go-jose/v3"
+              },
+              "vulnerable_version_range": "all",
+              "patched_versions": "",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-27pc-rm86-68pq",
+          "cve": null,
+          "url": "https://github.com/go-jose/go-jose/security/advisories/GHSA-27pc-rm86-68pq",
+          "publishedAt": "2026-10-30T19:20:47Z",
+          "updatedAt": "2026-10-30T19:20:47Z",
+          "severity": "low",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/go-jose/go-jose/v4"
+              },
+              "vulnerable_version_range": "<= v4.1.6",
+              "patched_versions": "v4.1.7",
+              "vulnerable_functions": []
+            },
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/go-jose/go-jose/v3"
+              },
+              "vulnerable_version_range": "all",
+              "patched_versions": "",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-r39w-98wm-9pp6",
+          "cve": null,
+          "url": "https://github.com/go-jose/go-jose/security/advisories/GHSA-r39w-98wm-9pp6",
+          "publishedAt": "2026-10-30T19:20:40Z",
+          "updatedAt": "2026-10-30T19:22:08Z",
+          "severity": "low",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/go-jose/go-jose/v4"
+              },
+              "vulnerable_version_range": "<= v4.1.6",
+              "patched_versions": "v4.1.7",
+              "vulnerable_functions": []
+            },
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/go-jose/go-jose/v3"
+              },
+              "vulnerable_version_range": "all",
+              "patched_versions": "",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-c67m-wr4h-2ccg",
+          "cve": null,
+          "url": "https://github.com/go-jose/go-jose/security/advisories/GHSA-c67m-wr4h-2ccg",
+          "publishedAt": "2026-10-30T19:20:34Z",
+          "updatedAt": "2026-10-30T19:21:57Z",
+          "severity": "medium",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/go-jose/go-jose/v4"
+              },
+              "vulnerable_version_range": "<= v4.1.6",
+              "patched_versions": "v4.1.7",
+              "vulnerable_functions": []
+            },
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/go-jose/go-jose/v3"
+              },
+              "vulnerable_version_range": "all",
+              "patched_versions": "",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-v6h2-qj3f-2h6v",
+          "cve": null,
+          "url": "https://github.com/go-jose/go-jose/security/advisories/GHSA-v6h2-qj3f-2h6v",
+          "publishedAt": "2026-10-30T19:20:27Z",
+          "updatedAt": "2026-10-30T19:22:23Z",
+          "severity": "medium",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/go-jose/go-jose/v4"
+              },
+              "vulnerable_version_range": "<= 4.1.6",
+              "patched_versions": "v4.1.7",
+              "vulnerable_functions": []
+            },
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/go-jose/go-jose/v3"
+              },
+              "vulnerable_version_range": "all",
+              "patched_versions": "",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-4w3g-jfj2-cw2q",
+          "cve": "CVE-2026-116585",
+          "url": "https://github.com/go-jose/go-jose/security/advisories/GHSA-4w3g-jfj2-cw2q",
+          "publishedAt": "2026-10-19T19:08:30Z",
+          "updatedAt": "2026-10-26T21:04:47Z",
+          "severity": "medium",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/go-jose/go-jose/v4"
+              },
+              "vulnerable_version_range": "< 4.1.5",
+              "patched_versions": "4.1.5",
+              "vulnerable_functions": []
+            },
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/go-jose/go-jose/v3"
+              },
+              "vulnerable_version_range": "<= 3.0.5",
+              "patched_versions": "",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-vvm8-gf78-28g4",
+          "cve": "CVE-2026-116586",
+          "url": "https://github.com/go-jose/go-jose/security/advisories/GHSA-vvm8-gf78-28g4",
+          "publishedAt": "2026-10-19T19:08:33Z",
+          "updatedAt": "2026-10-26T21:08:28Z",
+          "severity": "medium",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/go-jose/go-jose/v4"
+              },
+              "vulnerable_version_range": "< 4.1.5",
+              "patched_versions": "4.1.5",
+              "vulnerable_functions": []
+            },
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/go-jose/go-jose/v3"
+              },
+              "vulnerable_version_range": "<= 3.0.5",
+              "patched_versions": "",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-mgcc-cww5-fp2q",
+          "cve": "CVE-2026-116587",
+          "url": "https://github.com/go-jose/go-jose/security/advisories/GHSA-mgcc-cww5-fp2q",
+          "publishedAt": "2026-10-14T23:13:08Z",
+          "updatedAt": "2026-10-26T21:11:18Z",
+          "severity": "high",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/go-jose/go-jose/v4"
+              },
+              "vulnerable_version_range": "<= 4.1.5",
+              "patched_versions": "4.1.6",
+              "vulnerable_functions": []
+            },
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/go-jose/go-jose/v3"
+              },
+              "vulnerable_version_range": "<= 3.0.5",
+              "patched_versions": "",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-6mp9-8xrw-74r4",
+          "cve": null,
+          "url": "https://github.com/go-jose/go-jose/security/advisories/GHSA-6mp9-8xrw-74r4",
+          "publishedAt": "2026-09-04T04:49:17Z",
+          "updatedAt": "2026-09-04T04:49:17Z",
+          "severity": "high",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/go-jose/go-jose/v4"
+              },
+              "vulnerable_version_range": "< v4.1.5",
+              "patched_versions": "v4.1.4",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-78h2-9frx-2jm8",
+          "cve": "CVE-2026-34986",
+          "url": "https://github.com/go-jose/go-jose/security/advisories/GHSA-78h2-9frx-2jm8",
+          "publishedAt": "2026-03-31T23:54:13Z",
+          "updatedAt": "2026-03-31T23:54:13Z",
+          "severity": "high",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/go-jose/go-jose/v4"
+              },
+              "vulnerable_version_range": "< 4.1.4",
+              "patched_versions": "4.1.4",
+              "vulnerable_functions": []
+            },
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/go-jose/go-jose/v3"
+              },
+              "vulnerable_version_range": "< 3.0.5",
+              "patched_versions": "3.0.5",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-c6gw-w398-hv78",
+          "cve": "CVE-2025-27144",
+          "url": "https://github.com/go-jose/go-jose/security/advisories/GHSA-c6gw-w398-hv78",
+          "publishedAt": "2025-02-24T20:38:00Z",
+          "updatedAt": "2025-02-24T20:47:55Z",
+          "severity": "low",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/go-jose/go-jose/v4"
+              },
+              "vulnerable_version_range": "< 4.0.5",
+              "patched_versions": "4.0.5",
+              "vulnerable_functions": []
+            },
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/go-jose/go-jose/v3"
+              },
+              "vulnerable_version_range": "< 3.0.4",
+              "patched_versions": "3.0.4",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-c5q2-7r4c-mv6g",
+          "cve": "CVE-2024-28180",
+          "url": "https://github.com/go-jose/go-jose/security/advisories/GHSA-c5q2-7r4c-mv6g",
+          "publishedAt": "2024-03-07T22:29:09Z",
+          "updatedAt": "2024-03-08T15:02:48Z",
+          "severity": "medium",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/go-jose/go-jose/v4"
+              },
+              "vulnerable_version_range": "< 4.0.1",
+              "patched_versions": "4.0.1",
+              "vulnerable_functions": []
+            },
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/go-jose/go-jose/v3"
+              },
+              "vulnerable_version_range": "< 3.0.3",
+              "patched_versions": "3.0.3",
+              "vulnerable_functions": []
+            },
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "gopkg.in/go-jose/go-jose.v2"
+              },
+              "vulnerable_version_range": "< 2.6.3",
+              "patched_versions": "2.6.3",
+              "vulnerable_functions": []
+            }
+          ]
+        }
+      ],
+      "caddyserver/caddy": [
+        {
+          "id": "GHSA-6365-7ppr-5r92",
+          "cve": null,
+          "url": "https://github.com/caddyserver/caddy/security/advisories/GHSA-6365-7ppr-5r92",
+          "publishedAt": "2026-07-10T17:08:10Z",
+          "updatedAt": "2026-07-10T17:08:11Z",
+          "severity": "medium",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/caddyserver/caddy"
+              },
+              "vulnerable_version_range": "< v2.11.5",
+              "patched_versions": "v.2.11.5",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-8qx7-j2v2-x6q5",
+          "cve": "CVE-2026-55458",
+          "url": "https://github.com/caddyserver/caddy/security/advisories/GHSA-8qx7-j2v2-x6q5",
+          "publishedAt": "2026-10-13T16:27:12Z",
+          "updatedAt": "2026-10-13T16:27:13Z",
+          "severity": "low",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/caddyserver/caddy/v2"
+              },
+              "vulnerable_version_range": "<=v2.11.4",
+              "patched_versions": "v2.11.5",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-qrp7-cvwr-j2c6",
+          "cve": "CVE-2026-52844",
+          "url": "https://github.com/caddyserver/caddy/security/advisories/GHSA-qrp7-cvwr-j2c6",
+          "publishedAt": "2026-06-08T22:24:46Z",
+          "updatedAt": "2026-06-08T22:24:47Z",
+          "severity": "high",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "",
+                "name": ""
+              },
+              "vulnerable_version_range": "< v2.11.4",
+              "patched_versions": "v2.11.4",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-f59h-q822-g45g",
+          "cve": "CVE-2026-52845",
+          "url": "https://github.com/caddyserver/caddy/security/advisories/GHSA-f59h-q822-g45g",
+          "publishedAt": "2026-06-08T22:25:00Z",
+          "updatedAt": "2026-06-08T22:25:00Z",
+          "severity": "high",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/caddyserver/caddy/v2/modules/caddyhttp"
+              },
+              "vulnerable_version_range": "< v2.11.4",
+              "patched_versions": "v2.11.4",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-j8px-rmrx-76h9",
+          "cve": "CVE-2026-77281",
+          "url": "https://github.com/caddyserver/caddy/security/advisories/GHSA-j8px-rmrx-76h9",
+          "publishedAt": "2026-07-10T15:22:04Z",
+          "updatedAt": "2026-08-20T19:19:15Z",
+          "severity": "medium",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/caddyserver/caddy/v2"
+              },
+              "vulnerable_version_range": "<= 2.11.3",
+              "patched_versions": "v2.11.4",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-vcc4-2c75-vc9v",
+          "cve": "CVE-2026-52846",
+          "url": "https://github.com/caddyserver/caddy/security/advisories/GHSA-vcc4-2c75-vc9v",
+          "publishedAt": "2026-06-08T22:24:11Z",
+          "updatedAt": "2026-06-08T22:24:11Z",
+          "severity": "medium",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/caddyserver/caddy"
+              },
+              "vulnerable_version_range": "<= 2.11.3",
+              "patched_versions": "v2.11.4",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-m675-2p33-xv9g",
+          "cve": "CVE-2026-45135",
+          "url": "https://github.com/caddyserver/caddy/security/advisories/GHSA-m675-2p33-xv9g",
+          "publishedAt": "2026-05-13T14:39:28Z",
+          "updatedAt": "2026-05-13T14:39:29Z",
+          "severity": "high",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/caddyserver/caddy/v2"
+              },
+              "vulnerable_version_range": ">= 2.7.0, <= 2.10.2",
+              "patched_versions": "v2.11.3",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-wwhq-w58m-w29c",
+          "cve": null,
+          "url": "https://github.com/caddyserver/caddy/security/advisories/GHSA-wwhq-w58m-w29c",
+          "publishedAt": "2026-05-13T14:39:55Z",
+          "updatedAt": "2026-05-13T14:39:56Z",
+          "severity": "high",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/caddyserver/caddy/v2/modules/caddyhttp"
+              },
+              "vulnerable_version_range": "<=2.11.2",
+              "patched_versions": "",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-x5w9-xh9r-mvfc",
+          "cve": "CVE-2026-45692",
+          "url": "https://github.com/caddyserver/caddy/security/advisories/GHSA-x5w9-xh9r-mvfc",
+          "publishedAt": "2026-05-13T14:40:02Z",
+          "updatedAt": "2026-05-13T14:40:02Z",
+          "severity": "medium",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/caddyserver/caddy/v2"
+              },
+              "vulnerable_version_range": "v2.4.0 and later",
+              "patched_versions": "v2.11.3",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-gx7w-56w6-g48x",
+          "cve": null,
+          "url": "https://github.com/caddyserver/caddy/security/advisories/GHSA-gx7w-56w6-g48x",
+          "publishedAt": "2026-05-13T14:40:35Z",
+          "updatedAt": "2026-05-13T14:40:35Z",
+          "severity": "medium",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/caddyserver/caddy/v2"
+              },
+              "vulnerable_version_range": "< v2.11.3",
+              "patched_versions": "v2.11.3",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-7r4p-vjf4-gxv4",
+          "cve": "CVE-2026-30851",
+          "url": "https://github.com/caddyserver/caddy/security/advisories/GHSA-7r4p-vjf4-gxv4",
+          "publishedAt": "2026-03-06T01:59:07Z",
+          "updatedAt": "2026-03-06T22:59:39Z",
+          "severity": "high",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/caddyserver/caddy/v2/modules/caddyhttp/reverseproxy"
+              },
+              "vulnerable_version_range": ">= 2.10.0, < v2.11.2",
+              "patched_versions": "v2.11.2",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-m2w3-8f23-hxxf",
+          "cve": "CVE-2026-30852",
+          "url": "https://github.com/caddyserver/caddy/security/advisories/GHSA-m2w3-8f23-hxxf",
+          "publishedAt": "2026-03-06T01:59:32Z",
+          "updatedAt": "2026-03-06T23:00:19Z",
+          "severity": "medium",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/caddyserver/caddy/v2/modules/caddyhttp"
+              },
+              "vulnerable_version_range": ">= v2.7.5, <= v2.11.1",
+              "patched_versions": "v2.11.2",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-4xrr-hq4w-6vf4",
+          "cve": "CVE-2026-27585",
+          "url": "https://github.com/caddyserver/caddy/security/advisories/GHSA-4xrr-hq4w-6vf4",
+          "publishedAt": "2026-02-23T04:21:54Z",
+          "updatedAt": "2026-02-23T04:21:54Z",
+          "severity": "medium",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/caddyserver/caddy/v2/modules/caddyhttp/fileserver"
+              },
+              "vulnerable_version_range": "< v2.11.0",
+              "patched_versions": "v2.11.0",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-hffm-g8v7-wrv7",
+          "cve": "CVE-2026-27586",
+          "url": "https://github.com/caddyserver/caddy/security/advisories/GHSA-hffm-g8v7-wrv7",
+          "publishedAt": "2026-02-23T04:24:19Z",
+          "updatedAt": "2026-02-23T04:24:19Z",
+          "severity": "high",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/caddyserver/caddy/v2/modules/caddytls"
+              },
+              "vulnerable_version_range": "v2.10.2",
+              "patched_versions": "v2.11.0",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-g7pc-pc7g-h8jh",
+          "cve": "CVE-2026-27587",
+          "url": "https://github.com/caddyserver/caddy/security/advisories/GHSA-g7pc-pc7g-h8jh",
+          "publishedAt": "2026-02-23T04:24:08Z",
+          "updatedAt": "2026-02-23T04:24:08Z",
+          "severity": "medium",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/caddyserver/caddy/v2/modules/caddyhttp"
+              },
+              "vulnerable_version_range": "2.10.2",
+              "patched_versions": "v2.11.0",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-x76f-jf84-rqj8",
+          "cve": "CVE-2026-27588",
+          "url": "https://github.com/caddyserver/caddy/security/advisories/GHSA-x76f-jf84-rqj8",
+          "publishedAt": "2026-02-23T04:23:55Z",
+          "updatedAt": "2026-02-23T04:23:55Z",
+          "severity": "medium",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/caddyserver/caddy/v2/modules/caddyhttp"
+              },
+              "vulnerable_version_range": "2.10.2",
+              "patched_versions": "v2.11.0",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-879p-475x-rqh2",
+          "cve": "CVE-2026-27589",
+          "url": "https://github.com/caddyserver/caddy/security/advisories/GHSA-879p-475x-rqh2",
+          "publishedAt": "2026-02-23T04:22:19Z",
+          "updatedAt": "2026-02-23T04:22:19Z",
+          "severity": "medium",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/caddyserver/caddy/v2"
+              },
+              "vulnerable_version_range": "(confirmed on main @ e0f8d9b2047af417d8faf354b675941f3dac9891)",
+              "patched_versions": "v2.11.0",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-5r3v-vc8m-m96g",
+          "cve": "CVE-2026-27590",
+          "url": "https://github.com/caddyserver/caddy/security/advisories/GHSA-5r3v-vc8m-m96g",
+          "publishedAt": "2026-02-23T04:22:08Z",
+          "updatedAt": "2026-02-23T04:22:08Z",
+          "severity": "high",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/caddyserver/caddy/v2/modules/caddyhttp/reverseproxy/fastcgi"
+              },
+              "vulnerable_version_range": "< v2.11.0",
+              "patched_versions": "v2.11.0",
+              "vulnerable_functions": []
+            }
+          ]
+        }
+      ],
+      "ggml-org/llama.cpp": [
+        {
+          "id": "GHSA-3p4r-fq3f-q74v",
+          "cve": "CVE-2026-27940",
+          "url": "https://github.com/ggml-org/llama.cpp/security/advisories/GHSA-3p4r-fq3f-q74v",
+          "publishedAt": "2026-03-12T11:17:52Z",
+          "updatedAt": "2026-03-12T11:17:52Z",
+          "severity": "high",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "",
+                "name": "llama.cpp"
+              },
+              "vulnerable_version_range": "<= b8145",
+              "patched_versions": ">= b8146",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-j8rj-fmpv-wcxw",
+          "cve": "CVE-2026-34159",
+          "url": "https://github.com/ggml-org/llama.cpp/security/advisories/GHSA-j8rj-fmpv-wcxw",
+          "publishedAt": "2026-03-26T09:59:34Z",
+          "updatedAt": "2026-03-26T16:10:09Z",
+          "severity": "critical",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "other",
+                "name": "llama.cpp"
+              },
+              "vulnerable_version_range": "<= b7991",
+              "patched_versions": "",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-96jg-mvhq-q7q7",
+          "cve": "CVE-2026-33298",
+          "url": "https://github.com/ggml-org/llama.cpp/security/advisories/GHSA-96jg-mvhq-q7q7",
+          "publishedAt": "2026-03-18T18:37:01Z",
+          "updatedAt": "2026-03-18T21:48:49Z",
+          "severity": "high",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "",
+                "name": "ggml-org/llama.cpp"
+              },
+              "vulnerable_version_range": "< b7437",
+              "patched_versions": "b7824",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-8947-pfff-2f3c",
+          "cve": "CVE-2026-21869",
+          "url": "https://github.com/ggml-org/llama.cpp/security/advisories/GHSA-8947-pfff-2f3c",
+          "publishedAt": "2026-01-05T14:00:09Z",
+          "updatedAt": "2026-04-26T07:06:11Z",
+          "severity": "low",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "ggml-org/llama.cpp",
+                "name": "llama.cpp"
+              },
+              "vulnerable_version_range": "<= 55d4206c8",
+              "patched_versions": ">= c78fb90",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-vgg9-87g3-85w8",
+          "cve": "CVE-2025-53630",
+          "url": "https://github.com/ggml-org/llama.cpp/security/advisories/GHSA-vgg9-87g3-85w8",
+          "publishedAt": "2025-07-10T05:22:33Z",
+          "updatedAt": "2025-07-10T15:38:10Z",
+          "severity": "high",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "llama.cpp",
+                "name": ""
+              },
+              "vulnerable_version_range": "<26a48ad",
+              "patched_versions": "26a48ad",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-7rxv-5jhh-j6xx",
+          "cve": "CVE-2025-52566",
+          "url": "https://github.com/ggml-org/llama.cpp/security/advisories/GHSA-7rxv-5jhh-j6xx",
+          "publishedAt": "2025-06-23T16:04:05Z",
+          "updatedAt": "2025-06-23T16:04:05Z",
+          "severity": "high",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "llama.cpp",
+                "name": ""
+              },
+              "vulnerable_version_range": "<b5721",
+              "patched_versions": "b5721",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-g4cc-763q-h9h6",
+          "cve": null,
+          "url": "https://github.com/ggml-org/llama.cpp/security/advisories/GHSA-g4cc-763q-h9h6",
+          "publishedAt": "2025-06-25T06:26:17Z",
+          "updatedAt": "2025-06-25T08:31:33Z",
+          "severity": "medium",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "llama.cpp",
+                "name": ""
+              },
+              "vulnerable_version_range": "c33fe8b8",
+              "patched_versions": "c33fe8b8",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-8wwf-w4qm-gpqr",
+          "cve": "CVE-2025-49847",
+          "url": "https://github.com/ggml-org/llama.cpp/security/advisories/GHSA-8wwf-w4qm-gpqr",
+          "publishedAt": "2025-06-14T09:55:24Z",
+          "updatedAt": "2025-06-17T02:28:40Z",
+          "severity": "high",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "",
+                "name": "llama.cpp"
+              },
+              "vulnerable_version_range": "All versions before patch",
+              "patched_versions": ">= b5662",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-wcr5-566p-9cwj",
+          "cve": "CVE-2024-42479",
+          "url": "https://github.com/ggml-org/llama.cpp/security/advisories/GHSA-wcr5-566p-9cwj",
+          "publishedAt": "2024-08-12T14:18:18Z",
+          "updatedAt": "2024-08-20T06:25:28Z",
+          "severity": "critical",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "",
+                "name": ""
+              },
+              "vulnerable_version_range": "< b3561",
+              "patched_versions": ">= b3561",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-5vm9-p64x-gqw9",
+          "cve": "CVE-2024-42478",
+          "url": "https://github.com/ggml-org/llama.cpp/security/advisories/GHSA-5vm9-p64x-gqw9",
+          "publishedAt": "2024-08-12T14:18:08Z",
+          "updatedAt": "2024-08-20T06:26:38Z",
+          "severity": "medium",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "",
+                "name": ""
+              },
+              "vulnerable_version_range": "< b3561",
+              "patched_versions": ">= b3561",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-mqp6-7pv6-fqjf",
+          "cve": "CVE-2024-42477",
+          "url": "https://github.com/ggml-org/llama.cpp/security/advisories/GHSA-mqp6-7pv6-fqjf",
+          "publishedAt": "2024-08-12T14:17:57Z",
+          "updatedAt": "2024-08-20T06:26:00Z",
+          "severity": "medium",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "",
+                "name": ""
+              },
+              "vulnerable_version_range": "< b3561",
+              "patched_versions": ">= b3561",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-49q7-2jmh-92fp",
+          "cve": "CVE-2024-41130",
+          "url": "https://github.com/ggml-org/llama.cpp/security/advisories/GHSA-49q7-2jmh-92fp",
+          "publishedAt": "2024-07-22T16:22:34Z",
+          "updatedAt": "2024-07-22T16:22:34Z",
+          "severity": "medium",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "",
+                "name": ""
+              },
+              "vulnerable_version_range": "<=b3426",
+              "patched_versions": "b3427",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-p5mv-gjc5-mwqv",
+          "cve": "CVE-2024-32878",
+          "url": "https://github.com/ggml-org/llama.cpp/security/advisories/GHSA-p5mv-gjc5-mwqv",
+          "publishedAt": "2024-04-26T10:17:10Z",
+          "updatedAt": "2024-04-26T10:17:10Z",
+          "severity": "high",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "",
+                "name": "llama.cpp"
+              },
+              "vulnerable_version_range": "b2715",
+              "patched_versions": "b2740",
+              "vulnerable_functions": []
+            }
+          ]
+        }
+      ],
+      "aquasecurity/trivy": [
+        {
+          "id": "GHSA-q3fv-x8vg-qqm4",
+          "cve": "CVE-2026-54448",
+          "url": "https://github.com/aquasecurity/trivy/security/advisories/GHSA-q3fv-x8vg-qqm4",
+          "publishedAt": "2026-06-04T07:41:17Z",
+          "updatedAt": "2026-06-15T18:15:57Z",
+          "severity": "medium",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/aquasecurity/trivy"
+              },
+              "vulnerable_version_range": "<0.71.0",
+              "patched_versions": "0.71.0",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-69fq-xp46-6x23",
+          "cve": "CVE-2026-33634",
+          "url": "https://github.com/aquasecurity/trivy/security/advisories/GHSA-69fq-xp46-6x23",
+          "publishedAt": "2026-03-21T15:51:56Z",
+          "updatedAt": "2026-03-30T16:44:30Z",
+          "severity": "critical",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/aquasecurity/trivy"
+              },
+              "vulnerable_version_range": "=0.69.4",
+              "patched_versions": "0.69.3",
+              "vulnerable_functions": []
+            },
+            {
+              "package": {
+                "ecosystem": "actions",
+                "name": "aquasecurity/trivy-action"
+              },
+              "vulnerable_version_range": "<0.35.0",
+              "patched_versions": "0.35.0",
+              "vulnerable_functions": []
+            },
+            {
+              "package": {
+                "ecosystem": "actions",
+                "name": "aquasecurity/setup-trivy"
+              },
+              "vulnerable_version_range": "<0.2.6",
+              "patched_versions": "0.2.6",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-mcj4-mphf-j9ff",
+          "cve": "CVE-2026-55092",
+          "url": "https://github.com/aquasecurity/trivy/security/advisories/GHSA-mcj4-mphf-j9ff",
+          "publishedAt": "2026-06-15T10:05:30Z",
+          "updatedAt": "2026-06-16T15:16:32Z",
+          "severity": "high",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/aquasecurity/trivy"
+              },
+              "vulnerable_version_range": "<0.71.1",
+              "patched_versions": "0.71.1",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-8rc5-4fr6-64pw",
+          "cve": "CVE-2026-63328",
+          "url": "https://github.com/aquasecurity/trivy/security/advisories/GHSA-8rc5-4fr6-64pw",
+          "publishedAt": "2026-06-30T12:14:12Z",
+          "updatedAt": "2026-07-16T17:40:01Z",
+          "severity": "medium",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/aquasecurity/trivy"
+              },
+              "vulnerable_version_range": "<0.72.0",
+              "patched_versions": "0.72.0",
+              "vulnerable_functions": []
+            }
+          ]
+        },
+        {
+          "id": "GHSA-xcq4-m2r3-cmrj",
+          "cve": "CVE-2024-35192",
+          "url": "https://github.com/aquasecurity/trivy/security/advisories/GHSA-xcq4-m2r3-cmrj",
+          "publishedAt": "2024-05-20T07:09:20Z",
+          "updatedAt": "2026-03-01T00:28:08Z",
+          "severity": "medium",
+          "vulnerabilities": [
+            {
+              "package": {
+                "ecosystem": "go",
+                "name": "github.com/aquasecurity/trivy"
+              },
+              "vulnerable_version_range": "< 0.51.2",
+              "patched_versions": "0.51.2",
+              "vulnerable_functions": []
+            }
+          ]
+        }
+      ]
+    },
+    "ubuntu": {
+      "checkedAt": "2026-10-30T22:28:01.986Z",
+      "cves": [
+        {
+          "id": "CVE-2026-102473",
+          "url": "https://ubuntu.com/security/cves/CVE-2026-102473.json",
+          "updatedAt": "2026-10-15T20:00:36.630457+00:00",
+          "packages": [
+            {
+              "name": "dash",
+              "noble": [
+                {
+                  "component": null,
+                  "description": "2026-10-15",
+                  "pocket": "security",
+                  "release_codename": "noble",
+                  "status": "deferred"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "CVE-2026-102474",
+          "url": "https://ubuntu.com/security/cves/CVE-2026-102474.json",
+          "updatedAt": "2026-10-15T19:57:10.480468+00:00",
+          "packages": [
+            {
+              "name": "dash",
+              "noble": [
+                {
+                  "component": null,
+                  "description": "2026-10-15",
+                  "pocket": "security",
+                  "release_codename": "noble",
+                  "status": "deferred"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "CVE-2026-18374",
+          "url": "https://ubuntu.com/security/cves/CVE-2026-18374.json",
+          "updatedAt": "2026-09-24T17:23:02.363689+00:00",
+          "packages": [
+            {
+              "name": "glibc",
+              "noble": [
+                {
+                  "component": null,
+                  "description": "",
+                  "pocket": "security",
+                  "release_codename": "noble",
+                  "status": "needed"
+                }
+              ]
+            },
+            {
+              "name": "eglibc",
+              "noble": [
+                {
+                  "component": null,
+                  "description": "",
+                  "pocket": "security",
+                  "release_codename": "noble",
+                  "status": "DNE"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "CVE-2026-89092",
+          "url": "https://ubuntu.com/security/cves/CVE-2026-89092.json",
+          "updatedAt": "2026-10-01T15:15:01.115614+00:00",
+          "packages": [
+            {
+              "name": "glibc",
+              "noble": [
+                {
+                  "component": null,
+                  "description": "",
+                  "pocket": "security",
+                  "release_codename": "noble",
+                  "status": "needed"
+                }
+              ]
+            },
+            {
+              "name": "eglibc",
+              "noble": [
+                {
+                  "component": null,
+                  "description": "",
+                  "pocket": "security",
+                  "release_codename": "noble",
+                  "status": "DNE"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "CVE-2026-67693",
+          "url": "https://ubuntu.com/security/cves/CVE-2026-67693.json",
+          "updatedAt": "2026-10-22T06:41:50.894117+00:00",
+          "packages": [
+            {
+              "name": "gnutls26",
+              "noble": [
+                {
+                  "component": null,
+                  "description": "",
+                  "pocket": "security",
+                  "release_codename": "noble",
+                  "status": "DNE"
+                }
+              ]
+            },
+            {
+              "name": "gnutls28",
+              "noble": [
+                {
+                  "component": null,
+                  "description": "2026-10-15",
+                  "pocket": "security",
+                  "release_codename": "noble",
+                  "status": "deferred"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "CVE-2026-88647",
+          "url": "https://ubuntu.com/security/cves/CVE-2026-88647.json",
+          "updatedAt": "2026-10-22T06:43:24.533530+00:00",
+          "packages": [
+            {
+              "name": "gnutls26",
+              "noble": [
+                {
+                  "component": null,
+                  "description": "",
+                  "pocket": "security",
+                  "release_codename": "noble",
+                  "status": "DNE"
+                }
+              ]
+            },
+            {
+              "name": "gnutls28",
+              "noble": [
+                {
+                  "component": null,
+                  "description": "2026-10-15",
+                  "pocket": "security",
+                  "release_codename": "noble",
+                  "status": "deferred"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "CVE-2026-88648",
+          "url": "https://ubuntu.com/security/cves/CVE-2026-88648.json",
+          "updatedAt": "2026-10-28T16:19:26.694580+00:00",
+          "packages": [
+            {
+              "name": "gnutls26",
+              "noble": [
+                {
+                  "component": null,
+                  "description": "",
+                  "pocket": "security",
+                  "release_codename": "noble",
+                  "status": "DNE"
+                }
+              ]
+            },
+            {
+              "name": "gnutls28",
+              "noble": [
+                {
+                  "component": null,
+                  "description": "2026-10-15",
+                  "pocket": "security",
+                  "release_codename": "noble",
+                  "status": "deferred"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "CVE-2026-95184",
+          "url": "https://ubuntu.com/security/cves/CVE-2026-95184.json",
+          "updatedAt": "2026-10-22T06:44:01.576726+00:00",
+          "packages": [
+            {
+              "name": "gnutls26",
+              "noble": [
+                {
+                  "component": null,
+                  "description": "",
+                  "pocket": "security",
+                  "release_codename": "noble",
+                  "status": "DNE"
+                }
+              ]
+            },
+            {
+              "name": "gnutls28",
+              "noble": [
+                {
+                  "component": null,
+                  "description": "2026-10-15",
+                  "pocket": "security",
+                  "release_codename": "noble",
+                  "status": "deferred"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "CVE-2026-95209",
+          "url": "https://ubuntu.com/security/cves/CVE-2026-95209.json",
+          "updatedAt": "2026-10-22T06:38:41.348695+00:00",
+          "packages": [
+            {
+              "name": "gnutls26",
+              "noble": [
+                {
+                  "component": null,
+                  "description": "",
+                  "pocket": "security",
+                  "release_codename": "noble",
+                  "status": "DNE"
+                }
+              ]
+            },
+            {
+              "name": "gnutls28",
+              "noble": [
+                {
+                  "component": null,
+                  "description": "2026-10-15",
+                  "pocket": "security",
+                  "release_codename": "noble",
+                  "status": "deferred"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "CVE-2026-95210",
+          "url": "https://ubuntu.com/security/cves/CVE-2026-95210.json",
+          "updatedAt": "2026-10-22T06:42:01.827525+00:00",
+          "packages": [
+            {
+              "name": "gnutls26",
+              "noble": [
+                {
+                  "component": null,
+                  "description": "",
+                  "pocket": "security",
+                  "release_codename": "noble",
+                  "status": "DNE"
+                }
+              ]
+            },
+            {
+              "name": "gnutls28",
+              "noble": [
+                {
+                  "component": null,
+                  "description": "2026-10-15",
+                  "pocket": "security",
+                  "release_codename": "noble",
+                  "status": "deferred"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "CVE-2026-103111",
+          "url": "https://ubuntu.com/security/cves/CVE-2026-103111.json",
+          "updatedAt": "2026-10-13T20:53:01.626234+00:00",
+          "packages": [
+            {
+              "name": "pcre2",
+              "noble": [
+                {
+                  "component": null,
+                  "description": "",
+                  "pocket": "security",
+                  "release_codename": "noble",
+                  "status": "needed"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "CVE-2026-86145",
+          "url": "https://ubuntu.com/security/cves/CVE-2026-86145.json",
+          "updatedAt": "2026-10-13T23:31:52.401868+00:00",
+          "packages": [
+            {
+              "name": "pcre2",
+              "noble": [
+                {
+                  "component": null,
+                  "description": "",
+                  "pocket": "security",
+                  "release_codename": "noble",
+                  "status": "needed"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "CVE-2026-89156",
+          "url": "https://ubuntu.com/security/cves/CVE-2026-89156.json",
+          "updatedAt": "2026-10-13T23:32:09.376679+00:00",
+          "packages": [
+            {
+              "name": "pcre2",
+              "noble": [
+                {
+                  "component": null,
+                  "description": "",
+                  "pocket": "security",
+                  "release_codename": "noble",
+                  "status": "needed"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "CVE-2026-89157",
+          "url": "https://ubuntu.com/security/cves/CVE-2026-89157.json",
+          "updatedAt": "2026-10-13T23:32:51.602389+00:00",
+          "packages": [
+            {
+              "name": "pcre2",
+              "noble": [
+                {
+                  "component": null,
+                  "description": "",
+                  "pocket": "security",
+                  "release_codename": "noble",
+                  "status": "needed"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "CVE-2026-89158",
+          "url": "https://ubuntu.com/security/cves/CVE-2026-89158.json",
+          "updatedAt": "2026-10-13T23:34:06.918704+00:00",
+          "packages": [
+            {
+              "name": "pcre2",
+              "noble": [
+                {
+                  "component": null,
+                  "description": "",
+                  "pocket": "security",
+                  "release_codename": "noble",
+                  "status": "needed"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "CVE-2026-89160",
+          "url": "https://ubuntu.com/security/cves/CVE-2026-89160.json",
+          "updatedAt": "2026-10-13T23:34:19.855883+00:00",
+          "packages": [
+            {
+              "name": "pcre2",
+              "noble": [
+                {
+                  "component": null,
+                  "description": "",
+                  "pocket": "security",
+                  "release_codename": "noble",
+                  "status": "needed"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "CVE-2026-89161",
+          "url": "https://ubuntu.com/security/cves/CVE-2026-89161.json",
+          "updatedAt": "2026-10-13T23:32:26.451704+00:00",
+          "packages": [
+            {
+              "name": "pcre2",
+              "noble": [
+                {
+                  "component": null,
+                  "description": "",
+                  "pocket": "security",
+                  "release_codename": "noble",
+                  "status": "needed"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "CVE-2026-107161",
+          "url": "https://ubuntu.com/security/cves/CVE-2026-107161.json",
+          "updatedAt": "2026-10-16T21:39:08.799279+00:00",
+          "packages": [
+            {
+              "name": "cyrus-sasl2",
+              "noble": [
+                {
+                  "component": null,
+                  "description": "2026-10-14",
+                  "pocket": "security",
+                  "release_codename": "noble",
+                  "status": "deferred"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "CVE-2026-40228",
+          "url": "https://ubuntu.com/security/cves/CVE-2026-40228.json",
+          "updatedAt": "2026-06-06T19:08:08.695081+00:00",
+          "packages": [
+            {
+              "name": "systemd",
+              "noble": [
+                {
+                  "component": null,
+                  "description": "2026-06-05",
+                  "pocket": "security",
+                  "release_codename": "noble",
+                  "status": "deferred"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "CVE-2024-56433",
+          "url": "https://ubuntu.com/security/cves/CVE-2024-56433.json",
+          "updatedAt": "2026-08-31T14:00:00.319264+00:00",
+          "packages": [
+            {
+              "name": "shadow",
+              "noble": [
+                {
+                  "component": null,
+                  "description": "2026-08-31",
+                  "pocket": "security",
+                  "release_codename": "noble",
+                  "status": "deferred"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "CVE-2026-18477",
+          "url": "https://ubuntu.com/security/cves/CVE-2026-18477.json",
+          "updatedAt": "2026-09-28T17:28:47.200071+00:00",
+          "packages": [
+            {
+              "name": "tar",
+              "noble": [
+                {
+                  "component": null,
+                  "description": "",
+                  "pocket": "security",
+                  "release_codename": "noble",
+                  "status": "needed"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "CVE-2026-18508",
+          "url": "https://ubuntu.com/security/cves/CVE-2026-18508.json",
+          "updatedAt": "2026-09-28T17:28:47.200071+00:00",
+          "packages": [
+            {
+              "name": "tar",
+              "noble": [
+                {
+                  "component": null,
+                  "description": "",
+                  "pocket": "security",
+                  "release_codename": "noble",
+                  "status": "needed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "passwordPolicy": {
+      "source": "https://pages.nist.gov/800-63-4/sp800-63b.html#passwordver",
+      "finalPublished": "2025-07",
+      "singleFactorMinimum": 15,
+      "mfaMinimum": 8,
+      "projectMinimum": 6,
+      "usernameRange": "1..128",
+      "passwordRange": "6..128",
+      "latestUserDecision": "Maintain current lengths; no length change",
+      "checklist": "S07 remains unchecked; immutable completion criteria preserved"
+    }
+  },
+  "backup": {
+    "schema": 15,
+    "encryptedRoundTrip": true,
+    "restoredAccountsDisabled": true,
+    "restoredSessionsEmpty": true,
+    "restoreDatabaseRemoved": true
+  },
+  "live": {
+    "checkedAt": "2026-10-30T22:34:10.283Z",
+    "checks": [
+      {
+        "method": "GET",
+        "path": "/",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/public/news/edition",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/newsletter.html",
+        "status": 302
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/newsletters",
+        "status": 401
+      },
+      {
+        "method": "GET",
+        "path": "/internal/live",
+        "status": 404
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/auth/csrf",
+        "status": 200
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/auth/signup",
+        "status": 200
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/auth/login",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/auth/csrf",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/account",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/admin/sites",
+        "status": 403
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/newsletters",
+        "status": 200
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/v1/account/password",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/account",
+        "status": 401
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/auth/csrf",
+        "status": 200
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/auth/login",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/auth/csrf",
+        "status": 200
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/v1/account",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/account",
+        "status": 401
+      }
+    ],
+    "secureRememberCookie": true,
+    "syntheticAccountDeleted": true
+  },
+  "runtime": {
+    "checkedAt": "2026-10-30T22:35:10.496Z",
+    "containers": {
+      "web": {
+        "image": "sha256:12c78c40add2643477af41260a643f20ebeae25e3bd427d4c37028cf68840d90",
+        "user": "10001:10001",
+        "readOnly": true,
+        "capDrop": [
+          "ALL"
+        ],
+        "securityOpt": [
+          "no-new-privileges:true"
+        ],
+        "publishedPorts": {},
+        "networks": [
+          "moapan_backend"
+        ]
+      },
+      "worker": {
+        "image": "sha256:12c78c40add2643477af41260a643f20ebeae25e3bd427d4c37028cf68840d90",
+        "user": "10001:10001",
+        "readOnly": true,
+        "capDrop": [
+          "ALL"
+        ],
+        "securityOpt": [
+          "no-new-privileges:true"
+        ],
+        "publishedPorts": {},
+        "networks": [
+          "moapan_backend",
+          "moapan_classification",
+          "moapan_translation"
+        ]
+      },
+      "proxy": {
+        "image": "sha256:55f0915c6be86026d07419b8f8f21374d1febfd9046955bf010fdb9c68f8bafa",
+        "user": "10001:10001",
+        "readOnly": true,
+        "capDrop": [
+          "ALL"
+        ],
+        "securityOpt": [
+          "no-new-privileges:true"
+        ],
+        "publishedPorts": {
+          "8080/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "8080"
+            }
+          ],
+          "8081/tcp": [
+            {
+              "HostIp": "175.195.62.165",
+              "HostPort": "80"
+            }
+          ],
+          "8443/tcp": [
+            {
+              "HostIp": "175.195.62.165",
+              "HostPort": "443"
+            }
+          ]
+        },
+        "networks": [
+          "moapan_backend"
+        ]
+      },
+      "db": {
+        "image": "sha256:43853516f9d452497377625b7a608974a04dc416ab4b4faa8cbc4ab6d70726be",
+        "user": "",
+        "readOnly": false,
+        "capDrop": null,
+        "securityOpt": [
+          "no-new-privileges:true"
+        ],
+        "publishedPorts": {},
+        "networks": [
+          "moapan_backend"
+        ]
+      },
+      "translator": {
+        "image": "sha256:33589c1edc5f6b67a3eebd165b6d1e78230aa1e3835baec73fadcc34bad51a06",
+        "user": "10001:10001",
+        "readOnly": true,
+        "capDrop": [
+          "ALL"
+        ],
+        "securityOpt": [
+          "no-new-privileges:true"
+        ],
+        "publishedPorts": {},
+        "networks": [
+          "moapan_translation"
+        ],
+        "modelSha256": "a09d287f41d297206947a2e51acc29dd03c8b22356111fdb1e289c0c97c173f3",
+        "unauthenticatedInferenceStatus": "401"
+      },
+      "classifier": {
+        "image": "sha256:d5f131bce43adfd3fd776ac58e481268ad23594a4bc80b316ded4e930599bdad",
+        "user": "10001:10001",
+        "readOnly": true,
+        "capDrop": [
+          "ALL"
+        ],
+        "securityOpt": [
+          "no-new-privileges:true"
+        ],
+        "publishedPorts": {},
+        "networks": [
+          "moapan_classification"
+        ],
+        "modelSha256": "00fe7986ff5f6b463e62455821146049db6f9313603938a70800d1fb69ef11a4",
+        "unauthenticatedInferenceStatus": "401"
+      }
+    }
+  },
+  "jarSha256": "c433047078e17cc98679d45cc942792423ed750a3966c18f1ff73dd655c3dd15",
+  "images": [
+    {
+      "tag": "moapan-local:1.0.0",
+      "digest": "sha256:12c78c40add2643477af41260a643f20ebeae25e3bd427d4c37028cf68840d90",
+      "scannedAt": "2026-10-31T07:41:50.165394+09:00",
+      "reportSha256": "4e5caf5607863043bf7c8e7b0cf6cc845c976c139f9afa00c12c7f86ad0f7d86",
+      "findings": [
+        {
+          "id": "CVE-2026-102473",
+          "pkg": "dash",
+          "version": "0.5.12-6ubuntu5",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-102474",
+          "pkg": "dash",
+          "version": "0.5.12-6ubuntu5",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-18374",
+          "pkg": "libc-bin",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89092",
+          "pkg": "libc-bin",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-18374",
+          "pkg": "libc6",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89092",
+          "pkg": "libc6",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-67693",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-88647",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-88648",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-95184",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-95209",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-95210",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-103111",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-86145",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89156",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89157",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89158",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89160",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89161",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-107161",
+          "pkg": "libsasl2-2",
+          "version": "2.1.28+dfsg1-5ubuntu3.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-107161",
+          "pkg": "libsasl2-modules-db",
+          "version": "2.1.28+dfsg1-5ubuntu3.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-40228",
+          "pkg": "libsystemd0",
+          "version": "255.4-1ubuntu8.18",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2026-40228",
+          "pkg": "libudev1",
+          "version": "255.4-1ubuntu8.18",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2024-56433",
+          "pkg": "login",
+          "version": "1:4.13+dfsg1-4ubuntu3.2",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2024-56433",
+          "pkg": "passwd",
+          "version": "1:4.13+dfsg1-4ubuntu3.2",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2026-18477",
+          "pkg": "tar",
+          "version": "1.35+dfsg-3ubuntu0.4",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-18508",
+          "pkg": "tar",
+          "version": "1.35+dfsg-3ubuntu0.4",
+          "fixed": null,
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "tag": "moapan-build:security-20261031",
+      "digest": "sha256:e3a7d720b567418fe76926d02444126a779fef21ef2fb711062285c5cedd44f4",
+      "scannedAt": "2026-10-31T07:46:54.30457+09:00",
+      "reportSha256": "d7a5ccae9756c2e6c2337eb7ca43566085115c8f64277ba2e47cfeb629f8e006",
+      "findings": [
+        {
+          "id": "CVE-2026-102473",
+          "pkg": "dash",
+          "version": "0.5.12-6ubuntu5",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-102474",
+          "pkg": "dash",
+          "version": "0.5.12-6ubuntu5",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-18374",
+          "pkg": "libc-bin",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89092",
+          "pkg": "libc-bin",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-18374",
+          "pkg": "libc6",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89092",
+          "pkg": "libc6",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-67693",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-88647",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-88648",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-95184",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-95209",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-95210",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-103111",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-86145",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89156",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89157",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89158",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89160",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89161",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-107161",
+          "pkg": "libsasl2-2",
+          "version": "2.1.28+dfsg1-5ubuntu3.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-107161",
+          "pkg": "libsasl2-modules-db",
+          "version": "2.1.28+dfsg1-5ubuntu3.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-40228",
+          "pkg": "libsystemd0",
+          "version": "255.4-1ubuntu8.18",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2026-40228",
+          "pkg": "libudev1",
+          "version": "255.4-1ubuntu8.18",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2024-56433",
+          "pkg": "login",
+          "version": "1:4.13+dfsg1-4ubuntu3.2",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2024-56433",
+          "pkg": "passwd",
+          "version": "1:4.13+dfsg1-4ubuntu3.2",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2026-18477",
+          "pkg": "tar",
+          "version": "1.35+dfsg-3ubuntu0.4",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-18508",
+          "pkg": "tar",
+          "version": "1.35+dfsg-3ubuntu0.4",
+          "fixed": null,
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "tag": "moapan-proxy-public:2.11.7",
+      "digest": "sha256:55f0915c6be86026d07419b8f8f21374d1febfd9046955bf010fdb9c68f8bafa",
+      "scannedAt": "2026-10-31T07:41:50.60868+09:00",
+      "reportSha256": "32e5adc6c913f17d4c3115dd3971265218bf0da1f5fd743cb4d7bf12ac5b647b",
+      "findings": [
+        {
+          "id": "CVE-2026-102473",
+          "pkg": "dash",
+          "version": "0.5.12-6ubuntu5",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-102474",
+          "pkg": "dash",
+          "version": "0.5.12-6ubuntu5",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-18374",
+          "pkg": "libc-bin",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89092",
+          "pkg": "libc-bin",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-18374",
+          "pkg": "libc6",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89092",
+          "pkg": "libc6",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-67693",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-88647",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-88648",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-95184",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-95209",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-95210",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-103111",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-86145",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89156",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89157",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89158",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89160",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89161",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-107161",
+          "pkg": "libsasl2-2",
+          "version": "2.1.28+dfsg1-5ubuntu3.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-107161",
+          "pkg": "libsasl2-modules-db",
+          "version": "2.1.28+dfsg1-5ubuntu3.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-40228",
+          "pkg": "libsystemd0",
+          "version": "255.4-1ubuntu8.18",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2026-40228",
+          "pkg": "libudev1",
+          "version": "255.4-1ubuntu8.18",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2024-56433",
+          "pkg": "login",
+          "version": "1:4.13+dfsg1-4ubuntu3.2",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2024-56433",
+          "pkg": "passwd",
+          "version": "1:4.13+dfsg1-4ubuntu3.2",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2026-18477",
+          "pkg": "tar",
+          "version": "1.35+dfsg-3ubuntu0.4",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-18508",
+          "pkg": "tar",
+          "version": "1.35+dfsg-3ubuntu0.4",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-116587",
+          "pkg": "github.com/go-jose/go-jose/v3",
+          "version": "v3.0.5",
+          "fixed": null,
+          "severity": "HIGH"
+        },
+        {
+          "id": "CVE-2026-116585",
+          "pkg": "github.com/go-jose/go-jose/v3",
+          "version": "v3.0.5",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-116586",
+          "pkg": "github.com/go-jose/go-jose/v3",
+          "version": "v3.0.5",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "GO-2026-5932",
+          "pkg": "golang.org/x/crypto",
+          "version": "v0.58.0",
+          "fixed": null,
+          "severity": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "tag": "moapan-db-local:18.6",
+      "digest": "sha256:43853516f9d452497377625b7a608974a04dc416ab4b4faa8cbc4ab6d70726be",
+      "scannedAt": "2026-10-31T07:41:50.844011+09:00",
+      "reportSha256": "ae9ed49d6b07ee27c663caac11d3b5b2360aaa0c93bab9b469e55a08525d6388",
+      "findings": []
+    },
+    {
+      "tag": "moapan-translator:cpu-b11960",
+      "digest": "sha256:33589c1edc5f6b67a3eebd165b6d1e78230aa1e3835baec73fadcc34bad51a06",
+      "scannedAt": "2026-10-31T07:41:51.043062+09:00",
+      "reportSha256": "3af89ce72efccf5e6b0700cbfd1c298d1c1092751c76426c1e8a9282c793171b",
+      "findings": [
+        {
+          "id": "CVE-2026-102473",
+          "pkg": "dash",
+          "version": "0.5.12-6ubuntu5",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-102474",
+          "pkg": "dash",
+          "version": "0.5.12-6ubuntu5",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-18374",
+          "pkg": "libc-bin",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89092",
+          "pkg": "libc-bin",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-18374",
+          "pkg": "libc6",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89092",
+          "pkg": "libc6",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-67693",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-88647",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-88648",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-95184",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-95209",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-95210",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-103111",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-86145",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89156",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89157",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89158",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89160",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89161",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-107161",
+          "pkg": "libsasl2-2",
+          "version": "2.1.28+dfsg1-5ubuntu3.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-107161",
+          "pkg": "libsasl2-modules-db",
+          "version": "2.1.28+dfsg1-5ubuntu3.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-40228",
+          "pkg": "libsystemd0",
+          "version": "255.4-1ubuntu8.18",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2026-40228",
+          "pkg": "libudev1",
+          "version": "255.4-1ubuntu8.18",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2024-56433",
+          "pkg": "login",
+          "version": "1:4.13+dfsg1-4ubuntu3.2",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2024-56433",
+          "pkg": "passwd",
+          "version": "1:4.13+dfsg1-4ubuntu3.2",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2026-18477",
+          "pkg": "tar",
+          "version": "1.35+dfsg-3ubuntu0.4",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-18508",
+          "pkg": "tar",
+          "version": "1.35+dfsg-3ubuntu0.4",
+          "fixed": null,
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "tag": "moapan-classifier:cpu-b11960",
+      "digest": "sha256:d5f131bce43adfd3fd776ac58e481268ad23594a4bc80b316ded4e930599bdad",
+      "scannedAt": "2026-10-31T07:41:51.264459+09:00",
+      "reportSha256": "90e713642757b7a443db345f54173fe6433a1a8d2b30dd6aa94b69f40a43a480",
+      "findings": [
+        {
+          "id": "CVE-2026-102473",
+          "pkg": "dash",
+          "version": "0.5.12-6ubuntu5",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-102474",
+          "pkg": "dash",
+          "version": "0.5.12-6ubuntu5",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-18374",
+          "pkg": "libc-bin",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89092",
+          "pkg": "libc-bin",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-18374",
+          "pkg": "libc6",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89092",
+          "pkg": "libc6",
+          "version": "2.39-0ubuntu8.9",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-67693",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-88647",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-88648",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-95184",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-95209",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-95210",
+          "pkg": "libgnutls30t64",
+          "version": "3.8.3-1.1ubuntu3.6",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-103111",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-86145",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89156",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89157",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89158",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89160",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-89161",
+          "pkg": "libpcre2-8-0",
+          "version": "10.42-4ubuntu2.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-107161",
+          "pkg": "libsasl2-2",
+          "version": "2.1.28+dfsg1-5ubuntu3.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-107161",
+          "pkg": "libsasl2-modules-db",
+          "version": "2.1.28+dfsg1-5ubuntu3.1",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-40228",
+          "pkg": "libsystemd0",
+          "version": "255.4-1ubuntu8.18",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2026-40228",
+          "pkg": "libudev1",
+          "version": "255.4-1ubuntu8.18",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2024-56433",
+          "pkg": "login",
+          "version": "1:4.13+dfsg1-4ubuntu3.2",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2024-56433",
+          "pkg": "passwd",
+          "version": "1:4.13+dfsg1-4ubuntu3.2",
+          "fixed": null,
+          "severity": "LOW"
+        },
+        {
+          "id": "CVE-2026-18477",
+          "pkg": "tar",
+          "version": "1.35+dfsg-3ubuntu0.4",
+          "fixed": null,
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-18508",
+          "pkg": "tar",
+          "version": "1.35+dfsg-3ubuntu0.4",
+          "fixed": null,
+          "severity": "MEDIUM"
+        }
+      ]
+    }
+  ],
+  "failuresCorrected": [
+    "Three credential races reproduced and corrected",
+    "Delete/recreate identity race found by independent review, reproduced and corrected",
+    "Test overload compile error corrected",
+    "Tool rebuild shell failure propagation and case quoting corrected; actual script and failure-injection passed"
+  ],
+  "remaining": [
+    "S05 vendor v3 patchNone",
+    "S06 Ubuntu needed/deferred, available apt updates0",
+    "S07 user length policy unchanged"
+  ]
+}

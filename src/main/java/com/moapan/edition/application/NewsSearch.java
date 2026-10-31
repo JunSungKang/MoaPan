@@ -33,12 +33,14 @@ public class NewsSearch {
                 String pattern="%"+term.replace("!","!!").replace("%","!%").replace("_","!_")+"%";
                 String where=" FROM articles a JOIN sources s ON s.id=a.source_id JOIN sites p ON p.id=s.site_id WHERE a.public AND s.allow_display AND s.rights_status IN ('APPROVED','RESTRICTED') AND COALESCE(a.published_at,a.collected_at)<=now()";
                 Map<String,Object> params=new HashMap<>();
+                if(!term.isEmpty()){params.put("provider",com.moapan.translation.application.TranslationWorker.PROVIDER);}
+                if(!term.isEmpty()||!input.category().isEmpty())params.put("policy",news.classificationPolicy());
                 if(!term.isEmpty()){
-                    where+=" AND (lower(a.title) LIKE :term ESCAPE '!' OR (s.allow_summary AND lower(a.summary_bullets::text) LIKE :term ESCAPE '!') OR (s.allow_translation AND s.allow_summary AND EXISTS(SELECT 1 FROM article_translations tr WHERE tr.article_id=a.id AND (lower(tr.title) LIKE :term ESCAPE '!' OR lower(tr.summary_bullets::text) LIKE :term ESCAPE '!'))) OR EXISTS(SELECT 1 FROM article_tags at JOIN tags t ON t.id=at.tag_id WHERE at.article_id=a.id AND t.active AND (lower(t.name) LIKE :term ESCAPE '!' OR lower(t.slug) LIKE :term ESCAPE '!')))";
+                    where+=" AND (lower(a.title) LIKE :term ESCAPE '!' OR (s.allow_summary AND lower(a.summary_bullets::text) LIKE :term ESCAPE '!') OR (s.allow_translation AND s.allow_summary AND EXISTS(SELECT 1 FROM article_translations tr WHERE tr.article_id=a.id AND (tr.locked OR tr.provider=:provider) AND (lower(tr.title) LIKE :term ESCAPE '!' OR lower(tr.summary_bullets::text) LIKE :term ESCAPE '!'))) OR EXISTS(SELECT 1 FROM article_tags at JOIN tags t ON t.id=at.tag_id WHERE at.article_id=a.id AND t.active AND (at.method<>'LLM' OR at.locked OR EXISTS(SELECT 1 FROM article_classification_jobs cj WHERE cj.article_id=a.id AND cj.state='DONE' AND cj.policy_hash=:policy)) AND (lower(t.name) LIKE :term ESCAPE '!' OR lower(t.slug) LIKE :term ESCAPE '!')))";
                     params.put("term",pattern);
                 }
                 if(!input.category().isEmpty()){
-                    where+=" AND EXISTS(SELECT 1 FROM article_tags at JOIN tags t ON t.id=at.tag_id WHERE at.article_id=a.id AND t.active AND t.category=:category)";
+                    where+=" AND EXISTS(SELECT 1 FROM article_tags at JOIN tags t ON t.id=at.tag_id WHERE at.article_id=a.id AND t.active AND t.category=:category AND (at.method<>'LLM' OR at.locked OR EXISTS(SELECT 1 FROM article_classification_jobs cj WHERE cj.article_id=a.id AND cj.state='DONE' AND cj.policy_hash=:policy)))";
                     params.put("category",input.category());
                 }
                 if(input.day()!=null){

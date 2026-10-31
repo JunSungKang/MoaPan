@@ -69,7 +69,7 @@ public class SecurityConfig {
                 var auth=org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
                 if(session!=null&&auth!=null&&auth.isAuthenticated()){
                     boolean valid=RememberedSession.valid(session);
-                    try{valid&=accounts.findById(UUID.fromString(auth.getName())).filter(a->a.active&&auth.getAuthorities().stream().anyMatch(p->p.getAuthority().equals("ROLE_"+a.role))).isPresent();}catch(IllegalArgumentException e){valid=false;}
+                    try{valid&=accounts.findById(UUID.fromString(auth.getName())).filter(a->a.active&&Objects.equals(session.getAttribute(RememberedSession.CREDENTIAL_VERSION),a.authVersion)&&auth.getAuthorities().stream().anyMatch(p->p.getAuthority().equals("ROLE_"+a.role))).isPresent();}catch(IllegalArgumentException e){valid=false;}
                     if(!valid){session.invalidate();org.springframework.security.core.context.SecurityContextHolder.clearContext();if(!publicNewsRequest(q)){if(q.getRequestURI().endsWith(".html"))redirect(r,"/login.html");else error(r,401);return;}}
                 }
                 if(q.getRequestURI().equals("/api/v1/auth/csrf")&&session==null)limits.auth("anonymous_sessions",600,60);

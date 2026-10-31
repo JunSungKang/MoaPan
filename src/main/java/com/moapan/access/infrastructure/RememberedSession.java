@@ -7,6 +7,7 @@ import org.springframework.session.web.http.*;
 /** Opt-in persistent Spring Session; the browser never stores account credentials. */
 @Configuration @ConditionalOnWebApplication
 public class RememberedSession {
+    public static final String CREDENTIAL_VERSION="MOAPAN_CREDENTIAL_VERSION";
     public static final String UNTIL="MOAPAN_REMEMBER_UNTIL";
     public static final int DAYS_30=30*24*60*60;
     public static void configure(HttpSession session,boolean remember){

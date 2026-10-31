@@ -46,6 +46,8 @@ class SecurityIntegrationTest {
     @DynamicPropertySource static void properties(DynamicPropertyRegistry r){r.add("spring.datasource.url",postgres::getJdbcUrl);r.add("spring.datasource.username",postgres::getUsername);r.add("spring.datasource.password",postgres::getPassword);}
     @AfterAll static void stop(){postgres.stop();}
     @Autowired com.moapan.translation.infrastructure.ArticleTranslations translations;
+    @org.springframework.test.context.bean.override.mockito.MockitoSpyBean org.springframework.security.authentication.AuthenticationManager authManager;
+    @org.springframework.test.context.bean.override.mockito.MockitoSpyBean org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
     @Autowired MockMvc mvc;@Autowired Accounts accounts;@Autowired Limits limits;@Autowired CatalogRepository repo;@Autowired CatalogService catalog;@Autowired Worker worker;@Autowired NewsService news;
     @Autowired org.springframework.session.SessionRepository<?> sessions;
     private static final String PASSWORD="synthetic password 12345";
@@ -205,10 +207,10 @@ class SecurityIntegrationTest {
         repo.db().sql("INSERT INTO articles(id,source_id,source_guid,canonical_url,title,summary_bullets,summary_mode,language,input_hash) VALUES(:id,:source,'translate-fixture','https://translation.example.org/article','Synthetic retrieval','[\"A synthetic retrieval algorithm.\"]','EXTRACTIVE_ORIGINAL_LANGUAGE','en',:hash)").param("id",id).param("source",source).param("hash","e".repeat(64)).update();
         String hash=com.moapan.translation.infrastructure.ArticleTranslations.contentHash("Synthetic retrieval",List.of("A synthetic retrieval algorithm."));
         var text=new com.moapan.translation.infrastructure.ArticleTranslations.Text("합성 검색",List.of("합성 검색 알고리즘입니다."));
-        assertFalse(translations.store(id,hash,"ko",text,"synthetic-test"));
+        assertFalse(translations.store(id,hash,"ko",text,com.moapan.translation.application.TranslationWorker.PROVIDER));
         repo.db().sql("UPDATE sources SET allow_translation=true WHERE id=:id").param("id",source).update();
-        assertFalse(translations.store(id,"wrong-hash","ko",text,"synthetic-test"));
-        assertTrue(translations.store(id,hash,"ko",text,"synthetic-test"));
+        assertFalse(translations.store(id,"wrong-hash","ko",text,com.moapan.translation.application.TranslationWorker.PROVIDER));
+        assertTrue(translations.store(id,hash,"ko",text,com.moapan.translation.application.TranslationWorker.PROVIDER));
         repo.db().sql("UPDATE news_editions SET expires_at=now()-interval '1 second'").update();
         var article=news.publicEdition().items().stream().filter(a->a.id().equals(id)).findFirst().orElseThrow();
         assertEquals("Synthetic retrieval",article.title());assertEquals(text,article.translations().get("ko"));
@@ -220,11 +222,12 @@ class SecurityIntegrationTest {
         repo.db().sql("UPDATE sources SET allow_translation=true WHERE id=:id").param("id",source).update();
         repo.db().sql("UPDATE articles SET title='Changed synthetic retrieval' WHERE id=:id").param("id",id).update();
         assertEquals(0,repo.db().sql("SELECT count(*) FROM article_translations WHERE article_id=:id").param("id",id).query(Integer.class).single());
-        assertFalse(translations.store(id,hash,"ko",text,"synthetic-test"));
+        assertFalse(translations.store(id,hash,"ko",text,com.moapan.translation.application.TranslationWorker.PROVIDER));
         var engine=new com.moapan.translation.infrastructure.LocalTranslator("",""){@Override public String translate(String input,String language,int attempt,String reason){return "합성 번역";}};
         var translationWorker=new com.moapan.translation.application.TranslationWorker(repo.db(),engine,translations,tm);
         var first=translationWorker.claim();assertEquals(id,first.get("article_id"));assertNull(translationWorker.claim());
         repo.db().sql("UPDATE article_translation_jobs SET lease_until=now()-interval '1 second' WHERE article_id=:id").param("id",id).update();
+        assertFalse(translationWorker.processOne());repo.db().sql("UPDATE translation_runtime SET lease_until=now()-interval '1 second'").update();
         assertTrue(translationWorker.processOne());
         assertTrue(translationWorker.processOne());
         assertEquals(1,repo.db().sql("SELECT count(*) FROM article_translations WHERE article_id=:id").param("id",id).query(Integer.class).single());
@@ -253,6 +256,7 @@ class SecurityIntegrationTest {
         assertTrue(recovered.heartbeat(id,(UUID)leased.get("token")));
         assertFalse(recovered.heartbeat(id,UUID.randomUUID()));
         repo.db().sql("UPDATE sources SET allow_translation=false WHERE id=:id").param("id",source).update();
+        assertFalse(recovered.heartbeat(id,(UUID)leased.get("token")));repo.db().sql("UPDATE translation_runtime SET lease_until=now()-interval '1 second'").update();
         assertNull(recovered.claim());
         assertEquals("CANCELLED",repo.db().sql("SELECT state FROM article_translation_jobs WHERE article_id=:id").param("id",id).query(String.class).single());
         repo.db().sql("UPDATE sources SET allow_translation=true WHERE id=:id").param("id",source).update();
@@ -408,6 +412,50 @@ class SecurityIntegrationTest {
         for(String weights:List.of("{}","{\""+tag+"\":6}","{\""+UUID.randomUUID()+"\":3}"))mvc.perform(put("/api/v1/admin/interests").cookie(admin).with(csrf()).contentType("application/json").content("{\"version\":"+(version+1)+",\"weights\":"+weights+"}")).andExpect(status().isBadRequest());
         assertEquals(1,repo.db().sql("SELECT count(*) FROM admin_actions WHERE action='representative_interests' AND admin_id=:id").param("id",owner.id).query(Integer.class).single());
         mvc.perform(get("/settings.html").cookie(admin)).andExpect(status().isOk());
+    }
+
+
+    @Test @Order(11) void lateStoredSessionCannotBypassCredentialVersion()throws Exception{
+        signup("late_session_version");var cookie=login("late_session_version");var account=accounts.findByUsername("late_session_version").orElseThrow();
+        String id=new String(Base64.getDecoder().decode(cookie.getValue()),java.nio.charset.StandardCharsets.UTF_8);assertEquals(0L,((Long)sessions.findById(id).getAttribute(com.moapan.access.infrastructure.RememberedSession.CREDENTIAL_VERSION)).longValue());
+        repo.db().sql("UPDATE users SET auth_version=auth_version+1 WHERE id=:id").param("id",account.id).update();
+        mvc.perform(get("/api/v1/account").cookie(cookie)).andExpect(status().isUnauthorized());assertNull(sessions.findById(id));
+    }
+    @Test @Order(11) void deletedUsernameReplacementCannotInheritPriorAuthentication()throws Exception{
+        signup("replaced_login_race");var cookie=login("replaced_login_race");var priorId=accounts.findByUsername("replaced_login_race").orElseThrow().id;var verified=new CountDownLatch(1);var resume=new CountDownLatch(1);
+        org.mockito.Mockito.doAnswer(i->{var result=i.callRealMethod();verified.countDown();assertTrue(resume.await(10,TimeUnit.SECONDS));return result;}).when(authManager).authenticate(org.mockito.ArgumentMatchers.any());
+        try(var pool=Executors.newSingleThreadExecutor()){
+            var pending=pool.submit(()->mvc.perform(post("/api/v1/auth/login").with(csrf()).contentType("application/json").content("{\"username\":\"replaced_login_race\",\"password\":\""+PASSWORD+"\"}")).andReturn().getResponse().getStatus());
+            try{assertTrue(verified.await(10,TimeUnit.SECONDS));mvc.perform(delete("/api/v1/account").cookie(cookie).with(csrf()).contentType("application/json").content("{\"currentPassword\":\""+PASSWORD+"\"}")).andExpect(status().isOk());
+                mvc.perform(post("/api/v1/auth/signup").with(csrf()).contentType("application/json").content("{\"username\":\"replaced_login_race\",\"password\":\"different replacement credential 12345\",\"termsAccepted\":true,\"termsVersion\":\"terms-1\"}")).andExpect(status().isOk());
+            }finally{resume.countDown();}assertEquals(401,pending.get(10,TimeUnit.SECONDS));assertNotEquals(priorId,accounts.findByUsername("replaced_login_race").orElseThrow().id);
+        }finally{resume.countDown();org.mockito.Mockito.reset(authManager);}
+    }
+    @Test @Order(11) void passwordChangeRejectsAlreadyAuthenticatedLateLogin()throws Exception{
+        signup("late_login_race");var cookie=login("late_login_race");var verified=new CountDownLatch(1);var resume=new CountDownLatch(1);
+        org.mockito.Mockito.doAnswer(i->{var result=i.callRealMethod();verified.countDown();assertTrue(resume.await(10,TimeUnit.SECONDS));return result;}).when(authManager).authenticate(org.mockito.ArgumentMatchers.any());
+        try(var pool=Executors.newSingleThreadExecutor()){
+            var pending=pool.submit(()->mvc.perform(post("/api/v1/auth/login").with(csrf()).contentType("application/json").content("{\"username\":\"late_login_race\",\"password\":\""+PASSWORD+"\"}")).andReturn().getResponse().getStatus());
+            try{assertTrue(verified.await(10,TimeUnit.SECONDS));mvc.perform(patch("/api/v1/account/password").cookie(cookie).with(csrf()).contentType("application/json").content("{\"currentPassword\":\""+PASSWORD+"\",\"newPassword\":\"new synthetic credential 12345\"}")).andExpect(status().isOk());}finally{resume.countDown();}
+            assertEquals(401,pending.get(10,TimeUnit.SECONDS));
+        }finally{resume.countDown();org.mockito.Mockito.reset(authManager);}
+    }
+    @Test @Order(11) void concurrentPasswordChangesAcceptOnlyOneCredentialSnapshot()throws Exception{
+        signup("password_update_race");var cookie=login("password_update_race");var arrived=new CountDownLatch(2);var resume=new CountDownLatch(1);
+        org.mockito.Mockito.doAnswer(i->{var result=i.callRealMethod();if(Thread.currentThread().getName().startsWith("credential-race")){arrived.countDown();assertTrue(resume.await(10,TimeUnit.SECONDS));}return result;}).when(passwordEncoder).matches(org.mockito.ArgumentMatchers.any(),org.mockito.ArgumentMatchers.any());
+        try(var pool=Executors.newFixedThreadPool(2,r->new Thread(r,"credential-race"))){
+            var results=new ArrayList<Future<Integer>>();for(int n=0;n<2;n++){final int k=n;results.add(pool.submit(()->mvc.perform(patch("/api/v1/account/password").cookie(cookie).with(csrf()).contentType("application/json").content("{\"currentPassword\":\""+PASSWORD+"\",\"newPassword\":\"updated synthetic credential "+k+"\"}")).andReturn().getResponse().getStatus()));}
+            try{assertTrue(arrived.await(10,TimeUnit.SECONDS));}finally{resume.countDown();}var statuses=new ArrayList<Integer>();for(var f:results)statuses.add(f.get(10,TimeUnit.SECONDS));Collections.sort(statuses);assertEquals(List.of(200,409),statuses);
+        }finally{resume.countDown();org.mockito.Mockito.reset(passwordEncoder);}
+    }
+    @Test @Order(11) void stalePasswordConfirmationCannotDeleteChangedAccount()throws Exception{
+        signup("stale_delete_race");var cookie=login("stale_delete_race");var checked=new CountDownLatch(1);var resume=new CountDownLatch(1);
+        org.mockito.Mockito.doAnswer(i->{var result=i.callRealMethod();if(Thread.currentThread().getName().equals("stale-delete")){checked.countDown();assertTrue(resume.await(10,TimeUnit.SECONDS));}return result;}).when(passwordEncoder).matches(org.mockito.ArgumentMatchers.any(),org.mockito.ArgumentMatchers.any());
+        try(var pool=Executors.newSingleThreadExecutor(r->new Thread(r,"stale-delete"))){
+            var deletion=pool.submit(()->mvc.perform(delete("/api/v1/account").cookie(cookie).with(csrf()).contentType("application/json").content("{\"currentPassword\":\""+PASSWORD+"\"}")).andReturn().getResponse().getStatus());
+            try{assertTrue(checked.await(10,TimeUnit.SECONDS));mvc.perform(patch("/api/v1/account/password").cookie(cookie).with(csrf()).contentType("application/json").content("{\"currentPassword\":\""+PASSWORD+"\",\"newPassword\":\"changed before deletion 12345\"}")).andExpect(status().isOk());}finally{resume.countDown();}
+            assertEquals(409,deletion.get(10,TimeUnit.SECONDS));assertTrue(accounts.findByUsername("stale_delete_race").isPresent());
+        }finally{resume.countDown();org.mockito.Mockito.reset(passwordEncoder);}
     }
 
     @Test @Order(99) void databaseOutageDoesNotBypassSessionsOrQuota()throws Exception {

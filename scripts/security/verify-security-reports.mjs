@@ -7,10 +7,11 @@ const jar=read('build/reports/security/jar.json');
 assert(jar.Results?.some(r=>r.Type==='jar'&&r.Packages?.length>0),'JAR analyzer did not recognize any packages; scan is incomplete');
 const bom=read('build/reports/sbom.cdx.json');
 assert(bom.components?.length>0,'Empty SBOM');
-for(const f of ['source','jar','sbom']){
+for(const f of ['source','jar','sbom','helm']){
  const report=read(`build/reports/security/${f}.json`);
  verifyScanFreshness(report,read('.local/trivy/db/metadata.json'));
  assert(Array.isArray(report.Results),`Missing scanner results: ${f}`);
+ if(f==='helm')assert(report.Results.some(r=>r.Type==='kubernetes'&&r.Misconfigurations?.length),'Rendered Kubernetes resources were not analyzed');
  assert.equal(report.Results.flatMap(r=>r.Vulnerabilities||[]).filter(v=>['HIGH','CRITICAL'].includes(v.Severity)&&!documentedNonExposure(v)).length,0,`High risk findings: ${f}`);
  assert.equal(report.Results.flatMap(r=>r.Misconfigurations||[]).filter(v=>['HIGH','CRITICAL'].includes(v.Severity)&&v.Status==='FAIL').length,0,`High risk configuration: ${f}`);
  assert.equal(report.Results.flatMap(r=>r.Secrets||[]).length,0,`Secrets detected: ${f}`);
