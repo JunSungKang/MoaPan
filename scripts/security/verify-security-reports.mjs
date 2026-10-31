@@ -1,5 +1,5 @@
 import {verifyScanFreshness} from './scan-freshness.mjs';
-import {documentedNonExposure} from './security-applicability.mjs';
+import {documentedNonExposure,documentedSourceBackport} from './security-applicability.mjs';
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 const read=p=>JSON.parse(fs.readFileSync(p,'utf8'));
@@ -12,7 +12,7 @@ for(const f of ['source','jar','sbom','helm']){
  verifyScanFreshness(report,read('.local/trivy/db/metadata.json'));
  assert(Array.isArray(report.Results),`Missing scanner results: ${f}`);
  if(f==='helm')assert(report.Results.some(r=>r.Type==='kubernetes'&&r.Misconfigurations?.length),'Rendered Kubernetes resources were not analyzed');
- assert.equal(report.Results.flatMap(r=>r.Vulnerabilities||[]).filter(v=>['HIGH','CRITICAL'].includes(v.Severity)&&!documentedNonExposure(v)).length,0,`High risk findings: ${f}`);
+ assert.equal(report.Results.flatMap(r=>r.Vulnerabilities||[]).filter(v=>['HIGH','CRITICAL'].includes(v.Severity)&&!documentedNonExposure(v)&&!(f==='source'&&documentedSourceBackport(v))).length,0,`High risk findings: ${f}`);
  assert.equal(report.Results.flatMap(r=>r.Misconfigurations||[]).filter(v=>['HIGH','CRITICAL'].includes(v.Severity)&&v.Status==='FAIL').length,0,`High risk configuration: ${f}`);
  assert.equal(report.Results.flatMap(r=>r.Secrets||[]).length,0,`Secrets detected: ${f}`);
 }

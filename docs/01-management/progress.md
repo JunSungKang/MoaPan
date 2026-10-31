@@ -87,3 +87,9 @@ G01~G11 코드 작성 및 152단위/64PG 통합 회귀 진행. 첫 UI 회귀는 
 실모델 G06 검증: SSE 변경 후 실제 CPU 번역 추론 시작을 관찰하고 HTTP 취소 후 슬롯이 유휴로 돌아오는 것을 확인. 정상 번역/분류2건·공격6건 보류·취소1건 PASS. 기존 worker 재시작 완료. 2차 독립 리뷰 지적(Helm immutable selector, 객체형 SSE function_call) 수정 및 회귀 추가. 최종 gate는 마지막 코드 변경 후 다시 실행 예정.
 
 G01~G11 최종 회귀255건(153/63/39), JAR/SBOM/source/렌더Helm 및5종runtime image 검사, 실모델 정상2+실제취소1/공격6보류, HTTPS20검사 통과. V16 실제 적용과 기사300/계정2/뉴스레터1 보존, 실행JAR SHA 일치 확인. worker/web 정상 실행. 원래 S05/S06 공식 미패치 및 S07 사용자유지 정책은 미완료. 최종 독립 리뷰와 전달·develop 통합 상태는 [PR9](https://github.com/JunSungKang/MoaPan/pull/9)의 최신 head 기준으로 확인한다.
+
+S06 후속: 공식 Alpine3.24.3(main/community 지원2028-06)와 같은 Temurin27.0.1.0.2+1의 공식 musl amd64/arm64 배포를 확인했다. 별도 security-runtime 브랜치/정상 guard 후 Ubuntu 구성요소 제거 후보를 검증 중. 현재 운영 이미지는 PR9 검증 digest를 유지하며 후보 검증 전 승격하지 않는다.
+
+S05/S06 후보 구현: 공식 v4 JOSE 백포트와 원본5개 패키지 회귀, 미패치 공개 API 공격5개 실패/패치 후 통과, 8개 이미지의 OS 발견0, 실제 OS/JDK 루트 점검 진행. 독립 리뷰에서 공개 API 시험 누락·패키지 갱신 후 루트 복원 가능성을 검출해 수정했다. 최종 실모델 취소가 4초 기준에 실패하여 운영 승격 보류 중이다. 인터럽트 비반응 InputStream 재현→실패→감시 close 수정 후 성공; native prefill batch64로 조정해 실제 취소 재검증 중. 원래 기준을 완화하거나 실패를 PASS로 합산하지 않는다. 운영 기사300/계정2/뉴스레터1 유지.
+
+런타임 후속 운영 반영 완료: 최종256회귀/Node5/JOSE5패키지/실모델 정상2·공격6보류·4초내실제취소1/8이미지OS발견0/최종HTTPS21 PASS. 암호화 격리 복원과 실제DB300/2/1 보존, 실행6개 digest 일치 확인. 임시Compose·DBvolume·복원DB·백업키·암호화백업 제거. 현재 app sha256:85e6653e28a167c02bca78f8b76725dd0fb7328ca74760552df99c81a10f46d6, JAR27a6da342d9fe66920ab2caec3074d5bdda11498b1ca26ab8abf19117fa75e81. S05공식수정백포트/S06취약OS제거 검증 완료, S07사용자정책유지, S20후속GitHub전달대기. 현재18/20이며 정의/기준을 바꾸지 않았다.

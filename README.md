@@ -19,7 +19,7 @@ docker compose ps
 
 접속: http://localhost:8080. 기본 loopback HTTP에서는 합성 계정만 사용한다. DB와 web 포트는 host에 공개하지 않는다. `.env`, tool cache, 검사 원본, 개인 backup은 `.local`과 함께 Git에서 제외한다. `.env.example`을 실제 운영 secret으로 사용하면 안 된다.
 
-첫 기동은 migrate가 Flyway를 실행한 뒤 web·worker가 시작된다. web/worker는 app 전용 non-superuser DB 역할, migrate는 별도 자격으로 실행한다. app 이미지는 Temurin27.0.1.0.2+1 Linux amd64/arm64 배포 파일을 각각 SHA256 검증해 구성한다. 현재 실행 검증은 Linux ARM64 컨테이너에서 완료했으며 별도 Linux 서버·AMD64·GPU 실행은 미검증이다. PostgreSQL·Caddy는 digest로 고정한 공식 소스/베이스에 보안 패치를 반영해 로컬 이미지를 빌드한다. Caddy와 gosu만 Go 1.27.3으로 재빌드하며 제품 코드는 Java다.
+첫 기동은 migrate가 Flyway를 실행한 뒤 web·worker가 시작된다. web/worker는 app 전용 non-superuser DB 역할, migrate는 별도 자격으로 실행한다. app 이미지는 Alpine3.24.3과 Temurin27.0.1.0.2+1 공식 musl Linux amd64/arm64 배포 파일을 각각 SHA256 검증해 구성한다. 현재 실행 검증은 Linux ARM64 컨테이너에서 완료했으며 별도 Linux 서버·AMD64·GPU 실행은 미검증이다. PostgreSQL·Caddy는 digest로 고정한 공식 소스/베이스에 보안 패치를 반영해 로컬 이미지를 빌드한다. Caddy와 gosu만 Go 1.27.3으로 재빌드하며 제품 코드는 Java다.
 
 회원가입 후 다음 명령에 기존 아이디를 stdin으로 입력해 관리자 권한을 부여한다. 비밀번호는 CLI 인자로 받지 않는다.
 
@@ -70,8 +70,8 @@ Wrapper ZIP/JAR 체크섬, dependency locking, strict verification을 사용한�
 처음에는 비공개 환경 설정 후 `sh scripts/translation/translation-prepare.sh`로 번역 키와 모델을 준비한다. 현재 Mac 공개 주소에서는 다음 조합을 사용한다. DB·모델·인증서 볼륨을 유지하며 초기화 서비스는 성공 후 종료한다.
 
 ```sh
-docker compose -f compose.yaml -f scripts/deploy/compose-public.yaml -f scripts/deploy/compose-translation.yaml up -d --build
-docker compose -f compose.yaml -f scripts/deploy/compose-public.yaml -f scripts/deploy/compose-translation.yaml ps -a
+docker compose -f compose.yaml -f scripts/deploy/compose-public.yaml -f scripts/deploy/compose-translation.yaml -f scripts/deploy/compose-classification.yaml up -d --build
+docker compose -f compose.yaml -f scripts/deploy/compose-public.yaml -f scripts/deploy/compose-translation.yaml -f scripts/deploy/compose-classification.yaml ps -a
 ```
 
 Linux 서버에서는 `compose-public.yaml` 대신 `scripts/deploy/compose-server.yaml`을 사용한다. 공개 주소·방화벽·Docker 자동 시작 설정은 해당 서버에 맞춰 준비한다. [Linux 이관 안내](docs/06-transition/linux-translation.md)를 따른다. 단순 재시작에는 `--build`를 생략한다.
@@ -124,3 +124,7 @@ Linux 서버에서는 `compose-public.yaml` 대신 `scripts/deploy/compose-serve
 
 ### AI 가드레일 후속 운영
 현재 Index-Translate-2B 번역과 Qwen3.5-4B 분류를 유지한다. 입력 보류, 실제4096토큰 예산, SSE 취소, 출처별 일일 집계 한도와 유한 재시도, 관리자 번역 수정·잠금을 추가했다. 상세 범위·한계·운영 지침은 [AI 보안](docs/07-operation/ai-security-and-licenses.md), [검증 증빙](docs/05-test/evidence/ai-guardrail-followup-20261031.json)을 따른다. Helm은 모델 다운로드 Job과 실행 Pod의 외부 통신 차단을 분리하며 실클러스터 설치는 별도다.
+
+## 현재 보안 검증
+
+2026-10-31 최종256회귀와 실제 경량모델·HTTPS·8개 이미지 검증을 완료했다. Ubuntu 잔여 구성요소를 제거하고 JOSE 공식 수정을 별도 백포트했다. source-version 검사에 사용하는 백포트 근거는2026-11-07까지 유효하며 이후 공급자 공지·패치/빌드 증빙을 재검토해야 한다. 비밀번호 길이는 사용자 요청으로6~128을 유지하므로 단독 인증 권고와의 차이를 완료 처리하지 않는다. [현재 증빙](docs/05-test/evidence/runtime-security-followup-20261031.json)과 [고정20항목](docs/07-operation/security-review.md)을 확인한다.

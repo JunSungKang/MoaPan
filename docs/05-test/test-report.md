@@ -205,3 +205,6 @@ Helm migrationVersion14 lint/render/부정입력3PASS, 합성값렌더Trivy HIGH
 
 ## G01~G11 가드레일 후속 검증
 2026-10-31: clean check/integrationTest/e2eTest/bootJar/sbom/securityCheck/acceptanceTest 실제 성공. 단위153/PG63/Playwright39, 실패·오류·skip0. 실모델 공격6개 추론 전 보류, 정상2건, 취소1건 성공. HTTPS 합성 계정20검사 성공 후 삭제. Helm lint/render/부정3개·동노드/selector/다운로드·egress 경계와 렌더된 manifest Trivy config 검사 성공; 실클러스터 미제공. [실행 증빙](evidence/ai-guardrail-followup-20261031.json). 원래20개 정의는 유지하며 S05/S06/S07은 미완료다. 새 G01~G11의 구현·범위 검증 통과가 모든 취약점 제거를 의미하지 않는다.
+
+### 2026-10-31 런타임·백포트 최종 검증
+최종 clean 전체256건(단위154/PG63/브라우저39), 실패/오류/skip0. source/JAR/SBOM/렌더Helm/8개 runtime·builder 이미지 검사와 Node 보안5건 통과. JOSE 전체5패키지와 미패치 공격5실패→패치 후 통과를 별도로 검증했다. 실제 경량모델 정상2/공격6보류/취소1, OS8개/JDK TLS14차단, 격리 복원300/2/1, 실제HTTPS 합성계정21검사를 완료했다. 시험 중 발견한 취소 실패와 source-version gate 실패는 성공에 포함하지 않고 조치 후 재실행했다. 검사된 동일 digest로 운영6개 컨테이너를 교체했으며 원문·개인 관심사를 추가 저장하지 않았고 기존 기사·계정·발간물 수300/2/1을 보존했다. 임시환경은 종료·정리했다. Linux/amd64 실행·실제 Kubernetes 배포는 미실행이다. [증빙](evidence/runtime-security-followup-20261031.json), [백포트 근거](evidence/jose-v3-backport.json). 최종 GitHub 전달은 증빙의 delivery/PR 현재 상태를 따른다.

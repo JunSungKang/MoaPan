@@ -1,0 +1,385 @@
+{
+  "checkedAt": "2026-10-31T11:23:54.617Z",
+  "scope": "Approved security-only runtime followup; no model/username/password policy changes, CI/CD or external image publishing",
+  "base": "018c3acec1a6aa1ed0240c847a5cf65e4d2b6595",
+  "tests": {
+    "suites": {
+      "test": {
+        "tests": 154,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "integrationTest": {
+        "tests": 63,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "e2eTest": {
+        "tests": 39,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "total": 256,
+    "nodeSecurityTests": 5,
+    "nativeUpstreamPackages": 5,
+    "nativeUnpatchedPublicApiFailures": 5,
+    "failedAttemptsNotCounted": [
+      "Blocking response cancellation regression before watcher fix",
+      "Real CPU cancellation before64 batch limit",
+      "Source version scan before exact backport evidence integration"
+    ]
+  },
+  "models": {
+    "checks": [
+      {
+        "inferenceRequests": 0,
+        "check": "known-adversarial-inputs",
+        "held": 6
+      },
+      {
+        "validated": true,
+        "check": "benign-translation",
+        "millis": 7894
+      },
+      {
+        "validated": true,
+        "check": "benign-classification",
+        "millis": 34225
+      },
+      {
+        "validated": true,
+        "check": "client-cancellation-stops-real-inference"
+      }
+    ],
+    "checkedAt": "2026-10-31T11:16:37.156190963Z",
+    "limits": "Synthetic smoke only; not proof against unknown prompt injection or all semantic errors.",
+    "realInferenceRequests": 3
+  },
+  "cancellation": {
+    "javaNonInterruptibleStreamBefore": "FAIL_REPRODUCED",
+    "javaAfter": "PASS",
+    "cpuBefore": "FAIL_NOT_PROMOTED",
+    "cpuAfter": "PASS_SAME_4_SECOND_CRITERION",
+    "logicalBatch": 64,
+    "microBatch": 64
+  },
+  "jdk": {
+    "vendor": "Eclipse Adoptium",
+    "version": "27.0.1.0.2+1",
+    "distribution": "official alpine-linux musl",
+    "architecture": "linux/arm64",
+    "amd64": "Official asset/checksum and base availability verified; actual execution not tested",
+    "ordinaryHTTPS": true,
+    "blockedProblemChains": 14,
+    "officialFourRootsAbsent": true,
+    "trustLogSha256": "878b770b127463b97cf1b98483f72e87a52c08c08daddd0904dbb68fa2eabde2"
+  },
+  "osTrust": [
+    {
+      "image": "sha256:85e6653e28a167c02bca78f8b76725dd0fb7328ca74760552df99c81a10f46d6",
+      "roots": 117,
+      "bundleSha256": "e3fa61389e6cfa0f623c603e3cbcb6ab5827967f9a2463f945d4316cd0b8bc7b",
+      "officialFourRoots": "ABSENT"
+    },
+    {
+      "image": "sha256:a726330cd65b8e35938813a526ce7b55ff12168a9f83e077b4afb9e4ce23c6fd",
+      "roots": 117,
+      "bundleSha256": "e3fa61389e6cfa0f623c603e3cbcb6ab5827967f9a2463f945d4316cd0b8bc7b",
+      "officialFourRoots": "ABSENT"
+    },
+    {
+      "image": "sha256:8ee8af1f67452558bb3bcdf475b43ec4c1124f6df9957f7a9d79a08f5e292a0d",
+      "roots": 117,
+      "bundleSha256": "e3fa61389e6cfa0f623c603e3cbcb6ab5827967f9a2463f945d4316cd0b8bc7b",
+      "officialFourRoots": "ABSENT"
+    },
+    {
+      "image": "sha256:8e0b496277410200aeff2334844c93fd9a9544f73ad7218d0df50f6a6e17efce",
+      "roots": 117,
+      "bundleSha256": "e3fa61389e6cfa0f623c603e3cbcb6ab5827967f9a2463f945d4316cd0b8bc7b",
+      "officialFourRoots": "ABSENT"
+    },
+    {
+      "image": "sha256:8a9b1fbd783fda8305655c4a0939df1faa52c29ebac220050ffe1c45d42a3ca5",
+      "roots": 117,
+      "bundleSha256": "e3fa61389e6cfa0f623c603e3cbcb6ab5827967f9a2463f945d4316cd0b8bc7b",
+      "officialFourRoots": "ABSENT"
+    },
+    {
+      "image": "sha256:dcd42e5fea349e29e0a69158e6fef3c71e1c35d5969e483440538565d34767bf",
+      "roots": 117,
+      "bundleSha256": "e3fa61389e6cfa0f623c603e3cbcb6ab5827967f9a2463f945d4316cd0b8bc7b",
+      "officialFourRoots": "ABSENT"
+    },
+    {
+      "image": "sha256:fccbba3aaae89a628fb9896decbdcc123f505e803899e3b9d9287fbce2c0cd2f",
+      "roots": 117,
+      "bundleSha256": "e3fa61389e6cfa0f623c603e3cbcb6ab5827967f9a2463f945d4316cd0b8bc7b",
+      "officialFourRoots": "ABSENT"
+    },
+    {
+      "image": "sha256:bb2f2d1a6ff4fc3fd79620c7c4124faea9c2cdbb60d71d3918898196276803c5",
+      "roots": 117,
+      "bundleSha256": "e3fa61389e6cfa0f623c603e3cbcb6ab5827967f9a2463f945d4316cd0b8bc7b",
+      "officialFourRoots": "ABSENT"
+    }
+  ],
+  "images": {
+    "runtime": {
+      "digest": "sha256:85e6653e28a167c02bca78f8b76725dd0fb7328ca74760552df99c81a10f46d6",
+      "reportSha256": "267289f2fbaf53633feafb1d96bce99977ae3fe0b81b3f405a9586507777ab55",
+      "scannedAt": "2026-10-31T20:18:11.018518+09:00",
+      "os": {
+        "Family": "alpine",
+        "Name": "3.24.3"
+      },
+      "osFindings": 0,
+      "findings": [],
+      "secretFindings": 0
+    },
+    "proxy": {
+      "digest": "sha256:a726330cd65b8e35938813a526ce7b55ff12168a9f83e077b4afb9e4ce23c6fd",
+      "reportSha256": "c5f8d8e19a0693566748b9354a91dbbefd64e813790d16e1e83a3b91890edf40",
+      "scannedAt": "2026-10-31T20:18:11.309973+09:00",
+      "os": {
+        "Family": "alpine",
+        "Name": "3.24.3"
+      },
+      "osFindings": 0,
+      "findings": [
+        {
+          "id": "GO-2026-5932",
+          "package": "golang.org/x/crypto",
+          "version": "v0.58.0",
+          "severity": "UNKNOWN"
+        }
+      ],
+      "secretFindings": 0
+    },
+    "db": {
+      "digest": "sha256:8ee8af1f67452558bb3bcdf475b43ec4c1124f6df9957f7a9d79a08f5e292a0d",
+      "reportSha256": "35e565da25c676dd7b5adbc76ee844d9f590958e85d14f8b39b8c6b7a2037591",
+      "scannedAt": "2026-10-31T20:18:11.564307+09:00",
+      "os": {
+        "Family": "alpine",
+        "Name": "3.24.3"
+      },
+      "osFindings": 0,
+      "findings": [],
+      "secretFindings": 0
+    },
+    "translator": {
+      "digest": "sha256:8e0b496277410200aeff2334844c93fd9a9544f73ad7218d0df50f6a6e17efce",
+      "reportSha256": "893c1ee6ebf9ed7029e2eef7f7e0ec76c603818196965e9582b6f26bc76f638c",
+      "scannedAt": "2026-10-31T20:18:12.223114+09:00",
+      "os": {
+        "Family": "alpine",
+        "Name": "3.24.3"
+      },
+      "osFindings": 0,
+      "findings": [],
+      "secretFindings": 0
+    },
+    "classifier": {
+      "digest": "sha256:8a9b1fbd783fda8305655c4a0939df1faa52c29ebac220050ffe1c45d42a3ca5",
+      "reportSha256": "35ac8d4712ff48fa938f8d491756989ce0ee34d1966bfcabe85488dcbde8e95f",
+      "scannedAt": "2026-10-31T20:18:13.301726+09:00",
+      "os": {
+        "Family": "alpine",
+        "Name": "3.24.3"
+      },
+      "osFindings": 0,
+      "findings": [],
+      "secretFindings": 0
+    },
+    "app-build": {
+      "digest": "sha256:dcd42e5fea349e29e0a69158e6fef3c71e1c35d5969e483440538565d34767bf",
+      "reportSha256": "8d459cca8b51b6176192646518ee36b9b945d66b30dc5b1cd8ea7fab5e1b1058",
+      "scannedAt": "2026-10-31T20:18:19.884491+09:00",
+      "os": {
+        "Family": "alpine",
+        "Name": "3.24.3"
+      },
+      "osFindings": 0,
+      "findings": [],
+      "secretFindings": 0
+    },
+    "proxy-build": {
+      "digest": "sha256:fccbba3aaae89a628fb9896decbdcc123f505e803899e3b9d9287fbce2c0cd2f",
+      "reportSha256": "e6861200199995a6f938788016d10505136874bca9710b8183f0dd721017540d",
+      "scannedAt": "2026-10-31T20:18:20.167502+09:00",
+      "os": {
+        "Family": "alpine",
+        "Name": "3.24.3"
+      },
+      "osFindings": 0,
+      "findings": [
+        {
+          "id": "GO-2026-5932",
+          "package": "golang.org/x/crypto",
+          "version": "v0.58.0",
+          "severity": "UNKNOWN"
+        }
+      ],
+      "secretFindings": 0
+    },
+    "model-build": {
+      "digest": "sha256:bb2f2d1a6ff4fc3fd79620c7c4124faea9c2cdbb60d71d3918898196276803c5",
+      "reportSha256": "72d91d46dc07e1f6159b4b62aa856c854ace2ed20c1e99bb826fd09f03d3a7e6",
+      "scannedAt": "2026-10-31T20:18:20.379053+09:00",
+      "os": {
+        "Family": "alpine",
+        "Name": "3.24.3"
+      },
+      "osFindings": 0,
+      "findings": [],
+      "secretFindings": 0
+    }
+  },
+  "runtime": {
+    "web": {
+      "image": "sha256:85e6653e28a167c02bca78f8b76725dd0fb7328ca74760552df99c81a10f46d6",
+      "running": true,
+      "health": "healthy"
+    },
+    "worker": {
+      "image": "sha256:85e6653e28a167c02bca78f8b76725dd0fb7328ca74760552df99c81a10f46d6",
+      "running": true,
+      "health": "no-http-worker"
+    },
+    "db": {
+      "image": "sha256:8ee8af1f67452558bb3bcdf475b43ec4c1124f6df9957f7a9d79a08f5e292a0d",
+      "running": true,
+      "health": "healthy"
+    },
+    "proxy": {
+      "image": "sha256:a726330cd65b8e35938813a526ce7b55ff12168a9f83e077b4afb9e4ce23c6fd",
+      "running": true,
+      "health": "healthy"
+    },
+    "translator": {
+      "image": "sha256:8e0b496277410200aeff2334844c93fd9a9544f73ad7218d0df50f6a6e17efce",
+      "running": true,
+      "health": "healthy"
+    },
+    "classifier": {
+      "image": "sha256:8a9b1fbd783fda8305655c4a0939df1faa52c29ebac220050ffe1c45d42a3ca5",
+      "running": true,
+      "health": "healthy"
+    }
+  },
+  "jarSha256": "27a6da342d9fe66920ab2caec3074d5bdda11498b1ca26ab8abf19117fa75e81",
+  "sbomSha256": "1ad74a0dc59e1c37447a0d4496fcbe280394be7ddb7a0328ac5655b21c962b63",
+  "scanner": {
+    "version": "0.76.1+moapan-security.1",
+    "binarySha256": "e03dd18760769d22350cf0d9f0098ebcd8eef9726a243107585a18f7dd48b2f2",
+    "db": {
+      "Version": 2,
+      "NextUpdate": "2026-10-31T19:07:50.77378224Z",
+      "UpdatedAt": "2026-10-30T19:07:50.77378237Z",
+      "DownloadedAt": "2026-10-30T22:21:32.692522Z"
+    },
+    "javaDb": {
+      "Version": 1,
+      "NextUpdate": "2026-11-03T01:06:44.904950452Z",
+      "UpdatedAt": "2026-10-31T01:06:44.904950573Z",
+      "DownloadedAt": "2026-10-31T10:20:40.233553Z"
+    }
+  },
+  "joseBackport": {
+    "reviewedAt": "2026-10-31T11:11:53.963Z",
+    "expiresAt": "2026-11-07T00:00:00Z",
+    "status": "fixed",
+    "package": "github.com/go-jose/go-jose/v3",
+    "upstreamVersion": "v3.0.5",
+    "localPatch": "moapan.security.1",
+    "advisories": [
+      "CVE-2026-116587",
+      "CVE-2026-116585",
+      "CVE-2026-116586"
+    ],
+    "scope": "Source version scanner cannot model checksum-verified local backport. Runtime local-module analyzer incompleteness is not treated as proof.",
+    "image": "sha256:a726330cd65b8e35938813a526ce7b55ff12168a9f83e077b4afb9e4ce23c6fd",
+    "sourceSha256": {
+      "Dockerfile": "d7d67589f89970e073bd97d233bae8be0f6d698a6bb042860a8dcbc9fc7ff017",
+      "scripts/deploy/proxy/main.go": "e9a0d7c3e4e96ff8793e45bd461e6dade9ab9ceb38afeefd666061ccff6ad79b",
+      "scripts/deploy/proxy/go.mod": "b8dc94829b6789cb737a739c8c8ea5b30c1f950b364d4fec0b5c4d3fb0a487e4",
+      "scripts/deploy/proxy/go.sum": "d83a996a47268b1ea9f2c91af433cf509f3bb222272fe4e65a9b12c5ade3b462",
+      "scripts/deploy/proxy/patches/README.md": "fbb232ab37d76b309c14f23d54c8b36b119ba2d8ffd253225f32caa376e8ddf2",
+      "scripts/deploy/proxy/patches/cipher_security_test.go": "f4822f4e98f00cce33f23017d9e97e65b1fddf526d93490aad5a8c24dbad8b42",
+      "scripts/deploy/proxy/patches/jose-v3-security.patch": "8501ac4620f5c6962ddb72950e07ce486c64b2d807f2c1e62cd480eaf13f6112",
+      "scripts/deploy/proxy/patches/jose_security_test.go": "0162aa0f5a3cb5ff75b63c4bca606954432caace7015098ad2fc357a22724525",
+      "scripts/deploy/proxy/patches/json_security_test.go": "b4b21c60f36681be721d4482b94936a926ce313a9889a56917ff6ed08ed8c238",
+      "scripts/deploy/proxy/patches/modified.sha256": "5503258badff0a457f5eb5775f02f2b544486bb845f1ef86fe270108a7e3034f",
+      "scripts/deploy/proxy/patches/original.sha256": "73d53867d005a46b993d6f039272bbd5ecb616d9bb30554d01a27645242b256d",
+      "scripts/deploy/proxy/patches/public_api_test.go": "4f3fcf53773da1c3b5e1dc77d2a7677f48db4a449069957c4168e3c41c0dc477"
+    },
+    "binarySha256": "0d42db0cb578655050325ba625310f95e16a42ffda0142f2e3ca0542c0b3550f",
+    "tests": {
+      "upstreamPackages": 5,
+      "unpatchedPublicApiFailures": 5,
+      "sourceLogSha256": "78af2f702812a1f0abe47f6204e8357c91280a9de3bdb1fc0499ffbc9322ee52",
+      "unpatchedLogSha256": "af42573f95174c005e4678dd234c6b15840f18fef5e646652ac39dbcf9526664"
+    },
+    "runtimeSourceChecksumsVerified": 6
+  },
+  "unknownReview": {
+    "checkedAt": "2026-10-31T11:11:06.301Z",
+    "symbolCount": 81217,
+    "openpgpPresent": false,
+    "status": "NOT_AFFECTED_PACKAGE_ABSENT"
+  },
+  "data": {
+    "before": {
+      "articles": 300,
+      "users": 2,
+      "newsletters": 1
+    },
+    "after": {
+      "articles": 300,
+      "users": 2,
+      "newsletters": 1
+    }
+  },
+  "backup": {
+    "checkedAt": "2026-10-31T11:20:14.768Z",
+    "encrypted": true,
+    "sha256": "fdd73e4ce99b0a279a140a13f494815f6092b99711cbe3f34424eeae2fe84e02",
+    "restoreCounts": {
+      "articles": 300,
+      "users": 2,
+      "newsletters": 1
+    },
+    "restoreDatabaseDropped": true,
+    "taskIdentityAndEncryptedBackupRemoved": true
+  },
+  "https": {
+    "url": "https://175.195.62.165/",
+    "status": "PASS",
+    "syntheticAccountChecks": 21,
+    "syntheticAccountDeleted": true,
+    "externalPhone": "Earlier user confirmed cellular access; this run verifies same approved public URL from host"
+  },
+  "helm": {
+    "lint": true,
+    "render": true,
+    "negativeInputs": 3,
+    "modelBoundaries": true,
+    "actualCluster": "NOT_PROVIDED_NOT_EXECUTED"
+  },
+  "delivery": {
+    "status": "PENDING_GUARDED_PR",
+    "baseBranch": "develop",
+    "mainMerge": false
+  },
+  "remaining": [
+    "S07 user explicitly retains password6..128; current NIST/OWASP15 single-factor guidance unmet",
+    "Actual Kubernetes and Linux amd64 execution not available",
+    "Source backport proof expires2026-11-07; supplier officialv3 patch remainsNone"
+  ],
+  "securityGate": "NO_APPLICABLE_UNRESOLVED_HIGH_CRITICAL_IDENTIFIED; ALL20_NOT_COMPLETE_USER_PASSWORD_POLICY"
+}

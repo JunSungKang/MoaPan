@@ -1,15 +1,22 @@
-FROM ubuntu:24.04@sha256:24737cef17f4e22b1977df7d9a05e77c4e28b7da5b8911f8d8ccda136bf3573c AS build
-RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates curl cmake g++ make && rm -rf /var/lib/apt/lists/*
+FROM alpine:3.24.3@sha256:be2656061b536c1883c4034790e21d0a09c5aaaf51968b89368a3c0371ea2c9a AS verified-alpine
+COPY scripts/security/patch-os-trust.sh /security/patch-os-trust.sh
+RUN apk upgrade --no-cache && apk add --no-cache ca-certificates openssl \
+    && sh /security/patch-os-trust.sh
+FROM verified-alpine AS build
+ARG TARGETARCH
+RUN apk upgrade --no-cache && apk add --no-cache ca-certificates curl cmake build-base linux-headers \
+    && sh /security/patch-os-trust.sh && apk del openssl && rm -rf /security
 WORKDIR /source
 RUN curl -fL --retry 2 -o source.tar.gz https://github.com/ggml-org/llama.cpp/archive/8642541b255bfb5dc39cd351a178be09013a55d6.tar.gz \
     && echo '1688a167a8edd9499cdd0c19b8bd044f0fa184b466981977bbf2222d884953a4  source.tar.gz' | sha256sum -c - \
     && tar -xzf source.tar.gz --strip-components=1 && rm source.tar.gz
-RUN cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DGGML_NATIVE=OFF -DBUILD_SHARED_LIBS=OFF -DLLAMA_CURL=OFF -DLLAMA_BUILD_TESTS=OFF -DLLAMA_BUILD_EXAMPLES=OFF -DLLAMA_BUILD_SERVER=ON \
-    && cmake --build build --target llama-server -j 2
-FROM ubuntu:24.04@sha256:24737cef17f4e22b1977df7d9a05e77c4e28b7da5b8911f8d8ccda136bf3573c AS classifier
-RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates curl util-linux libgomp1 libstdc++6 && rm -rf /var/lib/apt/lists/* \
-    && groupadd -g 10001 classifier && useradd -u 10001 -g 10001 --no-create-home classifier && mkdir /models && chown 10001:10001 /models
-COPY --from=build /source/build/bin/llama-server /usr/local/bin/llama-server
+RUN --mount=type=cache,id=moapan-llama-musl-b11960-${TARGETARCH},target=/source/build,sharing=locked cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DGGML_NATIVE=OFF -DBUILD_SHARED_LIBS=OFF -DLLAMA_CURL=OFF -DLLAMA_BUILD_TESTS=OFF -DLLAMA_BUILD_EXAMPLES=OFF -DLLAMA_BUILD_SERVER=ON -DLLAMA_BUILD_UI=OFF -DLLAMA_USE_PREBUILT_UI=OFF \
+    && cmake --build build --target llama-server -j 2 && cp build/bin/llama-server /llama-server
+FROM verified-alpine AS classifier
+RUN apk upgrade --no-cache && apk add --no-cache ca-certificates curl util-linux-misc libgomp libstdc++ \
+    && sh /security/patch-os-trust.sh && apk del openssl && rm -rf /security \
+    && addgroup -g 10001 classifier && adduser -D -H -u 10001 -G classifier classifier && mkdir /models && chown 10001:10001 /models
+COPY --from=build /llama-server /usr/local/bin/llama-server
 COPY --chmod=0555 scripts/classification/model-init.sh scripts/classification/serve.sh /opt/classification/
 COPY licenses/models/qwen/ /opt/classification/licenses/model/
 COPY licenses/native/llama.cpp/ /opt/classification/licenses/runtime/

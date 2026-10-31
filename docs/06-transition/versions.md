@@ -50,3 +50,13 @@ Caddy2.11.7/Go1.27.3 및 Java27.0.1.0.2+1 유지. go-jose/v4 4.1.6, x/net0.62.0�
 llama.cpp b11960 공식 commit 8642541b255bfb5dc39cd351a178be09013a55d6, source archive SHA256 1688a167a8edd9499cdd0c19b8bd044f0fa184b466981977bbf2222d884953a4. 공식 server 문서 https://github.com/ggml-org/llama.cpp/blob/8642541b255bfb5dc39cd351a178be09013a55d6/tools/server/README.md 확인. 모델 revision 3a0eca6ce931d88d00614d427ab3ed8ff0743902/Q8_0, SHA256 a09d287f41d297206947a2e51acc29dd03c8b22356111fdb1e289c0c97c173f3. aarch64 Temurin27.0.1.0.2+1 공식 archive SHA256 5ddacf925244a00b60cac828b61ff2f67a68cd32b8dfe5cee1405e333b4589e5 추가 검증. 실제 Linux ARM64 실행, AMD64 build 경로 미실행.
 
 2026-10-30 재확인: 공급자최신정식버전은security-refresh.json 참조. Temurin27.0.1.0.2+1의기본cacerts에공식ops.java/emudhra4루트완화책추가(G1 1개제거). 바이너리버전동일/신뢰저장소SHA변경을구분하며Dockerfile에재현절차고정.
+
+## 2026-10-31 musl 런타임 후보 검증
+Ubuntu의 공급자 미패치 구성요소를 제거하기 위해 [공식 Alpine3.24.3](https://alpinelinux.org/releases/)를 manifest digest `sha256:be2656061b536c1883c4034790e21d0a09c5aaaf51968b89368a3c0371ea2c9a`로 고정했다. 선택 JDK는 그대로 Eclipse Temurin27.0.1.0.2+1이며 [동일 공식 릴리스](https://github.com/adoptium/temurin27-binaries/releases/tag/jdk-27.0.1.0.2%2B1)의 musl 배포를 사용한다.
+
+|공식 musl 산출물|SHA256|
+|---|---|
+|OpenJDK27U-jdk_x64_alpine-linux_hotspot_27.0.1.0.2_1.tar.gz|576a3b8ba79aa5a8bc7f1cb8b54aeffab8b2d1fb84a8fde4f8f3035ac65dfca1|
+|OpenJDK27U-jdk_aarch64_alpine-linux_hotspot_27.0.1.0.2_1.tar.gz|d6e8d5e5c101d9319a995405de1e800b02f718ac226dccd8c3b11dae46479ae0|
+
+두 아키텍처의 공식 배포·체크섬·base manifest 가용성을 확인했다. 실제 이미지 빌드·동작 시험은 이 호스트의 linux/arm64이며 amd64 실행까지 검증한 것으로 표시하지 않는다. 공급자·GPL+Classpath·지원 종료 조건은 기존 JDK 선정과 같다. Alpine3.24 main/community의 현재 지원 상태와2028-06-01 종료 표를 확인했으며 community의 일반 정책은 다음 안정판까지이므로 사용 시점에 다시 확인한다. 원래 Caddy2.11.7의 JOSE v3 미패치 의존성은 공식 v4 수정을 별도 백포트하며 수정 릴리스로 위장하지 않는다. 정확한 실제 실행 digest와 검증 결과는 후속 증빙에 기록한다.

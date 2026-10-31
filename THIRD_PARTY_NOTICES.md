@@ -125,3 +125,8 @@ Spring Session4.1.1의 두 POM은 Broadcom Foundation License라고 표시하지
 |org.yaml:snakeyaml|2.6|Apache License, Version 2.0|
 |tools.jackson.core:jackson-core|3.1.7|The Apache Software License, Version 2.0|
 |tools.jackson.core:jackson-databind|3.1.7|The Apache Software License, Version 2.0|
+
+## 2026-10-31 런타임 OS·프록시 보안 변경
+Alpine3.24.3 musl 기반으로 이동하며 선택 JDK·모델은 유지합니다. musl(MIT), BusyBox(GPL-2.0-only), GCC runtime(GPL-3.0 + GCC Runtime Library Exception) 등 OS 구성요소의 의무는 각각 적용됩니다. [GCC 공식 예외](https://gcc.gnu.org/onlinedocs/libstdc++/manual/license.html)는 독립 코드의 라이선스 선택을 허용하지만 런타임 자체의 조건을 없애지 않습니다. 외부 이미지 재배포 전 실제 APK 버전별 대응 소스와 고지를 제공해야 하며, 현 단계에서는 이미지를 외부 registry에 공개 배포하지 않습니다.
+
+go-jose/v3에는 공식 v4 보안 수정을 이식했습니다. 공급자 정식 v3 릴리스와 구분하며 Apache-2.0 저작권·변경 표시를 유지합니다. 프록시 이미지 /opt/moapan/security에 수정 소스·패치·체크섬·설명서를 포함하고 /opt/moapan/licenses/go에 모듈 고지를 보존합니다. 상세 근거는 scripts/deploy/proxy/patches/README.md입니다. 자체 서비스 전체 코드의 공개 의무가 확인됐다는 뜻은 아닙니다.

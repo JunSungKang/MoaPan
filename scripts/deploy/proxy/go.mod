@@ -111,6 +111,7 @@ require (
 	github.com/spf13/cast v1.10.0 // indirect
 	github.com/spf13/cobra v1.10.2 // indirect
 	github.com/spf13/pflag v1.0.10 // indirect
+	github.com/stretchr/testify v1.12.1 // indirect
 	github.com/tailscale/tscert v0.0.0-20251216020129-aea342f6d747 // indirect
 	github.com/tianon/gosu v0.0.0-20250923190938-6456aaa0f3c8 // indirect
 	github.com/urfave/cli v1.22.17 // indirect

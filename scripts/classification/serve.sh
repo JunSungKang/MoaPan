@@ -6,7 +6,7 @@ case "$threads" in ''|*[!0-9]*) echo 'Invalid classification thread count'; exit
 [ -s /run/secrets/classification_key ] || { echo 'Classification key missing'; exit 1; }
 printf '%s  %s\n' 00fe7986ff5f6b463e62455821146049db6f9313603938a70800d1fb69ef11a4 /models/qwen3.5-4b-q4.gguf | sha256sum -c -
 # No outgoing network, web UI, RPC, prompt logs, GPU or dynamic model download.
-llama-server -m /models/qwen3.5-4b-q4.gguf --alias moapan-classification --host 0.0.0.0 --port 11436 -c 4096 -np 1 -ngl 0 -t "$threads" --no-webui --offline --no-cache-prompt --cache-ram 0 --api-key-file /run/secrets/classification_key --reasoning off --chat-template-kwargs '{"enable_thinking":false}' -tb "$threads" --log-disable &
+llama-server -m /models/qwen3.5-4b-q4.gguf --alias moapan-classification --host 0.0.0.0 --port 11436 -c 4096 -b 64 -ub 64 -np 1 -ngl 0 -t "$threads" --no-webui --offline --no-cache-prompt --cache-ram 0 --api-key-file /run/secrets/classification_key --reasoning off --chat-template-kwargs '{"enable_thinking":false}' -tb "$threads" --log-disable &
 server=$!
 stop(){ kill "$server" 2>/dev/null || true; wait "$server" 2>/dev/null || true; }
 trap 'stop; exit 0' TERM INT
