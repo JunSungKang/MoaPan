@@ -3,7 +3,7 @@ import {language,t} from '../shared/i18n.js';
 import {articleText} from '../article/article-text.js';
 import {slideWindow} from './slides.js';
 import {request} from '../shared/api.js';
-import {el,report,date,viewer,setIssueDate} from '../shared/common.js';
+import {el,report,viewer,setIssueDate} from '../shared/common.js';
 import {loadPreferences,canonicalize,defaults} from '../personalization/preferences.js';
 import {rank,effectivePreferences} from '../personalization/ranking.js';
 const paper=document.querySelector('#paper'),status=document.querySelector('[role="status"]'),more=document.querySelector('#more');

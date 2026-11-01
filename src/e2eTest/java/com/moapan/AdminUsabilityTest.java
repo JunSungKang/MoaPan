@@ -61,7 +61,7 @@ class AdminUsabilityTest {
                 else {tags.add(tag(NEW,data.get("name").asText()));response=JSON.writeValueAsString(Map.of("id",NEW));}
                 route.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(response));
             });
-            var page=context.newPage();page.navigate(BrowserTest.origin+"/admin.html#topics/dictionary");page.waitForCondition(()->page.locator("#topic-edit-choice").isEnabled());
+            var page=context.newPage();page.navigate(BrowserTest.origin+"/admin.html#topics/dictionary");page.waitForCondition(()->page.locator("#topic-edit-choice").isVisible()&&page.locator("#topic-edit-choice").isEnabled()&&page.locator("#topic-edit-choice option[value='"+TOPIC+"']").count()==1);
             page.locator("#tag-form [name=name]").fill("새 연구 주제");page.locator("#tag-form [name=category]").fill("기술");page.locator("#tag-form [type=submit]").click();
             page.waitForCondition(()->writes.size()==1&&page.locator("#tag-form [type=submit]").isEnabled());assertFalse(writes.getFirst().contains("slug"));
             assertEquals(NEW,page.locator("#topic-edit-choice").inputValue());page.locator("#tag-form [name=name]").fill("수정한 연구 주제");page.locator("#tag-form [type=submit]").click();
@@ -121,7 +121,7 @@ class AdminUsabilityTest {
                 else route.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(JSON.writeValueAsString(Map.of("tags",List.of(tag(TOPIC,"인공지능")),"aliases",List.of(),"redirects",List.of()))));
             });
             var page=context.newPage();page.navigate(BrowserTest.origin+"/admin.html#topics/dictionary");
-            page.waitForCondition(()->page.locator("#refresh-topic-catalog").isEnabled());
+            page.waitForCondition(()->!page.locator("#tag-result").textContent().isBlank()&&page.locator("#refresh-topic-catalog").isVisible()&&page.locator("#refresh-topic-catalog").isEnabled());
             assertTrue(page.locator("#tag-form [type=submit]").isDisabled());assertTrue(page.locator("#topic-edit-choice").isDisabled());assertTrue(page.locator("#new-topic").isDisabled());
             unavailable.set(false);page.locator("#refresh-topic-catalog").click();
             page.waitForCondition(()->page.locator("#topic-edit-choice").isEnabled());assertTrue(page.locator("#tag-form [type=submit]").isEnabled());

@@ -1,4 +1,4 @@
-import {account,request} from '../shared/api.js';
+import {request} from '../shared/api.js';
 import {report,requireAccount} from '../shared/common.js';
 import {deletePreferences} from '../personalization/preferences.js';
 let user;

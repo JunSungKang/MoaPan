@@ -4,7 +4,7 @@ import {date} from '../shared/format.js';
 export function blankDossier(weekStart){const now=new Date(),day=new Date(now.getTime()+9*3600000);const monday=new Date(Date.UTC(day.getUTCFullYear(),day.getUTCMonth(),day.getUTCDate()-((day.getUTCDay()+6)%7)));const week=weekStart||monday.toISOString().slice(0,10),end=new Date(week+'T00:00:00+09:00').getTime()+7*86400000;return {weekStart:week,cutoff:new Date(Math.min(now.getTime(),end-1)).toISOString(),articleIds:[],forecasts:[],rightsConfirmed:false,editorialReviewed:false,correctionNote:''};}
 export function researchEditor(onChange){
  let state=blankDossier(),evidence=[],expectedWeek=state.weekStart;
- const root=document.querySelector('#research-panel'),rows=document.querySelector('#research-evidence'),forecasts=document.querySelector('#research-forecasts');
+ const rows=document.querySelector('#research-evidence'),forecasts=document.querySelector('#research-forecasts');
  const invalid=(rights=false)=>{state.editorialReviewed=false;document.querySelector('#editorial-reviewed').checked=false;if(rights){state.rightsConfirmed=false;document.querySelector('#rights-confirmed').checked=false;}document.querySelector('#publication-review').replaceChildren();};
  function changed(review=false){document.querySelector('#publication-review').replaceChildren();if(!review)invalid();onChange();}
  function paint(){

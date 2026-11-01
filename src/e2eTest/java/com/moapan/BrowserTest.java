@@ -129,7 +129,7 @@ class BrowserTest {
         p.locator("#next-slide").click();assertEquals(1,p.locator("#paper article").count());assertTrue(p.locator("#next-slide").isDisabled());
         p.locator("#paper").focus();p.keyboard().press("ArrowLeft");assertEquals("2 / 3",p.locator("#slide-position").textContent());
         assertEquals(true,p.evaluate("""
-          async()=>{const {slideWindow}=await import('/assets/js/edition/slides.js');const rows=Array.from({length:200},(_,i)=>({id:String(i).padStart(3,'0'),publishedAt:new Date(2026,0,i+1).toISOString()}));const home=slideWindow(rows,100);const search=slideWindow(rows,100,true);return home.pages===6&&home.total===42&&home.items.length===7&&search.pages===20&&search.total===140&&search.page===19&&search.items.length===7&&slideWindow(rows,0,true).items[0].id==='199';}
+          async()=>{const {slideWindow}=await import('/assets/js/edition/slides.js');const rows=Array.from({length:200},(_,i)=>({id:String(i).padStart(3,'0'),publishedAt:new Date(2026,0,i+1).toISOString()}));const home=slideWindow(rows,100),first=slideWindow(rows,-1),empty=slideWindow([],100);return home.pages===6&&home.total===42&&home.items.length===7&&home.page===5&&first.page===0&&first.items[0].id==='000'&&slideWindow(rows,NaN).page===0&&empty.pages===0&&empty.total===0&&empty.items.length===0;}
           """));
         p.locator("[data-language-select]").selectOption("en");p.waitForFunction("document.documentElement.lang==='en'&&document.querySelector('#open-search').textContent.includes('Search')");
         p.navigate(origin+"/signup.html");p.waitForFunction("document.documentElement.lang==='en'");assertTrue(p.locator("h1").textContent().contains("Sign up"));
@@ -151,27 +151,28 @@ class BrowserTest {
       }
     }
 
-    @Test void articleLanguagePreservesOriginalAndMakesNoRequests(){
+    @Test void storedArticleTextPreservesOriginalAndMakesNoRequests(){
         try(var context=browser.newContext()){
             Page page=context.newPage();page.navigate(origin+"/about.html");
             assertEquals(true,page.evaluate("""
               async () => {
-                const {articleLanguage}=await import('/assets/js/article/article-language.js');
-                const article={title:'Original <title>',summaryBullets:['Original summary'],source:{language:'en'},summaryMode:'EXTRACTIVE',
-                  translation:{language:'ko',title:'번역 제목',summaryBullets:['번역 요약']}};
-                const link=document.createElement('a'),list=document.createElement('ul');
+                const {articleText}=await import('/assets/js/article/article-text.js');
+                const {el}=await import('/assets/js/shared/dom.js');
+                const article={title:'Original <title>',summaryBullets:['Original summary'],source:{language:'en-US'},
+                  translations:{ko:{title:'번역 제목',summaryBullets:['번역 요약']}}};
                 const before=JSON.stringify(article);let requests=0;
                 const previous=window.fetch;window.fetch=()=>{requests++;throw Error('unexpected request');};
                 try {
-                  const {controls,note}=articleLanguage(article,link,list);
-                  if(link.textContent!==article.title||link.querySelector('title'))return false;
-                  controls.querySelectorAll('button')[1].click();
-                  if(link.textContent!=='번역 제목'||list.textContent!=='번역 요약'||!note.textContent.includes('자동 번역'))return false;
-                  controls.querySelectorAll('button')[0].click();
-                  if(link.textContent!==article.title||list.textContent!=='Original summary'||JSON.stringify(article)!==before)return false;
-                  const missing=articleLanguage({...article,translation:null},link,list);
-                  const malformed=articleLanguage({...article,translation:{...article.translation,summaryBullets:[]}},link,list);
-                  return requests===0&&missing.controls.children.length===0&&malformed.controls.children.length===0;
+                  const original=articleText(article,'en'),korean=articleText(article,'ko');
+                  const link=el('a',original.title);
+                  if(link.textContent!==article.title||link.querySelector('title')||original.language!=='en')return false;
+                  if(korean.title!=='번역 제목'||korean.summaryBullets[0]!=='번역 요약'||korean.language!=='ko')return false;
+                  if(articleText(article,'en').title!==original.title||JSON.stringify(article)!==before)return false;
+                  for(const candidate of [null,{title:'번역 제목',summaryBullets:[]},{title:' ',summaryBullets:['번역 요약']},{title:'번역 제목',summaryBullets:[' ']}]){
+                    const fallback=articleText({...article,translations:{ko:candidate}},'ko');
+                    if(fallback.title!==article.title||fallback.language!=='en'||fallback.summaryBullets[0]!=='Original summary')return false;
+                  }
+                  return requests===0&&articleText(article,'fr').title===article.title;
                 } finally {window.fetch=previous;}
               }
               """));

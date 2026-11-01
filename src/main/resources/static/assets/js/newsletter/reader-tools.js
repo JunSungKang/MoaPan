@@ -6,7 +6,6 @@ const output=()=>import('./publication-output.js');
 export function readerTools(parent,data,label){
  if(!data.dossier?.forecasts?.length)return;
  const url=new URL('/newsletter.html',location.origin);url.searchParams.set('id',data.id);
- const code=()=>label(data.issueNumber,data.firstPublishedAt||data.publishedAt);
  const tools=el('div',undefined,'publication-tools'),feedback=el('p');feedback.setAttribute('aria-live','polite');
  const button=(name,fn)=>{const b=el('button',name);b.type='button';b.addEventListener('click',async()=>{b.disabled=true;try{await fn();}catch(e){report(e);}finally{b.disabled=false;}});tools.append(b);};
  if(data.reuseAllowed){
