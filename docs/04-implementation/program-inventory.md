@@ -49,7 +49,6 @@
 - `settings.js` → `src/main/resources/static/assets/js/personalization/settings.js`
 - `news.js` → `src/main/resources/static/assets/js/edition/news.js`
 - `slides.js` → `src/main/resources/static/assets/js/edition/slides.js`
-- `article-language.js` → `src/main/resources/static/assets/js/article/article-language.js`
 - `article-text.js` → `src/main/resources/static/assets/js/article/article-text.js`
 - `admin.js` → `src/main/resources/static/assets/js/administration/admin.js`
 - `api.js` → `src/main/resources/static/assets/js/shared/api.js`
@@ -81,3 +80,5 @@
 - VersionedReadCacheTest/ReadCacheIntegrationTest: TTL/용량/동시성/롤백/실제DB재시작. 도메인 API 어댑터는 후속 PR이며 현재 연결하지 않았다.
 
 서버 캐시 도메인 프로그램:classification.application.TagDictionary(불변 태그 사전), TopicCatalog(snapshot 캐시), edition.application.EditionReadModels(후보ID/요청 카드/출처), RepresentativeInterests(운영 공통 기본값), advertising.application.AdvertisingSettings(표시 projection), newsletter.PublicationReadModels(발간 원고/목록). 기존 Controller→Service 호출에서 바로 사용한다. BrowserReadCacheHttpTest와 각 도메인 CacheIntegrationTest, cache-service-smoke.mjs가 실제 연결을 검증한다. V17~22가 저장 해시와 trigger를 제공한다.
+
+2026-11-02 미사용 정리:실제뉴스언어는article-text.js만사용하며기사별구언어버튼모듈은제거했다. 서버태그는TagDictionary,기사목록은날짜/정렬조회만유지한다. migrate는Spring context없이직접Flyway실행,admin-cli는try-with-resources안의AdminCommand실행으로단일화했다. deprecated Mac nativelauncher와일회성과거증빙assembler는제거했으며현행Compose/Helm/보안/백업도구와측정기록은보존한다. 상세분류는 [미사용검증서](../05-test/dead-code-audit.md)를따른다.

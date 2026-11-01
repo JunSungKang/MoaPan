@@ -35,3 +35,5 @@
 | MP-DOC-029 | AI 보안·윤리 및 오픈소스 관리서 | 보안 담당 | [문서](../07-operation/ai-security-and-licenses.md) |
 | MP-DOC-030 | 공통 코드·브라우저 성능 검증서 | 개발 담당 | [문서](../05-test/web-performance.md) |
 | MP-DOC-031 | 서버 메모리 캐시 검증서 | 개발 담당 | [문서](../05-test/server-cache.md) |
+
+| MP-DOC-032 | 전체 미사용 코드 점검 결과서 | 개발 담당 | [문서](../05-test/dead-code-audit.md) |

@@ -48,7 +48,7 @@ Caddyfile과 scripts/deploy/db-init.sh는 이미지에 포함된다. 수정 후 
 ## 선택적 무료 로컬 번역 (macOS arm64)
 현재 운영 번역은 Linux CPU 컨테이너 방식으로 전환했다. 준비·실행·서버 이관·자동 복구 절차는 [LINUX_TRANSLATION.md](linux-translation.md)를 따른다. host.docker.internal이나 Mac native 모델 시작은 필요하지 않다.
 
-선택 모델 Index Translate 2B Q8_0와 glossary-v1 유지. scripts/experiments/translation-local.sh는 과거 비교 실험용이며 현재 운영 경로가 아니다. Docker daemon이 시작돼야 restart 정책이 동작한다.
+선택 모델 Index Translate 2B Q8_0와 glossary-v1 유지. 과거 Mac native 번역 실행기는 제거했으며 현재 운영은 Compose/Helm 경로만 사용한다. 과거 비교 측정 증빙은 보존한다. Docker daemon이 시작돼야 restart 정책이 동작한다.
 
 ## 광고 등록 방법
 1. 관리자 계정으로 로그인하고 관리 → 광고 관리에서 직접 링크 배너를 선택한다.

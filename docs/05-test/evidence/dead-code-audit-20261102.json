@@ -1,0 +1,183 @@
+{
+  "status": "SERVICE_VERIFIED_GITHUB_DELIVERY",
+  "baseSha": "a716c1d5d1a95610c78b26c2f9053cefb14a2601",
+  "checkedAt": "2026-11-01T20:55:05.969Z",
+  "scope": {
+    "javaRuntime": 67,
+    "javaTests": 34,
+    "html": 11,
+    "css": 5,
+    "webModulesBefore": 39,
+    "webModulesAfter": 38,
+    "reachableAfter": 38,
+    "unusedLocalBindingsAfter": [],
+    "scriptFilesBefore": 86,
+    "scriptFilesAfter": 84,
+    "nodeScripts": 19,
+    "sqlMigrations": 22,
+    "trackedBaselineFiles": 611,
+    "remainingBaselineFiles": 608
+  },
+  "removed": [
+    {
+      "kind": "server",
+      "items": [
+        "NewsService.tags() obsolete uncached dictionary copy",
+        "EditorialService.list() no-argument unused adapter",
+        "SafeFetch.Raw.contentType and its unused header read",
+        "MoapanApplication duplicate migrate branch, launchCommand wrapper and unused Spring Flyway bean",
+        "14 unused imports; model class debug line positions retained"
+      ]
+    },
+    {
+      "kind": "browser",
+      "items": [
+        "article-language.js legacy singular-translation card controls",
+        "slideWindow local search branch, search-only sorting and limit constant",
+        "unused account/date imports4 and code/root bindings2"
+      ]
+    },
+    {
+      "kind": "styles",
+      "tokens": 16,
+      "branches": 37
+    },
+    {
+      "kind": "tooling",
+      "items": [
+        "scripts/experiments/translation-local.sh obsolete native Mac launcher",
+        "scripts/security/record-evidence.mjs obsolete one-off historical receipt assembler"
+      ]
+    }
+  ],
+  "retained": {
+    "springAndJpa": "Framework mapping/scheduled/bean/serializer/entity callbacks retained unless complete path/config proof establishes no consumer",
+    "testedSecurityContracts": "ModelJson.content, model interfaces and package-private cache inspection methods have active security/conformance/unit-test callers; not deleted from name-count heuristics",
+    "dynamicSelectors": [
+      "letter-teaser",
+      "latest-letter"
+    ],
+    "operations": "Compose/Helm/bootstrap/backup/source and AI smoke scripts, Go module registration and security backport tests remain supported entry points",
+    "history": "V1-V22/SQL schema, license material and prior measurement evidence unchanged"
+  },
+  "methods": {
+    "java": "JDK27 JavacTask parse/analyze resolved symbols with actual102 runtime dependency classpath; manual framework/record/role review",
+    "javascript": "Node24.18.0 built-in Acorn8.16.0 AST/import graph from all11 HTML entries including literal dynamic imports; 19 Node CLI/test roots separately",
+    "css": "HTML class/id attributes and JS DOM-construction selectors, with manual dynamic concatenation confirmation; only proven absent16 tokens removed"
+  },
+  "aiPolicy": {
+    "comparedClasses": 10,
+    "identical": true,
+    "reason": "Whitespace preserves debug line tables for the two model classes whose unused imports were removed; no inference policy invalidation",
+    "classes": [
+      "com/moapan/classification/infrastructure/LocalClassifier.class",
+      "com/moapan/translation/infrastructure/LocalTranslator.class",
+      "com/moapan/ai/domain/AiPolicy.class",
+      "com/moapan/classification/domain/ClassificationPolicy.class",
+      "com/moapan/translation/domain/TranslationGlossary.class",
+      "com/moapan/translation/domain/TranslationValidator.class",
+      "com/moapan/ai/domain/ArticleGuard.class",
+      "com/moapan/ai/infrastructure/ModelTokenBudget.class",
+      "com/moapan/ai/infrastructure/ModelJson.class",
+      "com/moapan/ai/infrastructure/ModelStream.class"
+    ]
+  },
+  "validation": {
+    "firstFullRun": "330PASS before final bootstrap simplification; superseded by final run",
+    "final": {
+      "unit": 164,
+      "postgresql": 107,
+      "e2e": 59,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "result": "PASS"
+    },
+    "html": {
+      "messages": 0
+    },
+    "intermediateFullRun": {
+      "unit": "PASS164",
+      "postgresql": "PASS107",
+      "e2e": "FAIL2/59 before readiness fix",
+      "failureEvidence": "Workspace .local/dead-code-20261102/initial-ui-failures.xml",
+      "cause": "Old test readiness accepted initial enabled DOM before async admin module/catalog initialization",
+      "fix": "Await visible enabled populated topic options / completed failure message; original mutation and disabled-state assertions unchanged",
+      "focusedRecheck": "PASS5 AdminUsability tests; no timeout or acceptance threshold relaxed"
+    },
+    "security": {
+      "result": "PASS",
+      "completedAt": "2026-11-01T21:02:03Z",
+      "db": {
+        "Version": 2,
+        "NextUpdate": "2026-11-02T19:08:08.720434111Z",
+        "UpdatedAt": "2026-11-01T19:08:08.720434681Z",
+        "DownloadedAt": "2026-11-01T20:52:15.050556Z"
+      },
+      "newIgnores": 0,
+      "retainedExceptions": "Existing precise JOSE backport/non-exposure evidence; S07 password policy remains19/20"
+    },
+    "truststore": "Final image JDK27.0.1.0.2+1/117roots/four official mitigation roots absent/ordinary HTTPS pass/14 suspect chains rejected",
+    "visual": "SiteDesignAudit 72 synthetic states at390/768/1440 and2 languages; mobile home/desktop editor screenshots inspected"
+  },
+  "independentPreflight": "No blocking findings in cleanup and additional bootstrap reachability review",
+  "runtimeDeployment": true,
+  "developMerge": false,
+  "runtime": {
+    "image": "sha256:ec89cdad8d05eef1a5bf22956b45f234810359034bcc68898204c1f1f22cb772",
+    "builder": "sha256:e2d1b2ed11ecc098b35913517e3b6203bcf67607d5f469606f9f677987ccf02d",
+    "jarSha256": "4ece479b47d3285dece0f58b14f40cd7af96f99ae15bae854f21cca03d5a1cfd",
+    "hostAndImageJarMatch": true,
+    "deletedModuleAbsentFromJar": true,
+    "webAndWorkerJarMatch": true,
+    "deletedModuleHttpsStatus": 404,
+    "migrateRole": "PASS validates22/current22/no pending migration",
+    "adminCliRole": "PASS through synthetic-account grant and cleanup",
+    "workerHeartbeatRecent": true,
+    "data": {
+      "articles": 300,
+      "accounts": 2,
+      "publications": 1,
+      "schema": 22,
+      "identifierSetHashesMatch": true,
+      "encryptedBackupAndIsolatedRestore": "PASS"
+    },
+    "smoke": {
+      "checks": [
+        "public-tags",
+        "public-representative-defaults",
+        "public-edition",
+        "ordinary-member-admin-forbidden",
+        "classification-settings",
+        "public-source-catalog",
+        "public-advertisement",
+        "authenticated-edition",
+        "publication-catalog",
+        "published-manuscript",
+        "static-shared-module-etag-304",
+        "live-cached-models-observed-in-web-jvm"
+      ],
+      "syntheticAccountRemoved": true
+    },
+    "unchanged": [
+      "database image/volume",
+      "proxy image/config",
+      "translator image/model",
+      "classifier image/model"
+    ]
+  },
+  "finalVerifiedAt": "2026-11-01T21:05:38.580Z",
+  "reports": {
+    "source.json": "7f6719815f6b74fe8e87d3bf38269027f528592a7fc103cc88bf1a5c1df1d9b0",
+    "jar.json": "48f67ab449569d2dcfaef0267548a3992ad006d4d732bf9ceea0f8e307254ff4",
+    "sbom.json": "16f722364c9c13c24c9f8414ea1cafcdbcd56a262eb7cb6ad7bbd0c093e2b9e6",
+    "helm.json": "47305758f15d90032b2e9cb8cd9d3ef6d247ed04c9d67723aa0914caabd80e03",
+    "image-ec89cdad8d05eef1a5bf22956b45f234810359034bcc68898204c1f1f22cb772.json": "6165c767c5a37f42b90301fceb0dd88f2e33b3e860e0b80e81b0feac9879958c",
+    "image-e2d1b2ed11ecc098b35913517e3b6203bcf67607d5f469606f9f677987ccf02d.json": "64fef75fef24f64a648f9e426cb79f09ffad1319a05c415f6445c7d1829c264e"
+  },
+  "sourceSize": {
+    "insertedLines": 22,
+    "removedLines": 170
+  },
+  "review": "Independent preflight no blockers; final current-head review follows"
+}

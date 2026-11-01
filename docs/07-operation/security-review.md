@@ -217,3 +217,6 @@ Boot4.1.2 BOM의 Caffeine3.2.4와 error_prone_annotations2.49.0을 추가했다.
 
 ## 실제 도메인 캐시·브라우저 성능 통합 산출물
 2026-11-01T13:49:27Z 소스/JAR/SBOM·Helm gate, 최종 앱 sha256:6542dd108cb892fabd214a39b304680e5f5f1e7e0625ee499f6452286627646d 및 빌드 sha256:613c25b98d65522480ed0192acffcf933de118b9d73593c33cc6530acd0896c8의 원본 이미지 취약점/secret0을 확인했다. proxy sha256:a0103b28767b1122ef5a20af33076b7dd296b7da9b95837998297e42f2955300의 원본 GO-2026-5932 UNKNOWN은 기존 정확한 코드 부재 판정으로만 통과하며 탐지0으로 쓰지 않는다. 새로운 ignore는 없다. scanner DB 동기화2026-10-31T22:08:51.77085Z, 실제 검사 당시24시간 이내였다. JDK27.0.1.0.2+1의117루트에서 공식4대상 부재·정상HTTPS·문제체인14개 TLS 거부를 재확인했다. 인증/access/AI/모델호출32개 class가 직전 실행 JAR와 byte일치한다. 기존 JOSE 공식 백포트 증거/2026-11-07만료·S07 사용자 비밀번호 유지(19/20)는 그대로다. 이후 최종 HEAD source/config 재검사 결과는 [통합 증빙](../05-test/evidence/cache-service-delivery-20261101.json)에 기록한다. 미공개 취약점 부재를 보증하지 않는다.
+
+## 미사용 코드 제거 산출물(2026-11-02)
+앱sha256:ec89cdad8d05eef1a5bf22956b45f234810359034bcc68898204c1f1f22cb772/빌드sha256:e2d1b2ed11ecc098b35913517e3b6203bcf67607d5f469606f9f677987ccf02d를새DB동기화2026-11-01T20:52:15.050556Z후검사했고원본취약점/secret0·소스/JAR/SBOM/HelmgatePASS다.실행JAR일치·실제권한/4역할·truststore117루트/공식4대상부재/문제체인14거부를확인했다.모델정책클래스10개의바이트가같으므로정책해시와기존번역/분류가유지된다.새예외나S07조건변경은없고기존JOSE백포트2026-11-07만료·코드부재근거는그대로다. [증빙](../05-test/evidence/dead-code-audit-20261102.json).공식Temurin최신release/Boot4.1.2·Gradle9.8.2및Spring보안목록을재조회했으며버전/의존성변경은없다.

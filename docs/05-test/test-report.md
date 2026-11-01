@@ -257,3 +257,5 @@ Helm migrationVersion14 lint/render/부정입력3PASS, 합성값렌더Trivy HIGH
 
 ## 실제 서버 캐시 통합 검증
 2026-11-01 통합330건 PASS(단위164/PG107/E2E59), failure/error/skip0·Nu0·소스/JAR/SBOM 및 최종 앱/빌드/프록시 gate PASS. 기존 실제300기사·2계정·1발간물과 ID집합을 보존하고 V17~22, 백업/격리 복원, 승인된 HTTPS에서 공개/보호 경계·캐시 live 객체·자산304를 확인했다. 합성 계정 삭제. 원본 proxy UNKNOWN/기존 적용성 근거·S07 사용자 정책 및 단일 timing 표본 한계는 [서버 캐시 검증서](server-cache.md)와 [통합 증빙](evidence/cache-service-delivery-20261101.json)에 명시한다. 초기 잠금 역전과 시험 종료 오류는 숨기지 않고 수정 후 동일 기준을 재검증했다.
+
+2026-11-02 코드정리 최종330PASS(164단위/107PG/59E2E),failure/error/skip0·Nu0·72화면·소스/JAR/SBOM/최종앱/빌드gatePASS. 미사용모듈시험을실사용helper시험으로옮겼고검색140/20페이지기준은서버/브라우저에서유지했다.중간관리UI준비대기2실패와수정/재검증,실제4역할·HTTPS·데이터보존은 [증빙](evidence/dead-code-audit-20261102.json)에기록했다.
