@@ -1,7 +1,8 @@
 import {request} from '../shared/api.js';
-import {el,date,report} from '../shared/common.js';
+import {el,report} from '../shared/dom.js';
+import {date} from '../shared/format.js';
 import {language,t} from '../shared/i18n.js';
-import {plainNewsletter,htmlNewsletter,worksheet,download} from './publication-output.js';
+const output=()=>import('./publication-output.js');
 export function readerTools(parent,data,label){
  if(!data.dossier?.forecasts?.length)return;
  const url=new URL('/newsletter.html',location.origin);url.searchParams.set('id',data.id);
@@ -9,10 +10,10 @@ export function readerTools(parent,data,label){
  const tools=el('div',undefined,'publication-tools'),feedback=el('p');feedback.setAttribute('aria-live','polite');
  const button=(name,fn)=>{const b=el('button',name);b.type='button';b.addEventListener('click',async()=>{b.disabled=true;try{await fn();}catch(e){report(e);}finally{b.disabled=false;}});tools.append(b);};
  if(data.reuseAllowed){
-  button('출처 포함 복사',async()=>{const fresh=await request('/api/v1/newsletters/'+data.id+'/reuse');await navigator.clipboard.writeText(plainNewsletter(fresh,label(fresh.issueNumber,fresh.firstPublishedAt||fresh.publishedAt),url.href,language));feedback.textContent='출처와 원문 링크를 포함해 복사했습니다.';});
-  button('재게재용 파일',async()=>{const fresh=await request('/api/v1/newsletters/'+data.id+'/reuse');download(htmlNewsletter(fresh,label(fresh.issueNumber,fresh.firstPublishedAt||fresh.publishedAt),url.href,language),'damgox2-'+data.id+'-r'+fresh.revision+'.html','text/html;charset=utf-8');});
+  button('출처 포함 복사',async()=>{const fresh=await request('/api/v1/newsletters/'+data.id+'/reuse');const {plainNewsletter}=await output();await navigator.clipboard.writeText(plainNewsletter(fresh,label(fresh.issueNumber,fresh.firstPublishedAt||fresh.publishedAt),url.href,language));feedback.textContent='출처와 원문 링크를 포함해 복사했습니다.';});
+  button('재게재용 파일',async()=>{const fresh=await request('/api/v1/newsletters/'+data.id+'/reuse');const {download,htmlNewsletter}=await output();download(htmlNewsletter(fresh,label(fresh.issueNumber,fresh.firstPublishedAt||fresh.publishedAt),url.href,language),'damgox2-'+data.id+'-r'+fresh.revision+'.html','text/html;charset=utf-8');});
  }
- for(const [kind,name]of [['meeting','회의용 요약'],['priority','연구 우선순위표'],['experiment','실험·평가 양식']])button(name,async()=>{const fresh=await request('/api/v1/newsletters/'+data.id+'/worksheet');download(worksheet(fresh,label(fresh.issueNumber,fresh.firstPublishedAt||fresh.publishedAt),url.href,kind,language),'damgox2-'+kind+'-r'+fresh.revision+'.txt');});
+ for(const [kind,name]of [['meeting','회의용 요약'],['priority','연구 우선순위표'],['experiment','실험·평가 양식']])button(name,async()=>{const fresh=await request('/api/v1/newsletters/'+data.id+'/worksheet');const {download,worksheet}=await output();download(worksheet(fresh,label(fresh.issueNumber,fresh.firstPublishedAt||fresh.publishedAt),url.href,kind,language),'damgox2-'+kind+'-r'+fresh.revision+'.txt');});
  button('인쇄',()=>{details.open=true;window.print();});
  const details=el('details',undefined,'research-notes');details.append(el('summary','근거와 연구 메모'));
  const period=el('p');const renderPeriod=()=>period.textContent=t('근거 주간')+': '+data.dossier.weekStart+' · '+date(data.dossier.cutoff);renderPeriod();window.addEventListener('moapan-language',renderPeriod);details.append(period);

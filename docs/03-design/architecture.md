@@ -45,3 +45,7 @@ newspaper.css는 신문 지면·기본 폼, auth.css는 간결한 인증 컬럼,
 
 
 관리자 운영입력 계층: administration/article-review.js는 날짜/정렬 조건을 EditorialController→EditorialService로 보내고 서버는 고정 SQL 정렬 목록·KST 시각 경계·최대100개를 적용한다. topics.js는 공개 태그 사전·canonical 매핑의 문서 메모리 캐시와 이름 체크박스를 제공한다. topic-management.js는 이름/분야/별칭/병합, classification-management.js는 별도 자동분류 기준을 소유한다. 강제 새로고침은 진행 중 요청 뒤에 최신 사전을 재조회하며 미확인 주제를 조용히 제거하지 않는다. collection-jobs.js는 CatalogService의 최대50개 작업을 출처·시각·상태로 선택한다. UUID/version은 내부 계약 값으로만 사용하고 사람에게 입력받지 않는다. 기사/분류/주제 변경과 병합의 교착을 피하기 위해 병합의 관련 기사·설정·태그 잠금은 NOWAIT 및409 재시도를 사용한다. DB 스키마·모델 실행·인증 경계는 그대로다.
+
+
+### 공통 Presentation 자원 경계
+shared/dom.js와 format.js는 UI 생성·날짜 형식의 leaf 모듈이며 계정 API나 페이지 초기화를 수행하지 않는다. common.js는 페이지 초기화와 호환 export를 담당한다. presentation/infrastructure/StaticAssetsConfiguration은 public classpath assets의 ETag·재검증만 관리한다. 국제화 변경 범위와 성능·캐시 검증은 [성능 검증서](../05-test/web-performance.md)를 참조한다.
