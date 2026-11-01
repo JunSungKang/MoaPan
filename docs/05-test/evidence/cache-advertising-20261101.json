@@ -1,0 +1,25 @@
+{
+  "checkedAt": "2026-11-01T12:05:57.424Z",
+  "domain": "advertising",
+  "status": "CHECK_AND_POSTGRESQL_PASS_FINAL_COMPOSITE_SECURITY_PENDING",
+  "focusedTests": 4,
+  "regression": {
+    "unit": 163,
+    "postgresql": 75
+  },
+  "warmRead": {
+    "sqlStatements": 1,
+    "payloadQueries": 0,
+    "probe": "public-display SHA-256"
+  },
+  "checks": [
+    "public-only immutable DTO",
+    "two JVM caches",
+    "disable immediate",
+    "private publisher/slot edits excluded",
+    "fresh admin reads",
+    "rollback"
+  ],
+  "sqlRoundTripReductionClaimed": false,
+  "runtimeDeployed": false
+}

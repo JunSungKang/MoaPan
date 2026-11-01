@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 4,
+  "workSlug": "cache-advertising-20261101",
+  "flowType": "integration",
+  "branch": "codex/cache-advertising-20261101",
+  "targetBranch": "develop",
+  "baseSha": "f19d5e539f84da72cb21a7908efd583b889a747f",
+  "mergeMethod": "squash",
+  "governance": {
+    "prAuthorLogin": "JunSungKang",
+    "assigneeLogin": "JunSungKang",
+    "reviewerLogin": "junsung-bot[bot]",
+    "requiredChecks": [],
+    "commitAuthor": {
+      "name": "jun-sung, Kang",
+      "email": "kjuns1@naver.com"
+    },
+    "coAuthors": [
+      {
+        "name": "Codex",
+        "email": "codex@openai.com"
+      },
+      {
+        "name": "junsung-bot[bot]",
+        "email": "302617028+junsung-bot[bot]@users.noreply.github.com"
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "reviewed-cache-foundation-dependency",
+      "expectedPaths": [
+        ".github/workflow-plans/server-cache-foundation-20261101.json",
+        "build.gradle",
+        "gradle.lockfile",
+        "gradle/verification-metadata.xml",
+        "licenses/**",
+        "src/main/java/com/moapan/shared/infrastructure/cache/**",
+        "src/main/resources/db/migration/V17__read_cache_fingerprints.sql",
+        "src/test/java/com/moapan/shared/infrastructure/cache/**",
+        "src/integrationTest/java/com/moapan/cache/**",
+        "docs/**",
+        "THIRD_PARTY_NOTICES.md"
+      ],
+      "forbiddenPaths": [
+        ".env",
+        ".github/workflows/**",
+        "src/main/java/com/moapan/identity/**",
+        "src/main/java/com/moapan/access/**",
+        "src/main/java/com/moapan/ai/**",
+        "src/main/resources/static/**",
+        "Dockerfile",
+        "compose.yaml"
+      ],
+      "acceptanceCriteria": [
+        "Retain the exact reviewed foundation dependency f2856c5. User approved complete caching, service reflection before develop merges; main unchanged."
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh --no-daemon check integrationTest bootJar sbom securityCheck",
+        "git diff --check"
+      ],
+      "documentation": {
+        "rationale": "Separate domain implementation depending on reviewed PR17."
+      }
+    },
+    {
+      "id": "public-advertising-read-cache",
+      "expectedPaths": [
+        ".github/workflow-plans/cache-advertising-20261101.json",
+        "src/main/java/com/moapan/advertising/application/AdvertisingSettings.java",
+        "src/main/resources/db/migration/V20__advertising_read_cache.sql",
+        "src/integrationTest/java/com/moapan/cache/CacheDatabase.java",
+        "src/integrationTest/java/com/moapan/cache/AdvertisingCacheIntegrationTest.java",
+        "docs/05-test/evidence/cache-advertising-20261101.json"
+      ],
+      "forbiddenPaths": [
+        ".env",
+        ".github/workflows/**",
+        "src/main/java/com/moapan/identity/**",
+        "src/main/java/com/moapan/access/**",
+        "src/main/resources/static/**"
+      ],
+      "acceptanceCriteria": [
+        "Actually reuse immutable public advertising DTO for existing browser requests; authorization always outside cache, admin reads remain fresh.",
+        "Transactional write-time hash includes public display fields only. Exclude private publisher/slot IDs and no-op version edits. Test immediate changes across JVM caches and rollback.",
+        "Deploy all verified domains before develop merges per current user instruction."
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh --no-daemon check integrationTest",
+        "git diff --check"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/05-test/evidence/cache-advertising-20261101.json"
+        ]
+      }
+    },
+    {
+      "id": "preserve-local-https-skill",
+      "expectedPaths": [
+        ".agents/skills/https-certificate/SKILL.md",
+        ".agents/skills/https-certificate/agents/openai.yaml",
+        ".agents/skills/https-certificate/references/caddy-acme.md"
+      ],
+      "forbiddenPaths": [],
+      "acceptanceCriteria": [
+        "User explicitly requested that the existing HTTPS skill not be committed. Observe these exact untracked paths only to preserve unrelated work in place. Do not edit, stage, commit, move, delete or ignore them.",
+        "Before each commit, push and PR/review operation, verify original SHA-256 and that git ls-files returns no tracked/staged path. They are not performance or server-cache deliverables."
+      ],
+      "validationCommands": [
+        "node -e 'const fs=require(\"node:fs\"),c=require(\"node:crypto\"),cp=require(\"node:child_process\");for(const x of [{\"file\":\".agents/skills/https-certificate/SKILL.md\",\"sha256\":\"47071a68b12a638b0f7c3d3290f92833e955771f854312c2bb14c0074c1b0e0f\"},{\"file\":\".agents/skills/https-certificate/agents/openai.yaml\",\"sha256\":\"7272ebe0da2378a3c3cb769f9c614870091d91d42d13e4ad87d0d6f7d6cde9e7\"},{\"file\":\".agents/skills/https-certificate/references/caddy-acme.md\",\"sha256\":\"540d923e2c305dac16280286bd91fbd23b52a20bafffaf8b51372824483b8335\"}]){if(c.createHash(\"sha256\").update(fs.readFileSync(x.file)).digest(\"hex\")!==x.sha256)throw Error(\"Preserved skill changed: \"+x.file);if(cp.execFileSync(\"git\",[\"ls-files\",\"--\",x.file],{encoding:\"utf8\"}).trim())throw Error(\"Local skill must remain untracked: \"+x.file);}'"
+      ],
+      "documentation": {
+        "rationale": "Existing local skill belongs to another user request; preservation only, excluded from commits and PR diffs."
+      }
+    }
+  ]
+}
