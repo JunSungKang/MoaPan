@@ -1,0 +1,25 @@
+{
+  "checkedAt": "2026-11-01T11:56:44.707Z",
+  "domain": "administrator-representative-interests",
+  "status": "CHECK_AND_POSTGRESQL_PASS_FINAL_COMPOSITE_SECURITY_PENDING",
+  "focusedTests": 4,
+  "regression": {
+    "unit": 163,
+    "postgresql": 75
+  },
+  "warmRead": {
+    "sqlStatements": 1,
+    "payloadQueries": 0,
+    "probe": "stored SHA-256"
+  },
+  "checks": [
+    "immutable weights",
+    "two JVM caches",
+    "weights update",
+    "inactive tags and redirect normalization",
+    "rollback",
+    "same data hash"
+  ],
+  "memberInterestsCached": false,
+  "runtimeDeployed": false
+}
