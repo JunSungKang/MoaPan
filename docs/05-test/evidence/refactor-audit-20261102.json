@@ -1,0 +1,725 @@
+{
+  "status": "VALIDATED_GOVERNED_DELIVERY",
+  "base": "d9e8c98560f5fd2a5e77b433e7400f31ba16720c",
+  "checklist": [
+    {
+      "id": "RF-01",
+      "title": "이전 커밋·보고의 범위와 잘못된 표현 교정",
+      "status": "PASS",
+      "evidence": [
+        "PR16 93b32e2 / PR25 d9e8c98 actual diff; separate resources are not duplicate requests"
+      ]
+    },
+    {
+      "id": "RF-02",
+      "title": "동일 조건·선택자에서 뒤 선언에 상쇄되는 CSS 52개 제거",
+      "status": "PASS",
+      "evidence": [
+        "52 dominated selector/declaration branches removed; whitespace-aware conservative selector/media comparison"
+      ]
+    },
+    {
+      "id": "RF-03",
+      "title": "공통/페이지 CSS 소유권과 의도된 반응형·인쇄 조건 구분",
+      "status": "PASS",
+      "evidence": [
+        "Common newspaper.css plus page-owned auth/newsletter/admin.css; media/print intentionally separate;150 effective-style states unchanged"
+      ]
+    },
+    {
+      "id": "RF-04",
+      "title": "HTML·JS·Java·운영 도구의 실제 진입점/죽은 경로 재확인",
+      "status": "PASS",
+      "evidence": [
+        "11 HTML /38 reachable ES modules /0 unreachable /0 unused imports;Java67 files732declarations0analysis errors;3 dead masthead rules and unreachable search fallback removed;obsolete mutating local-smoke deleted"
+      ]
+    },
+    {
+      "id": "RF-05",
+      "title": "요청/기사/캐시 계량마다 만드는 기본 JSON 매퍼 재사용",
+      "status": "PASS",
+      "evidence": [
+        "7 classes across catalog/article/collection/classification/translation;9 per-operation default mapper construction sites replaced by class-owned immutable mapper reuse;specialized constrained parsers preserved;ArticleFingerprint old vectors2 unchanged"
+      ]
+    },
+    {
+      "id": "RF-06",
+      "title": "같은 주제 별칭의 정규식 반복 컴파일을 bounded cache로 제거",
+      "status": "PASS",
+      "evidence": [
+        "256-entry synchronized access-order cache;operator alias keys only;aliases longer than100chars compiled without retention;1000aliases/8threads test"
+      ]
+    },
+    {
+      "id": "RF-07",
+      "title": "JS 이벤트/네임스페이스·번역 사전·서로 다른 보안 정책 중복 검토",
+      "status": "PASS",
+      "evidence": [
+        "Real signup language fallback retained;page dictionaries and security-boundary policies retained intentionally;no additional dead import/export/lifecycle path confirmed"
+      ]
+    },
+    {
+      "id": "RF-08",
+      "title": "CSS 구조·문법·검사 실패 회귀를 check에 연결",
+      "status": "PASS",
+      "evidence": [
+        "8 Node scanner tests including malformed/unsupported failure;readonly checker enforced by sourceCheck;Javac AST mapper checker catches operation and field-lambda allocation"
+      ]
+    },
+    {
+      "id": "RF-09",
+      "title": "150개 합성 화면 상태의 실제 computed style 수정 전후 일치",
+      "status": "PASS",
+      "evidence": [
+        "150 before/after computed-style states equal;11pages plus newsletter detail,ko/en,390/768/1440,screen/print,search focus;generic build/reports/cascade artifacts"
+      ]
+    },
+    {
+      "id": "RF-10",
+      "title": "전체 회귀/HTML/보안/SBOM/최종 이미지·모델 정책 검증",
+      "status": "PASS",
+      "evidence": [
+        "342 JUnit tests PASS,0failure/error/skip;Nu11pages0messages;source/JAR/SBOM/Helm gate PASS;runtime and builder raw findings0;truststore117roots4removedanchorsabsent14badTLSrejected;realCPU3modelrequests/6attacksheld/cancellationPASS"
+      ]
+    },
+    {
+      "id": "RF-11",
+      "title": "기존 자료 보존·동일 이미지 서비스 반영·실제 HTTPS/PSI 검증",
+      "status": "PASS",
+      "evidence": [
+        "Same scanned runtime on web/worker;JAR SHA host/web/worker equal;articles300/accounts2/newsletters1IDs andschema22preserved;workerheartbeat;HTTPS11pages and auth/no-store/gzip304 verified;fresh PSI both100/100/100/100 CLS0"
+      ]
+    },
+    {
+      "id": "RF-12",
+      "title": "독립 current-head 리뷰·guarded PR 및 승인된 develop 후속 전달",
+      "status": "PASS",
+      "evidence": [
+        "Independent read-only current-head code review APPROVE at 56641a3740cef466f1059dbd27ac363997c3675d;READ_COMPLETE;no blocking findings",
+        "PR26 human author and assignee verified;plan-aware server guard and human push passed;final documentation delta requires refreshed current-head review before App formal approval and human merge",
+        "Final delivery is complete only when PR26 remote state is MERGED into develop and exact remote/local/tracking head refs are absent;remote PR is canonical,not a pre-recorded future merge SHA"
+      ]
+    }
+  ],
+  "sourceBackupsCreated": false,
+  "checkedAt": "2026-11-01T22:30:10.064Z",
+  "cssRemovals": [
+    {
+      "file": "src/main/resources/static/assets/css/auth.css",
+      "rule": 23,
+      "declaration": 6,
+      "context": [],
+      "selector": ".auth-footer",
+      "property": "padding",
+      "value": "16px 0"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/auth.css",
+      "rule": 23,
+      "declaration": 5,
+      "context": [],
+      "selector": ".auth-footer",
+      "property": "margin",
+      "value": "24px 0"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/auth.css",
+      "rule": 23,
+      "declaration": 1,
+      "context": [],
+      "selector": ".auth-footer",
+      "property": "justify-content",
+      "value": "flex-end"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/auth.css",
+      "rule": 1,
+      "declaration": 1,
+      "context": [],
+      "selector": ".auth-brand",
+      "property": "padding",
+      "value": "64px 0 32px"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newsletter.css",
+      "rule": 20,
+      "declaration": 4,
+      "context": [],
+      "selector": ".teaser-cover",
+      "property": "min-height",
+      "value": "300px"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 188,
+      "declaration": 2,
+      "context": [],
+      "selector": ".newspaper-sheet .lead h2",
+      "property": "line-height",
+      "value": "1.35"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 188,
+      "declaration": 1,
+      "context": [],
+      "selector": ".newspaper-sheet .lead h2",
+      "property": "font-size",
+      "value": "1.65rem"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 179,
+      "declaration": 0,
+      "context": [],
+      "selector": ".newspaper-sheet article.lead",
+      "property": "grid-column",
+      "value": "span 2"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 157,
+      "declaration": 0,
+      "context": [],
+      "selector": ".masthead",
+      "property": "border-bottom-color",
+      "value": "var(--ink)"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 152,
+      "declaration": 1,
+      "context": [],
+      "selector": ".language-picker",
+      "property": "font",
+      "value": ".8rem system-ui"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 133,
+      "declaration": 1,
+      "context": [
+        "@media(max-width:600px)"
+      ],
+      "selector": ".masthead",
+      "property": "padding-bottom",
+      "value": ".25rem"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 133,
+      "declaration": 0,
+      "context": [
+        "@media(max-width:600px)"
+      ],
+      "selector": ".masthead",
+      "property": "border-bottom",
+      "value": "0"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 132,
+      "declaration": 1,
+      "context": [],
+      "selector": "footer",
+      "property": "text-align",
+      "value": "right"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 132,
+      "declaration": 0,
+      "context": [],
+      "selector": "footer",
+      "property": "justify-content",
+      "value": "flex-end"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 124,
+      "declaration": 7,
+      "context": [],
+      "selector": ".masthead .editorial-quote",
+      "property": "font-weight",
+      "value": "700"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 124,
+      "declaration": 5,
+      "context": [],
+      "selector": ".masthead .editorial-quote",
+      "property": "letter-spacing",
+      "value": "-.055em"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 124,
+      "declaration": 4,
+      "context": [],
+      "selector": ".masthead .editorial-quote",
+      "property": "line-height",
+      "value": "1.5"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 124,
+      "declaration": 3,
+      "context": [],
+      "selector": ".masthead .editorial-quote",
+      "property": "font-size",
+      "value": "clamp(1.8rem,3.3vw,3rem)"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 124,
+      "declaration": 2,
+      "context": [],
+      "selector": ".masthead .editorial-quote",
+      "property": "margin",
+      "value": "2.3rem auto 2.5rem"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 124,
+      "declaration": 1,
+      "context": [],
+      "selector": ".masthead .editorial-quote",
+      "property": "max-width",
+      "value": "26ch"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 124,
+      "declaration": 0,
+      "context": [],
+      "selector": ".masthead .editorial-quote",
+      "property": "white-space",
+      "value": "pre-line"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 103,
+      "declaration": 1,
+      "context": [],
+      "selector": "#account-menu",
+      "property": "max-width",
+      "value": "100%"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 103,
+      "declaration": 0,
+      "context": [],
+      "selector": "#account-menu",
+      "property": "min-width",
+      "value": "0"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 90,
+      "declaration": 0,
+      "context": [
+        "@media print"
+      ],
+      "selector": ".skip",
+      "property": "display",
+      "value": "none!important"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 86,
+      "declaration": 0,
+      "context": [
+        "@media print"
+      ],
+      "selector": "body",
+      "property": "background",
+      "value": "#fff"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 65,
+      "declaration": 4,
+      "context": [],
+      "selector": "footer",
+      "property": "gap",
+      "value": "1rem"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 65,
+      "declaration": 1,
+      "context": [],
+      "selector": "footer",
+      "property": "font",
+      "value": ".8rem/1.7 system-ui"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 34,
+      "declaration": 1,
+      "context": [],
+      "selector": ".meta",
+      "property": "padding-top",
+      "value": ".6rem"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 34,
+      "declaration": 0,
+      "context": [],
+      "selector": ".meta",
+      "property": "border-top",
+      "value": "1px solid var(--ink)"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 31,
+      "declaration": 2,
+      "context": [],
+      "selector": ".topline",
+      "property": "text-transform",
+      "value": "uppercase"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 31,
+      "declaration": 1,
+      "context": [],
+      "selector": ".topline",
+      "property": "letter-spacing",
+      "value": ".12em"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 30,
+      "declaration": 4,
+      "context": [],
+      "selector": "#account-menu",
+      "property": "flex-wrap",
+      "value": "wrap"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 30,
+      "declaration": 3,
+      "context": [],
+      "selector": "#account-menu",
+      "property": "gap",
+      "value": "1rem"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 30,
+      "declaration": 2,
+      "context": [],
+      "selector": "#account-menu",
+      "property": "align-items",
+      "value": "center"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 30,
+      "declaration": 1,
+      "context": [],
+      "selector": "#account-menu",
+      "property": "justify-content",
+      "value": "space-between"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 30,
+      "declaration": 0,
+      "context": [],
+      "selector": "#account-menu",
+      "property": "display",
+      "value": "flex"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 29,
+      "declaration": 3,
+      "context": [],
+      "selector": ".nav",
+      "property": "gap",
+      "value": "1rem"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 29,
+      "declaration": 1,
+      "context": [],
+      "selector": ".nav",
+      "property": "justify-content",
+      "value": "space-between"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 27,
+      "declaration": 3,
+      "context": [],
+      "selector": ".topline",
+      "property": "gap",
+      "value": "1rem"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 27,
+      "declaration": 2,
+      "context": [],
+      "selector": ".topline",
+      "property": "align-items",
+      "value": "center"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 27,
+      "declaration": 0,
+      "context": [],
+      "selector": ".topline",
+      "property": "display",
+      "value": "flex"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 26,
+      "declaration": 0,
+      "context": [],
+      "selector": ".masthead",
+      "property": "border-bottom",
+      "value": "5px double var(--ink)"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 2,
+      "declaration": 3,
+      "context": [],
+      "selector": "body",
+      "property": "background-size",
+      "value": "5px 7px,7px 11px,100% 100%"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 2,
+      "declaration": 2,
+      "context": [],
+      "selector": "body",
+      "property": "background-image",
+      "value": "radial-gradient(#30382a12 .45px,transparent .7px),radial-gradient(#ffffff42 .5px,transparent .8px),linear-gradient(113deg,transparent 42%,#ffffff12 49%,#24282003 53%,transparent 58%)"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 0,
+      "declaration": 6,
+      "context": [],
+      "selector": ":root",
+      "property": "font-family",
+      "value": "Georgia,'Times New Roman','Apple SD Gothic Neo','Malgun Gothic',serif"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 0,
+      "declaration": 4,
+      "context": [],
+      "selector": ":root",
+      "property": "--rule",
+      "value": "#adb0a6"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 0,
+      "declaration": 2,
+      "context": [],
+      "selector": ":root",
+      "property": "--ink",
+      "value": "#272825"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 0,
+      "declaration": 1,
+      "context": [],
+      "selector": ":root",
+      "property": "--paper",
+      "value": "#e7e7e2"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 201,
+      "declaration": 1,
+      "context": [
+        "@media(max-width:600px)"
+      ],
+      "selector": ".masthead-sidebar .header-tools",
+      "property": "flex-wrap",
+      "value": "nowrap"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 130,
+      "declaration": 0,
+      "context": [
+        "@media(max-width:600px)"
+      ],
+      "selector": "footer",
+      "property": "gap",
+      "value": ".5rem 1rem"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 128,
+      "declaration": 3,
+      "context": [
+        "@media(max-width:600px)"
+      ],
+      "selector": ".masthead #account-menu",
+      "property": "font-size",
+      "value": ".75rem"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "rule": 128,
+      "declaration": 0,
+      "context": [
+        "@media(max-width:600px)"
+      ],
+      "selector": ".masthead #account-menu",
+      "property": "gap",
+      "value": ".7rem"
+    }
+  ],
+  "removedPaths": [
+    "scripts/test/local-smoke.mjs"
+  ],
+  "removedSelectors": [
+    ".masthead h1",
+    ".masthead h1 a",
+    ".masthead>.language-picker"
+  ],
+  "tests": {
+    "test": {
+      "tests": 169,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "integrationTest": {
+      "tests": 111,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "e2eTest": {
+      "tests": 62,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "runtimeDigest": "sha256:610ae9fc386486a4b6a235a182776fab2d70538a1a0922b86b90cf81325dab7d",
+  "builderDigest": "sha256:3c837b3961925b76b63badca3df6eec24ce9eadea9c3a438945a7bef717a741a",
+  "jarSha256": "b6111de3df9ad1e8aa39c3d230688808315dd3a690c332be362ef78fa28173af",
+  "pageSpeed": {
+    "report": "https://pagespeed.web.dev/analysis/https-175-195-62-165/4smckkv28f",
+    "measuredAt": "2026-11-02T07:27:55+09:00",
+    "desktop": {
+      "performance": 100,
+      "accessibility": 100,
+      "bestPractices": 100,
+      "seo": 100,
+      "fcpMs": 228,
+      "lcpMs": 350,
+      "tbtMs": 0,
+      "cls": 0,
+      "speedIndexMs": 512
+    },
+    "mobile": {
+      "performance": 100,
+      "accessibility": 100,
+      "bestPractices": 100,
+      "seo": 100,
+      "fcpMs": 782,
+      "lcpMs": 1226,
+      "tbtMs": 0,
+      "cls": 0,
+      "speedIndexMs": 1215
+    },
+    "limitations": "Single emulated run;noCrUX;notproof of indexing/ranking/all accessibility/zero diagnostic recommendations. IP literal HSTS not effective."
+  },
+  "translation": {
+    "policyBefore": "guard-v3/9d6d510d69191b2e593286faf52a390f4ce1ac8a18b23400c2543885e7deb32a",
+    "policyAfter": "guard-v3/32dbe79b2fbde82c84aeb2d13b8d1bd156b47208546950eaae17ded93db98c9e",
+    "classificationPolicyUnchanged": true,
+    "automaticRevalidationAtFirstLiveCheck": {
+      "done": 1,
+      "pending": 243,
+      "running": 1
+    },
+    "allTranslationsCompleted": false
+  },
+  "security": {
+    "tool": "Trivy0.76.1",
+    "dbVersion": 2,
+    "dbUpdatedAt": "2026-11-01T19:08:08.720434681Z",
+    "dbDownloadedAt": "2026-11-01T20:52:15.050556Z",
+    "runtimeRawVulnerabilities": 0,
+    "builderRawVulnerabilities": 0,
+    "secrets": 0,
+    "jarPackages": 93,
+    "sbomComponents": 102,
+    "limitations": "Existing proxy GO-2026-5932 applicability evidence and S07 password policy are unchanged;this refactor does not claim all security checklist items resolved."
+  },
+  "cssTransfer": [
+    {
+      "file": "admin.css",
+      "beforeGzipBytes": 1887,
+      "afterGzipBytes": 1935,
+      "beforeRawBytes": 7979,
+      "afterRawBytes": 8036
+    },
+    {
+      "file": "auth.css",
+      "beforeGzipBytes": 1179,
+      "afterGzipBytes": 1165,
+      "beforeRawBytes": 3331,
+      "afterRawBytes": 3632
+    },
+    {
+      "file": "newsletter.css",
+      "beforeGzipBytes": 3852,
+      "afterGzipBytes": 3936,
+      "beforeRawBytes": 14906,
+      "afterRawBytes": 16779
+    },
+    {
+      "file": "newspaper.css",
+      "beforeGzipBytes": 5575,
+      "afterGzipBytes": 4863,
+      "beforeRawBytes": 21116,
+      "afterRawBytes": 21547
+    }
+  ],
+  "rawEvidence": {
+    "delivery-tests.log": "d777201114b127cdb024f7c3a2dd3e2bd7943a7a5f3ce88c2f8f747cc6736582",
+    "html-check.log": "c0d891dd9fa53f8170cc9fdf2f75c29cc67e1707dd7b9645bc62b03ed6fbc18d",
+    "final-image-scan.log": "c410dccc1567dbc38673264dddc59078f9cec09be2c2183d68ba62306c36d761",
+    "trust-audit.log": "c16ff2e9315934b2534330e87f8ab3922619e8c2783f80f0b38ed3d258ae95e0",
+    "model-smoke.log": "b4b4539229913c7b19d65faab3d6704cd7934c45fcc277428f29f5625c651389",
+    "data-before.txt": "754b0aadae5cb17b08fe5e7f92a7fd7fa199ea9b7e1a80725ec4114589211a92",
+    "data-after.txt": "23e3893e821aed1e8e6189aff2782ac014f409c8a17682887a6c7efa3c39effd",
+    "live-checks.json": "00828484c6565766c224e9e866aa92dd58b5e1037342c1fc4bca4b880ef3ad69",
+    "entrypoint-audit.json": "a7c19bb5061b12fb127aedcaa3c4724738cc2b6a51c0b9728297263e691e8eab",
+    "java-audit.txt": "5bca05dc438487b34bf534d3ca9db049eaaadeefe9ebf13190d905654c5db21f",
+    "policy-before.txt": "2781e2a25160ab90f20ae44eb5de9567fafcb403aafa329eb2e996545b75bb28",
+    "policy-after.txt": "61290c0ebe3f278117624c99266c5f4042b20d3e27cb0e604d79d1ea8e94ac84"
+  },
+  "delivery": {
+    "pr": "https://github.com/JunSungKang/MoaPan/pull/26",
+    "base": "develop",
+    "codeReviewedHead": "56641a3740cef466f1059dbd27ac363997c3675d",
+    "decision": "APPROVE",
+    "reviewIndependentlyExecutedTests": false,
+    "finalMergeEvidence": "Canonical PR state and guarded merge three-ref absence verification;completion conditional on these observations"
+  }
+}

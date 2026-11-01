@@ -9,6 +9,7 @@ import java.time.*;
 import tools.jackson.databind.json.JsonMapper;
 @Service @PreAuthorize("hasRole('ADMIN')")
 public class EditorialService {
+    private static final JsonMapper JSON=JsonMapper.builder().build();
     public record Edit(List<String>summaryBullets,boolean summaryLocked,boolean tagsLocked,boolean published,List<UUID>tagIds){}
     public record TagInput(String slug,String name,String category){}
     private final JdbcClient db;
@@ -26,7 +27,7 @@ public class EditorialService {
         if(e.summaryBullets()==null||e.summaryBullets().size()>4||e.summaryBullets().stream().anyMatch(s->s==null||s.length()>350)||(e.tagIds()!=null&&(e.tagIds().size()>6||e.tagIds().stream().anyMatch(Objects::isNull))))throw new ApiError(400,"invalid_editorial_input");
         if(e.tagIds()!=null&&!e.tagIds().isEmpty()&&db.sql("SELECT id FROM tags WHERE id IN (:ids) AND active ORDER BY id FOR SHARE").param("ids",new HashSet<>(e.tagIds())).query(UUID.class).list().size()!=new HashSet<>(e.tagIds()).size())throw new ApiError(400,"invalid_editorial_tags");
         var row=db.sql("SELECT * FROM articles WHERE id=:id FOR UPDATE").param("id",id).query().listOfRows().stream().findFirst().orElseThrow(()->new ApiError(404,"article_not_found"));
-        db.sql("UPDATE articles SET summary_bullets=CAST(:b AS jsonb),summary_mode='MANUAL',summary_locked=:sl,tags_locked=:tl,public=:p,updated_at=now() WHERE id=:id").param("id",id).param("b",JsonMapper.builder().build().writeValueAsString(e.summaryBullets())).param("sl",e.summaryLocked()).param("tl",e.tagsLocked()).param("p",e.published()).update();if(e.tagIds()!=null){db.sql("DELETE FROM article_tags WHERE article_id=:id").param("id",id).update();for(UUID tag:new HashSet<>(e.tagIds()))db.sql("INSERT INTO article_tags SELECT :id,id,1,'MANUAL',true FROM tags WHERE id=:tag AND active").param("id",id).param("tag",tag).update();}audit(actor,"article_edit",id);
+        db.sql("UPDATE articles SET summary_bullets=CAST(:b AS jsonb),summary_mode='MANUAL',summary_locked=:sl,tags_locked=:tl,public=:p,updated_at=now() WHERE id=:id").param("id",id).param("b",JSON.writeValueAsString(e.summaryBullets())).param("sl",e.summaryLocked()).param("tl",e.tagsLocked()).param("p",e.published()).update();if(e.tagIds()!=null){db.sql("DELETE FROM article_tags WHERE article_id=:id").param("id",id).update();for(UUID tag:new HashSet<>(e.tagIds()))db.sql("INSERT INTO article_tags SELECT :id,id,1,'MANUAL',true FROM tags WHERE id=:tag AND active").param("id",id).param("tag",tag).update();}audit(actor,"article_edit",id);
     }
     private static void validTag(TagInput i){if(i==null||i.slug()!=null&&!i.slug().matches("[a-z0-9-]{1,60}")||i.name()==null||i.name().isBlank()||i.name().length()>100||i.category()==null||i.category().isBlank()||i.category().length()>60)throw new ApiError(400,"invalid_tag");}
     @Transactional public Object tag(TagInput i,UUID actor){

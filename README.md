@@ -39,7 +39,7 @@ docker compose run --rm -e MOAPAN_ROLE=admin-cli web
 
 JDK는 정확한 공급자 빌드가 필요하다. 현재 macOS aarch64 workspace JDK와 cache를 사용할 때는 같은 인자를 `sh scripts/build/gradle-local.sh`에 전달한다. `java`, `javac`, Gradle toolchain과 런타임을 [버전 기록](docs/06-transition/versions.md)과 대조한다. preview·incubator·Maven 빌드는 사용하지 않는다.
 
-Playwright Java browser는 먼저 `sh scripts/build/gradle-local.sh playwrightInstall`로 workspace `.local/browsers`에 준비한다. PostgreSQL 통합 테스트에는 Docker가 필요하다. 테스트는 격리 Testcontainers DB와 합성 계정·문장을 사용한다. 실제 외부 source smoke는 `node scripts/test/local-smoke.mjs`로 분리한다. 이 명령은 loopback Compose에서만 실행하며 합성 관리자 계정을 검증 후 삭제한다. 운영 DB에서 실행하지 않는다.
+Playwright Java browser는 먼저 `sh scripts/build/gradle-local.sh playwrightInstall`로 workspace `.local/browsers`에 준비한다. PostgreSQL 통합 테스트에는 Docker가 필요하다. 테스트는 격리 Testcontainers DB와 합성 계정·문장을 사용한다. 현재 서비스는 `MOAPAN_AUDIT_BASE_URL=https://175.195.62.165 node scripts/test/site-http-audit.mjs`로 읽기 전용 점검한다. 실제 주제 출처 등록·수집 시험은 `scripts/test/topic-source-smoke.mjs`로 분리하며, 이 명령은 DB를 변경하므로 승인된 격리 검증 환경에서만 실행한다. 과거 NASA/NOAA를 재활성화하는 구형 local-smoke 실행기는 폐기했다.
 
 `securityCheck`에는 공식 배포 체크섬을 검증한 Trivy가 필요하며, 미준비·검사 오류는 실패다. `.local/bin`의 검증된 도구를 우선 사용한다. 최종 이미지 검사는 별도 실행한다.
 

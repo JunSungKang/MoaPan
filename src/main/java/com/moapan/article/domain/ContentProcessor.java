@@ -6,6 +6,11 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
 public final class ContentProcessor {
+    // Only bounded operator vocabulary is retained, never article/member text.
+    private static final int ALIAS_CACHE_LIMIT=256;
+    private static final Map<String,Pattern> ALIAS_PATTERNS=Collections.synchronizedMap(new LinkedHashMap<>(32,.75f,true){
+        @Override protected boolean removeEldestEntry(Map.Entry<String,Pattern> entry){return size()>ALIAS_CACHE_LIMIT;}
+    });
     // Fixed research vocabulary is compiled once; article text is never retained in these Patterns.
     private static final Pattern[][] RESEARCH_PATTERNS=Arrays.stream(new String[][]{
         {"propose","proposed","introduce","method","approach","architecture","algorithm","framework","설계","제안","방법"},
@@ -34,6 +39,6 @@ public final class ContentProcessor {
     }
 
     private static Pattern phrasePattern(String alias){return Pattern.compile("(?iu)(?<![\\p{L}\\p{N}_])"+Pattern.quote(alias)+(alias.matches(".*[가-힣].*")?"(?:은|는|이|가|을|를|와|과|에|의|도|로|으로|에서|부터|까지)?":"")+"(?![\\p{L}\\p{N}_])");}
-    public static boolean matches(String text,String alias){return phrasePattern(alias).matcher(text).find();}
+    public static boolean matches(String text,String alias){return (alias.length()>100?phrasePattern(alias):ALIAS_PATTERNS.computeIfAbsent(alias,ContentProcessor::phrasePattern)).matcher(text).find();}
     public static String hash(ArticleInput i){try{return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest((i.title()+"\u0000"+i.description()+"\u0000"+i.url()+"\u0000"+i.publishedAt()+"\u0000"+i.author()).getBytes(StandardCharsets.UTF_8)));}catch(Exception e){throw new IllegalStateException();}}
 }

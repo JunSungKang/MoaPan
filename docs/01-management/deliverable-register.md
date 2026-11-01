@@ -39,3 +39,5 @@
 | MP-DOC-032 | 전체 미사용 코드 점검 결과서 | 개발 담당 | [문서](../05-test/dead-code-audit.md) |
 
 | MP-DOC-033 | [PageSpeed·웹 표준 및 최종 코드 정리 검증서](../05-test/pagespeed-desktop.md) | 서비스 반영 검증 완료 | 개발 담당 | 독립 리뷰 담당 |
+
+| MP-DOC-034 | [공통화 재검수·리팩토링 체크리스트](../05-test/refactor-checklist.md) | 조사·구현 중 | 개발 담당 | 독립 리뷰 담당 |

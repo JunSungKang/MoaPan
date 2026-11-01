@@ -9,7 +9,8 @@
 ```sh
 sh scripts/build/gradle-local.sh --no-daemon --max-workers=2 clean check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest
 node --test scripts/governance/github-protection-bootstrap.test.mjs
-node scripts/test/local-smoke.mjs
+# 과거 NASA/NOAA 실행기 폐기(MP-DOC-034); 현재 읽기 전용 점검:
+MOAPAN_AUDIT_BASE_URL=https://175.195.62.165 node scripts/test/site-http-audit.mjs
 sh scripts/security/image-scan.sh moapan-local:1.0.0 moapan-proxy-local:2.11.7 moapan-db-local:18.6 moapan-build:1.0.0 moapan-proxy-build:2.11.7
 ```
 
@@ -20,7 +21,7 @@ sh scripts/security/image-scan.sh moapan-local:1.0.0 moapan-proxy-local:2.11.7 m
 |인증·조회 제한|401·ADMIN403·size/cursor 변조·타 계정·만료·숨김/권리 변경 반영, 두 Limits 인스턴스의 원자 일일6000 경쟁·동시3, 보안 카운터10000 용량 제한, 실제 DB 중단 후503|SecurityIntegrationTest|
 |수집 운영|초안 활성화 거부·409·중지 후 늦은 반영 차단·보관/복원·preview 미저장·주소 변경 승인 초기화·중복/변경/수동 잠금·lease 회복·429 Retry-After/최대 시도·TTL 정리|SecurityIntegrationTest|
 |브라우저|실제 ES Modules/IndexedDB 계정 namespace·고정 clock 순위·제외/별칭/병합·문장 폐기·관심사 네트워크 비전송·390/768/1440px·긴 제목·인쇄·로딩/빈결과/오류·키보드|BrowserTest, 합성 스크린샷|
-|실제 데이터|NASA/NOAA HTTPS 기술 점검·preview·worker job·영속 기사·edition 응답, 합성 관리자 계정 삭제|local-smoke.mjs|
+|실제 데이터|NASA/NOAA HTTPS 기술 점검·preview·worker job·영속 기사·edition 응답, 합성 관리자 계정 삭제|과거 local-smoke 실행 증빙; 현재 실행기는 폐기(MP-DOC-034)|
 |Compose|db healthy·migrate exit0·web healthy·worker heartbeat·proxy200·비회원 news401·DB/web host 포트 비공개|실제 Compose와 SQL 조회|
 |영속·백업|컨테이너 재생성 후20기사 유지, 새 볼륨에 암호화 dump 복원, 격리 복원 articles=20/active_accounts=0/sessions=0 후 격리 DB 제거|backup.sh, restore-check.sh|
 |보안|Trivy 원본 소스/전체 lock·runtime SBOM·실제 JAR 인식91패키지·실행/빌드 이미지·secret/config 검사, 공식 공지·KEV 대조|SECURITY_REVIEW.md|
@@ -263,3 +264,6 @@ Helm migrationVersion14 lint/render/부정입력3PASS, 합성값렌더Trivy HIGH
 
 ## PageSpeed 데스크톱 후속 최종 인수 — 2026-11-02
 336 PASS(단위164/PG111/E2E61), 실패/오류/skip0. Nu11페이지0/0. 외부 PSI 양쪽100/100/100/100, CLS0. source/JAR/SBOM/이미지/동일digest실행/HEAD·인증·합성가입탈퇴·데이터 보존·모델 fingerprint 확인. 상세한 초기 실패 수정·진단 적용 한계·최종 digest는 [MP-DOC-033](pagespeed-desktop.md)을 따른다.
+
+
+공통화 재검수:342 PASS(169/111/62),skip0·CSS150상태전후동일·Nu0·최종이미지/source/JAR/SBOM/모델CPU/trustgatePASS·실제서비스동일digest·데이터보존·PSI양쪽100/100/100/100. 구체적52선언/죽은경로/7클래스9생성경로 시정과 한계·자동번역재검증은 [MP-DOC-034](refactor-checklist.md)를 따른다.

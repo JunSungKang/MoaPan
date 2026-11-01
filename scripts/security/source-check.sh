@@ -5,3 +5,6 @@ if find .github/workflows -type f 2>/dev/null | read -r unused; then echo 'CI/CD
 if rg -n 'innerHTML|eval\(|new Function\(|https?://.*(fonts.googleapis|google-analytics)|user_interests|reading_history|click_events' src/main; then echo 'Unsafe rendering, tracking or forbidden storage' >&2; exit 1; fi
 
 node --test scripts/security/*.test.mjs
+
+node --test scripts/test/style-structure.test.mjs
+node scripts/test/style-structure.mjs
