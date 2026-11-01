@@ -1,0 +1,35 @@
+{
+  "checkedAt": "2026-11-01T12:21:40.507Z",
+  "domain": "edition-and-public-article-cards",
+  "status": "CHECK_AND_POSTGRESQL_PASS_FINAL_COMPOSITE_SECURITY_PENDING",
+  "focusedTests": 10,
+  "regression": {
+    "unit": 163,
+    "postgresql": 81
+  },
+  "warmRead": {
+    "articlePayloadQueries": 0,
+    "tagPayloadQueries": 0,
+    "translationPayloadQueries": 0,
+    "membershipPayloadQueries": 0,
+    "currentVisibilityAndSavedHashesChecked": true
+  },
+  "checks": [
+    "immutable cards",
+    "hide and rights revocation",
+    "summary/translation rights",
+    "corrections",
+    "source/site rename",
+    "classification state and policy",
+    "rollback",
+    "bookkeeping excluded",
+    "account-bound cursor",
+    "repeat item quotas",
+    "membership insert/delete",
+    "candidate300/first42",
+    "writer timezone-independent hash"
+  ],
+  "searchResultCache": false,
+  "patterns": "Fixed research patterns precompiled once; no source text retained",
+  "runtimeDeployed": false
+}
