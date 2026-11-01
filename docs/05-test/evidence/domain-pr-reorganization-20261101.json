@@ -1,0 +1,75 @@
+{
+  "startedAt": "2026-11-01T03:00:10.516Z",
+  "originalPullRequest": 11,
+  "originalBranch": "codex/design-consistency-seo-20261101",
+  "originalHead": "93eb76724f2eb9105845fe087bcd4b0900c9ba9b",
+  "originalBase": "b6026110eae5d463426b5e27f04a003302dfc3a8",
+  "mergeAuthorized": true,
+  "method": "Sprint Delivery; reconstruct new guarded branches/PRs, sequential reviewed squash merges; preserve existing shared history and original snapshot; no force push/reset/worktree/runtime/DB changes.",
+  "phases": [
+    {
+      "id": "shared-experience",
+      "branch": "codex/domain-shared-experience-20261101",
+      "title": "feat(experience): 공통 화면·관리 탐색 경계 정리",
+      "snapshot": "847af4fda14e5cac351a8fe1d134833eb06c2e21",
+      "scope": "Shared Kernel/presentation: shared typography/navigation/secondary headers/footer, admin tab shell, independent technical SEO evidence.",
+      "status": "VALIDATED_FOR_REVIEW",
+      "validation": {
+        "checkedAt": "2026-11-01T03:05:45.862Z",
+        "suites": {
+          "test": {
+            "tests": 154,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "integrationTest": {
+            "tests": 63,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "e2eTest": {
+            "tests": 46,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        },
+        "total": 263,
+        "htmlMessages": 0,
+        "logSha256": "94db83bc6a5547fd2d8bc26e32910a0f183958cca4c54fc5198ce2f9697785d1",
+        "jarSha256": "b5c4e9dae0801915d165193cc6fdf586cfca3bba3b113a09b5f3a39397926746",
+        "sourceCheckpoint": "847af4fda14e5cac351a8fe1d134833eb06c2e21",
+        "sourceComparedExactly": true,
+        "runtimeContainersUnchanged": true,
+        "sourceJarSbomGate": "PASS",
+        "runtimeDeployment": "NOT_CHANGED"
+      }
+    },
+    {
+      "id": "collection-operations",
+      "branch": "codex/domain-collection-operations-20261101",
+      "title": "feat(catalog): 수집원·작업 조회를 이름 기반으로 정리",
+      "snapshot": "CUSTOM_CATALOG_SLICE",
+      "scope": "Catalog/collection operations: recent50 job API and protected query, named job UI, source selection/advanced connection/language inputs and preview display.",
+      "status": "PLANNED"
+    },
+    {
+      "id": "editorial-taxonomy",
+      "branch": "codex/domain-editorial-taxonomy-20261101",
+      "title": "feat(editorial): 기사 검토·주제 정규화 경계 정리",
+      "snapshot": "564f5ac92743da5ee3228b29cbcb8045f30f5e4c",
+      "scope": "Article editorial/taxonomy: collected-date and ordering, focused draft-preserving review, topic dictionary/classification UI, canonical merge and translation save race.",
+      "status": "PLANNED"
+    },
+    {
+      "id": "publication-brand",
+      "branch": "codex/domain-publication-brand-20261101",
+      "title": "feat(publication): 담고담고 브랜드·발간 표기 통일",
+      "snapshot": "93eb76724f2eb9105845fe087bcd4b0900c9ba9b",
+      "scope": "Publication/service identity: current DamGoX2 brand, all user-facing copy/policies/metadata, downloads/attribution, own publication maintenance evidence and final source equivalence.",
+      "status": "PLANNED"
+    }
+  ]
+}

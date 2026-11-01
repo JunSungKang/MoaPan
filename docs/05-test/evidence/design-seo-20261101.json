@@ -1,0 +1,887 @@
+{
+  "checkedAt": "2026-10-31T22:24:21.439Z",
+  "scope": "All-page design consistency implementation and independent read-only SEO/web-standards audit. No backend, dependency, authentication, model, DB, CI/CD or crawl-policy changes.",
+  "base": "b6026110eae5d463426b5e27f04a003302dfc3a8",
+  "tests": {
+    "suites": {
+      "test": {
+        "tests": 154,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "integrationTest": {
+        "tests": 63,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "e2eTest": {
+        "tests": 41,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "total": 258,
+    "completeCommand": "sh scripts/build/gradle-local.sh --no-daemon check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest",
+    "postVisualFix": "e2eTest and bootJar rerun after English search nowrap, detail backlink and footer font fixes",
+    "lastHtmlChange": "Two existing favicon references added after final browser matrix; Nu and live exact-byte asset verification cover these head-only changes.",
+    "failedAttemptsNotCounted": [
+      "Nu detected four H1-to-H3 skips after heading cleanup; corrected to H2 and rerun.",
+      "Documentation-link check ran before the evidence file was created; create evidence and rerun."
+    ]
+  },
+  "ui": {
+    "pages": 11,
+    "dynamicDetailStates": 1,
+    "states": 72,
+    "widths": [
+      390,
+      768,
+      1440
+    ],
+    "languages": [
+      "ko",
+      "en"
+    ],
+    "navigation": {
+      "family": "system-ui",
+      "size": "14px",
+      "lineHeight": "21px",
+      "assertionMinimumGapPx": 12,
+      "measuredMinimumGapPx": 16
+    },
+    "footer": {
+      "family": "system-ui",
+      "size": "13px"
+    },
+    "visibleH1PerState": 1,
+    "horizontalOverflows": 0,
+    "javascriptErrors": 0,
+    "roleBoundaryKeyboardPrintTests": "PASS",
+    "matrixSha256": "aeecebf93a7bc358272dadd5742db5291563b9da528a469bfd51ea983a4904d2",
+    "screenshots": [
+      {
+        "name": "en-about-1440.png",
+        "sha256": "7e69b626d59981f1d0c90ff68f5df3568b01d9e0ac969ba993d13d54a6011064"
+      },
+      {
+        "name": "en-about-390.png",
+        "sha256": "c5e49e78774188bd7c89131f202c328b5015c8945b600e31dfbfa355404b1ddd"
+      },
+      {
+        "name": "en-about-768.png",
+        "sha256": "31685845203990dfcddd690f18ab00094183827d86b3d09da28f0c4c8fd6c0b4"
+      },
+      {
+        "name": "en-account-1440.png",
+        "sha256": "20a1e9ad25a486ad3f55d4d2780381a0060256a9e5b8298cd294746fafe24132"
+      },
+      {
+        "name": "en-account-390.png",
+        "sha256": "66375833351edc82acc9c941bb32f3ec1273132eaaaad300cf75e34a883b8669"
+      },
+      {
+        "name": "en-account-768.png",
+        "sha256": "b55dd86372188fc50edd66ab81d63616b01f339d2774018e2cdd611c50ba5a07"
+      },
+      {
+        "name": "en-admin-1440.png",
+        "sha256": "5ade70d18274b0a265e82c3624e9a655d387f5fb7f34795b44ca71c0f72b37b2"
+      },
+      {
+        "name": "en-admin-390.png",
+        "sha256": "e59f6c180ae6713696a25417576fa531f963042e0cd5bccbf8ba12eda4a099f9"
+      },
+      {
+        "name": "en-admin-768.png",
+        "sha256": "767a0c25de812867ef7964f2b7d86ac346bfb92351b9c351a1ebfbd37b1ca9d4"
+      },
+      {
+        "name": "en-index-1440.png",
+        "sha256": "00380922cddd97996673cd4aec73856153bb1502777a6f975a2fc7109d18b635"
+      },
+      {
+        "name": "en-index-390.png",
+        "sha256": "36a12b0c62737c6655a67381f6ec9631eddc8cfbda902be817daa0419fe7c7e3"
+      },
+      {
+        "name": "en-index-768.png",
+        "sha256": "e5b2ff59a788b239f606fcce57805f0bae598da1f19982b48dd532cf1e5d1ad4"
+      },
+      {
+        "name": "en-login-1440.png",
+        "sha256": "cc4130b714035d18d1d78595dac62a61508d2daf86c39d6dd907ff285319cdae"
+      },
+      {
+        "name": "en-login-390.png",
+        "sha256": "6f9c0e1590ec716ba8086c1edc94af45c618984461b17c6e18a32333486e67b4"
+      },
+      {
+        "name": "en-login-768.png",
+        "sha256": "102740113b3c9e50959c637b896c9f9990cdfdecde311b11be1dee1793ef2719"
+      },
+      {
+        "name": "en-newsletter-1440.png",
+        "sha256": "861bd934fe4b51faf2be63e747a2929d1c6e4c14a664abb322317b8330065230"
+      },
+      {
+        "name": "en-newsletter-390.png",
+        "sha256": "1d920977e823f0a7e9d363f3274a7e44e644b0b15eacd3ab3e8535e3f10ab5ef"
+      },
+      {
+        "name": "en-newsletter-768.png",
+        "sha256": "8e28eb8076ba9e48ce3fe339050002a9783e81df78906da3527e5c2262e2b829"
+      },
+      {
+        "name": "en-newsletter-detail-1440.png",
+        "sha256": "cd994b8174ee8158073b8c3dcf9e4b53a188938d1271da5fe714a4c74c89f74b"
+      },
+      {
+        "name": "en-newsletter-detail-390.png",
+        "sha256": "76bd85f606c36709f3ac59b1412482e36c2747b27188028f222602b543f53462"
+      },
+      {
+        "name": "en-newsletter-detail-768.png",
+        "sha256": "91132d3cead27339dd02b65ce20ff5c7a12adb3cba53c4213910d7f6cf2ca1fd"
+      },
+      {
+        "name": "en-newsletter-editor-1440.png",
+        "sha256": "32502f60aea29fbf1d7b4da0bd58096741f59b2d6e1ee20ad7566578b2ce0bab"
+      },
+      {
+        "name": "en-newsletter-editor-390.png",
+        "sha256": "bea6ed760797868a5fb3d25da07d5be215f2fadc24f4561640ecbe81ea15ddb1"
+      },
+      {
+        "name": "en-newsletter-editor-768.png",
+        "sha256": "c56f56ef1e125fc292a92f8badd87b9faa1e986941586e6626653670c274ec57"
+      },
+      {
+        "name": "en-privacy-1440.png",
+        "sha256": "9671c217b90893240735542a226fbfb84d1886582786e76a0240ce16c9a98617"
+      },
+      {
+        "name": "en-privacy-390.png",
+        "sha256": "0146029edca1abc0ae458c923021ec0438a53c5ba6f03ff2be425642dac76b84"
+      },
+      {
+        "name": "en-privacy-768.png",
+        "sha256": "bb67d395c64fee8f2a39fa51dd2dbef7603777401b5488e5926964087ebf91c9"
+      },
+      {
+        "name": "en-settings-1440.png",
+        "sha256": "7a89d9b5dc66af7347625cd38ac882a689ce4986367a322f25c91f6f82c20339"
+      },
+      {
+        "name": "en-settings-390.png",
+        "sha256": "53cc033b858fb536c29b1a5b959b7fa0b73ded43b9f84a2c77936b217caadd5e"
+      },
+      {
+        "name": "en-settings-768.png",
+        "sha256": "563969219e5bc6c8377a5362ca74c7389b9a7a73440af822be5c735cbcb4fd51"
+      },
+      {
+        "name": "en-signup-1440.png",
+        "sha256": "1c10a304d66b6cfa55f947b313da1614a52b3d0734454e861a9e0a9bf8774fc8"
+      },
+      {
+        "name": "en-signup-390.png",
+        "sha256": "4937aa955767cd9116d98678ab0f5af963830221ab449921c00472655304c56d"
+      },
+      {
+        "name": "en-signup-768.png",
+        "sha256": "757dd0b1d2408ed4bfde8f2c1f300125a8f4caa9c0b6153d2bdf25871e6d5453"
+      },
+      {
+        "name": "en-terms-1440.png",
+        "sha256": "eb19241f98d70f2364659c19c253d0dd925970518c3b0636ef6c8a13e97622b7"
+      },
+      {
+        "name": "en-terms-390.png",
+        "sha256": "a8dd8b3cb1434af380c71f8683d037ada4c4feb665f8b09493254b69e9edbdda"
+      },
+      {
+        "name": "en-terms-768.png",
+        "sha256": "3532db244520a2906f6033c17f53cd82598634d161937cf14d2cb6b5a297cf66"
+      },
+      {
+        "name": "ko-about-1440.png",
+        "sha256": "d44a9e67affc09e0cd3b9bb091888de8dd36404e2f5b1466b7bb73708f589e74"
+      },
+      {
+        "name": "ko-about-390.png",
+        "sha256": "1e09681ce075ab66e98ada5216450365aa8c0147f311b36c54c6a5688717d393"
+      },
+      {
+        "name": "ko-about-768.png",
+        "sha256": "81a5c1e15f1eeef215ddbefd5ae7d5a32814309014f3068e9054edbbf29dddbc"
+      },
+      {
+        "name": "ko-account-1440.png",
+        "sha256": "5593928d59d27d1b00aa269235a6247234a6d562a1cd131286a8661e17a039f0"
+      },
+      {
+        "name": "ko-account-390.png",
+        "sha256": "184db0ae3ef3a89a5c8f9537aec03ba5286c01aadf3155f2bb82f31b75081bfa"
+      },
+      {
+        "name": "ko-account-768.png",
+        "sha256": "21088eddbb7181fdf6ff4a398121dceca93cabcd026b22439406b2e4828a9d95"
+      },
+      {
+        "name": "ko-admin-1440.png",
+        "sha256": "a1acc5348a0a46da83599ed5ecd79278b7a8ddba703f3c07807690f519ce8a0a"
+      },
+      {
+        "name": "ko-admin-390.png",
+        "sha256": "b2feac36deec9ca267e77d8bc06fea89b43cecbfb0958c2123a86a0201a43cce"
+      },
+      {
+        "name": "ko-admin-768.png",
+        "sha256": "2b9c5f8304ba3ff3fe946149aa1c2c18f858a32927c0488220281adf834a8bf5"
+      },
+      {
+        "name": "ko-index-1440.png",
+        "sha256": "3ad60bea3ed0716197772eb473877cea263d8cd54d81c1ecd63e2891b8b84c5f"
+      },
+      {
+        "name": "ko-index-390.png",
+        "sha256": "df63baaf99cc93171747dab6394238aa99c5ab01f017bee7a18ce5981bc81cf7"
+      },
+      {
+        "name": "ko-index-768.png",
+        "sha256": "f3e75328dab3de659cfd8d8a39227f2ae8e2e8fdd4f3281310eaeaa6b6c13059"
+      },
+      {
+        "name": "ko-login-1440.png",
+        "sha256": "101194f19bb079d4789360130fabe2b51c2f7462af830636f86525944da2fbba"
+      },
+      {
+        "name": "ko-login-390.png",
+        "sha256": "2b655332d7c83b1bb9b80de021e739fd7c6931a7e04b63e2af845588821ee108"
+      },
+      {
+        "name": "ko-login-768.png",
+        "sha256": "0e179167fe5156c53b558fc21813a80308c0cd017a42ed0ba58f9631fdc6d059"
+      },
+      {
+        "name": "ko-newsletter-1440.png",
+        "sha256": "0bb176fa1733341f186124baa08ceec5f8c9d23d4cfd6eeeabc6421fbfb4ea00"
+      },
+      {
+        "name": "ko-newsletter-390.png",
+        "sha256": "4fcc78493fc569433311c5bc72b9d595a59adb99020f0d0469cc4cccc4dc6f98"
+      },
+      {
+        "name": "ko-newsletter-768.png",
+        "sha256": "a16131bc442994a2da2dec4df3e674b12d7ece7405af5d52f35f318c36523ac1"
+      },
+      {
+        "name": "ko-newsletter-detail-1440.png",
+        "sha256": "680908b9742ff292af6517c29cab1b1d9984ea2502d919193c3679bf6f8cb7ad"
+      },
+      {
+        "name": "ko-newsletter-detail-390.png",
+        "sha256": "b4bc10233cc49ef5a3c253508a36f4827eed2488e1ae09b8df0b6260285ad02b"
+      },
+      {
+        "name": "ko-newsletter-detail-768.png",
+        "sha256": "58e067821c7c14eda08586119f2fd170156c6a724f3bd1180754dbf64cbbc1cc"
+      },
+      {
+        "name": "ko-newsletter-editor-1440.png",
+        "sha256": "f66c8bf91cae5aa384b406b5a3dd98c3942a4d774e65f9355064f2636822f581"
+      },
+      {
+        "name": "ko-newsletter-editor-390.png",
+        "sha256": "a16e9e8def57160f45a47cdaec99e574c58314e1b0be7a6c435fb6e705c2cc9c"
+      },
+      {
+        "name": "ko-newsletter-editor-768.png",
+        "sha256": "9b4eb02b6a0a4d7a283ce8f807cc4c5a87188b931f1c8a17fbd1c436721a17a6"
+      },
+      {
+        "name": "ko-privacy-1440.png",
+        "sha256": "6f1eed8d5d8da45e59622158aedccd766864c861f6bd1982ffcf70cacc6ad028"
+      },
+      {
+        "name": "ko-privacy-390.png",
+        "sha256": "ebec4a6c61fd1aee7cb796831c81be471f8c210ea8457271ff3a5322731b52fb"
+      },
+      {
+        "name": "ko-privacy-768.png",
+        "sha256": "36faa755769e3fb802d82ce13521ad7d2649ed347a0485b2071492c879708143"
+      },
+      {
+        "name": "ko-settings-1440.png",
+        "sha256": "3c1cf019c03ef40a7e4c8cbad69a6e6489eb1656ec7c7e3dd2dce7e72a26bb7b"
+      },
+      {
+        "name": "ko-settings-390.png",
+        "sha256": "396f49cc58c4150001e2046cc1ff1cd1060a4c1197d8ca6ea185b752d789ff81"
+      },
+      {
+        "name": "ko-settings-768.png",
+        "sha256": "d0dac712436262ffe0f0e601aa23af9937df77175d50c478c5087a3b3c671f09"
+      },
+      {
+        "name": "ko-signup-1440.png",
+        "sha256": "7919b76a60f769a5fd8db2717162d88d1f7201837070cf35571b08ce8b8f90f0"
+      },
+      {
+        "name": "ko-signup-390.png",
+        "sha256": "770a3a893d685ad37ea0b207f3c0055ebde74c6fdab85f757e5c5833fb225270"
+      },
+      {
+        "name": "ko-signup-768.png",
+        "sha256": "783272c3a4b300b2bd8b042bd8715ec9513d54ec44a9639ca5e758209e4ad877"
+      },
+      {
+        "name": "ko-terms-1440.png",
+        "sha256": "53d9649b102d924414badaa93478d63952bfd800188dc55a283cc80d5239b9ca"
+      },
+      {
+        "name": "ko-terms-390.png",
+        "sha256": "2aa3adc2c71cfef569ae082376200d9c459c868824478bae9176336fe617baed"
+      },
+      {
+        "name": "ko-terms-768.png",
+        "sha256": "70848d5af24bf156770f99f03d9818cc55f48e9281e2b080898ea6be7151a29b"
+      }
+    ],
+    "visualInspection": [
+      "ko-index-390",
+      "ko-index-1440",
+      "ko-newsletter-editor-390",
+      "ko-newsletter-editor-1440",
+      "ko-privacy-390",
+      "ko-login-390",
+      "en-index-390",
+      "en-newsletter-detail-768"
+    ],
+    "syntheticOnly": true
+  },
+  "html": {
+    "tool": "Nu HTML Checker",
+    "version": "26.10.12 (0a70d65)",
+    "toolSha256": "19f89e204cb881e2d88c5d0cd451df6c1ee8334e7fe626f6694b64a129f6a813",
+    "pages": 11,
+    "errors": 0,
+    "warnings": 0
+  },
+  "security": {
+    "images": [
+      {
+        "tag": "moapan-design-candidate:20261101",
+        "id": "sha256:d4d31075e0acc9e261674dd2935274bb730fbd58d7988bb55d3cd9bdb1655444",
+        "checkedAt": "2026-11-01T07:20:01.278553+09:00",
+        "reportSha256": "969e001c351ae3f349b4fd711522b4f9663f72b92e0c7283c88d9c182468e213",
+        "severity": {
+          "UNKNOWN": 0,
+          "LOW": 0,
+          "MEDIUM": 0,
+          "HIGH": 0,
+          "CRITICAL": 0
+        },
+        "secrets": 0
+      },
+      {
+        "tag": "moapan-design-build:20261101",
+        "id": "sha256:78e5fe913338266748ea791ab8ffa49ed1db54462833fd8e24f0d3223bf9a51b",
+        "checkedAt": "2026-11-01T07:20:05.984553+09:00",
+        "reportSha256": "fda3e490b7b48cc6082bf8058e4c3c81b33cf55dcc79f6ad53e04ea501bfaede",
+        "severity": {
+          "UNKNOWN": 0,
+          "LOW": 0,
+          "MEDIUM": 0,
+          "HIGH": 0,
+          "CRITICAL": 0
+        },
+        "secrets": 0
+      }
+    ],
+    "database": {
+      "Version": 2,
+      "NextUpdate": "2026-11-01T18:53:10.861587125Z",
+      "UpdatedAt": "2026-10-31T18:53:10.861587496Z",
+      "DownloadedAt": "2026-10-31T22:08:51.77085Z"
+    },
+    "scope": "Final application and builder images inspected; unchanged proxy/DB/model scans and real-model smoke are not rerun or counted here.",
+    "retainedRisks": [
+      "Original checklist S07 remains USER_POLICY (password6..128, username1..128).",
+      "JOSE v3 backport proof is exact-source-bound and expires2026-11-07; not an upstream v3 release.",
+      "Known testing cannot guarantee absence of unknown vulnerabilities."
+    ],
+    "finalSourceJarSbomGate": "PASS",
+    "finalReports": {
+      "source": {
+        "createdAt": "2026-11-01T07:24:11.321188+09:00",
+        "reportSha256": "b185d97199a2826f8fddebc21c0d4026acbf4bae175dabcf72db7cac2290dbe6",
+        "vulnerabilities": {
+          "UNKNOWN": 2,
+          "LOW": 0,
+          "MEDIUM": 2,
+          "HIGH": 1,
+          "CRITICAL": 0
+        },
+        "secrets": 0,
+        "misconfigurationFailures": 4,
+        "findings": [
+          {
+            "id": "GO-2026-5932",
+            "package": "golang.org/x/crypto",
+            "version": "v0.57.0",
+            "severity": "UNKNOWN"
+          },
+          {
+            "id": "CVE-2026-116587",
+            "package": "github.com/go-jose/go-jose/v3",
+            "version": "v3.0.5",
+            "severity": "HIGH"
+          },
+          {
+            "id": "CVE-2026-116585",
+            "package": "github.com/go-jose/go-jose/v3",
+            "version": "v3.0.5",
+            "severity": "MEDIUM"
+          },
+          {
+            "id": "CVE-2026-116586",
+            "package": "github.com/go-jose/go-jose/v3",
+            "version": "v3.0.5",
+            "severity": "MEDIUM"
+          },
+          {
+            "id": "GO-2026-5932",
+            "package": "golang.org/x/crypto",
+            "version": "v0.58.0",
+            "severity": "UNKNOWN"
+          }
+        ]
+      },
+      "sbom": {
+        "createdAt": "2026-11-01T07:24:11.426385+09:00",
+        "reportSha256": "76d4ab492321767a35eede4e54aede313b91ccd4b99345edc509550111a9989b",
+        "vulnerabilities": {
+          "UNKNOWN": 0,
+          "LOW": 0,
+          "MEDIUM": 0,
+          "HIGH": 0,
+          "CRITICAL": 0
+        },
+        "secrets": 0,
+        "misconfigurationFailures": 0,
+        "findings": []
+      },
+      "jar": {
+        "createdAt": "2026-11-01T07:24:12.735589+09:00",
+        "reportSha256": "a394dd9e6b32e717606be8c486483794f7e55e71ea520c5d65ccfd554b52d42a",
+        "vulnerabilities": {
+          "UNKNOWN": 0,
+          "LOW": 0,
+          "MEDIUM": 0,
+          "HIGH": 0,
+          "CRITICAL": 0
+        },
+        "secrets": 0,
+        "misconfigurationFailures": 0,
+        "findings": []
+      }
+    },
+    "tool": "Version: 0.76.1+moapan-security.1",
+    "completedAt": "2026-10-31T22:24:12Z",
+    "sbomSha256": "1ad74a0dc59e1c37447a0d4496fcbe280394be7ddb7a0328ac5655b21c962b63",
+    "sbomComponents": 100,
+    "sourceFindingsInterpretation": "Raw source findings are retained. The unchanged JOSE v3 source backport and OpenPGP applicability proof are checked by the existing gate; counts are not relabeled as zero. Unchanged configuration warnings require their documented scope. Helm was not rerun for this static-only change."
+  },
+  "runtime": {
+    "url": "https://175.195.62.165/",
+    "replaced": [
+      "web",
+      "worker"
+    ],
+    "services": [
+      {
+        "service": "web",
+        "image": "sha256:d4d31075e0acc9e261674dd2935274bb730fbd58d7988bb55d3cd9bdb1655444",
+        "status": "running",
+        "health": "healthy"
+      },
+      {
+        "service": "worker",
+        "image": "sha256:d4d31075e0acc9e261674dd2935274bb730fbd58d7988bb55d3cd9bdb1655444",
+        "status": "running",
+        "health": null
+      },
+      {
+        "service": "proxy",
+        "image": "sha256:e4b645df85f6e31cae7eabadaf6a9482e0d199fa1444f57a22e6c7198640bad6",
+        "status": "running",
+        "health": "healthy"
+      },
+      {
+        "service": "db",
+        "image": "sha256:8ee8af1f67452558bb3bcdf475b43ec4c1124f6df9957f7a9d79a08f5e292a0d",
+        "status": "running",
+        "health": "healthy"
+      },
+      {
+        "service": "translator",
+        "image": "sha256:8e0b496277410200aeff2334844c93fd9a9544f73ad7218d0df50f6a6e17efce",
+        "status": "running",
+        "health": "healthy"
+      },
+      {
+        "service": "classifier",
+        "image": "sha256:8a9b1fbd783fda8305655c4a0939df1faa52c29ebac220050ffe1c45d42a3ca5",
+        "status": "running",
+        "health": "healthy"
+      }
+    ],
+    "jarSha256": "0845c6587131ef7ad4c47f4866112c45e9311ec182cfaef0c733e08cf4130080",
+    "webJarSha256": "0845c6587131ef7ad4c47f4866112c45e9311ec182cfaef0c733e08cf4130080",
+    "workerJarSha256": "0845c6587131ef7ad4c47f4866112c45e9311ec182cfaef0c733e08cf4130080",
+    "countsBefore": {
+      "articles": 300,
+      "users": 2,
+      "newsletters": 1
+    },
+    "countsAfter": {
+      "articles": 300,
+      "users": 2,
+      "newsletters": 1
+    },
+    "liveAssets": {
+      "checkedAt": "2026-10-31T22:22:17.004Z",
+      "staticAssets": [
+        {
+          "path": "/assets/css/site.css",
+          "status": 200,
+          "sha256": "14010f04018e3a248c07ee9d8631a5829b321b5d73744722900d5d2225d05aa6"
+        },
+        {
+          "path": "/assets/css/auth.css",
+          "status": 200,
+          "sha256": "7a698109a9c3a6eeccdc938867fe81aa6bcd2c2909094ff29ee2dff1cce664cd"
+        },
+        {
+          "path": "/assets/css/newsletter.css",
+          "status": 200,
+          "sha256": "8ad8e08db58443430782d8c70631428848c61a4035eaeaa0e59cca044c5899a0"
+        },
+        {
+          "path": "/assets/js/shared/common.js",
+          "status": 200,
+          "sha256": "c0f66443863ebf0085fab2aef70bd6696353071c9fe11e6e194f748e963ffd41"
+        },
+        {
+          "path": "/assets/js/shared/i18n.js",
+          "status": 200,
+          "sha256": "271c9cd74107d5aaa43ea8a2f4afb2cd8c09bc9cac96006dce451821fce7e2c3"
+        },
+        {
+          "path": "/index.html",
+          "status": 200,
+          "sha256": "9d600781a593fa445080ddbe91386306b30f48f994d107b1615bfd2dca13cbfe"
+        },
+        {
+          "path": "/about.html",
+          "status": 200,
+          "sha256": "a3bb88f13a22bd43beddfe1c930d30736dd196a65739adc9436438682c013c8f"
+        },
+        {
+          "path": "/privacy.html",
+          "status": 200,
+          "sha256": "eacd89684bf7d83533ed8ed4f070b687d9c81f5bc81afb45d8aa6c1f829a3c5d"
+        },
+        {
+          "path": "/terms.html",
+          "status": 200,
+          "sha256": "932333c7b18af1226f7429c39ed7fabeb14c36cc32bde3976df44d328fecb34e"
+        },
+        {
+          "path": "/login.html",
+          "status": 200,
+          "sha256": "be7c64de4cc37b6e866e8a1bb4b36ee77f3cecc47c6478de12f5b77b0d1223e0"
+        },
+        {
+          "path": "/signup.html",
+          "status": 200,
+          "sha256": "d56b302f8fa918b4c2a91b4ebcae5cfdfe63e7b8bfc4c03954e47de8743d115d"
+        }
+      ]
+    },
+    "httpAudit": {
+      "checkedAt": "2026-10-31T22:22:07.174Z",
+      "origin": "https://175.195.62.165",
+      "pages": [
+        {
+          "path": "/index.html",
+          "publicPage": true,
+          "status": 200,
+          "contentType": "text/html",
+          "location": null,
+          "canonicalHeader": "<https://175.195.62.165/index.html>; rel=\"canonical\"",
+          "robotsHeader": null,
+          "contentLanguage": null,
+          "metadata": {
+            "title": "오늘의 지면 | 모아판 MoA-PaN",
+            "description": "모아판은 보안, 인공지능, RAG, 데이터베이스와 검색 기술 소식을 모아 관심사에 맞게 읽는 뉴스 서비스입니다.",
+            "robots": "index, follow",
+            "lang": "ko",
+            "viewport": "width=device-width,initial-scale=1",
+            "canonical": "/index.html",
+            "staticArticleCount": 0
+          }
+        },
+        {
+          "path": "/about.html",
+          "publicPage": true,
+          "status": 200,
+          "contentType": "text/html",
+          "location": null,
+          "canonicalHeader": "<https://175.195.62.165/about.html>; rel=\"canonical\"",
+          "robotsHeader": null,
+          "contentLanguage": null,
+          "metadata": {
+            "title": "모아판 소개·출처 | 모아판 MoA-PaN",
+            "description": "모아판의 뉴스 수집 출처, 서비스 이용 방법과 브라우저에 저장하는 관심사 설정을 안내합니다.",
+            "robots": "index, follow",
+            "lang": "ko",
+            "viewport": "width=device-width,initial-scale=1",
+            "canonical": "/about.html",
+            "staticArticleCount": 0
+          }
+        },
+        {
+          "path": "/privacy.html",
+          "publicPage": true,
+          "status": 200,
+          "contentType": "text/html",
+          "location": null,
+          "canonicalHeader": "<https://175.195.62.165/privacy.html>; rel=\"canonical\"",
+          "robotsHeader": null,
+          "contentLanguage": null,
+          "metadata": {
+            "title": "개인정보 처리방침 | 모아판 MoA-PaN",
+            "description": "모아판이 처리하는 계정 정보와 보안 정보, 브라우저 관심사 보관 및 삭제 방법을 안내합니다.",
+            "robots": "index, follow",
+            "lang": "ko",
+            "viewport": "width=device-width,initial-scale=1",
+            "canonical": "/privacy.html",
+            "staticArticleCount": 0
+          }
+        },
+        {
+          "path": "/terms.html",
+          "publicPage": true,
+          "status": 200,
+          "contentType": "text/html",
+          "location": null,
+          "canonicalHeader": "<https://175.195.62.165/terms.html>; rel=\"canonical\"",
+          "robotsHeader": null,
+          "contentLanguage": null,
+          "metadata": {
+            "title": "이용약관 | 모아판 MoA-PaN",
+            "description": "모아판 서비스 이용 조건과 계정, 콘텐츠 및 원문 링크 이용에 관한 약관입니다.",
+            "robots": "index, follow",
+            "lang": "ko",
+            "viewport": "width=device-width,initial-scale=1",
+            "canonical": "/terms.html",
+            "staticArticleCount": 0
+          }
+        },
+        {
+          "path": "/login.html",
+          "publicPage": false,
+          "status": 200,
+          "contentType": "text/html",
+          "location": null,
+          "canonicalHeader": null,
+          "robotsHeader": "noindex, follow",
+          "contentLanguage": null,
+          "metadata": {
+            "title": "로그인 | 모아판 MoA-PaN",
+            "description": "모아판 계정으로 로그인합니다.",
+            "robots": "noindex, follow",
+            "lang": "ko",
+            "viewport": "width=device-width,initial-scale=1",
+            "canonical": null,
+            "staticArticleCount": 0
+          }
+        },
+        {
+          "path": "/signup.html",
+          "publicPage": false,
+          "status": 200,
+          "contentType": "text/html",
+          "location": null,
+          "canonicalHeader": null,
+          "robotsHeader": "noindex, follow",
+          "contentLanguage": null,
+          "metadata": {
+            "title": "회원가입 | 모아판 MoA-PaN",
+            "description": "아이디와 비밀번호로 모아판 계정을 만듭니다.",
+            "robots": "noindex, follow",
+            "lang": "ko",
+            "viewport": "width=device-width,initial-scale=1",
+            "canonical": null,
+            "staticArticleCount": 0
+          }
+        },
+        {
+          "path": "/settings.html",
+          "publicPage": false,
+          "status": 302,
+          "contentType": null,
+          "location": "/login.html",
+          "canonicalHeader": null,
+          "robotsHeader": "noindex, follow",
+          "contentLanguage": null,
+          "metadata": null
+        },
+        {
+          "path": "/account.html",
+          "publicPage": false,
+          "status": 302,
+          "contentType": null,
+          "location": "/login.html",
+          "canonicalHeader": null,
+          "robotsHeader": "noindex, follow",
+          "contentLanguage": null,
+          "metadata": null
+        },
+        {
+          "path": "/admin.html",
+          "publicPage": false,
+          "status": 302,
+          "contentType": null,
+          "location": "/login.html",
+          "canonicalHeader": null,
+          "robotsHeader": "noindex, follow",
+          "contentLanguage": null,
+          "metadata": null
+        },
+        {
+          "path": "/newsletter.html",
+          "publicPage": false,
+          "status": 302,
+          "contentType": null,
+          "location": "/login.html",
+          "canonicalHeader": null,
+          "robotsHeader": "noindex, follow",
+          "contentLanguage": null,
+          "metadata": null
+        },
+        {
+          "path": "/newsletter-editor.html",
+          "publicPage": false,
+          "status": 302,
+          "contentType": null,
+          "location": "/login.html",
+          "canonicalHeader": null,
+          "robotsHeader": "noindex, follow",
+          "contentLanguage": null,
+          "metadata": null
+        }
+      ],
+      "checks": {
+        "robots": {
+          "status": 200,
+          "sitemapReference": "https://175.195.62.165/sitemap.xml"
+        },
+        "sitemap": {
+          "status": 200,
+          "urls": [
+            "https://175.195.62.165/index.html",
+            "https://175.195.62.165/about.html",
+            "https://175.195.62.165/privacy.html",
+            "https://175.195.62.165/terms.html"
+          ]
+        },
+        "publicEdition": {
+          "status": 200,
+          "returnedItems": 42,
+          "candidateCount": 227
+        },
+        "notFound": {
+          "status": 404,
+          "robotsHeader": "noindex, follow"
+        },
+        "/api/v1/newsletters": {
+          "status": 401,
+          "robotsHeader": "noindex, follow"
+        },
+        "/api/v1/admin/sites": {
+          "status": 401,
+          "robotsHeader": "noindex, follow"
+        }
+      },
+      "limitations": [
+        "Actual Google/Naver/Bing indexing and rank require portal evidence and remain UNKNOWN.",
+        "User-agent imitation and public search samples do not prove access from a real engine crawler."
+      ],
+      "root": {
+        "status": 200,
+        "contentType": "text/html",
+        "location": null,
+        "canonicalHeader": "<https://175.195.62.165/index.html>; rel=\"canonical\"",
+        "robotsHeader": null,
+        "contentLanguage": "und",
+        "metadata": {
+          "title": "오늘의 지면 | 모아판 MoA-PaN",
+          "description": "모아판은 보안, 인공지능, RAG, 데이터베이스와 검색 기술 소식을 모아 관심사에 맞게 읽는 뉴스 서비스입니다.",
+          "robots": "index, follow",
+          "lang": "ko",
+          "viewport": "width=device-width,initial-scale=1",
+          "canonical": "/index.html",
+          "staticArticleCount": 0
+        }
+      },
+      "absoluteHtmlCanonicals": {
+        "passed": 0,
+        "total": 4
+      }
+    },
+    "productionTestAccountsCreated": 0
+  },
+  "seo": {
+    "independentAgent": "seo_audit",
+    "basicMetadata": {
+      "passed": 11,
+      "total": 11
+    },
+    "absoluteHtmlCanonical": {
+      "passed": 0,
+      "total": 4
+    },
+    "absoluteHttpCanonical": {
+      "passed": 4,
+      "total": 4
+    },
+    "sitemapPublicUrls": 4,
+    "publicSearchSampleAt": "2026-11-01T07:04:00+09:00",
+    "publicSearchQueries": 6,
+    "matchingOwnHostUrls": 0,
+    "actualPortalIndex": {
+      "google": "UNKNOWN",
+      "naver": "UNKNOWN",
+      "bing": "UNKNOWN"
+    },
+    "fieldCoreWebVitals": "NOT_MEASURED",
+    "recommendedFollowups": [
+      "Absolute canonical in initial public HTML",
+      "Crawlable access to later public slides within fixed edition bounds",
+      "Optional share/site-name metadata and language clarification"
+    ],
+    "limitations": "Public search provider, full SERP count and regional ranking unspecified. No separate portal ranking or index-verification claim. No SEO-policy changes implemented."
+  },
+  "delivery": {
+    "branch": "codex/design-consistency-seo-20261101",
+    "target": "develop",
+    "merge": "NOT_AUTHORIZED_FOR_THIS_TASK",
+    "currentHeadReview": "Consult current GitHub PR for this branch; this file does not certify a future head."
+  }
+}

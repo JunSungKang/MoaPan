@@ -63,3 +63,6 @@ FS-15/16/17/24/28(REQ-07/08/14): 비회원은 오늘의 지면 최대42개(7개�
 | FS-29 주간 근거·발간 |15|원고와 dossier를 같은version으로 저장; 최초발간주/선택기사collected_at/권리/확인·전망완결성·참고URL 검사|ADMIN+CSRF;400형식/409미충족·충돌. 수정된원고는점검안내폐기|PublicationResearchTest, SecurityIntegrationTest newsletterResearchGatesSnapshotsReuseAndRevisionIdentity, BrowserTest oldDraftCanMoveWeekAndStaleReviewCannotShowSuccess|
 | FS-30 재게재·업무양식 |16,17|발간본 snapshot·근거·무료/유료 출처만 사용; DOM안전 HTML과 로컬텍스트파일 생성|인증+별도혜택;미검토409/근거철회404;뉴스 원문 제외|publicationOutputsPreserveTruthfulCreditAndSafeOwnedContent, newsletterReaderCopiesAndDownloadsEnterpriseOutputs|
 | FS-32 구독 port |18|EntitlementProvider가 혜택과유효기간 제공;운영역할과독립검사|현재무료preview모든회원;미연결paid모드시작실패,결제API없음|EntitlementPolicyTest|
+
+
+FS-24 관리자 화면 추가: 수집 사이트·기사 검토·주제/태그·대표 관심사·광고·처리 현황을6개 주메뉴로 구분한다. 수집은 목록/사이트정보/수집주소, 주제·태그는 분류설정/태그사전의 하위탭을 제공한다. 선택한 작업영역만 표시하고 메뉴전환으로 미저장 입력을 지우거나 자동저장하지 않는다. 화살표/Home/End와 화면 해시·브라우저 뒤로가기를 지원한다. 새 사이트/선택 수정은 사이트정보, 주소 수정은 수집주소 입력을 연다. 늦은 상세응답은 다른 주메뉴로 이동한 사용자를 되돌리지 않는다. 점검·미리보기·202접수 결과는 접힘 밖에서 확인하고 작업조회 입력은 접어둘 수 있다. 기존 ADMIN/CSRF/version/API 계약은 그대로다.
