@@ -11,7 +11,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 public final class SharedReadCaches {
     public enum Region {
         DICTIONARY(512), CLASSIFICATION(512), INTERESTS(256), ADVERTISEMENT(256),
-        EDITION_IDS(2048), ARTICLE_CARDS(10240), PUBLICATIONS(2560);
+        EDITION_IDS(2048), ARTICLE_CARDS(9984), SOURCE_CATALOG(256), PUBLICATIONS(2560);
         final int kib;
         Region(int kib) { this.kib = kib; }
     }
