@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 4,
+  "workSlug": "domain-collection-operations-20261101",
+  "flowType": "integration",
+  "branch": "codex/domain-collection-operations-20261101",
+  "targetBranch": "develop",
+  "baseSha": "62c76b5b68fb70a5a3c9869b5fc54d1532ee9db1",
+  "mergeMethod": "squash",
+  "governance": {
+    "prAuthorLogin": "JunSungKang",
+    "assigneeLogin": "JunSungKang",
+    "reviewerLogin": "junsung-bot[bot]",
+    "requiredChecks": [],
+    "commitAuthor": {
+      "name": "jun-sung, Kang",
+      "email": "kjuns1@naver.com"
+    },
+    "coAuthors": [
+      {
+        "name": "Codex",
+        "email": "codex@openai.com"
+      },
+      {
+        "name": "junsung-bot[bot]",
+        "email": "302617028+junsung-bot[bot]@users.noreply.github.com"
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "collection-operations",
+      "expectedPaths": [
+        "src/main/java/com/moapan/catalog/api/AdminController.java",
+        "src/main/java/com/moapan/catalog/application/CatalogService.java",
+        "src/main/resources/static/admin.html",
+        "src/main/resources/static/assets/js/administration/admin.js",
+        "src/main/resources/static/assets/js/administration/collection-jobs.js",
+        "src/main/resources/static/assets/css/admin.css",
+        "src/main/resources/static/assets/js/shared/i18n-admin-navigation.js",
+        "src/integrationTest/java/com/moapan/SecurityIntegrationTest.java",
+        "src/e2eTest/java/com/moapan/AdminNavigationTest.java",
+        "docs/**",
+        ".github/workflow-plans/domain-collection-operations-20261101.json"
+      ],
+      "forbiddenPaths": [
+        ".env",
+        ".github/workflows/**",
+        "src/main/resources/db/**",
+        "build.gradle",
+        "gradle.lockfile",
+        "Dockerfile",
+        "scripts/deploy/**",
+        "scripts/security/**",
+        "src/main/java/com/moapan/identity/**",
+        "src/main/java/com/moapan/access/**",
+        "src/main/java/com/moapan/ai/**",
+        "src/main/java/com/moapan/classification/**",
+        "src/main/java/com/moapan/translation/**"
+      ],
+      "acceptanceCriteria": [
+        "Catalog/collection operations: recent50 job API and protected query, named job UI, source selection/advanced connection/language inputs and preview display.",
+        "History reconstruction only. Preserve user changes, existing shared history/main and original93eb767 snapshot; no force push/reset/worktree, no runtime or DB changes.",
+        "Tests and final artifact gates run at this checkpoint; no skipped/removed baseline assertions. Final phase product/test/scripts/build configuration and JAR must match original verified93eb767.",
+        "Guarded human commit/push/PR, independent current-head App approval, explicitly user-authorized develop squash merge and verified remote/tracking/local head cleanup."
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh --no-daemon check integrationTest e2eTest bootJar sbom securityCheck",
+        "sh scripts/test/html-check.sh",
+        "git diff --check"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/plan.md",
+          "docs/01-management/progress.md",
+          "docs/05-test/evidence/domain-pr-reorganization-20261101.json"
+        ]
+      }
+    }
+  ]
+}

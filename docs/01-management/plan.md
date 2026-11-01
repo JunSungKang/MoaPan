@@ -211,4 +211,4 @@ G05 출처별 원자적 예산, G06 소유권 상실 취소, G07 분산 번역 �
 
 ## 35. 도메인별 PR·커밋 이력 재구성
 사용자 승인으로 기존 PR11의 미병합5커밋을 공통표현/관리탐색(Shared Kernel), 수집원운영(Catalog), 기사편집·주제정규화(Article Editorial), 발간·서비스정체성(Publication)4개 PR로 분리한다. 각기능·테스트·문서를같은책임에묶고공유파일은담당기능구간으로나눈다.각PR은develop의실제최신SHA에서시작해테스트/보안gate·독립현재headApp승인후사람wrapper로squash병합하고head의원격/추적/로컬ref삭제를검증한다. main과기존공유이력·원래93eb767snapshot은보존하며forcepush/reset/worktree/운영서비스·DB변경을하지않는다. 최종제품/테스트/빌드/운영스크립트가원래검증본과같은지Gitblob으로대조하고원래PR11은대체PR목록을연결해종료한다.
-검증은각중간checkpoint의실제테스트와최종전체275회귀/Nu/최종JAR일치,실행컨테이너동일성을분리한다.과거테스트증빙을새head의실행결과로표시하지않는다.현재단계: shared-experience.
+검증은각중간checkpoint의실제테스트와최종전체275회귀/Nu/최종JAR일치,실행컨테이너동일성을분리한다.과거테스트증빙을새head의실행결과로표시하지않는다.현재단계: collection-operations.

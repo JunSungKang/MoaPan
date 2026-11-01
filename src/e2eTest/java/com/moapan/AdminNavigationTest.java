@@ -115,18 +115,18 @@ class AdminNavigationTest {
             });
             context.route("**/api/v1/admin/sources/synthetic-feed/*",route->{
                 boolean collect=route.request().url().endsWith("/collect");
-                route.fulfill(new Route.FulfillOptions().setContentType("application/json").setStatus(collect?202:200).setBody(collect?"{\"id\":\"synthetic-job-id\",\"status\":\"QUEUED\"}":"{\"preview\":true}"));
+                route.fulfill(new Route.FulfillOptions().setContentType("application/json").setStatus(collect?202:200).setBody(collect?"{\"id\":\"synthetic-job-id\",\"status\":\"QUEUED\"}":"{\"items\":[{\"title\":\"Synthetic preview\",\"description\":\"Synthetic preview excerpt\",\"publishedAt\":\"2024-01-05T00:00:00Z\",\"originalUrl\":\"https://example.test/preview\"}]}"));
             });
             Page page=context.newPage();page.navigate(BrowserTest.origin+"/admin.html");
             page.locator("#sites tr").first().getByText("상세·수정").click();page.locator("#manage-sources").click();
             assertFalse((boolean)page.locator("#job-query").evaluate("e=>e.closest('details').open"));
             page.locator("#source-list").getByText("미리보기",new Locator.GetByTextOptions().setExact(true)).click();
             page.waitForFunction("document.querySelector('#source-result').textContent.includes('preview')");
-            assertTrue(page.locator("#source-result").isVisible(),"Preview result must be visible without expanding the job lookup");
+            assertTrue(page.locator("#source-result").isVisible(),"Preview result must be visible without expanding the job lookup");assertTrue(page.locator("#source-result").textContent().contains("Synthetic preview excerpt"));assertTrue(page.locator("#source-result").textContent().contains("2024"));
             page.locator("#source-list").getByText("지금 수집",new Locator.GetByTextOptions().setExact(true)).click();
-            page.waitForFunction("document.querySelector('#source-result').textContent.includes('synthetic-job-id')");
+            page.waitForFunction("document.querySelector('#job-id').value==='synthetic-job-id'");
             assertTrue(page.locator("#source-result").isVisible());
-            assertTrue(page.locator("#source-result").textContent().contains("수집 성공이 아닙니다"));
+            assertTrue(page.locator("#source-result").textContent().contains("수집 성공을 뜻하지 않습니다"));
             assertEquals("synthetic-job-id",page.locator("#job-id").inputValue());
             assertFalse((boolean)page.locator("#job-query").evaluate("e=>e.closest('details').open"));
         }

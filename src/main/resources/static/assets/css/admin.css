@@ -52,3 +52,8 @@
   .admin-workspace { padding: 0; }
   .admin-workspace pre { max-height: none; }
 }
+
+.source-advanced { grid-column: 1 / -1; border-block: 1px solid var(--rule); padding: .75rem 0; }
+.source-advanced summary { cursor: pointer; font-weight: 600; }
+.source-advanced label { margin-block: .75rem; }
+.source-advanced p { font-size: .8125rem; }
