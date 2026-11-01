@@ -254,3 +254,6 @@ Helm migrationVersion14 lint/render/부정입력3PASS, 합성값렌더Trivy HIGH
 운영발간물1개의초안/발간본문/도식에도이전브랜드가있어독립사전검토한2회트랜잭션으로변경했다. 각회대상1개·기존이미지일치·advisory/행잠금·version+1·감사·보존검증·오류시rollback을적용했다. 호수·최초/최근발간시각·개정번호·배포구분·연구내용·근거URL보존, 기사300/계정2/발간물1유지,남은이전브랜드0. 도식의연구문구/수치/단계는유지했으며글꼴/간격은재렌더링차이가있다. 최종그림SHA a441b05700595067edbd304a2df92d3e68d6124496a58991a81051b10d33f1f7.
 
 최종소스/JAR/SBOM/앱·빌드이미지gatePASS. 앱 sha256:ef8e07a5671fb70e1d05f9cb4d2ade803108e4c0728327fc2b9cfacf029a76ee / 빌드 sha256:7e8e3ec394d3731eaa28e776895fa3fda9be16de30c019e79bc0eb302b391057, 두이미지원본취약점·secret0. web/worker에검증digest적용·실행JAR 6a19b59fceeb27473baf643f4773d624d29e5d4cc6dcbccbcc10b1bc4f5bec94일치, HTTPS19자산/공개·보호경계확인. 운영계정생성/로그인은하지않았다. 원래보안체크리스트19/20·패스워드사용자정책·JOSE백포트근거/만료는유지한다. [증빙](evidence/damgox2-brand-20261101.json).
+
+## 실제 서버 캐시 통합 검증
+2026-11-01 통합330건 PASS(단위164/PG107/E2E59), failure/error/skip0·Nu0·소스/JAR/SBOM 및 최종 앱/빌드/프록시 gate PASS. 기존 실제300기사·2계정·1발간물과 ID집합을 보존하고 V17~22, 백업/격리 복원, 승인된 HTTPS에서 공개/보호 경계·캐시 live 객체·자산304를 확인했다. 합성 계정 삭제. 원본 proxy UNKNOWN/기존 적용성 근거·S07 사용자 정책 및 단일 timing 표본 한계는 [서버 캐시 검증서](server-cache.md)와 [통합 증빙](evidence/cache-service-delivery-20261101.json)에 명시한다. 초기 잠금 역전과 시험 종료 오류는 숨기지 않고 수정 후 동일 기준을 재검증했다.

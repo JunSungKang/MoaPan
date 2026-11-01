@@ -128,3 +128,6 @@ Linux 서버에서는 `compose-public.yaml` 대신 `scripts/deploy/compose-serve
 ## 현재 보안 검증
 
 2026-10-31 최종256회귀와 실제 경량모델·HTTPS·8개 이미지 검증을 완료했다. Ubuntu 잔여 구성요소를 제거하고 JOSE 공식 수정을 별도 백포트했다. source-version 검사에 사용하는 백포트 근거는2026-11-07까지 유효하며 이후 공급자 공지·패치/빌드 증빙을 재검토해야 한다. 비밀번호 길이는 사용자 요청으로6~128을 유지하므로 단독 인증 권고와의 차이를 완료 처리하지 않는다. [현재 증빙](docs/05-test/evidence/runtime-security-followup-20261031.json)과 [고정20항목](docs/07-operation/security-review.md)을 확인한다.
+
+## 공통 조회 캐시
+브라우저 공통 ES Module/Intl/DOM 재사용과 정적 assets의 내용 ETag·압축을 적용했다. 서버는 내장 Caffeine으로 태그·공통 대표 관심사·광고 표시·요청한 공통 기사 카드·발간 원고를 최대60분 재사용한다. DB 수정 시 저장된 작은 해시를 비교해 변경을 즉시 반영하며 권한·quota·현재 공개 조건은 매 요청 검사한다. 회원 개인 관심사·검색·세션/계정 응답은 캐시하지 않는다. web16MiB/worker8MiB는 논리 가중치 예산이다. V17~22와 Helm schema22, 실제330회귀/HTTPS/데이터 보존 증거는 [서버 캐시 검증서](docs/05-test/server-cache.md)를 따른다.

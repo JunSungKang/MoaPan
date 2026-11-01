@@ -161,3 +161,5 @@ DOM/Intl 포맷은 인증·페이지 초기화 없이 재사용하는 leaf 모�
 사용자 승인에 따라 외부 캐시 서버 대신 JVM 라이브러리를 사용한다. Spring Boot4.1.2 BOM 관리 Caffeine3.2.4를 선택하고 공식3.2.4 릴리스/보안 공지·Maven Central SHA-512·Apache2.0 고지를 확인했다. 최신 upstream 숫자만 이유로 BOM을 override하지 않는다.
 캐시 값 논리 가중치 합계는 web16MiB/worker8MiB이며 실제 JVM heap 상한을 의미하지 않는다. 값별 최대512KiB/256KiB를 넘으면 보관하지 않는다. 최소 가중치512byte로 항목 수도 제한한다. 수명은 expireAfterWrite60분이고 오래된 값을 먼저 반환하는 비동기 refresh는 쓰지 않는다.
 동시 쓰기와 불일치한 해시/본문을 묶지 않도록 cache miss에서 해시·본문을 같은 REPEATABLE READ snapshot으로 읽는다. 최초 해시가 바뀌면 최대3회 재시도 후 불변 스냅샷 조회로 우회한다. 호출자 트랜잭션과 잠금 경로는 캐시를 쓰지 않아 미완료/롤백 값을 공유하지 않는다. 저장 해시는 PostgreSQL18 내장 sha256(bytea)를 이용하며 pgcrypto 확장을 추가하지 않는다.
+
+서버 캐시 최종:60분 최대 보관+매 요청 저장된 작은 해시/현재 공개 조건 비교. DB write transaction trigger로만 해시를 계산하고 값이 같은 작업 메타데이터 갱신은 무효화하지 않는다. edition15분 후보 갱신과 카드60분 보관을 분리하고, 같은 가시 후보/내용이면 editionUUID가 달라도 불변 카드를 재사용한다. web16MiB/worker8MiB는 논리 가중치이고 실heap 보증이 아니다. 발간 원고는 실제210787byte 자료를 검증하여 region당2MiB(web)/1MiB(worker)까지 단일 entry를 허용한다. 분류job/article lock inversion은 실제 FAIL→별도 지문 수정→동일 latch PASS로 결정했다.
