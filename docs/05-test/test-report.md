@@ -63,7 +63,7 @@ Java47개(unit11/integration23/E2E13) PASS/FAIL0/SKIP0. PostgreSQL 공개30개·
 
 ## 최초판·스크랩 지면 (2026-10-28T12:49:33.292Z)
 Java48개(unit11/integration23/E2E14) PASS/FAIL0/SKIP0. 전체 check/integrationTest/e2eTest/bootJar/sbom/securityCheck/acceptanceTest 통과. 최초 삭제 URL 검증의 빈404 응답을 브라우저 navigation으로 읽을 때 발생한 테스트 도구 오류는 실제 HTTP 응답 검사로 수정했고 8개 모두404를 확인했다. 검증 기준은 유지했다.
-MoA-PaN/중앙 문구 설정/상단 검색 위치/중간 설명 제거/4·2·1단/가로 넘침 없음/인쇄 장식 제거/검색 비전송/권한 메뉴/신규 terms-1 가입을 검증했다. 스크린샷: build/reports/screenshots/scrap-gallery-{390,768,1440}.png (합성 기사). 공개 HTTPS 실제13기사와 최초판2문서, 구 동의 거부400·신 동의200·로그인200·회원 API200·일반회원 admin403·테스트 계정 삭제 PASS. 기존 admin 활성/ADMIN 유지, Compose db/web/proxy healthy·worker running. evidence/scrap-layout.json 및 verification.json 참조.
+DamGoX2/중앙 문구 설정/상단 검색 위치/중간 설명 제거/4·2·1단/가로 넘침 없음/인쇄 장식 제거/검색 비전송/권한 메뉴/신규 terms-1 가입을 검증했다. 스크린샷: build/reports/screenshots/scrap-gallery-{390,768,1440}.png (합성 기사). 공개 HTTPS 실제13기사와 최초판2문서, 구 동의 거부400·신 동의200·로그인200·회원 API200·일반회원 admin403·테스트 계정 삭제 PASS. 기존 admin 활성/ADMIN 유지, Compose db/web/proxy healthy·worker running. evidence/scrap-layout.json 및 verification.json 참조.
 
 ## 검색 상호작용·모바일 상단·푸터
 CSS 변경 후 e2eTest/bootJar/sbom/securityCheck/acceptanceTest 통과. 기존 E2E14개 모두 재실행 PASS, 전체 최신 보고서48 PASS/FAIL0/SKIP0. 390/768/1440px 합성 지면 스크린샷 확인, 모바일 중복 구분선 제거 및 가로 넘침 없음. 검색 팝업·키보드·역할 메뉴·인쇄 회귀 유지. 최종 이미지/공개 CSS 일치 증빙은 evidence/header-layout.json 및 verification.json.
@@ -243,3 +243,14 @@ Helm migrationVersion14 lint/render/부정입력3PASS, 합성값렌더Trivy HIGH
 11개 HTML와 동적 등록 화면을 조사해 내부 UUID/slug 직접입력을 제거했다. 날짜조건 전달·이름선택 저장·별칭·병합·초기목록실패 차단/복구·미해결분류 주제 저장차단을 Playwright로 확인했다. 새18화면(기사필터/주제목록/분류기준 × 한영 ×390/768/1440), 기존72개 페이지상태·관리54상태를 확인했다. 행렬은 서로 겹치며 독립 사용자 평가 건수로 합산하지 않는다. 캡처 전 스크롤·2프레임 대기로 안정화하고 한H1/가로넘침없음을 검증한다. Nu11페이지 메시지0.
 
 소스/JAR/SBOM 및 새 앱·빌드 이미지 gate PASS. 앱 sha256:5ad3538359a78b7744d26f49c0d878081f29d3d660daa181c211e0036dacd373, 빌드 sha256:06fbe5006c8e0e5d00a01f4e7f26681aa636e5b953e2f642046cdc6bd65eb735; 원본 이미지 보고서상 취약점·secret0. Compose web/worker만 교체하고 실행JAR 6951754b48b478653305376d353aa15c2538dde296daf6056f6fd6e0664186cc 일치·HTTPS23자산hash/관리API3개401/기존공개·보호경계 확인. 운영 실제 로그인·계정생성은 하지 않았고 ADMIN 기능 동작은 합성PG/브라우저시험 결과다. 기사300/계정2/발간물1 보존. proxy·DB·모델의 새성능시험이나 포털색인 확인은 수행하지 않았다. [증빙](evidence/admin-usability-20261101.json).
+
+
+## 서비스 전체 담고담고(DamGoX2) 명명
+
+최신 사용자 정정에 따라 뉴스레터와 서비스 전체를 담고담고/DamGoX2로 통일했다. 의미는 여러 소식을 담고 펼치는 판이다. 전체11페이지의 최초제목/메타·한영메뉴·로그인/계정/관리·약관/개인정보·뉴스레터/미리보기/출처/내보내기명과 D파비콘, 수집User-Agent와 Spring표시명을 확인했다. 이전표기는현행정적UI·문서에0건이며계정/개인설정·암호화파일·세션·패키지/환경/프로젝트식별자와과거hash증빙은유지했다.
+
+최종275 PASS(단위154/PG67/브라우저54), 실패·오류·skip0. 최종영문철자반영후 check/e2eTest/bootJar/sbom/securityCheck와PG67을각각다시실행했다. 기존브랜드/제목/출처문구검증기준을새요구로갱신했고검증삭제/완화없다. 기존전체72상태/관리54상태·한영390/768/1440검증, Nu11페이지 메시지0. 이미지와코드현재철자시각검수포함.
+
+운영발간물1개의초안/발간본문/도식에도이전브랜드가있어독립사전검토한2회트랜잭션으로변경했다. 각회대상1개·기존이미지일치·advisory/행잠금·version+1·감사·보존검증·오류시rollback을적용했다. 호수·최초/최근발간시각·개정번호·배포구분·연구내용·근거URL보존, 기사300/계정2/발간물1유지,남은이전브랜드0. 도식의연구문구/수치/단계는유지했으며글꼴/간격은재렌더링차이가있다. 최종그림SHA a441b05700595067edbd304a2df92d3e68d6124496a58991a81051b10d33f1f7.
+
+최종소스/JAR/SBOM/앱·빌드이미지gatePASS. 앱 sha256:ef8e07a5671fb70e1d05f9cb4d2ade803108e4c0728327fc2b9cfacf029a76ee / 빌드 sha256:7e8e3ec394d3731eaa28e776895fa3fda9be16de30c019e79bc0eb302b391057, 두이미지원본취약점·secret0. web/worker에검증digest적용·실행JAR 6a19b59fceeb27473baf643f4773d624d29e5d4cc6dcbccbcc10b1bc4f5bec94일치, HTTPS19자산/공개·보호경계확인. 운영계정생성/로그인은하지않았다. 원래보안체크리스트19/20·패스워드사용자정책·JOSE백포트근거/만료는유지한다. [증빙](evidence/damgox2-brand-20261101.json).

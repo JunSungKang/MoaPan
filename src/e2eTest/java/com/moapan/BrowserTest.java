@@ -395,7 +395,7 @@ class BrowserTest {
     @Test void continuousNewspaperAndInitialPolicies(){
         try(var context=browser.newContext()){
             Page p=context.newPage();p.navigate(origin+"/index.html");p.waitForSelector("#paper article");
-            assertEquals("MoA-PaN",p.locator(".topline [data-brand-en]").textContent());
+            assertEquals("DamGoX2",p.locator(".topline [data-brand-en]").textContent());
             assertEquals(p.evaluate("async()=> (await import('/assets/js/shared/config.js')).brand.mastheadQuote"),p.locator("h1").textContent());
             assertEquals(1,p.locator(".topline #open-search").count());
             assertEquals(0,p.locator("main #open-search,#range,#interest-basis,main nav:not(.slide-controls)").count());
@@ -451,8 +451,8 @@ class BrowserTest {
             Page p=context.newPage();p.navigate(origin+"/login.html");p.waitForSelector("[data-language-select]");
             for(int width:new int[]{390,1440}){p.setViewportSize(width,1000);var form=p.locator("main").boundingBox();var brand=p.locator("header [data-brand-en]").boundingBox();var footer=p.locator("footer").boundingBox();assertEquals(form.x+form.width/2,brand.x+brand.width/2,1);assertEquals(form.x+form.width/2,footer.x+footer.width/2,1);assertEquals(0,p.locator("main h1").count());assertEquals(0,p.locator("header [data-language-select]").count());assertEquals(0,p.locator("footer [data-language-select]").count());assertEquals(1,p.locator(".auth-language-top [data-language-select]").count());var language=p.locator(".auth-language-top [data-language-select]").boundingBox();assertEquals(width-24,language.x+language.width,1);assertTrue(language.y+language.height<=brand.y);assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth<=innerWidth"));p.screenshot(new Page.ScreenshotOptions().setPath(Path.of("build/reports/screenshots/login-centered-"+width+".png")));}
             for(String page:List.of("index","about","privacy","terms","login","signup","account","settings","admin")){
-                p.navigate(origin+"/"+page+".html");p.waitForSelector("[data-language-select]");p.locator("[data-language-select]").selectOption("ko");p.waitForFunction("document.title.includes('모아판 MoA-PaN')");assertEquals(1,p.title().split("\\|",-1).length-1);
-                p.locator("[data-language-select]").selectOption("en");p.waitForFunction("document.title.endsWith(' | MoA-PaN')");assertFalse(p.title().contains("모아판"));
+                p.navigate(origin+"/"+page+".html");p.waitForSelector("[data-language-select]");p.locator("[data-language-select]").selectOption("ko");p.waitForFunction("document.title.includes('담고담고 DamGoX2')");assertEquals(1,p.title().split("\\|",-1).length-1);
+                p.locator("[data-language-select]").selectOption("en");p.waitForFunction("document.title.endsWith(' | DamGoX2')");assertFalse(p.title().contains("담고담고"));
             }
         }
     }
@@ -637,7 +637,7 @@ class BrowserTest {
   Page p=context.newPage();p.navigate(origin+"/about.html");p.waitForLoadState(com.microsoft.playwright.options.LoadState.NETWORKIDLE);
   var traffic=new ArrayList<String>();p.onRequest(r->traffic.add(r.url()));
   assertEquals(true,p.evaluate("""
-   async data=>{const m=await import('/assets/js/newsletter/publication-output.js');const url=location.origin+'/newsletter.html?id='+data.id;const free=m.plainNewsletter(data,'2026-001호',url);if(!free.includes('무료 열람 뉴스레터')||free.includes('유료 구독 뉴스레터')||!free.includes(url))return false;const paid=m.plainNewsletter({...data,distribution:'PAID_SUBSCRIPTION'},'2026-001호',url);if(!paid.includes('이 콘텐츠는 모아판(MoA-PaN)의 유료 구독 뉴스레터를 통해 제공되었습니다.'))return false;const html=m.htmlNewsletter(data,'2026-001호',url);const doc=new DOMParser().parseFromString(html,'text/html');if(doc.querySelector('meta[charset]')?.getAttribute('charset')!=='utf-8'||!doc.querySelector('meta[name=viewport]')?.content.includes('width=device-width'))return false;if(doc.querySelectorAll('script').length||!doc.querySelector('footer').textContent.includes(url)||!doc.querySelector('p').textContent.includes('Editorial'))return false;for(const kind of ['meeting','priority','experiment']){const text=m.worksheet(data,'2026-001호',url,kind);if(!text.includes('Conditional fixture scenario')||!text.includes('https://example.org/paper')||!text.includes(url))return false;}return true;}
+   async data=>{const m=await import('/assets/js/newsletter/publication-output.js');const url=location.origin+'/newsletter.html?id='+data.id;const free=m.plainNewsletter(data,'2026-001호',url);if(!free.includes('무료 열람 뉴스레터')||free.includes('유료 구독 뉴스레터')||!free.includes(url))return false;const paid=m.plainNewsletter({...data,distribution:'PAID_SUBSCRIPTION'},'2026-001호',url);if(!paid.includes('이 콘텐츠는 담고담고(DamGoX2)의 유료 구독 뉴스레터를 통해 제공되었습니다.'))return false;const html=m.htmlNewsletter(data,'2026-001호',url);const doc=new DOMParser().parseFromString(html,'text/html');if(doc.querySelector('meta[charset]')?.getAttribute('charset')!=='utf-8'||!doc.querySelector('meta[name=viewport]')?.content.includes('width=device-width'))return false;if(doc.querySelectorAll('script').length||!doc.querySelector('footer').textContent.includes(url)||!doc.querySelector('p').textContent.includes('Editorial'))return false;for(const kind of ['meeting','priority','experiment']){const text=m.worksheet(data,'2026-001호',url,kind);if(!text.includes('Conditional fixture scenario')||!text.includes('https://example.org/paper')||!text.includes(url))return false;}return true;}
    """,productIssue()));
   assertTrue(traffic.stream().allMatch(v->v.startsWith(origin+"/assets/js/")));
  }}

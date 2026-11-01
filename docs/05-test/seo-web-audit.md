@@ -62,7 +62,7 @@ User-Agent를 Googlebot/Yeti/bingbot 문자열로 바꾼 요청도 home/robots/e
 
 ### P2 — 뒷면 기사·링크의 발견성
 
-현재7개씩6면을 버튼·키보드·스와이프로 교체하고 개별 기사의 MOAPAN 고유 URL은 없다. [Google은 일반적으로 버튼을 클릭하지 않으므로](https://developers.google.com/search/docs/specialty/ecommerce/pagination-and-incremental-page-loading) 2~6면까지 발견된다고 보장할 수 없다. [Google의 JS 렌더링](https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics)과 [네이버의 JS 안내](https://searchadvisor.naver.com/guide/seo-advanced-javascript)를 함께 고려해야 한다. 공개 공통 지면에 한정한 크롤 가능한 URL/href를 검토하되, 기존 정적 HTML+REST 원칙·기사42개 제한·권리 조건을 유지해야 한다. 회원 본문 공개, 전체 DB dump, 원문 복제, 검색어 GET URL화·기록은 해결책으로 추가하지 않는다.
+현재7개씩6면을 버튼·키보드·스와이프로 교체하고 개별 기사의 DamGoX2 고유 URL은 없다. [Google은 일반적으로 버튼을 클릭하지 않으므로](https://developers.google.com/search/docs/specialty/ecommerce/pagination-and-incremental-page-loading) 2~6면까지 발견된다고 보장할 수 없다. [Google의 JS 렌더링](https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics)과 [네이버의 JS 안내](https://searchadvisor.naver.com/guide/seo-advanced-javascript)를 함께 고려해야 한다. 공개 공통 지면에 한정한 크롤 가능한 URL/href를 검토하되, 기존 정적 HTML+REST 원칙·기사42개 제한·권리 조건을 유지해야 한다. 회원 본문 공개, 전체 DB dump, 원문 복제, 검색어 GET URL화·기록은 해결책으로 추가하지 않는다.
 
 ### P3 — 공유 표현·언어 메타데이터
 
@@ -76,12 +76,14 @@ User-Agent를 Googlebot/Yeti/bingbot 문자열로 바꾼 요청도 home/robots/e
 
 | 검색어 | 반환 표본 | 자체 URL 일치 |
 |---|---|---:|
-| "모아판" "MoA-PaN" | 결과 없음 | 0 |
-| 모아판 MoA-PaN | 다른 서비스18건 | 0 |
+| 이름 변경 전 브랜드 정확 검색 | 결과 없음 | 0 |
+| 이름 변경 전 브랜드 일반 검색 | 다른 서비스18건 | 0 |
 | "175.195.62.165" | IP 대역 안내1건 | 0 |
 | "https://175.195.62.165/" | 결과 없음 | 0 |
 | site:175.195.62.165 | 결과 없음 | 0 |
-| site:175.195.62.165 "모아판" | 결과 없음 | 0 |
+| site:175.195.62.165 + 이름 변경 전 브랜드 | 결과 없음 | 0 |
+
+위 검색은 이름 변경 전에 실행한 기록이며, 새 이름의 검색 노출을 검증한 결과가 아니다. 원래 검색 조건은 당시 증빙에 보존한다.
 
 이 도구의 검색 공급자·지역 SERP·전체 결과 수·순위는 명시되지 않았다. 세 포털을 각각 직접 검사한 결과가 아니며 결과 부재를 미색인 확정으로 바꾸지 않는다. [Google도 site: 결과가 전체 색인이 아니라고 설명](https://developers.google.com/search/docs/monitor-debug/search-operators/all-search-site)한다. IP라서 검색이 불가능하다는 근거도 확인하지 못했다.
 

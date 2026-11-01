@@ -73,7 +73,7 @@ Sprint Delivery 유지. src 정적 모듈·설정 화면에 WebCrypto 암호화 
 공개 필드/상한/숨김 기사/권한/CSRF/충돌/기본값 및 메뉴 전체역할·검색 팝업·비전송·판 이력을 PostgreSQL와 Playwright Java로 검증. 기존 인수 기준의 변경 근거를 문서화. local 검사·이미지 검사·Compose 반영·HTTPS 확인·guarded push까지 진행한다. CI/CD/main merge/개인 관심사 서버 저장은 제외. 변경 경로 src/docs/scripts 및 현재 GitHub 계약 범위, 작업 루트는 승인된 moapan workspace만.
 
 ## 12. 최초 약관과 스크랩 갤러리
-현재 약관·개인정보 안내를 최초 제1판으로 표시하고 공개 이력 파일·링크를 삭제한다. 기존 회원 동의 기록은 변조하지 않는다. MoA-PaN 워드마크와 중앙 설정의 대표 문구, 상단 검색 버튼으로 제호를 정리한다. 중간 지면 설명·수량 줄을 제거하고 기사 순서·접근성을 유지한 4/2/1단 스크랩 갤러리를 만든다. Playwright·PostgreSQL·산출물/이미지 검사 후 현재 Compose 서비스 반영 및 guarded push한다.
+현재 약관·개인정보 안내를 최초 제1판으로 표시하고 공개 이력 파일·링크를 삭제한다. 기존 회원 동의 기록은 변조하지 않는다. DamGoX2 워드마크와 중앙 설정의 대표 문구, 상단 검색 버튼으로 제호를 정리한다. 중간 지면 설명·수량 줄을 제거하고 기사 순서·접근성을 유지한 4/2/1단 스크랩 갤러리를 만든다. Playwright·PostgreSQL·산출물/이미지 검사 후 현재 Compose 서비스 반영 및 guarded push한다.
 
 ## 13. 상단 상호작용·모바일 정렬 보완
 ### 13.1 구현
@@ -216,6 +216,10 @@ G05 출처별 원자적 예산, G06 소유권 상실 취소, G07 분산 번역 �
 조사범위:전체11개HTML과동적입력모듈. 사이트/수집주소/원고/근거는이미선택/자동ID라유지,원고근거의실패시ID대신안내표시. 외부광고연결ID·인증참조명·API매핑은실제연동에필요한값이므로DB-ID와구분해도움말/고급영역으로정리한다. Java변경은article/api/EditorialController,article/application/EditorialService,catalog/api/AdminController,catalog/application/CatalogService4개로한정하고DB마이그레이션/인증/모델/의존성/CI-CD는변경하지않는다.
 완료기준:한국시간날짜경계/기간역전/변조정렬/필터후100개·이름선택CRUD/병합/별칭/작업·미저장보존·화면한영390/768/1440·전수입력감사와기존회귀/최종산출물검사·Compose반영. PR11 current-head독립리뷰를갱신하며병합은포함하지않는다.
 
+
+### 34.6 서비스 담고담고 명명
+최신 사용자 정정으로 서비스 전체 이름을 담고담고(DamGoX2)로 바꾼다. 영문 DamGoX2, 의미 여러 소식을 담고 펼치는 판. 전체11페이지·언어사전·메뉴·제목/메타·약관/개인정보·뉴스레터목록/관리/출처·다운로드명·파비콘·현행문서를 조사해 이전 서비스표기를 제거한다. 공통 설정에서 이름을 관리하며 Spring 표시명과 수집 User-Agent도 변경한다. 저장된 개인설정·계정·원고·세션·암호화파일 호환성과 패키지/프로젝트/원격저장소 식별자는 유지한다. 이 식별자와 과거 hash증빙은 서비스명 표시와 구분한다. 기존 Sprint Delivery의 회귀·Nu·최종산출물/이미지검사·Compose반영·PR11현재head독립리뷰로 검증한다. develop/main병합은 제외한다.
+
 <!-- DOMAIN-PR-REORGANIZATION -->
 
 ## 35. 도메인별 PR·커밋 이력 재구성
@@ -234,4 +238,4 @@ main, 기존 공유 이력과 원래93eb767 snapshot을 보존한다. force push
 
 중간 단계의 실제 실행 결과와 최종275개 회귀 테스트, Nu 검사, 최종 JAR 일치, 실행 컨테이너 동일성을 각각 기록한다. 과거 증빙을 새 head의 실행 결과로 표시하지 않는다. 증빙 파일은 자기 커밋 이전의 검증 기록이며, 해당 PR 자신의 최종 병합·삭제 상태는 GitHub 기록으로 확인한다.
 
-현재 검증 단계: editorial-taxonomy.
+현재 검증 단계: publication-brand.

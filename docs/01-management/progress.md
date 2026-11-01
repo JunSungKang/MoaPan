@@ -119,5 +119,8 @@ PR10 guarded 사람 commit/push·생성 및 1db7303 독립 리뷰 APPROVE 완료
 
 관리자 수집일·입력 개선 로컬검증/서비스반영 완료: KST수집일 범위·3정렬을 LIMIT100 앞에서 적용, 드롭다운에 시각/제목/출처 표시, 주제목록과 자동분류기준의 목적/단계/예시·이름체크선택, UUID/slug직접입력 제거·서버자동코드, 최근50작업이름선택. 주제병합의 수동잠금/분류설정 보존과55P03충돌409, 외부관리자주제재조회·미해결저장차단·미리보기설명/발행시각복원을검증했다.275회귀(154/67/54),새18화면/기존72·54행렬/Nu0/최종앱·빌드gate PASS. 앱sha256:5ad3538359a78b7744d26f49c0d878081f29d3d660daa181c211e0036dacd373·JAR6951754b48b478653305376d353aa15c2538dde296daf6056f6fd6e0664186cc를 web/worker에 적용하고 HTTPS23자산·권한경계/DB300·2·1보존확인. [증빙](../05-test/evidence/admin-usability-20261101.json). PR11최종커밋/푸시/현재head독립리뷰를마무리하며 이번요청의develop/main병합은포함하지않는다.
 
+
+서비스 전체 명명 최종 반영: 사용자 정정으로 전체 서비스를 담고담고(DamGoX2), 의미 여러 소식을 담고 펼치는 판으로 통일했다.11페이지·한영/메뉴/메타/약관/개인정보/출처/다운로드/D파비콘/UA/Spring표시명·현행문서를맞췄다. 발간1호의자체본문·그림도동일연구내용/호수/시각/링크를보존해교체했고기사300·계정2·발간1유지.275회귀/72·54화면상태/Nu0/최종산출물·2이미지gatePASS. 앱sha256:ef8e07a5671fb70e1d05f9cb4d2ade803108e4c0728327fc2b9cfacf029a76ee를web/worker에적용해실행JAR/HTTPS19자산일치와경계를확인했다. [증빙](../05-test/evidence/damgox2-brand-20261101.json). PR11현재head전달·독립리뷰를진행하며develop/main병합은포함하지않는다.
+
 <!-- DOMAIN-PR-REORGANIZATION -->
-도메인별 이력 재구성 검증 단계: editorial-taxonomy. 검토·병합 결과는 [재구성 증빙](../05-test/evidence/domain-pr-reorganization-20261101.json)과 각 PR의 GitHub 최종 상태를 확인한다. 실행 중인 서비스와 데이터는 변경하지 않는다.
+도메인별 이력 재구성 검증 단계: publication-brand. 검토·병합 결과는 [재구성 증빙](../05-test/evidence/domain-pr-reorganization-20261101.json)과 각 PR의 GitHub 최종 상태를 확인한다. 실행 중인 서비스와 데이터는 변경하지 않는다.
