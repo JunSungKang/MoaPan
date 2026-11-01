@@ -1,5 +1,4 @@
 package com.moapan.classification.application;
-import com.moapan.classification.domain.ClassificationPolicy;
 
 import com.moapan.shared.api.ApiError;
 import com.moapan.article.domain.ArticleFingerprint;

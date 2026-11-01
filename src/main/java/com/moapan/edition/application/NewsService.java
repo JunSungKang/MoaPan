@@ -1,7 +1,6 @@
 package com.moapan.edition.application;
 import com.moapan.translation.infrastructure.ArticleTranslations;
 import com.moapan.shared.api.ApiError;
-import com.moapan.bootstrap.AdminCommand;
 import com.moapan.access.infrastructure.Limits;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Service;
@@ -47,6 +46,5 @@ public class NewsService {
     @SuppressWarnings("unchecked") private List<String>bullets(String value){return json.readValue(value,List.class);}
     private static void validateSize(int size){if(size<1||size>50)throw new ApiError(400,"invalid_size");}
     private static Instant instant(Object value){if(value==null)return null;if(value instanceof java.sql.Timestamp t)return t.toInstant();if(value instanceof OffsetDateTime t)return t.toInstant();return Instant.parse(value.toString());}
-    public Object tags(){return Map.of("tags",db.sql("SELECT id,slug,name,category FROM tags WHERE active ORDER BY name").query().listOfRows(),"aliases",db.sql("SELECT a.alias,a.tag_id AS \"tagId\" FROM tag_aliases a JOIN tags t ON t.id=a.tag_id WHERE t.active").query().listOfRows(),"redirects",db.sql("SELECT old_id AS \"oldId\",canonical_id AS \"canonicalId\" FROM tag_redirects").query().listOfRows());}
     public Object sources(){return readModels.sources();}
 }

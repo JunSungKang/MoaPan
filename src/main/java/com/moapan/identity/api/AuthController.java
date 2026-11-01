@@ -2,7 +2,6 @@ package com.moapan.identity.api;
 import com.moapan.identity.infrastructure.Account;
 import com.moapan.identity.infrastructure.Accounts;
 import com.moapan.shared.api.ApiError;
-import com.moapan.bootstrap.AdminCommand;
 import com.moapan.access.infrastructure.Limits;
 import jakarta.servlet.http.*;
 import jakarta.validation.Valid;

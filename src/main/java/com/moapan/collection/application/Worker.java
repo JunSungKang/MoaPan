@@ -1,7 +1,5 @@
 package com.moapan.collection.application;
 import com.moapan.shared.api.ApiError;
-import com.moapan.bootstrap.AdminCommand;
-import com.moapan.catalog.api.AdminController;
 import com.moapan.catalog.application.CatalogService;
 import com.moapan.catalog.infrastructure.CatalogRepository;
 import com.moapan.collection.infrastructure.SafeFetch;
