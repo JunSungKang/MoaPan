@@ -1,0 +1,40 @@
+{
+  "checkedAt": "2026-11-01T11:53:17.268Z",
+  "domain": "taxonomy",
+  "status": "VERIFIED_AND_LIVE_IN_COMPOSITE",
+  "tests": 6,
+  "warmDictionary": {
+    "sqlStatements": 1,
+    "payloadQueries": 0,
+    "probe": "stored SHA-256"
+  },
+  "warmClassification": {
+    "sqlStatements": 1,
+    "payloadQueries": 0
+  },
+  "checks": [
+    "immutable values",
+    "lock bypass",
+    "rename/definition/version invalidation",
+    "alias/redirect invalidation",
+    "rollback",
+    "two instances",
+    "concurrent edits hash correctness"
+  ],
+  "source": "TaxonomyCacheIntegrationTest actual PostgreSQL",
+  "dependency": "PR17",
+  "runtimeDeployed": true,
+  "validatedAt": "2026-11-01T11:54:20.891Z",
+  "regression": {
+    "unit": 163,
+    "postgresql": 77
+  },
+  "refreshedValidation": {
+    "test": 164,
+    "integrationTest": 78,
+    "check": "PASS",
+    "jarSbomSecurity": "PASS",
+    "date": "2026-11-01T13:29:43.176Z"
+  },
+  "runtimeScope": "Combined330-pass image6542dd108cb8; service-before-merge HTTPS verified; final delivery evidence follows"
+}
