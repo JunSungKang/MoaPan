@@ -1,5 +1,5 @@
 import {request} from '../shared/api.js';
-import {el} from '../shared/common.js';
+import {el} from '../shared/dom.js';
 import {t} from '../shared/i18n.js';
 import {loadTopics} from './topics.js';
 

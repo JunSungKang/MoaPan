@@ -4,7 +4,7 @@
   "flowType": "integration",
   "branch": "codex/cache-taxonomy-20261101",
   "targetBranch": "develop",
-  "baseSha": "f19d5e539f84da72cb21a7908efd583b889a747f",
+  "baseSha": "7f4c99a495605e094b5198e9b87626818eb306a5",
   "mergeMethod": "squash",
   "governance": {
     "prAuthorLogin": "JunSungKang",

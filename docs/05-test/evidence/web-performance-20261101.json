@@ -1,0 +1,695 @@
+{
+  "checkedAt": "2026-11-01T03:57:45.687Z",
+  "baseSha": "f19d5e539f84da72cb21a7908efd583b889a747f",
+  "coverage": {
+    "html": 11,
+    "jsBefore": 37,
+    "css": 5
+  },
+  "method": "Local real Spring HTTP, uncompressed assets, disposable empty PostgreSQL; cold/warm same Chromium context. No route interception, production traffic, or tracking.",
+  "samplesPerPage": 3,
+  "comparison": {
+    "login": {
+      "before": {
+        "coldTransferBytes": 126123,
+        "warmTransferBytes": 126123,
+        "jsBodyBytes": 95764,
+        "coldLoadMs": 59.09999990463257
+      },
+      "after": {
+        "coldTransferBytes": 88063,
+        "warmTransferBytes": 4200,
+        "jsBodyBytes": 58304,
+        "coldLoadMs": 51.299999952316284
+      },
+      "reductionPercent": {
+        "coldTransferBytes": 30.176890812936573,
+        "warmTransferBytes": 96.66991746152566,
+        "jsBodyBytes": 39.11699594837308,
+        "coldLoadMs": 13.197969483761163
+      }
+    },
+    "index": {
+      "before": {
+        "coldTransferBytes": 131505,
+        "warmTransferBytes": 131505,
+        "jsBodyBytes": 103603,
+        "coldLoadMs": 80
+      },
+      "after": {
+        "coldTransferBytes": 93336,
+        "warmTransferBytes": 5100,
+        "jsBodyBytes": 66034,
+        "coldLoadMs": 70.5
+      },
+      "reductionPercent": {
+        "coldTransferBytes": 29.02475191057374,
+        "warmTransferBytes": 96.12182046310026,
+        "jsBodyBytes": 36.262463442178316,
+        "coldLoadMs": 11.875000000000002
+      }
+    }
+  },
+  "baseline": {
+    "login": [
+      {
+        "warm": {
+          "transferBytes": 126123,
+          "assetRequests": 16,
+          "jsBodyBytes": 95764,
+          "modules": [
+            "/assets/js/identity/auth.js",
+            "/assets/js/shared/api.js",
+            "/assets/js/shared/common.js",
+            "/assets/js/shared/i18n.js",
+            "/assets/js/shared/config.js",
+            "/assets/js/advertising/banner.js",
+            "/assets/js/shared/i18n-product.js",
+            "/assets/js/shared/i18n-en.js",
+            "/assets/js/shared/i18n-advertising.js",
+            "/assets/js/shared/i18n-pages.js",
+            "/assets/js/shared/i18n-admin-navigation.js",
+            "/assets/js/shared/i18n-status.js"
+          ],
+          "loadMs": 33.700000047683716
+        },
+        "cold": {
+          "transferBytes": 126123,
+          "assetRequests": 16,
+          "jsBodyBytes": 95764,
+          "modules": [
+            "/assets/js/identity/auth.js",
+            "/assets/js/shared/api.js",
+            "/assets/js/shared/common.js",
+            "/assets/js/shared/i18n.js",
+            "/assets/js/shared/config.js",
+            "/assets/js/advertising/banner.js",
+            "/assets/js/shared/i18n-advertising.js",
+            "/assets/js/shared/i18n-product.js",
+            "/assets/js/shared/i18n-en.js",
+            "/assets/js/shared/i18n-pages.js",
+            "/assets/js/shared/i18n-status.js",
+            "/assets/js/shared/i18n-admin-navigation.js"
+          ],
+          "loadMs": 157
+        }
+      },
+      {
+        "warm": {
+          "transferBytes": 126123,
+          "assetRequests": 16,
+          "jsBodyBytes": 95764,
+          "modules": [
+            "/assets/js/identity/auth.js",
+            "/assets/js/shared/api.js",
+            "/assets/js/shared/common.js",
+            "/assets/js/shared/i18n.js",
+            "/assets/js/advertising/banner.js",
+            "/assets/js/shared/config.js",
+            "/assets/js/shared/i18n-product.js",
+            "/assets/js/shared/i18n-advertising.js",
+            "/assets/js/shared/i18n-admin-navigation.js",
+            "/assets/js/shared/i18n-pages.js",
+            "/assets/js/shared/i18n-status.js",
+            "/assets/js/shared/i18n-en.js"
+          ],
+          "loadMs": 29.59999990463257
+        },
+        "cold": {
+          "transferBytes": 126123,
+          "assetRequests": 16,
+          "jsBodyBytes": 95764,
+          "modules": [
+            "/assets/js/identity/auth.js",
+            "/assets/js/shared/api.js",
+            "/assets/js/shared/common.js",
+            "/assets/js/shared/i18n.js",
+            "/assets/js/shared/config.js",
+            "/assets/js/advertising/banner.js",
+            "/assets/js/shared/i18n-product.js",
+            "/assets/js/shared/i18n-advertising.js",
+            "/assets/js/shared/i18n-en.js",
+            "/assets/js/shared/i18n-pages.js",
+            "/assets/js/shared/i18n-status.js",
+            "/assets/js/shared/i18n-admin-navigation.js"
+          ],
+          "loadMs": 59.09999990463257
+        }
+      },
+      {
+        "warm": {
+          "transferBytes": 126123,
+          "assetRequests": 16,
+          "jsBodyBytes": 95764,
+          "modules": [
+            "/assets/js/identity/auth.js",
+            "/assets/js/shared/api.js",
+            "/assets/js/shared/common.js",
+            "/assets/js/shared/i18n.js",
+            "/assets/js/advertising/banner.js",
+            "/assets/js/shared/config.js",
+            "/assets/js/shared/i18n-product.js",
+            "/assets/js/shared/i18n-advertising.js",
+            "/assets/js/shared/i18n-status.js",
+            "/assets/js/shared/i18n-en.js",
+            "/assets/js/shared/i18n-admin-navigation.js",
+            "/assets/js/shared/i18n-pages.js"
+          ],
+          "loadMs": 34.5
+        },
+        "cold": {
+          "transferBytes": 126123,
+          "assetRequests": 16,
+          "jsBodyBytes": 95764,
+          "modules": [
+            "/assets/js/identity/auth.js",
+            "/assets/js/shared/api.js",
+            "/assets/js/shared/common.js",
+            "/assets/js/shared/i18n.js",
+            "/assets/js/shared/config.js",
+            "/assets/js/advertising/banner.js",
+            "/assets/js/shared/i18n-product.js",
+            "/assets/js/shared/i18n-status.js",
+            "/assets/js/shared/i18n-advertising.js",
+            "/assets/js/shared/i18n-en.js",
+            "/assets/js/shared/i18n-admin-navigation.js",
+            "/assets/js/shared/i18n-pages.js"
+          ],
+          "loadMs": 53.299999952316284
+        }
+      }
+    ],
+    "incrementalWork": {
+      "textVisits": 40780,
+      "formatters": 1000,
+      "mutationMs": 82.40000009536743,
+      "formattingMs": 54.09999990463257
+    },
+    "index": [
+      {
+        "warm": {
+          "transferBytes": 131505,
+          "assetRequests": 19,
+          "jsBodyBytes": 103603,
+          "modules": [
+            "/assets/js/edition/news.js",
+            "/assets/js/article/article-text.js",
+            "/assets/js/shared/i18n.js",
+            "/assets/js/edition/slides.js",
+            "/assets/js/personalization/preferences.js",
+            "/assets/js/shared/common.js",
+            "/assets/js/shared/api.js",
+            "/assets/js/personalization/ranking.js",
+            "/assets/js/shared/i18n-advertising.js",
+            "/assets/js/shared/i18n-product.js",
+            "/assets/js/shared/i18n-en.js",
+            "/assets/js/shared/i18n-pages.js",
+            "/assets/js/shared/i18n-admin-navigation.js",
+            "/assets/js/shared/i18n-status.js",
+            "/assets/js/advertising/banner.js",
+            "/assets/js/shared/config.js"
+          ],
+          "loadMs": 34
+        },
+        "cold": {
+          "transferBytes": 131505,
+          "assetRequests": 19,
+          "jsBodyBytes": 103603,
+          "modules": [
+            "/assets/js/edition/news.js",
+            "/assets/js/personalization/preferences.js",
+            "/assets/js/edition/slides.js",
+            "/assets/js/shared/common.js",
+            "/assets/js/shared/i18n.js",
+            "/assets/js/shared/api.js",
+            "/assets/js/article/article-text.js",
+            "/assets/js/personalization/ranking.js",
+            "/assets/js/shared/config.js",
+            "/assets/js/advertising/banner.js",
+            "/assets/js/shared/i18n-product.js",
+            "/assets/js/shared/i18n-en.js",
+            "/assets/js/shared/i18n-advertising.js",
+            "/assets/js/shared/i18n-admin-navigation.js",
+            "/assets/js/shared/i18n-status.js",
+            "/assets/js/shared/i18n-pages.js"
+          ],
+          "loadMs": 80
+        }
+      },
+      {
+        "warm": {
+          "transferBytes": 131505,
+          "assetRequests": 19,
+          "jsBodyBytes": 103603,
+          "modules": [
+            "/assets/js/edition/news.js",
+            "/assets/js/article/article-text.js",
+            "/assets/js/edition/slides.js",
+            "/assets/js/shared/api.js",
+            "/assets/js/shared/i18n.js",
+            "/assets/js/shared/common.js",
+            "/assets/js/personalization/preferences.js",
+            "/assets/js/personalization/ranking.js",
+            "/assets/js/shared/i18n-product.js",
+            "/assets/js/shared/i18n-advertising.js",
+            "/assets/js/shared/i18n-en.js",
+            "/assets/js/shared/i18n-pages.js",
+            "/assets/js/shared/i18n-admin-navigation.js",
+            "/assets/js/shared/i18n-status.js",
+            "/assets/js/shared/config.js",
+            "/assets/js/advertising/banner.js"
+          ],
+          "loadMs": 33.40000009536743
+        },
+        "cold": {
+          "transferBytes": 131505,
+          "assetRequests": 19,
+          "jsBodyBytes": 103603,
+          "modules": [
+            "/assets/js/edition/news.js",
+            "/assets/js/shared/i18n.js",
+            "/assets/js/article/article-text.js",
+            "/assets/js/edition/slides.js",
+            "/assets/js/shared/common.js",
+            "/assets/js/personalization/preferences.js",
+            "/assets/js/shared/api.js",
+            "/assets/js/personalization/ranking.js",
+            "/assets/js/shared/config.js",
+            "/assets/js/advertising/banner.js",
+            "/assets/js/shared/i18n-product.js",
+            "/assets/js/shared/i18n-en.js",
+            "/assets/js/shared/i18n-advertising.js",
+            "/assets/js/shared/i18n-pages.js",
+            "/assets/js/shared/i18n-admin-navigation.js",
+            "/assets/js/shared/i18n-status.js"
+          ],
+          "loadMs": 85.89999985694885
+        }
+      },
+      {
+        "warm": {
+          "transferBytes": 131505,
+          "assetRequests": 19,
+          "jsBodyBytes": 103603,
+          "modules": [
+            "/assets/js/edition/news.js",
+            "/assets/js/edition/slides.js",
+            "/assets/js/article/article-text.js",
+            "/assets/js/shared/i18n.js",
+            "/assets/js/shared/api.js",
+            "/assets/js/personalization/preferences.js",
+            "/assets/js/shared/common.js",
+            "/assets/js/personalization/ranking.js",
+            "/assets/js/shared/i18n-advertising.js",
+            "/assets/js/shared/i18n-en.js",
+            "/assets/js/shared/i18n-product.js",
+            "/assets/js/shared/i18n-pages.js",
+            "/assets/js/shared/i18n-admin-navigation.js",
+            "/assets/js/shared/i18n-status.js",
+            "/assets/js/shared/config.js",
+            "/assets/js/advertising/banner.js"
+          ],
+          "loadMs": 34.40000009536743
+        },
+        "cold": {
+          "transferBytes": 131505,
+          "assetRequests": 19,
+          "jsBodyBytes": 103603,
+          "modules": [
+            "/assets/js/edition/news.js",
+            "/assets/js/article/article-text.js",
+            "/assets/js/edition/slides.js",
+            "/assets/js/shared/i18n.js",
+            "/assets/js/shared/api.js",
+            "/assets/js/personalization/preferences.js",
+            "/assets/js/shared/common.js",
+            "/assets/js/personalization/ranking.js",
+            "/assets/js/shared/i18n-pages.js",
+            "/assets/js/shared/i18n-product.js",
+            "/assets/js/shared/i18n-en.js",
+            "/assets/js/shared/i18n-advertising.js",
+            "/assets/js/shared/i18n-status.js",
+            "/assets/js/shared/i18n-admin-navigation.js",
+            "/assets/js/shared/config.js",
+            "/assets/js/advertising/banner.js"
+          ],
+          "loadMs": 68.59999990463257
+        }
+      }
+    ],
+    "stage": "baseline",
+    "samplesPerPage": 3,
+    "scope": "Local real Spring HTTP, uncompressed assets, disposable empty PostgreSQL; cold/warm same Chromium context. No route interception, production traffic, or tracking."
+  },
+  "after": {
+    "login": [
+      {
+        "cold": {
+          "transferBytes": 88063,
+          "assetRequests": 14,
+          "jsBodyBytes": 58304,
+          "modules": [
+            "/assets/js/identity/auth.js",
+            "/assets/js/shared/api.js",
+            "/assets/js/shared/common.js",
+            "/assets/js/shared/i18n.js",
+            "/assets/js/shared/dom.js",
+            "/assets/js/shared/format.js",
+            "/assets/js/shared/config.js",
+            "/assets/js/shared/i18n-product.js",
+            "/assets/js/shared/i18n-status.js",
+            "/assets/js/shared/i18n-en.js"
+          ],
+          "loadMs": 115.89999985694885
+        },
+        "warm": {
+          "transferBytes": 4200,
+          "assetRequests": 14,
+          "jsBodyBytes": 0,
+          "modules": [
+            "/assets/js/identity/auth.js",
+            "/assets/js/shared/api.js",
+            "/assets/js/shared/common.js",
+            "/assets/js/shared/format.js",
+            "/assets/js/shared/dom.js",
+            "/assets/js/shared/config.js",
+            "/assets/js/shared/i18n.js",
+            "/assets/js/shared/i18n-product.js",
+            "/assets/js/shared/i18n-en.js",
+            "/assets/js/shared/i18n-status.js"
+          ],
+          "loadMs": 25.90000009536743
+        }
+      },
+      {
+        "cold": {
+          "transferBytes": 88063,
+          "assetRequests": 14,
+          "jsBodyBytes": 58304,
+          "modules": [
+            "/assets/js/identity/auth.js",
+            "/assets/js/shared/api.js",
+            "/assets/js/shared/common.js",
+            "/assets/js/shared/i18n.js",
+            "/assets/js/shared/config.js",
+            "/assets/js/shared/dom.js",
+            "/assets/js/shared/format.js",
+            "/assets/js/shared/i18n-product.js",
+            "/assets/js/shared/i18n-en.js",
+            "/assets/js/shared/i18n-status.js"
+          ],
+          "loadMs": 51.299999952316284
+        },
+        "warm": {
+          "transferBytes": 4200,
+          "assetRequests": 14,
+          "jsBodyBytes": 0,
+          "modules": [
+            "/assets/js/identity/auth.js",
+            "/assets/js/shared/api.js",
+            "/assets/js/shared/common.js",
+            "/assets/js/shared/config.js",
+            "/assets/js/shared/i18n.js",
+            "/assets/js/shared/dom.js",
+            "/assets/js/shared/format.js",
+            "/assets/js/shared/i18n-product.js",
+            "/assets/js/shared/i18n-en.js",
+            "/assets/js/shared/i18n-status.js"
+          ],
+          "loadMs": 31.90000009536743
+        }
+      },
+      {
+        "cold": {
+          "transferBytes": 88063,
+          "assetRequests": 14,
+          "jsBodyBytes": 58304,
+          "modules": [
+            "/assets/js/identity/auth.js",
+            "/assets/js/shared/api.js",
+            "/assets/js/shared/common.js",
+            "/assets/js/shared/config.js",
+            "/assets/js/shared/i18n.js",
+            "/assets/js/shared/dom.js",
+            "/assets/js/shared/format.js",
+            "/assets/js/shared/i18n-product.js",
+            "/assets/js/shared/i18n-en.js",
+            "/assets/js/shared/i18n-status.js"
+          ],
+          "loadMs": 49.700000047683716
+        },
+        "warm": {
+          "transferBytes": 4200,
+          "assetRequests": 14,
+          "jsBodyBytes": 0,
+          "modules": [
+            "/assets/js/identity/auth.js",
+            "/assets/js/shared/common.js",
+            "/assets/js/shared/api.js",
+            "/assets/js/shared/i18n.js",
+            "/assets/js/shared/config.js",
+            "/assets/js/shared/dom.js",
+            "/assets/js/shared/format.js",
+            "/assets/js/shared/i18n-product.js",
+            "/assets/js/shared/i18n-status.js",
+            "/assets/js/shared/i18n-en.js"
+          ],
+          "loadMs": 27.40000009536743
+        }
+      }
+    ],
+    "incrementalWork": {
+      "textVisits": 0,
+      "formatters": 1,
+      "mutationMs": 76.40000009536743,
+      "formattingMs": 12.900000095367432
+    },
+    "index": [
+      {
+        "cold": {
+          "transferBytes": 93336,
+          "assetRequests": 17,
+          "jsBodyBytes": 66034,
+          "modules": [
+            "/assets/js/edition/news.js",
+            "/assets/js/shared/format.js",
+            "/assets/js/edition/slides.js",
+            "/assets/js/article/article-text.js",
+            "/assets/js/shared/i18n.js",
+            "/assets/js/shared/api.js",
+            "/assets/js/shared/common.js",
+            "/assets/js/personalization/preferences.js",
+            "/assets/js/personalization/ranking.js",
+            "/assets/js/shared/i18n-product.js",
+            "/assets/js/shared/config.js",
+            "/assets/js/shared/i18n-en.js",
+            "/assets/js/shared/i18n-status.js",
+            "/assets/js/shared/dom.js"
+          ],
+          "loadMs": 102.90000009536743
+        },
+        "warm": {
+          "transferBytes": 5100,
+          "assetRequests": 17,
+          "jsBodyBytes": 0,
+          "modules": [
+            "/assets/js/edition/news.js",
+            "/assets/js/shared/i18n.js",
+            "/assets/js/shared/format.js",
+            "/assets/js/article/article-text.js",
+            "/assets/js/edition/slides.js",
+            "/assets/js/shared/common.js",
+            "/assets/js/shared/api.js",
+            "/assets/js/personalization/preferences.js",
+            "/assets/js/personalization/ranking.js",
+            "/assets/js/shared/i18n-product.js",
+            "/assets/js/shared/i18n-en.js",
+            "/assets/js/shared/i18n-status.js",
+            "/assets/js/shared/config.js",
+            "/assets/js/shared/dom.js"
+          ],
+          "loadMs": 19.59999990463257
+        }
+      },
+      {
+        "cold": {
+          "transferBytes": 93336,
+          "assetRequests": 17,
+          "jsBodyBytes": 66034,
+          "modules": [
+            "/assets/js/edition/news.js",
+            "/assets/js/shared/format.js",
+            "/assets/js/shared/i18n.js",
+            "/assets/js/article/article-text.js",
+            "/assets/js/shared/api.js",
+            "/assets/js/edition/slides.js",
+            "/assets/js/shared/common.js",
+            "/assets/js/personalization/ranking.js",
+            "/assets/js/personalization/preferences.js",
+            "/assets/js/shared/i18n-product.js",
+            "/assets/js/shared/i18n-status.js",
+            "/assets/js/shared/i18n-en.js",
+            "/assets/js/shared/config.js",
+            "/assets/js/shared/dom.js"
+          ],
+          "loadMs": 70.5
+        },
+        "warm": {
+          "transferBytes": 5100,
+          "assetRequests": 17,
+          "jsBodyBytes": 0,
+          "modules": [
+            "/assets/js/edition/news.js",
+            "/assets/js/shared/format.js",
+            "/assets/js/shared/i18n.js",
+            "/assets/js/article/article-text.js",
+            "/assets/js/shared/api.js",
+            "/assets/js/edition/slides.js",
+            "/assets/js/shared/common.js",
+            "/assets/js/personalization/ranking.js",
+            "/assets/js/personalization/preferences.js",
+            "/assets/js/shared/i18n-product.js",
+            "/assets/js/shared/i18n-en.js",
+            "/assets/js/shared/i18n-status.js",
+            "/assets/js/shared/config.js",
+            "/assets/js/shared/dom.js"
+          ],
+          "loadMs": 28.700000047683716
+        }
+      },
+      {
+        "cold": {
+          "transferBytes": 93336,
+          "assetRequests": 17,
+          "jsBodyBytes": 66034,
+          "modules": [
+            "/assets/js/edition/news.js",
+            "/assets/js/shared/i18n.js",
+            "/assets/js/shared/format.js",
+            "/assets/js/article/article-text.js",
+            "/assets/js/shared/api.js",
+            "/assets/js/edition/slides.js",
+            "/assets/js/shared/common.js",
+            "/assets/js/personalization/preferences.js",
+            "/assets/js/personalization/ranking.js",
+            "/assets/js/shared/i18n-product.js",
+            "/assets/js/shared/i18n-status.js",
+            "/assets/js/shared/i18n-en.js",
+            "/assets/js/shared/config.js",
+            "/assets/js/shared/dom.js"
+          ],
+          "loadMs": 66.90000009536743
+        },
+        "warm": {
+          "transferBytes": 5100,
+          "assetRequests": 17,
+          "jsBodyBytes": 0,
+          "modules": [
+            "/assets/js/edition/news.js",
+            "/assets/js/shared/format.js",
+            "/assets/js/shared/i18n.js",
+            "/assets/js/article/article-text.js",
+            "/assets/js/edition/slides.js",
+            "/assets/js/shared/api.js",
+            "/assets/js/shared/common.js",
+            "/assets/js/personalization/preferences.js",
+            "/assets/js/personalization/ranking.js",
+            "/assets/js/shared/i18n-status.js",
+            "/assets/js/shared/i18n-product.js",
+            "/assets/js/shared/i18n-en.js",
+            "/assets/js/shared/dom.js",
+            "/assets/js/shared/config.js"
+          ],
+          "loadMs": 28.399999856948853
+        }
+      }
+    ],
+    "stage": "after",
+    "samplesPerPage": 3,
+    "scope": "Local real Spring HTTP, uncompressed assets, disposable empty PostgreSQL; cold/warm same Chromium context. No route interception, production traffic, or tracking."
+  },
+  "incrementalWorkMetric": "textVisits counts only text returned by instrumented TreeWalker.nextNode; changed text is processed directly after the change, not zero translation work.",
+  "formatterScope": "1000 shared date calls in one language. Lazy cache has four fixed styles times two languages (at most8 instances per document). No claim about absolute RAM.",
+  "compression": {
+    "checkedAt": "2026-11-01T03:55:26.536Z",
+    "imageId": "sha256:405a6cdcca57ae80710a37d40d21f42b3c98265dd248d29430f34247e86b2a52",
+    "validatedConfigs": [
+      "Caddyfile",
+      "scripts/deploy/Caddyfile.public",
+      "scripts/deploy/helm/moapan/templates/config.yaml"
+    ],
+    "wireAsset": "/assets/js/shared/common.js",
+    "rawBytes": 7439,
+    "gzipBytes": 2603,
+    "reductionPercent": 65.00873773356635,
+    "gzipRoundTrip": true,
+    "varyAcceptEncoding": true,
+    "apiCompressionExcluded": true,
+    "scope": "Isolated Caddy image with identical asset matcher; Spring ETag/no-store verified separately by actual HTTP/PG tests; no production request."
+  },
+  "tests": {
+    "test": {
+      "tests": 155,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "integrationTest": {
+      "tests": 68,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "e2eTest": {
+      "tests": 59,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "total": 282,
+  "html": 0,
+  "security": {
+    "images": [
+      {
+        "name": "damgox2-performance:web-20261101",
+        "id": "sha256:8a9a06e3415ceccbc2abd5cd93beba99a85c52d89481ad9c1b62122f008d9ae4",
+        "scannerSeverities": {},
+        "reportSha256": "c2a7d77e0b76b0daee7b393266cd1a06067d5ad4b364934cc3c2735180c64906",
+        "gate": "PASS"
+      },
+      {
+        "name": "damgox2-performance:proxy-20261101",
+        "id": "sha256:405a6cdcca57ae80710a37d40d21f42b3c98265dd248d29430f34247e86b2a52",
+        "scannerSeverities": {
+          "UNKNOWN": 1
+        },
+        "reportSha256": "0702ba369715b431954555b2e18c4897e293841385a1b16d68b4716366bf889a",
+        "gate": "PASS"
+      }
+    ],
+    "sourceJarSbomGate": "PASS",
+    "jarSha256": "d1b00729cff8cff209e428aa2bd15df41ee74c8721c1bf9a7c07ae96f54ee47d",
+    "sbomSha256": "1ad74a0dc59e1c37447a0d4496fcbe280394be7ddb7a0328ac5655b21c962b63",
+    "dbSync": "2026-10-31T22:08:51.77085Z",
+    "applicability": {
+      "id": "GO-2026-5932",
+      "scannerSeverity": "UNKNOWN",
+      "package": "golang.org/x/crypto@v0.58.0",
+      "assessment": "NOT_AFFECTED: existing documented OpenPGP package non-inclusion evidence applies to the identical Caddy executable",
+      "oldAndNewCaddySha256": "0d42db0cb578655050325ba625310f95e16a42ffda0142f2e3ca0542c0b3550f",
+      "evidence": "docs/07-operation/security-review.md (OpenPGP package non-inclusion and prior symbol review)",
+      "newIgnoreOrException": false
+    },
+    "imageJarMatchesHost": true,
+    "webImageJarSha256": "d1b00729cff8cff209e428aa2bd15df41ee74c8721c1bf9a7c07ae96f54ee47d"
+  },
+  "runtimeContainersUnchanged": 6,
+  "productionDeployment": "NOT_PERFORMED",
+  "merge": "NOT_AUTHORIZED_FOR_THIS_NEW_PR",
+  "logs": {
+    "baseline": "9a5257be878e17a12366d87f2153079c16a6bd3f50f80142092471f40a0e6363",
+    "full": "0f88eba03ea396bf56ddd2037f5d896dc42c66c94751f3b2cc4fc3b50096c4a8",
+    "images": "a347a619bf7a8a3e1fd463685dcbd766f55f3eaf259ce09daec6eaf78be306a6"
+  }
+}
