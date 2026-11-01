@@ -25,6 +25,7 @@ class SiteDesignAuditTest {
             }else if(path.equals("/api/v1/newsletters"))body=json.writeValueAsString(List.of(Map.of("id",BrowserTest.A,"title","합성 뉴스레터 · Synthetic newsletter","introduction","화면 검증용 원고입니다.","topic","AI","published_at","2026-10-30T08:00:00Z")));
             else if(path.equals("/api/v1/newsletters/"+BrowserTest.A))body=json.writeValueAsString(BrowserTest.productIssue());
             else if(path.equals("/api/v1/admin/interests"))body="{\"version\":0,\"weights\":{\"ai\":3}}";
+            else if(path.equals("/api/v1/admin/classification"))body="{\"catalog\":{\"version\":0,\"topics\":[]},\"counts\":[],\"runtime\":{},\"recent\":[]}";
             else if(path.equals("/api/v1/admin/classification/topics"))body="{\"version\":0,\"topics\":[]}";
             else if(path.startsWith("/api/v1/admin/")&&!path.equals("/api/v1/admin/advertisements"))body="[]";
             if(body==null)r.fallback();else r.fulfill(new Route.FulfillOptions().setStatus(status).setContentType("application/json").setBody(body));

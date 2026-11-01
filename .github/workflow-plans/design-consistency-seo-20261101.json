@@ -35,28 +35,40 @@
         "scripts/test/**",
         "docs/**",
         "README.md",
-        ".github/workflow-plans/design-consistency-seo-20261101.json"
+        ".github/workflow-plans/design-consistency-seo-20261101.json",
+        "src/main/java/com/moapan/article/api/EditorialController.java",
+        "src/main/java/com/moapan/article/application/EditorialService.java",
+        "src/main/java/com/moapan/catalog/api/AdminController.java",
+        "src/main/java/com/moapan/catalog/application/CatalogService.java",
+        "src/integrationTest/**"
       ],
       "forbiddenPaths": [
         ".env",
         ".github/workflows/**",
         "src/main/resources/db/**",
-        "src/main/java/**",
         "build.gradle",
         "gradle.lockfile",
         "Dockerfile",
         "scripts/deploy/**",
         "scripts/translation/**",
-        "scripts/classification/**"
+        "scripts/classification/**",
+        "src/main/java/com/moapan/identity/**",
+        "src/main/java/com/moapan/access/**",
+        "src/main/java/com/moapan/collection/**",
+        "src/main/java/com/moapan/ai/**",
+        "src/main/java/com/moapan/classification/**",
+        "src/main/java/com/moapan/translation/**"
       ],
       "acceptanceCriteria": [
         "Audit all11 HTML pages and dynamic newsletter detail/admin/member/guest and Korean/English states; central UI typography/navigation styles eliminate touching links without changing protected page access",
         "Newspaper hero retains approved layout; compact secondary mastheads/controls/footer share tokens; auth pages stay simple and centered; mobile390/tablet768/desktop1440 no horizontal overflow",
         "Validate visible menu spacing/fonts/active state/keyboard focus/print and synthetic screenshots; preserve source text and local-only preferences/no tracking",
         "Separate SEO agent read-only audit allpages/liveHTTP/officialprimaryguidance; report crawltechnicalreadiness distinct actualportalindexandranking unknown; do not implement new SEO indexing/auth policy without further user authorization",
-        "Keep DB/models/JDK/dependencies/credential lengths/CI-CD unchanged; inspect finalJAR/image before existinglocalCompose runtime replacement; preserve previous verified image if checks fail",
+        "Keep DB/models/JDK/dependencies/credential lengths/CI-CD unchanged; inspect finalJAR/image before existinglocalCompose runtime replacement; preserve previous verified image if checks fail Explicit later user instruction permits the four named admin API/service files for collection-date and named-choice support.",
         "Guarded human commit/push/PR and independent currenthead App review; do not merge main or develop without task-specific merge authorization",
-        "User followup: split admin into six sections and nested collection/topics tabs; show one work area at a time, preserve unsaved DOM fields, support keyboard and safe hash navigation, retain ADMIN/CSRF/version/API contracts."
+        "User followup: split admin into six sections and nested collection/topics tabs; show one work area at a time, preserve unsaved DOM fields, support keyboard and safe hash navigation, retain ADMIN/CSRF/version/API contracts.",
+        "User followup: article review shows one article at a time with strong title/border,previous/next and title picker; lazily cache editor DOM and preserve summary/tag/translation drafts across navigation; guard list refresh during saves and confirm discarding drafts. Retain existing article/translation APIs and auth.",
+        "User followup: server-side collected-date inclusive Asia/Seoul range filtering before LIMIT100, strict sort allowlist and deterministic order; admin tag/job named selectors, server-generated optional tag slug, explicit auto-topic/catalog instructions, audit/remove all opaque-ID manual entry across11pages; preserve drafts, active/canonical tags, ADMIN/CSRF/no raw input persistence. Only four named Java admin classes may change; DB schema/security/models unchanged."
       ],
       "validationCommands": [
         "sh scripts/build/gradle-local.sh --no-daemon check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest",
