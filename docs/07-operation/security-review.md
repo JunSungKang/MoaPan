@@ -210,3 +210,7 @@ Helm 합성렌더구성검사: HIGH0/CRITICAL0/MEDIUM13/LOW2. KSV-01010은SOURCE
 ### 담고담고(DamGoX2) 명명 후 현재 산출물
 
 현재앱 sha256:ef8e07a5671fb70e1d05f9cb4d2ade803108e4c0728327fc2b9cfacf029a76ee, 빌드 sha256:7e8e3ec394d3731eaa28e776895fa3fda9be16de30c019e79bc0eb302b391057는원본이미지보고서상취약점·secret0이며최종소스/JAR/SBOMgate도재통과했다. Spring표시명·수집User-Agent·정적브랜드/문서와운영자체발간물표기만변경했다. 개인정보/권한/세션·모델/의존성/DB스키마변경없음. 운영원고유지보수는독립사전검토·잠금·버전·감사·보존/rollback검증을적용했다. [최신증빙](../05-test/evidence/damgox2-brand-20261101.json)이앞선앱이미지기록을대체한다. 기존source백포트근거/2026-11-07만료·사용자비밀번호정책·고정19/20및미공개취약점한계는그대로다.
+
+## 서버 캐시 기반 공급망 검증 (2026-11-01)
+Boot4.1.2 BOM의 Caffeine3.2.4와 error_prone_annotations2.49.0을 추가했다. 공식 Maven Central JAR SHA-512·POM·Apache2.0 고지를 확인하고 strict verification/lock/SBOM/실제102개 runtime 라이선스 목록을 갱신했다. Caffeine 공식 공개 advisory API의 당시 반환은 빈 목록이며 미공개 취약점 부재를 보장하지 않는다.
+최종 JAR/SBOM/격리 runtime 이미지의 scanner 발견0·secret0 및 소스 gate를 확인했다. 소스의 기존 JOSE 백포트3건·x/crypto 비노출2건은 기존 exact evidence 판정을 그대로 사용했으며 새 ignore는 추가하지 않았다. 이미지sha256:cb2aac91bb8f54a140c672cf7229135f919477c43008dcc1279c9f846d89cee4/JAR6622df757f348c27a51994afa0dbd6d0f71156edbb9fe1dd3b711175f453a836. 도구/DB 동기화 시각은 [기반 증빙](../05-test/evidence/server-cache-foundation-20261101.json) 참조. 운영 반영과 실제 도메인 적용은 후속 gate가 필요하다.

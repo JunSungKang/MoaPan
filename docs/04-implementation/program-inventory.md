@@ -64,3 +64,9 @@
 
 ### AI 경계 후속 프로그램
 `ai/domain`의 ArticleGuard/AiPolicy는 비신뢰 입력 보류와 실행 정책 식별을 담당한다. `ai/application`의 InferenceControl/InferenceBudget은 취소와 출처 집계 정책이다. `ai/infrastructure`의 ModelTokenBudget/ModelStream/ModelJson은 고정 로컬 모델의 토큰·전송·출력 경계다. 번역 편집 API/정적 모듈은 translation에 유지한다. 새로운 외부 모델·서비스·개인정보 저장소는 추가하지 않았다.
+
+## 서버 읽기 캐시 기반
+- shared/infrastructure/cache/VersionedReadCache: 제한된 Caffeine·60분 TTL·반복 읽기 snapshot·commit 이후 게시·활성 트랜잭션 우회.
+- shared/infrastructure/cache/SharedReadCaches: 도메인별 고정 region 예산 배분·중복 할당 방지.
+- V17__read_cache_fingerprints.sql: 공개 읽기 모델의 저장 해시 및 작성 트랜잭션 함수.
+- VersionedReadCacheTest/ReadCacheIntegrationTest: TTL/용량/동시성/롤백/실제DB재시작. 도메인 API 어댑터는 후속 PR이며 현재 연결하지 않았다.

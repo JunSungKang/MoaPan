@@ -124,3 +124,9 @@ PR10 guarded 사람 commit/push·생성 및 1db7303 독립 리뷰 APPROVE 완료
 
 <!-- DOMAIN-PR-REORGANIZATION -->
 도메인별 이력 재구성 검증 단계: publication-brand. 검토·병합 결과는 [재구성 증빙](../05-test/evidence/domain-pr-reorganization-20261101.json)과 각 PR의 GitHub 최종 상태를 확인한다. 실행 중인 서비스와 데이터는 변경하지 않는다.
+
+## 서버 메모리 캐시 기반 (2026-11-01)
+브라우저 최적화 PR16은9e680057b347443083c402ff7b11cf333e1c9fd3으로 푸시·독립 검토·App current-head APPROVED 완료, 미병합/운영 미반영이다. HTTPS 스킬3개는 원본 해시 동일·미추적 보존하며 커밋하지 않았다.
+별도 server-cache-foundation 브랜치에서 Caffeine 기반·고정 region 예산·60분 TTL·snapshot 적재·저장 해시 V17을 작성했다. 신규 단위9/격리 PostgreSQL3건 통과. 현재 도메인 API에 연결하지 않았으며 전체 회귀·최종 JAR/SBOM 검사·독립 리뷰·PR 전달을 진행한다.
+
+서버 캐시 기반 최종 검증:288 PASS(163/71/54), strict lock/verification·license·문서·소스/JAR/SBOM·격리 runtime 이미지 gate PASS. 이미지sha256:cb2aac91bb8f54a140c672cf7229135f919477c43008dcc1279c9f846d89cee4, JAR6622df757f348c27a51994afa0dbd6d0f71156edbb9fe1dd3b711175f453a836 일치. DB 재시작 시험의 임시 포트 변경 실패를 고쳐 동일 데이터/지문 보존·전체PG71 재검증을 통과했다. 사전 독립 리뷰 차단 결함 없음. 도메인 API 적용·운영 migration/배포·develop/main 병합은 아직 하지 않았다. [기반 증빙](../05-test/evidence/server-cache-foundation-20261101.json).

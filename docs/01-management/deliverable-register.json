@@ -230,5 +230,13 @@
     "status": "유지관리",
     "owner": "보안 담당",
     "reviewer": "독립 리뷰 담당"
+  },
+  {
+    "id": "MP-DOC-031",
+    "path": "docs/05-test/server-cache.md",
+    "title": "서버 메모리 캐시 검증서",
+    "status": "검증 중",
+    "owner": "개발 담당",
+    "reviewer": "독립 리뷰 담당"
   }
 ]

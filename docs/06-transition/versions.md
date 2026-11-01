@@ -60,3 +60,5 @@ Ubuntu의 공급자 미패치 구성요소를 제거하기 위해 [공식 Alpine
 |OpenJDK27U-jdk_aarch64_alpine-linux_hotspot_27.0.1.0.2_1.tar.gz|d6e8d5e5c101d9319a995405de1e800b02f718ac226dccd8c3b11dae46479ae0|
 
 두 아키텍처의 공식 배포·체크섬·base manifest 가용성을 확인했다. 실제 이미지 빌드·동작 시험은 이 호스트의 linux/arm64이며 amd64 실행까지 검증한 것으로 표시하지 않는다. 공급자·GPL+Classpath·지원 종료 조건은 기존 JDK 선정과 같다. Alpine3.24 main/community의 현재 지원 상태와2028-06-01 종료 표를 확인했으며 community의 일반 정책은 다음 안정판까지이므로 사용 시점에 다시 확인한다. 원래 Caddy2.11.7의 JOSE v3 미패치 의존성은 공식 v4 수정을 별도 백포트하며 수정 릴리스로 위장하지 않는다. 정확한 실제 실행 digest와 검증 결과는 후속 증빙에 기록한다.
+
+서버 캐시 기반 추가: Caffeine3.2.4(Spring Boot4.1.2 BOM), error_prone_annotations2.49.0(BOM). 확인2026-11-01. 공식 근거: https://docs.spring.io/spring-boot/appendix/dependency-versions/coordinates.html , https://github.com/ben-manes/caffeine/releases/tag/v3.2.4 , https://github.com/ben-manes/caffeine/security/advisories . Maven Central 공식 JAR SHA-512와 다운로드된 JAR을 대조했고 정확한 값/Apache2.0 고지는 licenses/java-inventory.json에 보관한다. 기존 JDK·Gradle·컨테이너는 변경하지 않았다. 이 변경 산출물의 최종 보안 검사는 별도로 수행한다.

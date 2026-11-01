@@ -3,7 +3,7 @@
 MOAPAN 자체 코드의 라이선스를 이 문서로 새로 부여하지 않습니다. 저장소 공개와 오픈소스 이용허락은 별개이며 프로젝트 라이선스는 소유자가 결정합니다.
 
 ## 실제 확인 범위
-현재 runtimeClasspath 100개 JAR의 POM 선언, 실제 SHA256이 일치하는 86개 JAR의 내장 고지와 나머지14개 구성요소의 공식 버전별 고지, 고정 모델 2종, llama.cpp/Caddy 및 실행 이미지 기반 구성요소를 확인했습니다. 전체 법률 적합성에 대한 보증이 아닙니다. 상세 좌표·원본 URL·SHA·내장 고지는 [Java 목록](licenses/java-inventory.json), [모델](licenses/models), [원문 출처](licenses/SOURCES.json)에 있습니다. 의존성 JAR와 JDK/OS의 기존 고지는 삭제하지 않습니다.
+현재 runtimeClasspath 102개 JAR의 POM 선언, 실제 SHA256이 일치하는 87개 JAR의 내장 고지와 나머지15개 구성요소의 공식 버전별 고지, 고정 모델 2종, llama.cpp/Caddy 및 실행 이미지 기반 구성요소를 확인했습니다. 전체 법률 적합성에 대한 보증이 아닙니다. 상세 좌표·원본 URL·SHA·내장 고지는 [Java 목록](licenses/java-inventory.json), [모델](licenses/models), [원문 출처](licenses/SOURCES.json)에 있습니다. 의존성 JAR와 JDK/OS의 기존 고지는 삭제하지 않습니다.
 
 ## 코드 공개·배포 의무 판정
 - 확인된 현재 구성에서 단순한 웹서비스 제공만으로 독립된 MOAPAN 전체 소스를 일반 공개해야 한다는 의무는 확인되지 않았습니다. 조사한 애플리케이션 runtime과 두 모델에 AGPL 선언은 발견하지 않았습니다.
@@ -29,6 +29,8 @@ Spring Session4.1.1의 두 POM은 Broadcom Foundation License라고 표시하지
 |ch.qos.logback:logback-core|1.5.38|EPL-2.0 / LGPL-2.1-only|
 |com.fasterxml.jackson.core:jackson-annotations|2.21|The Apache Software License, Version 2.0|
 |com.fasterxml:classmate|1.7.3|Apache License, Version 2.0|
+|com.github.ben-manes.caffeine:caffeine|3.2.4|Apache-2.0|
+|com.google.errorprone:error_prone_annotations|2.49.0|Apache-2.0|
 |com.rometools:rome-utils|2.1.0|The Apache Software License, Version 2.0|
 |com.rometools:rome|2.1.0|The Apache Software License, Version 2.0|
 |com.sun.istack:istack-commons-runtime|4.1.2|Eclipse Distribution License - v 1.0|
