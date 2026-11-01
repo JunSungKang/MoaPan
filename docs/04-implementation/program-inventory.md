@@ -64,3 +64,12 @@
 
 ### AI 경계 후속 프로그램
 `ai/domain`의 ArticleGuard/AiPolicy는 비신뢰 입력 보류와 실행 정책 식별을 담당한다. `ai/application`의 InferenceControl/InferenceBudget은 취소와 출처 집계 정책이다. `ai/infrastructure`의 ModelTokenBudget/ModelStream/ModelJson은 고정 로컬 모델의 토큰·전송·출력 경계다. 번역 편집 API/정적 모듈은 translation에 유지한다. 새로운 외부 모델·서비스·개인정보 저장소는 추가하지 않았다.
+
+
+### 공통 Presentation 성능 구성
+| 구성 | 책임 |
+|---|---|
+| presentation/infrastructure/StaticAssetsConfiguration | 정적 classpath assets 전용 재검증·ETag |
+| assets/js/shared/dom.js | 페이지 초기화 없는 공통 DOM·상태 표시 |
+| assets/js/shared/format.js | 서울 시간의 제한된 Intl 형식 재사용 |
+| SharedPresentationTest / WebPerformanceTest | 수명·언어·초안 회귀와 실제 HTTP 전후 측정 |

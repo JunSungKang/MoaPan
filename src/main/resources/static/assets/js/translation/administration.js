@@ -1,5 +1,5 @@
 import {request} from '../shared/api.js';
-import {el,report} from '../shared/common.js';
+import {el,report} from '../shared/dom.js';
 
 export function translationEditor(id,{onBusy=()=>{},onSaved=()=>{}}={}){
  const details=el('details'),heading=el('summary','번역 수정·잠금');details.append(heading);
@@ -31,7 +31,7 @@ export function translationEditor(id,{onBusy=()=>{},onSaved=()=>{}}={}){
    onSaved(form);snapshot=null;reload=true;
   }catch(error){snapshot=null;report(error);}
   finally{saving=false;language.disabled=false;load.disabled=false;form.inert=false;onBusy(form,false);}
-  if(reload)load.click();
+  if(reload&&details.isConnected)load.click();
  });
  details.append(language,load,note,form);return details;
 }

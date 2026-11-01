@@ -3,6 +3,8 @@
     auto_https off
 }
 :8080 {
+    @static_assets path /assets/*
+    encode @static_assets zstd gzip
     @internal path /internal/* /actuator/*
     respond @internal 404
     request_body {
