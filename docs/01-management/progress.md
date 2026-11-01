@@ -1,6 +1,6 @@
 # 진척현황
 
-최신: 오해로 추가한 평가 준비·집계 기능을 소스/실행 서비스에서 제거하고 전체 회귀·이미지·HTTPS 검증을 완료했다. 현재 작업 브랜치 codex/newsletter-editorial-redesign, PR#8. 아래는 누적 작업 이력이며 최종 상태는 마지막 기록과 증빙을 따른다.
+최신: PageSpeed 후속 구현·서비스 검증 완료. 최종 외부 측정(2026-11-02 06:40 KST)은 모바일/데스크톱 모두100/100/100/100·CLS0. MP-DOC-033과 해당 GitHub 통합 PR을 최신 정본으로 사용하며 아래 기록은 과거 이력이다.
 
 - 7단계 산출물 분류, 등록26개, 관리계획/프로그램목록/이식설계서/경로대장 적용.
 - Java34클래스와 JS19모듈 조사·재배치, 모델 포트/순수정책 분리.
@@ -145,3 +145,11 @@ PR10 guarded 사람 commit/push·생성 및 1db7303 독립 리뷰 APPROVE 완료
 2026-11-02 전체 죽은 코드 조사 착수. 기준develop a716c1d, 기존미추적HTTPS스킬3개 보존. 삭제전 Java compiler symbol/JS import·HTML/DOM/운영진입점의 참조를 확인하고 삭제후 서비스·테스트·보안·develop전달까지 검증한다.
 
 전체 미사용 코드 정리 실행·서비스 검증 완료. 중복 조회/도달 불가 migrate 분기와 Bean/읽지 않는 내부필드, JS유령모듈·미사용값·옛 로컬검색,16토큰37CSS분기,obsolete도구2개를 제거했다. 보안parser/프레임워크/운영진입점·22SQL·기존데이터 보존. 모델정책클래스10개byte일치. 최종330PASS(164/107/59)/Nu0/72합성화면/소스·JAR·SBOM·실제앱·빌드gate PASS. 중간UI준비대기2실패는기준완화없이수정후재검증. 실제새앱ec89cdad8d05·JAR4ece479b47d3가web/worker에서일치,4역할·HTTPS·삭제모듈404·캐시·300/2/1보존·합성계정삭제확인. 독립current-head/GitHub전달마감근거는 [미사용 코드 검증서](../05-test/dead-code-audit.md)와 해당PR상태를따른다. HTTPS스킬3개·전역Codex·main은보존한다.
+
+
+## PageSpeed 후속 착수 — 2026-11-02
+제공 보고서와 현재 배포본 재측정에서 데스크톱88/100/96/100, CLS0.244를 확인했다. footer 위치 이동과 익명 account 조회401이 원인이다. pagespeed-desktop-20261102 계약으로 구현·전체 회귀·서비스 반영·PSI 재검증·죽은 코드 무백업 삭제·develop 병합을 진행한다. 이전 HTTPS 스킬3파일은 변경·커밋하지 않는다.
+
+
+## PageSpeed·최종 코드 점검 검증 완료 — 2026-11-02
+336시험 PASS/실패·skip0, Nu11페이지 오류·경고0, source/JAR/SBOM/3이미지 gate PASS. 비회원401 탐지 경로를 정상204세션 조회로 분리하고 정적 nav·화면 공간·공통CSS·modulepreload·공개문서압축·HEAD 헤더·COOP/Trusted Types를 반영했다. 최종 측정 모바일/데스크톱4분야100·CLS0, agentic2/2. 입증된 더 불러오기 잔존 코드·기존CSS파일·중복선언을 백업/stash 없이 삭제했다. 현재 서비스6컨테이너 정상, DB300/2/1·V22/ID해시 보존·합성 계정 삭제·모델 정책10클래스 동일. [검증서](../05-test/pagespeed-desktop.md)·[증빙](../05-test/evidence/pagespeed-desktop-20261102.json) 참조. develop 통합은 승인된 guarded human/App 리뷰 흐름으로 추적하며 main/CI/CD/전역HTTPS스킬은 변경하지 않는다.

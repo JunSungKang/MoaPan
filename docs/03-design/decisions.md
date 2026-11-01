@@ -163,3 +163,5 @@ DOM/Intl 포맷은 인증·페이지 초기화 없이 재사용하는 leaf 모�
 동시 쓰기와 불일치한 해시/본문을 묶지 않도록 cache miss에서 해시·본문을 같은 REPEATABLE READ snapshot으로 읽는다. 최초 해시가 바뀌면 최대3회 재시도 후 불변 스냅샷 조회로 우회한다. 호출자 트랜잭션과 잠금 경로는 캐시를 쓰지 않아 미완료/롤백 값을 공유하지 않는다. 저장 해시는 PostgreSQL18 내장 sha256(bytea)를 이용하며 pgcrypto 확장을 추가하지 않는다.
 
 서버 캐시 최종:60분 최대 보관+매 요청 저장된 작은 해시/현재 공개 조건 비교. DB write transaction trigger로만 해시를 계산하고 값이 같은 작업 메타데이터 갱신은 무효화하지 않는다. edition15분 후보 갱신과 카드60분 보관을 분리하고, 같은 가시 후보/내용이면 editionUUID가 달라도 불변 카드를 재사용한다. web16MiB/worker8MiB는 논리 가중치이고 실heap 보증이 아니다. 발간 원고는 실제210787byte 자료를 검증하여 region당2MiB(web)/1MiB(worker)까지 단일 entry를 허용한다. 분류job/article lock inversion은 실제 FAIL→별도 지문 수정→동일 latch PASS로 결정했다.
+
+2026-11-02 PageSpeed: 초기 화면 이동을 막기 위해 콘텐츠 메뉴를 정적 HTML로 제공하고 지면의 최소 읽기 영역·날짜/언어/상태 영역을 확보한다. 계정 API401을 숨기거나 인증을 완화하지 않고 GET /api/v1/auth/session의 익명204/현재 유효계정200으로 정상 탐지를 분리한다. no-store·동일출처·전역 제한·세션 무효화는 유지한다. site.css의 실제 사용 규칙을 newspaper.css로 이동하고 이전 파일을 삭제해 critical CSS 요청을 하나로 줄인다. 로그인의 중복 작은 글자 규칙은 제거해 공통 글꼴을 따른다. 공개 정적 문서만 압축하며 개인정보/토큰을 담는 동적 API와 인증 HTML은 압축 대상에서 제외한다. COOP same-origin·Trusted Types sink 차단을 적용한다. IP literal에는 HSTS가 브라우저에서 적용되지 않고 preload 등록도 불가하므로 헤더 강화와 실제 효력을 구분한다.

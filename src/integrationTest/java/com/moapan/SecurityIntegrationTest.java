@@ -61,7 +61,7 @@ class SecurityIntegrationTest {
         mvc.perform(get("/api/v1/nonexistent")).andExpect(status().isUnauthorized());
     }
     @Test @Order(1) void staticValidatorsNeverCacheAuthenticatedOrDynamicResponses()throws Exception{
-        for(String asset:List.of("/assets/js/shared/common.js","/assets/css/site.css","/assets/images/favicon.svg")){
+        for(String asset:List.of("/assets/js/shared/common.js","/assets/css/newspaper.css","/assets/images/favicon.svg")){
             var response=mvc.perform(get(asset)).andExpect(status().isOk()).andExpect(header().string("Cache-Control",org.hamcrest.Matchers.allOf(org.hamcrest.Matchers.containsString("no-cache"),org.hamcrest.Matchers.containsString("public")))).andExpect(header().string("X-Content-Type-Options","nosniff")).andReturn().getResponse();
             String etag=response.getHeader("ETag");assertNotNull(etag);assertTrue(etag.startsWith("W/\""));
             mvc.perform(get(asset).header("If-None-Match",etag)).andExpect(status().isNotModified()).andExpect(content().string(""));
@@ -78,6 +78,28 @@ class SecurityIntegrationTest {
         mvc.perform(post("/api/v1/auth/signup").contentType("application/json").content("{\"username\":\"badone\",\"password\":\""+PASSWORD+"\"}")).andExpect(status().isForbidden());
         mvc.perform(post("/api/v1/auth/signup").with(csrf().useInvalidToken()).contentType("application/json").content("{}")).andExpect(status().isForbidden());
         mvc.perform(get("/api/v1/auth/csrf")).andExpect(status().isOk()).andExpect(jsonPath("$.token").isString());
+    }
+    @Test @Order(1) void guestSessionDiscoveryCreatesNoSessionOrAccountLeak()throws Exception{
+        mvc.perform(get("/api/v1/auth/session")).andExpect(status().isNoContent()).andExpect(content().string("")).andExpect(header().doesNotExist("Set-Cookie")).andExpect(header().string("Cache-Control","no-store"));
+        mvc.perform(get("/api/v1/account")).andExpect(status().isUnauthorized());
+        mvc.perform(get("/api/v1/auth/session").header("Sec-Fetch-Site","cross-site")).andExpect(status().isForbidden());
+        mvc.perform(get("/api/v1/auth/session").with(q->{q.setServerName("attacker.example");return q;})).andExpect(status().isForbidden());
+        mvc.perform(post("/api/v1/auth/session")).andExpect(status().isForbidden());
+    }
+    @Test @Order(3) void sessionDiscoveryUsesOnlyCurrentValidCredentials()throws Exception{
+        signup("session_discovery");var cookie=login("session_discovery");
+        mvc.perform(get("/api/v1/auth/session").cookie(cookie)).andExpect(status().isOk()).andExpect(jsonPath("$.username").value("session_discovery")).andExpect(jsonPath("$.role").value("USER")).andExpect(jsonPath("$.passwordHash").doesNotExist()).andExpect(header().string("Cache-Control","no-store"));
+        var user=accounts.findByUsername("session_discovery").orElseThrow();user.active=false;accounts.save(user);
+        mvc.perform(get("/api/v1/auth/session").cookie(cookie)).andExpect(status().isNoContent()).andExpect(content().string(""));
+        mvc.perform(get("/api/v1/account").cookie(cookie)).andExpect(status().isUnauthorized());
+    }
+    @Test @Order(1) void headRetainsSecurityAndCacheHeaders()throws Exception{
+        for(String path:List.of("/","/index.html","/login.html"))mvc.perform(head(path)).andExpect(status().isOk()).andExpect(header().string("Cache-Control",org.hamcrest.Matchers.containsString("no-store"))).andExpect(header().string("X-Content-Type-Options","nosniff")).andExpect(header().string("Cross-Origin-Opener-Policy","same-origin")).andExpect(header().string("Content-Security-Policy",org.hamcrest.Matchers.containsString("require-trusted-types-for 'script'"))).andExpect(content().string(""));
+        mvc.perform(head("/assets/css/newspaper.css")).andExpect(status().isOk()).andExpect(header().string("Cache-Control",org.hamcrest.Matchers.containsString("public"))).andExpect(header().exists("ETag"));
+        mvc.perform(head("/api/v1/account")).andExpect(status().isUnauthorized()).andExpect(header().string("Cache-Control","no-store"));
+    }
+    @Test @Order(1) void documentSecurityHeadersRejectUnsafeDomSinks()throws Exception{
+        mvc.perform(get("/index.html")).andExpect(header().string("Cross-Origin-Opener-Policy","same-origin")).andExpect(header().string("Content-Security-Policy",org.hamcrest.Matchers.allOf(org.hamcrest.Matchers.containsString("require-trusted-types-for 'script'"),org.hamcrest.Matchers.containsString("trusted-types 'none'"))));
     }
     @Test @Order(2) void signupRejectsExtraFieldsAndStoresOnlyHash()throws Exception{
         mvc.perform(post("/api/v1/auth/signup").with(csrf()).contentType("application/json").content("{\"username\":\"injected\",\"termsAccepted\":true,\"termsVersion\":\"terms-1\",\"password\":\""+PASSWORD+"\",\"role\":\"ADMIN\"}")).andExpect(status().isBadRequest());

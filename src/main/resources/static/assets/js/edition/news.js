@@ -6,12 +6,12 @@ import {request} from '../shared/api.js';
 import {el,report,viewer,setIssueDate} from '../shared/common.js';
 import {loadPreferences,canonicalize,defaults} from '../personalization/preferences.js';
 import {rank,effectivePreferences} from '../personalization/ranking.js';
-const paper=document.querySelector('#paper'),status=document.querySelector('[role="status"]'),more=document.querySelector('#more');
+const paper=document.querySelector('#paper'),status=document.querySelector('[role="status"]');
 const dialog=document.querySelector('#search-dialog');
-let candidates=[],prefs=defaults(),user=null,next,tagData,representative,filters={search:'',category:'',day:''};
+let candidates=[],prefs=defaults(),user=null,tagData,representative,filters={search:'',category:'',day:''};
 let generation=0,slide=0,searchActive=false,searchPage=null,searchBusy=false,searchTicket=0;
 const effective=()=>effectivePreferences(prefs,representative.weights);
-window.addEventListener('moapan-clear',()=>{generation++;searchTicket++;searchActive=false;searchPage=null;searchBusy=false;candidates=[];user=null;next=null;prefs=defaults();filters={search:'',category:'',day:''};for(const id of ['search','category','day'])document.querySelector('#'+id).value='';document.querySelector('#search-summary').textContent='';document.querySelector('#clear-search').hidden=true;paper.replaceChildren();setIssueDate([]);more.hidden=true;dialog.close();status.textContent='';if(representative)load(true);});
+window.addEventListener('moapan-clear',()=>{generation++;searchTicket++;searchActive=false;searchPage=null;searchBusy=false;candidates=[];user=null;prefs=defaults();filters={search:'',category:'',day:''};for(const id of ['search','category','day'])document.querySelector('#'+id).value='';document.querySelector('#search-summary').textContent='';document.querySelector('#clear-search').hidden=true;paper.replaceChildren();setIssueDate([]);dialog.close();status.textContent='';if(representative)load();});
 function render(){
  setIssueDate(candidates);
  const window=searchActive?{items:searchPage?.items||[],page:searchPage?.page||0,pages:searchPage?.pages||0}:slideWindow(rank(candidates,effective()),slide);
@@ -41,9 +41,8 @@ function articleNode(a,index){
  return article;
 }
 
-async function load(initial){const ticket=generation;more.disabled=true;status.textContent='지면을 불러오는 중입니다.';try{const path=!user?'/api/v1/public/news/edition':initial?'/api/v1/news/edition?size=42':'/api/v1/news/page?cursor='+encodeURIComponent(next);const page=await request(path);if(ticket!==generation)return;candidates=[...new Map([...candidates,...page.items].map(a=>[a.id,a])).values()];next=page.nextCursor;more.hidden=true;status.textContent='';render();}catch(error){report(error);}finally{more.disabled=false;}}
-try{[user,tagData,representative]=await Promise.all([viewer,request('/api/v1/public/tags'),request('/api/v1/public/interests')]);representative.weights=canonicalize({...defaults(),weights:representative.weights},tagData.redirects).weights;if(user)prefs=canonicalize(await loadPreferences(user.id),tagData.redirects);for(const c of [...new Set(tagData.tags.map(t=>t.category))]){const option=el('option',c);option.value=c;document.querySelector('#category').append(option);}await load(true);}catch(e){report(e);more.hidden=true;}
-more.addEventListener('click',()=>load(false));
+async function load(){const ticket=generation;paper.setAttribute('aria-busy','true');status.textContent='지면을 불러오는 중입니다.';try{const page=await request(user?'/api/v1/news/edition?size=42':'/api/v1/public/news/edition');if(ticket!==generation)return;candidates=[...new Map(page.items.map(a=>[a.id,a])).values()];status.textContent='';render();}catch(error){report(error);}finally{if(ticket===generation)paper.setAttribute('aria-busy','false');}}
+try{[user,tagData,representative]=await Promise.all([viewer,request('/api/v1/public/tags'),request('/api/v1/public/interests')]);representative.weights=canonicalize({...defaults(),weights:representative.weights},tagData.redirects).weights;if(user)prefs=canonicalize(await loadPreferences(user.id),tagData.redirects);for(const c of [...new Set(tagData.tags.map(t=>t.category))]){const option=el('option',c);option.value=c;document.querySelector('#category').append(option);}await load();}catch(e){report(e);}
 document.querySelector('#open-search').addEventListener('click',()=>{for(const id of ['search','category','day'])document.querySelector('#'+id).value=filters[id];dialog.showModal();});
 document.querySelector('#cancel-search').addEventListener('click',()=>dialog.close());
 async function search(page){

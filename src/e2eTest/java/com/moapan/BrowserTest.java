@@ -16,7 +16,7 @@ class BrowserTest {
     @BeforeAll static void start()throws Exception{
         server=HttpServer.create(new InetSocketAddress(InetAddress.getLoopbackAddress(),0),0);
         server.createContext("/",exchange->{String path=exchange.getRequestURI().getPath();String response=null;String type="application/json";
-            if(path.equals("/api/v1/account"))response="{\"id\":\""+active+"\",\"username\":\"synthetic_user\",\"role\":\"USER\"}";
+            if(path.equals("/api/v1/auth/session"))response="{\"id\":\""+active+"\",\"username\":\"synthetic_user\",\"role\":\"USER\"}";
             else if((path.equals("/api/v1/tags")||path.equals("/api/v1/public/tags")))response="{\"tags\":[{\"id\":\"ai\",\"slug\":\"ai\",\"name\":\"인공지능\",\"category\":\"기술\"},{\"id\":\"space\",\"slug\":\"space\",\"name\":\"우주\",\"category\":\"과학\"}],\"aliases\":[{\"alias\":\"인공지능\",\"tagId\":\"ai\"},{\"alias\":\"AI\",\"tagId\":\"ai\"}],\"redirects\":[]}";
             else if(path.equals("/api/v1/public/interests"))response="{\"version\":0,\"weights\":{\"space\":3}}";
             else if(path.equals("/api/v1/advertisements"))response="{\"enabled\":false}";
@@ -25,7 +25,7 @@ class BrowserTest {
             else if((path.equals("/api/v1/news/edition")||path.equals("/api/v1/public/news/edition")))response=edition();
             else if(path.endsWith("/news/search"))response="{\"items\":[],\"page\":0,\"pages\":0,\"total\":0}";
             else if(path.equals("/api/v1/auth/csrf"))response="{\"token\":\"synthetic-csrf\",\"headerName\":\"X-CSRF-TOKEN\"}";
-            if(path.equals("/api/v1/account")&&Objects.toString(exchange.getRequestHeaders().getFirst("Referer"),"").contains("/login.html")){response="{}";byte[] bytes=response.getBytes(StandardCharsets.UTF_8);exchange.getResponseHeaders().set("Content-Type","application/json");exchange.sendResponseHeaders(401,bytes.length);exchange.getResponseBody().write(bytes);exchange.close();return;}
+            if(path.equals("/api/v1/auth/session")&&Objects.toString(exchange.getRequestHeaders().getFirst("Referer"),"").contains("/login.html")){exchange.getResponseHeaders().set("Content-Type","application/json");exchange.sendResponseHeaders(204,-1);exchange.close();return;}
             if(response!=null){byte[]bytes=response.getBytes(StandardCharsets.UTF_8);exchange.getResponseHeaders().set("Content-Type",type);exchange.sendResponseHeaders(200,bytes.length);exchange.getResponseBody().write(bytes);exchange.close();return;}
             if(path.equals("/"))path="/index.html";try(var in=BrowserTest.class.getResourceAsStream("/static"+path)){if(in==null){exchange.sendResponseHeaders(404,-1);}else{type=path.endsWith(".js")?"text/javascript":path.endsWith(".css")?"text/css":"text/html";exchange.getResponseHeaders().set("Content-Type",type+"; charset=utf-8");byte[]bytes=in.readAllBytes();exchange.sendResponseHeaders(200,bytes.length);exchange.getResponseBody().write(bytes);}}exchange.close();
         });server.start();origin="http://localhost:"+server.getAddress().getPort();playwright=Playwright.create();browser=playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true).setChannel("chromium").setArgs(List.of("--disable-gpu")));
@@ -210,7 +210,7 @@ class BrowserTest {
         Path dir=Path.of("build/reports/screenshots");Files.createDirectories(dir);
         try(var context=browser.newContext()){Page p=context.newPage();List<String>outbound=new ArrayList<>();p.onRequest(r->{if(!r.url().startsWith(origin))outbound.add(r.url());});
             for(int width:new int[]{390,768,1440}){p.setViewportSize(width,1000);p.navigate(origin+"/index.html");p.waitForSelector("#paper article");assertEquals(7,p.locator("#paper article").count());assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth <= window.innerWidth"));var leadBox=p.locator("#paper article").first().boundingBox();var following=p.locator("#paper article").nth(width>1000?2:1).boundingBox();assertTrue(following.y-leadBox.y-leadBox.height>=20);p.screenshot(new Page.ScreenshotOptions().setPath(dir.resolve("newspaper-"+width+".png")).setFullPage(true));}
-            p.locator("#open-search").click();p.locator("#search").fill("synthetic-search-private-phrase");p.locator("#search-form [type=submit]").click();p.waitForFunction("document.querySelector('[role=status]').textContent==='' && document.querySelector('#paper article')===null");assertEquals(0,p.locator("#paper article").count());assertTrue(outbound.isEmpty());assertEquals(0,p.locator("script:not([type=module])").count());p.emulateMedia(new Page.EmulateMediaOptions().setMedia(com.microsoft.playwright.options.Media.PRINT));assertFalse(p.locator("#more").isVisible());
+            p.locator("#open-search").click();p.locator("#search").fill("synthetic-search-private-phrase");p.locator("#search-form [type=submit]").click();p.waitForFunction("document.querySelector('[role=status]').textContent==='' && document.querySelector('#paper article')===null");assertEquals(0,p.locator("#paper article").count());assertTrue(outbound.isEmpty());assertEquals(0,p.locator("script:not([type=module])").count());p.emulateMedia(new Page.EmulateMediaOptions().setMedia(com.microsoft.playwright.options.Media.PRINT));assertFalse(p.locator(".slide-controls").isVisible());
         }
     }
     @Test void simpleAuthFormsRequireConsentAndShowReadableTerms()throws Exception{
@@ -251,7 +251,7 @@ class BrowserTest {
             p.route("**/api/v1/auth/signup",r->{requests.add(r.request().postData());r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{}"));});
             p.navigate(origin+"/signup.html");assertEquals("128",p.locator("#username").getAttribute("maxlength"));p.locator("#username").fill("a");p.locator("#password").fill("abcde");p.locator("input[type=checkbox]").check();p.locator("button[type=submit]").click();assertTrue(requests.isEmpty());
             p.locator("#password").fill("abcdef");p.locator("button[type=submit]").click();p.waitForURL("**/login.html");assertEquals(1,requests.size());assertEquals("6",p.locator("#password").getAttribute("minlength"));assertEquals("1",p.locator("#username").getAttribute("minlength"));
-            p.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\""+"u".repeat(128)+"\",\"role\":\"USER\"}")));
+            p.route("**/api/v1/auth/session",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\""+"u".repeat(128)+"\",\"role\":\"USER\"}")));
             p.setViewportSize(390,900);p.navigate(origin+"/account.html");p.waitForSelector("#account-menu button");assertEquals("6",p.locator("[name=newPassword]").getAttribute("minlength"));assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth <= innerWidth"));
         }
     }
@@ -295,7 +295,7 @@ class BrowserTest {
 
     @Test void guestMenusProtectedPagesAndSearchDialog()throws Exception{
         try(var context=browser.newContext()){
-            context.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setStatus(401).setContentType("application/json").setBody("{}")));
+            context.route("**/api/v1/auth/session",r->r.fulfill(new Route.FulfillOptions().setStatus(204).setBody("")));
             Page p=context.newPage();List<String> traffic=new ArrayList<>();p.onRequest(r->traffic.add(r.url()+" "+Objects.toString(r.postData(),"")));
             for(String page:List.of("index","about","terms","privacy","login","signup")){
                 p.navigate(origin+"/"+page+".html");p.waitForLoadState(com.microsoft.playwright.options.LoadState.NETWORKIDLE);
@@ -332,7 +332,7 @@ class BrowserTest {
 
     @Test void guestUsesRepresentativeInterestsWithoutReadingSavedMemberSettings(){
         try(var context=browser.newContext()){
-            context.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setStatus(401).setContentType("application/json").setBody("{}")));
+            context.route("**/api/v1/auth/session",r->r.fulfill(new Route.FulfillOptions().setStatus(204).setBody("")));
             context.route("**/api/v1/public/news/edition",r->{
                 var mapper=tools.jackson.databind.json.JsonMapper.builder().build();var root=mapper.readTree(edition());
                 var item=(tools.jackson.databind.node.ObjectNode)root.get("items").get(1);item.put("title","대표 관심사 합성 기사");
@@ -352,7 +352,7 @@ class BrowserTest {
 
     @Test void memberAndAdminMenusAndRepresentativeEditor()throws Exception{
         for(String role:List.of("USER","ADMIN"))try(var context=browser.newContext()){
-            context.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\"synthetic_role\",\"role\":\""+role+"\"}")));
+            context.route("**/api/v1/auth/session",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\"synthetic_role\",\"role\":\""+role+"\"}")));
             var writes=new ArrayList<String>();
             context.route("**/api/v1/admin/**",r->{String body="[]";if(r.request().url().endsWith("/interests")){if(r.request().method().equals("PUT")){writes.add(r.request().postData());body="{\"version\":1,\"weights\":{\"space\":3,\"ai\":3}}";}else body="{\"version\":0,\"weights\":{\"space\":3}}";}r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(body));});
             Page p=context.newPage();
@@ -448,7 +448,7 @@ class BrowserTest {
 
     @Test void loginLayoutAndPageTitlesAreCenteredAndDistinct(){
         try(var context=browser.newContext()){
-            context.route("**/api/v1/account",r->{if(r.request().frame().url().contains("/login.html"))r.fulfill(new Route.FulfillOptions().setStatus(401).setContentType("application/json").setBody("{}"));else r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\"synthetic_admin\",\"role\":\"ADMIN\"}"));});
+            context.route("**/api/v1/auth/session",r->{if(r.request().frame().url().contains("/login.html"))r.fulfill(new Route.FulfillOptions().setStatus(204).setBody(""));else r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\"synthetic_admin\",\"role\":\"ADMIN\"}"));});
             Page p=context.newPage();p.navigate(origin+"/login.html");p.waitForSelector("[data-language-select]");
             for(int width:new int[]{390,1440}){p.setViewportSize(width,1000);var form=p.locator("main").boundingBox();var brand=p.locator("header [data-brand-en]").boundingBox();var footer=p.locator("footer").boundingBox();assertEquals(form.x+form.width/2,brand.x+brand.width/2,1);assertEquals(form.x+form.width/2,footer.x+footer.width/2,1);assertEquals(0,p.locator("main h1").count());assertEquals(0,p.locator("header [data-language-select]").count());assertEquals(0,p.locator("footer [data-language-select]").count());assertEquals(1,p.locator(".auth-language-top [data-language-select]").count());var language=p.locator(".auth-language-top [data-language-select]").boundingBox();assertEquals(width-24,language.x+language.width,1);assertTrue(language.y+language.height<=brand.y);assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth<=innerWidth"));p.screenshot(new Page.ScreenshotOptions().setPath(Path.of("build/reports/screenshots/login-centered-"+width+".png")));}
             for(String page:List.of("index","about","privacy","terms","login","signup","account","settings","admin")){
@@ -460,11 +460,11 @@ class BrowserTest {
 
     @Test void loginRedirectsAuthenticatedBrowserAndSendsRememberOnlyOnOptIn(){
         try(var context=browser.newContext()){
-            context.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\"synthetic_member\",\"role\":\"USER\"}")));
+            context.route("**/api/v1/auth/session",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\"synthetic_member\",\"role\":\"USER\"}")));
             Page p=context.newPage();p.navigate(origin+"/login.html");p.waitForURL("**/index.html");
         }
         try(var context=browser.newContext()){
-            context.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setStatus(401).setContentType("application/json").setBody("{}")));
+            context.route("**/api/v1/auth/session",r->r.fulfill(new Route.FulfillOptions().setStatus(204).setBody("")));
             List<String> bodies=new ArrayList<>();context.route("**/api/v1/auth/login",r->{bodies.add(r.request().postData());r.fulfill(new Route.FulfillOptions().setStatus(401).setContentType("application/json").setBody("{\"error\":\"invalid_credentials\"}"));});
             Page p=context.newPage();p.navigate(origin+"/login.html");assertFalse(p.locator("#remember-me").isChecked());p.locator("#username").fill("synthetic_login");p.locator("#password").fill("synthetic password");p.locator("button[type=submit]").click();p.waitForCondition(()->bodies.size()==1);assertTrue(bodies.getFirst().contains("\"rememberMe\":false"));p.locator("#remember-me").check();p.locator("button[type=submit]").click();p.waitForCondition(()->bodies.size()==2);assertTrue(bodies.getLast().contains("\"rememberMe\":true"));
             assertTrue(p.locator("#save-username").isChecked());assertTrue(p.locator("#save-username").isDisabled());
@@ -494,7 +494,7 @@ class BrowserTest {
             context.route("**/api/v1/**",r->{
                 String path=URI.create(r.request().url()).getPath();String body="[]";
                 if(r.request().method().equals("PATCH")||r.request().method().equals("POST")){writes.add(path+" "+r.request().postData());body="{}";}
-                else if(path.endsWith("/account"))body="{\"id\":\""+A+"\",\"role\":\"ADMIN\",\"username\":\"synthetic\"}";
+                else if(path.equals("/api/v1/auth/session"))body="{\"id\":\""+A+"\",\"role\":\"ADMIN\",\"username\":\"synthetic\"}";
                 else if(path.endsWith("/csrf"))body="{\"token\":\"test\"}";
                 else if(path.endsWith("/interests"))body="{\"version\":0,\"weights\":{}}";
                 else if(path.endsWith("/tags"))body="{\"tags\":[],\"aliases\":[],\"redirects\":[]}";
@@ -538,8 +538,8 @@ class BrowserTest {
     @Test void expiredSessionPreservesLocalPreferences(){
         try(var context=browser.newContext()){
             Page p=context.newPage();p.navigate(origin+"/about.html");
-            p.evaluate("async id=>{const m=await import('/assets/js/personalization/preferences.js');await m.savePreferences(id,{...m.defaults(),weights:{ai:5}});sessionStorage.setItem('moapan-account',id);}",A);
-            context.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setStatus(401).setContentType("application/json").setBody("{}")));
+            p.evaluate("async id=>{await(await import('/assets/js/shared/common.js')).viewer;const m=await import('/assets/js/personalization/preferences.js');await m.savePreferences(id,{...m.defaults(),weights:{ai:5}});sessionStorage.setItem('moapan-account',id);}",A);
+            context.route("**/api/v1/auth/session",r->r.fulfill(new Route.FulfillOptions().setStatus(204).setBody("")));
             p.evaluate("async()=>{try{await(await import('/assets/js/shared/api.js')).account();}catch(e){if(e.status!==401)throw e;}}");
             assertEquals(5,((Number)p.evaluate("async id=>(await(await import('/assets/js/personalization/preferences.js')).loadPreferences(id)).weights.ai",A)).intValue());
             assertNull(p.evaluate("sessionStorage.getItem('moapan-account')"));
@@ -548,7 +548,7 @@ class BrowserTest {
     @Test void administratorCanEditBoundedClassificationTopics(){
         try(var context=browser.newContext()){
             var writes=new ArrayList<String>();
-            context.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\"synthetic_admin\",\"role\":\"ADMIN\"}")));
+            context.route("**/api/v1/auth/session",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\"synthetic_admin\",\"role\":\"ADMIN\"}")));
             context.route("**/api/v1/admin/**",r->{String body="[]";String path=URI.create(r.request().url()).getPath();
                 if(path.equals("/api/v1/admin/interests"))body="{\"version\":0,\"weights\":{\"ai\":3}}";
                 if(path.equals("/api/v1/admin/classification"))body="{\"catalog\":{\"version\":0,\"topics\":[{\"id\":\"ai\",\"definition\":\"Model evaluation only\"}]},\"counts\":[],\"runtime\":{},\"recent\":[]}";
@@ -561,7 +561,7 @@ class BrowserTest {
     }
     @Test void advertisingAdminPreviewsAndSavesWithoutThirdPartyScripts(){
         try(var context=browser.newContext()){
-            context.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\"synthetic_admin\",\"role\":\"ADMIN\"}")));
+            context.route("**/api/v1/auth/session",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\"synthetic_admin\",\"role\":\"ADMIN\"}")));
             List<String> saved=new ArrayList<>();context.route("**/api/v1/admin/advertisements",r->{if(r.request().method().equals("PUT")){saved.add(r.request().postData());r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(r.request().postData()));}else r.resume();});
             Page p=context.newPage();List<String> external=new ArrayList<>();p.onRequest(r->{if(!r.url().startsWith(origin))external.add(r.url());});p.navigate(origin+"/admin.html");p.locator("#sections-tab-advertising").click();p.waitForSelector("#advertising-form");p.waitForCondition(()->p.locator("#advertising-form [type=submit]").isEnabled());
             p.locator("#advertising-form [name=title]").fill("Synthetic sponsor <script>");p.locator("#advertising-form [name=targetUrl]").fill("https://sponsor.example.test/");p.locator("#preview-advertising").click();p.waitForSelector("#advertising-preview a");assertEquals("Synthetic sponsor <script>",p.locator("#advertising-preview strong").textContent());assertEquals(0,p.locator("#advertising-preview script").count());assertTrue(p.locator("#advertising-preview a").getAttribute("rel").contains("sponsored"));
@@ -576,7 +576,7 @@ class BrowserTest {
  Page p=context.newPage();for(int width:new int[]{390,768,1440}){p.setViewportSize(width,1000);p.navigate(origin+"/newsletter.html?id="+id);p.waitForSelector("#letter-body p");assertTrue(p.locator("#letter-body").textContent().contains("<script>"));assertEquals(0,p.locator("#letter-body script").count());assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth<=innerWidth"));}
  }}
  @Test void newsletterSaveBlocksSwitchingWhileResponseIsPending(){try(var context=browser.newContext()){
- context.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\"synthetic_admin\",\"role\":\"ADMIN\"}")));
+ context.route("**/api/v1/auth/session",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\"synthetic_admin\",\"role\":\"ADMIN\"}")));
  context.route("**/api/v1/admin/newsletters",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("[]")));
  var pending=new java.util.concurrent.atomic.AtomicReference<Route>();context.route("**/api/v1/admin/newsletters/*",r->{if(r.request().method().equals("PUT"))pending.set(r);else r.resume();});
  Page p=context.newPage();p.navigate(origin+"/newsletter-editor.html");p.waitForSelector("#letter-form");p.locator("[name=title]").fill("Pending manuscript");p.locator("[data-add=paragraph]").click();p.locator("#blocks textarea").first().fill("Before save");p.locator("#letter-form [type=submit]").click();p.waitForCondition(()->pending.get()!=null);p.locator("#new-letter").click();assertEquals("Pending manuscript",p.locator("[name=title]").inputValue());p.locator("#blocks textarea").first().fill("Edited during save");pending.get().fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"version\":1}"));p.waitForFunction("document.querySelector('[role=status]').textContent.includes('초안을 저장')");assertEquals("Edited during save",p.locator("#blocks textarea").first().inputValue());
@@ -594,7 +594,7 @@ class BrowserTest {
   var rows=List.of(Map.of("id",id,"title",title,"introduction",manuscript.get("introduction"),"topic","인공지능","published_at","2026-10-30T00:00:00Z"),Map.of("id","older","title","데이터베이스의 변화에서 발견한 세 가지 질문","introduction","운영의 현장에서 바라본 새로운 검색의 조건. 합성 원고입니다.","topic","데이터베이스","published_at","2026-10-29T00:00:00Z"),Map.of("id","draft","title","보안과 신뢰 사이, 우리가 놓치기 쉬운 신호","introduction","기술을 읽는 또 다른 관점을 정리했습니다.","topic","보안","published_at","2026-10-28T00:00:00Z"));
   Files.createDirectories(Path.of("build/reports/screenshots"));
   try(var context=browser.newContext()){
-   context.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(mapper.writeValueAsString(Map.of("id",A,"username","synthetic_admin","role","ADMIN")))));
+   context.route("**/api/v1/auth/session",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(mapper.writeValueAsString(Map.of("id",A,"username","synthetic_admin","role","ADMIN")))));
    context.route("**/api/v1/newsletters",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(mapper.writeValueAsString(rows))));
    context.route("**/api/v1/newsletters/"+id,r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(mapper.writeValueAsString(Map.of("manuscript",manuscript,"issueNumber",3,"publishedAt","2026-10-30T00:00:00Z")))));
    context.route("**/api/v1/admin/newsletters",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(mapper.writeValueAsString(rows))));
@@ -614,7 +614,7 @@ class BrowserTest {
  @Test void newsletterDeleteConfirmsPreservesConflictsAndClearsOnlyOnSuccess(){try(var context=browser.newContext()){
   String id="20000000-0000-0000-0000-000000000020";
   var deleted=new java.util.concurrent.atomic.AtomicBoolean();var calls=new java.util.concurrent.atomic.AtomicInteger();var pending=new java.util.concurrent.atomic.AtomicReference<Route>();
-  context.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\"synthetic_admin\",\"role\":\"ADMIN\"}")));
+  context.route("**/api/v1/auth/session",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\"synthetic_admin\",\"role\":\"ADMIN\"}")));
   context.route("**/api/v1/admin/newsletters",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(deleted.get()?"[]":"[{\"id\":\""+id+"\",\"title\":\"Disposable manuscript\",\"published_at\":\"2026-10-30T00:00:00Z\"}]")));
   context.route("**/api/v1/admin/newsletters/"+id,r->{
    if(r.request().method().equals("DELETE")){
@@ -653,7 +653,7 @@ class BrowserTest {
   for(int width:new int[]{390,768,1440}){p.setViewportSize(width,1000);assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth<=innerWidth"));p.screenshot(new Page.ScreenshotOptions().setPath(Path.of("build/reports/screenshots/newsletter-product-"+width+".png")));}
  }}
  @Test void editorialDossierLinksWeeklyEvidenceAndClearsReviewOnEdit(){try(var context=browser.newContext()){
-  context.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\"synthetic_editor\",\"role\":\"ADMIN\"}")));
+  context.route("**/api/v1/auth/session",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\"synthetic_editor\",\"role\":\"ADMIN\"}")));
   context.route("**/api/v1/admin/newsletters",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("[]")));
   var writes=new ArrayList<String>();context.route("**/api/v1/admin/newsletters/*",r->{if(r.request().method().equals("PUT")){writes.add(r.request().postData());r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"version\":1}"));}else r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{}"));});
   context.route("**/api/v1/admin/newsletters/evidence",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"weekStart\":\"2026-10-26\",\"cutoff\":\"2026-10-30T08:00:00Z\",\"items\":[{\"id\":\""+B+"\",\"title\":\"Weekly synthetic evidence\",\"url\":\"https://example.org/paper\",\"collectedAt\":\"2026-10-30T06:00:00Z\",\"visible\":true}]}")));
@@ -666,7 +666,7 @@ class BrowserTest {
  @Test void oldDraftCanMoveWeekAndStaleReviewCannotShowSuccess(){try(var context=browser.newContext()){
   var mapper=tools.jackson.databind.json.JsonMapper.builder().build();var week=com.moapan.newsletter.domain.PublicationResearch.week(java.time.Instant.now());var old=week.minusWeeks(1);
   var dossier=new HashMap<String,Object>((Map<String,Object>)productIssue().get("dossier"));dossier.put("weekStart",old.toString());dossier.put("cutoff",com.moapan.newsletter.domain.PublicationResearch.start(week).minusSeconds(1).toString());
-  context.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\"synthetic_editor\",\"role\":\"ADMIN\"}")));
+  context.route("**/api/v1/auth/session",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\"synthetic_editor\",\"role\":\"ADMIN\"}")));
   context.route("**/api/v1/admin/newsletters",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("[{\"id\":\""+A+"\",\"title\":\"Older draft\",\"published_at\":null}]")));
   var saves=new java.util.concurrent.atomic.AtomicInteger(1);context.route("**/api/v1/admin/newsletters/"+A,r->{if(r.request().method().equals("PUT"))r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"version\":"+saves.incrementAndGet()+"}"));else r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(mapper.writeValueAsString(Map.of("version",1,"revision",0,"expectedWeek",week.toString(),"manuscript",productIssue().get("manuscript"),"dossier",dossier,"evidence",productIssue().get("evidence")))));});
   var pending=new java.util.concurrent.atomic.AtomicReference<Route>();context.route("**/api/v1/admin/newsletters/"+A+"/review",pending::set);

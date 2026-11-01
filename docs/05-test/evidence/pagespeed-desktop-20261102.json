@@ -1,0 +1,257 @@
+{
+  "status": "SERVICE_VALIDATED",
+  "originalReport": "https://pagespeed.web.dev/analysis/https-175-195-62-165/hzwkh9jxig?form_factor=desktop",
+  "baseline": {
+    "measuredAt": "2026-11-02T06:15:45+09:00",
+    "report": "https://pagespeed.web.dev/analysis/https-175-195-62-165/sk4krz712f",
+    "desktop": {
+      "performance": 88,
+      "accessibility": 100,
+      "bestPractices": 96,
+      "seo": 100,
+      "cls": 0.244
+    },
+    "mobile": {
+      "performance": 77,
+      "accessibility": 100,
+      "bestPractices": 96,
+      "seo": 100,
+      "cls": 0.677
+    }
+  },
+  "sourceBackupsCreated": false,
+  "checkedAt": "2026-11-01T21:43:43.936Z",
+  "final": {
+    "report": "https://pagespeed.web.dev/analysis/https-175-195-62-165/aofq5k9r8s",
+    "measuredAt": "2026-11-02T06:40:19+09:00",
+    "lighthouse": "13.6.0",
+    "chrome": "153.0.8010.36",
+    "desktop": {
+      "performance": 100,
+      "accessibility": 100,
+      "bestPractices": 100,
+      "seo": 100,
+      "agentic": "2/2",
+      "fcpMs": 225,
+      "lcpMs": 339,
+      "tbtMs": 0,
+      "cls": 0,
+      "speedIndexMs": 435
+    },
+    "mobile": {
+      "performance": 100,
+      "accessibility": 100,
+      "bestPractices": 100,
+      "seo": 100,
+      "agentic": "2/2",
+      "fcpMs": 797,
+      "lcpMs": 1386,
+      "tbtMs": 0,
+      "cls": 0,
+      "speedIndexMs": 967
+    }
+  },
+  "tests": {
+    "test": {
+      "tests": 164,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "integrationTest": {
+      "tests": 111,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "e2eTest": {
+      "tests": 61,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "layout": [
+    {
+      "cls": 0,
+      "width": 390,
+      "consoleErrors": 0
+    },
+    {
+      "cls": 0,
+      "width": 768,
+      "consoleErrors": 0
+    },
+    {
+      "cls": 0,
+      "width": 1440,
+      "consoleErrors": 0
+    }
+  ],
+  "html": {
+    "validator": "26.10.12",
+    "errors": 0,
+    "warnings": 0,
+    "pages": 11
+  },
+  "security": {
+    "images": {
+      "runtime": {
+        "imageId": "sha256:fba510fc15d13e3a078a6a27185d763a9046badb2aa7294e0790450e117db7f2",
+        "reportSha256": "1c67b3560288406190bd5366da6a71705472d715256fb89c2f5a8f42c9100bcb",
+        "rawFindings": [],
+        "secrets": 0
+      },
+      "builder": {
+        "imageId": "sha256:d4741202ca5253fb0a7e6a8c2d1ff14e3b061032fdd0eb76c92da33c8f63d679",
+        "reportSha256": "3c12dab26d2866dad928d45b0c0973ecfc06eb3dcbdb275e459138c7fb596c2a",
+        "rawFindings": [],
+        "secrets": 0
+      },
+      "proxy": {
+        "imageId": "sha256:453e34b953b74d07e425de9383bf2d7e3190deba1fe828eb34b036c69874074c",
+        "reportSha256": "04a83150eecc1af1d2be8a3f19852d655af106efd003ede399e1a548f28871a3",
+        "rawFindings": [
+          {
+            "id": "GO-2026-5932",
+            "severity": "UNKNOWN"
+          }
+        ],
+        "secrets": 0
+      }
+    },
+    "trivyVersion": "Version: 0.76.1+moapan-security.1",
+    "database": {
+      "Version": 2,
+      "NextUpdate": "2026-11-02T19:08:08.720434111Z",
+      "UpdatedAt": "2026-11-01T19:08:08.720434681Z",
+      "DownloadedAt": "2026-11-01T20:52:15.050556Z"
+    },
+    "completedAt": "2026-11-01T21:38:52Z",
+    "sourceJarSbomHelmGate": "PASS",
+    "proxyFinding": "GO-2026-5932 UNKNOWN: existing exact-code non-exposure evidence; no new ignore or exception",
+    "jdk": "Eclipse Temurin 27.0.1.0.2+1",
+    "trust": "117 roots; official four absent; ordinary HTTPS accepted; 14 affected TLS chains rejected; no custom truststore"
+  },
+  "jarSha256": "3c1877697b477650eb30e2dd84199b3612b3e0390daddce817c1d7da0fab5e9e",
+  "deployment": {
+    "base": "https://175.195.62.165",
+    "images": {
+      "runtime": "sha256:fba510fc15d13e3a078a6a27185d763a9046badb2aa7294e0790450e117db7f2",
+      "builder": "sha256:d4741202ca5253fb0a7e6a8c2d1ff14e3b061032fdd0eb76c92da33c8f63d679",
+      "proxy": "sha256:453e34b953b74d07e425de9383bf2d7e3190deba1fe828eb34b036c69874074c"
+    },
+    "db": {
+      "articles": 300,
+      "accounts": 2,
+      "newsletters": 1,
+      "schema": 22,
+      "aggregateIdsUnchanged": true
+    },
+    "workerHealthy": true,
+    "modelsAndVolumesPreserved": true,
+    "modelPolicyClassesUnchanged": 10,
+    "modelPolicyProofSha256": "b3f91e159cf361da6fff540f4cfb6f251bf236022dcb5146010049d286d2cb8b",
+    "syntheticAccountDeleted": true
+  },
+  "deadCode": {
+    "javaFiles": 67,
+    "javaDeclarations": 723,
+    "javaCompilerErrors": 0,
+    "browserModules": 38,
+    "reachableModules": 38,
+    "cssFiles": 4,
+    "scriptsFiles": 84,
+    "shellSyntaxChecks": 21,
+    "nodeSyntaxChecks": 19,
+    "removed": [
+      "assets/css/site.css (used rules moved to common stylesheet)",
+      "permanently hidden #more button and unreachable incremental cursor loader/state/listener/styles",
+      "duplicate login language font declaration",
+      "dynamic content nav construction (replaced with static HTML)"
+    ],
+    "retained": "Spring/JPA/JSON/record and ObjectPostProcessor callbacks; method references; dynamic newsletter import exports; server cursor contract/security tests; operational/model/license/migration files"
+  },
+  "liveSmoke": {
+    "checkedAt": "2026-11-01T21:40:15.363Z",
+    "base": "https://175.195.62.165",
+    "tlsValidation": true,
+    "checks": [
+      {
+        "path": "/",
+        "status": 200,
+        "gzip": true,
+        "canonical": true
+      },
+      {
+        "path": "/index.html",
+        "status": 200,
+        "gzip": true,
+        "canonical": true
+      },
+      {
+        "path": "/about.html",
+        "status": 200,
+        "gzip": true,
+        "canonical": true
+      },
+      {
+        "path": "/privacy.html",
+        "status": 200,
+        "gzip": true,
+        "canonical": true
+      },
+      {
+        "path": "/terms.html",
+        "status": 200,
+        "gzip": true,
+        "canonical": true
+      },
+      {
+        "path": "/",
+        "method": "HEAD",
+        "securityHeaders": true
+      },
+      {
+        "path": "/index.html",
+        "method": "HEAD",
+        "securityHeaders": true
+      },
+      {
+        "path": "/login.html",
+        "method": "HEAD",
+        "securityHeaders": true
+      },
+      {
+        "path": "/api/v1/account",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/newsletters",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/admin/sites",
+        "status": 401
+      },
+      {
+        "path": "/api/v1/public/news/edition",
+        "items": 42,
+        "uncompressed": true
+      },
+      {
+        "syntheticAccountLifecycle": true,
+        "memberAdminDenied": true,
+        "deletedSessionRejected": true
+      }
+    ],
+    "syntheticAccountDeleted": true
+  },
+  "limits": [
+    "Lighthouse lab result, no CrUX field data or search ranking/index guarantee.",
+    "Critical CSS/dependency-tree/LCP breakdown are diagnostics, not remaining deducted scored audits.",
+    "HSTS preload registration is unavailable for IP literals; no preload registration or actual IP HSTS enforcement claimed.",
+    "Existing user-approved password policy and existing security applicability evidence unchanged.",
+    "Independent current-head review and guarded develop integration must be verified from the PR and final workflow record."
+  ]
+}
