@@ -64,3 +64,7 @@ V14 전환: newsletters에 nullable dossier와최초발간/개정필드를추가
 
 ## 서버 캐시 V22 실제 반영
 승인된 기존 환경에서 compose.yaml + scripts/deploy/compose-public.yaml + scripts/deploy/compose-translation.yaml + scripts/deploy/compose-classification.yaml 네 파일로 실행했다. app/worker 중지→암호화 백업/격리 복원→검사한 동일 앱 image를 migrate로 V17~22 적용→web/worker 재생성→검사한 proxy로 교체했다. DB/모델 이미지·볼륨 유지,300기사·2계정·1발간물 ID집합 일치. web/worker JAR113f46dcf6054f4fc9d12b368ecbdfe23894750f5e8d1d7446b7d555062397a3 일치. 승인된 기존 HTTPS와 API·자산304·live캐시를 확인했고 합성계정은 삭제했다. 이번 실행에서 별도 새 셀룰러 측정이나 새 배포 환경 생성은 하지 않았다. Helm migrationVersion은 최신22로 맞춰 wait-schema가 캐시 migration 완료를 확인한다. chart lint/template/config scan만 수행했고 실제 Kubernetes 설치는 하지 않았다. 실행 명령/원본 보고서 해시는 [검증 증빙](../05-test/evidence/cache-service-delivery-20261101.json)을 따른다.
+
+
+## PageSpeed 후속 서비스 반영 검증 — 2026-11-02
+기존4개 Compose 설정을 모두 사용해 web/worker를 검증 runtime sha256:fba510fc15d13e3a078a6a27185d763a9046badb2aa7294e0790450e117db7f2로, proxy를 sha256:453e34b953b74d07e425de9383bf2d7e3190deba1fe828eb34b036c69874074c로 교체했다. 나머지DB/모델/볼륨 보존,6서비스정상/heartbeat·300기사/2계정/1발간물/V22·ID해시일치. 정상TLS검증을 유지한 실제HTTPS·HEAD·API접근경계·합성가입/로그인/탈퇴를 확인했다. 외부 PSI는 양쪽4분야100점. 새 유료자원/도메인/터널/CI/CD를 추가하지 않았다. builder/scan/truststore/실행JAR증빙은 [최종 검증서](../05-test/pagespeed-desktop.md)에 있다.

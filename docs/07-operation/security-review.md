@@ -220,3 +220,7 @@ Boot4.1.2 BOM의 Caffeine3.2.4와 error_prone_annotations2.49.0을 추가했다.
 
 ## 미사용 코드 제거 산출물(2026-11-02)
 앱sha256:ec89cdad8d05eef1a5bf22956b45f234810359034bcc68898204c1f1f22cb772/빌드sha256:e2d1b2ed11ecc098b35913517e3b6203bcf67607d5f469606f9f677987ccf02d를새DB동기화2026-11-01T20:52:15.050556Z후검사했고원본취약점/secret0·소스/JAR/SBOM/HelmgatePASS다.실행JAR일치·실제권한/4역할·truststore117루트/공식4대상부재/문제체인14거부를확인했다.모델정책클래스10개의바이트가같으므로정책해시와기존번역/분류가유지된다.새예외나S07조건변경은없고기존JOSE백포트2026-11-07만료·코드부재근거는그대로다. [증빙](../05-test/evidence/dead-code-audit-20261102.json).공식Temurin최신release/Boot4.1.2·Gradle9.8.2및Spring보안목록을재조회했으며버전/의존성변경은없다.
+
+
+## PageSpeed 변경 후 재검증 — 2026-11-02
+동일 의존성과 모델을 유지하며 session 탐지204/보호account401, CSP Trusted Types/COOP와 HEAD header eager 적용·동적 비압축경계를 회귀검증했다. JAR 3c1877697b477650eb30e2dd84199b3612b3e0390daddce817c1d7da0fab5e9e; runtime sha256:fba510fc15d13e3a078a6a27185d763a9046badb2aa7294e0790450e117db7f2; builder sha256:d4741202ca5253fb0a7e6a8c2d1ff14e3b061032fdd0eb76c92da33c8f63d679; proxy sha256:453e34b953b74d07e425de9383bf2d7e3190deba1fe828eb34b036c69874074c. source/JAR/SBOM/Helm/3image gate PASS, 최종 이미지만 서비스에 적용. DB동기화2026-11-01T20:52:15.050556Z·검사24시간 이내. runtime/builder raw취약점0·비밀0. proxy기존 GO-2026-5932 UNKNOWN 정확코드비노출근거 유지, 신규ignore 없음. Temurin27.0.1.0.2+1/117roots/공식4대상부재·정상HTTPS/14TLS거부 재검증. Spring/adoptium/Boot/Gradle 공식 문서를 재조회했다. IP HSTS효력·preload등록과 헤더 문법을 구분하며 기존 S07사용자 비밀번호 정책과 기존 예외 만료기한을 바꾸지 않는다. 상세 [MP-DOC-033](../05-test/pagespeed-desktop.md).

@@ -131,3 +131,7 @@ Linux 서버에서는 `compose-public.yaml` 대신 `scripts/deploy/compose-serve
 
 ## 공통 조회 캐시
 브라우저 공통 ES Module/Intl/DOM 재사용과 정적 assets의 내용 ETag·압축을 적용했다. 서버는 내장 Caffeine으로 태그·공통 대표 관심사·광고 표시·요청한 공통 기사 카드·발간 원고를 최대60분 재사용한다. DB 수정 시 저장된 작은 해시를 비교해 변경을 즉시 반영하며 권한·quota·현재 공개 조건은 매 요청 검사한다. 회원 개인 관심사·검색·세션/계정 응답은 캐시하지 않는다. web16MiB/worker8MiB는 논리 가중치 예산이다. V17~22와 Helm schema22, 실제330회귀/HTTPS/데이터 보존 증거는 [서버 캐시 검증서](docs/05-test/server-cache.md)를 따른다.
+
+
+### PageSpeed·웹 표준 검증
+2026-11-02 06:40 KST 실제 외부 PageSpeed 측정에서 모바일·데스크톱 성능/접근성/권장사항/SEO가 모두100점, CLS0으로 확인됐다. 실험값이며 검색 순위나 모든 이용 환경의 점수 보장은 아니다. [측정·336시험·보안·서비스·최종 코드 점검 근거](docs/05-test/pagespeed-desktop.md)를 참조한다. 현재6개 Compose서비스와 기존DB/모델을 보존한다.

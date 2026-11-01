@@ -125,3 +125,7 @@ GET /api/v1/admin/newsletters/{id}/review: ADMIN; {version,expectedWeek,blockers
 
 ### 관리자 번역 수정·잠금
 GET/PUT `/api/v1/admin/translations/{id}/{language}` (ko/en), ADMIN 및 상태변경 CSRF. GET: contentHash,version,title,summaryBullets,locked. PUT: 동일 필드, 최초version=-1. 현재 원문/요약 hash 및 수정 version 불일치409, 권리 미허용409, 잘못된 입력400, 비회원401, 일반회원/CSRF403. API는 원문 전문을 제공하지 않는다.
+
+
+### 로그인 상태 확인
+GET `/api/v1/auth/session`: 정상 비회원은204/빈 본문, 유효한 로그인 세션만200/{id,username,role}. 익명 세션/쿠키를 생성하지 않는다. 삭제·만료·비활성 세션은 폐기 후204를 반환한다. no-store, 동일출처·전역 요청 제한 유지. 기존 GET `/api/v1/account`는 계속 인증 필수이며 비회원401이다. 화면은 정상적인 비회원 탐지를 상태 확인 API로 수행한다.
