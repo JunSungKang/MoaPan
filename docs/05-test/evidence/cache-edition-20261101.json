@@ -2,10 +2,10 @@
   "checkedAt": "2026-11-01T12:21:40.507Z",
   "domain": "edition-and-public-article-cards",
   "status": "CHECK_AND_POSTGRESQL_PASS_FINAL_COMPOSITE_SECURITY_PENDING",
-  "focusedTests": 10,
+  "focusedTests": 11,
   "regression": {
     "unit": 163,
-    "postgresql": 81
+    "postgresql": 82
   },
   "warmRead": {
     "articlePayloadQueries": 0,
@@ -31,5 +31,12 @@
   ],
   "searchResultCache": false,
   "patterns": "Fixed research patterns precompiled once; no source text retained",
-  "runtimeDeployed": false
+  "runtimeDeployed": false,
+  "lockInversionRegression": {
+    "before": "FAIL: PostgreSQL deadlock detected in forced job/article latch interleaving",
+    "fix": "Separate classification-state fingerprint row with no parent article lock; retain this hash in card signatures",
+    "after": "PASS same forced latch ordering; complete check+PostgreSQL rerun passed",
+    "independentRecheck": "Cycle resolved, no further blocking findings in read-only preflight"
+  },
+  "validatedAt": "2026-11-01T12:54:03.897Z"
 }

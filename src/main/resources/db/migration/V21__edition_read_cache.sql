@@ -10,8 +10,7 @@ BEGIN
     PERFORM set_read_cache_fingerprint('article_card',a.id,jsonb_build_object(
         'article',jsonb_build_array(a.id,a.source_id,a.title,a.author,a.summary_bullets,a.summary_mode,a.published_at AT TIME ZONE 'UTC',a.collected_at AT TIME ZONE 'UTC',a.canonical_url,a.public),
         'tags',(SELECT coalesce(jsonb_agg(jsonb_build_array(tag_id,confidence,method,locked) ORDER BY tag_id),'[]') FROM article_tags WHERE article_id=a.id),
-        'translations',(SELECT coalesce(jsonb_agg(jsonb_build_array(language,content_hash,title,summary_bullets,provider,locked) ORDER BY language),'[]') FROM article_translations WHERE article_id=a.id),
-        'classification',(SELECT jsonb_build_array(state,policy_hash) FROM article_classification_jobs WHERE article_id=a.id)))
+        'translations',(SELECT coalesce(jsonb_agg(jsonb_build_array(language,content_hash,title,summary_bullets,provider,locked) ORDER BY language),'[]') FROM article_translations WHERE article_id=a.id)))
         FROM articles a WHERE a.id=article_key;
 END $$;
 CREATE FUNCTION article_card_changed() RETURNS trigger LANGUAGE plpgsql AS $$
@@ -32,7 +31,22 @@ END $$;
 CREATE TRIGGER article_read_cache AFTER INSERT OR UPDATE OF source_id,title,author,summary_bullets,summary_mode,published_at,collected_at,canonical_url,public OR DELETE ON articles FOR EACH ROW EXECUTE FUNCTION article_card_changed();
 CREATE TRIGGER article_tags_read_cache AFTER INSERT OR UPDATE OR DELETE ON article_tags FOR EACH ROW EXECUTE FUNCTION article_card_child_changed();
 CREATE TRIGGER translations_read_cache AFTER INSERT OR UPDATE OF language,content_hash,title,summary_bullets,provider,locked OR DELETE ON article_translations FOR EACH ROW EXECUTE FUNCTION article_card_child_changed();
-CREATE TRIGGER classification_result_read_cache AFTER INSERT OR UPDATE OF state,policy_hash OR DELETE ON article_classification_jobs FOR EACH ROW EXECUTE FUNCTION article_card_child_changed();
+-- Job claim/failure paths lock jobs before articles. Never acquire an article lock here:
+-- article edits take the opposite order when invalidating jobs. A separate fingerprint
+-- records the single job row atomically without introducing a parent/child lock cycle.
+CREATE FUNCTION article_classification_cache_changed() RETURNS trigger LANGUAGE plpgsql AS $$
+BEGIN
+    IF TG_OP='DELETE' THEN
+        DELETE FROM read_cache_fingerprints WHERE domain='article_classification' AND subject=OLD.article_id;
+    ELSE
+        IF TG_OP='UPDATE' AND OLD.article_id<>NEW.article_id THEN
+            DELETE FROM read_cache_fingerprints WHERE domain='article_classification' AND subject=OLD.article_id;
+        END IF;
+        PERFORM set_read_cache_fingerprint('article_classification',NEW.article_id,jsonb_build_array(NEW.state,NEW.policy_hash));
+    END IF;
+    RETURN NULL;
+END $$;
+CREATE TRIGGER classification_result_read_cache AFTER INSERT OR UPDATE OF article_id,state,policy_hash OR DELETE ON article_classification_jobs FOR EACH ROW EXECUTE FUNCTION article_classification_cache_changed();
 
 CREATE FUNCTION refresh_news_source_catalog() RETURNS void LANGUAGE plpgsql AS $$
 BEGIN
@@ -105,6 +119,7 @@ CREATE TRIGGER edition_members_delete_cache AFTER DELETE ON news_edition_items R
 CREATE TRIGGER edition_members_update_cache AFTER UPDATE ON news_edition_items REFERENCING NEW TABLE AS new_members OLD TABLE AS old_members FOR EACH STATEMENT EXECUTE FUNCTION edition_members_updated();
 
 SELECT refresh_article_card_fingerprint(id) FROM articles ORDER BY id;
+SELECT set_read_cache_fingerprint('article_classification',article_id,jsonb_build_array(state,policy_hash)) FROM article_classification_jobs ORDER BY article_id;
 SELECT set_read_cache_fingerprint('news_source',id,jsonb_build_array(site_id,label,language,allow_display,allow_summary,allow_translation,rights_status)) FROM sources ORDER BY id;
 SELECT set_read_cache_fingerprint('news_site',id,to_jsonb(name)) FROM sites ORDER BY id;
 SELECT refresh_news_source_catalog();

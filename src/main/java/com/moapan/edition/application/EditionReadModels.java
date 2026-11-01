@@ -57,11 +57,11 @@ public final class EditionReadModels {
         var selected=visible.stream().filter(m->m.position()>=start).limit(size).toList();
         StringBuilder signature=new StringBuilder();for(var m:visible)signature.append(m.position()).append(':').append(m.id()).append('|');
         if(selected.isEmpty())return new Selection(visible,selected,signature.toString());
-        var hashes=db.sql("SELECT a.id,af.fingerprint article_hash,sf.fingerprint source_hash,pf.fingerprint site_hash,(SELECT fingerprint FROM read_cache_fingerprints WHERE domain='news_taxonomy' AND subject='00000000-0000-0000-0000-000000000000') taxonomy_hash FROM articles a JOIN sources s ON s.id=a.source_id JOIN sites p ON p.id=s.site_id LEFT JOIN read_cache_fingerprints af ON af.domain='article_card' AND af.subject=a.id LEFT JOIN read_cache_fingerprints sf ON sf.domain='news_source' AND sf.subject=s.id LEFT JOIN read_cache_fingerprints pf ON pf.domain='news_site' AND pf.subject=p.id WHERE a.id IN (:ids)")
+        var hashes=db.sql("SELECT a.id,af.fingerprint article_hash,sf.fingerprint source_hash,pf.fingerprint site_hash,CASE WHEN cj.article_id IS NULL THEN 'none' ELSE cf.fingerprint END classification_hash,(SELECT fingerprint FROM read_cache_fingerprints WHERE domain='news_taxonomy' AND subject='00000000-0000-0000-0000-000000000000') taxonomy_hash FROM articles a JOIN sources s ON s.id=a.source_id JOIN sites p ON p.id=s.site_id LEFT JOIN article_classification_jobs cj ON cj.article_id=a.id LEFT JOIN read_cache_fingerprints cf ON cf.domain='article_classification' AND cf.subject=a.id LEFT JOIN read_cache_fingerprints af ON af.domain='article_card' AND af.subject=a.id LEFT JOIN read_cache_fingerprints sf ON sf.domain='news_source' AND sf.subject=s.id LEFT JOIN read_cache_fingerprints pf ON pf.domain='news_site' AND pf.subject=p.id WHERE a.id IN (:ids)")
                 .param("ids",selected.stream().map(Member::id).toList()).query().listOfRows();
         Map<UUID,Map<String,Object>> indexed=new HashMap<>();for(var row:hashes)indexed.put((UUID)row.get("id"),row);
         for(var m:selected){var row=indexed.get(m.id());if(row==null)return new Selection(visible,selected,null);
-            for(String field:List.of("article_hash","source_hash","site_hash","taxonomy_hash")){
+            for(String field:List.of("article_hash","source_hash","site_hash","classification_hash","taxonomy_hash")){
                 if(row.get(field)==null)return new Selection(visible,selected,null);
                 signature.append(row.get(field)).append('|');
             }

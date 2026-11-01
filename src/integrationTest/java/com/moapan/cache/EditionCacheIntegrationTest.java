@@ -95,4 +95,23 @@ class EditionCacheIntegrationTest {
         new TransactionTemplate(f.tm).executeWithoutResult(s->{f.db.sql("SET LOCAL TIME ZONE 'Asia/Seoul'").update();f.db.sql("UPDATE articles SET title=title WHERE id=:id").param("id",article).update();});
         assertEquals(before,f.db.sql("SELECT fingerprint FROM read_cache_fingerprints WHERE domain='article_card' AND subject=:id").param("id",article).query(String.class).single());
     }
+    @Test void classificationJobUpdateAndArticleEditHaveNoParentChildLockInversion()throws Exception{
+        UUID article=news.publicEdition().items().getFirst().id();
+        f.db.sql("INSERT INTO article_classification_jobs(article_id,content_hash,policy_hash,state) VALUES(:id,repeat('a',64),:policy,'DONE')").param("id",article).param("policy",POLICY).update();
+        var parentLocked=new java.util.concurrent.CountDownLatch(1);var jobLocked=new java.util.concurrent.CountDownLatch(1);
+        try(var pool=java.util.concurrent.Executors.newFixedThreadPool(2)){
+            var editor=pool.submit(()->new TransactionTemplate(f.tm).executeWithoutResult(s->{
+                f.db.sql("SELECT id FROM articles WHERE id=:id FOR UPDATE").param("id",article).query(UUID.class).single();parentLocked.countDown();await(jobLocked);
+                f.db.sql("UPDATE articles SET title='Concurrent edited title' WHERE id=:id").param("id",article).update();
+            }));
+            var classifier=pool.submit(()->new TransactionTemplate(f.tm).executeWithoutResult(s->{
+                await(parentLocked);f.db.sql("SELECT article_id FROM article_classification_jobs WHERE article_id=:id FOR UPDATE").param("id",article).query(UUID.class).single();jobLocked.countDown();
+                f.db.sql("UPDATE article_classification_jobs SET state='RUNNING' WHERE article_id=:id").param("id",article).update();
+            }));
+            editor.get(10,java.util.concurrent.TimeUnit.SECONDS);classifier.get(10,java.util.concurrent.TimeUnit.SECONDS);
+        }
+        assertEquals("Concurrent edited title",news.publicEdition().items().getFirst().title());
+        assertEquals("PENDING",f.db.sql("SELECT state FROM article_classification_jobs WHERE article_id=:id").param("id",article).query(String.class).single());
+    }
+    private static void await(java.util.concurrent.CountDownLatch latch){try{if(!latch.await(5,java.util.concurrent.TimeUnit.SECONDS))throw new IllegalStateException("Synthetic latch timeout");}catch(InterruptedException e){Thread.currentThread().interrupt();throw new IllegalStateException(e);}}
 }
