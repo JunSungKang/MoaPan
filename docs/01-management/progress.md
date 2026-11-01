@@ -109,4 +109,4 @@ PR10 guarded 사람 commit/push·생성 및 1db7303 독립 리뷰 APPROVE 완료
 관리자 재구성 최종 로컬 검증·서비스 반영 완료:6개 주메뉴·수집3/주제2 하위탭, 메뉴전환 입력 유지·키보드·해시/뒤로가기·늦은응답 비침범. 263회귀(154/63/46)/관리54화면/전체72화면/Nu0/최종 앱·빌드 이미지 gate PASS. 결과 숨김을 FAIL로 재현한 뒤 수정·전체재검증했고 앱af492f8866e4와 JARb5c4e9dae080을 Compose web/worker에 적용·실행일치 확인했다. HTTPS자산15개일치/권한경계/DB300·2·1 보존. [증빙](../05-test/evidence/admin-navigation-20261101.json). 후속커밋push뒤 PR11 현재head의 독립리뷰를 다시 받으며 develop/main병합은 포함하지 않는다.
 
 <!-- DOMAIN-PR-REORGANIZATION -->
-도메인별이력재구성진행: shared-experience. 검토·병합결과는 [재구성 증빙](../05-test/evidence/domain-pr-reorganization-20261101.json)의 실제 상태를 따른다. 실행중인검증서비스와데이터는이작업으로변경하지않는다.
+도메인별이력재구성진행: collection-operations. 검토·병합결과는 [재구성 증빙](../05-test/evidence/domain-pr-reorganization-20261101.json)의 실제 상태를 따른다. 실행중인검증서비스와데이터는이작업으로변경하지않는다.

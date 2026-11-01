@@ -13,7 +13,7 @@
       "title": "feat(experience): 공통 화면·관리 탐색 경계 정리",
       "snapshot": "847af4fda14e5cac351a8fe1d134833eb06c2e21",
       "scope": "Shared Kernel/presentation: shared typography/navigation/secondary headers/footer, admin tab shell, independent technical SEO evidence.",
-      "status": "VALIDATED_FOR_REVIEW",
+      "status": "MERGED_AND_BRANCHES_REMOVED",
       "validation": {
         "checkedAt": "2026-11-01T03:05:45.862Z",
         "suites": {
@@ -45,6 +45,20 @@
         "runtimeContainersUnchanged": true,
         "sourceJarSbomGate": "PASS",
         "runtimeDeployment": "NOT_CHANGED"
+      },
+      "pullRequest": 12,
+      "url": "https://github.com/JunSungKang/MoaPan/pull/12",
+      "headSha": "93983854215541bd9b2ecd22527d084df8be3c08",
+      "mergeReceipt": {
+        "pr": 12,
+        "mergeCommit": "62c76b5b68fb70a5a3c9869b5fc54d1532ee9db1",
+        "mergedBy": "JunSungKang",
+        "formalReviewer": "junsung-bot[bot]",
+        "mergeMethod": "squash",
+        "verifiedHeadSha": "93983854215541bd9b2ecd22527d084df8be3c08",
+        "deletedRemoteBranch": "codex/domain-shared-experience-20261101",
+        "deletedRemoteTrackingBranch": null,
+        "deletedLocalBranch": "codex/domain-shared-experience-20261101"
       }
     },
     {
@@ -53,7 +67,39 @@
       "title": "feat(catalog): 수집원·작업 조회를 이름 기반으로 정리",
       "snapshot": "CUSTOM_CATALOG_SLICE",
       "scope": "Catalog/collection operations: recent50 job API and protected query, named job UI, source selection/advanced connection/language inputs and preview display.",
-      "status": "PLANNED"
+      "status": "VALIDATED_FOR_REVIEW",
+      "validation": {
+        "checkedAt": "2026-11-01T03:11:34.810Z",
+        "suites": {
+          "test": {
+            "tests": 154,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "integrationTest": {
+            "tests": 64,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "e2eTest": {
+            "tests": 46,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        },
+        "total": 264,
+        "htmlMessages": 0,
+        "logSha256": "716c3cfbd645b6d60707984f081823366ee8c05e561946cd61b1cf991998f13d",
+        "jarSha256": "289ff11371f99accbdf7cde6e6c44af49944f787bd34617263f1e5b23ae910e2",
+        "sourceCheckpoint": "CUSTOM_CATALOG_SLICE",
+        "sourceComparedExactly": false,
+        "runtimeContainersUnchanged": true,
+        "sourceJarSbomGate": "PASS",
+        "runtimeDeployment": "NOT_CHANGED"
+      }
     },
     {
       "id": "editorial-taxonomy",

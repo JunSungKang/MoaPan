@@ -124,3 +124,6 @@ GET /api/v1/admin/newsletters/{id}/review: ADMIN; {version,expectedWeek,blockers
 
 ### 관리자 번역 수정·잠금
 GET/PUT `/api/v1/admin/translations/{id}/{language}` (ko/en), ADMIN 및 상태변경 CSRF. GET: contentHash,version,title,summaryBullets,locked. PUT: 동일 필드, 최초version=-1. 현재 원문/요약 hash 및 수정 version 불일치409, 권리 미허용409, 잘못된 입력400, 비회원401, 일반회원/CSRF403. API는 원문 전문을 제공하지 않는다.
+
+
+Catalog 재구성: ADMIN GET /api/v1/admin/jobs는 선택 sourceId로 제한한 최근50개를 created_at DESC/id 순서로 조회한다. id/status/attempts/error_code/source_label/site_name/UTC ISO created_at만 제공하며 입력UUID400/일반회원403이다. 화면은 출처·시각·상태로 선택하고 지금수집202접수와완료를구분한다.

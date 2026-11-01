@@ -463,6 +463,25 @@ class SecurityIntegrationTest {
         mvc.perform(get("/api/v1/news/edition").cookie(cookie)).andExpect(status().isServiceUnavailable()).andExpect(header().string("Retry-After","60")).andExpect(jsonPath("$.error").value("temporarily_unavailable"));
     }
 
+    @Test @Order(20) @WithMockUser(roles="ADMIN") @org.springframework.transaction.annotation.Transactional
+    void recentCollectionJobsAreBoundedNamedAndProtected()throws Exception{
+        UUID source=adminFixtureSource();
+        for(int i=0;i<55;i++)repo.db().sql("INSERT INTO content_jobs(id,source_id,status,site_version,source_version) VALUES(:id,:source,'SUCCEEDED',0,0)").param("id",UUID.randomUUID()).param("source",source).update();
+        mvc.perform(get("/api/v1/admin/jobs").with(adminWeb()).param("sourceId",source.toString())).andExpect(status().isOk()).andExpect(jsonPath("$.length()").value(50))
+            .andExpect(jsonPath("$[0].source_label").value("Synthetic admin feed")).andExpect(jsonPath("$[0].site_name").value("Synthetic admin site"))
+            .andExpect(jsonPath("$[0].created_at").isString()).andExpect(jsonPath("$[0].lease_token").doesNotExist());
+        mvc.perform(get("/api/v1/admin/jobs").with(adminWeb()).param("sourceId","not-a-uuid")).andExpect(status().isBadRequest());
+        mvc.perform(get("/api/v1/admin/jobs").with(adminWeb()).with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("synthetic-user").roles("USER"))).andExpect(status().isForbidden());
+    }
+
+    private org.springframework.test.web.servlet.request.RequestPostProcessor adminWeb(){return org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user(accounts.findByUsername("synthetic_admin").orElseThrow().id.toString()).roles("ADMIN");}
+
+    private UUID adminFixtureSource(){
+        UUID site=UUID.randomUUID(),source=UUID.randomUUID();String homepage="https://admin-fixture.example/"+site;
+        repo.db().sql("INSERT INTO sites(id,name,homepage_url,normalized_homepage_url) VALUES(:id,'Synthetic admin site',:url,:url)").param("id",site).param("url",homepage).update();
+        repo.db().sql("INSERT INTO sources(id,site_id,label,type,endpoint_url,normalized_endpoint_url) VALUES(:id,:site,'Synthetic admin feed','RSS',:url,:url)").param("id",source).param("site",site).param("url",homepage+"/feed").update();return source;
+    }
+
     @Test @Order(98) void securityCounterCapacityIsBounded(){
         repo.db().sql("INSERT INTO auth_rate_limits(bucket,window_start,used,expires_at) SELECT 'capacity-fixture-'||n,now(),1,now()+interval '15 minutes' FROM generate_series(1,10000)n").update();
         try{assertEquals(503,assertThrows(ApiError.class,()->limits.auth("new-capacity-fixture",1,60)).statusCode());}
