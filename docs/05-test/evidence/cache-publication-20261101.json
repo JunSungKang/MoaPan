@@ -1,0 +1,58 @@
+{
+  "checkedAt": "2026-11-01T12:36:57.312Z",
+  "domain": "publication",
+  "status": "VERIFIED_AND_LIVE_IN_COMPOSITE",
+  "focusedTests": 7,
+  "regression": {
+    "test": 163,
+    "integrationTest": 78
+  },
+  "warmRead": {
+    "publishedContentQueries": 0,
+    "publishedCatalogPayloadQueries": 0,
+    "perRequestEntitlement": true,
+    "perRequestEvidenceCheck": true
+  },
+  "checks": [
+    "deep immutable published models",
+    "large210k manuscript actually cached",
+    "draft edits excluded",
+    "revisions across instances",
+    "withdraw/delete",
+    "evidence rights/public status",
+    "entitlement revoked on warm cache",
+    "rollback"
+  ],
+  "budget": {
+    "detailLogicalBytes": 2097152,
+    "catalogLogicalBytes": 524288,
+    "webTotalLogicalBytes": 16777216,
+    "workerTotalLogicalBytes": 8388608
+  },
+  "currentProductionManuscriptBytesObserved": 210787,
+  "runtimeDeployed": true,
+  "notes": [
+    "Existing Spring Session cleanup was interrupted during test context shutdown; test assertions passed. No production DB restart or shutdown was performed."
+  ],
+  "refreshedValidation": {
+    "unit": 164,
+    "postgresql": 105,
+    "check": "PASS",
+    "jarSbomSecurity": "PASS",
+    "date": "2026-11-01T13:43:00.971Z"
+  },
+  "runtimeScope": "Combined330-pass image6542dd108cb8; service-before-merge HTTPS verified",
+  "helmSchemaRegression": {
+    "before": {
+      "status": "FAIL",
+      "configured": 16,
+      "latest": 22
+    },
+    "after": {
+      "status": "PASS",
+      "configured": 22,
+      "webAndWorkerWaitForLatest": true
+    },
+    "clusterDeployed": false
+  }
+}
