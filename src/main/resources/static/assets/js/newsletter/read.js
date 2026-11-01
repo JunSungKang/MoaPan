@@ -1,10 +1,11 @@
+import {issueYear} from '../shared/format.js';
 import {readerTools} from './reader-tools.js';
 import{request}from'../shared/api.js';
 import{requireAccount,el,date,report,newsletterElement}from'../shared/common.js';
 import{render}from'./render.js';
 import{language}from'../shared/i18n.js';
 import{brand}from'../shared/config.js';
-export function issueLabel(number,publishedAt){if(!Number.isSafeInteger(number)||number<1||!Number.isFinite(Date.parse(publishedAt)))return '';const year=new Intl.DateTimeFormat('en',{timeZone:'Asia/Seoul',year:'numeric'}).format(new Date(publishedAt));const code=year+'-'+String(number).padStart(3,'0');return language==='en'?'Issue '+code:code+'호';}
+export function issueLabel(number,publishedAt){if(!Number.isSafeInteger(number)||number<1||!Number.isFinite(Date.parse(publishedAt)))return '';const year=issueYear(publishedAt);const code=year+'-'+String(number).padStart(3,'0');return language==='en'?'Issue '+code:code+'호';}
 const target=document.querySelector('#letters'),filter=document.querySelector('#letter-filter');
 const href=id=>'/newsletter.html?id='+encodeURIComponent(id);
 function teaser(row,index){

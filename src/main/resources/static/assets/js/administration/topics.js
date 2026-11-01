@@ -1,15 +1,19 @@
 import {request} from '../shared/api.js';
-import {el} from '../shared/common.js';
+import {el} from '../shared/dom.js';
 import {t} from '../shared/i18n.js';
 
-let cached, pending;
+let cached,pending,generation=0;
+function clear(){generation++;cached=undefined;pending=undefined;}
+window.addEventListener('moapan-clear',clear);
+window.addEventListener('moapan-auth-lost',clear);
 export function loadTopics(refresh=false) {
   if (pending) return refresh ? pending.catch(()=>{}).then(()=>loadTopics(true)) : pending;
   if (cached && !refresh) return Promise.resolve(cached);
-  pending=request('/api/v1/tags').then(data=>{
+  const ticket=generation;const operation=request('/api/v1/tags').then(data=>{
+    if(ticket!==generation)throw new Error('로그인이 필요합니다.');
     cached={...data,tags:[...data.tags].sort((a,b)=>a.name.localeCompare(b.name,'ko')||a.id.localeCompare(b.id))};
     window.dispatchEvent(new CustomEvent('moapan-topic-catalog',{detail:cached}));return cached;
-  }).finally(()=>{pending=null;});return pending;
+  }).finally(()=>{if(pending===operation)pending=undefined;});pending=operation;return operation;
 }
 export function topicChecklist(ids=[]) {
   const node=el('fieldset',undefined,'topic-checklist');node.append(el('legend','기사 주제'));

@@ -4,7 +4,7 @@
   "flowType": "integration",
   "branch": "codex/cache-advertising-20261101",
   "targetBranch": "develop",
-  "baseSha": "f19d5e539f84da72cb21a7908efd583b889a747f",
+  "baseSha": "521dcb525162cbc785997c8f25f62aab216de52b",
   "mergeMethod": "squash",
   "governance": {
     "prAuthorLogin": "JunSungKang",

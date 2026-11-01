@@ -1,10 +1,11 @@
 import {request} from '../shared/api.js';
-import {el, report} from '../shared/common.js';
+import {el, report} from '../shared/dom.js';
+import {compactDate as formatCompactDate} from '../shared/format.js';
 import {t} from '../shared/i18n.js';
 import {topicChecklist} from './topics.js';
 import {translationEditor} from '../translation/administration.js';
 
-/** One visible editor. Visited editors and their drafts live only in this document. */
+/** One visible editor. Only unsaved or busy editors remain mounted when navigating. */
 export function initializeArticleReview(root, refresh) {
   const list = root.querySelector('#article-list');
   const status = root.querySelector('#article-review-status');
@@ -24,7 +25,7 @@ export function initializeArticleReview(root, refresh) {
   function paintApplied(){if(!appliedCriteria){applied.replaceChildren();return;}const {from,to,sort}=appliedCriteria;applied.replaceChildren(el('span',t('현재 목록')),el('span',(from||t('전체 기간'))+' ~ '+(to||t('전체 기간'))),el('span',t({collected_desc:'수집일 최신순',collected_asc:'수집일 오래된순',title_asc:'제목 가나다순'}[sort])));}
   let rows = [], current = 0, loading = false, saves = 0, epoch = 0;
   const editors = new Map(), dirty = new Set(), revisions = new WeakMap(), submitted = new WeakMap();
-  const compactDate=value=>{const instant=new Date(value);if(!value||!Number.isFinite(instant.getTime()))return t('수집일 미상');return new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).format(instant);};
+  const compactDate=value=>{const instant=new Date(value);if(!value||!Number.isFinite(instant.getTime()))return t('수집일 미상');return formatCompactDate(instant);};
   const optionTitle=(row,index)=>`${index+1}. ${appliedCriteria?.sort==='title_asc'?row.title+' · '+compactDate(row.collected_at):compactDate(row.collected_at)+' · '+row.title}${row.site_name?' · '+row.site_name:''}`;
   const array = value => Array.isArray(value) ? value : JSON.parse(typeof value === 'string' ? value : value?.value || '[]');
   function controls() {
@@ -35,6 +36,11 @@ export function initializeArticleReview(root, refresh) {
     picker.disabled = loading;
   }
   function isDirty(editor) { return [...dirty].some(form => editor.sheet.contains(form)); }
+  function releaseCleanEditors(){
+    for(const [id,editor]of editors){if(id===rows[current]?.id||isDirty(editor)||editor.sheet.querySelector('[aria-busy="true"]'))continue;
+      editor.dispose?.();editor.sheet.remove();editors.delete(id);
+    }
+  }
   function updateDrafts() {
     rows.forEach((row, index) => {
       const editor = editors.get(row.id), changed = editor && isDirty(editor);
@@ -46,7 +52,7 @@ export function initializeArticleReview(root, refresh) {
     form.inert = pending; form.setAttribute('aria-busy', String(pending));
     if (pending) { saves++; submitted.set(form, revisions.get(form) || 0); }
     else saves = Math.max(0, saves - 1);
-    controls();
+    controls();if(!pending)releaseCleanEditors();
   }
   function saved(form) {
     if (!root.contains(form)) return;
@@ -90,6 +96,7 @@ export function initializeArticleReview(root, refresh) {
         tagIds: tagsChanged ? tagChoice.values() : null};
       try {
         await request('/api/v1/admin/articles/' + article.id, {method: 'PATCH', body: payload});
+        Object.assign(article,{summary_bullets:payload.summaryBullets,summary_locked:payload.summaryLocked,tags_locked:payload.tagsLocked,public:payload.published,tag_ids:payload.tagIds??article.tag_ids});
         saved(form); note.textContent = t('저장했습니다.');
       } catch (error) { note.textContent = t(error.message); report(error); }
       finally { saving = false; save.disabled = false; busy(form, false); }
@@ -107,6 +114,7 @@ export function initializeArticleReview(root, refresh) {
     current = index;
     const editor = editors.get(rows[index].id) || editorFor(rows[index], index);
     for (const other of editors.values()) other.sheet.hidden = other !== editor;
+    releaseCleanEditors();
     picker.value = String(index); position.textContent = `${index + 1} / ${rows.length}`; controls();
     if (focus) editor.heading.focus({preventScroll: true});
   }

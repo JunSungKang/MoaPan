@@ -1,7 +1,7 @@
 {
   "checkedAt": "2026-11-01T12:05:57.424Z",
   "domain": "advertising",
-  "status": "CHECK_AND_POSTGRESQL_PASS_FINAL_COMPOSITE_SECURITY_PENDING",
+  "status": "VERIFIED_AND_LIVE_IN_COMPOSITE",
   "focusedTests": 4,
   "regression": {
     "unit": 163,
@@ -21,5 +21,13 @@
     "rollback"
   ],
   "sqlRoundTripReductionClaimed": false,
-  "runtimeDeployed": false
+  "runtimeDeployed": true,
+  "refreshedValidation": {
+    "unit": 164,
+    "postgresql": 86,
+    "check": "PASS",
+    "jarSbomSecurity": "PASS",
+    "date": "2026-11-01T13:35:41.155Z"
+  },
+  "runtimeScope": "Combined330-pass image6542dd108cb8; service-before-merge HTTPS verified"
 }
