@@ -3,7 +3,7 @@
 - 문서번호: MP-DOC-034
 - 기준: develop d9e8c98
 - 방법론: Sprint Delivery
-- 상태: 구현·서비스 검증 완료. RF-12 독립 리뷰·GitHub 전달 진행 중.
+- 상태: 구현·서비스·독립 코드 리뷰 검증 완료. 전달 정본: [PR #26](https://github.com/JunSungKang/MoaPan/pull/26). 전체 완료는 이 PR의 develop 병합과 작업 브랜치 세 ref 부재 확인을 조건으로 한다.
 
 ## 이력에 대한 정정
 
@@ -22,7 +22,7 @@ PR16(93b32e2)은 공통 JS·날짜/DOM·국제화 수명·CSRF·정적 캐시를
 - [x] RF-09 150개 합성 화면 상태의 실제 computed style 수정 전후 일치
 - [x] RF-10 전체 회귀/HTML/보안/SBOM/최종 이미지·모델 정책 검증
 - [x] RF-11 기존 자료 보존·동일 이미지 서비스 반영·실제 HTTPS/PSI 검증
-- [ ] RF-12 독립 current-head 리뷰·guarded PR 및 승인된 develop 후속 전달
+- [x] RF-12 독립 current-head 리뷰·guarded 전달 요건 검증 — 최종 병합 결과는 PR #26 정본
 
 ## 판정 원칙
 
@@ -50,3 +50,5 @@ PR16(93b32e2)은 공통 JS·날짜/DOM·국제화 수명·CSRF·정적 캐시를
 모델 실제 CPU smoke에서 악성6입력은 추론 전 차단, 정상 번역7242ms/분류24518ms·취소 시 추론 중단을 확인했다(실제3요청). 변경된 LocalTranslator의 정책 fingerprint를 우회하지 않아 이전 번역은 자동 재검증 중이다. 첫 운영 조회는 DONE1/PENDING243/RUNNING1이며 전체 번역 완료로 보고하지 않는다. 분류 정책과 기존 내용 해시2벡터는 동일하다.
 
 전체52선언 목록·전송 크기·정확한 digest·증빙 SHA는 [기계 판정서](evidence/refactor-audit-20261102.json)를 따른다. 실제 RAM 절감률·CPU 처리량 상승률은 측정하지 않았으므로 주장하지 않는다. 최종 PR current-head 리뷰와 develop 전달 결과는 PR의 원격 상태가 정본이다.
+
+독립 리뷰는 구현자와 분리된 읽기 전용 검토로 `56641a3740cef466f1059dbd27ac363997c3675d`에서 APPROVE를 받았다. 시험은 제출 증빙을 검토했으며 리뷰어가 중복 실행한 것으로 보고하지 않는다. 이 마감 문서 변경 후 새 head도 다시 검토하고, 그 SHA의 App formal APPROVED를 확인한 뒤 human merge wrapper로 develop 병합 및 원격/로컬/tracking 세 ref 제거를 검증한다. 기록에 미래 병합 SHA를 미리 작성하지 않으며 병합/정리는 PR 원격 상태와 최종 실행 증빙이 정본이다.
