@@ -1,0 +1,1145 @@
+{
+  "coverage": {
+    "html": 11,
+    "jsBefore": 37,
+    "css": 5
+  },
+  "entries": [
+    {
+      "file": "src/main/resources/static/about.html",
+      "bytes": 5851,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "c8fbd17dc38608b9c623a61dc65d0e515aee8be0cddb940ac079692d096d4b7b",
+      "afterBytes": 5851,
+      "afterSha256": "c8fbd17dc38608b9c623a61dc65d0e515aee8be0cddb940ac079692d096d4b7b"
+    },
+    {
+      "file": "src/main/resources/static/account.html",
+      "bytes": 3119,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "5f5391486a57d6f2c49d1d7b5fe963ad1c535e8e9578f6f2b57e4a3358a96cbc",
+      "afterBytes": 3119,
+      "afterSha256": "5f5391486a57d6f2c49d1d7b5fe963ad1c535e8e9578f6f2b57e4a3358a96cbc"
+    },
+    {
+      "file": "src/main/resources/static/admin.html",
+      "bytes": 19618,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "8e32585e49c7742ec7836d84badfb3a66be3a0e51130423e8c510658db1a88a3",
+      "afterBytes": 19618,
+      "afterSha256": "8e32585e49c7742ec7836d84badfb3a66be3a0e51130423e8c510658db1a88a3"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/admin.css",
+      "bytes": 7979,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "fb032bf1903294812a2f06686a5eef17962b3f39101d632d8cfba0d1d8424c4f",
+      "afterBytes": 7979,
+      "afterSha256": "fb032bf1903294812a2f06686a5eef17962b3f39101d632d8cfba0d1d8424c4f"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/auth.css",
+      "bytes": 3357,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "7a698109a9c3a6eeccdc938867fe81aa6bcd2c2909094ff29ee2dff1cce664cd",
+      "afterBytes": 3357,
+      "afterSha256": "7a698109a9c3a6eeccdc938867fe81aa6bcd2c2909094ff29ee2dff1cce664cd"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newsletter.css",
+      "bytes": 15405,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "8ad8e08db58443430782d8c70631428848c61a4035eaeaa0e59cca044c5899a0",
+      "afterBytes": 15405,
+      "afterSha256": "8ad8e08db58443430782d8c70631428848c61a4035eaeaa0e59cca044c5899a0"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/newspaper.css",
+      "bytes": 17586,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "885e4496d1f05f685b3d47ba903ea7f8a99a6b45a280e672e4eb8323cb5b5561",
+      "afterBytes": 17586,
+      "afterSha256": "885e4496d1f05f685b3d47ba903ea7f8a99a6b45a280e672e4eb8323cb5b5561"
+    },
+    {
+      "file": "src/main/resources/static/assets/css/site.css",
+      "bytes": 4378,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "14010f04018e3a248c07ee9d8631a5829b321b5d73744722900d5d2225d05aa6",
+      "afterBytes": 4378,
+      "afterSha256": "14010f04018e3a248c07ee9d8631a5829b321b5d73744722900d5d2225d05aa6"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/administration/admin.js",
+      "bytes": 13079,
+      "imports": [
+        "./topic-management.js",
+        "./collection-jobs.js",
+        "./classification-management.js",
+        "./navigation.js",
+        "./article-review.js",
+        "../advertising/administration.js",
+        "../shared/api.js",
+        "../shared/common.js"
+      ],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "94a559babbe5bee55bcd9c7731b4796f531a6b82e623f5378b805cfd1ff91161",
+      "afterBytes": 13079,
+      "afterSha256": "94a559babbe5bee55bcd9c7731b4796f531a6b82e623f5378b805cfd1ff91161"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/administration/article-review.js",
+      "bytes": 11250,
+      "imports": [
+        "../shared/api.js",
+        "../shared/common.js",
+        "../shared/i18n.js",
+        "./topics.js",
+        "../translation/administration.js"
+      ],
+      "formatters": 1,
+      "windowListeners": 3,
+      "beforeSha256": "208255842844175ccf86f090e4c556c4238b23ec2d86004bc79334f1d88d14a1",
+      "afterBytes": 11699,
+      "afterSha256": "75defc504b6ca95951baa70ea25761e32d96fa56679371b25bf74ab10b20f8dc"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/administration/classification-management.js",
+      "bytes": 4325,
+      "imports": [
+        "../shared/api.js",
+        "../shared/common.js",
+        "../shared/i18n.js",
+        "./topics.js"
+      ],
+      "formatters": 0,
+      "windowListeners": 1,
+      "beforeSha256": "e9aa7a9f4f5f45d9d120d6638bdc3225b61beb4d07f3e2a4853f81910595a646",
+      "afterBytes": 4322,
+      "afterSha256": "b08978bc0e8fa72d8824979607fd71cf56ad46947657468866bb60aff7cf85ed"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/administration/collection-jobs.js",
+      "bytes": 3229,
+      "imports": [
+        "../shared/api.js",
+        "../shared/common.js",
+        "../shared/i18n.js"
+      ],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "2f0e0264a551a1b61d0e76db1605b190e1adfa6cfbdd8367a46e41dc256f202c",
+      "afterBytes": 3263,
+      "afterSha256": "96e9af81818644ee27ead01818461c1ce17a6e66637a88c3b47073a9098f5545"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/administration/navigation.js",
+      "bytes": 3095,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 2,
+      "beforeSha256": "c02c95b45b0637d6b32d823275985f6d03d3f45b5df5c16c6a9e75f37b2d3549",
+      "afterBytes": 3095,
+      "afterSha256": "c02c95b45b0637d6b32d823275985f6d03d3f45b5df5c16c6a9e75f37b2d3549"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/administration/topic-management.js",
+      "bytes": 5548,
+      "imports": [
+        "../shared/api.js",
+        "../shared/common.js",
+        "../shared/i18n.js",
+        "./topics.js"
+      ],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "ba2ca5655f3ca6780fc9bf064b89a6a80903d2b90ecfff5a9ab401f7e41cb0e4",
+      "afterBytes": 5545,
+      "afterSha256": "92dfca8b0c44f2c3448a87ec5635fff722539f0bd83951da08502d0a8b13e3e4"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/administration/topics.js",
+      "bytes": 2900,
+      "imports": [
+        "../shared/api.js",
+        "../shared/common.js",
+        "../shared/i18n.js"
+      ],
+      "formatters": 0,
+      "windowListeners": 1,
+      "beforeSha256": "fe8ea4a27b49e652ac388b29b1475fc15baf7e9787c52aa18a57f196e0b63a15",
+      "afterBytes": 3231,
+      "afterSha256": "d53f5d362eed11294b9cab4d5096d2b5fafd0063a014824253fb44ddb781b6f4"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/advertising/administration.js",
+      "bytes": 2910,
+      "imports": [
+        "../shared/api.js",
+        "../shared/i18n.js",
+        "./banner.js"
+      ],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "2a1830c20b8ceb4275dc626c7e69dbf9faefd4f5bcd7441c500f22f00f2e5932",
+      "afterBytes": 2910,
+      "afterSha256": "2a1830c20b8ceb4275dc626c7e69dbf9faefd4f5bcd7441c500f22f00f2e5932"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/advertising/banner.js",
+      "bytes": 1129,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "00a8798303d8668828ce095ee02f7f50eedf6b925f05917a980023acc9316a99",
+      "afterBytes": 1129,
+      "afterSha256": "00a8798303d8668828ce095ee02f7f50eedf6b925f05917a980023acc9316a99"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/article/article-language.js",
+      "bytes": 1801,
+      "imports": [
+        "../shared/common.js"
+      ],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "53e6d9e63f35773ad478de033ea1f2a57e2aa5058bff1f0684703cdda7d5d074",
+      "afterBytes": 1798,
+      "afterSha256": "55cc4919a4fcdf921d8cdddccb85d42f924ed4b4f92fe32926f00257f52de33a"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/article/article-text.js",
+      "bytes": 722,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "f7afbeade23b0d86e717949b5fe9e5dc3df0ce00c1f417ebcf9292722eb1e1fa",
+      "afterBytes": 722,
+      "afterSha256": "f7afbeade23b0d86e717949b5fe9e5dc3df0ce00c1f417ebcf9292722eb1e1fa"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/edition/news.js",
+      "bytes": 7830,
+      "imports": [
+        "../shared/i18n.js",
+        "../article/article-text.js",
+        "./slides.js",
+        "../shared/api.js",
+        "../shared/common.js",
+        "../personalization/preferences.js",
+        "../personalization/ranking.js"
+      ],
+      "formatters": 1,
+      "windowListeners": 2,
+      "beforeSha256": "04f2dcf851901b88e7418b0da402fb7cd8e87130f4b69ac099708863335a06aa",
+      "afterBytes": 7721,
+      "afterSha256": "a0f2234060aaa461d56f37c2dbe98c00a6f1f917fa5e7d95eac2756dbf8a5698"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/edition/slides.js",
+      "bytes": 600,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "1414172c5ede05cc856f1f116b5838b7f619813b1ecddd02facc08e84f18f4fe",
+      "afterBytes": 600,
+      "afterSha256": "1414172c5ede05cc856f1f116b5838b7f619813b1ecddd02facc08e84f18f4fe"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/identity/account.js",
+      "bytes": 1304,
+      "imports": [
+        "../shared/api.js",
+        "../shared/common.js",
+        "../personalization/preferences.js"
+      ],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "91701e81778c9be13c1a75bc43607dcc4c834f61c86d25f7a38b32630435fbca",
+      "afterBytes": 1304,
+      "afterSha256": "91701e81778c9be13c1a75bc43607dcc4c834f61c86d25f7a38b32630435fbca"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/identity/auth.js",
+      "bytes": 5145,
+      "imports": [
+        "../shared/api.js",
+        "../shared/common.js"
+      ],
+      "formatters": 0,
+      "windowListeners": 2,
+      "beforeSha256": "9d043c3b6b1a4ab1fcace65b3541077ad2bc9767be858276f6ab939bc9871aa3",
+      "afterBytes": 5145,
+      "afterSha256": "9d043c3b6b1a4ab1fcace65b3541077ad2bc9767be858276f6ab939bc9871aa3"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/newsletter/edit.js",
+      "bytes": 12006,
+      "imports": [
+        "./research-editor.js",
+        "../shared/api.js",
+        "../shared/common.js",
+        "./render.js"
+      ],
+      "formatters": 0,
+      "windowListeners": 1,
+      "beforeSha256": "3d9b7e15e843460ec8e0f307a8487e0d5745e7275f54919fbd0271278744f51e",
+      "afterBytes": 12006,
+      "afterSha256": "3d9b7e15e843460ec8e0f307a8487e0d5745e7275f54919fbd0271278744f51e"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/newsletter/publication-output.js",
+      "bytes": 5238,
+      "imports": [
+        "../shared/config.js",
+        "./render.js"
+      ],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "488a541c52bf756b0e120d0c59f57e73f3f30341e81381611e2ff4d3c577b502",
+      "afterBytes": 5238,
+      "afterSha256": "488a541c52bf756b0e120d0c59f57e73f3f30341e81381611e2ff4d3c577b502"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/newsletter/read.js",
+      "bytes": 4825,
+      "imports": [
+        "./reader-tools.js",
+        "../shared/api.js",
+        "../shared/common.js",
+        "./render.js",
+        "../shared/i18n.js",
+        "../shared/config.js"
+      ],
+      "formatters": 1,
+      "windowListeners": 2,
+      "beforeSha256": "22519ee3cdf0a37ff0ef3a6ef4e6881d2aa387206123aa8f0cd8b3a592c86fcc",
+      "afterBytes": 4796,
+      "afterSha256": "8e9694e06ae67dd7235606b92fdce4c56a5c84e1df83c3cf529e032ed5a3a1ab"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/newsletter/reader-tools.js",
+      "bytes": 3556,
+      "imports": [
+        "../shared/api.js",
+        "../shared/common.js",
+        "../shared/i18n.js",
+        "./publication-output.js"
+      ],
+      "formatters": 0,
+      "windowListeners": 1,
+      "beforeSha256": "9cdc340caa8474cb24165ed8c4d31bdbda4cf22683f978c3e1ae4b22ef92df33",
+      "afterBytes": 3679,
+      "afterSha256": "89d713813353e60d72905e518d0747474baa66c6ac8d92f8ac80cad2d518fd38"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/newsletter/render.js",
+      "bytes": 833,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "bc56267456244a2a3c82e01be85b0e76546bed5aa37812a4e92dbab858e2542d",
+      "afterBytes": 833,
+      "afterSha256": "bc56267456244a2a3c82e01be85b0e76546bed5aa37812a4e92dbab858e2542d"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/newsletter/research-editor.js",
+      "bytes": 5734,
+      "imports": [
+        "../shared/i18n.js",
+        "../shared/common.js"
+      ],
+      "formatters": 0,
+      "windowListeners": 1,
+      "beforeSha256": "69f4b19c3a05f06a399d1b8ee531e56032c9a8d5c2e8f6b9bda6885bea8d354e",
+      "afterBytes": 5768,
+      "afterSha256": "8cbc2c073cef48ee6a740b3a2ca64dad5f222d4f66eeecdfe42423c4443c6857"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/personalization/preferences-transfer-ui.js",
+      "bytes": 3691,
+      "imports": [
+        "./preferences-transfer.js",
+        "./preferences.js"
+      ],
+      "formatters": 0,
+      "windowListeners": 1,
+      "beforeSha256": "c8be24b37b832957ebcd351ea8ea59aff64b228909f922e4f1c4662dc5620317",
+      "afterBytes": 3691,
+      "afterSha256": "c8be24b37b832957ebcd351ea8ea59aff64b228909f922e4f1c4662dc5620317"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/personalization/preferences-transfer.js",
+      "bytes": 4778,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "7da99d8eb856b5e57202c66956cefdd3980ce7153fa2cf671bc554f77e6de527",
+      "afterBytes": 4778,
+      "afterSha256": "7da99d8eb856b5e57202c66956cefdd3980ce7153fa2cf671bc554f77e6de527"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/personalization/preferences.js",
+      "bytes": 2391,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "ecdcd660c36db95a2a1fc5a8a72152a19d49257d5a0b578427382c0653c6515c",
+      "afterBytes": 2391,
+      "afterSha256": "ecdcd660c36db95a2a1fc5a8a72152a19d49257d5a0b578427382c0653c6515c"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/personalization/ranking.js",
+      "bytes": 1441,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "02c8ea51902ac0bf46194d82e0f402bfb19d9195dcd06c902841e67d7c9f5663",
+      "afterBytes": 1441,
+      "afterSha256": "02c8ea51902ac0bf46194d82e0f402bfb19d9195dcd06c902841e67d7c9f5663"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/personalization/settings.js",
+      "bytes": 4493,
+      "imports": [
+        "./preferences-transfer-ui.js",
+        "../shared/api.js",
+        "../shared/common.js",
+        "./preferences.js"
+      ],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "d75265b67d2abe313f9909353257d0881e79ddc4404f3840e493cad4cec47631",
+      "afterBytes": 4493,
+      "afterSha256": "d75265b67d2abe313f9909353257d0881e79ddc4404f3840e493cad4cec47631"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/shared/api.js",
+      "bytes": 3551,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "361f98586ac6d225eb33f0daf858d019f77328e70932fe4da11cd70ff7ac09d0",
+      "afterBytes": 3975,
+      "afterSha256": "a497f4887bfa8ef87721debc5b78a0fdd7577d233472fbcd525e860290637d84"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/shared/common.js",
+      "bytes": 7785,
+      "imports": [
+        "./i18n.js",
+        "./config.js",
+        "../advertising/banner.js",
+        "./api.js"
+      ],
+      "formatters": 1,
+      "windowListeners": 3,
+      "beforeSha256": "c899a8a0a8d68ef93026241355980e93efdca4b976327a467eb56463b6defa27",
+      "afterBytes": 7439,
+      "afterSha256": "c2a8abb320229326c6e1b837ec45d532ab0d20fd74afab8c5bfb73dbe2da1fdb"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/shared/config.js",
+      "bytes": 1076,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "4cfe7a13b6008445b7ca349b63d0403791e90f5c7a69329e5446cb578a3e3ccd",
+      "afterBytes": 1076,
+      "afterSha256": "4cfe7a13b6008445b7ca349b63d0403791e90f5c7a69329e5446cb578a3e3ccd"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/shared/i18n-admin-navigation.js",
+      "bytes": 11581,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "7a32a7da8bf2e4eac61da93038f67f8f061a3907af69e60b87119f49e1d42385",
+      "afterBytes": 11581,
+      "afterSha256": "7a32a7da8bf2e4eac61da93038f67f8f061a3907af69e60b87119f49e1d42385"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/shared/i18n-advertising.js",
+      "bytes": 2939,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "d4a12630d7ce96548621ed2a6c9097248e66e422d55f8d274a4f25b91c699335",
+      "afterBytes": 2939,
+      "afterSha256": "d4a12630d7ce96548621ed2a6c9097248e66e422d55f8d274a4f25b91c699335"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/shared/i18n-en.js",
+      "bytes": 15645,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "e606da85655532050d2e29f6c1d8ff7ea3fe6789e1e09d4907befb14a833450d",
+      "afterBytes": 15645,
+      "afterSha256": "e606da85655532050d2e29f6c1d8ff7ea3fe6789e1e09d4907befb14a833450d"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/shared/i18n-pages.js",
+      "bytes": 24703,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "58053ef021558e67b91c2b260ca5dc8b32fcd91d4fc7f85aa80edf0e3ae523d3",
+      "afterBytes": 24703,
+      "afterSha256": "58053ef021558e67b91c2b260ca5dc8b32fcd91d4fc7f85aa80edf0e3ae523d3"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/shared/i18n-product.js",
+      "bytes": 8145,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "dfad14d4445de6aa296d849fbfed6e56e7bc4d8554afc4672ce914bb40caabe1",
+      "afterBytes": 8145,
+      "afterSha256": "dfad14d4445de6aa296d849fbfed6e56e7bc4d8554afc4672ce914bb40caabe1"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/shared/i18n-status.js",
+      "bytes": 6573,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "e5b6efab5c75744bf766cf444c746aba9dbeb3de43babf2b5399b432758a84f6",
+      "afterBytes": 6573,
+      "afterSha256": "e5b6efab5c75744bf766cf444c746aba9dbeb3de43babf2b5399b432758a84f6"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/shared/i18n.js",
+      "bytes": 7492,
+      "imports": [
+        "./i18n-product.js",
+        "./i18n-en.js",
+        "./i18n-advertising.js",
+        "./i18n-pages.js",
+        "./i18n-admin-navigation.js",
+        "./i18n-status.js"
+      ],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "1ec7ef10606c7f4562abb46b6fb5027108fd6ad3179db12f0dc51967f06a9719",
+      "afterBytes": 8787,
+      "afterSha256": "10f75c23f3af23a60a4f83766bdc41c606942b88642df6b66dad02404dc6cbc9"
+    },
+    {
+      "file": "src/main/resources/static/assets/js/translation/administration.js",
+      "bytes": 2981,
+      "imports": [
+        "../shared/api.js",
+        "../shared/common.js"
+      ],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "a25d4ae71b0022eadb66fb57315e6b4da550e1a46b7aa69d26b7240595fc381e",
+      "afterBytes": 2999,
+      "afterSha256": "5f6415010248cd0133d9b531bb29ffe8a3d4a70797a82ec8f5cf720a69ab416d"
+    },
+    {
+      "file": "src/main/resources/static/index.html",
+      "bytes": 3943,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "84e7dd16d0f533556a67f9f0db594170140f81671368c46979271cad477fdd01",
+      "afterBytes": 3943,
+      "afterSha256": "84e7dd16d0f533556a67f9f0db594170140f81671368c46979271cad477fdd01"
+    },
+    {
+      "file": "src/main/resources/static/login.html",
+      "bytes": 2840,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "f315d52fdf8adcdf72eaea183b2fb022fc2737794e4de7c2f1a036e8fe9e79da",
+      "afterBytes": 2840,
+      "afterSha256": "f315d52fdf8adcdf72eaea183b2fb022fc2737794e4de7c2f1a036e8fe9e79da"
+    },
+    {
+      "file": "src/main/resources/static/newsletter-editor.html",
+      "bytes": 6176,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "2c38fc685ffbac8ecd8d61b72b61b0d72b9c327338813842530c0cc66d70d0ba",
+      "afterBytes": 6176,
+      "afterSha256": "2c38fc685ffbac8ecd8d61b72b61b0d72b9c327338813842530c0cc66d70d0ba"
+    },
+    {
+      "file": "src/main/resources/static/newsletter.html",
+      "bytes": 2718,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "af0f8df8b8308b2cfbd5c8ab0458220befc7c414e4bd291b040aebd720e6af4e",
+      "afterBytes": 2718,
+      "afterSha256": "af0f8df8b8308b2cfbd5c8ab0458220befc7c414e4bd291b040aebd720e6af4e"
+    },
+    {
+      "file": "src/main/resources/static/privacy.html",
+      "bytes": 9585,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "9a431e357e8590b0c4baba7c58de3a4ffacf355b8a4bc46a9b019329bf175694",
+      "afterBytes": 9585,
+      "afterSha256": "9a431e357e8590b0c4baba7c58de3a4ffacf355b8a4bc46a9b019329bf175694"
+    },
+    {
+      "file": "src/main/resources/static/settings.html",
+      "bytes": 5271,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "ecab01734d04994369339581a7a3ea75660b83e711e84835f40cd6968ef15649",
+      "afterBytes": 5271,
+      "afterSha256": "ecab01734d04994369339581a7a3ea75660b83e711e84835f40cd6968ef15649"
+    },
+    {
+      "file": "src/main/resources/static/signup.html",
+      "bytes": 2769,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "fb42710d7154d522ce5bc2892051b60d798de30916e5bc47e3cfa82484b3c962",
+      "afterBytes": 2769,
+      "afterSha256": "fb42710d7154d522ce5bc2892051b60d798de30916e5bc47e3cfa82484b3c962"
+    },
+    {
+      "file": "src/main/resources/static/terms.html",
+      "bytes": 8127,
+      "imports": [],
+      "formatters": 0,
+      "windowListeners": 0,
+      "beforeSha256": "bb629a82101c5c826a13493b43780e65e3097497a34ca505eff234bfada184be",
+      "afterBytes": 8127,
+      "afterSha256": "bb629a82101c5c826a13493b43780e65e3097497a34ca505eff234bfada184be"
+    }
+  ],
+  "addedSharedModules": [
+    "assets/js/shared/dom.js",
+    "assets/js/shared/format.js"
+  ],
+  "backendPatternSurvey": {
+    "count": 62,
+    "scope": "Static inventory and repeated JSON/regex/cache pattern survey. Browser presentation/cache path reviewed in detail; not a full backend/security audit.",
+    "entries": [
+      {
+        "file": "src/main/java/com/moapan/MoapanApplication.java",
+        "sha256": "909b24ba190dc2d6257f304114dec46c80b1229e8790198c73773e12ef5cc3dd",
+        "bytes": 2398,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/access/infrastructure/DatabaseAvailabilityFilter.java",
+        "sha256": "55545280a6a33294ded8d934c3c797c8e50cfc90ea7ee40f13d099c1ae93e41e",
+        "bytes": 1792,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/access/infrastructure/Limits.java",
+        "sha256": "b3867660aa7cd5e551ca54995787163e5d7810889b0266cbea8178f573b3a980",
+        "bytes": 4917,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/access/infrastructure/RememberedSession.java",
+        "sha256": "dd8ecd43075720399d20442b1156a15384f8ed8590c4c9a99f8aa117d39af3bf",
+        "bytes": 2038,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/access/infrastructure/RequestBodyLimitFilter.java",
+        "sha256": "2a3fa7b3c82899a1efb23ca951a482954cb793a6dd7395eb97958fc6aab56f1f",
+        "bytes": 2235,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 1
+      },
+      {
+        "file": "src/main/java/com/moapan/access/infrastructure/SecurityConfig.java",
+        "sha256": "b7c16208cf0fb4c1efdf1ef556639bfc92a6f68953660b46469f25ad95ce28b4",
+        "bytes": 8190,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 3
+      },
+      {
+        "file": "src/main/java/com/moapan/advertising/api/AdvertisingController.java",
+        "sha256": "6c6533dd08d2256ce6e19df64a7353fffc6bfc71371215275cce47e3965e47f3",
+        "bytes": 1025,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/advertising/application/AdvertisingSettings.java",
+        "sha256": "fee2a001d5129f44e392ed0648c2525197544e3d7befee332b13ce702636cabf",
+        "bytes": 3783,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/ai/application/InferenceBudget.java",
+        "sha256": "67b860204819bb58b6974e7fa1dec352936ae877d0e316729141f085b0a947bc",
+        "bytes": 1648,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/ai/application/InferenceControl.java",
+        "sha256": "bd62bfec2fd93868bbcc2c8f81d56903f08aaea04ccdaae0cafa1362dde21916",
+        "bytes": 1181,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/ai/domain/AiPolicy.java",
+        "sha256": "cab8385d4ba5581138892fc692b45712bf848a0604d3e9ded37b147af602aaeb",
+        "bytes": 1298,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/ai/domain/ArticleGuard.java",
+        "sha256": "22220b783c95cb62dc03fde9b95388993bd258df860a24090c354ff3b006dec4",
+        "bytes": 2640,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 4,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/ai/infrastructure/ModelJson.java",
+        "sha256": "781ffb4fdf1f671d8cce284efabd9cf2402a31a027b34f30f7d0a63a7be50f1e",
+        "bytes": 2535,
+        "jsonMapperBuilders": 1,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/ai/infrastructure/ModelStream.java",
+        "sha256": "2578573654389db830b9824116f053898773c8269d04969c09eb9c2e85299f93",
+        "bytes": 4331,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/ai/infrastructure/ModelTokenBudget.java",
+        "sha256": "dae3162e8a6d098fd4b171e6d07c9f0c174052a98a4a174ef0b2c0e6596ffc7c",
+        "bytes": 2434,
+        "jsonMapperBuilders": 1,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/article/api/EditorialController.java",
+        "sha256": "87816686e141ee5cb2382499e87f1920c13c238b82b8e800478f832145dac7a3",
+        "bytes": 2003,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/article/application/EditorialService.java",
+        "sha256": "285b5e886d1e2e466096318fffc61852f58082477e91c944764985b4e4b5b5a1",
+        "bytes": 8894,
+        "jsonMapperBuilders": 1,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/article/domain/ArticleFingerprint.java",
+        "sha256": "c969e4e1809fc3a44cb017664b0c6159842920c3a30f95cafa44ed2b4d5312ab",
+        "bytes": 704,
+        "jsonMapperBuilders": 1,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/article/domain/ArticleInput.java",
+        "sha256": "a269350baec4a1d6201163c40c72d90c208fcb3e76141907fa2094b9a6db587d",
+        "bytes": 269,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/article/domain/ContentProcessor.java",
+        "sha256": "3a0556cf931a9b021c036428574e14e10e53d1a79a8258a67ab0cc487ebc002d",
+        "bytes": 2835,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 1,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/bootstrap/AdminCommand.java",
+        "sha256": "580d8e4ecd2cde86171187bab0e5a280b9cefd723da210e968d0fb2eed0d1d6a",
+        "bytes": 942,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/catalog/api/AdminController.java",
+        "sha256": "1c39ddd45da97a603db5064882dc8cf7d20e394742a3a2ac05ff335cf972ca38",
+        "bytes": 3736,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/catalog/application/CatalogService.java",
+        "sha256": "da962b8115388a6bde610b1b4295d9f66df8f6a09bdcd162a63b2cb461875f4e",
+        "bytes": 17050,
+        "jsonMapperBuilders": 3,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/catalog/infrastructure/CatalogRepository.java",
+        "sha256": "086ea15116c29503c46e5e6d2fcd0b63458ad5d3902ca4ca148ea1d25bff419c",
+        "bytes": 879,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/classification/api/ClassificationController.java",
+        "sha256": "4a60af326d47deb6d88dd5f278de445427f8d89ca95b6f6dac862d1109ec3c31",
+        "bytes": 1559,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/classification/application/ClassificationModel.java",
+        "sha256": "5a201265dadf3478ec8556f0eefa971ce6ce2be0ed928f3ccfc3c53fd6502d60",
+        "bytes": 286,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/classification/application/ClassificationWorker.java",
+        "sha256": "97a1a46924e3107132bcb19c335902e16e3d8cbfe38e2f75e2ffe1c0fb791e04",
+        "bytes": 11160,
+        "jsonMapperBuilders": 1,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/classification/application/TopicCatalog.java",
+        "sha256": "c34ddc4f1de8d39076fe4655e627a192e5583275c0d7acc06498add7061cc919",
+        "bytes": 3005,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/classification/domain/ClassificationPolicy.java",
+        "sha256": "58177dc43cf1337e4a4d87eeb3b909f2224b9075897bed441da0a128a5a3b7e8",
+        "bytes": 213,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/classification/domain/TopicTaxonomy.java",
+        "sha256": "c59d09871d38073376ed9f4a4c14e6298517dfb172463c349beaef0428751e64",
+        "bytes": 277,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/classification/infrastructure/LocalClassifier.java",
+        "sha256": "164d75bcf1930eef33c89458f2116aaa6a1b0742328b156681eaf0c82f708a8b",
+        "bytes": 6274,
+        "jsonMapperBuilders": 1,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/collection/application/CollectionFilter.java",
+        "sha256": "4e20dd7fcbb7d6356d25e15a15f08b948da15db32229affc4fd7e70fe17153f8",
+        "bytes": 1398,
+        "jsonMapperBuilders": 1,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/collection/application/Worker.java",
+        "sha256": "4f1a1c4272d3e5261efa1aabc8a9d67a6219684820534d4667bf157584bb8453",
+        "bytes": 12317,
+        "jsonMapperBuilders": 1,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/collection/infrastructure/ArxivGate.java",
+        "sha256": "4c3a68d08b9e7eca17f6eb37fcf20e69980cd4f04ba5a3b2636f2b3414e77c93",
+        "bytes": 1614,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/collection/infrastructure/SafeFetch.java",
+        "sha256": "ff8aad00f1488bcafc65275f10b583d4ff0acde43566476bdf1b919c99cdc0d2",
+        "bytes": 12310,
+        "jsonMapperBuilders": 1,
+        "regexCompilers": 0,
+        "httpCacheMentions": 1
+      },
+      {
+        "file": "src/main/java/com/moapan/discovery/DiscoveryController.java",
+        "sha256": "9f4f701dbd896adcccbcf236b6bc69f953298edf34cfcab927d540a19eb1265d",
+        "bytes": 1512,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/discovery/DiscoveryHeaders.java",
+        "sha256": "011bc052807e89f5dbb93bca8618d6f1505e119f1ef9778593b1cd6918960d97",
+        "bytes": 1227,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/edition/api/NewsController.java",
+        "sha256": "fee1319e0821c2b16dc5f41defcc0bb435dfefb4fbfd787a29472ed3714f8a98",
+        "bytes": 3177,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/edition/application/NewsSearch.java",
+        "sha256": "8e42ffff1daa719cd0855078a27512cf090edb4370bbdb3aadf05d6b59e3776c",
+        "bytes": 5231,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/edition/application/NewsService.java",
+        "sha256": "9eb0ed5d8154a93aeb98869f04c4e3b62e2e88cb1eeae6c555ae4aa970563d4f",
+        "bytes": 9335,
+        "jsonMapperBuilders": 1,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/edition/application/RepresentativeInterests.java",
+        "sha256": "621f4ab2f63f3eac68745b857d275cb6f6e4dc3820ac1d461e96221df16b0dad",
+        "bytes": 2904,
+        "jsonMapperBuilders": 1,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/identity/api/AuthController.java",
+        "sha256": "71af16c3af1d64639726b80c0b017fb4e853d20b21680a1a0a67abafcc706162",
+        "bytes": 8576,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/identity/infrastructure/Account.java",
+        "sha256": "0389f38377086558cda682b3d6917fa9be8ab4d305988f1390104546c77b8f2d",
+        "bytes": 822,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/identity/infrastructure/Accounts.java",
+        "sha256": "2735ecd055f444bd9431d7e7a0b30bbc3b5e2da8854e170ba0b00d194943fbfd",
+        "bytes": 294,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/newsletter/NewsletterController.java",
+        "sha256": "652c22fe19a167b69dcbf3100c1e107b0433bd846cb25329bc3ac01894ca493a",
+        "bytes": 2268,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/newsletter/NewsletterService.java",
+        "sha256": "370f47c37b8437769fd32f3b44a1d52f964af56b0f824b9a21da807d4342cd12",
+        "bytes": 12534,
+        "jsonMapperBuilders": 1,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/newsletter/application/PublicationEvidence.java",
+        "sha256": "a31c062b596e8c00fd9c1d57f968ad4c61ed8266b4e81ccd033a54db60c697bc",
+        "bytes": 3072,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/newsletter/domain/PublicationResearch.java",
+        "sha256": "146dd14fe859003d66f3080a0089b91b679ce2bba4f81038dac257cb7a4a0e43",
+        "bytes": 4010,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/presentation/infrastructure/StaticAssetsConfiguration.java",
+        "sha256": "87c53e3e06c7719c23cdf4a32e7358803f25b1440e6a673b6ad361e1b67bfe7a",
+        "bytes": 2407,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 3
+      },
+      {
+        "file": "src/main/java/com/moapan/shared/api/ApiError.java",
+        "sha256": "0c4139dbca140911b8de09ccb83c1e5c7b956634ca4909df7c7d738109e30143",
+        "bytes": 2583,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 2
+      },
+      {
+        "file": "src/main/java/com/moapan/subscription/application/ContentAccess.java",
+        "sha256": "04d7d1d7ee298bb5925049ba22e8ce358d99edc14c27a0711b0a789ba539381f",
+        "bytes": 1188,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/subscription/application/EntitlementProvider.java",
+        "sha256": "c8a32161692252c137b8205727ad099cbbe389b5ac8ea3f3cc36469162f7f7f7",
+        "bytes": 272,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/subscription/domain/EntitlementPolicy.java",
+        "sha256": "dd6e7a31c04e9afdc08d370d7f739ff65b173c8fb152c08de832662864820111",
+        "bytes": 660,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/subscription/infrastructure/PreviewEntitlements.java",
+        "sha256": "bdd6ed07a75e467317ced7f3a994aecfc2e88c75ff25befb297d3aef0c0c5a7f",
+        "bytes": 856,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/translation/api/TranslationStatusController.java",
+        "sha256": "76b26149f5c3e4d451d580ceec911ff9a08d73677eefefc9138f95e5942da587",
+        "bytes": 1953,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/translation/application/TranslationModel.java",
+        "sha256": "9ea9cc76c668af4745056f7a6b86253a30908a365b27f7ec2ed097c67b88d5ff",
+        "bytes": 213,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/translation/application/TranslationWorker.java",
+        "sha256": "72f7f175fc115ebf803d3c81fc191dcb12d4fb382fea4996d2aa5f9e38e9fa0c",
+        "bytes": 13357,
+        "jsonMapperBuilders": 1,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/translation/domain/TranslationFailure.java",
+        "sha256": "632a019cd83ec32ae0733e51b982fde9004807b768b9a26b7cc04a43df364733",
+        "bytes": 413,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/translation/domain/TranslationGlossary.java",
+        "sha256": "687d5d0913b0e8cc7a6e17a4939540b559b23beb2ef6d2d9e86e1ed524b70286",
+        "bytes": 1980,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/translation/domain/TranslationValidator.java",
+        "sha256": "62d21b5193cb10637c3565525539dea99a9a078c9ba07c4811f50fc11754a868",
+        "bytes": 8870,
+        "jsonMapperBuilders": 0,
+        "regexCompilers": 14,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/translation/infrastructure/ArticleTranslations.java",
+        "sha256": "cce17d7fc698bb61a64e82316ef2eab438422f392ae08ae9f89a86aa5d579290",
+        "bytes": 8388,
+        "jsonMapperBuilders": 1,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      },
+      {
+        "file": "src/main/java/com/moapan/translation/infrastructure/LocalTranslator.java",
+        "sha256": "bf4b827f6631d1a37132c9f855ed7cf18aec3c4f5ba920f4c84fb923848cabb7",
+        "bytes": 7111,
+        "jsonMapperBuilders": 1,
+        "regexCompilers": 0,
+        "httpCacheMentions": 0
+      }
+    ]
+  }
+}

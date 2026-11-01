@@ -13,8 +13,12 @@ public class RepresentativeInterests {
     public record Settings(Long version,Map<UUID,Integer> weights){}
     private final JdbcClient db;
     private final JsonMapper json=JsonMapper.builder().build();
-    public RepresentativeInterests(JdbcClient db){this.db=db;}
+    private final com.moapan.shared.infrastructure.cache.VersionedReadCache<Settings> cache;
+    public RepresentativeInterests(JdbcClient db,com.moapan.shared.infrastructure.cache.SharedReadCaches caches){this.db=db;cache=caches.create(com.moapan.shared.infrastructure.cache.SharedReadCaches.Region.INTERESTS,s->256+96*s.weights().size());}
     public Settings read(){
+        return cache.read("representative",()->db.sql("SELECT fingerprint FROM read_cache_fingerprints WHERE domain='representative' AND subject='00000000-0000-0000-0000-000000000000'").query(String.class).optional().orElse(null),this::load);
+    }
+    private Settings load(){
         var row=db.sql("SELECT version,weights::text FROM representative_interests WHERE singleton").query().singleRow();
         Map<UUID,Integer> weights=new LinkedHashMap<>();
         var node=json.readTree(row.get("weights").toString());
@@ -29,7 +33,7 @@ public class RepresentativeInterests {
             if(value!=null&&active.contains(target))
                 weights.merge(target,value.asInt(),Math::max);
         }
-        return new Settings(((Number)row.get("version")).longValue(),weights);
+        return new Settings(((Number)row.get("version")).longValue(),Collections.unmodifiableMap(weights));
     }
     @Transactional @PreAuthorize("hasRole('ADMIN')")
     public Settings update(Settings input,UUID actor){

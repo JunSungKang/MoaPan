@@ -1,8 +1,8 @@
 {
   "checkedAt": "2026-11-01T12:21:40.507Z",
   "domain": "edition-and-public-article-cards",
-  "status": "CHECK_AND_POSTGRESQL_PASS_FINAL_COMPOSITE_SECURITY_PENDING",
-  "focusedTests": 11,
+  "status": "VERIFIED_AND_LIVE_IN_COMPOSITE",
+  "focusedTests": 12,
   "regression": {
     "unit": 163,
     "postgresql": 82
@@ -27,16 +27,25 @@
     "repeat item quotas",
     "membership insert/delete",
     "candidate300/first42",
-    "writer timezone-independent hash"
+    "writer timezone-independent hash",
+    "identical card reuse across successive edition UUIDs"
   ],
   "searchResultCache": false,
   "patterns": "Fixed research patterns precompiled once; no source text retained",
-  "runtimeDeployed": false,
+  "runtimeDeployed": true,
   "lockInversionRegression": {
     "before": "FAIL: PostgreSQL deadlock detected in forced job/article latch interleaving",
     "fix": "Separate classification-state fingerprint row with no parent article lock; retain this hash in card signatures",
     "after": "PASS same forced latch ordering; complete check+PostgreSQL rerun passed",
     "independentRecheck": "Cycle resolved, no further blocking findings in read-only preflight"
   },
-  "validatedAt": "2026-11-01T12:54:03.897Z"
+  "validatedAt": "2026-11-01T12:54:03.897Z",
+  "refreshedValidation": {
+    "unit": 164,
+    "postgresql": 98,
+    "check": "PASS",
+    "jarSbomSecurity": "PASS",
+    "date": "2026-11-01T13:39:11.947Z"
+  },
+  "runtimeScope": "Combined330-pass image6542dd108cb8; service-before-merge HTTPS verified"
 }

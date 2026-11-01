@@ -60,6 +60,18 @@ class SecurityIntegrationTest {
         for(String path:List.of("/nonexistent-page.html","/assets/js/nonexistent-module.js"))mvc.perform(get(path)).andExpect(status().isNotFound()).andExpect(header().string("Cache-Control","no-store")).andExpect(content().json("{\"error\":\"not_found\"}"));
         mvc.perform(get("/api/v1/nonexistent")).andExpect(status().isUnauthorized());
     }
+    @Test @Order(1) void staticValidatorsNeverCacheAuthenticatedOrDynamicResponses()throws Exception{
+        for(String asset:List.of("/assets/js/shared/common.js","/assets/css/site.css","/assets/images/favicon.svg")){
+            var response=mvc.perform(get(asset)).andExpect(status().isOk()).andExpect(header().string("Cache-Control",org.hamcrest.Matchers.allOf(org.hamcrest.Matchers.containsString("no-cache"),org.hamcrest.Matchers.containsString("public")))).andExpect(header().string("X-Content-Type-Options","nosniff")).andReturn().getResponse();
+            String etag=response.getHeader("ETag");assertNotNull(etag);assertTrue(etag.startsWith("W/\""));
+            mvc.perform(get(asset).header("If-None-Match",etag)).andExpect(status().isNotModified()).andExpect(content().string(""));
+            mvc.perform(get(asset).header("If-None-Match","\"different-content\"")).andExpect(status().isOk()).andExpect(header().string("ETag",etag));
+        }
+        for(String page:List.of("/index.html","/login.html","/privacy.html"))mvc.perform(get(page)).andExpect(status().isOk()).andExpect(header().string("Cache-Control",org.hamcrest.Matchers.containsString("no-store")));
+        mvc.perform(get("/admin.html").header("If-None-Match","*")).andExpect(status().isFound()).andExpect(header().string("Cache-Control","no-store"));
+        mvc.perform(get("/api/v1/account").header("If-None-Match","*")).andExpect(status().isUnauthorized()).andExpect(header().string("Cache-Control","no-store"));
+        mvc.perform(get("/api/v1/auth/csrf").header("If-None-Match","*")).andExpect(status().isOk()).andExpect(header().string("Cache-Control","no-store"));
+    }
     @Test @Order(1) void unauthenticatedAndCsrf()throws Exception{
         mvc.perform(get("/api/v1/private.html")).andExpect(status().isUnauthorized()).andExpect(content().contentType("application/json"));
         mvc.perform(get("/api/v1/news/edition").header("Referer","http://localhost").header("User-Agent","browser")).andExpect(status().isUnauthorized());

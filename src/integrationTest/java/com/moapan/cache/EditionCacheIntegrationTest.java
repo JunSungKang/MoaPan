@@ -90,6 +90,11 @@ class EditionCacheIntegrationTest {
     @Test void candidateCeilingAndFirstRequestPayloadLimitStayUnchanged(){
         addArticles(310);var page=news.publicEdition();assertEquals(300,page.candidateCount());assertEquals(42,page.items().size());
     }
+    @Test void unchangedCardsAreReusedAcrossSuccessiveEditionIds(){
+        var first=news.publicEdition();
+        f.db.sql("UPDATE news_editions SET created_at=now()-interval '16 minutes' WHERE id=:id").param("id",first.editionId()).update();f.reset();
+        var next=news.publicEdition();assertNotEquals(first.editionId(),next.editionId());assertSame(first.items(),next.items());assertEquals(0,f.readsContaining("select a.id,a.title,a.author"));
+    }
     @Test void equivalentTimestampProjectionDoesNotChangeWithWriterTimezone(){
         UUID article=news.publicEdition().items().getFirst().id();String before=f.db.sql("SELECT fingerprint FROM read_cache_fingerprints WHERE domain='article_card' AND subject=:id").param("id",article).query(String.class).single();
         new TransactionTemplate(f.tm).executeWithoutResult(s->{f.db.sql("SET LOCAL TIME ZONE 'Asia/Seoul'").update();f.db.sql("UPDATE articles SET title=title WHERE id=:id").param("id",article).update();});

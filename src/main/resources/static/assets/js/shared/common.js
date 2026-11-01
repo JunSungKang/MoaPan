@@ -1,13 +1,12 @@
 import {language,t,languagePicker} from './i18n.js';
 import {brand,newsletterText} from './config.js';
-import {renderBanner} from '../advertising/banner.js';
+import {el,report} from './dom.js';
+import {date} from './format.js';
+export {el,report,date};
 import {request,account} from './api.js';
-export function el(tag,text,className){const node=document.createElement(tag);if(text!==undefined)node.textContent=t(text);if(className)node.className=className;return node;}
 export function newsletterElement(tag,kind,className){const node=el(tag,undefined,className);node.dataset.newsletterBrand=kind;node.dataset.originalContent='';node.textContent=newsletterText(kind,language);return node;}
 function renderNewsletterBrand(){for(const node of document.querySelectorAll('[data-newsletter-brand]')){node.dataset.originalContent='';node.textContent=newsletterText(node.dataset.newsletterBrand,language);}}
 renderNewsletterBrand();
-export function report(error){const node=document.querySelector('[role="status"]');if(node)node.textContent=error.message||String(error);}
-export function date(value){return new Intl.DateTimeFormat(language==='en'?'en-US':'ko-KR',{timeZone:'Asia/Seoul',year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'}).format(new Date(value));}
 for(const node of document.querySelectorAll('[data-brand]'))node.textContent=brand.name;
 for(const node of document.querySelectorAll('[data-brand-en]'))node.textContent=brand.english;
 for(const node of document.querySelectorAll('[data-masthead-quote]'))node.textContent=brand.mastheadQuote;
@@ -40,7 +39,7 @@ if(languageSlot){languageSlot.append(languagePicker());}else if(searchButton){co
 window.addEventListener('moapan-language',()=>{renderIssueDate();renderNewsletterBrand();setPageMetadata();});
 
 const adSlot=document.querySelector('[data-ad-slot]');
-if(adSlot)viewer.then(async a=>{if(!a)return;try{const config=await request('/api/v1/advertisements');renderBanner(adSlot,config);}catch{/* An unavailable ad must not stop the newspaper. */}});
+if(adSlot)viewer.then(async a=>{if(!a)return;const ticket=contentGeneration;try{const config=await request('/api/v1/advertisements');if(config?.enabled){const {renderBanner}=await import('../advertising/banner.js');if(contentGeneration===ticket)renderBanner(adSlot,config);}}catch{/* An unavailable ad must not stop the newspaper. */}});
 
 if(document.querySelector('.masthead')){const nav=el('nav',undefined,'content-menu');nav.setAttribute('aria-label',t('콘텐츠 메뉴'));for(const [title,url]of [['오늘의 지면','/index.html'],['담고담고','/newsletter.html']]){const a=url==='/newsletter.html'?newsletterElement('a','name'):el('a',title);a.href=url;if(url==='/newsletter.html'){a.dataset.auth='member';a.hidden=true;}if(location.pathname===url||(location.pathname==='/'&&url==='/index.html'))a.setAttribute('aria-current','page');nav.append(a);}document.querySelector('header')?.append(nav);}
 

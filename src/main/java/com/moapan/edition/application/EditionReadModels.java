@@ -35,7 +35,9 @@ public final class EditionReadModels {
         var members=memberships.read(edition.toString(),()->stamp("edition_membership",edition),
                 ()->List.copyOf(db.sql("SELECT position,article_id FROM news_edition_items WHERE edition_id=:id ORDER BY position LIMIT 300")
                     .param("id",edition).query((r,n)->new Member(r.getInt("position"),r.getObject("article_id",UUID.class))).list()));
-        return cards.read(edition+":"+start+":"+size,()->selection(members,start,size).fingerprint(),()->{
+        // Slice contains no edition/account identity. Its complete saved-data signature permits
+        // reuse across successive editions with identical visible membership and content.
+        return cards.read("cards:"+start+":"+size,()->selection(members,start,size).fingerprint(),()->{
             var selection=selection(members,start,size);
             var selected=selection.selected();
             if(selected.isEmpty())return new Slice(List.of(),selection.visible().size(),300,false);
