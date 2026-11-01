@@ -20,7 +20,7 @@ public class LocalTranslator implements com.moapan.translation.application.Trans
     private final String key;
     private final java.util.concurrent.Semaphore inference=new java.util.concurrent.Semaphore(1);
     private final HttpClient http=HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(3)).followRedirects(HttpClient.Redirect.NEVER).build();
-    private final JsonMapper json=JsonMapper.builder().build();
+    private static final JsonMapper json=JsonMapper.builder().build();
     public LocalTranslator(@Value("${MOAPAN_TRANSLATION_URL:}") String url,@Value("${MOAPAN_TRANSLATION_KEY_FILE:}") String keyFile){
         if(timeoutSeconds()<10||timeoutSeconds()>600)throw new IllegalStateException("invalid_translation_timeout");
         endpoint=url.isBlank()?null:URI.create(url);
@@ -60,7 +60,7 @@ public class LocalTranslator implements com.moapan.translation.application.Trans
             default -> "Return only the complete translation without commentary or markdown headings.";
         };
         if(attempt>1)prompt+="\nTranslate each sentence in source order. Preserve factual relationships exactly.";
-        return Map.of("model","moapan-translation","messages",List.of(Map.of("role","system","content",prompt),Map.of("role","user","content",new JsonMapper().writeValueAsString(Map.of("source_text",input)))),"temperature",0,"max_tokens",1200,"stream",true,"chat_template_kwargs",Map.of("enable_thinking",false));
+        return Map.of("model","moapan-translation","messages",List.of(Map.of("role","system","content",prompt),Map.of("role","user","content",json.writeValueAsString(Map.of("source_text",input)))),"temperature",0,"max_tokens",1200,"stream",true,"chat_template_kwargs",Map.of("enable_thinking",false));
     }
     public static String prompt(String input,String language){
         String target=language.equals("ko")?"韩语":"英语";

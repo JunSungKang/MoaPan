@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 4,
+  "workSlug": "refactor-audit-20261102",
+  "flowType": "integration",
+  "branch": "codex/refactor-audit-20261102",
+  "targetBranch": "develop",
+  "baseSha": "d9e8c98560f5fd2a5e77b433e7400f31ba16720c",
+  "mergeMethod": "squash",
+  "governance": {
+    "prAuthorLogin": "JunSungKang",
+    "assigneeLogin": "JunSungKang",
+    "reviewerLogin": "junsung-bot[bot]",
+    "requiredChecks": [],
+    "commitAuthor": {
+      "name": "jun-sung, Kang",
+      "email": "kjuns1@naver.com"
+    },
+    "coAuthors": [
+      {
+        "name": "Codex",
+        "email": "codex@openai.com"
+      },
+      {
+        "name": "junsung-bot[bot]",
+        "email": "302617028+junsung-bot[bot]@users.noreply.github.com"
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "fundamental-refactor-and-checklist",
+      "expectedPaths": [
+        ".github/workflow-plans/refactor-audit-20261102.json",
+        "src/main/java/**",
+        "src/main/resources/static/**",
+        "src/test/java/**",
+        "src/integrationTest/java/**",
+        "src/e2eTest/java/**",
+        "scripts/**",
+        "docs/**",
+        "README.md",
+        "Caddyfile"
+      ],
+      "forbiddenPaths": [
+        ".env",
+        ".github/workflows/**",
+        "src/main/resources/db/migration/**",
+        "licenses/**",
+        "build.gradle",
+        "gradle.lockfile",
+        "gradle/verification-metadata.xml",
+        "Dockerfile",
+        "compose.yaml"
+      ],
+      "acceptanceCriteria": [
+        "Follow-up correction of the previously authorized common-code/dead-code/service/develop delivery: audit commit evidence, explain actual previous scope accurately, inventory every confirmed actionable finding, implement and verify the entire checklist. Continue Sprint Delivery in the current authorized root; no additional worktree or global skill/config changes.",
+        "Analyze CSS declarations/cascade/media/shorthands, cross-page ownership and real rendering, JS imports/exports/event/request lifecycles, Java per-call allocations/duplicate responsibility and framework entrypoints, scripts/config/docs. Distinguish separate CSS resources from duplicate content or repeated requests. Do not merge different security/domain policies merely because code looks similar.",
+        "Remove dominated CSS declarations/empty rules and proven unused paths without source backups or stashes. Preserve exact effective computed styles, responsive/print/interactive behavior with before/after real-browser snapshots and structural regression checks wired to check. Test scanner failure behavior, not name-only existence counts.",
+        "Reuse per-call default JSON mappers at domain-owned scope including the existing translator mapper. Preserve specialized parser restrictions. Do not bypass implementation policy fingerprints; verify affected translation invalidation/retry behavior and report natural revalidation separately from classification and member data. No dependency/model/schema/credential/password/username policy changes.",
+        "Run complete unit/PostgreSQL/Playwright/HTML/structure/security/SBOM/images/truststore tests; apply identical scanned digest to existing service preserving real entities/volumes. Independently review current head and use human wrappers/App approval for PR and authorized develop correction/three-ref cleanup. main and CI/CD remain outside scope."
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh --no-daemon check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest",
+        "sh scripts/test/html-check.sh",
+        "git diff --check"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/plan.md",
+          "docs/01-management/progress.md",
+          "docs/05-test/refactor-checklist.md",
+          "docs/05-test/evidence/refactor-audit-20261102.json"
+        ]
+      }
+    },
+    {
+      "id": "preserve-local-https-skill",
+      "expectedPaths": [
+        ".agents/skills/https-certificate/SKILL.md",
+        ".agents/skills/https-certificate/agents/openai.yaml",
+        ".agents/skills/https-certificate/references/caddy-acme.md"
+      ],
+      "forbiddenPaths": [],
+      "acceptanceCriteria": [
+        "User explicitly requested that the existing HTTPS skill not be committed. Observe these exact untracked paths only to preserve unrelated work in place. Do not edit, stage, commit, move, delete or ignore them.",
+        "Before each commit, push and PR/review operation, verify original SHA-256 and that git ls-files returns no tracked/staged path. They are not performance or server-cache deliverables."
+      ],
+      "validationCommands": [
+        "node -e 'const fs=require(\"node:fs\"),c=require(\"node:crypto\"),cp=require(\"node:child_process\");for(const x of [{\"file\":\".agents/skills/https-certificate/SKILL.md\",\"sha256\":\"47071a68b12a638b0f7c3d3290f92833e955771f854312c2bb14c0074c1b0e0f\"},{\"file\":\".agents/skills/https-certificate/agents/openai.yaml\",\"sha256\":\"7272ebe0da2378a3c3cb769f9c614870091d91d42d13e4ad87d0d6f7d6cde9e7\"},{\"file\":\".agents/skills/https-certificate/references/caddy-acme.md\",\"sha256\":\"540d923e2c305dac16280286bd91fbd23b52a20bafffaf8b51372824483b8335\"}]){if(c.createHash(\"sha256\").update(fs.readFileSync(x.file)).digest(\"hex\")!==x.sha256)throw Error(\"Preserved skill changed: \"+x.file);if(cp.execFileSync(\"git\",[\"ls-files\",\"--\",x.file],{encoding:\"utf8\"}).trim())throw Error(\"Local skill must remain untracked: \"+x.file);}'"
+      ],
+      "documentation": {
+        "rationale": "Existing local skill belongs to another user request; preservation only, excluded from commits and PR diffs."
+      }
+    }
+  ]
+}
