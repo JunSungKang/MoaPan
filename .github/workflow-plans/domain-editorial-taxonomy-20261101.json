@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 4,
+  "workSlug": "domain-editorial-taxonomy-20261101",
+  "flowType": "integration",
+  "branch": "codex/domain-editorial-taxonomy-20261101",
+  "targetBranch": "develop",
+  "baseSha": "bd3502fc34a92c291bd81da876bb1734f4b1b249",
+  "mergeMethod": "squash",
+  "governance": {
+    "prAuthorLogin": "JunSungKang",
+    "assigneeLogin": "JunSungKang",
+    "reviewerLogin": "junsung-bot[bot]",
+    "requiredChecks": [],
+    "commitAuthor": {
+      "name": "jun-sung, Kang",
+      "email": "kjuns1@naver.com"
+    },
+    "coAuthors": [
+      {
+        "name": "Codex",
+        "email": "codex@openai.com"
+      },
+      {
+        "name": "junsung-bot[bot]",
+        "email": "302617028+junsung-bot[bot]@users.noreply.github.com"
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "editorial-taxonomy",
+      "expectedPaths": [
+        "src/main/java/com/moapan/article/**",
+        "src/main/resources/static/**",
+        "src/e2eTest/**",
+        "src/integrationTest/java/com/moapan/SecurityIntegrationTest.java",
+        ".github/workflow-plans/design-consistency-seo-20261101.json",
+        "docs/**",
+        ".github/workflow-plans/domain-editorial-taxonomy-20261101.json"
+      ],
+      "forbiddenPaths": [
+        ".env",
+        ".github/workflows/**",
+        "src/main/resources/db/**",
+        "build.gradle",
+        "gradle.lockfile",
+        "Dockerfile",
+        "scripts/deploy/**",
+        "scripts/security/**",
+        "src/main/java/com/moapan/identity/**",
+        "src/main/java/com/moapan/access/**",
+        "src/main/java/com/moapan/ai/**",
+        "src/main/java/com/moapan/classification/**",
+        "src/main/java/com/moapan/translation/**"
+      ],
+      "acceptanceCriteria": [
+        "Article editorial/taxonomy: collected-date and ordering, focused draft-preserving review, topic dictionary/classification UI, canonical merge and translation save race.",
+        "History reconstruction only. Preserve user changes, existing shared history/main and original93eb767 snapshot; no force push/reset/worktree, no runtime or DB changes.",
+        "Tests and final artifact gates run at this checkpoint; no skipped/removed baseline assertions. Final phase product/test/scripts/build configuration and JAR must match original verified93eb767.",
+        "Guarded human commit/push/PR, independent current-head App approval, explicitly user-authorized develop squash merge and verified remote/tracking/local head cleanup."
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh --no-daemon check integrationTest e2eTest bootJar sbom securityCheck",
+        "sh scripts/test/html-check.sh",
+        "git diff --check"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/plan.md",
+          "docs/01-management/progress.md",
+          "docs/05-test/evidence/domain-pr-reorganization-20261101.json"
+        ]
+      }
+    }
+  ]
+}

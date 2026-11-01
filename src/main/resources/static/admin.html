@@ -6,7 +6,7 @@
 <div class="admin-tabs admin-tabs-primary" role="tablist" aria-label="관리 메뉴" data-admin-tab-group="sections">
 <button type="button" role="tab" id="sections-tab-collection" data-admin-tab="collection" aria-controls="sections-panel-collection" aria-selected="true" tabindex="0">수집 사이트</button>
 <button type="button" role="tab" id="sections-tab-articles" data-admin-tab="articles" aria-controls="sections-panel-articles" aria-selected="false" tabindex="-1">기사 검토</button>
-<button type="button" role="tab" id="sections-tab-topics" data-admin-tab="topics" aria-controls="sections-panel-topics" aria-selected="false" tabindex="-1">주제·태그</button>
+<button type="button" role="tab" id="sections-tab-topics" data-admin-tab="topics" aria-controls="sections-panel-topics" aria-selected="false" tabindex="-1">주제 관리</button>
 <button type="button" role="tab" id="sections-tab-interests" data-admin-tab="interests" aria-controls="sections-panel-interests" aria-selected="false" tabindex="-1">대표 관심사</button>
 <button type="button" role="tab" id="sections-tab-advertising" data-admin-tab="advertising" aria-controls="sections-panel-advertising" aria-selected="false" tabindex="-1">광고</button>
 <button type="button" role="tab" id="sections-tab-processing" data-admin-tab="processing" aria-controls="sections-panel-processing" aria-selected="false" tabindex="-1">처리 현황</button>
@@ -46,27 +46,26 @@
 </section>
 </section>
 <section id="sections-panel-articles" class="admin-workspace" role="tabpanel" aria-labelledby="sections-tab-articles" tabindex="0" data-admin-panel-group="sections" data-admin-panel="articles" hidden>
-<h2>기사·요약 검토</h2><p>아래 내용은 관리자 편집입니다. 근거에 맞는 요약만 작성하세요. 태그 UUID는 /api/v1/tags에서 확인할 수 있습니다.</p><button id="refresh-articles">최근 기사 100개 조회</button><div id="article-list"></div>
+<h2>기사·요약 검토</h2>
+<p>원문 근거와 비교해 요약·태그·공개 여부를 검토하세요.</p>
+<form id="article-review-filters" class="filters"><label>수집 시작일<input type="date" name="collectedFrom"></label><label>수집 종료일<input type="date" name="collectedTo"></label><label>기사 정렬<select name="sort"><option value="collected_desc">수집일 최신순</option><option value="collected_asc">수집일 오래된순</option><option value="title_asc">제목 가나다순</option></select></label><button type="submit" id="refresh-articles">조건으로 기사 조회</button><button type="button" id="clear-article-filters">조건 초기화</button></form><p class="muted">발행일이 아닌 모아판에 수집된 날짜를 한국 시간으로 조회합니다. 조건에 맞는 기사를 최대 100개 표시합니다.</p><p id="article-review-applied" class="admin-context" aria-live="polite"></p>
+<div id="article-review"><p id="article-review-status" aria-live="polite">최근 기사를 불러오세요.</p><div id="article-list"></div></div>
 </section>
 <section id="sections-panel-topics" class="admin-workspace" role="tabpanel" aria-labelledby="sections-tab-topics" tabindex="0" data-admin-panel-group="sections" data-admin-panel="topics" hidden>
-<h2>주제·태그</h2>
+<h2>주제 관리</h2>
 <div class="admin-tabs admin-tabs-secondary" role="tablist" aria-label="주제·태그 메뉴" data-admin-tab-group="topics">
-<button type="button" role="tab" id="topics-tab-classification" data-admin-tab="classification" aria-controls="topics-panel-classification" aria-selected="true" tabindex="0">분류 설정</button>
-<button type="button" role="tab" id="topics-tab-dictionary" data-admin-tab="dictionary" aria-controls="topics-panel-dictionary" aria-selected="false" tabindex="-1">태그 사전</button>
+<button type="button" role="tab" id="topics-tab-classification" data-admin-tab="classification" aria-controls="topics-panel-classification" aria-selected="true" tabindex="0">자동 분류 기준</button>
+<button type="button" role="tab" id="topics-tab-dictionary" data-admin-tab="dictionary" aria-controls="topics-panel-dictionary" aria-selected="false" tabindex="-1">주제 목록</button>
 </div>
 <section id="topics-panel-classification" class="admin-subsection" role="tabpanel" aria-labelledby="topics-tab-classification" tabindex="0" data-admin-panel-group="topics" data-admin-panel="classification">
-<h3>기사 주제 분류</h3><p>모델은 아래 목록 안에서만 주제를 고릅니다. 사용할 태그를 최대 8개 선택하고, 각 주제에 포함할 내용과 제외할 내용을 200자 이내로 정의하세요. 저장하면 기존 기사를 순차 재분류합니다. 수동 태그 잠금은 유지됩니다.</p><button id="refresh-classification">분류 현황·주제 불러오기</button>
+<h3>AI가 기사의 주제를 고르는 기준</h3><ol class="admin-instructions"><li>주제 목록에서 기사에 사용할 주제 이름을 먼저 만드세요.</li><li>아래에서 자동 분류에 사용할 주제를 최대 8개 선택하세요.</li><li>각 주제에 포함할 내용과 제외할 내용을 적고 저장하세요.</li></ol><p>저장하면 기존 기사를 순차 재분류합니다. 관리자가 잠근 기사 주제는 바뀌지 않습니다.</p><button id="refresh-classification">분류 현황·주제 불러오기</button>
 <form id="classification-form"><div id="classification-topics"></div><button type="submit">분류 주제 저장</button>
-</form><p id="classification-message" aria-live="polite"></p><pre id="classification-status"></pre>
+</form><p id="classification-message" aria-live="polite"></p><details class="admin-editor"><summary>분류 처리 기록 보기</summary><pre id="classification-status"></pre></details>
 </section>
 <section id="topics-panel-dictionary" class="admin-subsection" role="tabpanel" aria-labelledby="topics-tab-dictionary" tabindex="0" data-admin-panel-group="topics" data-admin-panel="dictionary" hidden>
-<h3>태그 운영</h3>
-<form id="tag-form"><label>수정할 태그 UUID (신규 등록은 비워두기)<input name="tagId"></label><label>slug<input name="slug" required></label><label>표시명<input name="name" required></label><label>카테고리<input name="category" required></label><button>태그 등록</button>
-</form>
-<form id="alias-form"><label>태그 UUID<input name="tagId" required></label><label>별칭<input name="alias" required></label><button>별칭 등록</button>
-</form>
-<form id="merge-form"><label>이전 태그 UUID<input name="oldId" required></label><label>canonical 태그 UUID<input name="canonicalId" required></label><button>태그 병합</button>
-</form><pre id="tag-result"></pre>
+<h3>기사와 관심사에 표시할 주제</h3><p>주제를 추가하거나 이름을 수정합니다. 다른 표현을 연결하면 같은 뜻의 말을 한 주제로 찾을 수 있고, 겹치는 주제는 하나로 합칠 수 있습니다.</p><button type="button" id="refresh-topic-catalog">주제 목록 새로고침</button><ul id="topic-catalog-list" class="topic-catalog-list"></ul><div class="topic-management-forms"><section><h4>주제 추가·수정</h4><label>수정할 주제<select id="topic-edit-choice"><option value="">새 주제 만들기</option></select></label><button type="button" id="new-topic">새 주제 만들기</button><form id="tag-form"><label>주제 이름<input name="name" required maxlength="100" placeholder="예: 인공지능"></label><label>분야<input name="category" required maxlength="60" placeholder="예: 기술"></label><button type="submit">새 주제 추가</button>
+</form></section><section><h4>같은 뜻의 표현 연결</h4><p>예: 인공지능에 AI, artificial intelligence를 연결합니다.</p><form id="alias-form"><label>연결할 주제<select name="tagId" required><option value="">주제를 선택하세요.</option></select></label><label>다른 표현<input name="alias" required maxlength="100" placeholder="예: AI"></label><button>표현 연결</button>
+</form></section><section><h4>겹치는 주제 합치기</h4><p>합칠 주제는 사라지고 기사·기존 관심사 연결은 남길 주제로 옮겨집니다.</p><form id="merge-form"><label>합칠 주제<select name="oldId" required><option value="">합칠 주제를 선택하세요.</option></select></label><label>남길 주제<select name="canonicalId" required><option value="">남길 주제를 선택하세요.</option></select></label><button>선택한 주제 합치기</button></form></section></div><p id="tag-result" aria-live="polite"></p>
 </section>
 </section>
 <section id="sections-panel-interests" class="admin-workspace" role="tabpanel" aria-labelledby="sections-tab-interests" tabindex="0" data-admin-panel-group="sections" data-admin-panel="interests" hidden>
@@ -77,7 +76,7 @@
 <section id="sections-panel-advertising" class="admin-workspace" role="tabpanel" aria-labelledby="sections-tab-advertising" tabindex="0" data-admin-panel-group="sections" data-admin-panel="advertising" hidden>
 
 <h2 id="advertising-title" class="section-title">광고 관리</h2><p>우측 상단 광고를 관리합니다. CPC는 클릭당 과금 방식입니다. 클릭 집계와 정산은 계약한 광고 서비스에서 확인하며 모아판은 클릭을 추적하지 않습니다.</p>
-<form id="advertising-form"><label>광고 방식<select name="provider"><option value="BANNER">직접 링크 배너</option><option value="ADSENSE">애드센스 연결 정보</option></select></label><label class="check"><input name="enabled" type="checkbox">지면에 광고 표시</label><div id="banner-fields"><label>광고 문구<input name="title" maxlength="80"></label><label>보조 문구<input name="description" maxlength="160"></label><label>광고 목적지 HTTPS 링크<input name="targetUrl" type="url" maxlength="2048"></label><label>선택 이미지 경로<input name="imagePath" maxlength="240" placeholder="/assets/images/sponsor.webp"></label><p>이미지는 서버에 준비된 PNG·JPEG·WebP·GIF 파일만 사용할 수 있습니다. 이미지가 없으면 광고 문구를 표시합니다.</p></div><div id="adsense-fields" hidden><label>게시자 ID<input name="publisherId" maxlength="32" placeholder="ca-pub-1234567890123456"></label><label>광고 단위 ID<input name="slotId" maxlength="20" inputmode="numeric"></label></div><p id="adsense-pending" hidden>애드센스는 연결 준비 상태입니다. 승인된 사이트와 광고 단위, 동의 관리 설정을 확인한 뒤 송출 연결이 필요합니다. 정보 저장만으로 Google 광고가 요청되지는 않습니다.</p><div class="actions"><button type="submit" disabled>광고 설정 저장</button><button type="button" id="reload-advertising">다시 불러오기</button><button type="button" id="preview-advertising">미리보기</button></div><p id="advertising-status" aria-live="polite"></p>
+<form id="advertising-form"><label>광고 방식<select name="provider"><option value="BANNER">직접 링크 배너</option><option value="ADSENSE">애드센스 연결 정보</option></select></label><label class="check"><input name="enabled" type="checkbox">지면에 광고 표시</label><div id="banner-fields"><label>광고 문구<input name="title" maxlength="80"></label><label>보조 문구<input name="description" maxlength="160"></label><label>광고 목적지 HTTPS 링크<input name="targetUrl" type="url" maxlength="2048"></label><label>선택 이미지 경로<input name="imagePath" maxlength="240" placeholder="/assets/images/sponsor.webp"></label><p>이미지는 서버에 준비된 PNG·JPEG·WebP·GIF 파일만 사용할 수 있습니다. 이미지가 없으면 광고 문구를 표시합니다.</p></div><div id="adsense-fields" hidden><p>두 값은 모아판의 내부 번호가 아니라 Google이 발급한 광고 연결 정보입니다. 애드센스에서 복사해 붙여 넣으세요.</p><label>애드센스 게시자 ID<input name="publisherId" maxlength="32" placeholder="ca-pub-1234567890123456"></label><label>애드센스 광고 단위 ID<input name="slotId" maxlength="20" inputmode="numeric"></label></div><p id="adsense-pending" hidden>애드센스는 연결 준비 상태입니다. 승인된 사이트와 광고 단위, 동의 관리 설정을 확인한 뒤 송출 연결이 필요합니다. 정보 저장만으로 Google 광고가 요청되지는 않습니다.</p><div class="actions"><button type="submit" disabled>광고 설정 저장</button><button type="button" id="reload-advertising">다시 불러오기</button><button type="button" id="preview-advertising">미리보기</button></div><p id="advertising-status" aria-live="polite"></p>
 </form><aside class="masthead-ad advertising-preview" aria-label="광고 미리보기"><div id="advertising-preview">미리보기</div></aside>
 
 </section>

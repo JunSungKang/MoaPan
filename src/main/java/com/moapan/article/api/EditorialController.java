@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 public class EditorialController {
     record Alias(String alias){} record Merge(UUID canonicalId){}
     private final EditorialService service;public EditorialController(EditorialService service){this.service=service;}
-    @GetMapping("/articles")Object list(){return service.list();}
+    @GetMapping("/articles")Object list(@RequestParam(required=false) @org.springframework.format.annotation.DateTimeFormat(iso=org.springframework.format.annotation.DateTimeFormat.ISO.DATE) java.time.LocalDate collectedFrom,@RequestParam(required=false) @org.springframework.format.annotation.DateTimeFormat(iso=org.springframework.format.annotation.DateTimeFormat.ISO.DATE) java.time.LocalDate collectedTo,@RequestParam(defaultValue="collected_desc")String sort){return service.list(collectedFrom,collectedTo,sort);}
     @PatchMapping("/articles/{id}")void edit(@PathVariable UUID id,@RequestBody EditorialService.Edit input,Authentication a){service.edit(id,input,UUID.fromString(a.getName()));}
     @PostMapping("/tags")Object tag(@RequestBody EditorialService.TagInput input,Authentication a){return service.tag(input,UUID.fromString(a.getName()));}
     @PatchMapping("/tags/{id}")void updateTag(@PathVariable UUID id,@RequestBody EditorialService.TagInput input,Authentication a){service.updateTag(id,input,UUID.fromString(a.getName()));}
