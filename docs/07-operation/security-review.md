@@ -198,3 +198,10 @@ Helm 합성렌더구성검사: HIGH0/CRITICAL0/MEDIUM13/LOW2. KSV-01010은SOURCE
 관리자 작업영역 분리 후 최종 현재 앱은 sha256:af492f8866e4a708afd859adec8704ad16d42e0efa9c3ad1309bc41ec53bb892, 빌드는 sha256:29a7e3daf67b2340cfccd5def799e5b2f50d2d6d9fc065ec28d37da6ca661c6c다. 둘 다 원본 이미지 보고서상 취약점·secret 발견0이며 source/JAR/SBOM gate를 다시 통과했다. [최신 증빙](../05-test/evidence/admin-navigation-20261101.json)의 검사/실행 대조가 앞선 디자인 이미지 기록을 대체한다. 나머지 보안 범위와 잔여 사항은 그대로다.
 
 기사 검토 후속의 현재 앱은 sha256:5f8cb0c07239e93991e7c22e0a0b0c2d3852f387ed2130666ea7d0bcc4bbdfbe, 빌드는 sha256:35e386ab60a4d761e75325acf2cc7dd01293b2d80b3c4d508b7f3a87337551a6다. 원본 이미지 취약점·secret 발견0, source/JAR/SBOM gate 재통과·실행JAR일치. 수정은 정적 편집 UI와 입력/응답 경합 방어이며 서버 권한·API·모델·의존성·원래20개 정의를 바꾸지 않았다. [현재 증빙](../05-test/evidence/article-review-20261101.json)이 앞선 앱 이미지 기록을 대체한다. 기존 보안 잔여와 검사 한계는 유지한다.
+
+
+### 관리자 수집일·이름 선택 개선 산출물
+
+명명된 기사/수집관리4개 Java와 정적화면을 변경했다. 고정SQL정렬·날짜바인딩·활성태그 검사·ADMIN/CSRF 및 관련기사/분류/태그 NOWAIT 잠금409를 PG 회귀로 검증했다. 내부 ID는 서버생성/API 값으로 유지하고 사람이 입력하지 않는다. 새 권한·원문영속·회원프로필/추적·모델/의존성·DB마이그레이션은 추가하지 않았다.
+
+현재 앱 sha256:5ad3538359a78b7744d26f49c0d878081f29d3d660daa181c211e0036dacd373 / 빌드 sha256:06fbe5006c8e0e5d00a01f4e7f26681aa636e5b953e2f642046cdc6bd65eb735를 실제 검사했고 원본 이미지 보고서상 취약점·secret 발견0이다. JAR/SBOM/source gate,24시간내DB동기화 및 web/worker 실행JAR 대조는 [이번 증빙](../05-test/evidence/admin-usability-20261101.json)을 따른다. 앞선 앱이미지 기록을 대체하며 source의 JOSE 백포트·2026-11-07만료·OpenPGP 부재근거/S07 사용자정책은 유지한다. 원래20항목은19/20 그대로이며 이 기능변경으로 모두완료라고 주장하지 않는다.

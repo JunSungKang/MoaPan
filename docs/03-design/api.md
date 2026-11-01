@@ -44,6 +44,7 @@ username은 ASCII 영문·숫자·밑줄1~128, 대문자를 소문자로 정규�
 - GET/PATCH/DELETE `/api/v1/admin/sources/{id}`: 상세/수정/논리 보관. GET은 publishedArticleCount로 권리 철회 영향 기사 수를 안내한다.
 - POST `/api/v1/admin/sources/{id}/restore|validate|preview|collect`: 복원/기술 점검/최대5개 미저장 미리보기/202+job ID.
 - GET `/api/v1/admin/sources/{id}/runs`: 최근50개 실행 결과. SUCCEEDED/NO_CHANGE/FAILED와 작업 접수를 구분한다.
+- GET `/api/v1/admin/jobs`: 최근50개 작업. 선택 query `sourceId`(UUID)로 출처 제한; 기본 전체. created_at 내림차순/id로 정렬하고 id,status,attempts,error_code,source_label,site_name,UTC ISO created_at만 반환한다. 권한 ADMIN.
 - GET `/api/v1/admin/jobs/{id}`: QUEUED/RUNNING/SUCCEEDED/FAILED/CANCELLED,attempts,시각,정제 오류 코드.
 - GET `/api/v1/admin/workers`: worker ID·heartbeat.
 
@@ -53,12 +54,12 @@ JSON_API는 단일 GET 응답의 제한된 점 구분 경로만 지원: items,id
 
 ## 관리자 편집
 
-- GET `/api/v1/admin/articles`: 최근100개 최소 편집 필드.
+- GET `/api/v1/admin/articles`: 선택 query collectedFrom/collectedTo(YYYY-MM-DD), sort(collected_desc 기본/collected_asc/title_asc). 수집시각을 Asia/Seoul 날짜 시작 이상·종료 다음날 미만으로 제한한 뒤 최대100개를 반환한다. 발행일 필터가 아니다. 범위 역전/잘못된 날짜·정렬은400. 날짜정렬의 동률은 제목/id, 제목정렬은 lower(title)/title/수집시각내림차순/id. 응답은 기존 편집 필드와 site_name/source_label/UTC ISO collected_at/published_at.
 - PATCH `/api/v1/admin/articles/{id}`: summaryBullets(0~4·각350자 이하),summaryLocked,tagsLocked,published,tagIds(최대6). 수동 방식 표시·감사 기록. 공개 여부와 별개로 source 권리는 응답 시 검사한다.
-- POST `/api/v1/admin/tags`: slug,name,category.
-- PATCH `/api/v1/admin/tags/{id}`: slug,name,category 수정. 비활성 태그404.
+- POST `/api/v1/admin/tags`: name,category 필수, slug 선택. 생략한 slug는 서버에서 이름 기반의 짧은 코드와 생성 UUID 일부로 만든다. 내부 UUID는 서버 생성이며 화면 입력항목이 아니다.
+- PATCH `/api/v1/admin/tags/{id}`: name,category와 선택 slug 수정. slug 생략 시 기존 코드 유지. 비활성 태그404.
 - POST `/api/v1/admin/tags/{id}/aliases`: alias.
-- POST `/api/v1/admin/tags/{id}/merge`: canonicalId. 이전 태그 비활성·기사 연결/별칭/redirect를 canonical로 정규화.
+- POST `/api/v1/admin/tags/{id}/merge`: canonicalId. 이전 태그 비활성·기사 연결/수동잠금/별칭/redirect/자동분류 기준을 canonical로 정규화한다. 분류기준 변경 시 config version 증가. 관련 기사·분류 설정·태그 잠금 경합은 즉시409 tag_merge_busy이며 일부 반영 없이 재시도한다.
 
 내부 /internal/live, /internal/ready는 요약 상태만. Caddy는 /internal/*와 /actuator/*를 외부에404로 차단한다. worker/migrate/admin-cli는 HTTP를 열지 않는다.
 
@@ -95,7 +96,7 @@ JSON 입력: search(필수 문자열, 최대100자), category(필수 문자열, 
 ### 관리자 번역 상태
 GET /api/v1/admin/translations (ADMIN): runtime(state,failures,next_probe_at,checked_at,error_code), counts(state,count), failures(error_code,count), recent(최근20개 article_id,state,error_code,attempts,infra_failures,updated_at). 회원정보·원문·실패 번역 전문·secret 제외. 관리자 화면 새로고침으로 관측하며 작업 승인 없이 자동 처리한다.
 
-관리 기사 편집: GET /api/v1/admin/articles의 tag_ids는 현재 태그 UUID JSON 문자열이다. PATCH tagIds=null/미지정은 기존 연결을 보존하고, []는 명시적 전체 제거, UUID 목록은 교체한다.
+관리 기사 편집: GET /api/v1/admin/articles의 tag_ids는 현재 태그 UUID JSON 문자열이다. PATCH tagIds=null/미지정은 기존 연결을 보존하고, []는 명시적 전체 제거, UUID 목록은 교체한다. 교체 목록에 비활성/없는 주제가 있으면400 invalid_editorial_tags로 전체 변경을 거부한다. UI는 이름 체크박스를 사용하며 UUID는 내부 값으로만 전송한다.
 
 ## 분류 운영
 ADMIN GET `/api/v1/admin/classification`: policy/catalog(version/topics/hash), 상태별 counts, runtime, 최근20개 작업. ADMIN+CSRF PUT `/api/v1/admin/classification/topics`: `{version,topics:[{tagId,definition}]}`. 1~8개/중복ID 금지/활성태그/정의1~200자. 400 입력오류,409 version충돌. 뉴스 응답 필드는 변경하지 않는다.

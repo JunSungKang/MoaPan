@@ -22,7 +22,7 @@ class ArticleReviewTest {
     @Test void oneArticleAtATimeIsReadableAtAllSizesAndLanguages()throws Exception{
         Path pictures=Path.of("build/reports/screenshots/article-review");Files.createDirectories(pictures);
         try(var context=BrowserTest.browser.newContext()){
-            SiteDesignAuditTest.routes(context,"ADMIN");context.route("**/api/v1/admin/articles",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(articles())));
+            SiteDesignAuditTest.routes(context,"ADMIN");context.route("**/api/v1/admin/articles*",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(articles())));
             var page=open(context);var errors=new ArrayList<String>();page.onPageError(errors::add);
             page.locator("#refresh-articles").click();page.waitForSelector(".article-review-sheet");
             assertEquals(1,page.locator(".article-review-sheet").count(),"Only the visited editor should be mounted");
@@ -87,7 +87,7 @@ class ArticleReviewTest {
     @Test void reloadCancellationErrorsAndEmptyResultsDoNotLoseEdits(){
         try(var context=BrowserTest.browser.newContext()){
             SiteDesignAuditTest.routes(context,"ADMIN");var calls=new AtomicInteger();var mode=new AtomicInteger();var pending=new AtomicReference<Route>();
-            context.route("**/api/v1/admin/articles",r->{calls.incrementAndGet();if(mode.get()==2){pending.set(r);return;}
+            context.route("**/api/v1/admin/articles*",r->{calls.incrementAndGet();if(mode.get()==2){pending.set(r);return;}
                 r.fulfill(new Route.FulfillOptions().setContentType("application/json").setStatus(mode.get()==1?503:200).setBody(mode.get()==1?"{}":mode.get()==3?"[]":articles()));});
             var page=open(context);page.locator("#refresh-articles").click();page.waitForSelector(".article-review-sheet");
             page.getByLabel("수동 요약 (한 줄 한 항목)").fill("Keep my synthetic draft");

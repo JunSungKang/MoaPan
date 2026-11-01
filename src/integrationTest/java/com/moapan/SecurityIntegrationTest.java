@@ -463,6 +463,95 @@ class SecurityIntegrationTest {
         mvc.perform(get("/api/v1/news/edition").cookie(cookie)).andExpect(status().isServiceUnavailable()).andExpect(header().string("Retry-After","60")).andExpect(jsonPath("$.error").value("temporarily_unavailable"));
     }
 
+    @Test @Order(20) @WithMockUser(roles="ADMIN") @org.springframework.transaction.annotation.Transactional
+    void editorialDateRangeUsesKoreaTimeBeforeLimitAndStrictSort()throws Exception{
+        UUID source=adminFixtureSource();
+        UUID first=adminFixtureArticle(source,"A first","2001-02-02T15:00:00Z"),last=adminFixtureArticle(source,"Z last","2001-02-03T14:59:59.999999Z");
+        adminFixtureArticle(source,"Outside before","2001-02-02T14:59:59.999999Z");adminFixtureArticle(source,"Outside after","2001-02-03T15:00:00Z");
+        for(int i=0;i<105;i++)adminFixtureArticle(source,"Newer outside "+i,"2002-01-01T00:00:00Z");
+        mvc.perform(get("/api/v1/admin/articles").with(adminWeb()).param("collectedFrom","2001-02-03").param("collectedTo","2001-02-03"))
+            .andExpect(status().isOk()).andExpect(jsonPath("$.length()").value(2)).andExpect(jsonPath("$[0].id").value(last.toString()))
+            .andExpect(jsonPath("$[1].id").value(first.toString())).andExpect(jsonPath("$[0].collected_at").value("2001-02-03T14:59:59.999999Z"));
+        mvc.perform(get("/api/v1/admin/articles").with(adminWeb()).param("collectedFrom","2001-02-03").param("collectedTo","2001-02-03").param("sort","title_asc"))
+            .andExpect(status().isOk()).andExpect(jsonPath("$[0].id").value(first.toString())).andExpect(jsonPath("$[0].site_name").value("Synthetic admin site"));
+        mvc.perform(get("/api/v1/admin/articles").with(adminWeb()).param("collectedFrom","2001-02-03").param("collectedTo","2001-02-03").param("sort","collected_asc"))
+            .andExpect(status().isOk()).andExpect(jsonPath("$[0].id").value(first.toString()));
+        mvc.perform(get("/api/v1/admin/articles").with(adminWeb())).andExpect(status().isOk()).andExpect(jsonPath("$.length()").value(100));
+        mvc.perform(get("/api/v1/admin/articles").with(adminWeb()).param("collectedFrom","2001-02-04").param("collectedTo","2001-02-03")).andExpect(status().isBadRequest());
+        mvc.perform(get("/api/v1/admin/articles").with(adminWeb()).param("collectedFrom","2001-02-99")).andExpect(status().isBadRequest());
+        mvc.perform(get("/api/v1/admin/articles").with(adminWeb()).param("sort","collected_desc;DROP TABLE users")).andExpect(status().isBadRequest());
+        mvc.perform(get("/api/v1/admin/articles").with(adminWeb()).with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("synthetic-user").roles("USER"))).andExpect(status().isForbidden());
+    }
+
+    @Test @Order(20) @WithMockUser(roles="ADMIN") @org.springframework.transaction.annotation.Transactional @SuppressWarnings("unchecked")
+    void namedTopicOperationsGenerateCodesAndPreserveMergedConfiguration()throws Exception{
+        UUID actor=accounts.findByUsername("synthetic_a").orElseThrow().id;
+        var created=(Map<String,Object>)editorial.tag(new com.moapan.article.application.EditorialService.TagInput(null,"합성 주제","기술"),actor);
+        UUID old=(UUID)created.get("id"),target=(UUID)((Map<String,Object>)editorial.tag(new com.moapan.article.application.EditorialService.TagInput(null,"남길 주제","기술"),actor)).get("id");
+        String slug=repo.db().sql("SELECT slug FROM tags WHERE id=:id").param("id",old).query(String.class).single();assertTrue(slug.matches("[a-z0-9-]{1,60}"));
+        editorial.updateTag(old,new com.moapan.article.application.EditorialService.TagInput(null,"변경한 이름","연구"),actor);
+        assertEquals(slug,repo.db().sql("SELECT slug FROM tags WHERE id=:id").param("id",old).query(String.class).single());
+        editorial.alias(old," Synthetic alias ",actor);
+        repo.db().sql("INSERT INTO classification_topics(tag_id,definition) VALUES(:id,'Synthetic inclusion and exclusion')").param("id",old).update();
+        long version=repo.db().sql("SELECT version FROM classification_config WHERE id=1").query(Long.class).single();
+        UUID article=adminFixtureArticle(adminFixtureSource(),"Synthetic linked article","2001-01-01T00:00:00Z");
+        repo.db().sql("INSERT INTO article_tags VALUES(:a,:t,1,'MANUAL',true)").param("a",article).param("t",old).update();
+        editorial.merge(old,target,actor);
+        assertEquals(target,repo.db().sql("SELECT tag_id FROM article_tags WHERE article_id=:id").param("id",article).query(UUID.class).single());
+        assertTrue(repo.db().sql("SELECT locked FROM article_tags WHERE article_id=:id").param("id",article).query(Boolean.class).single());
+        assertEquals(target,repo.db().sql("SELECT tag_id FROM tag_aliases WHERE alias='synthetic alias'").query(UUID.class).single());
+        assertEquals(1,repo.db().sql("SELECT count(*) FROM classification_topics WHERE tag_id=:id").param("id",target).query(Integer.class).single());
+        assertEquals(version+1,repo.db().sql("SELECT version FROM classification_config WHERE id=1").query(Long.class).single());
+        assertThrows(ApiError.class,()->editorial.edit(article,new com.moapan.article.application.EditorialService.Edit(List.of("Must not replace summary"),false,false,true,List.of(old)),actor));
+        assertEquals(target,repo.db().sql("SELECT tag_id FROM article_tags WHERE article_id=:id").param("id",article).query(UUID.class).single());
+        mvc.perform(post("/api/v1/admin/tags").with(csrf()).with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user(actor.toString()).roles("ADMIN"))
+            .contentType("application/json").content("{\"name\":\"API generated topic\",\"category\":\"Research\"}"))
+            .andExpect(status().isOk()).andExpect(jsonPath("$.id").isString());
+    }
+
+    @Test @Order(20) @WithMockUser(roles="ADMIN") @org.springframework.transaction.annotation.Transactional
+    void recentCollectionJobsAreBoundedNamedAndProtected()throws Exception{
+        UUID source=adminFixtureSource();
+        for(int i=0;i<55;i++)repo.db().sql("INSERT INTO content_jobs(id,source_id,status,site_version,source_version) VALUES(:id,:source,'SUCCEEDED',0,0)").param("id",UUID.randomUUID()).param("source",source).update();
+        mvc.perform(get("/api/v1/admin/jobs").with(adminWeb()).param("sourceId",source.toString())).andExpect(status().isOk()).andExpect(jsonPath("$.length()").value(50))
+            .andExpect(jsonPath("$[0].source_label").value("Synthetic admin feed")).andExpect(jsonPath("$[0].site_name").value("Synthetic admin site"))
+            .andExpect(jsonPath("$[0].created_at").isString()).andExpect(jsonPath("$[0].lease_token").doesNotExist());
+        mvc.perform(get("/api/v1/admin/jobs").with(adminWeb()).param("sourceId","not-a-uuid")).andExpect(status().isBadRequest());
+        mvc.perform(get("/api/v1/admin/jobs").with(adminWeb()).with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("synthetic-user").roles("USER"))).andExpect(status().isForbidden());
+    }
+
+    private org.springframework.test.web.servlet.request.RequestPostProcessor adminWeb(){return org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user(accounts.findByUsername("synthetic_admin").orElseThrow().id.toString()).roles("ADMIN");}
+    @Test @Order(21) @WithMockUser(roles="ADMIN") @SuppressWarnings("unchecked")
+    void topicMergeFailsQuicklyWhenRelatedArticleIsBeingProcessed()throws Exception{
+        UUID actor=accounts.findByUsername("synthetic_a").orElseThrow().id,source=adminFixtureSource();
+        UUID old=(UUID)((Map<String,Object>)editorial.tag(new com.moapan.article.application.EditorialService.TagInput(null,"Busy synthetic topic","Research"),actor)).get("id");
+        UUID target=(UUID)((Map<String,Object>)editorial.tag(new com.moapan.article.application.EditorialService.TagInput(null,"Retained synthetic topic","Research"),actor)).get("id");
+        UUID article=adminFixtureArticle(source,"Busy synthetic article","2001-01-01T00:00:00Z");
+        repo.db().sql("INSERT INTO article_tags VALUES(:article,:tag,1,'MANUAL',true)").param("article",article).param("tag",old).update();
+        var locked=new CountDownLatch(1);var release=new CountDownLatch(1);var pool=Executors.newFixedThreadPool(2);
+        var authentication=org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        var holder=pool.submit(()->new org.springframework.transaction.support.TransactionTemplate(tm).executeWithoutResult(status->{
+            repo.db().sql("SELECT id FROM articles WHERE id=:id FOR UPDATE").param("id",article).query(UUID.class).single();locked.countDown();
+            try{assertTrue(release.await(5,TimeUnit.SECONDS));}catch(InterruptedException error){Thread.currentThread().interrupt();throw new AssertionError(error);}
+        }));
+        try{
+            assertTrue(locked.await(2,TimeUnit.SECONDS));
+            var attempt=pool.submit(()->{var context=org.springframework.security.core.context.SecurityContextHolder.createEmptyContext();context.setAuthentication(authentication);org.springframework.security.core.context.SecurityContextHolder.setContext(context);
+                try{editorial.merge(old,target,actor);return (ApiError)null;}catch(ApiError error){return error;}finally{org.springframework.security.core.context.SecurityContextHolder.clearContext();}});
+            ApiError error=attempt.get(2,TimeUnit.SECONDS);assertNotNull(error);assertEquals(409,error.statusCode());assertEquals("tag_merge_busy",error.getMessage());
+            assertTrue(repo.db().sql("SELECT active FROM tags WHERE id=:id").param("id",old).query(Boolean.class).single());
+        }finally{release.countDown();holder.get(3,TimeUnit.SECONDS);pool.shutdownNow();}
+    }
+    private UUID adminFixtureSource(){
+        UUID site=UUID.randomUUID(),source=UUID.randomUUID();String homepage="https://admin-fixture.example/"+site;
+        repo.db().sql("INSERT INTO sites(id,name,homepage_url,normalized_homepage_url) VALUES(:id,'Synthetic admin site',:url,:url)").param("id",site).param("url",homepage).update();
+        repo.db().sql("INSERT INTO sources(id,site_id,label,type,endpoint_url,normalized_endpoint_url) VALUES(:id,:site,'Synthetic admin feed','RSS',:url,:url)").param("id",source).param("site",site).param("url",homepage+"/feed").update();return source;
+    }
+    private UUID adminFixtureArticle(UUID source,String title,String collected){
+        UUID id=UUID.randomUUID();repo.db().sql("INSERT INTO articles(id,source_id,source_guid,canonical_url,title,summary_mode,language,input_hash,collected_at,published_at) VALUES(:id,:source,:guid,:url,:title,'MANUAL','en',:hash,:collected,'1999-01-01')")
+            .param("id",id).param("source",source).param("guid",id.toString()).param("url","https://admin-fixture.example/articles/"+id).param("title",title).param("hash","a".repeat(64)).param("collected",java.sql.Timestamp.from(Instant.parse(collected))).update();return id;
+    }
+
     @Test @Order(98) void securityCounterCapacityIsBounded(){
         repo.db().sql("INSERT INTO auth_rate_limits(bucket,window_start,used,expires_at) SELECT 'capacity-fixture-'||n,now(),1,now()+interval '15 minutes' FROM generate_series(1,10000)n").update();
         try{assertEquals(503,assertThrows(ApiError.class,()->limits.auth("new-capacity-fixture",1,60)).statusCode());}

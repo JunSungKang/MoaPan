@@ -42,3 +42,6 @@ newspaper.css는 신문 지면·기본 폼, auth.css는 간결한 인증 컬럼,
 관리자 작업 화면은 admin.css와 administration/navigation.js가 소유한다.6개 주메뉴와 수집/주제의 하위탭은 기존 form·입력·저장 handler를 유지한 채 hidden/ARIA 선택 상태만 바꾼다. URL 해시는 정해진 화면 식별자만 사용하고 미저장 내용은 DOM 메모리에만 남긴다. 새로고침 복구·서버 설정 저장이나 추가 권한을 제공하는 기능은 아니다. 기술 점검/미리보기/수집 접수 결과는 수집주소 작업영역에서 접힘 바깥에 표시한다.
 
 기사 검토 화면은 administration/article-review.js가 목록/활성기사/방문편집기/미저장상태를 문서 메모리에서 관리한다. translation/administration.js의 선택적 저장상태 callback으로 목록 교체를 저장완료 뒤로 제한하며 기본 standalone 사용은 유지한다. API와 개인화 저장 구조는 변경하지 않는다.
+
+
+관리자 운영입력 계층: administration/article-review.js는 날짜/정렬 조건을 EditorialController→EditorialService로 보내고 서버는 고정 SQL 정렬 목록·KST 시각 경계·최대100개를 적용한다. topics.js는 공개 태그 사전·canonical 매핑의 문서 메모리 캐시와 이름 체크박스를 제공한다. topic-management.js는 이름/분야/별칭/병합, classification-management.js는 별도 자동분류 기준을 소유한다. 강제 새로고침은 진행 중 요청 뒤에 최신 사전을 재조회하며 미확인 주제를 조용히 제거하지 않는다. collection-jobs.js는 CatalogService의 최대50개 작업을 출처·시각·상태로 선택한다. UUID/version은 내부 계약 값으로만 사용하고 사람에게 입력받지 않는다. 기사/분류/주제 변경과 병합의 교착을 피하기 위해 병합의 관련 기사·설정·태그 잠금은 NOWAIT 및409 재시도를 사용한다. DB 스키마·모델 실행·인증 경계는 그대로다.

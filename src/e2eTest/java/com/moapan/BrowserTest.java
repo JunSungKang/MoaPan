@@ -512,7 +512,7 @@ class BrowserTest {
             p.waitForFunction("document.querySelector('#site-form [name=name]').value==='Site B'");
             assertEquals("",p.locator("#source-form [name=label]").inputValue());assertEquals("",p.locator("#source-form [name=endpointUrl]").inputValue());
             p.locator("#sections-tab-articles").click();p.locator("#refresh-articles").click();p.waitForSelector("#article-list form");
-            assertEquals("tag-A",p.getByLabel("수동 태그 UUID 목록").inputValue());
+            p.waitForSelector(".topic-checklist input[value=tag-A]");assertTrue(p.locator(".topic-checklist input[value=tag-A]").isChecked());
             p.getByLabel("수동 요약 (한 줄 한 항목)").fill("Changed summary");p.getByRole(com.microsoft.playwright.options.AriaRole.BUTTON,new Page.GetByRoleOptions().setName("요약·태그·공개 상태 저장").setExact(true)).click();
             p.waitForCondition(()->!writes.isEmpty());assertTrue(writes.getFirst().contains("\"tagIds\":null"));
         }
@@ -555,7 +555,7 @@ class BrowserTest {
                 r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(body));});
             var p=context.newPage();p.navigate(origin+"/admin.html");p.locator("#sections-tab-topics").click();p.locator("#refresh-classification").click();p.waitForFunction("document.querySelectorAll('#classification-topics textarea').length===2");
             assertTrue(p.locator("#classify-ai").isChecked());assertEquals("200",p.locator("#classification-topics textarea").first().getAttribute("maxlength"));
-            p.locator("#classification-topics textarea").first().fill("LLM evaluation; exclude unrelated applications");p.locator("#classification-form button[type=submit]").click();p.waitForFunction("document.querySelector('#classification-message').textContent.includes('저장했습니다')");assertEquals(1,writes.size());assertTrue(writes.getFirst().contains("LLM evaluation"));assertTrue(writes.getFirst().contains("\"version\":0"));
+            p.locator(".classification-choice:has(#classify-ai) textarea").fill("LLM evaluation; exclude unrelated applications");p.locator("#classification-form button[type=submit]").click();p.waitForFunction("document.querySelector('#classification-message').textContent.includes('저장했습니다')");assertEquals(1,writes.size());assertTrue(writes.getFirst().contains("LLM evaluation"));assertTrue(writes.getFirst().contains("\"version\":0"));
         }
     }
     @Test void advertisingAdminPreviewsAndSavesWithoutThirdPartyScripts(){

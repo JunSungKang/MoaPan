@@ -29,6 +29,7 @@ public class AdminController {
     @PostMapping("/sources/{id}/preview")Object preview(@PathVariable UUID id,Authentication a){return service.preview(id,false,actor(a));}
     @PostMapping("/sources/{id}/collect")ResponseEntity<?> collect(@PathVariable UUID id,Authentication a){return ResponseEntity.accepted().body(service.collect(id,actor(a)));}
     @GetMapping("/sources/{id}/runs")Object runs(@PathVariable UUID id){return service.runs(id);}
+    @GetMapping("/jobs")Object jobs(@RequestParam(required=false)UUID sourceId){return service.jobs(sourceId);}
     @GetMapping("/jobs/{id}")Object job(@PathVariable UUID id){return service.job(id);}
     @GetMapping("/workers")Object workers(){return service.heartbeat();}
 }
