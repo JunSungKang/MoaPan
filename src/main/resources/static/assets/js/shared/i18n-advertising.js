@@ -1,6 +1,6 @@
 export default {
   "광고 관리": "Advertising management",
-  "우측 상단 광고를 관리합니다. CPC는 클릭당 과금 방식입니다. 클릭 집계와 정산은 계약한 광고 서비스에서 확인하며 모아판은 클릭을 추적하지 않습니다.": "Manage the top-right advertisement. CPC means cost per click. Your advertising provider handles click reports and billing; MoA-PaN does not track clicks.",
+  "우측 상단 광고를 관리합니다. CPC는 클릭당 과금 방식입니다. 클릭 집계와 정산은 계약한 광고 서비스에서 확인하며 담고담고는 클릭을 추적하지 않습니다.": "Manage the top-right advertisement. CPC means cost per click. Your advertising provider handles click reports and billing; DamGoX2 does not track clicks.",
   "광고 방식": "Advertisement type",
   "직접 링크 배너": "Direct link banner",
   "애드센스 연결 정보": "AdSense connection details",

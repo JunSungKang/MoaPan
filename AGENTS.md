@@ -1,4 +1,4 @@
-# MOAPAN V1 작업 지침
+# DamGoX2 V1 작업 지침
 
 사용자 전체 명세의 REQ/FS/AC와 docs/01-management/plan.md에 따라 Sprint Delivery를 진행한다. CI/CD·GitHub Actions·정기 workflow는 최신 사용자 지시로 제외한다.
 

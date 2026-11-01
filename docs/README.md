@@ -1,4 +1,4 @@
-# MOAPAN 공식 산출물
+# DamGoX2 공식 산출물
 
 [산출물대장](01-management/deliverable-register.md)에서 문서번호·책임·경로를 확인한다. 기준선은 develop의 병합 커밋이며 작성/검토 상태와 실제 사용자 승인은 구분한다.
 

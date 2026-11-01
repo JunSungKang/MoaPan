@@ -5,7 +5,7 @@
 | 문서번호 | 산출물 | 작성 책임 | 경로 |
 |---|---|---|---|
 | MP-DOC-001 | Sprint Delivery 실행 계획 | 개발 담당 | [문서](../../docs/01-management/plan.md) |
-| MP-DOC-002 | MOAPAN 진행 상태 | 개발 담당 | [문서](../../docs/01-management/progress.md) |
+| MP-DOC-002 | DamGoX2 진행 상태 | 개발 담당 | [문서](../../docs/01-management/progress.md) |
 | MP-DOC-003 | 현재 상태 안내 | 개발 담당 | [문서](../../docs/01-management/delivery.md) |
 | MP-DOC-004 | 요구사항 | 개발 담당 | [문서](../../docs/02-analysis/requirements.md) |
 | MP-DOC-005 | 기능명세 | 개발 담당 | [문서](../../docs/02-analysis/functional-spec.md) |

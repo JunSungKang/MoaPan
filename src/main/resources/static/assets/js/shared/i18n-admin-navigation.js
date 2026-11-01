@@ -14,7 +14,7 @@ export default {
   '수집일 최신순': 'Newest collection first', '수집일 오래된순': 'Oldest collection first', '제목 가나다순': 'Title order',
   '조건으로 기사 조회': 'Find articles', '조건 초기화': 'Clear filters', '수집일': 'Collected', '수집일 미상': 'Collection time unavailable',
   '현재 목록': 'Current results', '전체 기간': 'All dates', '수집 시작일은 종료일보다 늦을 수 없습니다.': 'The start date must not follow the end date.',
-  '발행일이 아닌 모아판에 수집된 날짜를 한국 시간으로 조회합니다. 조건에 맞는 기사를 최대 100개 표시합니다.': 'Filter by the date MoA-PaN collected an article in Korea time, rather than its publication date. Up to 100 matching articles are shown.',
+  '발행일이 아닌 담고담고에 수집된 날짜를 한국 시간으로 조회합니다. 조건에 맞는 기사를 최대 100개 표시합니다.': 'Filter by the date DamGoX2 collected an article in Korea time, rather than its publication date. Up to 100 matching articles are shown.',
   '기사 주제': 'Article topics', '주제 찾기': 'Find a topic', '주제를 불러오는 중입니다.': 'Loading topics.',
   '최대 6개를 선택하세요. 변경하지 않으면 기존 주제를 유지합니다.': 'Choose up to 6 topics. Unchanged selections keep existing topics.',
   '주제를 불러오지 못했습니다. 기존 선택은 유지됩니다.': 'Could not load topics. Existing selections are preserved.',
@@ -56,7 +56,7 @@ export default {
   'API·인증 고급 연결 설정': 'Advanced API and authentication', 'RSS·Atom은 보통 비워둡니다. 공식 API의 항목 경로를 연결하거나 운영 환경에 등록된 인증 정보 이름을 지정할 때만 사용합니다. 비밀번호나 인증키 값을 입력하지 마세요.': 'Usually leave these empty for RSS or Atom. Use them only to map official API fields or reference credentials configured in the deployment. Never enter a password or key value.',
   'API 응답 항목 연결': 'API field mapping', '운영 환경의 인증 정보 이름': 'Configured credential reference',
   '애드센스 게시자 ID': 'AdSense publisher ID', '애드센스 광고 단위 ID': 'AdSense ad unit ID',
-  '두 값은 모아판의 내부 번호가 아니라 Google이 발급한 광고 연결 정보입니다. 애드센스에서 복사해 붙여 넣으세요.': 'These are advertising identifiers issued by Google, not MoA-PaN internal IDs. Copy them from AdSense.',
+  '두 값은 담고담고의 내부 번호가 아니라 Google이 발급한 광고 연결 정보입니다. 애드센스에서 복사해 붙여 넣으세요.': 'These are advertising identifiers issued by Google, not DamGoX2 internal IDs. Copy them from AdSense.',
 
   '입력 중인 내용을 유지했습니다.': 'Your current edits have been preserved.',
   '요약': 'Summary',

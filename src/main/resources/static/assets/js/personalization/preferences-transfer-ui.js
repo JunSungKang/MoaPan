@@ -25,7 +25,7 @@ export function setupTransfer(user, dictionary, onApplied) {
     const text = await exportPreferences(user.id, await loadPreferences(user.id), password.value);
     const url = URL.createObjectURL(new Blob([text],{type:'application/json'}));
     const link = document.createElement('a');
-    link.href = url; link.download = 'moapan-interests.moapan';
+    link.href = url; link.download = 'damgox2-interests.damgo';
     document.body.append(link); link.click(); link.remove();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
     message.textContent = '파일 다운로드를 요청했습니다. 파일과 비밀번호를 따로 보관하고, 다른 기기에서 같은 계정으로 로그인해 가져오세요.';
@@ -33,7 +33,7 @@ export function setupTransfer(user, dictionary, onApplied) {
   document.querySelector('#transfer-import').addEventListener('click', () => run(async () => {
     reset();
     const file = input.files[0];
-    if (!file || file.size > MAX_FILE_BYTES) throw new Error('128KB 이하의 모아판 관심사 파일을 선택해 주세요.');
+    if (!file || file.size > MAX_FILE_BYTES) throw new Error('128KB 이하의 담고담고 관심사 파일을 선택해 주세요.');
     pending = validatePreferences(canonicalize(await importPreferences(await file.text(),user.id,password.value),dictionary.redirects));
     const available = new Set(dictionary.tags.map(tag => tag.id));
     const unknown = Object.keys(pending.weights).filter(id => !available.has(id)).length;

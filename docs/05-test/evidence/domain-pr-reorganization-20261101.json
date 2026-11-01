@@ -121,7 +121,7 @@
       "title": "feat(editorial): 기사 검토·주제 정규화 경계 정리",
       "snapshot": "564f5ac92743da5ee3228b29cbcb8045f30f5e4c",
       "scope": "Article editorial/taxonomy: collected-date and ordering, focused draft-preserving review, topic dictionary/classification UI, canonical merge and translation save race.",
-      "status": "VALIDATED_FOR_REVIEW",
+      "status": "MERGED_AND_BRANCHES_REMOVED",
       "validation": {
         "checkedAt": "2026-11-01T03:16:35.092Z",
         "suites": {
@@ -153,6 +153,20 @@
         "runtimeContainersUnchanged": true,
         "sourceJarSbomGate": "PASS",
         "runtimeDeployment": "NOT_CHANGED"
+      },
+      "pullRequest": 14,
+      "url": "https://github.com/JunSungKang/MoaPan/pull/14",
+      "headSha": "9fa9146364cf4469effc0c963b7b8be930cf6969",
+      "mergeReceipt": {
+        "pr": 14,
+        "mergeCommit": "2e366dbf4127969520080b531eca5b62460e288a",
+        "mergedBy": "JunSungKang",
+        "formalReviewer": "junsung-bot[bot]",
+        "mergeMethod": "squash",
+        "verifiedHeadSha": "9fa9146364cf4469effc0c963b7b8be930cf6969",
+        "deletedRemoteBranch": "codex/domain-editorial-taxonomy-20261101",
+        "deletedRemoteTrackingBranch": null,
+        "deletedLocalBranch": "codex/domain-editorial-taxonomy-20261101"
       }
     },
     {
@@ -161,7 +175,51 @@
       "title": "feat(publication): 담고담고 브랜드·발간 표기 통일",
       "snapshot": "93eb76724f2eb9105845fe087bcd4b0900c9ba9b",
       "scope": "Publication/service identity: current DamGoX2 brand, all user-facing copy/policies/metadata, downloads/attribution, own publication maintenance evidence and final source equivalence.",
-      "status": "PLANNED"
+      "status": "VALIDATED_FOR_REVIEW",
+      "validation": {
+        "checkedAt": "2026-11-01T03:20:58.860Z",
+        "suites": {
+          "test": {
+            "tests": 154,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "integrationTest": {
+            "tests": 67,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "e2eTest": {
+            "tests": 54,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        },
+        "total": 275,
+        "htmlMessages": 0,
+        "logSha256": "1191f080f4d90d58986cbde32989d25b1b9f8755310d3d1794d22df75c0bf0dd",
+        "jarSha256": "6a19b59fceeb27473baf643f4773d624d29e5d4cc6dcbccbcc10b1bc4f5bec94",
+        "sourceCheckpoint": "93eb76724f2eb9105845fe087bcd4b0900c9ba9b",
+        "sourceComparedExactly": true,
+        "runtimeContainersUnchanged": true,
+        "sourceJarSbomGate": "PASS",
+        "runtimeDeployment": "NOT_CHANGED",
+        "originalJarSha256": "6a19b59fceeb27473baf643f4773d624d29e5d4cc6dcbccbcc10b1bc4f5bec94",
+        "finalJarMatchesOriginal": true,
+        "nonProductChanges": [
+          ".github/workflow-plans/domain-collection-operations-20261101.json",
+          ".github/workflow-plans/domain-editorial-taxonomy-20261101.json",
+          ".github/workflow-plans/domain-publication-brand-20261101.json",
+          ".github/workflow-plans/domain-shared-experience-20261101.json",
+          "docs/01-management/plan.md",
+          "docs/01-management/progress.md",
+          "docs/05-test/evidence/domain-pr-reorganization-20261101.json"
+        ],
+        "finalRepositoryEquivalence": "Exact original tracked tree except four domain contracts, management plan/progress and reorganization evidence"
+      }
     }
   ]
 }
