@@ -1,0 +1,33 @@
+{
+  "checkedAt": "2026-11-01T11:56:44.707Z",
+  "domain": "administrator-representative-interests",
+  "status": "VERIFIED_AND_LIVE_IN_COMPOSITE",
+  "focusedTests": 4,
+  "regression": {
+    "unit": 163,
+    "postgresql": 75
+  },
+  "warmRead": {
+    "sqlStatements": 1,
+    "payloadQueries": 0,
+    "probe": "stored SHA-256"
+  },
+  "checks": [
+    "immutable weights",
+    "two JVM caches",
+    "weights update",
+    "inactive tags and redirect normalization",
+    "rollback",
+    "same data hash"
+  ],
+  "memberInterestsCached": false,
+  "runtimeDeployed": true,
+  "refreshedValidation": {
+    "unit": 164,
+    "postgresql": 82,
+    "check": "PASS",
+    "jarSbomSecurity": "PASS",
+    "date": "2026-11-01T13:32:41.212Z"
+  },
+  "runtimeScope": "Combined330-pass image6542dd108cb8; service-before-merge HTTPS verified"
+}
