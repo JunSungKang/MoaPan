@@ -23,7 +23,7 @@ export function setIssueDate(items){
  const published=Number.isFinite(Date.parse(latest.publishedAt));today.dataset.issueValue=published?latest.publishedAt:latest.collectedAt;today.dataset.issueKind=published?'published':'collected';renderIssueDate();
 }
 function renderIssueDate(){if(!today?.dataset.issueValue)return;today.dateTime=today.dataset.issueValue;today.textContent=(today.dataset.issueKind==='collected'?t('수집 기준')+' · ':'')+date(today.dataset.issueValue);}
-if(today)today.textContent='';
+
 const menu=document.querySelector('#account-menu');
 let contentGeneration=0;
 window.addEventListener('moapan-clear',()=>{contentGeneration++;for(const node of document.querySelectorAll('[data-member-content]'))node.remove();});
@@ -35,12 +35,10 @@ window.addEventListener('moapan-auth-lost',()=>{guestMenu();const main=document.
 
 const searchButton=document.querySelector('#open-search');
 const languageSlot=document.querySelector('[data-language-slot]');
-if(languageSlot){languageSlot.append(languagePicker());}else if(searchButton){const tools=document.createElement('div');tools.className='header-tools';searchButton.before(tools);tools.append(languagePicker(),searchButton);}else{const header=document.querySelector('.masthead,.auth-brand');if(header)header.prepend(languagePicker());}
+if(languageSlot){languageSlot.prepend(languagePicker());}else if(searchButton){const tools=document.createElement('div');tools.className='header-tools';searchButton.before(tools);tools.append(languagePicker(),searchButton);}else{const header=document.querySelector('.masthead,.auth-brand');if(header)header.prepend(languagePicker());}
 window.addEventListener('moapan-language',()=>{renderIssueDate();renderNewsletterBrand();setPageMetadata();});
 
 const adSlot=document.querySelector('[data-ad-slot]');
 if(adSlot)viewer.then(async a=>{if(!a)return;const ticket=contentGeneration;try{const config=await request('/api/v1/advertisements');if(config?.enabled){const {renderBanner}=await import('../advertising/banner.js');if(contentGeneration===ticket)renderBanner(adSlot,config);}}catch{/* An unavailable ad must not stop the newspaper. */}});
-
-if(document.querySelector('.masthead')){const nav=el('nav',undefined,'content-menu');nav.setAttribute('aria-label',t('콘텐츠 메뉴'));for(const [title,url]of [['오늘의 지면','/index.html'],['담고담고','/newsletter.html']]){const a=url==='/newsletter.html'?newsletterElement('a','name'):el('a',title);a.href=url;if(url==='/newsletter.html'){a.dataset.auth='member';a.hidden=true;}if(location.pathname===url||(location.pathname==='/'&&url==='/index.html'))a.setAttribute('aria-current','page');nav.append(a);}document.querySelector('header')?.append(nav);}
 
 if(document.querySelector('#paper'))viewer.then(async a=>{if(!a)return;const ticket=contentGeneration;try{const rows=await request('/api/v1/newsletters');if(ticket!==contentGeneration||!rows.length)return;const section=el('section');section.dataset.memberContent='';const h=newsletterElement('h2','name');const link=el('a',rows[0].title);link.href='/newsletter.html?id='+rows[0].id;section.append(h,link,el('p',rows[0].introduction));document.querySelector('main').append(section);}catch{}});

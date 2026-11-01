@@ -49,6 +49,30 @@ class WebPerformanceTest {
         measurements.put("stage",STAGE);measurements.put("samplesPerPage",3);measurements.put("scope","Local real Spring HTTP, uncompressed assets, disposable empty PostgreSQL; cold/warm same Chromium context. No route interception, production traffic, or tracking.");
         Path directory=Path.of("build/reports/performance");Files.createDirectories(directory);Files.writeString(directory.resolve(STAGE+".json"),tools.jackson.databind.json.JsonMapper.builder().build().writerWithDefaultPrettyPrinter().writeValueAsString(measurements));
     }
+    @Test void delayedGuestNewsDoesNotMoveTheFirstViewportOrLogErrors()throws Exception{
+        var results=new ArrayList<Object>();
+        try(var playwright=Playwright.create();var browser=playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true).setChannel("chromium").setArgs(List.of("--disable-gpu")))){
+            for(int width:new int[]{390,768,1440})try(var context=browser.newContext(new Browser.NewContextOptions().setViewportSize(width,900))){
+                context.addInitScript("window.__shifts=[];new PerformanceObserver(list=>{for(const e of list.getEntries())if(!e.hadRecentInput)window.__shifts.push(e.value);}).observe({type:'layout-shift',buffered:true});");
+                context.route("**/api/v1/public/news/edition",r->{try{Thread.sleep(1200);}catch(InterruptedException e){Thread.currentThread().interrupt();throw new RuntimeException(e);}r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(BrowserTest.edition()));});
+                var page=context.newPage();var errors=new ArrayList<String>();page.onPageError(errors::add);page.onConsoleMessage(m->{if(m.type().equals("error"))errors.add(m.text());});
+                page.navigate("http://localhost:"+port+"/index.html");page.waitForSelector("#paper article");page.waitForLoadState(com.microsoft.playwright.options.LoadState.NETWORKIDLE);
+                double cls=((Number)page.evaluate("window.__shifts.reduce((a,b)=>a+b,0)")).doubleValue();assertTrue(cls<=0.02,"First viewport CLS "+width+": "+cls);assertTrue(errors.isEmpty(),errors.toString());
+                assertTrue((Boolean)page.evaluate("document.documentElement.scrollWidth<=innerWidth"));assertEquals(7,page.locator("#paper article").count());assertEquals(0,page.locator("a[href='/newsletter.html']:visible").count());
+                page.locator("#open-search").click();assertTrue(page.locator("#search-dialog").isVisible());page.keyboard().press("Escape");assertFalse(page.locator("#search-dialog").isVisible());
+                results.add(Map.of("width",width,"cls",cls,"consoleErrors",errors.size()));
+            }
+        }
+        Path out=Path.of("build/reports/performance/pagespeed-layout.json");Files.createDirectories(out.getParent());Files.writeString(out,tools.jackson.databind.json.JsonMapper.builder().build().writerWithDefaultPrettyPrinter().writeValueAsString(results));
+    }
+    @Test void enforcedTrustedTypesBlocksSinksWhileNewsletterExportStillWorks(){
+        try(var playwright=Playwright.create();var browser=playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true).setChannel("chromium").setArgs(List.of("--disable-gpu")));var context=browser.newContext()){
+            var page=context.newPage();page.navigate("http://localhost:"+port+"/index.html");ready(page,"index");
+            assertEquals(true,page.evaluate("()=>{try{new DOMParser().parseFromString('<p>blocked</p>','text/html');return false;}catch(e){return e instanceof TypeError;}}"));
+            String html=(String)page.evaluate("async data=>(await import('/assets/js/newsletter/publication-output.js')).htmlNewsletter(data,'2026-001',location.origin+'/newsletter.html')",BrowserTest.productIssue());
+            assertTrue(html.startsWith("<!doctype html>"));assertTrue(html.contains("<article>"));assertTrue(html.contains("<footer>"));assertFalse(html.contains("<script"));
+        }
+    }
     static void ready(Page p,String name){p.waitForSelector("[data-language-select]");if(name.equals("index"))p.waitForSelector("#paper > *");p.waitForLoadState(com.microsoft.playwright.options.LoadState.NETWORKIDLE);}
     static Object timing(Page p){return p.evaluate("""
         ()=>{const assets=performance.getEntriesByType('resource').filter(r=>new URL(r.name).pathname.startsWith('/assets/'));return {transferBytes:assets.reduce((n,r)=>n+r.transferSize,0),assetRequests:assets.length,jsBodyBytes:assets.filter(r=>r.name.endsWith('.js')).reduce((n,r)=>n+r.decodedBodySize,0),modules:assets.filter(r=>r.name.endsWith('.js')).map(r=>new URL(r.name).pathname),loadMs:performance.getEntriesByType('navigation')[0].loadEventEnd};}

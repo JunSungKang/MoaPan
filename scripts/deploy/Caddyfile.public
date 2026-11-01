@@ -3,6 +3,9 @@
  http_port 8081
  https_port 8443
  default_sni {$MOAPAN_PUBLIC_HOST}
+ servers {
+  protocols h1 h2
+ }
 }
 https://{$MOAPAN_PUBLIC_HOST} {
  tls {
@@ -11,11 +14,13 @@ https://{$MOAPAN_PUBLIC_HOST} {
    profile shortlived
   }
  }
- @static_assets path /assets/*
- encode @static_assets zstd gzip
+ # HTML declares its actual language; the server does not negotiate translations.
+ header -Content-Language
+ @public_documents path / /index.html /about.html /privacy.html /terms.html /robots.txt /sitemap.xml /assets/*
+ encode @public_documents zstd gzip
  @internal path /internal/* /actuator/*
  respond @internal 404
- header Strict-Transport-Security "max-age=86400"
+ header Strict-Transport-Security "max-age=31536000; includeSubDomains"
  request_body {
   max_size 1MB
  }
