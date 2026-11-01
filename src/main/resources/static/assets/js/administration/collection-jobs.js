@@ -1,5 +1,6 @@
 import {request} from '../shared/api.js';
-import {el,date} from '../shared/common.js';
+import {el} from '../shared/dom.js';
+import {date} from '../shared/format.js';
 import {t} from '../shared/i18n.js';
 
 const states={QUEUED:'대기',RUNNING:'수집 중',SUCCEEDED:'완료',FAILED:'실패',CANCELLED:'취소',NO_CHANGE:'새 자료 없음',PASSED:'점검 통과'};

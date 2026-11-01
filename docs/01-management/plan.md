@@ -240,6 +240,25 @@ main, 기존 공유 이력과 원래93eb767 snapshot을 보존한다. force push
 
 현재 검증 단계: publication-brand.
 
+
+## 36. 공통 코드·브라우저 성능 개선 Sprint
+- 방법론: 기존 승인된 Sprint Delivery. 현재 사용자 지시는 구현·검증 승인이다. 이번 PR의 develop/main 병합과 운영 배포는 별도 승인 범위다.
+- 목표: 공통 코드 재사용, 정적 리소스 재검증 캐시, 초기 전송량 및 반복 DOM 작업·할당 감소. 관찰 가능한 개선을 기존 기능·개인정보 경계를 유지하며 입증한다.
+- 허용 영역: 현재 저장소의 정적 ES Modules, Presentation 정적 리소스 설정, Caddy/Helm 설정, 관련 테스트와 정식 산출물.
+- 금지: API/기사/계정 응답 영속 캐시, 서비스워커, 개인 설정 전송, DB/의존성/모델/인증 정책 변경, CI/CD 추가.
+
+### 36.1 전수 조사·기준 측정
+11개 HTML 페이지와 전체 JS/CSS의 의존성·전송·이벤트·수명·중복을 목록화한다. 실제 Spring HTTP와 일회용 PostgreSQL, Chromium의 라우팅 가로채기 없는 캐시로 로그인·지면을 각각3회 cold/warm 측정한다. 시간값은 변동성을 공개하고 전송량·순회·할당 같은 구조적 수치와 구분한다.
+
+### 36.2 공통 기반·로딩 개선
+인증 부작용 없는 DOM/날짜 leaf 모듈을 분리하고 포맷터를 제한된 경우별로 재사용한다. 페이지별 사전을 필요한 화면에서만 적재하며 변경된 DOM 부분만 번역한다. 독립 초기 요청은 병렬화하고 동시 CSRF 조회는 공유하되 로그인 경계의 이전 토큰은 재사용하지 않는다. 기사 검토의 미저장 초안을 보호하며 깨끗한 편집기 DOM을 정리한다.
+
+### 36.3 HTTP 캐시·압축
+이름이 고정된 정적 자원은 매번 ETag로 검증하여 변경 즉시 새 파일을 받고 같으면304를 사용한다. 장기 immutable 캐시를 임의 적용하지 않는다. Caddy/외부/Helm은 정적 assets만 gzip/zstd 압축한다. API·오류·보호 HTML의 no-store와 CSRF·권한·quota를 유지한다.
+
+### 36.4 검증·납품
+전후 동일 기준 측정, 언어 왕복·원문 제외·초안·세션 경계 회귀, PostgreSQL304/캐시 격리, Caddy 실제 압축과 Helm 렌더를 확인한다. check/integrationTest/e2eTest/bootJar/sbom/securityCheck/acceptanceTest, Nu와 diff check 후 독립 현재-head 검토를 거쳐 PR로 제공한다. 성능 역행·권한 또는 데이터 경계 회귀 시 해당 변경을 수정하거나 제외하고 근거를 기록한다.
+
 ## 서버 메모리 캐시 Sprint (사용자 승인, 도메인별 PR)
 ### 기반: 제한된 읽기 캐시와 저장 해시
 Caffeine은 JVM 내부 라이브러리로 사용한다. web16MiB/worker8MiB 논리 가중치 합계·최대60분 수명·동시 miss 병합·큰 값 제외를 구현한다. 저장 시 같은 트랜잭션에서 SHA-256을 기록하고 조회는 작은 해시를 비교한다. miss는 해시와 payload를 REPEATABLE READ로 읽고 commit 뒤 캐시에 공개한다. 작업 중인 쓰기/잠금 트랜잭션은 캐시를 우회한다.

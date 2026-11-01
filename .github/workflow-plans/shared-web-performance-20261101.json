@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 4,
+  "workSlug": "shared-web-performance-20261101",
+  "flowType": "integration",
+  "branch": "codex/shared-web-performance-20261101",
+  "targetBranch": "develop",
+  "baseSha": "f19d5e539f84da72cb21a7908efd583b889a747f",
+  "mergeMethod": "squash",
+  "governance": {
+    "prAuthorLogin": "JunSungKang",
+    "assigneeLogin": "JunSungKang",
+    "reviewerLogin": "junsung-bot[bot]",
+    "requiredChecks": [],
+    "commitAuthor": {
+      "name": "jun-sung, Kang",
+      "email": "kjuns1@naver.com"
+    },
+    "coAuthors": [
+      {
+        "name": "Codex",
+        "email": "codex@openai.com"
+      },
+      {
+        "name": "junsung-bot[bot]",
+        "email": "302617028+junsung-bot[bot]@users.noreply.github.com"
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "shared-web-performance",
+      "expectedPaths": [
+        "src/main/resources/static/assets/js/**",
+        "src/main/java/com/moapan/presentation/**",
+        "src/test/java/com/moapan/presentation/**",
+        "src/integrationTest/java/com/moapan/SecurityIntegrationTest.java",
+        "src/e2eTest/java/com/moapan/**",
+        "Caddyfile",
+        "scripts/deploy/Caddyfile.public",
+        "scripts/deploy/helm/moapan/templates/config.yaml",
+        "docs/**",
+        ".github/workflow-plans/shared-web-performance-20261101.json"
+      ],
+      "forbiddenPaths": [
+        ".env",
+        ".github/workflows/**",
+        "src/main/resources/db/**",
+        "build.gradle",
+        "gradle.lockfile",
+        "Dockerfile",
+        "src/main/java/com/moapan/identity/**",
+        "src/main/java/com/moapan/access/**",
+        "src/main/java/com/moapan/ai/**",
+        "src/main/java/com/moapan/translation/**"
+      ],
+      "acceptanceCriteria": [
+        "Audit every frontend module and page dependency; measure repeatable baseline and changed result on synthetic/isolated test data. Preserve domain boundaries.",
+        "Share leaf DOM/date helpers, reuse bounded Intl formatters; load page-specific dictionaries and optional tools only where used; process only changed DOM subtrees and preserve original-content exclusions and language round trips.",
+        "Enable content ETag revalidation for public static assets and asset-only compression in Compose/public/Helm proxy config. Dynamic APIs, auth/protected HTML and errors stay no-store; no service worker, persistent news cache or interest/behavior transmission.",
+        "Maintain drafts and bound clean editor DOM; cancel/clear obsolete state, share concurrent CSRF retrieval without reviving stale tokens; preserve auth and quota behavior.",
+        "Run unit/PostgreSQL/browser/HTML/security checks and before/after measurements; disclose variability and limitations. No runtime deployment or production data changes.",
+        "Human commit/push/PR and independent current-head App review; do not merge main/develop without separate approval for this new PR."
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh --no-daemon check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest",
+        "sh scripts/test/html-check.sh",
+        "git diff --check"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/plan.md",
+          "docs/01-management/progress.md",
+          "docs/03-design/decisions.md",
+          "docs/05-test/web-performance.md"
+        ]
+      }
+    },
+    {
+      "id": "preserve-local-https-skill",
+      "expectedPaths": [
+        ".agents/skills/https-certificate/SKILL.md",
+        ".agents/skills/https-certificate/agents/openai.yaml",
+        ".agents/skills/https-certificate/references/caddy-acme.md"
+      ],
+      "forbiddenPaths": [],
+      "acceptanceCriteria": [
+        "User explicitly requested that the existing HTTPS skill not be committed. Observe these exact untracked paths only to preserve unrelated work in place. Do not edit, stage, commit, move, delete or ignore them.",
+        "Before each commit, push and PR/review operation, verify original SHA-256 and that git ls-files returns no tracked/staged path. They are not performance or server-cache deliverables."
+      ],
+      "validationCommands": [
+        "node -e 'const fs=require(\"node:fs\"),c=require(\"node:crypto\"),cp=require(\"node:child_process\");for(const x of [{\"file\":\".agents/skills/https-certificate/SKILL.md\",\"sha256\":\"47071a68b12a638b0f7c3d3290f92833e955771f854312c2bb14c0074c1b0e0f\"},{\"file\":\".agents/skills/https-certificate/agents/openai.yaml\",\"sha256\":\"7272ebe0da2378a3c3cb769f9c614870091d91d42d13e4ad87d0d6f7d6cde9e7\"},{\"file\":\".agents/skills/https-certificate/references/caddy-acme.md\",\"sha256\":\"540d923e2c305dac16280286bd91fbd23b52a20bafffaf8b51372824483b8335\"}]){if(c.createHash(\"sha256\").update(fs.readFileSync(x.file)).digest(\"hex\")!==x.sha256)throw Error(\"Preserved skill changed: \"+x.file);if(cp.execFileSync(\"git\",[\"ls-files\",\"--\",x.file],{encoding:\"utf8\"}).trim())throw Error(\"Local skill must remain untracked: \"+x.file);}'"
+      ],
+      "documentation": {
+        "rationale": "Existing local skill belongs to another user request; preservation only, excluded from commits and PR diffs."
+      }
+    }
+  ]
+}
