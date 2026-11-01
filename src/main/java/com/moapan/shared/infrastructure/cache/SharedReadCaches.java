@@ -23,6 +23,8 @@ public final class SharedReadCaches {
             @Value("${moapan.role:web}") String role) {
         this.transactions = transactions;
         divisor = role.equals("worker") ? 2 : 1;
+        org.slf4j.LoggerFactory.getLogger(SharedReadCaches.class)
+                .info("Shared read-cache logical budget: {} bytes",logicalBudgetBytes());
     }
 
     public synchronized <V> VersionedReadCache<V> create(Region region, ToIntFunction<V> weigh) {
