@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 4,
+  "workSlug": "pagespeed-desktop-20261102",
+  "flowType": "integration",
+  "branch": "codex/pagespeed-desktop-20261102",
+  "targetBranch": "develop",
+  "baseSha": "b88e94a5d881cd118b338f2f35f5005cd5fd54d0",
+  "mergeMethod": "squash",
+  "governance": {
+    "prAuthorLogin": "JunSungKang",
+    "assigneeLogin": "JunSungKang",
+    "reviewerLogin": "junsung-bot[bot]",
+    "requiredChecks": [],
+    "commitAuthor": {
+      "name": "jun-sung, Kang",
+      "email": "kjuns1@naver.com"
+    },
+    "coAuthors": [
+      {
+        "name": "Codex",
+        "email": "codex@openai.com"
+      },
+      {
+        "name": "junsung-bot[bot]",
+        "email": "302617028+junsung-bot[bot]@users.noreply.github.com"
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "pagespeed-standards-and-final-reachability",
+      "expectedPaths": [
+        ".github/workflow-plans/pagespeed-desktop-20261102.json",
+        "src/main/java/**",
+        "src/main/resources/static/**",
+        "src/test/java/**",
+        "src/integrationTest/java/**",
+        "src/e2eTest/java/**",
+        "scripts/**",
+        "docs/**",
+        "README.md",
+        "Caddyfile"
+      ],
+      "forbiddenPaths": [
+        ".env",
+        ".github/workflows/**",
+        "src/main/resources/db/migration/**",
+        "licenses/**",
+        "build.gradle",
+        "gradle.lockfile",
+        "gradle/verification-metadata.xml",
+        "Dockerfile",
+        "compose.yaml"
+      ],
+      "acceptanceCriteria": [
+        "Explicit user approval: inspect supplied mobile/desktop PSI report; fix actionable failed audits and performance/standards/SEO causes without sacrificing existing mobile experience. Retain public guest edition, authenticated account/newsletter/admin and CSRF/quota/privacy/security boundaries.",
+        "Record historical report and current live baseline, eliminate first-load layout shifts, normal guest console errors, unnecessary critical assets and document compression issues. Preserve semantic crawlable metadata and manual keyboard/contrast/responsive/print behavior; no score cloaking or security bypass.",
+        "Re-audit all Java/JS/CSS/HTML/scripts after changes. Delete only proven dead code, without source backups, archives or stashes. Preserve framework callbacks, legitimate cross-page and operational code.",
+        "Run full unit/PostgreSQL/Playwright/HTML/security/SBOM/image/truststore checks. Reflect same scanned digests in existing service without DB/model changes. Retest PSI desktop and mobile; report actual scores with measurement timestamps and limits.",
+        "Independent current-head review and App APPROVED; guarded human commit/push/PR/develop merge and exact-head three-ref cleanup. main and original local HTTPS skill untouched. No CI/CD, extra worktree, global settings or paid resources."
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh --no-daemon check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest",
+        "sh scripts/test/html-check.sh",
+        "git diff --check"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/plan.md",
+          "docs/01-management/progress.md",
+          "docs/05-test/pagespeed-desktop.md",
+          "docs/05-test/evidence/pagespeed-desktop-20261102.json"
+        ]
+      }
+    },
+    {
+      "id": "preserve-local-https-skill",
+      "expectedPaths": [
+        ".agents/skills/https-certificate/SKILL.md",
+        ".agents/skills/https-certificate/agents/openai.yaml",
+        ".agents/skills/https-certificate/references/caddy-acme.md"
+      ],
+      "forbiddenPaths": [],
+      "acceptanceCriteria": [
+        "User explicitly requested that the existing HTTPS skill not be committed. Observe these exact untracked paths only to preserve unrelated work in place. Do not edit, stage, commit, move, delete or ignore them.",
+        "Before each commit, push and PR/review operation, verify original SHA-256 and that git ls-files returns no tracked/staged path. They are not performance or server-cache deliverables."
+      ],
+      "validationCommands": [
+        "node -e 'const fs=require(\"node:fs\"),c=require(\"node:crypto\"),cp=require(\"node:child_process\");for(const x of [{\"file\":\".agents/skills/https-certificate/SKILL.md\",\"sha256\":\"47071a68b12a638b0f7c3d3290f92833e955771f854312c2bb14c0074c1b0e0f\"},{\"file\":\".agents/skills/https-certificate/agents/openai.yaml\",\"sha256\":\"7272ebe0da2378a3c3cb769f9c614870091d91d42d13e4ad87d0d6f7d6cde9e7\"},{\"file\":\".agents/skills/https-certificate/references/caddy-acme.md\",\"sha256\":\"540d923e2c305dac16280286bd91fbd23b52a20bafffaf8b51372824483b8335\"}]){if(c.createHash(\"sha256\").update(fs.readFileSync(x.file)).digest(\"hex\")!==x.sha256)throw Error(\"Preserved skill changed: \"+x.file);if(cp.execFileSync(\"git\",[\"ls-files\",\"--\",x.file],{encoding:\"utf8\"}).trim())throw Error(\"Local skill must remain untracked: \"+x.file);}'"
+      ],
+      "documentation": {
+        "rationale": "Existing local skill belongs to another user request; preservation only, excluded from commits and PR diffs."
+      }
+    }
+  ]
+}

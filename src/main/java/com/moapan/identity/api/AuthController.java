@@ -56,6 +56,11 @@ public class AuthController {
         });
     }
     @PostMapping("/api/v1/auth/logout") void logout(HttpServletRequest request){if(request.getSession(false)!=null)request.getSession(false).invalidate();SecurityContextHolder.clearContext();}
+    /** A normal guest is not an authentication error. Never creates an anonymous session. */
+    @GetMapping("/api/v1/auth/session") org.springframework.http.ResponseEntity<View> session(Authentication auth){
+        if(auth==null||!auth.isAuthenticated()||auth instanceof AnonymousAuthenticationToken)return org.springframework.http.ResponseEntity.noContent().build();
+        return org.springframework.http.ResponseEntity.ok(view(current(auth)));
+    }
     @GetMapping("/api/v1/account") View account(Authentication auth){return view(current(auth));}
     @PatchMapping("/api/v1/account/password") void password(Authentication auth,@Valid @RequestBody Change change,HttpServletRequest q){
         passwordLength(change.newPassword());Account user=current(auth);limits.auth("password:"+user.id,10,900);
