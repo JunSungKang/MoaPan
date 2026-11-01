@@ -1,0 +1,33 @@
+{
+  "checkedAt": "2026-11-01T12:05:57.424Z",
+  "domain": "advertising",
+  "status": "VERIFIED_AND_LIVE_IN_COMPOSITE",
+  "focusedTests": 4,
+  "regression": {
+    "unit": 163,
+    "postgresql": 75
+  },
+  "warmRead": {
+    "sqlStatements": 1,
+    "payloadQueries": 0,
+    "probe": "public-display SHA-256"
+  },
+  "checks": [
+    "public-only immutable DTO",
+    "two JVM caches",
+    "disable immediate",
+    "private publisher/slot edits excluded",
+    "fresh admin reads",
+    "rollback"
+  ],
+  "sqlRoundTripReductionClaimed": false,
+  "runtimeDeployed": true,
+  "refreshedValidation": {
+    "unit": 164,
+    "postgresql": 86,
+    "check": "PASS",
+    "jarSbomSecurity": "PASS",
+    "date": "2026-11-01T13:35:41.155Z"
+  },
+  "runtimeScope": "Combined330-pass image6542dd108cb8; service-before-merge HTTPS verified"
+}

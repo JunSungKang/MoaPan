@@ -18,10 +18,12 @@ public class AdvertisingSettings {
         @NotNull @Size(max=32) String publisherId,@NotNull @Size(max=20) String slotId){}
     public record Display(boolean enabled,String title,String description,String targetUrl,String imagePath){}
     private final JdbcClient db;
-    public AdvertisingSettings(JdbcClient db){this.db=db;}
+    private final com.moapan.shared.infrastructure.cache.VersionedReadCache<Display> cache;
+    public AdvertisingSettings(JdbcClient db,com.moapan.shared.infrastructure.cache.SharedReadCaches caches){this.db=db;cache=caches.create(com.moapan.shared.infrastructure.cache.SharedReadCaches.Region.ADVERTISEMENT,s->256+2*(s.title().length()+s.description().length()+s.targetUrl().length()+s.imagePath().length()));}
     private Settings current(){return db.sql("SELECT * FROM advertising_settings WHERE singleton").query((r,n)->new Settings(r.getLong("version"),r.getBoolean("enabled"),Provider.valueOf(r.getString("provider")),r.getString("title"),r.getString("description"),r.getString("target_url"),r.getString("image_path"),r.getString("publisher_id"),r.getString("slot_id"))).single();}
     @PreAuthorize("hasRole('ADMIN')") public Settings read(){return current();}
-    @PreAuthorize("isAuthenticated()") public Display display(){var s=current();return s.enabled()&&s.provider()==Provider.BANNER?new Display(true,s.title(),s.description(),s.targetUrl(),s.imagePath()):new Display(false,"","","","");}
+    @PreAuthorize("isAuthenticated()") public Display display(){return cache.read("public-advertisement",()->db.sql("SELECT fingerprint FROM read_cache_fingerprints WHERE domain='advertising' AND subject='00000000-0000-0000-0000-000000000000'").query(String.class).optional().orElse(null),this::displayCurrent);}
+    private Display displayCurrent(){return db.sql("SELECT enabled,provider,title,description,target_url,image_path FROM advertising_settings WHERE singleton").query((r,n)->r.getBoolean("enabled")&&r.getString("provider").equals("BANNER")?new Display(true,r.getString("title"),r.getString("description"),r.getString("target_url"),r.getString("image_path")):new Display(false,"","","","")).single();}
     @Transactional @PreAuthorize("hasRole('ADMIN')")
     public Settings update(Settings input,UUID actor){
         if(!input.targetUrl().isBlank()){
