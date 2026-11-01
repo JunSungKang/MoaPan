@@ -1,5 +1,6 @@
 import {t} from '../shared/i18n.js';
-import {el,date} from '../shared/common.js';
+import {el} from '../shared/dom.js';
+import {date} from '../shared/format.js';
 export function blankDossier(weekStart){const now=new Date(),day=new Date(now.getTime()+9*3600000);const monday=new Date(Date.UTC(day.getUTCFullYear(),day.getUTCMonth(),day.getUTCDate()-((day.getUTCDay()+6)%7)));const week=weekStart||monday.toISOString().slice(0,10),end=new Date(week+'T00:00:00+09:00').getTime()+7*86400000;return {weekStart:week,cutoff:new Date(Math.min(now.getTime(),end-1)).toISOString(),articleIds:[],forecasts:[],rightsConfirmed:false,editorialReviewed:false,correctionNote:''};}
 export function researchEditor(onChange){
  let state=blankDossier(),evidence=[],expectedWeek=state.weekStart;

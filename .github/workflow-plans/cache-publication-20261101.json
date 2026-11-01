@@ -4,7 +4,7 @@
   "flowType": "integration",
   "branch": "codex/cache-publication-20261101",
   "targetBranch": "develop",
-  "baseSha": "f19d5e539f84da72cb21a7908efd583b889a747f",
+  "baseSha": "d074b3dd90e365f54dfa5eb38dff6045fe817f29",
   "mergeMethod": "squash",
   "governance": {
     "prAuthorLogin": "JunSungKang",
@@ -113,6 +113,30 @@
       ],
       "documentation": {
         "rationale": "Existing local skill belongs to another user request; preservation only, excluded from commits and PR diffs."
+      }
+    },
+    {
+      "id": "cache-schema-release-alignment",
+      "expectedPaths": [
+        "scripts/deploy/helm/moapan/values.yaml",
+        "scripts/deploy/helm/moapan/README.md",
+        "scripts/test/helm-check.sh"
+      ],
+      "forbiddenPaths": [
+        ".env",
+        ".github/workflows/**"
+      ],
+      "acceptanceCriteria": [
+        "Align Helm wait-schema default to latest cache FlywayV22 so a new app cannot pass schema wait against obsoleteV16. Enforce latest migration alignment in existing Helm render check. No Kubernetes cluster operations."
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh --no-daemon securityCheck",
+        "git diff --check"
+      ],
+      "documentation": {
+        "paths": [
+          "scripts/deploy/helm/moapan/README.md"
+        ]
       }
     }
   ]

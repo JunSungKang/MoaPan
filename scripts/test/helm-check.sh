@@ -28,6 +28,14 @@ chart=scripts/deploy/helm/moapan
 node --input-type=module - "$work/rendered.yaml" <<'JSEND'
 import fs from "node:fs";import assert from "node:assert/strict";
 const docs=fs.readFileSync(process.argv[2],"utf8").split(/\n---/);
+const latest=Math.max(...fs.readdirSync("src/main/resources/db/migration").map(name=>Number(name.match(/^V(\d+)__/)?.[1]||0)));
+const configured=fs.readFileSync("scripts/deploy/helm/moapan/values.yaml","utf8").match(/^migrationVersion:\s*"(\d+)"/m)?.[1];
+assert.equal(configured,String(latest),"Helm must wait for the latest Flyway schema before starting the application");
+for(const component of ["web","worker"]){
+ const deployment=docs.find(d=>d.includes("kind: Deployment")&&d.includes("name: "+component+"\n"));
+ assert(deployment?.includes("WHERE version='"+latest+"' AND success"),component+" must wait for the latest schema");
+}
+console.log("Helm latest Flyway schema wait passed: V"+latest);
 for(const model of ["translator","classifier"]){
  const deployment=docs.find(d=>d.includes("kind: Deployment")&&d.includes("name: "+model+"\n"));
  const download=docs.find(d=>d.includes("kind: Job")&&d.includes(model+"-download-"));

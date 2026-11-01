@@ -1,7 +1,7 @@
 {
   "checkedAt": "2026-11-01T12:36:57.312Z",
   "domain": "publication",
-  "status": "CHECK_AND_POSTGRESQL_PASS_FINAL_COMPOSITE_SECURITY_PENDING",
+  "status": "VERIFIED_AND_LIVE_IN_COMPOSITE",
   "focusedTests": 7,
   "regression": {
     "test": 163,
@@ -30,8 +30,29 @@
     "workerTotalLogicalBytes": 8388608
   },
   "currentProductionManuscriptBytesObserved": 210787,
-  "runtimeDeployed": false,
+  "runtimeDeployed": true,
   "notes": [
     "Existing Spring Session cleanup was interrupted during test context shutdown; test assertions passed. No production DB restart or shutdown was performed."
-  ]
+  ],
+  "refreshedValidation": {
+    "unit": 164,
+    "postgresql": 105,
+    "check": "PASS",
+    "jarSbomSecurity": "PASS",
+    "date": "2026-11-01T13:43:00.971Z"
+  },
+  "runtimeScope": "Combined330-pass image6542dd108cb8; service-before-merge HTTPS verified",
+  "helmSchemaRegression": {
+    "before": {
+      "status": "FAIL",
+      "configured": 16,
+      "latest": 22
+    },
+    "after": {
+      "status": "PASS",
+      "configured": 22,
+      "webAndWorkerWaitForLatest": true
+    },
+    "clusterDeployed": false
+  }
 }
