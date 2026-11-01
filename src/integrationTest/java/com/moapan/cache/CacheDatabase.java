@@ -34,5 +34,8 @@ final class CacheDatabase implements AutoCloseable {
     }
     int readsContaining(String sql){return counts.entrySet().stream().filter(e->e.getKey().startsWith("select ")&&e.getKey().contains(sql.toLowerCase(Locale.ROOT))).mapToInt(e->e.getValue().get()).sum();}
     void reset(){counts.clear();}
+    String jdbcUrl(){return pg.getJdbcUrl();}
+    String username(){return pg.getUsername();}
+    String password(){return pg.getPassword();}
     public void close(){pg.stop();}
 }

@@ -79,3 +79,5 @@
 - shared/infrastructure/cache/SharedReadCaches: 도메인별 고정 region 예산 배분·중복 할당 방지.
 - V17__read_cache_fingerprints.sql: 공개 읽기 모델의 저장 해시 및 작성 트랜잭션 함수.
 - VersionedReadCacheTest/ReadCacheIntegrationTest: TTL/용량/동시성/롤백/실제DB재시작. 도메인 API 어댑터는 후속 PR이며 현재 연결하지 않았다.
+
+서버 캐시 도메인 프로그램:classification.application.TagDictionary(불변 태그 사전), TopicCatalog(snapshot 캐시), edition.application.EditionReadModels(후보ID/요청 카드/출처), RepresentativeInterests(운영 공통 기본값), advertising.application.AdvertisingSettings(표시 projection), newsletter.PublicationReadModels(발간 원고/목록). 기존 Controller→Service 호출에서 바로 사용한다. BrowserReadCacheHttpTest와 각 도메인 CacheIntegrationTest, cache-service-smoke.mjs가 실제 연결을 검증한다. V17~22가 저장 해시와 trigger를 제공한다.

@@ -24,3 +24,5 @@ identity(계정), access(인증/제한), catalog(사이트/출처 관리), colle
 newsletter/domain/PublicationResearch는프레임워크없는주간/기준시각·근거·전망·검토·정정판정정책이다. application/PublicationEvidence는PostgreSQL메타데이터조회·source/article잠금어댑터다. NewsletterService는원고/근거snapshot·version·발간권한을조합한다. 정책검사는기계적으로범위와필수값을검사하며의미정확성/법적권리보증은아니다.
 subscription/domain/EntitlementPolicy는혜택과시작/만료만판정한다. application/EntitlementProvider port와ContentAccess가현재인증UUID의혜택을확인한다. infrastructure/PreviewEntitlements는현재모든회원에게무료혜택을제공하며미지원paid설정으로시작하지않는다. 운영ADMIN역할이상품혜택을우회하는분기를두지않았다. 결제/조직DB와의연동은추후provider구현으로교체한다.
 정적 newsletter 모듈은 research-editor(편집근거), reader-tools(회원출력), publication-output(DOM 안전한 HTML·출처·업무텍스트)로 분리했다. 제품 재평가는 서비스 코드에 포함하지 않는다.
+
+서버 캐시는 해당 도메인의 불변 공통 read model로 한정한다. 분류는 TagDictionary/TopicCatalog, 지면은 RepresentativeInterests/EditionReadModels, 광고는 AdvertisingSettings, 발간은 PublicationReadModels가 소유한다. 인프라는 SharedReadCaches/VersionedReadCache를 재사용한다. 권한/거래/동의·개인화/검색 데이터는 경계 밖이고 writer 트랜잭션은 캐시를 우회한다. 도메인별 PR과 독립 회귀는 [캐시 검증서](../05-test/server-cache.md)에 연결한다.

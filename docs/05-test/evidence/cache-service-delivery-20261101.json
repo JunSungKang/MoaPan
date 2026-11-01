@@ -1,0 +1,292 @@
+{
+  "checkedAt": "2026-11-01T13:25:51.474Z",
+  "tests": {
+    "unit": 164,
+    "postgresql": 107,
+    "e2e": 59,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "html": {
+    "messages": 0
+  },
+  "security": {
+    "completedAt": "2026-11-01T13:19:47Z",
+    "db": {
+      "Version": 2,
+      "NextUpdate": "2026-11-01T18:53:10.861587125Z",
+      "UpdatedAt": "2026-10-31T18:53:10.861587496Z",
+      "DownloadedAt": "2026-10-31T22:08:51.77085Z"
+    },
+    "newSuppressions": 0,
+    "existingPolicyExceptions": "Prior exact JOSE backport and OpenPGP code-absence evidence retained. Password policy S07 remains USER_POLICY, not marked fixed.",
+    "finalCompletedAt": "2026-11-01T13:49:27Z",
+    "finalBuilderRawFindings": 0
+  },
+  "runtime": {
+    "applicationImage": "sha256:6542dd108cb892fabd214a39b304680e5f5f1e7e0625ee499f6452286627646d",
+    "proxyImage": "sha256:a0103b28767b1122ef5a20af33076b7dd296b7da9b95837998297e42f2955300",
+    "builderImage": "sha256:613c25b98d65522480ed0192acffcf933de118b9d73593c33cc6530acd0896c8",
+    "jarSha256": "113f46dcf6054f4fc9d12b368ecbdfe23894750f5e8d1d7446b7d555062397a3",
+    "webAndWorkerJarMatch": true,
+    "webLogicalBudgetBytes": 16777216,
+    "workerLogicalBudgetBytes": 8388608,
+    "schema": 22,
+    "dbAndModelImagesUnchanged": true,
+    "finalBuilderImage": "sha256:613c25b98d65522480ed0192acffcf933de118b9d73593c33cc6530acd0896c8",
+    "originalBuilderImage": "sha256:a23bbc01c4ce6069bd945814838cde879564d92a123e6a5ea83a2b010696cf8b"
+  },
+  "data": {
+    "articles": 300,
+    "accounts": 2,
+    "publications": 1,
+    "identifiersAggregateHashMatched": true,
+    "encryptedBackupAndIsolatedRestore": "PASS",
+    "restoredActiveAccounts": 0,
+    "restoredSessions": 0
+  },
+  "https": {
+    "checkedAt": "2026-11-01T13:22:48.126Z",
+    "checks": [
+      "public-tags",
+      "public-representative-defaults",
+      "public-edition",
+      "ordinary-member-admin-forbidden",
+      "classification-settings",
+      "public-source-catalog",
+      "public-advertisement",
+      "authenticated-edition",
+      "publication-catalog",
+      "published-manuscript",
+      "static-shared-module-etag-304",
+      "live-cached-models-observed-in-web-jvm"
+    ],
+    "timingsMs": {
+      "public-tags": [
+        23.82,
+        8.48
+      ],
+      "public-representative-defaults": [
+        17.66,
+        6.33
+      ],
+      "public-edition": [
+        174.79,
+        57.82
+      ],
+      "classification-settings": [
+        52.14,
+        10.35
+      ],
+      "public-source-catalog": [
+        11.4,
+        6.68
+      ],
+      "public-advertisement": [
+        10.78,
+        7.74
+      ],
+      "authenticated-edition": [
+        47.91,
+        22.86
+      ],
+      "publication-catalog": [
+        21.45,
+        9.07
+      ],
+      "published-manuscript": [
+        57.93,
+        12.69
+      ]
+    },
+    "syntheticAccountRemoved": true,
+    "liveCacheClasses": [
+      {
+        "class": "com.moapan.shared.infrastructure.cache.VersionedReadCache$Entry",
+        "instances": 9,
+        "shallowBytes": 144
+      },
+      {
+        "class": "com.moapan.advertising.application.AdvertisingSettings$Display",
+        "instances": 1,
+        "shallowBytes": 32
+      },
+      {
+        "class": "com.moapan.classification.domain.TopicTaxonomy$Snapshot",
+        "instances": 1,
+        "shallowBytes": 24
+      },
+      {
+        "class": "com.moapan.edition.application.EditionReadModels$Slice",
+        "instances": 1,
+        "shallowBytes": 24
+      },
+      {
+        "class": "com.moapan.edition.application.RepresentativeInterests$Settings",
+        "instances": 1,
+        "shallowBytes": 16
+      },
+      {
+        "class": "com.moapan.newsletter.PublicationReadModels$Detail",
+        "instances": 1,
+        "shallowBytes": 16
+      }
+    ],
+    "heapScope": "Live class counts and shallow sizes only; not retained graph size or cache hit-rate measurement"
+  },
+  "aiPolicy": {
+    "comparedClasses": 32,
+    "changed": 0
+  },
+  "review": {
+    "independentComposite": "No blocking findings",
+    "formalDomainHeads": "All seven source PR heads approved and merged; evidence PR review follows"
+  },
+  "limits": [
+    "Logical cache weights are not measured retained JVM heap. Observed full-process memory web475.3MiB/worker386.8MiB includes all application memory.",
+    "HTTP timings are one cold/warm pair per endpoint, not a statistically controlled benchmark.",
+    "The proxy raw scan retains GO-2026-5932 UNKNOWN; existing exact code-absence evidence passes the unchanged gate.",
+    "No claim to prevent unknown vulnerabilities; S07 remains19/20 policy checklist.",
+    "Existing approved public IP checked over HTTPS from this Mac; no new independent cellular measurement this run."
+  ],
+  "reports": {
+    "source.json": "9f9874a3c0fbc2ac63c4f841ec6532598986382115e8d7b40239cfc75d1e5e2b",
+    "jar.json": "a38a6168ca03a63edeac6fea820c7e9247f1aa713d1dcdffd0687098136d99cd",
+    "sbom.json": "4c742782096f29d466c58853aac7c6aa5018c2a9fa05ffbaa0579eb51901d460",
+    "helm.json": "59fd2998dc0487eb4322ff499ad9d904c2116b36dba690ff04bdf4352da89537",
+    "image-6542dd108cb892fabd214a39b304680e5f5f1e7e0625ee499f6452286627646d.json": "b76350ded751a57a1273bd8bcc401676960d9c3f0a9c33a1e172325fae58c882",
+    "image-a0103b28767b1122ef5a20af33076b7dd296b7da9b95837998297e42f2955300.json": "9fa1ba6fb7f9442b1d957551c1e4db00571195687292d66c2b3922fc8f522b55",
+    "image-613c25b98d65522480ed0192acffcf933de118b9d73593c33cc6530acd0896c8.json": "79f40b4eb5f57c6a43413c259ef900bb549d444da66ac45a05179b8d1b1ab9ea"
+  },
+  "sourceRevision": "0abc6f8edd407385b88a9408ca85e091756f18ec",
+  "sourceComparison": {
+    "applicationStaticAndProxyFiles": 150,
+    "differentFiles": 0
+  },
+  "helmSchemaRegression": {
+    "test": "Helm default wait-schema must require latest migration",
+    "before": {
+      "status": "FAIL",
+      "configured": 16,
+      "latest": 22
+    },
+    "after": {
+      "status": "PASS",
+      "configured": 22,
+      "webAndWorkerWaitForLatest": true
+    }
+  },
+  "pullRequests": [
+    {
+      "baseRefName": "develop",
+      "headRefName": "codex/shared-web-performance-20261101",
+      "headRefOid": "9e680057b347443083c402ff7b11cf333e1c9fd3",
+      "mergeCommit": {
+        "oid": "93b32e2b0bbc57126dd926c942a21b5183ccc9a9"
+      },
+      "number": 16,
+      "state": "MERGED",
+      "branchCleanup": "remote/local/tracking absent verified",
+      "review": "Independent APPROVE and App current-head APPROVED before merge"
+    },
+    {
+      "baseRefName": "develop",
+      "headRefName": "codex/server-cache-foundation-20261101",
+      "headRefOid": "74ad3a09f24a375797a9c946c6c2319d66391706",
+      "mergeCommit": {
+        "oid": "7f4c99a495605e094b5198e9b87626818eb306a5"
+      },
+      "number": 17,
+      "state": "MERGED",
+      "branchCleanup": "remote/local/tracking absent verified",
+      "review": "Independent APPROVE and App current-head APPROVED before merge"
+    },
+    {
+      "baseRefName": "develop",
+      "headRefName": "codex/cache-taxonomy-20261101",
+      "headRefOid": "75d071c9e96c0f12f61ec41a0f1e003545a62c77",
+      "mergeCommit": {
+        "oid": "aa336e65e8a95853b34409d52947f91941e971a0"
+      },
+      "number": 18,
+      "state": "MERGED",
+      "branchCleanup": "remote/local/tracking absent verified",
+      "review": "Independent APPROVE and App current-head APPROVED before merge"
+    },
+    {
+      "baseRefName": "develop",
+      "headRefName": "codex/cache-interests-20261101",
+      "headRefOid": "0dc469b9e1183d66b331472ba1044461177275d9",
+      "mergeCommit": {
+        "oid": "521dcb525162cbc785997c8f25f62aab216de52b"
+      },
+      "number": 19,
+      "state": "MERGED",
+      "branchCleanup": "remote/local/tracking absent verified",
+      "review": "Independent APPROVE and App current-head APPROVED before merge"
+    },
+    {
+      "baseRefName": "develop",
+      "headRefName": "codex/cache-advertising-20261101",
+      "headRefOid": "73f5c5d6503e5e6581ed6f88fb9364b4fbb86c7b",
+      "mergeCommit": {
+        "oid": "c2ba607b2273f1faedc079efdce8b3199f36d384"
+      },
+      "number": 20,
+      "state": "MERGED",
+      "branchCleanup": "remote/local/tracking absent verified",
+      "review": "Independent APPROVE and App current-head APPROVED before merge"
+    },
+    {
+      "baseRefName": "develop",
+      "headRefName": "codex/cache-edition-20261101",
+      "headRefOid": "2a2a6ecfcceffe1d42eaf235d019095b948b7143",
+      "mergeCommit": {
+        "oid": "d074b3dd90e365f54dfa5eb38dff6045fe817f29"
+      },
+      "number": 21,
+      "state": "MERGED",
+      "branchCleanup": "remote/local/tracking absent verified",
+      "review": "Independent APPROVE and App current-head APPROVED before merge"
+    },
+    {
+      "baseRefName": "develop",
+      "headRefName": "codex/cache-publication-20261101",
+      "headRefOid": "207261149b11f358bb6da2cd733279d9639e4a0b",
+      "mergeCommit": {
+        "oid": "0abc6f8edd407385b88a9408ca85e091756f18ec"
+      },
+      "number": 22,
+      "state": "MERGED",
+      "branchCleanup": "remote/local/tracking absent verified",
+      "review": "Independent APPROVE and App current-head APPROVED before merge"
+    }
+  ],
+  "validationHistory": {
+    "htmlNewWorktree": "First attempt NOT_RUN because clean worktree lacked validator. Linked existing verified workspace validator, checksum verified, final Nu0.",
+    "preExistingShutdownWarnings": "Some baseline Spring test fixtures close their DB before context shutdown, producing Hikari shutdown warnings. No failure/error/skip in final suites; not a production-cache failure."
+  },
+  "finalVerifiedAt": "2026-11-01T13:51:26.808Z",
+  "finalTests": {
+    "test": {
+      "tests": 164,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "integrationTest": {
+      "tests": 107,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "e2eTest": {
+      "tests": 59,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "rawArtifacts": "Workspace .local/server-cache-live-20261101/final-artifacts (reports/test-results), not published"
+}
