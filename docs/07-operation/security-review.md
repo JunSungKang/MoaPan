@@ -205,3 +205,8 @@ Helm 합성렌더구성검사: HIGH0/CRITICAL0/MEDIUM13/LOW2. KSV-01010은SOURCE
 명명된 기사/수집관리4개 Java와 정적화면을 변경했다. 고정SQL정렬·날짜바인딩·활성태그 검사·ADMIN/CSRF 및 관련기사/분류/태그 NOWAIT 잠금409를 PG 회귀로 검증했다. 내부 ID는 서버생성/API 값으로 유지하고 사람이 입력하지 않는다. 새 권한·원문영속·회원프로필/추적·모델/의존성·DB마이그레이션은 추가하지 않았다.
 
 현재 앱 sha256:5ad3538359a78b7744d26f49c0d878081f29d3d660daa181c211e0036dacd373 / 빌드 sha256:06fbe5006c8e0e5d00a01f4e7f26681aa636e5b953e2f642046cdc6bd65eb735를 실제 검사했고 원본 이미지 보고서상 취약점·secret 발견0이다. JAR/SBOM/source gate,24시간내DB동기화 및 web/worker 실행JAR 대조는 [이번 증빙](../05-test/evidence/admin-usability-20261101.json)을 따른다. 앞선 앱이미지 기록을 대체하며 source의 JOSE 백포트·2026-11-07만료·OpenPGP 부재근거/S07 사용자정책은 유지한다. 원래20항목은19/20 그대로이며 이 기능변경으로 모두완료라고 주장하지 않는다.
+
+
+### 담고담고(DamGoX2) 명명 후 현재 산출물
+
+현재앱 sha256:ef8e07a5671fb70e1d05f9cb4d2ade803108e4c0728327fc2b9cfacf029a76ee, 빌드 sha256:7e8e3ec394d3731eaa28e776895fa3fda9be16de30c019e79bc0eb302b391057는원본이미지보고서상취약점·secret0이며최종소스/JAR/SBOMgate도재통과했다. Spring표시명·수집User-Agent·정적브랜드/문서와운영자체발간물표기만변경했다. 개인정보/권한/세션·모델/의존성/DB스키마변경없음. 운영원고유지보수는독립사전검토·잠금·버전·감사·보존/rollback검증을적용했다. [최신증빙](../05-test/evidence/damgox2-brand-20261101.json)이앞선앱이미지기록을대체한다. 기존source백포트근거/2026-11-07만료·사용자비밀번호정책·고정19/20및미공개취약점한계는그대로다.

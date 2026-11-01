@@ -57,7 +57,7 @@ public class SafeFetch {
                 var client=HttpClients.custom().setConnectionManager(connection).disableRedirectHandling().disableAutomaticRetries().disableContentCompression().setDefaultRequestConfig(RequestConfig.custom().setResponseTimeout(Timeout.ofSeconds(10)).setConnectionRequestTimeout(Timeout.ofSeconds(3)).build()).build()){
                 URI current=endpoint;
                 for(int redirects=0;redirects<=3;redirects++){
-                    HttpGet get=new HttpGet(current);get.setHeader("Accept-Encoding","identity");get.setHeader("User-Agent","MOAPAN/1.0 (+news-feed-reader)");get.setHeader("Accept","application/rss+xml,application/atom+xml,application/json,application/xml,text/xml");
+                    HttpGet get=new HttpGet(current);get.setHeader("Accept-Encoding","identity");get.setHeader("User-Agent","DamGoX2/1.0 (+news-feed-reader)");get.setHeader("Accept","application/rss+xml,application/atom+xml,application/json,application/xml,text/xml");
                     if(source.get("etag")!=null)get.setHeader("If-None-Match",source.get("etag").toString());if(source.get("last_modified")!=null)get.setHeader("If-Modified-Since",source.get("last_modified").toString());
                     String ref=(String)source.get("secret_ref");if(ref!=null){String secret=System.getenv(ref);if(secret==null||secret.contains("\r")||secret.contains("\n"))throw new ApiError(503,"source_secret_missing");get.setHeader("Authorization","Bearer "+secret);}
                     var response=client.execute(get,r->{

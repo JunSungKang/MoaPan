@@ -40,7 +40,11 @@
         "src/main/java/com/moapan/article/application/EditorialService.java",
         "src/main/java/com/moapan/catalog/api/AdminController.java",
         "src/main/java/com/moapan/catalog/application/CatalogService.java",
-        "src/integrationTest/**"
+        "src/integrationTest/**",
+        "src/test/**",
+        "src/main/resources/application.properties",
+        "src/main/java/com/moapan/collection/infrastructure/SafeFetch.java",
+        "AGENTS.md"
       ],
       "forbiddenPaths": [
         ".env",
@@ -54,7 +58,6 @@
         "scripts/classification/**",
         "src/main/java/com/moapan/identity/**",
         "src/main/java/com/moapan/access/**",
-        "src/main/java/com/moapan/collection/**",
         "src/main/java/com/moapan/ai/**",
         "src/main/java/com/moapan/classification/**",
         "src/main/java/com/moapan/translation/**"
@@ -68,7 +71,11 @@
         "Guarded human commit/push/PR and independent currenthead App review; do not merge main or develop without task-specific merge authorization",
         "User followup: split admin into six sections and nested collection/topics tabs; show one work area at a time, preserve unsaved DOM fields, support keyboard and safe hash navigation, retain ADMIN/CSRF/version/API contracts.",
         "User followup: article review shows one article at a time with strong title/border,previous/next and title picker; lazily cache editor DOM and preserve summary/tag/translation drafts across navigation; guard list refresh during saves and confirm discarding drafts. Retain existing article/translation APIs and auth.",
-        "User followup: server-side collected-date inclusive Asia/Seoul range filtering before LIMIT100, strict sort allowlist and deterministic order; admin tag/job named selectors, server-generated optional tag slug, explicit auto-topic/catalog instructions, audit/remove all opaque-ID manual entry across11pages; preserve drafts, active/canonical tags, ADMIN/CSRF/no raw input persistence. Only four named Java admin classes may change; DB schema/security/models unchanged."
+        "User followup: server-side collected-date inclusive Asia/Seoul range filtering before LIMIT100, strict sort allowlist and deterministic order; admin tag/job named selectors, server-generated optional tag slug, explicit auto-topic/catalog instructions, audit/remove all opaque-ID manual entry across11pages; preserve drafts, active/canonical tags, ADMIN/CSRF/no raw input persistence. Only four named Java admin classes may change; DB schema/security/models unchanged.",
+        "Latest user correction supersedes newsletter-only rename: replace all current service branding with 담고담고(DamGoX2), meaning 여러 소식을 담고 펼치는 판. Cover all11pages/staticHTML/metadata/i18n/terms/privacy/navigation/editorial/reuse/download filenames/favicon/current docs, Spring app display name and feed User-Agent. Preserve stable internal package/project IDs, account/browser storage/session/import contracts, repository URL, historical hash evidence, article/manuscript DB data, auth/models/dependencies/CI-CD. The two named application.properties and SafeFetch.java additions permit only brand labels. No develop/main merge.",
+        "Latest service-wide rename also authorizes targeted transactional replacement of old brand text in the single owned newsletter draft/published/dossier after read-only discovery. Retain issue/revision/publication times/image/reference URLs and research facts, increment editor version, audit maintenance action; no article/user/schema changes and no external source-text rewriting. Temporary maintenance SQL is workspace-local, independently checked and removed after verified execution.",
+        "Owned publication illustration also contains the former wordmark. Re-render its unchanged research diagram from a temporary vector source with current wordmark; replace only the exact known original PNG in the single owned draft/publication. Verify PNG1200x1180 and size limit, preserve all source-reference URLs and other fields, inspect diagram text visually and independently, retain old/new SHA evidence and remove temporary content files.",
+        "Latest English spelling is DamGoX2, superseding all earlier English wordmark forms. Apply across current service text/metadata/copy/source attribution/file names/diagram and maintain the same verified boundaries and own-publication maintenance checks."
       ],
       "validationCommands": [
         "sh scripts/build/gradle-local.sh --no-daemon check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest",

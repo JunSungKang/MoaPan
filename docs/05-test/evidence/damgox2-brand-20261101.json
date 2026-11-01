@@ -1,0 +1,595 @@
+{
+  "checkedAt": "2026-11-01T01:16:13.396Z",
+  "service": {
+    "name": "담고담고",
+    "english": "DamGoX2",
+    "meaning": "여러 소식을 담고 펼치는 판"
+  },
+  "scope": [
+    "All11static pages, metadata, menus, Korean/English UI, terms/privacy/republishing copy",
+    "Newsletter archive/detail/editor/preview/bylines and copied attribution",
+    "Export filenames, D favicon, Spring application display name and feed User-Agent",
+    "Current documentation renamed; historical hash evidence and existing technical identifiers kept intact"
+  ],
+  "tests": {
+    "suites": {
+      "test": {
+        "tests": 154,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "integrationTest": {
+        "tests": 67,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "e2eTest": {
+        "tests": 54,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "total": 275,
+    "latestUiCommand": "sh scripts/build/gradle-local.sh --no-daemon check e2eTest bootJar sbom securityCheck",
+    "latestPgCommand": "sh scripts/build/gradle-local.sh --no-daemon integrationTest",
+    "uiLogSha256": "2e4b211a39596bb7c170f7be4d43a357c18cd2c4429e95aa8f662fb89692e6b5",
+    "pgLogSha256": "8b9fe7707fd7199a3a9b4a47a3c877ccf67bc0a40147b90f92da8f956b374448",
+    "newTests": 0,
+    "assertions": "Existing brand/title/attribution assertions updated to the requested spelling; no checks removed."
+  },
+  "ui": {
+    "widths": [
+      390,
+      768,
+      1440
+    ],
+    "languages": [
+      "ko",
+      "en"
+    ],
+    "allPageStates": 72,
+    "adminStates": 54,
+    "syntheticOnly": true,
+    "visualInspection": [
+      "ko-index-1440",
+      "en-login-390",
+      "ko-newsletter-390",
+      "en-index-390"
+    ],
+    "legacyMatchScope": "Previous visible service spellings in current static pages/modules and current documentation; internal storage/session/import/package identifiers excluded.",
+    "legacyVisibleBrandOccurrences": 0
+  },
+  "html": {
+    "pages": 11,
+    "version": "26.10.12 (0a70d65)",
+    "messages": []
+  },
+  "maintenance": {
+    "authorized": "Latest user requested service-wide replacement including existing owned publication labels.",
+    "before": {
+      "draftsWithOldBrand": 1,
+      "publicationsWithOldBrand": 1,
+      "articles": 300,
+      "users": 2,
+      "newsletters": 1
+    },
+    "after": {
+      "draftsWithOldBrand": 0,
+      "publicationsWithOldBrand": 0,
+      "articles": 300,
+      "users": 2,
+      "newsletters": 1,
+      "publishedIllustrationSha256": "a441b05700595067edbd304a2df92d3e68d6124496a58991a81051b10d33f1f7"
+    },
+    "transactions": 2,
+    "rowsPerTransaction": 1,
+    "editorVersionIncrements": 2,
+    "publicationsDeleted": 0,
+    "originalIllustrationSha256": "c85ee9c00e5437cb1a66b995b79540735a6f6ea6e4d8a8303ba107d84e56e2ff",
+    "finalIllustrationSha256": "a441b05700595067edbd304a2df92d3e68d6124496a58991a81051b10d33f1f7",
+    "illustration": {
+      "method": "Owned research diagram re-rendered from a temporary code-native vector source, current wordmark; same research wording, numbers, stages and conditions.",
+      "width": 1200,
+      "height": 1180,
+      "bytes": 145067,
+      "independentVisualComparison": "APPROVE; typography/spacing may differ, research content retained."
+    },
+    "preserved": [
+      "issue number",
+      "first publication time",
+      "latest publication time",
+      "publication revision",
+      "distribution",
+      "reference URLs",
+      "research facts",
+      "all300 articles",
+      "both accounts"
+    ],
+    "safety": [
+      "same newsletter advisory/row lock",
+      "single known target and image",
+      "version conflict rejection",
+      "active administrator maintenance audit",
+      "validation failure rollback"
+    ],
+    "sqlSha256": [
+      "5b67c0e4cb5107b5081efaf80053eff7bbaeb2a21d0386024a8e29232220b30d",
+      "99e49de101de42016aa86bc33768c2b3f0a79585d2193607c33b18452a574766"
+    ],
+    "logSha256": [
+      "1a9a0acae8cc7348a621ee59b2e076e75a335ec18971fe27547ebf54bb611ed3",
+      "f9ed9be639202f3a649ed41b8f32dbdb15adf1e8888a171340de0c2ca67f1f6c"
+    ],
+    "contentRetention": "No raw source content or full manuscript stored in Git evidence. Temporary illustration/code/SQL files removed after review."
+  },
+  "security": {
+    "images": [
+      {
+        "tag": "moapan-damgox2-candidate:20261101",
+        "id": "sha256:ef8e07a5671fb70e1d05f9cb4d2ade803108e4c0728327fc2b9cfacf029a76ee",
+        "createdAt": "2026-11-01T10:14:36.563032+09:00",
+        "reportSha256": "fd60929e8979fe60cd99e36426aa1a6db09afd0b30c967005b97e9f914201941",
+        "vulnerabilities": 0,
+        "secrets": 0
+      },
+      {
+        "tag": "moapan-damgox2-build:20261101",
+        "id": "sha256:7e8e3ec394d3731eaa28e776895fa3fda9be16de30c019e79bc0eb302b391057",
+        "createdAt": "2026-11-01T10:14:41.808325+09:00",
+        "reportSha256": "408139ed2d76f40de584f2435622ce20a2cfe4dfd01d2845408eb302ef43535e",
+        "vulnerabilities": 0,
+        "secrets": 0
+      }
+    ],
+    "artifacts": {
+      "source": {
+        "reportSha256": "c2e35c21a0006886582ac5c009e7310354538ecc0015293bfdd56610cf91cfbe",
+        "createdAt": "2026-11-01T10:14:09.530132+09:00",
+        "findings": [
+          {
+            "id": "GO-2026-5932",
+            "severity": "UNKNOWN",
+            "package": "golang.org/x/crypto",
+            "version": "v0.57.0"
+          },
+          {
+            "id": "CVE-2026-116587",
+            "severity": "HIGH",
+            "package": "github.com/go-jose/go-jose/v3",
+            "version": "v3.0.5"
+          },
+          {
+            "id": "CVE-2026-116585",
+            "severity": "MEDIUM",
+            "package": "github.com/go-jose/go-jose/v3",
+            "version": "v3.0.5"
+          },
+          {
+            "id": "CVE-2026-116586",
+            "severity": "MEDIUM",
+            "package": "github.com/go-jose/go-jose/v3",
+            "version": "v3.0.5"
+          },
+          {
+            "id": "GO-2026-5932",
+            "severity": "UNKNOWN",
+            "package": "golang.org/x/crypto",
+            "version": "v0.58.0"
+          }
+        ],
+        "secrets": 0
+      },
+      "jar": {
+        "reportSha256": "16543435c56c952547c32f8a76fe8df39562a9fd21019a57861f8d49d5f8b9e9",
+        "createdAt": "2026-11-01T10:14:10.903536+09:00",
+        "findings": [],
+        "secrets": 0
+      },
+      "sbom": {
+        "reportSha256": "13018c0e8f42bf610d49d9311e12f0ba172b90bed825279c93760fc1ba580396",
+        "createdAt": "2026-11-01T10:14:09.62101+09:00",
+        "findings": [],
+        "secrets": 0
+      }
+    },
+    "database": {
+      "Version": 2,
+      "NextUpdate": "2026-11-01T18:53:10.861587125Z",
+      "UpdatedAt": "2026-10-31T18:53:10.861587496Z",
+      "DownloadedAt": "2026-10-31T22:08:51.77085Z"
+    },
+    "sbomSha256": "1ad74a0dc59e1c37447a0d4496fcbe280394be7ddb7a0328ac5655b21c962b63",
+    "retained": "Existing source JOSE backport proof/2026-11-07 expiry and user-maintained password policy unchanged; fixed checklist remains19/20. No unknown-vulnerability immunity claim."
+  },
+  "runtime": {
+    "url": "https://175.195.62.165/",
+    "services": [
+      {
+        "service": "web",
+        "image": "sha256:ef8e07a5671fb70e1d05f9cb4d2ade803108e4c0728327fc2b9cfacf029a76ee",
+        "state": "running",
+        "health": "healthy"
+      },
+      {
+        "service": "worker",
+        "image": "sha256:ef8e07a5671fb70e1d05f9cb4d2ade803108e4c0728327fc2b9cfacf029a76ee",
+        "state": "running",
+        "health": null
+      },
+      {
+        "service": "db",
+        "image": "sha256:8ee8af1f67452558bb3bcdf475b43ec4c1124f6df9957f7a9d79a08f5e292a0d",
+        "state": "running",
+        "health": "healthy"
+      },
+      {
+        "service": "proxy",
+        "image": "sha256:e4b645df85f6e31cae7eabadaf6a9482e0d199fa1444f57a22e6c7198640bad6",
+        "state": "running",
+        "health": "healthy"
+      },
+      {
+        "service": "translator",
+        "image": "sha256:8e0b496277410200aeff2334844c93fd9a9544f73ad7218d0df50f6a6e17efce",
+        "state": "running",
+        "health": "healthy"
+      },
+      {
+        "service": "classifier",
+        "image": "sha256:8a9b1fbd783fda8305655c4a0939df1faa52c29ebac220050ffe1c45d42a3ca5",
+        "state": "running",
+        "health": "healthy"
+      }
+    ],
+    "checkedAt": "2026-11-01T01:15:37.424Z",
+    "assets": [
+      {
+        "path": "/about.html",
+        "sha256": "c8fbd17dc38608b9c623a61dc65d0e515aee8be0cddb940ac079692d096d4b7b",
+        "status": 200
+      },
+      {
+        "path": "/assets/images/favicon.svg",
+        "sha256": "7d9cd4752a47515ea6607a5592ec71f11c6ac63355709e8e6ae902735c4d58f2",
+        "status": 200
+      },
+      {
+        "path": "/assets/js/newsletter/read.js",
+        "sha256": "22519ee3cdf0a37ff0ef3a6ef4e6881d2aa387206123aa8f0cd8b3a592c86fcc",
+        "status": 200
+      },
+      {
+        "path": "/assets/js/newsletter/reader-tools.js",
+        "sha256": "9cdc340caa8474cb24165ed8c4d31bdbda4cf22683f978c3e1ae4b22ef92df33",
+        "status": 200
+      },
+      {
+        "path": "/assets/js/personalization/preferences-transfer-ui.js",
+        "sha256": "c8be24b37b832957ebcd351ea8ea59aff64b228909f922e4f1c4662dc5620317",
+        "status": 200
+      },
+      {
+        "path": "/assets/js/shared/common.js",
+        "sha256": "c899a8a0a8d68ef93026241355980e93efdca4b976327a467eb56463b6defa27",
+        "status": 200
+      },
+      {
+        "path": "/assets/js/shared/config.js",
+        "sha256": "4cfe7a13b6008445b7ca349b63d0403791e90f5c7a69329e5446cb578a3e3ccd",
+        "status": 200
+      },
+      {
+        "path": "/assets/js/shared/i18n-admin-navigation.js",
+        "sha256": "7a32a7da8bf2e4eac61da93038f67f8f061a3907af69e60b87119f49e1d42385",
+        "status": 200
+      },
+      {
+        "path": "/assets/js/shared/i18n-advertising.js",
+        "sha256": "d4a12630d7ce96548621ed2a6c9097248e66e422d55f8d274a4f25b91c699335",
+        "status": 200
+      },
+      {
+        "path": "/assets/js/shared/i18n-en.js",
+        "sha256": "e606da85655532050d2e29f6c1d8ff7ea3fe6789e1e09d4907befb14a833450d",
+        "status": 200
+      },
+      {
+        "path": "/assets/js/shared/i18n-pages.js",
+        "sha256": "58053ef021558e67b91c2b260ca5dc8b32fcd91d4fc7f85aa80edf0e3ae523d3",
+        "status": 200
+      },
+      {
+        "path": "/assets/js/shared/i18n-product.js",
+        "sha256": "dfad14d4445de6aa296d849fbfed6e56e7bc4d8554afc4672ce914bb40caabe1",
+        "status": 200
+      },
+      {
+        "path": "/assets/js/shared/i18n-status.js",
+        "sha256": "e5b6efab5c75744bf766cf444c746aba9dbeb3de43babf2b5399b432758a84f6",
+        "status": 200
+      },
+      {
+        "path": "/assets/js/shared/i18n.js",
+        "sha256": "1ec7ef10606c7f4562abb46b6fb5027108fd6ad3179db12f0dc51967f06a9719",
+        "status": 200
+      },
+      {
+        "path": "/index.html",
+        "sha256": "84e7dd16d0f533556a67f9f0db594170140f81671368c46979271cad477fdd01",
+        "status": 200
+      },
+      {
+        "path": "/login.html",
+        "sha256": "f315d52fdf8adcdf72eaea183b2fb022fc2737794e4de7c2f1a036e8fe9e79da",
+        "status": 200
+      },
+      {
+        "path": "/privacy.html",
+        "sha256": "9a431e357e8590b0c4baba7c58de3a4ffacf355b8a4bc46a9b019329bf175694",
+        "status": 200
+      },
+      {
+        "path": "/signup.html",
+        "sha256": "fb42710d7154d522ce5bc2892051b60d798de30916e5bc47e3cfa82484b3c962",
+        "status": 200
+      },
+      {
+        "path": "/terms.html",
+        "sha256": "bb629a82101c5c826a13493b43780e65e3097497a34ca505eff234bfada184be",
+        "status": 200
+      }
+    ],
+    "jarSha256": "6a19b59fceeb27473baf643f4773d624d29e5d4cc6dcbccbcc10b1bc4f5bec94",
+    "runtimeJars": [
+      {
+        "service": "web",
+        "sha256": "6a19b59fceeb27473baf643f4773d624d29e5d4cc6dcbccbcc10b1bc4f5bec94"
+      },
+      {
+        "service": "worker",
+        "sha256": "6a19b59fceeb27473baf643f4773d624d29e5d4cc6dcbccbcc10b1bc4f5bec94"
+      }
+    ],
+    "productionAccountLoginOrCreation": false,
+    "httpAudit": {
+      "checkedAt": "2026-11-01T01:15:35.832Z",
+      "origin": "https://175.195.62.165",
+      "pages": [
+        {
+          "path": "/index.html",
+          "publicPage": true,
+          "status": 200,
+          "contentType": "text/html",
+          "location": null,
+          "canonicalHeader": "<https://175.195.62.165/index.html>; rel=\"canonical\"",
+          "robotsHeader": null,
+          "contentLanguage": null,
+          "metadata": {
+            "title": "오늘의 지면 | 담고담고 DamGoX2",
+            "description": "담고담고는 보안, 인공지능, RAG, 데이터베이스와 검색 기술 소식을 모아 관심사에 맞게 읽는 뉴스 서비스입니다.",
+            "robots": "index, follow",
+            "lang": "ko",
+            "viewport": "width=device-width,initial-scale=1",
+            "canonical": "/index.html",
+            "staticArticleCount": 0
+          }
+        },
+        {
+          "path": "/about.html",
+          "publicPage": true,
+          "status": 200,
+          "contentType": "text/html",
+          "location": null,
+          "canonicalHeader": "<https://175.195.62.165/about.html>; rel=\"canonical\"",
+          "robotsHeader": null,
+          "contentLanguage": null,
+          "metadata": {
+            "title": "담고담고 소개·출처 | 담고담고 DamGoX2",
+            "description": "담고담고의 뉴스 수집 출처, 서비스 이용 방법과 브라우저에 저장하는 관심사 설정을 안내합니다.",
+            "robots": "index, follow",
+            "lang": "ko",
+            "viewport": "width=device-width,initial-scale=1",
+            "canonical": "/about.html",
+            "staticArticleCount": 0
+          }
+        },
+        {
+          "path": "/privacy.html",
+          "publicPage": true,
+          "status": 200,
+          "contentType": "text/html",
+          "location": null,
+          "canonicalHeader": "<https://175.195.62.165/privacy.html>; rel=\"canonical\"",
+          "robotsHeader": null,
+          "contentLanguage": null,
+          "metadata": {
+            "title": "개인정보 처리방침 | 담고담고 DamGoX2",
+            "description": "담고담고가 처리하는 계정 정보와 보안 정보, 브라우저 관심사 보관 및 삭제 방법을 안내합니다.",
+            "robots": "index, follow",
+            "lang": "ko",
+            "viewport": "width=device-width,initial-scale=1",
+            "canonical": "/privacy.html",
+            "staticArticleCount": 0
+          }
+        },
+        {
+          "path": "/terms.html",
+          "publicPage": true,
+          "status": 200,
+          "contentType": "text/html",
+          "location": null,
+          "canonicalHeader": "<https://175.195.62.165/terms.html>; rel=\"canonical\"",
+          "robotsHeader": null,
+          "contentLanguage": null,
+          "metadata": {
+            "title": "이용약관 | 담고담고 DamGoX2",
+            "description": "담고담고 서비스 이용 조건과 계정, 콘텐츠 및 원문 링크 이용에 관한 약관입니다.",
+            "robots": "index, follow",
+            "lang": "ko",
+            "viewport": "width=device-width,initial-scale=1",
+            "canonical": "/terms.html",
+            "staticArticleCount": 0
+          }
+        },
+        {
+          "path": "/login.html",
+          "publicPage": false,
+          "status": 200,
+          "contentType": "text/html",
+          "location": null,
+          "canonicalHeader": null,
+          "robotsHeader": "noindex, follow",
+          "contentLanguage": null,
+          "metadata": {
+            "title": "로그인 | 담고담고 DamGoX2",
+            "description": "담고담고 계정으로 로그인합니다.",
+            "robots": "noindex, follow",
+            "lang": "ko",
+            "viewport": "width=device-width,initial-scale=1",
+            "canonical": null,
+            "staticArticleCount": 0
+          }
+        },
+        {
+          "path": "/signup.html",
+          "publicPage": false,
+          "status": 200,
+          "contentType": "text/html",
+          "location": null,
+          "canonicalHeader": null,
+          "robotsHeader": "noindex, follow",
+          "contentLanguage": null,
+          "metadata": {
+            "title": "회원가입 | 담고담고 DamGoX2",
+            "description": "아이디와 비밀번호로 담고담고 계정을 만듭니다.",
+            "robots": "noindex, follow",
+            "lang": "ko",
+            "viewport": "width=device-width,initial-scale=1",
+            "canonical": null,
+            "staticArticleCount": 0
+          }
+        },
+        {
+          "path": "/settings.html",
+          "publicPage": false,
+          "status": 302,
+          "contentType": null,
+          "location": "/login.html",
+          "canonicalHeader": null,
+          "robotsHeader": "noindex, follow",
+          "contentLanguage": null,
+          "metadata": null
+        },
+        {
+          "path": "/account.html",
+          "publicPage": false,
+          "status": 302,
+          "contentType": null,
+          "location": "/login.html",
+          "canonicalHeader": null,
+          "robotsHeader": "noindex, follow",
+          "contentLanguage": null,
+          "metadata": null
+        },
+        {
+          "path": "/admin.html",
+          "publicPage": false,
+          "status": 302,
+          "contentType": null,
+          "location": "/login.html",
+          "canonicalHeader": null,
+          "robotsHeader": "noindex, follow",
+          "contentLanguage": null,
+          "metadata": null
+        },
+        {
+          "path": "/newsletter.html",
+          "publicPage": false,
+          "status": 302,
+          "contentType": null,
+          "location": "/login.html",
+          "canonicalHeader": null,
+          "robotsHeader": "noindex, follow",
+          "contentLanguage": null,
+          "metadata": null
+        },
+        {
+          "path": "/newsletter-editor.html",
+          "publicPage": false,
+          "status": 302,
+          "contentType": null,
+          "location": "/login.html",
+          "canonicalHeader": null,
+          "robotsHeader": "noindex, follow",
+          "contentLanguage": null,
+          "metadata": null
+        }
+      ],
+      "checks": {
+        "robots": {
+          "status": 200,
+          "sitemapReference": "https://175.195.62.165/sitemap.xml"
+        },
+        "sitemap": {
+          "status": 200,
+          "urls": [
+            "https://175.195.62.165/index.html",
+            "https://175.195.62.165/about.html",
+            "https://175.195.62.165/privacy.html",
+            "https://175.195.62.165/terms.html"
+          ]
+        },
+        "publicEdition": {
+          "status": 200,
+          "returnedItems": 42,
+          "candidateCount": 225
+        },
+        "notFound": {
+          "status": 404,
+          "robotsHeader": "noindex, follow"
+        },
+        "/api/v1/newsletters": {
+          "status": 401,
+          "robotsHeader": "noindex, follow"
+        },
+        "/api/v1/admin/sites": {
+          "status": 401,
+          "robotsHeader": "noindex, follow"
+        }
+      },
+      "limitations": [
+        "Actual Google/Naver/Bing indexing and rank require portal evidence and remain UNKNOWN.",
+        "User-agent imitation and public search samples do not prove access from a real engine crawler."
+      ],
+      "root": {
+        "status": 200,
+        "contentType": "text/html",
+        "location": null,
+        "canonicalHeader": "<https://175.195.62.165/index.html>; rel=\"canonical\"",
+        "robotsHeader": null,
+        "contentLanguage": "und",
+        "metadata": {
+          "title": "오늘의 지면 | 담고담고 DamGoX2",
+          "description": "담고담고는 보안, 인공지능, RAG, 데이터베이스와 검색 기술 소식을 모아 관심사에 맞게 읽는 뉴스 서비스입니다.",
+          "robots": "index, follow",
+          "lang": "ko",
+          "viewport": "width=device-width,initial-scale=1",
+          "canonical": "/index.html",
+          "staticArticleCount": 0
+        }
+      },
+      "absoluteHtmlCanonicals": {
+        "passed": 0,
+        "total": 4
+      }
+    }
+  },
+  "delivery": {
+    "pullRequest": "https://github.com/JunSungKang/MoaPan/pull/11",
+    "merge": "NOT_AUTHORIZED_FOR_THIS_TASK",
+    "review": "Check current-head PR approval; this record does not approve future changes."
+  }
+}
