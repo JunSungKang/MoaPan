@@ -15,12 +15,17 @@ public class TopicCatalog {
     public record Entry(UUID tagId,String definition){}
     public record Edit(long version,List<Entry> topics){}
     private final JdbcClient db;
-    public TopicCatalog(JdbcClient db){this.db=db;}
+    private final com.moapan.shared.infrastructure.cache.VersionedReadCache<TopicTaxonomy.Snapshot> cache;
+    public TopicCatalog(JdbcClient db,com.moapan.shared.infrastructure.cache.SharedReadCaches caches){this.db=db;cache=caches.create(com.moapan.shared.infrastructure.cache.SharedReadCaches.Region.CLASSIFICATION,s->256+s.topics().stream().mapToInt(t->256+2*(t.slug().length()+t.name().length()+t.definition().length())).sum());}
     public TopicTaxonomy.Snapshot snapshot(boolean lock){
+        return lock?load(true):cache.read("classification",this::fingerprint,()->load(false));
+    }
+    private String fingerprint(){var stamp=db.sql("SELECT fingerprint FROM read_cache_fingerprints WHERE domain='taxonomy' AND subject='00000000-0000-0000-0000-000000000000'").query(String.class).optional().orElse(null);return stamp==null?null:stamp+":"+com.moapan.classification.infrastructure.LocalClassifier.POLICY;}
+    private TopicTaxonomy.Snapshot load(boolean lock){
         long version=db.sql("SELECT version FROM classification_config WHERE id=1"+(lock?" FOR SHARE":"")).query(Long.class).single();
         var topics=db.sql("SELECT t.id,t.slug,t.name,c.definition FROM classification_topics c JOIN tags t ON t.id=c.tag_id WHERE t.active ORDER BY t.id"+(lock?" FOR SHARE OF t,c":"")).query((r,n)->new TopicTaxonomy.Topic(r.getObject("id",UUID.class),r.getString("slug"),r.getString("name"),r.getString("definition"))).list();
         String hash=ArticleFingerprint.contentHash(com.moapan.classification.infrastructure.LocalClassifier.POLICY+":"+version,topics.stream().map(t->t.id()+"|"+t.slug()+"|"+t.name()+"|"+t.definition()).toList());
-        return new TopicTaxonomy.Snapshot(version,topics,hash);
+        return new TopicTaxonomy.Snapshot(version,List.copyOf(topics),hash);
     }
     @Transactional @PreAuthorize("hasRole('ADMIN')")
     public void edit(Edit input,UUID actor){
