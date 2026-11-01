@@ -21,7 +21,7 @@ CI/CD는 사용자 명시 제외. PASS는 아래 실제 시험 범위의 통과�
 |AC-13|02,08|기술 점검·미리보기|PASS|SecurityIntegrationTest preview 미저장·승인 분리|
 |AC-14|02,09|동시 운영|PASS|Worker/CatalogService; 늦은 결과·version409·job 중복|
 |AC-15|02,09|보관·권리 철회|PASS|SecurityIntegrationTest; NewsService 조회 시 권리 재검사|
-|AC-16|01,06|실제2출처|PASS|local-smoke.mjs; NASA/NOAA 각각10기사; SOURCES.md|
+|AC-16|01,06|실제2출처|PASS|과거 NASA/NOAA 각10기사 증빙(실행기 폐기); 현재 출처 상태는 sources.md 및 MP-DOC-034 참조|
 |AC-17|01,10|수집 장애·복구|PASS|fixture429/503/timeout 재시도·중복·변경; 실제 SIGKILL lease 복구|
 |AC-18|01,08|SSRF·XXE·크기|PASS|ContentTest 고정 DNS resolver·redirect·주소·XXE·응답크기|
 |AC-19|05,06|요약·태그|PASS|ContentTest; SecurityIntegrationTest 수동 잠금·태그 병합|

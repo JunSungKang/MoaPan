@@ -10,7 +10,7 @@
 
 공개 접속 중지: `docker compose -f compose.yaml -f scripts/deploy/compose-public.yaml stop proxy`. 볼륨 삭제는 필요 없다. 다시 로컬 HTTP로 전환하려면 PUBLIC_BASE_URL=http://localhost:8080, COOKIE_SECURE=false 후 기본 Compose로 재생성한다.
 
-검증: `COMPOSE_FILE=compose.yaml:scripts/deploy/compose-public.yaml MOAPAN_SMOKE_BASE_URL=https://175.195.62.165 node scripts/test/local-smoke.mjs`. 합성 계정만 생성하며 완료 후 삭제한다. TLS 검증 우회는 하지 않는다.
+현재 읽기 전용 검증: `MOAPAN_AUDIT_BASE_URL=https://175.195.62.165 node scripts/test/site-http-audit.mjs`. 과거 NASA/NOAA 등록형 실행기는 MP-DOC-034에서 폐기했다. 출처 구성을 바꾸는 실제 수집 시험은 승인된 격리 환경에서만 실행한다. TLS 검증 우회는 하지 않는다.
 
 ```sh
 cp .env.example .env

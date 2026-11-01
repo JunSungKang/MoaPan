@@ -1,3 +1,4 @@
+/* Shared primitives and domain rules; responsive/print conditions are intentional. */
 .admin-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
 .admin-heading .page-heading { flex: 1; margin-bottom: .5rem; }
 .admin-newsletter-link { font-size: .875rem; white-space: nowrap; }
@@ -5,14 +6,9 @@
 .admin-tabs { display: grid; gap: 0; border-bottom: 1px solid var(--rule); }
 .admin-tabs-primary { grid-template-columns: repeat(6, minmax(0, 1fr)); margin: 1.25rem 0 0; }
 .admin-tabs-secondary { display: flex; flex-wrap: wrap; margin: 0 0 1.5rem; }
-.admin-tabs [role=tab] {
-  min-height: 48px; padding: .75rem .8rem; border: 0; border-bottom: 3px solid transparent;
-  font-size: .875rem; line-height: 1.5; background: transparent; color: var(--muted);
-}
+.admin-tabs [role=tab] { min-height: 48px; padding: .75rem .8rem; border: 0; border-bottom: 3px solid transparent; font-size: .875rem; line-height: 1.5; background: transparent; color: var(--muted); }
 .admin-tabs [role=tab]:hover { color: var(--ink); background: #ffffff30; }
-.admin-tabs [role=tab][aria-selected=true] {
-  color: var(--ink); font-weight: 700; border-bottom-color: var(--ink); background: #ffffff40;
-}
+.admin-tabs [role=tab][aria-selected=true] { color: var(--ink); font-weight: 700; border-bottom-color: var(--ink); background: #ffffff40; }
 .admin-workspace { min-width: 0; padding: 1.5rem 0 2rem; }
 .admin-workspace > h2, .admin-workspace > section > h2 { margin: 0 0 1.25rem; font-size: 1.4rem; border: 0; }
 .admin-subsection > h3 { margin-top: 0; font-size: 1.05rem; }
@@ -82,8 +78,7 @@
 .source-advanced { grid-column: 1 / -1; border-block: 1px solid var(--rule); padding: .75rem 0; }
 .source-advanced summary { cursor: pointer; font-weight: 600; }
 .source-advanced label { margin-block: .75rem; }
-.source-advanced p { font-size: .8125rem; }
-#article-review-applied { font-size: .8125rem; }
+.source-advanced p, #article-review-applied { font-size: .8125rem; }
 #article-list[inert] { opacity: .65; }
 @media (max-width: 900px) {
   .admin-tabs-primary { grid-template-columns: repeat(3, minmax(0, 1fr)); }

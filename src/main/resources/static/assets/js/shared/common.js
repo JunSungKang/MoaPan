@@ -33,9 +33,8 @@ viewer.then(a=>{if(!a){guestMenu();if(document.body.hasAttribute('data-requires-
 export async function requireAccount(role){const a=await viewer;if(!a){location.replace('/login.html');throw new Error('로그인이 필요합니다.');}if(role&&a.role!==role){location.replace('/index.html');throw new Error('관리자 권한이 필요합니다.');}const main=document.querySelector('[data-protected]');if(main)main.hidden=false;return a;}
 window.addEventListener('moapan-auth-lost',()=>{guestMenu();const main=document.querySelector('[data-protected]');if(main)main.hidden=true;window.dispatchEvent(new Event('moapan-clear'));if(document.body.hasAttribute('data-requires-login'))location.replace('/login.html');});
 
-const searchButton=document.querySelector('#open-search');
 const languageSlot=document.querySelector('[data-language-slot]');
-if(languageSlot){languageSlot.prepend(languagePicker());}else if(searchButton){const tools=document.createElement('div');tools.className='header-tools';searchButton.before(tools);tools.append(languagePicker(),searchButton);}else{const header=document.querySelector('.masthead,.auth-brand');if(header)header.prepend(languagePicker());}
+if(languageSlot){languageSlot.prepend(languagePicker());}else{const header=document.querySelector('.masthead,.auth-brand');if(header)header.prepend(languagePicker());}
 window.addEventListener('moapan-language',()=>{renderIssueDate();renderNewsletterBrand();setPageMetadata();});
 
 const adSlot=document.querySelector('[data-ad-slot]');
