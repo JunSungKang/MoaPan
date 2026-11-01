@@ -1,7 +1,6 @@
 package com.moapan.catalog.application;
 import com.moapan.catalog.infrastructure.CatalogRepository;
 import com.moapan.shared.api.ApiError;
-import com.moapan.bootstrap.AdminCommand;
 import com.moapan.collection.infrastructure.SafeFetch;
 import com.moapan.access.infrastructure.Limits;
 import jakarta.validation.constraints.*;

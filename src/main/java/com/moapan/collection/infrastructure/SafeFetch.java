@@ -6,7 +6,6 @@ import java.net.*;
 import java.io.*;
 import java.time.*;
 import java.util.*;
-import java.nio.charset.StandardCharsets;
 import org.springframework.stereotype.Component;
 import org.apache.hc.client5.http.*;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
@@ -63,14 +62,13 @@ public class SafeFetch {
                     var response=client.execute(get,r->{
                         int status=r.getCode();String location=r.getFirstHeader("Location")==null?null:r.getFirstHeader("Location").getValue();String retry=r.getFirstHeader("Retry-After")==null?null:r.getFirstHeader("Retry-After").getValue();
                         if(status==429||status>=500)throw new FetchFailure(status,retry);
-                        if(status==304)return new Raw(status,null,null,null,null,location);
-                        if(status>=300&&status<400)return new Raw(status,null,null,null,null,location);
+                        if(status==304)return new Raw(status,null,null,null,location);
+                        if(status>=300&&status<400)return new Raw(status,null,null,null,location);
                         if(status!=200)throw new ApiError(502,"source_http_rejected");
                         if(r.getFirstHeader("Content-Encoding")!=null&&!r.getFirstHeader("Content-Encoding").getValue().equalsIgnoreCase("identity"))throw new ApiError(502,"compressed_response_rejected");
                         if(r.getEntity()==null||r.getEntity().getContentLength()>2_097_152)throw new ApiError(502,"source_too_large");
                         byte[] bytes;try(InputStream in=r.getEntity().getContent()){bytes=in.readNBytes(2_097_153);}if(bytes.length>2_097_152)throw new ApiError(502,"source_too_large");
-                        String content=r.getFirstHeader("Content-Type")==null?"":r.getFirstHeader("Content-Type").getValue();
-                        return new Raw(status,bytes,content,header(r,"ETag",500),header(r,"Last-Modified",100),location);
+                        return new Raw(status,bytes,header(r,"ETag",500),header(r,"Last-Modified",100),location);
                     });
                     if(response.status==304)return new Result(List.of(),null,null,true);
                     if(response.location!=null&&response.status>=300&&response.status<400){current=redirect(current,response.location,host);continue;}
@@ -81,7 +79,7 @@ public class SafeFetch {
             }
         }catch(ApiError|FetchFailure e){throw e;}catch(java.io.IOException e){throw new FetchFailure(0,null);}catch(Exception e){throw new ApiError(502,"source_fetch_or_parse_failed");}
     }
-    private record Raw(int status,byte[]bytes,String contentType,String etag,String modified,String location){}
+    private record Raw(int status,byte[]bytes,String etag,String modified,String location){}
     private static String header(org.apache.hc.core5.http.ClassicHttpResponse r,String name,int max){var h=r.getFirstHeader(name);if(h==null)return null;String v=h.getValue();return v.length()<=max&&!v.contains("\r")&&!v.contains("\n")?v:null;}
     public static class FetchFailure extends RuntimeException {public final int status;public final String retry;public FetchFailure(int status,String retry){super("retryable_source_failure");this.status=status;this.retry=retry;}}
     public static List<Item> parse(byte[] bytes,String type,String mapping)throws Exception{

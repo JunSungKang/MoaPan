@@ -141,3 +141,7 @@ PR10 guarded 사람 commit/push·생성 및 1db7303 독립 리뷰 APPROVE 완료
 
 ## 실제 서버 캐시·서비스 우선 반영 완료
 기존 브라우저 호출이 도메인별 공통 캐시를 실제 사용한다. 통합330 PASS(164/107/59)·Nu0·JAR/SBOM/소스/최종이미지 gate PASS 후 기존환경 web/worker/proxy에 반영했다. V22/300기사·2계정·1발간물 보존·암호화 격리복원·HTTPS 공개/보호경계·liveEntry9/카드/발간객체·자산304·합성계정삭제 확인. 모든 source150파일과 실행JAR113f46dcf605가 일치한다. 기능PR16~22는 서비스 검증 뒤 독립current-head/App승인을 받고 develop 병합·정확한 head의 remote/local/tracking 부재를 확인했다. Helm기본대기16 오류도22로 고치고 최신SQL검사를 추가했다. 최종 HTTP/문서 포함 전체330건 재검증·Nu0·최종builder613c25b98d65 및 실행앱/proxy 재검사도 통과했다. 이 증빙 commit의 독립current-head 승인·병합 상태는 GitHub PR을 기준으로 확인하며 main은 그대로다. [실행증빙](../05-test/evidence/cache-service-delivery-20261101.json)과 [캐시검증서](../05-test/server-cache.md)를 따른다. 기존 HTTPS스킬3개는 원본해시 동일·미추적·미커밋이다.
+
+2026-11-02 전체 죽은 코드 조사 착수. 기준develop a716c1d, 기존미추적HTTPS스킬3개 보존. 삭제전 Java compiler symbol/JS import·HTML/DOM/운영진입점의 참조를 확인하고 삭제후 서비스·테스트·보안·develop전달까지 검증한다.
+
+전체 미사용 코드 정리 실행·서비스 검증 완료. 중복 조회/도달 불가 migrate 분기와 Bean/읽지 않는 내부필드, JS유령모듈·미사용값·옛 로컬검색,16토큰37CSS분기,obsolete도구2개를 제거했다. 보안parser/프레임워크/운영진입점·22SQL·기존데이터 보존. 모델정책클래스10개byte일치. 최종330PASS(164/107/59)/Nu0/72합성화면/소스·JAR·SBOM·실제앱·빌드gate PASS. 중간UI준비대기2실패는기준완화없이수정후재검증. 실제새앱ec89cdad8d05·JAR4ece479b47d3가web/worker에서일치,4역할·HTTPS·삭제모듈404·캐시·300/2/1보존·합성계정삭제확인. 독립current-head/GitHub전달마감근거는 [미사용 코드 검증서](../05-test/dead-code-audit.md)와 해당PR상태를따른다. HTTPS스킬3개·전역Codex·main은보존한다.

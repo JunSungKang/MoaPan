@@ -4,7 +4,7 @@ import {initializeClassificationManagement} from './classification-management.js
 import {initializeAdminNavigation} from './navigation.js';
 import {initializeArticleReview} from './article-review.js';
 import {initializeAdvertising} from '../advertising/administration.js';
-import {account,request} from '../shared/api.js';import {el,report,date,requireAccount} from '../shared/common.js';
+import {request} from '../shared/api.js';import {el,report,date,requireAccount} from '../shared/common.js';
 const navigation=initializeAdminNavigation(document.querySelector('.admin-page'));
 const collectionJobs=initializeCollectionJobs();
 let representativeVersion;

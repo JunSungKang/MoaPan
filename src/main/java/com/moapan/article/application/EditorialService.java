@@ -1,6 +1,5 @@
 package com.moapan.article.application;
 import com.moapan.shared.api.ApiError;
-import com.moapan.bootstrap.AdminCommand;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Service;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,7 +13,6 @@ public class EditorialService {
     public record TagInput(String slug,String name,String category){}
     private final JdbcClient db;
     public EditorialService(JdbcClient db){this.db=db;}
-    public Object list(){return list(null,null,"collected_desc");}
     public Object list(LocalDate from,LocalDate to,String sort){
         if(from!=null&&(from.getYear()<1||from.getYear()>9999)||to!=null&&(to.getYear()<1||to.getYear()>9999)||from!=null&&to!=null&&from.isAfter(to))throw new ApiError(400,"invalid_collection_period");
         String order=switch(sort){case "collected_desc"->"a.collected_at DESC,a.title,a.id";case "collected_asc"->"a.collected_at,a.title,a.id";case "title_asc"->"lower(a.title),a.title,a.collected_at DESC,a.id";default->throw new ApiError(400,"invalid_editorial_sort");};

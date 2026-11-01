@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 4,
+  "workSlug": "dead-code-audit-20261102",
+  "flowType": "integration",
+  "branch": "codex/dead-code-audit-20261102",
+  "targetBranch": "develop",
+  "baseSha": "a716c1d5d1a95610c78b26c2f9053cefb14a2601",
+  "mergeMethod": "squash",
+  "governance": {
+    "prAuthorLogin": "JunSungKang",
+    "assigneeLogin": "JunSungKang",
+    "reviewerLogin": "junsung-bot[bot]",
+    "requiredChecks": [],
+    "commitAuthor": {
+      "name": "jun-sung, Kang",
+      "email": "kjuns1@naver.com"
+    },
+    "coAuthors": [
+      {
+        "name": "Codex",
+        "email": "codex@openai.com"
+      },
+      {
+        "name": "junsung-bot[bot]",
+        "email": "302617028+junsung-bot[bot]@users.noreply.github.com"
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "reachable-runtime-and-maintenance-code",
+      "expectedPaths": [
+        ".github/workflow-plans/dead-code-audit-20261102.json",
+        "src/main/java/**",
+        "src/main/resources/static/**",
+        "src/test/java/**",
+        "src/integrationTest/java/**",
+        "src/e2eTest/java/**",
+        "scripts/**",
+        "docs/**",
+        "README.md"
+      ],
+      "forbiddenPaths": [
+        ".env",
+        ".github/workflows/**",
+        "src/main/resources/db/migration/**",
+        "licenses/**",
+        "build.gradle",
+        "gradle.lockfile",
+        "gradle/verification-metadata.xml",
+        "Dockerfile",
+        "compose.yaml"
+      ],
+      "acceptanceCriteria": [
+        "User explicitly authorized whole-project dead-code audit/removal, actual service reflection and develop merge. Continue Sprint Delivery; preserve existing functionality and domain boundaries.",
+        "Inspect all tracked runtime Java/JS/CSS/HTML/config/scripts and tests; combine static usage graphs with actual Spring/JSON/JPA/reflection/HTML/ES module/dynamic DOM/runtime entry point review. Mere text occurrence counts and test-only references are not proof of deadness.",
+        "Remove only proven unreachable or obsolete duplicate code; retain framework hooks, operational scripts/model security tools, migrations/history/licenses and intentional compatibility/API/semantic metadata. No changing auth, CSRF, quota, rights, LLM guardrails, privacy, data or password/username policy.",
+        "Record exact removal/retention evidence, update current docs/references, run complete tests/HTML/source/JAR/SBOM/image/security with fresh advisory DB; use same verified image for web/worker, preserve DB/models/proxy configuration and existing data.",
+        "Independent current-head review plus App formal APPROVED, guarded human commit/push/PR/develop merge and three-ref cleanup. main untouched. Existing local HTTPS skill files unchanged/untracked; no global Codex modification or extra worktree."
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh --no-daemon check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest",
+        "sh scripts/test/html-check.sh",
+        "git diff --check"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/plan.md",
+          "docs/01-management/progress.md",
+          "docs/05-test/dead-code-audit.md",
+          "docs/05-test/evidence/dead-code-audit-20261102.json"
+        ]
+      }
+    },
+    {
+      "id": "preserve-local-https-skill",
+      "expectedPaths": [
+        ".agents/skills/https-certificate/SKILL.md",
+        ".agents/skills/https-certificate/agents/openai.yaml",
+        ".agents/skills/https-certificate/references/caddy-acme.md"
+      ],
+      "forbiddenPaths": [],
+      "acceptanceCriteria": [
+        "User explicitly requested that the existing HTTPS skill not be committed. Observe these exact untracked paths only to preserve unrelated work in place. Do not edit, stage, commit, move, delete or ignore them.",
+        "Before each commit, push and PR/review operation, verify original SHA-256 and that git ls-files returns no tracked/staged path. They are not performance or server-cache deliverables."
+      ],
+      "validationCommands": [
+        "node -e 'const fs=require(\"node:fs\"),c=require(\"node:crypto\"),cp=require(\"node:child_process\");for(const x of [{\"file\":\".agents/skills/https-certificate/SKILL.md\",\"sha256\":\"47071a68b12a638b0f7c3d3290f92833e955771f854312c2bb14c0074c1b0e0f\"},{\"file\":\".agents/skills/https-certificate/agents/openai.yaml\",\"sha256\":\"7272ebe0da2378a3c3cb769f9c614870091d91d42d13e4ad87d0d6f7d6cde9e7\"},{\"file\":\".agents/skills/https-certificate/references/caddy-acme.md\",\"sha256\":\"540d923e2c305dac16280286bd91fbd23b52a20bafffaf8b51372824483b8335\"}]){if(c.createHash(\"sha256\").update(fs.readFileSync(x.file)).digest(\"hex\")!==x.sha256)throw Error(\"Preserved skill changed: \"+x.file);if(cp.execFileSync(\"git\",[\"ls-files\",\"--\",x.file],{encoding:\"utf8\"}).trim())throw Error(\"Local skill must remain untracked: \"+x.file);}'"
+      ],
+      "documentation": {
+        "rationale": "Existing local skill belongs to another user request; preservation only, excluded from commits and PR diffs."
+      }
+    }
+  ]
+}
