@@ -125,6 +125,14 @@ PR10 guarded 사람 commit/push·생성 및 1db7303 독립 리뷰 APPROVE 완료
 <!-- DOMAIN-PR-REORGANIZATION -->
 도메인별 이력 재구성 검증 단계: publication-brand. 검토·병합 결과는 [재구성 증빙](../05-test/evidence/domain-pr-reorganization-20261101.json)과 각 PR의 GitHub 최종 상태를 확인한다. 실행 중인 서비스와 데이터는 변경하지 않는다.
 
+
+## 공통 코드·브라우저 성능 개선 (2026-11-01)
+진행 중: 전수 조사 및 실제 Spring/Chromium 기준 측정. 제품 변경 후 동일 조건으로 재측정한다. 현재 운영 서비스·DB는 수정하지 않는다. 결과는 [성능 검증서](../05-test/web-performance.md)에 기록한다.
+
+성능 개선 검증 완료:282 PASS(155/68/59), Nu0, 소스/JAR/SBOM와 새 web/proxy 이미지 보안 게이트 PASS. 로그인 재접속 assets126123→4200byte, 지면131505→5100byte(동일 조건3회 중앙값). 상세는 성능 검증서 참조. 운영은 그대로이며 이번 PR의 병합·배포 승인 대기.
+
+2026-11-01 사용자 지시로 기존 HTTPS 스킬3개는 수정·이동·삭제·stage·커밋 없이 보존한다. 최초 SHA-256 동일·미추적 상태를 검증했으며 현재 작업 계약에 보존 조건만 명시해 정상 server guard를 통과했다. 제품 변경은 앞선282 PASS 대상과 동일하고 성능 개선 PR 전달을 진행한다. 서버 캐시는 별도 도메인 PR 범위이며 아직 제품 구현·운영 반영하지 않았다.
+
 ## 서버 메모리 캐시 기반 (2026-11-01)
 브라우저 최적화 PR16은9e680057b347443083c402ff7b11cf333e1c9fd3으로 푸시·독립 검토·App current-head APPROVED 완료, 미병합/운영 미반영이다. HTTPS 스킬3개는 원본 해시 동일·미추적 보존하며 커밋하지 않았다.
 별도 server-cache-foundation 브랜치에서 Caffeine 기반·고정 region 예산·60분 TTL·snapshot 적재·저장 해시 V17을 작성했다. 신규 단위9/격리 PostgreSQL3건 통과. 현재 도메인 API에 연결하지 않았으며 전체 회귀·최종 JAR/SBOM 검사·독립 리뷰·PR 전달을 진행한다.

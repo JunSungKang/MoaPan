@@ -1,4 +1,4 @@
-import {el} from '../shared/common.js';
+import {el} from '../shared/dom.js';
 
 /** Switch only between supplied article texts; no network request or tracking. */
 export function articleLanguage(article, headingLink, summaryList) {
