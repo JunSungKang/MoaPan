@@ -1,0 +1,37 @@
+{
+  "checkedAt": "2026-11-01T12:36:57.312Z",
+  "domain": "publication",
+  "status": "CHECK_AND_POSTGRESQL_PASS_FINAL_COMPOSITE_SECURITY_PENDING",
+  "focusedTests": 7,
+  "regression": {
+    "test": 163,
+    "integrationTest": 78
+  },
+  "warmRead": {
+    "publishedContentQueries": 0,
+    "publishedCatalogPayloadQueries": 0,
+    "perRequestEntitlement": true,
+    "perRequestEvidenceCheck": true
+  },
+  "checks": [
+    "deep immutable published models",
+    "large210k manuscript actually cached",
+    "draft edits excluded",
+    "revisions across instances",
+    "withdraw/delete",
+    "evidence rights/public status",
+    "entitlement revoked on warm cache",
+    "rollback"
+  ],
+  "budget": {
+    "detailLogicalBytes": 2097152,
+    "catalogLogicalBytes": 524288,
+    "webTotalLogicalBytes": 16777216,
+    "workerTotalLogicalBytes": 8388608
+  },
+  "currentProductionManuscriptBytesObserved": 210787,
+  "runtimeDeployed": false,
+  "notes": [
+    "Existing Spring Session cleanup was interrupted during test context shutdown; test assertions passed. No production DB restart or shutdown was performed."
+  ]
+}

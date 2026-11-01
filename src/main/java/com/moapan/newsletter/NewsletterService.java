@@ -20,7 +20,8 @@ public class NewsletterService{
  public record Input(long version,Manuscript manuscript,Dossier dossier){}
  private final JdbcClient db;private final JsonMapper json=JsonMapper.builder().build();
  private final PublicationEvidence evidence;private final ContentAccess access;private final Clock clock;
- public NewsletterService(JdbcClient db,PublicationEvidence evidence,ContentAccess access,Clock clock){this.db=db;this.evidence=evidence;this.access=access;this.clock=clock;}
+ private final PublicationReadModels readModels;
+ public NewsletterService(JdbcClient db,PublicationEvidence evidence,ContentAccess access,Clock clock,PublicationReadModels readModels){this.db=db;this.evidence=evidence;this.access=access;this.clock=clock;this.readModels=readModels;}
  private String validate(Manuscript m){
   if(m==null||m.title()==null||m.title().isBlank()||m.title().length()>180||m.introduction()==null||m.introduction().length()>1000||m.topic()==null||m.topic().length()>100||m.blocks()==null||m.blocks().size()>80)throw new ApiError(400,"invalid_manuscript");
   for(var b:m.blocks()){
@@ -33,17 +34,16 @@ public class NewsletterService{
  }
  @PreAuthorize("isAuthenticated()") public Object list(){
   access.require(Benefit.READ_NEWSLETTER);
-  var rows=db.sql("SELECT id,issue_number,published->>'title' title,published->>'introduction' introduction,published->>'topic' topic,published_at,first_published_at,publication_revision,distribution,published_dossier::text dossier FROM newsletters WHERE published IS NOT NULL ORDER BY published_at DESC,id LIMIT 100").query().listOfRows();
-  var ids=new HashSet<UUID>();for(var row:rows){var d=dossier(row.get("dossier"));if(d!=null)ids.addAll(d.articleIds());}
+  var rows=readModels.catalog();
+  var ids=new HashSet<UUID>();for(var row:rows)ids.addAll(row.articleIds());
   var visible=new HashSet<UUID>();for(var e:evidence.selected(ids,false))if(e.visible())visible.add(e.id());
-  var output=new ArrayList<Map<String,Object>>();for(var row:rows){var d=dossier(row.get("dossier"));if(d!=null&&!visible.containsAll(d.articleIds()))continue;var copy=new LinkedHashMap<>(row);copy.remove("dossier");output.add(utcTimestamps(copy));}return output;
+  var output=new ArrayList<Map<String,Object>>();for(var row:rows){if(!visible.containsAll(row.articleIds()))continue;output.add(new LinkedHashMap<>(row.fields()));}return output;
  }
  @PreAuthorize("isAuthenticated()") public Object detail(UUID id){
   access.require(Benefit.READ_NEWSLETTER);
-  var row=db.sql("SELECT id,issue_number,published::text content,published_dossier::text dossier,published_at,first_published_at,publication_revision,distribution FROM newsletters WHERE id=:id AND published IS NOT NULL").param("id",id).query().listOfRows().stream().findFirst().orElseThrow(()->new ApiError(404,"newsletter_not_found"));
-  Dossier d=dossier(row.get("dossier"));var refs=d==null?List.<Evidence>of():evidence.selected(d.articleIds(),false);
-  if(d!=null&&(refs.size()!=d.articleIds().size()||refs.stream().anyMatch(e->!e.visible())))throw new ApiError(404,"newsletter_not_found");
-  var out=new LinkedHashMap<String,Object>();out.put("id",id);out.put("issueNumber",row.get("issue_number"));out.put("manuscript",json.readTree(row.get("content").toString()));out.put("publishedAt",utcTimestamp(row.get("published_at")));out.put("firstPublishedAt",utcTimestamp(row.get("first_published_at")));out.put("revision",row.get("publication_revision"));out.put("distribution",row.get("distribution"));out.put("dossier",d);out.put("evidence",refs);out.put("reuseAllowed",d!=null&&d.rightsConfirmed());return out;
+  var row=readModels.detail(id);var refs=row.articleIds().isEmpty()?List.<Evidence>of():evidence.selected(row.articleIds(),false);
+  if(refs.size()!=row.articleIds().size()||refs.stream().anyMatch(e->!e.visible()))throw new ApiError(404,"newsletter_not_found");
+  var out=new LinkedHashMap<String,Object>(row.fields());out.put("evidence",refs);return out;
  }
  @PreAuthorize("isAuthenticated()") public Object reuse(UUID id){access.require(Benefit.REUSE_NEWSLETTER);var result=detail(id);@SuppressWarnings("unchecked")var data=(Map<String,Object>)result;if(!Boolean.TRUE.equals(data.get("reuseAllowed")))throw new ApiError(409,"reuse_rights_review_required");return data;}
  @PreAuthorize("isAuthenticated()") public Object worksheet(UUID id){access.require(Benefit.RESEARCH_WORKSHEET);return detail(id);}
