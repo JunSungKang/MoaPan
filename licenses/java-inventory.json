@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-30T22:59:36.951Z",
+  "checkedAt": "2026-11-01T11:19:40.975Z",
   "scope": "runtimeClasspath; declared metadata, not a legal opinion or a complete OS license audit",
   "components": [
     {
@@ -135,6 +135,59 @@
           "entry": "META-INF/NOTICE",
           "path": "licenses/java/com.fasterxml/classmate/1.7.3/NOTICE",
           "sha256": "1a8c67aaade274bc7bf06a7044571ab280d59fe3686941b6499b2176a072ea6d"
+        }
+      ]
+    },
+    {
+      "group": "com.github.ben-manes.caffeine",
+      "name": "caffeine",
+      "version": "3.2.4",
+      "jarSha256": "9d9d2cfd681fd9272ded3d27c9930db12f89f732345975aa113ebc223bbf1224",
+      "url": "https://repo.maven.apache.org/maven2/com/github/ben-manes/caffeine/caffeine/3.2.4/caffeine-3.2.4.pom",
+      "pomSha256": "624ec9fc538e1a618964dfa9f8cf9344435607c58e45a818378e7a643d4e09b3",
+      "licenses": [
+        {
+          "name": "Apache License, Version 2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "status": "REVIEWED_APACHE_2_0",
+      "embeddedNotices": [
+        {
+          "entry": "META-INF/LICENSE",
+          "path": "licenses/java/com.github.ben-manes.caffeine/caffeine/3.2.4/LICENSE",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        }
+      ],
+      "checksumEvidence": {
+        "url": "https://repo.maven.apache.org/maven2/com/github/ben-manes/caffeine/caffeine/3.2.4/caffeine-3.2.4.jar.sha512",
+        "sha512": "6923d1b826e3723a9d58b092626045bdbac48dd91e758b3b78164de31105035343145d14c20a00b62658b7d1dff2a5cfb7475b200cc630dcd967c4732c2628ee"
+      }
+    },
+    {
+      "group": "com.google.errorprone",
+      "name": "error_prone_annotations",
+      "version": "2.49.0",
+      "jarSha256": "3b1003e51b8ae56fdbd7c71073e81d1683b97e6c4dff5a9151164d59b769d13c",
+      "url": "https://repo.maven.apache.org/maven2/com/google/errorprone/error_prone_annotations/2.49.0/error_prone_annotations-2.49.0.pom",
+      "pomSha256": "601d673cb736ccadecc8acca5d47d88d31d8e8775be45ae6bedcd8b2359c9cc5",
+      "licenses": [
+        {
+          "name": "Apache 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "status": "REVIEWED_APACHE_2_0",
+      "embeddedNotices": [],
+      "checksumEvidence": {
+        "url": "https://repo.maven.apache.org/maven2/com/google/errorprone/error_prone_annotations/2.49.0/error_prone_annotations-2.49.0.jar.sha512",
+        "sha512": "88ad711b9c573a4f44a0e4c230104845ddf92b51d0955e390736bff1fe7afda6718c3d8b9d73349054668ecd83ceb174ef0021f10cf369df600aec4ac50998d4"
+      },
+      "externalNotices": [
+        {
+          "path": "licenses/java/com.google.errorprone/error_prone_annotations/2.49.0/COPYING",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+          "url": "https://raw.githubusercontent.com/google/error-prone/v2.49.0/COPYING"
         }
       ]
     },

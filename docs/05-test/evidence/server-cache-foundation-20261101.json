@@ -1,0 +1,68 @@
+{
+  "checkedAt": "2026-11-01T11:32:26.835Z",
+  "status": "FOUNDATION_VALIDATED_DOMAIN_ADAPTERS_NOT_IMPLEMENTED",
+  "baseSha": "f19d5e539f84da72cb21a7908efd583b889a747f",
+  "suites": {
+    "test": {
+      "tests": 163,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "integrationTest": {
+      "tests": 71,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "e2eTest": {
+      "tests": 54,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "totalTests": 288,
+  "newTests": {
+    "unit": 9,
+    "postgresql": 4
+  },
+  "cacheBudgets": {
+    "webLogicalBytes": 16777216,
+    "workerLogicalBytes": 8388608,
+    "maximumMinutes": 60,
+    "actualHeapMeasured": false
+  },
+  "security": {
+    "sourceGate": "PASS_WITH_EXISTING_EXACT_BACKPORT_AND_NONEXPOSURE_EVIDENCE",
+    "jarFindings": 0,
+    "sbomFindings": 0,
+    "imageFindings": 0,
+    "imageSecretFindings": 0,
+    "db": {
+      "Version": 2,
+      "NextUpdate": "2026-11-01T18:53:10.861587125Z",
+      "UpdatedAt": "2026-10-31T18:53:10.861587496Z",
+      "DownloadedAt": "2026-10-31T22:08:51.77085Z"
+    },
+    "tool": "Version: 0.76.1+moapan-security.1",
+    "upstreamCaffeinePublicAdvisories": [],
+    "upstreamAdvisorySource": "https://api.github.com/repos/ben-manes/caffeine/security-advisories"
+  },
+  "image": {
+    "tag": "damgox2-cache:foundation-20261101",
+    "id": "sha256:cb2aac91bb8f54a140c672cf7229135f919477c43008dcc1279c9f846d89cee4",
+    "architecture": "arm64",
+    "jarSha256": "6622df757f348c27a51994afa0dbd6d0f71156edbb9fe1dd3b711175f453a836",
+    "containerJarSha256": "6622df757f348c27a51994afa0dbd6d0f71156edbb9fe1dd3b711175f453a836",
+    "deployed": false
+  },
+  "restart": {
+    "initialAttempt": "FAILED_STALE_JDBC_PORT_AFTER_DOCKER_RESTART",
+    "causeObserved": "Docker changed the synthetic PostgreSQL ephemeral published port",
+    "fix": "Reinspect mapped port after restart, update test DataSource URL, await readiness",
+    "finalResult": "PASS_SAME_DATA_AND_FINGERPRINT"
+  },
+  "skills": "THREE_UNTRACKED_LOCAL_HTTPS_SKILL_FILES_UNCHANGED_AND_EXCLUDED_FROM_COMMITS",
+  "runtimeChanged": false
+}

@@ -47,3 +47,5 @@ users.auth_version bigint NOT NULL DEFAULT0 CHECK>=0. 비밀번호 변경은 현
 
 ### V16 AI 작업·편집 경계
 translation_runtime 분산 lease, 두 모델 작업 started_at, article_translations locked/version, ai_source_budgets(source_id,model,day/calls/characters/seconds). 개인 데이터나 기사별 회원 행위는 추가하지 않는다. 원문 변경 시 기존 V8 trigger로 번역/잠금을 무효화하며 새 내용으로 다시 검토한다.
+
+서버 캐시 기반 V17: read_cache_fingerprints(domain,subject,fingerprint)는 공개 출력 모델의 SHA-256만 저장한다. PK는(domain,subject), hash는64자리 소문자16진수다. set_read_cache_fingerprint 함수는 작성자 트랜잭션 안에서 계산하며 동일 hash에는 행을 갱신하지 않는다. 원문·회원·검색어를 넣지 않는다. 도메인별 생성/갱신/삭제 트리거는 후속 적용 사항이며 현재 운영 DB에 V17을 적용하지 않았다.

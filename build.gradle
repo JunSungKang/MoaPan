@@ -17,6 +17,7 @@ dependencies {
     implementation 'org.bouncycastle:bcprov-jdk18on:1.86'
     implementation 'com.rometools:rome:2.1.0'
     implementation 'org.apache.httpcomponents.client5:httpclient5'
+    implementation 'com.github.ben-manes.caffeine:caffeine'
     implementation 'org.jsoup:jsoup:1.23.2'
     runtimeOnly 'org.postgresql:postgresql'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

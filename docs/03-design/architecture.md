@@ -49,3 +49,7 @@ newspaper.css는 신문 지면·기본 폼, auth.css는 간결한 인증 컬럼,
 
 ### 공통 Presentation 자원 경계
 shared/dom.js와 format.js는 UI 생성·날짜 형식의 leaf 모듈이며 계정 API나 페이지 초기화를 수행하지 않는다. common.js는 페이지 초기화와 호환 export를 담당한다. presentation/infrastructure/StaticAssetsConfiguration은 public classpath assets의 ETag·재검증만 관리한다. 국제화 변경 범위와 성능·캐시 검증은 [성능 검증서](../05-test/web-performance.md)를 참조한다.
+
+## 서버 읽기 캐시 기반 (도메인 적용 전)
+shared/infrastructure/cache는 Caffeine과 PostgreSQL 트랜잭션을 조정하는 인프라다. 순수 domain 클래스에 Spring/Caffeine 의존성을 추가하지 않는다. 도메인별 읽기 모델이 고정된 region을 하나씩 소유하고 불변 값만 제공한다. 작은 저장 해시를 확인한 뒤 같은 버전의 값을 재사용하며, 새 값을 읽을 때는 별도 REPEATABLE READ 트랜잭션 commit 후 보관한다. 호출자 트랜잭션은 그대로 우회한다.
+V17 read_cache_fingerprints는 공개 데이터 출력 해시만 저장한다. 원문·회원 데이터는 저장하지 않는다. 도메인 트리거/조회 어댑터는 후속 PR에 구현하므로 이 기반만으로 현행 API의 DB 조회가 감소했다고 주장하지 않는다.

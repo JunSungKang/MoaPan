@@ -73,3 +73,9 @@
 | assets/js/shared/dom.js | 페이지 초기화 없는 공통 DOM·상태 표시 |
 | assets/js/shared/format.js | 서울 시간의 제한된 Intl 형식 재사용 |
 | SharedPresentationTest / WebPerformanceTest | 수명·언어·초안 회귀와 실제 HTTP 전후 측정 |
+
+## 서버 읽기 캐시 기반
+- shared/infrastructure/cache/VersionedReadCache: 제한된 Caffeine·60분 TTL·반복 읽기 snapshot·commit 이후 게시·활성 트랜잭션 우회.
+- shared/infrastructure/cache/SharedReadCaches: 도메인별 고정 region 예산 배분·중복 할당 방지.
+- V17__read_cache_fingerprints.sql: 공개 읽기 모델의 저장 해시 및 작성 트랜잭션 함수.
+- VersionedReadCacheTest/ReadCacheIntegrationTest: TTL/용량/동시성/롤백/실제DB재시작. 도메인 API 어댑터는 후속 PR이며 현재 연결하지 않았다.

@@ -132,3 +132,9 @@ PR10 guarded 사람 commit/push·생성 및 1db7303 독립 리뷰 APPROVE 완료
 성능 개선 검증 완료:282 PASS(155/68/59), Nu0, 소스/JAR/SBOM와 새 web/proxy 이미지 보안 게이트 PASS. 로그인 재접속 assets126123→4200byte, 지면131505→5100byte(동일 조건3회 중앙값). 상세는 성능 검증서 참조. 운영은 그대로이며 이번 PR의 병합·배포 승인 대기.
 
 2026-11-01 사용자 지시로 기존 HTTPS 스킬3개는 수정·이동·삭제·stage·커밋 없이 보존한다. 최초 SHA-256 동일·미추적 상태를 검증했으며 현재 작업 계약에 보존 조건만 명시해 정상 server guard를 통과했다. 제품 변경은 앞선282 PASS 대상과 동일하고 성능 개선 PR 전달을 진행한다. 서버 캐시는 별도 도메인 PR 범위이며 아직 제품 구현·운영 반영하지 않았다.
+
+## 서버 메모리 캐시 기반 (2026-11-01)
+브라우저 최적화 PR16은9e680057b347443083c402ff7b11cf333e1c9fd3으로 푸시·독립 검토·App current-head APPROVED 완료, 미병합/운영 미반영이다. HTTPS 스킬3개는 원본 해시 동일·미추적 보존하며 커밋하지 않았다.
+별도 server-cache-foundation 브랜치에서 Caffeine 기반·고정 region 예산·60분 TTL·snapshot 적재·저장 해시 V17을 작성했다. 신규 단위9/격리 PostgreSQL3건 통과. 현재 도메인 API에 연결하지 않았으며 전체 회귀·최종 JAR/SBOM 검사·독립 리뷰·PR 전달을 진행한다.
+
+서버 캐시 기반 최종 검증:288 PASS(163/71/54), strict lock/verification·license·문서·소스/JAR/SBOM·격리 runtime 이미지 gate PASS. 이미지sha256:cb2aac91bb8f54a140c672cf7229135f919477c43008dcc1279c9f846d89cee4, JAR6622df757f348c27a51994afa0dbd6d0f71156edbb9fe1dd3b711175f453a836 일치. DB 재시작 시험의 임시 포트 변경 실패를 고쳐 동일 데이터/지문 보존·전체PG71 재검증을 통과했다. 사전 독립 리뷰 차단 결함 없음. 도메인 API 적용·운영 migration/배포·develop/main 병합은 아직 하지 않았다. [기반 증빙](../05-test/evidence/server-cache-foundation-20261101.json).

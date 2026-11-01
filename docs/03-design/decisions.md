@@ -156,3 +156,8 @@ DB 초기화 스크립트와 Caddyfile은 비밀값 없는 고정 배포 설정�
 
 ## 2026-11-01 공통 Presentation 성능 경계
 DOM/Intl 포맷은 인증·페이지 초기화 없이 재사용하는 leaf 모듈로 분리한다. 국제화 사전은 화면별 적재, 문서 전체 재번역은 언어 전환 때만 수행한다. 고정 자원명에 장기 immutable 캐시를 붙이지 않고 내용 ETag 재검증을 사용한다. packaged JAR의 validator만 문서별 고정 자원 수 범위에서 메모리에 보관하고, 개발 파일은 변경을 감지하도록 다시 해시한다. assets 압축과 정적 캐시를 API·HTML·오류로 확대하지 않는다. 네트워크 요청 통합은 CSRF의 동시 조회에만 적용하며 기사 quota 대상 요청을 합치지 않는다. 작업 중 초안을 보존하는 범위에서만 편집기 DOM을 해제한다. 전체 자원 조사·전후 수치는 성능 검증서에 기록한다.
+
+## 서버 캐시 기반: Caffeine,60분,저장 시 해시
+사용자 승인에 따라 외부 캐시 서버 대신 JVM 라이브러리를 사용한다. Spring Boot4.1.2 BOM 관리 Caffeine3.2.4를 선택하고 공식3.2.4 릴리스/보안 공지·Maven Central SHA-512·Apache2.0 고지를 확인했다. 최신 upstream 숫자만 이유로 BOM을 override하지 않는다.
+캐시 값 논리 가중치 합계는 web16MiB/worker8MiB이며 실제 JVM heap 상한을 의미하지 않는다. 값별 최대512KiB/256KiB를 넘으면 보관하지 않는다. 최소 가중치512byte로 항목 수도 제한한다. 수명은 expireAfterWrite60분이고 오래된 값을 먼저 반환하는 비동기 refresh는 쓰지 않는다.
+동시 쓰기와 불일치한 해시/본문을 묶지 않도록 cache miss에서 해시·본문을 같은 REPEATABLE READ snapshot으로 읽는다. 최초 해시가 바뀌면 최대3회 재시도 후 불변 스냅샷 조회로 우회한다. 호출자 트랜잭션과 잠금 경로는 캐시를 쓰지 않아 미완료/롤백 값을 공유하지 않는다. 저장 해시는 PostgreSQL18 내장 sha256(bytea)를 이용하며 pgcrypto 확장을 추가하지 않는다.
