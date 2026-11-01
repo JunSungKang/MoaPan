@@ -362,7 +362,7 @@ class BrowserTest {
             }
             p.navigate(origin+"/admin.html");
             if(role.equals("USER")){p.waitForURL("**/index.html");assertTrue(writes.isEmpty());}
-            else {p.waitForSelector("#representative-ai");p.locator("#representative-ai").check();p.locator("#representative-form [type=submit]").click();p.waitForFunction("document.querySelector('#representative-status').textContent.includes('저장했습니다')");assertEquals(1,writes.size());assertTrue(writes.getFirst().contains("\"ai\":3"));assertTrue(writes.getFirst().contains("\"version\":0"));}
+            else {p.locator("#sections-tab-interests").click();p.waitForSelector("#representative-ai");p.locator("#representative-ai").check();p.locator("#representative-form [type=submit]").click();p.waitForFunction("document.querySelector('#representative-status').textContent.includes('저장했습니다')");assertEquals(1,writes.size());assertTrue(writes.getFirst().contains("\"ai\":3"));assertTrue(writes.getFirst().contains("\"version\":0"));}
         }
     }
     @Test void defaultInterestsAndPolicyEditionsAreExplicit(){
@@ -506,12 +506,12 @@ class BrowserTest {
                 r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(body));
             });
             Page p=context.newPage();p.navigate(origin+"/admin.html");
-            p.locator("#sites tr").nth(0).getByText("상세·수정").click();p.locator("#source-list").getByText("수정",new com.microsoft.playwright.Locator.GetByTextOptions().setExact(true)).click();
+            p.locator("#sites tr").nth(0).getByText("상세·수정").click();p.locator("#manage-sources").click();p.locator("#source-list").getByText("수정",new com.microsoft.playwright.Locator.GetByTextOptions().setExact(true)).click();
             p.waitForFunction("document.querySelector('#source-form [name=label]').value==='Source A'");
-            p.locator("#sites tr").nth(1).getByText("상세·수정").click();
+            p.locator("#collection-tab-list").click();p.locator("#sites tr").nth(1).getByText("상세·수정").click();
             p.waitForFunction("document.querySelector('#site-form [name=name]').value==='Site B'");
             assertEquals("",p.locator("#source-form [name=label]").inputValue());assertEquals("",p.locator("#source-form [name=endpointUrl]").inputValue());
-            p.locator("#refresh-articles").click();p.waitForSelector("#article-list form");
+            p.locator("#sections-tab-articles").click();p.locator("#refresh-articles").click();p.waitForSelector("#article-list form");
             assertEquals("tag-A",p.getByLabel("수동 태그 UUID 목록").inputValue());
             p.getByLabel("수동 요약 (한 줄 한 항목)").fill("Changed summary");p.getByRole(com.microsoft.playwright.options.AriaRole.BUTTON,new Page.GetByRoleOptions().setName("요약·태그·공개 상태 저장").setExact(true)).click();
             p.waitForCondition(()->!writes.isEmpty());assertTrue(writes.getFirst().contains("\"tagIds\":null"));
@@ -553,7 +553,7 @@ class BrowserTest {
                 if(path.equals("/api/v1/admin/classification"))body="{\"catalog\":{\"version\":0,\"topics\":[{\"id\":\"ai\",\"definition\":\"Model evaluation only\"}]},\"counts\":[],\"runtime\":{},\"recent\":[]}";
                 if(path.endsWith("/classification/topics")){assertEquals("PUT",r.request().method());writes.add(r.request().postData());body="{}";}
                 r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(body));});
-            var p=context.newPage();p.navigate(origin+"/admin.html");p.locator("#refresh-classification").click();p.waitForFunction("document.querySelectorAll('#classification-topics textarea').length===2");
+            var p=context.newPage();p.navigate(origin+"/admin.html");p.locator("#sections-tab-topics").click();p.locator("#refresh-classification").click();p.waitForFunction("document.querySelectorAll('#classification-topics textarea').length===2");
             assertTrue(p.locator("#classify-ai").isChecked());assertEquals("200",p.locator("#classification-topics textarea").first().getAttribute("maxlength"));
             p.locator("#classification-topics textarea").first().fill("LLM evaluation; exclude unrelated applications");p.locator("#classification-form button[type=submit]").click();p.waitForFunction("document.querySelector('#classification-message').textContent.includes('저장했습니다')");assertEquals(1,writes.size());assertTrue(writes.getFirst().contains("LLM evaluation"));assertTrue(writes.getFirst().contains("\"version\":0"));
         }
@@ -562,7 +562,7 @@ class BrowserTest {
         try(var context=browser.newContext()){
             context.route("**/api/v1/account",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\"synthetic_admin\",\"role\":\"ADMIN\"}")));
             List<String> saved=new ArrayList<>();context.route("**/api/v1/admin/advertisements",r->{if(r.request().method().equals("PUT")){saved.add(r.request().postData());r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody(r.request().postData()));}else r.resume();});
-            Page p=context.newPage();List<String> external=new ArrayList<>();p.onRequest(r->{if(!r.url().startsWith(origin))external.add(r.url());});p.navigate(origin+"/admin.html");p.waitForSelector("#advertising-form");p.waitForCondition(()->p.locator("#advertising-form [type=submit]").isEnabled());
+            Page p=context.newPage();List<String> external=new ArrayList<>();p.onRequest(r->{if(!r.url().startsWith(origin))external.add(r.url());});p.navigate(origin+"/admin.html");p.locator("#sections-tab-advertising").click();p.waitForSelector("#advertising-form");p.waitForCondition(()->p.locator("#advertising-form [type=submit]").isEnabled());
             p.locator("#advertising-form [name=title]").fill("Synthetic sponsor <script>");p.locator("#advertising-form [name=targetUrl]").fill("https://sponsor.example.test/");p.locator("#preview-advertising").click();p.waitForSelector("#advertising-preview a");assertEquals("Synthetic sponsor <script>",p.locator("#advertising-preview strong").textContent());assertEquals(0,p.locator("#advertising-preview script").count());assertTrue(p.locator("#advertising-preview a").getAttribute("rel").contains("sponsored"));
             p.locator("#advertising-form [name=enabled]").check();p.locator("#advertising-form [type=submit]").click();p.waitForCondition(()->saved.size()==1);assertTrue(saved.getFirst().contains("\"enabled\":true"));
             p.locator("#advertising-form [name=provider]").selectOption("ADSENSE");assertTrue(p.locator("#advertising-form [name=enabled]").isDisabled());assertFalse(p.locator("#advertising-form [name=enabled]").isChecked());p.locator("#advertising-form [name=publisherId]").fill("ca-pub-1234567890123456");p.locator("#advertising-form [name=slotId]").fill("1234567890");p.locator("#advertising-form [type=submit]").click();p.waitForCondition(()->saved.size()==2);assertTrue(saved.getLast().contains("\"enabled\":false"));assertTrue(external.isEmpty());

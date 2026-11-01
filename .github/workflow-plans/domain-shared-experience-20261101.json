@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 4,
+  "workSlug": "domain-shared-experience-20261101",
+  "flowType": "integration",
+  "branch": "codex/domain-shared-experience-20261101",
+  "targetBranch": "develop",
+  "baseSha": "b6026110eae5d463426b5e27f04a003302dfc3a8",
+  "mergeMethod": "squash",
+  "governance": {
+    "prAuthorLogin": "JunSungKang",
+    "assigneeLogin": "JunSungKang",
+    "reviewerLogin": "junsung-bot[bot]",
+    "requiredChecks": [],
+    "commitAuthor": {
+      "name": "jun-sung, Kang",
+      "email": "kjuns1@naver.com"
+    },
+    "coAuthors": [
+      {
+        "name": "Codex",
+        "email": "codex@openai.com"
+      },
+      {
+        "name": "junsung-bot[bot]",
+        "email": "302617028+junsung-bot[bot]@users.noreply.github.com"
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "shared-experience",
+      "expectedPaths": [
+        "src/main/resources/static/**",
+        "src/e2eTest/**",
+        "scripts/test/**",
+        "docs/**",
+        ".github/workflow-plans/design-consistency-seo-20261101.json",
+        ".github/workflow-plans/domain-shared-experience-20261101.json"
+      ],
+      "forbiddenPaths": [
+        ".env",
+        ".github/workflows/**",
+        "src/main/java/**",
+        "src/main/resources/db/**",
+        "build.gradle",
+        "gradle.lockfile",
+        "Dockerfile",
+        "scripts/deploy/**",
+        "scripts/security/**"
+      ],
+      "acceptanceCriteria": [
+        "Shared Kernel/presentation: shared typography/navigation/secondary headers/footer, admin tab shell, independent technical SEO evidence.",
+        "Reconstruct the exact product/test/script state at847af4f from existing reviewed commits e8d127d and847af4f. No new business behavior or runtime deployment.",
+        "Tests match this domain checkpoint: check/integrationTest/e2eTest and Nu; no skipped/removed baseline tests; final artifact gate remains enforced.",
+        "Guarded human commit/push/PR, independent current-head App approval, user-authorized develop squash merge and verified branch cleanup. Keep prior develop/main history and original93eb767 snapshot intact."
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh --no-daemon check integrationTest e2eTest bootJar sbom securityCheck",
+        "sh scripts/test/html-check.sh",
+        "git diff --check"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/plan.md",
+          "docs/01-management/progress.md",
+          "docs/05-test/evidence/domain-pr-reorganization-20261101.json"
+        ]
+      }
+    }
+  ]
+}

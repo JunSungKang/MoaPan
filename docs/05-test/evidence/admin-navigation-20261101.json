@@ -1,0 +1,1155 @@
+{
+  "checkedAt": "2026-10-31T22:46:03.397Z",
+  "scope": "User followup on PR11: six management sections with collection/topic subtabs. Static DOM and view navigation only; no API, DB, model, authentication, dependency or CI/CD changes.",
+  "previousHead": "e8d127deacc36b5e9d4b64865c1b23b4ee140ba1",
+  "tests": {
+    "suites": {
+      "test": {
+        "tests": 154,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "integrationTest": {
+        "tests": 63,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "e2eTest": {
+        "tests": 46,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "total": 263,
+    "command": "sh scripts/build/gradle-local.sh --no-daemon check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest",
+    "newBrowserTests": 5,
+    "earlierFailure": {
+      "test": "sourceActionResultsRemainVisibleWithJobLookupClosed",
+      "before": "FAIL_REPRODUCED: preview response hidden inside closed collection job lookup",
+      "after": "PASS: result outside details,202 acknowledgement and job ID visible",
+      "failedLogSha256": "9de4b1b950d8a9b3c9bc355f2b04be0894e1061af7167d0fd35bcb9245c6ecf9"
+    },
+    "earlierNuWarning": "Advertising wrapper section had no own heading. Removed redundant wrapper and reran Nu to0."
+  },
+  "ui": {
+    "mainSections": [
+      "collection",
+      "articles",
+      "topics",
+      "interests",
+      "advertising",
+      "processing"
+    ],
+    "collectionSubtabs": [
+      "list",
+      "site",
+      "sources"
+    ],
+    "topicSubtabs": [
+      "classification",
+      "dictionary"
+    ],
+    "adminMatrix": [
+      {
+        "overflow": false,
+        "language": "ko",
+        "visibleWorkspaces": 1,
+        "width": 390,
+        "section": "collection"
+      },
+      {
+        "overflow": false,
+        "language": "ko",
+        "visibleWorkspaces": 1,
+        "width": 390,
+        "section": "articles"
+      },
+      {
+        "overflow": false,
+        "language": "ko",
+        "visibleWorkspaces": 1,
+        "width": 390,
+        "section": "topics"
+      },
+      {
+        "overflow": false,
+        "language": "ko",
+        "visibleWorkspaces": 1,
+        "width": 390,
+        "section": "interests"
+      },
+      {
+        "overflow": false,
+        "language": "ko",
+        "visibleWorkspaces": 1,
+        "width": 390,
+        "section": "advertising"
+      },
+      {
+        "overflow": false,
+        "language": "ko",
+        "visibleWorkspaces": 1,
+        "width": 390,
+        "section": "processing"
+      },
+      {
+        "overflow": false,
+        "language": "ko",
+        "visibleWorkspaces": 1,
+        "width": 390,
+        "section": "collection-site"
+      },
+      {
+        "overflow": false,
+        "language": "ko",
+        "visibleWorkspaces": 1,
+        "width": 390,
+        "section": "collection-sources"
+      },
+      {
+        "overflow": false,
+        "language": "ko",
+        "visibleWorkspaces": 1,
+        "width": 390,
+        "section": "topics-dictionary"
+      },
+      {
+        "overflow": false,
+        "language": "ko",
+        "visibleWorkspaces": 1,
+        "width": 768,
+        "section": "collection"
+      },
+      {
+        "overflow": false,
+        "language": "ko",
+        "visibleWorkspaces": 1,
+        "width": 768,
+        "section": "articles"
+      },
+      {
+        "overflow": false,
+        "language": "ko",
+        "visibleWorkspaces": 1,
+        "width": 768,
+        "section": "topics"
+      },
+      {
+        "overflow": false,
+        "language": "ko",
+        "visibleWorkspaces": 1,
+        "width": 768,
+        "section": "interests"
+      },
+      {
+        "overflow": false,
+        "language": "ko",
+        "visibleWorkspaces": 1,
+        "width": 768,
+        "section": "advertising"
+      },
+      {
+        "overflow": false,
+        "language": "ko",
+        "visibleWorkspaces": 1,
+        "width": 768,
+        "section": "processing"
+      },
+      {
+        "overflow": false,
+        "language": "ko",
+        "visibleWorkspaces": 1,
+        "width": 768,
+        "section": "collection-site"
+      },
+      {
+        "overflow": false,
+        "language": "ko",
+        "visibleWorkspaces": 1,
+        "width": 768,
+        "section": "collection-sources"
+      },
+      {
+        "overflow": false,
+        "language": "ko",
+        "visibleWorkspaces": 1,
+        "width": 768,
+        "section": "topics-dictionary"
+      },
+      {
+        "overflow": false,
+        "language": "ko",
+        "visibleWorkspaces": 1,
+        "width": 1440,
+        "section": "collection"
+      },
+      {
+        "overflow": false,
+        "language": "ko",
+        "visibleWorkspaces": 1,
+        "width": 1440,
+        "section": "articles"
+      },
+      {
+        "overflow": false,
+        "language": "ko",
+        "visibleWorkspaces": 1,
+        "width": 1440,
+        "section": "topics"
+      },
+      {
+        "overflow": false,
+        "language": "ko",
+        "visibleWorkspaces": 1,
+        "width": 1440,
+        "section": "interests"
+      },
+      {
+        "overflow": false,
+        "language": "ko",
+        "visibleWorkspaces": 1,
+        "width": 1440,
+        "section": "advertising"
+      },
+      {
+        "overflow": false,
+        "language": "ko",
+        "visibleWorkspaces": 1,
+        "width": 1440,
+        "section": "processing"
+      },
+      {
+        "overflow": false,
+        "language": "ko",
+        "visibleWorkspaces": 1,
+        "width": 1440,
+        "section": "collection-site"
+      },
+      {
+        "overflow": false,
+        "language": "ko",
+        "visibleWorkspaces": 1,
+        "width": 1440,
+        "section": "collection-sources"
+      },
+      {
+        "overflow": false,
+        "language": "ko",
+        "visibleWorkspaces": 1,
+        "width": 1440,
+        "section": "topics-dictionary"
+      },
+      {
+        "overflow": false,
+        "language": "en",
+        "visibleWorkspaces": 1,
+        "width": 390,
+        "section": "collection"
+      },
+      {
+        "overflow": false,
+        "language": "en",
+        "visibleWorkspaces": 1,
+        "width": 390,
+        "section": "articles"
+      },
+      {
+        "overflow": false,
+        "language": "en",
+        "visibleWorkspaces": 1,
+        "width": 390,
+        "section": "topics"
+      },
+      {
+        "overflow": false,
+        "language": "en",
+        "visibleWorkspaces": 1,
+        "width": 390,
+        "section": "interests"
+      },
+      {
+        "overflow": false,
+        "language": "en",
+        "visibleWorkspaces": 1,
+        "width": 390,
+        "section": "advertising"
+      },
+      {
+        "overflow": false,
+        "language": "en",
+        "visibleWorkspaces": 1,
+        "width": 390,
+        "section": "processing"
+      },
+      {
+        "overflow": false,
+        "language": "en",
+        "visibleWorkspaces": 1,
+        "width": 390,
+        "section": "collection-site"
+      },
+      {
+        "overflow": false,
+        "language": "en",
+        "visibleWorkspaces": 1,
+        "width": 390,
+        "section": "collection-sources"
+      },
+      {
+        "overflow": false,
+        "language": "en",
+        "visibleWorkspaces": 1,
+        "width": 390,
+        "section": "topics-dictionary"
+      },
+      {
+        "overflow": false,
+        "language": "en",
+        "visibleWorkspaces": 1,
+        "width": 768,
+        "section": "collection"
+      },
+      {
+        "overflow": false,
+        "language": "en",
+        "visibleWorkspaces": 1,
+        "width": 768,
+        "section": "articles"
+      },
+      {
+        "overflow": false,
+        "language": "en",
+        "visibleWorkspaces": 1,
+        "width": 768,
+        "section": "topics"
+      },
+      {
+        "overflow": false,
+        "language": "en",
+        "visibleWorkspaces": 1,
+        "width": 768,
+        "section": "interests"
+      },
+      {
+        "overflow": false,
+        "language": "en",
+        "visibleWorkspaces": 1,
+        "width": 768,
+        "section": "advertising"
+      },
+      {
+        "overflow": false,
+        "language": "en",
+        "visibleWorkspaces": 1,
+        "width": 768,
+        "section": "processing"
+      },
+      {
+        "overflow": false,
+        "language": "en",
+        "visibleWorkspaces": 1,
+        "width": 768,
+        "section": "collection-site"
+      },
+      {
+        "overflow": false,
+        "language": "en",
+        "visibleWorkspaces": 1,
+        "width": 768,
+        "section": "collection-sources"
+      },
+      {
+        "overflow": false,
+        "language": "en",
+        "visibleWorkspaces": 1,
+        "width": 768,
+        "section": "topics-dictionary"
+      },
+      {
+        "overflow": false,
+        "language": "en",
+        "visibleWorkspaces": 1,
+        "width": 1440,
+        "section": "collection"
+      },
+      {
+        "overflow": false,
+        "language": "en",
+        "visibleWorkspaces": 1,
+        "width": 1440,
+        "section": "articles"
+      },
+      {
+        "overflow": false,
+        "language": "en",
+        "visibleWorkspaces": 1,
+        "width": 1440,
+        "section": "topics"
+      },
+      {
+        "overflow": false,
+        "language": "en",
+        "visibleWorkspaces": 1,
+        "width": 1440,
+        "section": "interests"
+      },
+      {
+        "overflow": false,
+        "language": "en",
+        "visibleWorkspaces": 1,
+        "width": 1440,
+        "section": "advertising"
+      },
+      {
+        "overflow": false,
+        "language": "en",
+        "visibleWorkspaces": 1,
+        "width": 1440,
+        "section": "processing"
+      },
+      {
+        "overflow": false,
+        "language": "en",
+        "visibleWorkspaces": 1,
+        "width": 1440,
+        "section": "collection-site"
+      },
+      {
+        "overflow": false,
+        "language": "en",
+        "visibleWorkspaces": 1,
+        "width": 1440,
+        "section": "collection-sources"
+      },
+      {
+        "overflow": false,
+        "language": "en",
+        "visibleWorkspaces": 1,
+        "width": 1440,
+        "section": "topics-dictionary"
+      }
+    ],
+    "siteMatrixStates": 72,
+    "siteMatrixSha256": "aeecebf93a7bc358272dadd5742db5291563b9da528a469bfd51ea983a4904d2",
+    "countsNote": "The54 management scenarios and72 all-page scenarios overlap in default admin views; they are not126 unique states.",
+    "navigation": [
+      "DOM draft retention on menu switch",
+      "ArrowLeft/ArrowRight/Home/End and focus",
+      "Bounded hash deep links and invalid fallback",
+      "Back/forward without form loss",
+      "Late site detail cannot reopen another main section",
+      "Guest/member cannot reveal ADMIN tabs or trigger admin requests",
+      "Preview and202 acknowledgement visible outside closed job lookup"
+    ],
+    "screenshots": [
+      {
+        "name": "en-advertising-1440.png",
+        "sha256": "fc06d3d6379cb6334c9c11f59aa0a5c5c4883268bf6372b416675cc0b33e9289"
+      },
+      {
+        "name": "en-advertising-390.png",
+        "sha256": "34dca729732ef9aaf3919a43109d33f41cfeef393e1de0e1be85cf4e7284ed50"
+      },
+      {
+        "name": "en-advertising-768.png",
+        "sha256": "af19e25813cc9cd0ffe64dead9056dc29831fca6958ea4dc7d1195a60e609845"
+      },
+      {
+        "name": "en-articles-1440.png",
+        "sha256": "d1b0ae9725378b9e427699f6766a31b9bdcb1196216c60bb0b929bb7681c0516"
+      },
+      {
+        "name": "en-articles-390.png",
+        "sha256": "2b243c825c39a7c4864ea4923ec32c99d64f0a6d125ee196c5833d49541026f5"
+      },
+      {
+        "name": "en-articles-768.png",
+        "sha256": "cafd16cfe68fcb905cd1e04fdb4a40c8643e557654659efdd130ce79da74a067"
+      },
+      {
+        "name": "en-collection-1440.png",
+        "sha256": "0335bf74a00b29527c88d619c88cb6abdf15f5788bdc544be0b4e568ed239508"
+      },
+      {
+        "name": "en-collection-390.png",
+        "sha256": "d829e826bf1a89dfa94c3067c8994f9de50096799d3d29a7f38289cc266e89d8"
+      },
+      {
+        "name": "en-collection-768.png",
+        "sha256": "77d889e71274cb5f6839c651cb7c882da69f15017d8af6e1e7b85dbf71ffbcc7"
+      },
+      {
+        "name": "en-collection-site-1440.png",
+        "sha256": "7ea7957c62c8df332349383f0cf5dbdf76100bd3b6d800117fcf1a9621618b3d"
+      },
+      {
+        "name": "en-collection-site-390.png",
+        "sha256": "2965bdf83e7d7a9a4951188b0373f5cf8935d81837f86f29deb63878bd06f40d"
+      },
+      {
+        "name": "en-collection-site-768.png",
+        "sha256": "bf673436ea751526fb70d585a2e6c53740f387802f2cdf944bcd9916b4edaec0"
+      },
+      {
+        "name": "en-collection-sources-1440.png",
+        "sha256": "a8b60ae1d28faf414d10fd79848f92bc12d955d49f600b30a59c9d719efbecf7"
+      },
+      {
+        "name": "en-collection-sources-390.png",
+        "sha256": "b9e6b5e4c5efab0f0682612c7561e3f616c1f20a3c8993fc3594d179fea7d23a"
+      },
+      {
+        "name": "en-collection-sources-768.png",
+        "sha256": "135962123c8b0dc386ef3f827605c0c299feac133372f66e55e8aa2d74bb8bcf"
+      },
+      {
+        "name": "en-interests-1440.png",
+        "sha256": "291df9bece4fa1a3f8e524a76a3a09c848c7712f75507945ec466b6cfc66f92f"
+      },
+      {
+        "name": "en-interests-390.png",
+        "sha256": "70934bdcb37c0901a5b7b13f548d896df93da31fa70992425d211c152a2f994a"
+      },
+      {
+        "name": "en-interests-768.png",
+        "sha256": "8a9e4ce262635b2e310296be4aa2805314a4e37119b1936159c00bee8fb7858d"
+      },
+      {
+        "name": "en-processing-1440.png",
+        "sha256": "55c5c8fa3a27c148ef16cd90bcca46e9715dd9abcb9df2fcb4bdf419c24dcbf6"
+      },
+      {
+        "name": "en-processing-390.png",
+        "sha256": "ac87dfbfc7cae251b078aeb7f61a5bfbb9388725f2e67967adc0a89c0e40cb8e"
+      },
+      {
+        "name": "en-processing-768.png",
+        "sha256": "e8be64c2de71d2fb201bfe71c2a4e6074eb5b92e50fd42c602df7a4237936915"
+      },
+      {
+        "name": "en-topics-1440.png",
+        "sha256": "4d595209d0201a3f384b788dd915f9c91337c53091f3b159df73fa09a1685abd"
+      },
+      {
+        "name": "en-topics-390.png",
+        "sha256": "30152487b5c7f4739a8164eb915e746577f5e555198dfe8a1d811bde9c268b3d"
+      },
+      {
+        "name": "en-topics-768.png",
+        "sha256": "969d323d51c59b17b85340d6e3bcbbfc7c06949ed7280bb09ab2317afe5da113"
+      },
+      {
+        "name": "en-topics-dictionary-1440.png",
+        "sha256": "6fd0d9a561ef582c36391817a219bf1d20a79fe194d8bee59750cd445a389e71"
+      },
+      {
+        "name": "en-topics-dictionary-390.png",
+        "sha256": "309fcc48d15978f0094559a3b47e21157beb1985c46b0767293657e0a0587ddd"
+      },
+      {
+        "name": "en-topics-dictionary-768.png",
+        "sha256": "878300e04c64a0733d40a7f44879beab601807d8adec0663a322bbf81ab36edb"
+      },
+      {
+        "name": "ko-advertising-1440.png",
+        "sha256": "1a98f2c8fd23d46c053f0ec8fa9060577f972cbb3657e055ca484ab7c8f571ab"
+      },
+      {
+        "name": "ko-advertising-390.png",
+        "sha256": "4e651cb4789fc141bb0d16dbe7cc0891ad6cb48d1bbe3d43c3da537e3a80e80e"
+      },
+      {
+        "name": "ko-advertising-768.png",
+        "sha256": "a61f6766feb0369f87af6b59a4ab9ebd46f85539849fb98271d179f9fbd61404"
+      },
+      {
+        "name": "ko-articles-1440.png",
+        "sha256": "0827e7e966a147f5464c72a792d3dba5e145211374870ba65621a27be2e94185"
+      },
+      {
+        "name": "ko-articles-390.png",
+        "sha256": "47434ad137a2c28b8ed79bdd1721bf167be0e544641221e9e3ea92f2c47430ff"
+      },
+      {
+        "name": "ko-articles-768.png",
+        "sha256": "b311c05211fb00c3801e3245ae2dc70f3b73c91813b438483e6ece08a5cdd07e"
+      },
+      {
+        "name": "ko-collection-1440.png",
+        "sha256": "14a65c043d5cda0f43e5d61196536ee4d03aae1df21dbed969b8de0f883d0c1a"
+      },
+      {
+        "name": "ko-collection-390.png",
+        "sha256": "57fb512f423fa45bd30b310c02a9a59ca67eca0307573f215aee1337af1bc686"
+      },
+      {
+        "name": "ko-collection-768.png",
+        "sha256": "2c75e87d646d310fe9b7d11f39fc96e8bad78053365c3d6b3764cf83121d079f"
+      },
+      {
+        "name": "ko-collection-site-1440.png",
+        "sha256": "4561cc5d79ca18123c95fcdce8fdc02ee834af1e2917e7b4b613ea0ceaf4afa7"
+      },
+      {
+        "name": "ko-collection-site-390.png",
+        "sha256": "5b2f734d278a8072a9d12fb98801792310c1011828c732691f850fdb1dad0769"
+      },
+      {
+        "name": "ko-collection-site-768.png",
+        "sha256": "dfe00cabb03757472f8dba4d705395dc716092c642fdf038b8ba87b4f9257e17"
+      },
+      {
+        "name": "ko-collection-sources-1440.png",
+        "sha256": "0a65521d24b5f38ffbddaba2ee498f259c321a82b6a25ee42d3b870184f264b3"
+      },
+      {
+        "name": "ko-collection-sources-390.png",
+        "sha256": "117ec57ad1c7d948c630be7b47f1cbaaf347fd184e10da89b9a1a53e9b429e69"
+      },
+      {
+        "name": "ko-collection-sources-768.png",
+        "sha256": "3aab5ac75cc62f828f563b1ff59abe8b8ffb97be2827f64697cab868beeed7ee"
+      },
+      {
+        "name": "ko-interests-1440.png",
+        "sha256": "7f6ee343ad47ca05460ee78c67dc35a447a7862bceee722e65f0091c4a687d55"
+      },
+      {
+        "name": "ko-interests-390.png",
+        "sha256": "11d152c40242f1cacc60a5bfc8a85590190e1fd6b99d0f0dbd1c94b561879248"
+      },
+      {
+        "name": "ko-interests-768.png",
+        "sha256": "616f09379e39c84df101becef483d2d92fe24ee0505d2d7a020015a2f67a58f6"
+      },
+      {
+        "name": "ko-processing-1440.png",
+        "sha256": "6dfaf823c3376d85f1ed42cbe2d19b52bdd990d5ea4ea59b84b8fb0699dd3941"
+      },
+      {
+        "name": "ko-processing-390.png",
+        "sha256": "9704c51e50b841749d6843fe901d8ae07fb97d59baf07205bda43598b8c7ae71"
+      },
+      {
+        "name": "ko-processing-768.png",
+        "sha256": "858ee2e48b8a388d30484118cea141cbdadb184268e5e9f043c61fa7af065958"
+      },
+      {
+        "name": "ko-topics-1440.png",
+        "sha256": "83d68b534bafc91c0831bc9bbea1c60fe8a541f68e96fb9a4105b36c193b7eeb"
+      },
+      {
+        "name": "ko-topics-390.png",
+        "sha256": "ef2ae5326c67102a3e8a086e227f2d3b6741c6ab256237b484cc87aec4fa3389"
+      },
+      {
+        "name": "ko-topics-768.png",
+        "sha256": "a308fb55da61b512dab01c4a3dd9d9527617da94699c1fac1b3d9c5794e9da28"
+      },
+      {
+        "name": "ko-topics-dictionary-1440.png",
+        "sha256": "e08fa5b613b3b39a42537828b85e2f5f2d3517edaaeefa9d54766d41256d7416"
+      },
+      {
+        "name": "ko-topics-dictionary-390.png",
+        "sha256": "9d707834bf5ef502184b7ee183dfccb75e22d99f2b24b7d68c1015cc99f454a6"
+      },
+      {
+        "name": "ko-topics-dictionary-768.png",
+        "sha256": "95d70d3829bdf0ebe009f72f43c9a199a95fb4f2ed1a553394a587c46fd66b74"
+      }
+    ],
+    "visualInspection": [
+      "ko-collection-390",
+      "en-collection-1440",
+      "ko-collection-sources-1440",
+      "ko-topics-dictionary-390",
+      "en-advertising-390"
+    ],
+    "syntheticOnly": true
+  },
+  "html": {
+    "version": "26.10.12 (0a70d65)",
+    "messages": [],
+    "pages": 11,
+    "toolSha256": "19f89e204cb881e2d88c5d0cd451df6c1ee8334e7fe626f6694b64a129f6a813"
+  },
+  "security": {
+    "images": [
+      {
+        "tag": "moapan-admin-candidate:20261101",
+        "id": "sha256:af492f8866e4a708afd859adec8704ad16d42e0efa9c3ad1309bc41ec53bb892",
+        "reportSha256": "b32f60a3f53c9b193707ad828471057d35ab629f2058c0a53330a02b8022352d",
+        "createdAt": "2026-11-01T07:44:29.219971+09:00",
+        "vulnerabilities": {
+          "UNKNOWN": 0,
+          "LOW": 0,
+          "MEDIUM": 0,
+          "HIGH": 0,
+          "CRITICAL": 0
+        },
+        "secrets": 0
+      },
+      {
+        "tag": "moapan-admin-build:20261101",
+        "id": "sha256:29a7e3daf67b2340cfccd5def799e5b2f50d2d6d9fc065ec28d37da6ca661c6c",
+        "reportSha256": "07c7f89d574305572e9033497e1a574e17d58301a71e9bcb514c1e9f59701069",
+        "createdAt": "2026-11-01T07:44:33.993412+09:00",
+        "vulnerabilities": {
+          "UNKNOWN": 0,
+          "LOW": 0,
+          "MEDIUM": 0,
+          "HIGH": 0,
+          "CRITICAL": 0
+        },
+        "secrets": 0
+      }
+    ],
+    "finalSourceJarSbomGate": "PASS",
+    "reports": {
+      "source": {
+        "createdAt": "2026-11-01T07:46:39.219285+09:00",
+        "sha256": "cdd94f5320bb96b13520a13cbe9a90b1c0d19f4650276b03d3ae6f58ece202e2",
+        "vulnerabilities": [
+          {
+            "id": "GO-2026-5932",
+            "package": "golang.org/x/crypto",
+            "version": "v0.57.0",
+            "severity": "UNKNOWN"
+          },
+          {
+            "id": "CVE-2026-116587",
+            "package": "github.com/go-jose/go-jose/v3",
+            "version": "v3.0.5",
+            "severity": "HIGH"
+          },
+          {
+            "id": "CVE-2026-116585",
+            "package": "github.com/go-jose/go-jose/v3",
+            "version": "v3.0.5",
+            "severity": "MEDIUM"
+          },
+          {
+            "id": "CVE-2026-116586",
+            "package": "github.com/go-jose/go-jose/v3",
+            "version": "v3.0.5",
+            "severity": "MEDIUM"
+          },
+          {
+            "id": "GO-2026-5932",
+            "package": "golang.org/x/crypto",
+            "version": "v0.58.0",
+            "severity": "UNKNOWN"
+          }
+        ],
+        "secrets": 0
+      },
+      "jar": {
+        "createdAt": "2026-11-01T07:46:40.603125+09:00",
+        "sha256": "fbc32fae651c054885dfcc8647bb79ab513d367323f350ac18c1d584cbe04546",
+        "vulnerabilities": [],
+        "secrets": 0
+      },
+      "sbom": {
+        "createdAt": "2026-11-01T07:46:39.311437+09:00",
+        "sha256": "0d0cb7cf829983b1ab708742f82249d56bc0559e0fccc0289a57785c2acedbf1",
+        "vulnerabilities": [],
+        "secrets": 0
+      }
+    },
+    "database": {
+      "Version": 2,
+      "NextUpdate": "2026-11-01T18:53:10.861587125Z",
+      "UpdatedAt": "2026-10-31T18:53:10.861587496Z",
+      "DownloadedAt": "2026-10-31T22:08:51.77085Z"
+    },
+    "sbomSha256": "1ad74a0dc59e1c37447a0d4496fcbe280394be7ddb7a0328ac5655b21c962b63",
+    "retainedRisks": [
+      "Original S07 user password policy is unchanged.",
+      "Source scanner raw JOSE findings use the existing exact-source backport proof,expires2026-11-07; not an upstream v3 release.",
+      "No claim of unknown-vulnerability or prompt-injection immunity."
+    ],
+    "scope": "Application/builder/JAR/SBOM/source scanned; unchanged proxy/DB/models are not newly scanned or retested here.",
+    "documentationRescan": "PASS after final documentation",
+    "completedAt": "2026-10-31T22:46:40Z"
+  },
+  "runtime": {
+    "url": "https://175.195.62.165/",
+    "replaced": [
+      "web",
+      "worker"
+    ],
+    "services": [
+      {
+        "service": "web",
+        "image": "sha256:af492f8866e4a708afd859adec8704ad16d42e0efa9c3ad1309bc41ec53bb892",
+        "status": "running",
+        "health": "healthy"
+      },
+      {
+        "service": "worker",
+        "image": "sha256:af492f8866e4a708afd859adec8704ad16d42e0efa9c3ad1309bc41ec53bb892",
+        "status": "running",
+        "health": null
+      },
+      {
+        "service": "proxy",
+        "image": "sha256:e4b645df85f6e31cae7eabadaf6a9482e0d199fa1444f57a22e6c7198640bad6",
+        "status": "running",
+        "health": "healthy"
+      },
+      {
+        "service": "db",
+        "image": "sha256:8ee8af1f67452558bb3bcdf475b43ec4c1124f6df9957f7a9d79a08f5e292a0d",
+        "status": "running",
+        "health": "healthy"
+      },
+      {
+        "service": "translator",
+        "image": "sha256:8e0b496277410200aeff2334844c93fd9a9544f73ad7218d0df50f6a6e17efce",
+        "status": "running",
+        "health": "healthy"
+      },
+      {
+        "service": "classifier",
+        "image": "sha256:8a9b1fbd783fda8305655c4a0939df1faa52c29ebac220050ffe1c45d42a3ca5",
+        "status": "running",
+        "health": "healthy"
+      }
+    ],
+    "jarSha256": "b5c4e9dae0801915d165193cc6fdf586cfca3bba3b113a09b5f3a39397926746",
+    "webJarSha256": "b5c4e9dae0801915d165193cc6fdf586cfca3bba3b113a09b5f3a39397926746",
+    "workerJarSha256": "b5c4e9dae0801915d165193cc6fdf586cfca3bba3b113a09b5f3a39397926746",
+    "countsBefore": {
+      "articles": 300,
+      "users": 2,
+      "newsletters": 1
+    },
+    "countsAfter": {
+      "articles": 300,
+      "users": 2,
+      "newsletters": 1
+    },
+    "assets": {
+      "checkedAt": "2026-10-31T22:44:58.624Z",
+      "assets": [
+        {
+          "path": "/assets/css/site.css",
+          "status": 200,
+          "sha256": "14010f04018e3a248c07ee9d8631a5829b321b5d73744722900d5d2225d05aa6"
+        },
+        {
+          "path": "/assets/css/auth.css",
+          "status": 200,
+          "sha256": "7a698109a9c3a6eeccdc938867fe81aa6bcd2c2909094ff29ee2dff1cce664cd"
+        },
+        {
+          "path": "/assets/css/newsletter.css",
+          "status": 200,
+          "sha256": "8ad8e08db58443430782d8c70631428848c61a4035eaeaa0e59cca044c5899a0"
+        },
+        {
+          "path": "/assets/js/shared/common.js",
+          "status": 200,
+          "sha256": "c0f66443863ebf0085fab2aef70bd6696353071c9fe11e6e194f748e963ffd41"
+        },
+        {
+          "path": "/assets/js/shared/i18n.js",
+          "status": 200,
+          "sha256": "8a7ef0a34d18b3af2c36664d7674676bcf077c5e7e8587bd1c05ad1bd849e984"
+        },
+        {
+          "path": "/index.html",
+          "status": 200,
+          "sha256": "9d600781a593fa445080ddbe91386306b30f48f994d107b1615bfd2dca13cbfe"
+        },
+        {
+          "path": "/about.html",
+          "status": 200,
+          "sha256": "a3bb88f13a22bd43beddfe1c930d30736dd196a65739adc9436438682c013c8f"
+        },
+        {
+          "path": "/privacy.html",
+          "status": 200,
+          "sha256": "eacd89684bf7d83533ed8ed4f070b687d9c81f5bc81afb45d8aa6c1f829a3c5d"
+        },
+        {
+          "path": "/terms.html",
+          "status": 200,
+          "sha256": "932333c7b18af1226f7429c39ed7fabeb14c36cc32bde3976df44d328fecb34e"
+        },
+        {
+          "path": "/login.html",
+          "status": 200,
+          "sha256": "be7c64de4cc37b6e866e8a1bb4b36ee77f3cecc47c6478de12f5b77b0d1223e0"
+        },
+        {
+          "path": "/signup.html",
+          "status": 200,
+          "sha256": "d56b302f8fa918b4c2a91b4ebcae5cfdfe63e7b8bfc4c03954e47de8743d115d"
+        },
+        {
+          "path": "/assets/css/admin.css",
+          "status": 200,
+          "sha256": "3dedb4d898f78cd3b817c18cbeec94ee966c8b7382a837cf6b7acae98b2bcfdb"
+        },
+        {
+          "path": "/assets/js/administration/admin.js",
+          "status": 200,
+          "sha256": "581b878db2e33a4f910c3c7ca6adfe0c61740282111e95d6d29ef4c89379fae4"
+        },
+        {
+          "path": "/assets/js/administration/navigation.js",
+          "status": 200,
+          "sha256": "c02c95b45b0637d6b32d823275985f6d03d3f45b5df5c16c6a9e75f37b2d3549"
+        },
+        {
+          "path": "/assets/js/shared/i18n-admin-navigation.js",
+          "status": 200,
+          "sha256": "855328dc8944ba2a202ff818d73d2da90f55d3aeacc1aa1efd927bcdfccfe024"
+        }
+      ]
+    },
+    "httpAudit": {
+      "checkedAt": "2026-10-31T22:44:58.092Z",
+      "origin": "https://175.195.62.165",
+      "pages": [
+        {
+          "path": "/index.html",
+          "publicPage": true,
+          "status": 200,
+          "contentType": "text/html",
+          "location": null,
+          "canonicalHeader": "<https://175.195.62.165/index.html>; rel=\"canonical\"",
+          "robotsHeader": null,
+          "contentLanguage": null,
+          "metadata": {
+            "title": "오늘의 지면 | 모아판 MoA-PaN",
+            "description": "모아판은 보안, 인공지능, RAG, 데이터베이스와 검색 기술 소식을 모아 관심사에 맞게 읽는 뉴스 서비스입니다.",
+            "robots": "index, follow",
+            "lang": "ko",
+            "viewport": "width=device-width,initial-scale=1",
+            "canonical": "/index.html",
+            "staticArticleCount": 0
+          }
+        },
+        {
+          "path": "/about.html",
+          "publicPage": true,
+          "status": 200,
+          "contentType": "text/html",
+          "location": null,
+          "canonicalHeader": "<https://175.195.62.165/about.html>; rel=\"canonical\"",
+          "robotsHeader": null,
+          "contentLanguage": null,
+          "metadata": {
+            "title": "모아판 소개·출처 | 모아판 MoA-PaN",
+            "description": "모아판의 뉴스 수집 출처, 서비스 이용 방법과 브라우저에 저장하는 관심사 설정을 안내합니다.",
+            "robots": "index, follow",
+            "lang": "ko",
+            "viewport": "width=device-width,initial-scale=1",
+            "canonical": "/about.html",
+            "staticArticleCount": 0
+          }
+        },
+        {
+          "path": "/privacy.html",
+          "publicPage": true,
+          "status": 200,
+          "contentType": "text/html",
+          "location": null,
+          "canonicalHeader": "<https://175.195.62.165/privacy.html>; rel=\"canonical\"",
+          "robotsHeader": null,
+          "contentLanguage": null,
+          "metadata": {
+            "title": "개인정보 처리방침 | 모아판 MoA-PaN",
+            "description": "모아판이 처리하는 계정 정보와 보안 정보, 브라우저 관심사 보관 및 삭제 방법을 안내합니다.",
+            "robots": "index, follow",
+            "lang": "ko",
+            "viewport": "width=device-width,initial-scale=1",
+            "canonical": "/privacy.html",
+            "staticArticleCount": 0
+          }
+        },
+        {
+          "path": "/terms.html",
+          "publicPage": true,
+          "status": 200,
+          "contentType": "text/html",
+          "location": null,
+          "canonicalHeader": "<https://175.195.62.165/terms.html>; rel=\"canonical\"",
+          "robotsHeader": null,
+          "contentLanguage": null,
+          "metadata": {
+            "title": "이용약관 | 모아판 MoA-PaN",
+            "description": "모아판 서비스 이용 조건과 계정, 콘텐츠 및 원문 링크 이용에 관한 약관입니다.",
+            "robots": "index, follow",
+            "lang": "ko",
+            "viewport": "width=device-width,initial-scale=1",
+            "canonical": "/terms.html",
+            "staticArticleCount": 0
+          }
+        },
+        {
+          "path": "/login.html",
+          "publicPage": false,
+          "status": 200,
+          "contentType": "text/html",
+          "location": null,
+          "canonicalHeader": null,
+          "robotsHeader": "noindex, follow",
+          "contentLanguage": null,
+          "metadata": {
+            "title": "로그인 | 모아판 MoA-PaN",
+            "description": "모아판 계정으로 로그인합니다.",
+            "robots": "noindex, follow",
+            "lang": "ko",
+            "viewport": "width=device-width,initial-scale=1",
+            "canonical": null,
+            "staticArticleCount": 0
+          }
+        },
+        {
+          "path": "/signup.html",
+          "publicPage": false,
+          "status": 200,
+          "contentType": "text/html",
+          "location": null,
+          "canonicalHeader": null,
+          "robotsHeader": "noindex, follow",
+          "contentLanguage": null,
+          "metadata": {
+            "title": "회원가입 | 모아판 MoA-PaN",
+            "description": "아이디와 비밀번호로 모아판 계정을 만듭니다.",
+            "robots": "noindex, follow",
+            "lang": "ko",
+            "viewport": "width=device-width,initial-scale=1",
+            "canonical": null,
+            "staticArticleCount": 0
+          }
+        },
+        {
+          "path": "/settings.html",
+          "publicPage": false,
+          "status": 302,
+          "contentType": null,
+          "location": "/login.html",
+          "canonicalHeader": null,
+          "robotsHeader": "noindex, follow",
+          "contentLanguage": null,
+          "metadata": null
+        },
+        {
+          "path": "/account.html",
+          "publicPage": false,
+          "status": 302,
+          "contentType": null,
+          "location": "/login.html",
+          "canonicalHeader": null,
+          "robotsHeader": "noindex, follow",
+          "contentLanguage": null,
+          "metadata": null
+        },
+        {
+          "path": "/admin.html",
+          "publicPage": false,
+          "status": 302,
+          "contentType": null,
+          "location": "/login.html",
+          "canonicalHeader": null,
+          "robotsHeader": "noindex, follow",
+          "contentLanguage": null,
+          "metadata": null
+        },
+        {
+          "path": "/newsletter.html",
+          "publicPage": false,
+          "status": 302,
+          "contentType": null,
+          "location": "/login.html",
+          "canonicalHeader": null,
+          "robotsHeader": "noindex, follow",
+          "contentLanguage": null,
+          "metadata": null
+        },
+        {
+          "path": "/newsletter-editor.html",
+          "publicPage": false,
+          "status": 302,
+          "contentType": null,
+          "location": "/login.html",
+          "canonicalHeader": null,
+          "robotsHeader": "noindex, follow",
+          "contentLanguage": null,
+          "metadata": null
+        }
+      ],
+      "checks": {
+        "robots": {
+          "status": 200,
+          "sitemapReference": "https://175.195.62.165/sitemap.xml"
+        },
+        "sitemap": {
+          "status": 200,
+          "urls": [
+            "https://175.195.62.165/index.html",
+            "https://175.195.62.165/about.html",
+            "https://175.195.62.165/privacy.html",
+            "https://175.195.62.165/terms.html"
+          ]
+        },
+        "publicEdition": {
+          "status": 200,
+          "returnedItems": 42,
+          "candidateCount": 225
+        },
+        "notFound": {
+          "status": 404,
+          "robotsHeader": "noindex, follow"
+        },
+        "/api/v1/newsletters": {
+          "status": 401,
+          "robotsHeader": "noindex, follow"
+        },
+        "/api/v1/admin/sites": {
+          "status": 401,
+          "robotsHeader": "noindex, follow"
+        }
+      },
+      "limitations": [
+        "Actual Google/Naver/Bing indexing and rank require portal evidence and remain UNKNOWN.",
+        "User-agent imitation and public search samples do not prove access from a real engine crawler."
+      ],
+      "root": {
+        "status": 200,
+        "contentType": "text/html",
+        "location": null,
+        "canonicalHeader": "<https://175.195.62.165/index.html>; rel=\"canonical\"",
+        "robotsHeader": null,
+        "contentLanguage": "und",
+        "metadata": {
+          "title": "오늘의 지면 | 모아판 MoA-PaN",
+          "description": "모아판은 보안, 인공지능, RAG, 데이터베이스와 검색 기술 소식을 모아 관심사에 맞게 읽는 뉴스 서비스입니다.",
+          "robots": "index, follow",
+          "lang": "ko",
+          "viewport": "width=device-width,initial-scale=1",
+          "canonical": "/index.html",
+          "staticArticleCount": 0
+        }
+      },
+      "absoluteHtmlCanonicals": {
+        "passed": 0,
+        "total": 4
+      }
+    },
+    "productionLoginOrTestAccountCreation": false
+  },
+  "delivery": {
+    "pullRequest": "https://github.com/JunSungKang/MoaPan/pull/11",
+    "merge": "NOT_AUTHORIZED_FOR_THIS_TASK",
+    "currentHeadReview": "Read the current PR formal review; this evidence does not approve a future head."
+  }
+}
