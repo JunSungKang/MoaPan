@@ -31,7 +31,7 @@ public class SecurityConfig {
         UserDetailsService users=name->accounts.findByUsername(name).filter(a->a.active).map(a->User.withUsername(a.username).password(a.passwordHash).roles(a.role).build()).orElseThrow(()->new UsernameNotFoundException("invalid_credentials"));
         var provider=new DaoAuthenticationProvider(users);provider.setPasswordEncoder(encoder);return new ProviderManager(provider);
     }
-    @Bean SecurityFilterChain chain(HttpSecurity http,Accounts accounts,Limits limits,SecurityContextRepository repository,@Value("${moapan.public-base-url}")String origin)throws Exception{
+    @Bean SecurityFilterChain chain(HttpSecurity http,Accounts accounts,Limits limits,SecurityContextRepository repository,@Value("${moapan.public-base-url}")String origin,com.moapan.subscription.application.ContentAccess access)throws Exception{
         URI base=URI.create(origin); if(base.getHost()==null||!Set.of("http","https").contains(base.getScheme()))throw new IllegalStateException("Invalid PUBLIC_BASE_URL");
         var csrf=new HttpSessionCsrfTokenRepository(); csrf.setHeaderName("X-CSRF-TOKEN");
         var handler=new CsrfTokenRequestAttributeHandler();
@@ -51,7 +51,7 @@ public class SecurityConfig {
                 .permissionsPolicyHeader(c->c.policy("camera=(), microphone=(), geolocation=()"))
                 .addHeaderWriter(new org.springframework.security.web.header.writers.StaticHeadersWriter("Cross-Origin-Opener-Policy","same-origin"));})
             .addFilterBefore(new RequestBodyLimitFilter(),CsrfFilter.class)
-            .addFilterBefore(new Boundary(accounts,limits,base),AnonymousAuthenticationFilter.class);
+            .addFilterBefore(new Boundary(accounts,limits,base,access),AnonymousAuthenticationFilter.class);
         return http.build();
     }
     // A relative Location keeps the browser on HTTPS without trusting forwarded headers.
@@ -60,9 +60,10 @@ public class SecurityConfig {
     private static boolean canContinueAsGuest(HttpServletRequest q){
         return "GET".equals(q.getMethod())&&Set.of("/api/v1/auth/session","/","/index.html","/api/v1/public/news/edition","/api/v1/public/interests","/api/v1/public/tags").contains(q.getRequestURI())||"POST".equals(q.getMethod())&&q.getRequestURI().equals("/api/v1/public/news/search");
     }
+    private static boolean newsletterPath(HttpServletRequest q){String p=q.getRequestURI();return p.equals("/newsletter.html")||p.equals("/api/v1/newsletters")||p.startsWith("/api/v1/newsletters/");}
     static class Boundary extends OncePerRequestFilter {
-        final Accounts accounts;final Limits limits;final URI origin;final Semaphore requests=new Semaphore(100);
-        Boundary(Accounts a,Limits l,URI u){accounts=a;limits=l;origin=u;}
+        final Accounts accounts;final Limits limits;final URI origin;final com.moapan.subscription.application.ContentAccess access;final Semaphore requests=new Semaphore(100);
+        Boundary(Accounts a,Limits l,URI u,com.moapan.subscription.application.ContentAccess access){accounts=a;limits=l;origin=u;this.access=access;}
         protected void doFilterInternal(HttpServletRequest q,HttpServletResponse r,FilterChain chain)throws ServletException,IOException{
             if(!requests.tryAcquire()){r.setHeader("Retry-After","1");error(r,503);return;}
             try{
@@ -76,8 +77,10 @@ public class SecurityConfig {
                 if(session!=null&&auth!=null&&auth.isAuthenticated()){
                     boolean valid=RememberedSession.valid(session);
                     try{valid&=accounts.findById(UUID.fromString(auth.getName())).filter(a->a.active&&Objects.equals(session.getAttribute(RememberedSession.CREDENTIAL_VERSION),a.authVersion)&&auth.getAuthorities().stream().anyMatch(p->p.getAuthority().equals("ROLE_"+a.role))).isPresent();}catch(IllegalArgumentException e){valid=false;}
-                    if(!valid){session.invalidate();org.springframework.security.core.context.SecurityContextHolder.clearContext();if(!canContinueAsGuest(q)){if(q.getRequestURI().endsWith(".html"))redirect(r,"/login.html");else error(r,401);return;}}
+                    if(!valid){session.invalidate();org.springframework.security.core.context.SecurityContextHolder.clearContext();if(newsletterPath(q)||q.getRequestURI().equals("/404.html")){com.moapan.shared.api.NotFoundResponse.send(q,r);return;}if(!canContinueAsGuest(q)){if(Set.of("/settings.html","/account.html","/admin.html","/newsletter-editor.html").contains(q.getRequestURI())){redirect(r,"/login.html");return;}if(q.getRequestURI().startsWith("/api/")){error(r,401);return;}}}
                 }
+                if(q.getRequestURI().equals("/404.html")){com.moapan.shared.api.NotFoundResponse.send(q,r);return;}
+                if(newsletterPath(q)){r.setHeader("Cache-Control","no-store");if(!access.allows(com.moapan.subscription.domain.EntitlementPolicy.Benefit.READ_NEWSLETTER)){com.moapan.shared.api.NotFoundResponse.send(q,r);return;}}
                 if(q.getRequestURI().equals("/api/v1/auth/csrf")&&session==null)limits.auth("anonymous_sessions",600,60);
                 chain.doFilter(q,r);
             }catch(com.moapan.shared.api.ApiError e){r.setHeader("Retry-After","60");error(r,e.statusCode());}
