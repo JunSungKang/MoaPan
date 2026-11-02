@@ -44,4 +44,31 @@ class SubscriptionBrowserTest {
             SiteDesignAuditTest.routes(c,"USER");viewer(c,"USER",new AtomicBoolean(false));var p=c.newPage();p.navigate(BrowserTest.origin+"/newsletter.html");p.waitForURL("**/404.html");p.waitForLoadState(LoadState.NETWORKIDLE);assertEquals("페이지를 찾을 수 없습니다",p.locator("h1").textContent());p.locator("[data-language-select]").selectOption("en");assertEquals("Page not found",p.locator("h1").textContent());assertTrue(p.title().startsWith("Page not found"));assertEquals(0,p.locator("#letter-body").count());
         }
     }
+    @Test void alreadyLoadedNewsletterCleansUpOnAuthenticationLossWithoutReferenceErrors(){
+        try(var c=BrowserTest.browser.newContext()){
+            SiteDesignAuditTest.routes(c,"USER");viewer(c,"USER",new AtomicBoolean(true));var p=c.newPage();List<String> errors=new ArrayList<>();p.onPageError(errors::add);
+            p.navigate(BrowserTest.origin+"/newsletter.html?id="+BrowserTest.A);p.waitForSelector("#letter-body:visible");
+            p.evaluate("window.addEventListener('moapan-clear',()=>sessionStorage.setItem('synthetic-newsletter-cleared','1'));window.dispatchEvent(new Event('moapan-auth-lost'))");
+            p.waitForURL("**/404.html");p.waitForLoadState(LoadState.NETWORKIDLE);assertEquals("1",p.evaluate("sessionStorage.getItem('synthetic-newsletter-cleared')"));assertEquals(0,p.locator("#letter-body").count());assertTrue(errors.isEmpty(),errors.toString());
+        }
+    }
+    @Test void initialAnonymousSession204And401BothReach404WithoutScriptErrors(){
+        for(int status:List.of(204,401))try(var c=BrowserTest.browser.newContext()){
+            SiteDesignAuditTest.routes(c,"USER");c.route("**/api/v1/auth/session",r->r.fulfill(new Route.FulfillOptions().setStatus(status).setContentType("application/json").setBody(status==204?"":"{\"error\":\"authentication_required\"}")));var p=c.newPage();List<String> errors=new ArrayList<>();p.onPageError(errors::add);
+            p.navigate(BrowserTest.origin+"/newsletter.html?id="+BrowserTest.A);p.waitForURL("**/404.html");p.waitForLoadState(LoadState.NETWORKIDLE);assertEquals(0,p.locator("#letter-body").count());assertTrue(errors.isEmpty(),errors.toString());
+        }
+    }
+    @Test void everyReuseAndWorksheetButtonClearsLoadedContentAfterServer404(){
+        for(String button:List.of("출처 포함 복사","재게재용 파일","회의용 요약","연구 우선순위표","실험·평가 양식"))try(var c=BrowserTest.browser.newContext()){
+            SiteDesignAuditTest.routes(c,"USER");viewer(c,"USER",new AtomicBoolean(true));c.route("**/api/v1/newsletters/*/reuse",r->r.fulfill(new Route.FulfillOptions().setStatus(404).setContentType("application/json").setBody("{\"error\":\"not_found\"}")));c.route("**/api/v1/newsletters/*/worksheet",r->r.fulfill(new Route.FulfillOptions().setStatus(404).setContentType("application/json").setBody("{\"error\":\"not_found\"}")));
+            var p=c.newPage();List<String> errors=new ArrayList<>();var downloads=new AtomicInteger();p.onPageError(errors::add);p.onDownload(d->downloads.incrementAndGet());p.navigate(BrowserTest.origin+"/newsletter.html?id="+BrowserTest.A);p.waitForSelector("#letter-body:visible");p.getByRole(com.microsoft.playwright.options.AriaRole.BUTTON,new Page.GetByRoleOptions().setName(button).setExact(true)).click();
+            p.waitForURL("**/404.html");p.waitForLoadState(LoadState.NETWORKIDLE);assertEquals(0,p.locator("#letter-body").count());assertEquals(0,downloads.get());assertTrue(errors.isEmpty(),errors.toString());
+        }
+    }
+    @Test void unavailableOptionalNewsletterNeverClearsPublicNewsOrPersonalization(){
+        try(var c=BrowserTest.browser.newContext()){
+            SiteDesignAuditTest.routes(c,"USER");viewer(c,"USER",new AtomicBoolean(true));c.route("**/api/v1/newsletters",r->r.fulfill(new Route.FulfillOptions().setStatus(404).setContentType("application/json").setBody("{\"error\":\"not_found\"}")));var p=c.newPage();List<String> errors=new ArrayList<>();p.onPageError(errors::add);
+            p.navigate(BrowserTest.origin+"/index.html");p.waitForLoadState(LoadState.NETWORKIDLE);assertEquals(7,p.locator("#paper article").count());assertTrue(p.url().endsWith("/index.html"));assertEquals(0,p.locator("[data-newsletter-content]").count());assertEquals(0,p.locator(".content-menu a[href='/newsletter.html']:visible").count());assertTrue(p.locator("#account-menu a[href='/account.html']").isVisible());assertTrue(errors.isEmpty(),errors.toString());
+        }
+    }
 }

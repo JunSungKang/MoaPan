@@ -224,3 +224,8 @@ Boot4.1.2 BOM의 Caffeine3.2.4와 error_prone_annotations2.49.0을 추가했다.
 
 ## PageSpeed 변경 후 재검증 — 2026-11-02
 동일 의존성과 모델을 유지하며 session 탐지204/보호account401, CSP Trusted Types/COOP와 HEAD header eager 적용·동적 비압축경계를 회귀검증했다. JAR 3c1877697b477650eb30e2dd84199b3612b3e0390daddce817c1d7da0fab5e9e; runtime sha256:fba510fc15d13e3a078a6a27185d763a9046badb2aa7294e0790450e117db7f2; builder sha256:d4741202ca5253fb0a7e6a8c2d1ff14e3b061032fdd0eb76c92da33c8f63d679; proxy sha256:453e34b953b74d07e425de9383bf2d7e3190deba1fe828eb34b036c69874074c. source/JAR/SBOM/Helm/3image gate PASS, 최종 이미지만 서비스에 적용. DB동기화2026-11-01T20:52:15.050556Z·검사24시간 이내. runtime/builder raw취약점0·비밀0. proxy기존 GO-2026-5932 UNKNOWN 정확코드비노출근거 유지, 신규ignore 없음. Temurin27.0.1.0.2+1/117roots/공식4대상부재·정상HTTPS/14TLS거부 재검증. Spring/adoptium/Boot/Gradle 공식 문서를 재조회했다. IP HSTS효력·preload등록과 헤더 문법을 구분하며 기존 S07사용자 비밀번호 정책과 기존 예외 만료기한을 바꾸지 않는다. 상세 [MP-DOC-033](../05-test/pagespeed-desktop.md).
+
+
+## 계정별 구독 권한 변경 검증 (2026-11-02)
+구독 권한은 요청별 DB 상태/기간으로 판정하고 HTML/API/HEAD·인코딩 별칭의 부적격 접근은 같은404/no-store를 반환한다. 권한은 세션/공유발간캐시에 저장하지 않는다. ADMIN/CSRF·최초경합·버전·감사·계정삭제·DB실패503·서비스직접호출·기존본문캐시를검증했다. 독립리뷰의UI인증상실/독자도구404 결함과 전체회귀의공개지면초기화는수정하고재검증했다. MP-DOC-035/036 및 PR #27 정본을 따른다. 가격/실결제/자격증명 길이·의존성·모델정책은 변경하지 않았다.
+공식 [Spring 보안공지](https://spring.io/security/)와 개별 CVE-2026-41707/47841/47877/47842의수정7.1.1, [JPA47834](https://spring.io/security/cve-2026-47834/)수정4.1.1을다시확인했다. 실제JAR Security7.1.2/JPA4.1.2는이후버전이며DPoP/WebAuthn/AuthorizationServer/해당AES API는추가하지않았다. [Oracle 공지](https://www.oracle.com/security-alerts/)와 [Temurin notes](https://adoptium.net/temurin/release-notes)를조회하고기존JDK보안빌드·실제런타임truststore수정검증을유지했다. 이확인은모든미공개취약점부재를보증하지않으며기존proxy 적용성·S07 잔여상태를닫지않는다.

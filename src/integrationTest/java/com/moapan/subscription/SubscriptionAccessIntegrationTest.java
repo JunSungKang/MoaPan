@@ -113,4 +113,11 @@ class SubscriptionAccessIntegrationTest {
         org.mockito.Mockito.doThrow(new org.springframework.dao.DataAccessResourceFailureException("synthetic outage")).when(provider).grants(org.mockito.ArgumentMatchers.eq(member.id()),org.mockito.ArgumentMatchers.any(Instant.class));
         mvc.perform(get("/api/v1/newsletters").cookie(member.session())).andExpect(status().isServiceUnavailable()).andExpect(header().string("Cache-Control","no-store")).andExpect(header().string("Retry-After","60"));
     }
+    @Test void encodedUnreservedPathsCannotBypassConcealmentOrApiContentType()throws Exception{
+        for(String path:List.of("/%6eewsletter.html","/api/v1/%6eewsletters","/%61pi/v1/newsletters")){
+            for(Cookie cookie:List.of(member.session(),admin.session()))mvc.perform(get(java.net.URI.create(path)).cookie(cookie).accept("text/html")).andExpect(status().isNotFound()).andExpect(header().string("Cache-Control","no-store")).andExpect(header().doesNotExist("Location"));
+            mvc.perform(get(java.net.URI.create(path))).andExpect(status().isNotFound()).andExpect(content().json("{\"error\":\"not_found\"}"));
+            if(!path.endsWith(".html"))mvc.perform(get(java.net.URI.create(path)).cookie(member.session()).accept("text/html")).andExpect(content().contentType("application/json"));
+        }
+    }
 }

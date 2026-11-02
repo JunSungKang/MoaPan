@@ -37,5 +37,5 @@ try{
   for(const topic of new Set(list.map(row=>row.topic))){const option=el('option',topic);option.value=topic;filter.append(option);}
   if(list.length)try{const latest=await request('/api/v1/newsletters/'+encodeURIComponent(list[0].id));const cover=latest.manuscript.blocks.find(b=>b.type==='image'&&/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/.test(b.url));if(cover){const image=el('img',undefined,'letter-cover');image.src=cover.url;image.alt=cover.text;const slot=target.querySelector('.teaser-cover');slot.removeAttribute('aria-hidden');slot.classList.remove('placeholder');slot.replaceChildren(image);}}catch{/* The archive remains usable if its optional cover is unavailable. */}
  }
-}catch(e){if(e.status===404)location.replace('/404.html');else report(e);}
+}catch(e){if(e.status!==404)report(e);}
 filter.addEventListener('change',()=>{for(const article of target.querySelectorAll('article'))article.hidden=!!filter.value&&article.dataset.topic!==filter.value;});

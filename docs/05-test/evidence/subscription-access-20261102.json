@@ -1,6 +1,6 @@
 {
-  "status": "SERVICE_VALIDATED_REVIEW_PENDING",
-  "checkedAt": "2026-11-02T04:23:43.711Z",
+  "status": "SERVICE_VALIDATED_REVIEW_FIX_PENDING",
+  "checkedAt": "2026-11-02T04:55:10.290Z",
   "base": "fe81b65c2889a92136b3b2d3861c2e5a3f1482bb",
   "checklist": [
     {
@@ -50,25 +50,25 @@
   ],
   "tests": {
     "test": {
-      "tests": 170,
+      "tests": 171,
       "failures": 0,
       "errors": 0,
       "skipped": 0
     },
     "integrationTest": {
-      "tests": 121,
+      "tests": 122,
       "failures": 0,
       "errors": 0,
       "skipped": 0
     },
     "e2eTest": {
-      "tests": 65,
+      "tests": 69,
       "failures": 0,
       "errors": 0,
       "skipped": 0
     }
   },
-  "totalTests": 356,
+  "totalTests": 362,
   "html": {
     "pages": 12,
     "messages": 0,
@@ -76,17 +76,17 @@
   },
   "images": [
     {
-      "digest": "sha256:ee16331194f2f924dc1c82b7d324b710b4a6090e881e9923beb4d5051d4b0438",
+      "digest": "sha256:0331e5d64b9005512795c4815295eb49c350e0de55d79543db100184e7ccaef4",
       "vulnerabilities": 0,
       "secrets": 0
     },
     {
-      "digest": "sha256:bede4477077f76eb594428bad77d477443c39161eb4c909a56dcd9bb79cd2a79",
+      "digest": "sha256:2f9fc675b45ba8b3e07a35275e61d8183c9e7ddceb2d32600a444539256eb984",
       "vulnerabilities": 0,
       "secrets": 0
     }
   ],
-  "jarSha256": "8ef2b640cebb475aa0eeef7839b295043f85b6a95a247c760ef17278faac18bf",
+  "jarSha256": "30b80292deea5ae7745129f609e2d98c7aefec58c280da863331bf3f8d3e19e2",
   "schemaBefore": 22,
   "schemaAfter": 23,
   "existingRecords": {
@@ -98,9 +98,9 @@
     "subscriptionsAfterSyntheticCleanup": 0
   },
   "live": {
-    "checkedAt": "2026-11-02T04:18:50.136Z",
+    "checkedAt": "2026-11-02T04:53:08.875Z",
     "checks": [
-      "guest HTML/API real404 and same missing-page body",
+      "guest HTML/API real404 and same missing-page body; encoded unreserved paths+HEAD404",
       "no default grant and ADMIN not a subscriber",
       "manual grant, current remembered session, published list/detail and warm cache",
       "revocation next request/warm cache/all reader paths+HEAD404, no relogin",
@@ -124,7 +124,8 @@
   "delivery": {
     "service": "https://175.195.62.165/",
     "mergeAuthorized": false,
-    "merge": "NOT_PERFORMED"
+    "merge": "NOT_PERFORMED",
+    "pr": "https://github.com/JunSungKang/MoaPan/pull/27"
   },
   "evidenceHashes": {
     "verified-all.log": "e8cc8d063b20e3798fe6cafdd88b3b5fa424a9663e255604a9c50f0250833e7a",
@@ -137,6 +138,31 @@
     "live-smoke.log": "ce7464dd7aa99c76758999ab7ca82288de3f3cade5652f2a40ad1a9ebabb26ba",
     "data-before.txt": "69b027bb4a498c97389dcd19a043296b83256c533b3446fc85dd07f6f7e37d94",
     "data-after.txt": "cf6ee22aacdf0bb75686e8039bdeee2be385acd7ac5541d98d8c58e12585029f",
-    "html-final.log": "c0d891dd9fa53f8170cc9fdf2f75c29cc67e1707dd7b9645bc62b03ed6fbc18d"
-  }
+    "html-final.log": "c0d891dd9fa53f8170cc9fdf2f75c29cc67e1707dd7b9645bc62b03ed6fbc18d",
+    "delivery-tests.log": "ef473c1f5f80a937ba170f03706c7b6a901ed5764b4a4b0e28577df693aa138e",
+    "delivery-image-scan.log": "150e09f08a7081c13715d8b13311be7cd62bff8d42b58901be1dbdece5701e77",
+    "delivery-trust-audit.log": "878b770b127463b97cf1b98483f72e87a52c08c08daddd0904dbb68fa2eabde2",
+    "model-delivery.txt": "06fe573e24fa4a0dde1f25af80a56b237ad36d968483a5a70b8075f58da93244",
+    "delivery-deploy.log": "6e86be295e0ebc307c2e8bb4779d4f273d74bcb2e1d62b809375d55129b4779f",
+    "delivery-live-smoke.log": "f0b558088f68d2bea7408a6d0f08b1b1df3911a56b0bb0f3e5eafed35da52067",
+    "data-delivery.txt": "cf6ee22aacdf0bb75686e8039bdeee2be385acd7ac5541d98d8c58e12585029f",
+    "canonical-path-tests.log": "c5b6a1d08e922446e5bf065b7defb0a7f94c53a8724f676172535e1c19fbf0e3",
+    "scoped-regression.log": "c71431c50d0641478c451621a6e515fba31b4ae2a435a0e82bdfbac62f3de273"
+  },
+  "initialImplementation": {
+    "head": "b15c2edb7f63a8a80c21cf1d05093871a1340d56",
+    "tests": 356,
+    "independentReview": "CHANGES_REQUESTED",
+    "findings": [
+      "P2 guestMenu undefined a on auth loss",
+      "P2 loaded reader reuse/worksheet404 did not navigate/clear"
+    ],
+    "initialRuntime": "sha256:ee16331194f2f924dc1c82b7d324b710b4a6090e881e9923beb4d5051d4b0438"
+  },
+  "reviewFixes": [
+    "Auth loss has no out-of-scope reference;204/401 and already-loaded regressions",
+    "All5 reuse/worksheet actions central404 cleanup,0unauthorizeddownloads",
+    "Scoped newsletter epoch/content cleanup preserves public edition and account controls",
+    "MVC-equivalent decoded path + request-local URI/context cache;encoded unreserved URLs/HEAD and JSON error negotiation verified"
+  ]
 }
