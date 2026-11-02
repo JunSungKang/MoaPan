@@ -54,21 +54,23 @@ public class SubscriptionManagement {
                 ON CONFLICT(account_id) DO UPDATE SET status='ACTIVE',starts_at=:start,expires_at=:end,
                 version=account_subscriptions.version+1,updated_at=now()
                 """).param("id",account).param("start",input.startsAt().atOffset(ZoneOffset.UTC)).param("end",input.expiresAt().atOffset(ZoneOffset.UTC)).update();
-        audit(actor,account,"subscription_grant");return read(account);
+        audit(actor,account,"subscription_grant",clock.instant());return read(account);
     }
 
     @Transactional
     public AccountView revoke(UUID account,Version input,UUID actor) {
         if(input==null||input.version()<1)throw new ApiError(400,"invalid_version");
         lockAccount(account);checkVersion(account,input.version());
-        db.sql("UPDATE account_subscriptions SET status='REVOKED',version=version+1,updated_at=now() WHERE account_id=:id")
-                .param("id",account).update();audit(actor,account,"subscription_revoke");return read(account);
+        var current=read(account);if(current.subscriptionStatus().equals("REVOKED"))return current;
+        var revokedAt=clock.instant().truncatedTo(java.time.temporal.ChronoUnit.MICROS);
+        db.sql("UPDATE account_subscriptions SET status='REVOKED',expires_at=:at,version=version+1,updated_at=:at WHERE account_id=:id")
+                .param("id",account).param("at",revokedAt.atOffset(ZoneOffset.UTC)).update();audit(actor,account,"subscription_revoke",revokedAt);return read(account);
     }
 
     private void lockAccount(UUID id){if(db.sql("SELECT id FROM users WHERE id=:id FOR UPDATE").param("id",id).query(UUID.class).optional().isEmpty())throw new ApiError(404,"not_found");}
     private void checkVersion(UUID id,long version){long current=db.sql("SELECT version FROM account_subscriptions WHERE account_id=:id").param("id",id).query(Long.class).optional().orElse(0L);if(current!=version)throw new ApiError(409,"version_conflict");}
     private AccountView read(UUID id){var now=clock.instant();return db.sql(SELECT+" WHERE u.id=:id").param("id",id).query((rs,n)->map(rs,now)).single();}
-    private void audit(UUID actor,UUID target,String action){db.sql("INSERT INTO admin_actions(id,admin_id,action,target_id) VALUES(:id,:actor,:action,:target)").param("id",UUID.randomUUID()).param("actor",actor).param("action",action).param("target",target).update();}
+    private void audit(UUID actor,UUID target,String action,Instant at){db.sql("INSERT INTO admin_actions(id,admin_id,action,target_id,created_at) VALUES(:id,:actor,:action,:target,:at)").param("id",UUID.randomUUID()).param("actor",actor).param("action",action).param("target",target).param("at",at.atOffset(ZoneOffset.UTC)).update();}
     private static final String SELECT="SELECT u.id,u.username,u.role,u.active,s.status,s.starts_at,s.expires_at,COALESCE(s.version,0) version FROM users u LEFT JOIN account_subscriptions s ON s.account_id=u.id";
     private static AccountView map(java.sql.ResultSet rs,Instant now)throws java.sql.SQLException {
         var start=rs.getObject("starts_at",OffsetDateTime.class);var end=rs.getObject("expires_at",OffsetDateTime.class);String state=rs.getString("status");

@@ -72,6 +72,32 @@ class SubscriptionAccessIntegrationTest {
         db.sql("UPDATE account_subscriptions SET expires_at=now()+interval '1 hour' WHERE account_id=:id").param("id",member.id()).update();db.sql("UPDATE users SET active=false WHERE id=:id").param("id",member.id()).update();denied(member.session());
         db.sql("DELETE FROM users WHERE id=:id").param("id",member.id()).update();assertEquals(0,db.sql("SELECT count(*) FROM account_subscriptions WHERE account_id=:id").param("id",member.id()).query(Integer.class).single());
     }
+    @Test void revocationStoresOneServerInstantAndRepeatedRequestsCannotMoveIt()throws Exception {
+        grant(member);var original=subscriptionSearch(Map.of("username",member.username())).path("items").get(0);Instant before=Instant.now();
+        var revoked=revokeAccount(member,1);Instant ended=Instant.parse(revoked.path("expiresAt").asText());
+        assertFalse(ended.isBefore(before));assertFalse(ended.isAfter(Instant.now()));assertEquals(original.path("startsAt"),revoked.path("startsAt"));assertEquals(2,revoked.path("version").asLong());
+        var changed=db.sql("SELECT updated_at FROM account_subscriptions WHERE account_id=:id").param("id",member.id()).query(OffsetDateTime.class).single().toInstant();
+        var audited=db.sql("SELECT created_at FROM admin_actions WHERE target_id=:id AND action='subscription_revoke'").param("id",member.id()).query(OffsetDateTime.class).single().toInstant();
+        assertEquals(ended,changed);assertEquals(ended,audited);assertEquals(revoked.path("expiresAt"),subscriptionSearch(Map.of("username",member.username())).path("items").get(0).path("expiresAt"));
+        assertEquals(revoked,revokeAccount(member,2));assertEquals(1,db.sql("SELECT count(*) FROM admin_actions WHERE target_id=:id AND action='subscription_revoke'").param("id",member.id()).query(Integer.class).single());
+        mvc.perform(post("/api/v1/admin/subscriptions/"+member.id()+"/revoke").cookie(admin.session()).with(csrf()).contentType("application/json").content("{\"version\":1}")).andExpect(status().isConflict());denied(member.session());
+        mvc.perform(put("/api/v1/admin/subscriptions/"+member.id()).cookie(admin.session()).with(csrf()).contentType("application/json").content(grantBody(2))).andExpect(status().isOk()).andExpect(jsonPath("$.subscriptionStatus").value("ACTIVE")).andExpect(jsonPath("$.version").value(3));
+        mvc.perform(get("/newsletter.html").cookie(member.session())).andExpect(status().isOk());
+    }
+    @Test void cancellingScheduledSubscriptionKeepsItsPlannedStartAndClosesItNow()throws Exception {
+        var start=Instant.now().plusSeconds(86400);var end=start.plusSeconds(86400);
+        mvc.perform(put("/api/v1/admin/subscriptions/"+member.id()).cookie(admin.session()).with(csrf()).contentType("application/json").content(json.writeValueAsString(Map.of("version",0,"startsAt",start.toString(),"expiresAt",end.toString())))).andExpect(status().isOk()).andExpect(jsonPath("$.subscriptionStatus").value("SCHEDULED"));
+        var original=subscriptionSearch(Map.of("username",member.username())).path("items").get(0);var revoked=revokeAccount(member,1);
+        assertEquals("REVOKED",revoked.path("subscriptionStatus").asText());assertEquals(original.path("startsAt"),revoked.path("startsAt"));assertTrue(Instant.parse(revoked.path("expiresAt").asText()).isBefore(start));denied(member.session());
+        assertThrows(org.springframework.dao.DataIntegrityViolationException.class,()->db.sql("UPDATE account_subscriptions SET status='ACTIVE' WHERE account_id=:id").param("id",member.id()).update());
+    }
+    @Test void expiredSubscriptionCanBeRevokedAndEndsAtRecordedRevocationTime()throws Exception {
+        grant(member);db.sql("UPDATE account_subscriptions SET starts_at=now()-interval '2 days',expires_at=now()-interval '1 day' WHERE account_id=:id").param("id",member.id()).update();
+        Instant before=Instant.now();var revoked=revokeAccount(member,1);assertEquals("REVOKED",revoked.path("subscriptionStatus").asText());assertFalse(Instant.parse(revoked.path("expiresAt").asText()).isBefore(before));denied(member.session());
+    }
+    private tools.jackson.databind.JsonNode revokeAccount(Account target,long version)throws Exception {
+        String result=mvc.perform(post("/api/v1/admin/subscriptions/"+target.id()+"/revoke").cookie(admin.session()).with(csrf()).contentType("application/json").content(json.writeValueAsString(Map.of("version",version)))).andExpect(status().isOk()).andReturn().getResponse().getContentAsString();return json.readTree(result);
+    }
     @Test void adminRoleCsrfCurrentVersionAndPeriodAreEnforced()throws Exception{
         String url="/api/v1/admin/subscriptions/"+member.id();
         mvc.perform(put(url).cookie(member.session()).with(csrf()).contentType("application/json").content(grantBody(0))).andExpect(status().isForbidden());

@@ -132,3 +132,5 @@ GET `/api/v1/auth/session`: 정상 비회원은204/빈 본문, 유효한 로그�
 
 ## 계정별 구독 권한 최신 규약
 뉴스레터HTML 및 /api/v1/newsletters 목록/본문/reuse/worksheet는비로그인도포함해유효권한없으면404 not_found/no-store. 그외인증API401/ADMIN403/CSRF403/DB503은유지한다. 계정DTO canReadNewsletter는읽기전용계산값. 관리자검색POST /api/v1/admin/subscriptions/search {username,page,size,sort}（기본10명/RECENT, EXPIRING 지원）,부여/연장PUT /api/v1/admin/subscriptions/{id} {version,startsAt,expiresAt},회수POST .../{id}/revoke {version}. ADMIN/CSRF·기간400·충돌409,원자적감사. 상세는MP-DOC-035. 실제결제/가격/자동청구API없음.
+
+구독 회수 후 expiresAt은 서버가 기록한 실제 회수 시각이며 updated_at 및 회수 감사 시각과 같다. 현재 version의 이미 회수된 계정은 추가 변경 없이 반환하고 구 version은409다. 시작 전 취소는 REVOKED 상태의 startsAt이 expiresAt보다 늦을 수 있으며 재부여는 정상 기간 검사를 다시 통과해야 한다.

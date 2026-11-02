@@ -1,0 +1,122 @@
+{
+  "status": "IMPLEMENTED_SERVICE_VERIFIED_REVIEW_GATED",
+  "checkedAt": "2026-11-02T09:59:26.523Z",
+  "scope": "PR27 revocation time follow-up; no develop/main merge",
+  "tests": {
+    "unit": 171,
+    "postgresql": 128,
+    "playwright": 70,
+    "total": 369,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "reproduction": "Three PostgreSQL behavior tests failed before the patch; then all passed",
+  "migration": {
+    "from": 23,
+    "to": 24,
+    "oldRevocationRowsCorrected": 0,
+    "upgradeFixture": "Scheduled old revoked end corrected from recorded event time, only corrected version incremented; ACTIVE and already-correct REVOKED preserved; validate/repeat passed",
+    "liveExpectedStateMatches": true
+  },
+  "images": [
+    {
+      "digest": "sha256:24fc8045a50cc78f44a57d0bdae30b12ed3d8bb52fcde7a1fa5e2042fafbf082",
+      "vulnerabilities": 0,
+      "secrets": 0
+    },
+    {
+      "digest": "sha256:08e298f1a02b6790992334dcc4e9e863b11885d68f64bb120ba161dfa9dca7c1",
+      "vulnerabilities": 0,
+      "secrets": 0
+    }
+  ],
+  "jarSha256": "8d471680b8a67ad6809d63479e96d80c5ec46087831cca6d6d4f80dc2c2cd36e",
+  "html": {
+    "pages": 12,
+    "messages": 0
+  },
+  "requirements": {
+    "serverClockAfterLock": true,
+    "endChangeAndAuditTimesIdentical": true,
+    "scheduledStartPreserved": true,
+    "repeatDoesNotChangeTimeOrVersionOrAudit": true,
+    "staleVersion409": true,
+    "activePeriodConstraintRetained": true,
+    "regrantValidated": true
+  },
+  "live": {
+    "checkedAt": "2026-11-02T09:57:23.274Z",
+    "status": "PASS",
+    "checks": [
+      "active revoke ends at server event time; identical DB end/change/audit; stable repeat and stale409; reader404",
+      "scheduled cancellation preserves start; current end on search; repeat adds no audit or version",
+      "public news preserved"
+    ],
+    "syntheticCreated": 2,
+    "syntheticDeleted": 2,
+    "existingAccountsModified": 0
+  },
+  "originalRecords": {
+    "articles": 347,
+    "accounts": 2,
+    "newsletters": 1,
+    "subscriptions": 1,
+    "preservedExceptApprovedEndAndVersionCorrection": true
+  },
+  "vendorIndices": [
+    "https://spring.io/security/",
+    "https://www.oracle.com/security-alerts/",
+    "https://adoptium.net/temurin/release-notes/"
+  ],
+  "review": {
+    "canonical": "https://github.com/JunSungKang/MoaPan/pull/27",
+    "required": "Independent current-head review and App APPROVED after push; merge separately authorized"
+  },
+  "artifacts": [
+    {
+      "path": ".local/subscription-access-20261102/revoke-before-tests.log",
+      "sha256": "8fd36f2390bfe355bbe71204c6016e7676c1d69b3f36a18f80bd586e4f27f8fc"
+    },
+    {
+      "path": ".local/subscription-access-20261102/revoke-scoped-tests.log",
+      "sha256": "12c7412a7fa0bf10d8f8f618591430cca3730805d205e6971b0405bc90a4bf26"
+    },
+    {
+      "path": ".local/subscription-access-20261102/revoke-all-tests.log",
+      "sha256": "f82a0be075bf197403b278bf8f6e162ffd098484af019b0c922c4880b8678b05"
+    },
+    {
+      "path": ".local/subscription-access-20261102/revoke-html.log",
+      "sha256": "c0d891dd9fa53f8170cc9fdf2f75c29cc67e1707dd7b9645bc62b03ed6fbc18d"
+    },
+    {
+      "path": ".local/subscription-access-20261102/revoke-image-scan.log",
+      "sha256": "13f4361ca1ce719ad500df30744dadeb13053d1dc2ee1d084d9736764f027a54"
+    },
+    {
+      "path": ".local/subscription-access-20261102/revoke-trust-audit.log",
+      "sha256": "878b770b127463b97cf1b98483f72e87a52c08c08daddd0904dbb68fa2eabde2"
+    },
+    {
+      "path": ".local/subscription-access-20261102/revoke-migrate.log",
+      "sha256": "852e279a0b5bf6daf2f723b9e2002eb9f04c05302d83130d5be54c38e1ff3472"
+    },
+    {
+      "path": ".local/subscription-access-20261102/revoke-deploy.log",
+      "sha256": "525b6b273bfa87b45aa2dde026a44c2ab2890c123bae8b57fd82d604380b017e"
+    },
+    {
+      "path": ".local/subscription-access-20261102/revoke-http.log",
+      "sha256": "5e8a4c475edab31a5cfa48f60fa58c6e6bb44682b985454946c6bc6db7aa06e7"
+    },
+    {
+      "path": ".local/subscription-access-20261102/revoke-data-before.txt",
+      "sha256": "8325a37db414016205adef922a5ed0b82401490fa11a7a18961be3e290520add"
+    },
+    {
+      "path": ".local/subscription-access-20261102/revoke-data-after.txt",
+      "sha256": "e5844355f01a0bf28c4dc61c3da32e2aed4de930449ac496c354d9edaa213190"
+    }
+  ]
+}
