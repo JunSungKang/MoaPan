@@ -62,3 +62,26 @@ if(!absolute.startsWith(root+'/build/'))throw new Error('Helm scan output must b
 fs.mkdirSync(path.dirname(absolute),{recursive:true});fs.copyFileSync(source,absolute);
 JS
 fi
+# Optional MailBox SMTP render only; root-master approval and cluster application remain separate.
+cat >> "$work/values.yaml" <<EOF
+mail:
+  enabled: true
+  from: no-reply@example.test
+  tls: STARTTLS
+  existingSecret: synthetic-email
+  customCa: true
+  server:
+    enabled: true
+    image: registry.example.test/smtp@sha256:$digest
+    hostname: mailbox-smtp
+    trustedNetworks: 10.244.0.0/16
+    tlsSecret: synthetic-smtp-tls
+EOF
+"$helm" lint "$chart" --strict -f "$work/values.yaml"
+"$helm" template moapan "$chart" -n moapan -f "$work/values.yaml" > "$work/smtp-rendered.yaml"
+if "$helm" template moapan "$chart" -f "$work/values.yaml" --set-string mail.server.trustedNetworks=0.0.0.0/0 > "$work/rejected.log" 2>&1; then echo 'Unrestricted SMTP trust unexpectedly accepted'; exit 1; fi
+if "$helm" template moapan "$chart" -f "$work/values.yaml" --set mail.server.image=smtp:latest > "$work/rejected.log" 2>&1; then echo 'Unpinned SMTP image unexpectedly accepted'; exit 1; fi
+if "$helm" template moapan "$chart" -f "$work/values.yaml" --set mail.tls=SMTPS > "$work/rejected.log" 2>&1; then echo 'Unsupported bundled SMTP TLS mode unexpectedly accepted'; exit 1; fi
+mkdir -p "$root/build/reports/security/helm-mail-render"
+cp "$work/smtp-rendered.yaml" "$root/build/reports/security/helm-mail-render/manifests.yaml"
+printf 'Optional SMTP Helm render and 3 rejection checks passed; no cluster resources created.\n'

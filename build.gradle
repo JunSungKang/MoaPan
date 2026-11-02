@@ -12,6 +12,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-session-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.flywaydb:flyway-database-postgresql'
     implementation 'org.bouncycastle:bcprov-jdk18on:1.86'
@@ -101,4 +102,12 @@ tasks.register('modelSmokeClasspath') {
         def out = layout.buildDirectory.file('reports/model-smoke.classpath').get().asFile
         out.parentFile.mkdirs(); out.text = sourceSets.test.runtimeClasspath.asPath
     }
+}
+
+// Optional explicit test against the loopback-only MailBox fixture, never a real recipient.
+tasks.register('smtpSmoke', JavaExec) {
+    dependsOn integrationTestClasses
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    mainClass = 'com.moapan.identity.SmtpPostfixSmoke'
+    systemProperty 'java.io.tmpdir', file('.local/tmp').absolutePath
 }

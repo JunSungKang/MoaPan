@@ -63,6 +63,80 @@
     "classificationThreads": {
       "type": "string",
       "pattern": "^([1-9]|[1-5][0-9]|6[0-4])$"
+    },
+    "mail": {
+      "type": "object",
+      "required": [
+        "enabled",
+        "host",
+        "port",
+        "from",
+        "tls",
+        "username",
+        "existingSecret",
+        "customCa"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "host": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "from": {
+          "type": "string"
+        },
+        "tls": {
+          "type": "string",
+          "enum": [
+            "STARTTLS",
+            "SMTPS"
+          ]
+        },
+        "username": {
+          "type": "string"
+        },
+        "existingSecret": {
+          "type": "string"
+        },
+        "customCa": {
+          "type": "boolean"
+        },
+        "server": {
+          "type": "object",
+          "required": [
+            "enabled",
+            "image",
+            "hostname",
+            "tlsSecret",
+            "trustedNetworks"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "image": {
+              "type": "string"
+            },
+            "hostname": {
+              "type": "string"
+            },
+            "tlsSecret": {
+              "type": "string"
+            },
+            "trustedNetworks": {
+              "type": "string"
+            }
+          }
+        }
+      }
     }
   }
 }

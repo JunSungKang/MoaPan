@@ -7,7 +7,9 @@ import jakarta.servlet.http.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import java.util.*;
-import java.util.concurrent.Semaphore;
+import com.moapan.identity.application.EmailIdentity;
+import com.moapan.identity.application.IdentityPasswords;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.*;
@@ -23,19 +25,19 @@ import org.springframework.transaction.PlatformTransactionManager;
 @RestController @org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication
 public class AuthController {
     record Credentials(@NotNull @Size(min=1,max=128) String username,@NotNull @Size(min=6,max=256)String password,Boolean rememberMe){}
-    public static final String TERMS_VERSION="terms-1";
-    record Signup(@NotNull @Size(min=1,max=128) String username,@NotNull @Size(min=6,max=256) String password,@NotNull @AssertTrue Boolean termsAccepted,@NotBlank @Size(max=32) String termsVersion){}
-    record Change(@NotNull String currentPassword,@NotNull @Size(min=6,max=256)String newPassword){}
-    record Confirm(@NotNull String currentPassword){}
-    record View(UUID id,String username,String role,boolean canReadNewsletter){}
+    public static final String TERMS_VERSION=com.moapan.identity.domain.CredentialPolicy.TERMS_VERSION;
+    record Signup(@NotNull @Size(min=1,max=128) String username,@NotNull @Size(min=6,max=256) String password,@NotNull @AssertTrue Boolean termsAccepted,@NotBlank @Size(max=32) String termsVersion,@NotBlank @Size(max=254)String email,@NotNull UUID challengeId,@NotBlank @Pattern(regexp="[0-9]{6}")String code,@NotNull @AssertTrue Boolean emailPolicyAccepted,@NotBlank @Size(max=32) String emailPolicyVersion){}
+    record Change(@NotNull @Size(max=256) String currentPassword,@NotNull @Size(min=6,max=256)String newPassword){}
+    record Confirm(@NotNull @Size(max=256) String currentPassword){}
+    record View(UUID id,String username,String role,boolean canReadNewsletter,boolean emailVerified){}
     private record CredentialSnapshot(UUID id,long version){}
-    private final com.moapan.subscription.application.ContentAccess access;private final Accounts users;private final PasswordEncoder encoder;private final AuthenticationManager manager;private final SecurityContextRepository contexts;private final Limits limits;private final JdbcClient db;private final TransactionTemplate tx;private final Semaphore hashes=new Semaphore(4);
-    public AuthController(Accounts users,PasswordEncoder encoder,AuthenticationManager manager,SecurityContextRepository contexts,Limits limits,JdbcClient db,PlatformTransactionManager tm,com.moapan.subscription.application.ContentAccess access){this.access=access;this.users=users;this.encoder=encoder;this.manager=manager;this.contexts=contexts;this.limits=limits;this.db=db;this.tx=new TransactionTemplate(tm);}
+    private final com.moapan.subscription.application.ContentAccess access;private final Accounts users;private final PasswordEncoder encoder;private final AuthenticationManager manager;private final SecurityContextRepository contexts;private final Limits limits;private final JdbcClient db;private final TransactionTemplate tx;private final IdentityPasswords passwords;private final EmailIdentity emailIdentity;
+    public AuthController(Accounts users,PasswordEncoder encoder,AuthenticationManager manager,SecurityContextRepository contexts,Limits limits,JdbcClient db,PlatformTransactionManager tm,com.moapan.subscription.application.ContentAccess access,IdentityPasswords passwords,EmailIdentity emailIdentity){this.access=access;this.users=users;this.encoder=encoder;this.manager=manager;this.contexts=contexts;this.limits=limits;this.db=db;this.tx=new TransactionTemplate(tm);this.passwords=passwords;this.emailIdentity=emailIdentity;}
     @GetMapping("/api/v1/auth/csrf") Object csrf(CsrfToken token){return Map.of("token",token.getToken(),"headerName",token.getHeaderName());}
-    @PostMapping("/api/v1/auth/signup") View signup(@Valid @RequestBody Signup input){
+    @PostMapping("/api/v1/auth/signup") View signup(@Valid @RequestBody Signup input,HttpServletRequest request){
         if(!TERMS_VERSION.equals(input.termsVersion()))throw new ApiError(400,"terms_version_outdated");
-        passwordLength(input.password());limits.auth("signup",100,3600);String username=normalize(input.username());
-        return hash(()->{if(users.findByUsername(username).isPresent())throw new ApiError(409,"username_unavailable");Account user=new Account(username,encoder.encode(input.password()));user.termsVersion=TERMS_VERSION;user.termsAcceptedAt=java.time.Instant.now();return view(users.save(user));});
+        passwordLength(input.password());limits.auth("signup",100,3600);
+        UUID id=emailIdentity.signup(input.username(),input.password(),input.email(),input.challengeId(),input.code(),EmailController.binding(request),input.termsAccepted(),input.termsVersion(),input.emailPolicyAccepted(),input.emailPolicyVersion());return view(users.findById(id).orElseThrow());
     }
     @PostMapping("/api/v1/auth/login") View login(@Valid @RequestBody Credentials input,HttpServletRequest request,HttpServletResponse response){
         passwordLength(input.password());limits.auth("login_global",300,900);String username=normalize(input.username());String bucket="login:"+limits.fingerprint(username);limits.checkAuth(bucket,10);
@@ -64,17 +66,17 @@ public class AuthController {
     @GetMapping("/api/v1/account") View account(Authentication auth){return view(current(auth));}
     @PatchMapping("/api/v1/account/password") void password(Authentication auth,@Valid @RequestBody Change change,HttpServletRequest q){
         passwordLength(change.newPassword());Account user=current(auth);limits.auth("password:"+user.id,10,900);
-        hash(()->{if(!encoder.matches(change.currentPassword(),user.passwordHash))throw new ApiError(403,"invalid_credentials");tx.executeWithoutResult(s->{String encoded=encoder.encode(change.newPassword());if(db.sql("UPDATE users SET password_hash=:hash,auth_version=auth_version+1 WHERE id=:id AND active AND auth_version=:v").param("hash",encoded).param("id",user.id).param("v",user.authVersion).update()!=1)throw new ApiError(409,"credential_changed");db.sql("DELETE FROM spring_session WHERE principal_name=:p").param("p",user.id.toString()).update();});return null;});
+        hash(()->{if(!encoder.matches(change.currentPassword(),user.passwordHash))throw new ApiError(403,"invalid_credentials");tx.executeWithoutResult(s->{String encoded=encoder.encode(change.newPassword());if(db.sql("UPDATE users SET password_hash=:hash,auth_version=auth_version+1 WHERE id=:id AND active AND auth_version=:v").param("hash",encoded).param("id",user.id).param("v",user.authVersion).update()!=1)throw new ApiError(409,"credential_changed");db.sql("DELETE FROM spring_session WHERE principal_name=:p").param("p",user.id.toString()).update();emailIdentity.passwordChanged(user.id);});return null;});
         if(q.getSession(false)!=null)q.getSession(false).invalidate();SecurityContextHolder.clearContext();
     }
     @DeleteMapping("/api/v1/account") void delete(Authentication auth,@Valid @RequestBody Confirm confirm,HttpServletRequest q){
         Account user=current(auth);limits.auth("password:"+user.id,10,900);
-        hash(()->{if(!encoder.matches(confirm.currentPassword(),user.passwordHash))throw new ApiError(403,"invalid_credentials");tx.executeWithoutResult(s->{db.sql("DELETE FROM spring_session WHERE principal_name=:p").param("p",user.id.toString()).update();db.sql("DELETE FROM auth_rate_limits WHERE bucket=:b").param("b","password:"+user.id).update();db.sql("DELETE FROM auth_rate_limits WHERE bucket=:b").param("b","login:"+limits.fingerprint(user.username)).update();if(db.sql("DELETE FROM users WHERE id=:id AND active AND auth_version=:v").param("id",user.id).param("v",user.authVersion).update()!=1)throw new ApiError(409,"credential_changed");});return null;});
+        hash(()->{if(!encoder.matches(confirm.currentPassword(),user.passwordHash))throw new ApiError(403,"invalid_credentials");tx.executeWithoutResult(s->{db.sql("DELETE FROM spring_session WHERE principal_name=:p").param("p",user.id.toString()).update();db.sql("DELETE FROM auth_rate_limits WHERE bucket IN (:password,:binding)").param("password","password:"+user.id).param("binding","email_bind:"+user.id).update();if(user.emailKey!=null)db.sql("DELETE FROM auth_rate_limits WHERE bucket IN (:send,:resend)").param("send","email_send_address:"+user.emailKey).param("resend","email_resend:"+user.emailKey).update();db.sql("DELETE FROM auth_rate_limits WHERE bucket=:b").param("b","login:"+limits.fingerprint(user.username)).update();if(db.sql("DELETE FROM users WHERE id=:id AND active AND auth_version=:v").param("id",user.id).param("v",user.authVersion).update()!=1)throw new ApiError(409,"credential_changed");});return null;});
         if(q.getSession(false)!=null)q.getSession(false).invalidate();SecurityContextHolder.clearContext();
     }
-    private static void passwordLength(String password){int n=password.codePointCount(0,password.length());if(n<6||n>128)throw new ApiError(400,"invalid_password_length");}
+    private static void passwordLength(String password){com.moapan.identity.domain.CredentialPolicy.password(password);}
     private Account current(Authentication auth){return users.findById(UUID.fromString(auth.getName())).filter(a->a.active).orElseThrow(()->new ApiError(401,"authentication_required"));}
-    private <T>T hash(java.util.function.Supplier<T> work){if(!hashes.tryAcquire())throw new ApiError(503,"hash_capacity");try{return work.get();}finally{hashes.release();}}
-    private View view(Account a){return new View(a.id,a.username,a.role,access.allows(a.id,com.moapan.subscription.domain.EntitlementPolicy.Benefit.READ_NEWSLETTER));}
-    private static String normalize(String value){if(!value.matches("[A-Za-z0-9_]{1,128}"))throw new ApiError(400,"invalid_username");String n=value.toLowerCase(Locale.ROOT);if(!n.matches("[a-z0-9_]{1,128}"))throw new ApiError(400,"invalid_username");return n;}
+    private <T>T hash(java.util.function.Supplier<T> work){return passwords.hash(work);}
+    private View view(Account a){return new View(a.id,a.username,a.role,access.allows(a.id,com.moapan.subscription.domain.EntitlementPolicy.Benefit.READ_NEWSLETTER),a.emailVerifiedAt!=null);}
+    private static String normalize(String value){return com.moapan.identity.domain.CredentialPolicy.username(value);}
 }

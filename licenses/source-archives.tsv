@@ -1,3 +1,5 @@
 logback-classic-1.5.38-sources.jar	7f0a30657cb7b63379686419924e73851fa7e5159e0c3d7c653646030a142643	https://repo.maven.apache.org/maven2/ch/qos/logback/logback-classic/1.5.38/logback-classic-1.5.38-sources.jar
 logback-core-1.5.38-sources.jar	682355ce7b96b8c6350ae20df86fe13ea262ef6b5d863833f26da1f700d6800a	https://repo.maven.apache.org/maven2/ch/qos/logback/logback-core/1.5.38/logback-core-1.5.38-sources.jar
 aspectjweaver-1.9.25.1-sources.jar	06fbde6ef3a83791e70965432b5f1891e493e21cdbc37307c54575ee86752595	https://repo.maven.apache.org/maven2/org/aspectj/aspectjweaver/1.9.25.1/aspectjweaver-1.9.25.1-sources.jar
+angus-mail-2.0.5-sources.jar	1b5608273dfc8dd94b2d6b6e8e07c0724987b2544267cd092a51155b2575dd33	https://repo.maven.apache.org/maven2/org/eclipse/angus/angus-mail/2.0.5/angus-mail-2.0.5-sources.jar
+jakarta.mail-api-2.1.5-sources.jar	1deda3bda890b39c96f8c6af3d144fb71d45a103db749091bc725679336c4107	https://repo.maven.apache.org/maven2/jakarta/mail/jakarta.mail-api/2.1.5/jakarta.mail-api-2.1.5-sources.jar

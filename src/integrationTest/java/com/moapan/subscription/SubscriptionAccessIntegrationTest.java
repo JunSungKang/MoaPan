@@ -22,9 +22,12 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest(properties={"spring.flyway.enabled=true","moapan.secret=synthetic-only-test-secret-32-characters","moapan.public-base-url=http://localhost","server.servlet.session.cookie.secure=false"})
+@SpringBootTest(properties={"moapan.mail.enabled=true","moapan.mail.host=localhost","moapan.mail.from=no-reply@example.test","moapan.mail.data-key=MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=","spring.flyway.enabled=true","moapan.secret=synthetic-only-test-secret-32-characters","moapan.public-base-url=http://localhost","server.servlet.session.cookie.secure=false"})
 @AutoConfigureMockMvc(print=MockMvcPrint.NONE)
+@org.springframework.context.annotation.Import(com.moapan.identity.EmailTestSupport.Config.class)
 class SubscriptionAccessIntegrationTest {
+    @Autowired com.moapan.identity.application.EmailOutbox emailOutbox;
+    @Autowired com.moapan.identity.EmailTestSupport.Mailbox emailMailbox;
     static final PostgreSQLContainer<?> postgres=new PostgreSQLContainer<>(org.testcontainers.utility.DockerImageName.parse("postgres@sha256:edb0c08dc33befd0262ab3b5cf1c4f3f8cfd8b09e88c05b45adee29d6761ddb6").asCompatibleSubstituteFor("postgres"));
     static {postgres.start();org.flywaydb.core.Flyway.configure().dataSource(postgres.getJdbcUrl(),postgres.getUsername(),postgres.getPassword()).cleanDisabled(true).load().migrate();}
     @DynamicPropertySource static void properties(DynamicPropertyRegistry r){r.add("spring.datasource.url",postgres::getJdbcUrl);r.add("spring.datasource.username",postgres::getUsername);r.add("spring.datasource.password",postgres::getPassword);}
@@ -37,7 +40,7 @@ class SubscriptionAccessIntegrationTest {
     @BeforeEach void setup()throws Exception{admin=create("ADMIN");member=create("USER");}
     private Account create(String role)throws Exception{
         String name="subscription_"+UUID.randomUUID().toString().replace("-","");
-        mvc.perform(post("/api/v1/auth/signup").with(csrf()).contentType("application/json").content(json.writeValueAsString(Map.of("username",name,"password","synthetic subscription password","termsAccepted",true,"termsVersion","terms-1")))).andExpect(status().isOk()).andExpect(jsonPath("$.canReadNewsletter").value(false));
+        var signup=com.moapan.identity.EmailTestSupport.signup(mvc,emailOutbox,emailMailbox,name,"synthetic subscription password");assertFalse(json.readTree(signup.getResponse().getContentAsString()).path("canReadNewsletter").asBoolean());
         UUID id=db.sql("SELECT id FROM users WHERE username=:name").param("name",name).query(UUID.class).single();db.sql("UPDATE users SET role=:role WHERE id=:id").param("role",role).param("id",id).update();
         var initial=mvc.perform(get("/api/v1/auth/csrf")).andReturn().getResponse().getCookie("SESSION");
         var cookie=mvc.perform(post("/api/v1/auth/login").cookie(initial).with(csrf()).contentType("application/json").content(json.writeValueAsString(Map.of("username",name,"password","synthetic subscription password","rememberMe",true)))).andExpect(status().isOk()).andReturn().getResponse().getCookie("SESSION");

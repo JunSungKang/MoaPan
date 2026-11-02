@@ -18,7 +18,6 @@
 .agreement label { display: flex; align-items: center; gap: 8px; font-weight: 400; }
 .agreement input { width: 18px; height: 18px; margin: 0; accent-color: #252722; }
 .agreement a { font-size: 12px; margin-left: 26px; }
-.auth-main .recovery-hint { font-size: 12px; color: #625e56; margin: 12px 0 0; }
 .auth-main [role=status] { font-size: 14px; margin: 0; color: #9b2525; }
 .auth-main [role=status]:empty { display: none; }
 .auth-switch { text-align: center; font-size: 14px; margin: 28px 0; }

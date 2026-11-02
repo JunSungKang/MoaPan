@@ -21,6 +21,7 @@ class BrowserTest {
             else if(path.equals("/api/v1/public/interests"))response="{\"version\":0,\"weights\":{\"space\":3}}";
             else if(path.equals("/api/v1/advertisements"))response="{\"enabled\":false}";
             else if(path.equals("/api/v1/admin/advertisements"))response="{\"version\":0,\"enabled\":false,\"provider\":\"BANNER\",\"title\":\"\",\"description\":\"\",\"targetUrl\":\"\",\"imagePath\":\"\",\"publisherId\":\"\",\"slotId\":\"\"}";
+            else if(path.equals("/api/v1/account/email"))response="{\"verified\":false,\"email\":null,\"verifiedAt\":null}";
             else if(path.equals("/api/v1/sources"))response="[]";
             else if((path.equals("/api/v1/news/edition")||path.equals("/api/v1/public/news/edition")))response=edition();
             else if(path.endsWith("/news/search"))response="{\"items\":[],\"page\":0,\"pages\":0,\"total\":0}";
@@ -31,6 +32,10 @@ class BrowserTest {
         });server.start();origin="http://localhost:"+server.getAddress().getPort();playwright=Playwright.create();browser=playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true).setChannel("chromium").setArgs(List.of("--disable-gpu")));
     }
     static String edition(){StringBuilder items=new StringBuilder();for(int i=0;i<15;i++){if(i>0)items.append(',');items.append("{\"id\":\"synthetic-").append(i).append("\",\"title\":\"[합성 검증 기사] 긴 한글 제목과 인공지능 우주 소식이 여러 단의 신문 지면에서 자연스럽게 표시되는지 확인합니다 ").append(i).append("\",\"summaryBullets\":[\"실제 뉴스가 아닌 화면 검증용 합성 문장입니다. 외부 전송 없이 현재 후보를 정렬합니다.\"],\"source\":{\"id\":\"source-").append(i%5).append("\",\"site\":\"합성 출처\",\"name\":\"Synthetic\",\"language\":\"ko\"},\"publishedAt\":null,\"collectedAt\":\"2026-10-28T00:00:00Z\",\"tags\":[{\"id\":\"ai\",\"slug\":\"ai\",\"name\":\"인공지능\",\"category\":\"기술\",\"confidence\":1}],\"originalUrl\":\"https://example.org/synthetic/").append(i).append("\",\"summaryMode\":\"EXTRACTIVE_ORIGINAL_LANGUAGE\"}");}return "{\"editionId\":\"synthetic-edition\",\"editionAt\":\"2026-10-28T00:00:00Z\",\"periodDays\":7,\"candidateCount\":15,\"items\":["+items+"],\"nextCursor\":null}";}
+    static void verifySignupEmail(Page page){
+        page.route("**/api/v1/auth/email/signup-code",r->r.fulfill(new Route.FulfillOptions().setStatus(202).setContentType("application/json").setBody("{\"challengeId\":\"00000000-0000-0000-0000-000000000777\",\"expiresInSeconds\":300,\"resendAfterSeconds\":60}")));
+        page.locator("#email").fill("synthetic@example.test");page.locator("[name=emailPolicyAccepted]").check();page.locator("[data-request-code]").click();page.waitForFunction("document.querySelector('[data-email-status]').textContent.includes('발송을 요청했습니다')");page.locator("#code").fill("123456");
+    }
     @AfterAll static void stop(){if(browser!=null)browser.close();if(playwright!=null)playwright.close();if(server!=null)server.stop(0);}
 
     @Test void serverSearchUsesPostOnlyOnSubmitAndLoadsOneSlideAtATime(){
@@ -220,15 +225,34 @@ class BrowserTest {
             p.route("**/api/v1/auth/signup",r->{bodies.add(r.request().postData());r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{}"));});
             for(int width:new int[]{390,768,1440})for(String mode:List.of("login","signup")){
                 p.setViewportSize(width,900);p.navigate(origin+"/"+mode+".html");
-                assertEquals(2,p.locator("input:not([type=checkbox])").count());assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth <= innerWidth"));
+                assertEquals(mode.equals("login")?2:4,p.locator("input:not([type=checkbox])").count());assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth <= innerWidth"));
                 if(mode.equals("login")){var saved=p.locator("#save-username").boundingBox();var automatic=p.locator("#remember-me").boundingBox();assertEquals(saved.y,automatic.y,1);assertTrue(automatic.x>saved.x);assertEquals("자동로그인",p.locator("label:has(#remember-me)").textContent());}
                 p.screenshot(new Page.ScreenshotOptions().setPath(dir.resolve(mode+"-"+width+".png")).setFullPage(true));
             }
-            p.locator("#username").fill("synthetic_terms");p.locator("#password").fill("synthetic password 12345");
-            assertFalse(p.locator("input[type=checkbox]").isChecked());p.locator("button[type=submit]").click();assertTrue(bodies.isEmpty());
-            Page terms=p.waitForPopup(()->p.locator(".agreement a").click());terms.waitForLoadState();assertTrue(terms.locator("main").textContent().contains("약관 개정 제 1판"));assertTrue(terms.locator("main").textContent().contains("복구할 수 없습니다"));terms.close();
-            assertEquals("synthetic_terms",p.locator("#username").inputValue());p.locator("input[type=checkbox]").check();p.locator("button[type=submit]").click();p.waitForURL("**/login.html");
+            p.locator("#username").fill("synthetic_terms");p.locator("#password").fill("synthetic password 12345");verifySignupEmail(p);
+            assertFalse(p.locator("[name=termsAccepted]").isChecked());p.locator("button[type=submit]").click();assertTrue(bodies.isEmpty());
+            Page terms=p.waitForPopup(()->p.locator(".agreement a").click());terms.waitForLoadState();assertTrue(terms.locator("main").textContent().contains("약관 개정 제 1판"));assertTrue(terms.locator("main").textContent().contains("미리 인증한 이메일로 비밀번호를 재설정할 수 있습니다"));terms.close();
+            assertEquals("synthetic_terms",p.locator("#username").inputValue());p.locator("[name=termsAccepted]").check();p.locator("button[type=submit]").click();p.waitForURL("**/login.html");
             assertEquals(1,bodies.size());assertTrue(bodies.getFirst().contains("\"termsAccepted\":true"));assertTrue(bodies.getFirst().contains("\"termsVersion\":\"terms-1\""));
+        }
+    }
+    @Test void forgotPasswordIsLinkedTranslatedAndNeverSendsWhileTyping()throws Exception{
+        Path dir=Path.of("build/reports/screenshots");Files.createDirectories(dir);
+        try(var context=browser.newContext()){
+            Page p=context.newPage();List<String> sent=new ArrayList<>();List<String> external=new ArrayList<>();p.onRequest(r->{if(!r.url().startsWith(origin))external.add(r.url());});
+            p.route("**/api/v1/auth/password/reset-code",r->{sent.add(r.request().postData());assertFalse(r.request().url().contains("?"));r.fulfill(new Route.FulfillOptions().setStatus(202).setContentType("application/json").setBody("{\"challengeId\":\"00000000-0000-0000-0000-000000000777\",\"expiresInSeconds\":300,\"resendAfterSeconds\":60}"));});
+            p.route("**/api/v1/auth/password/reset",r->{sent.add(r.request().postData());r.fulfill(new Route.FulfillOptions().setStatus(200).setContentType("application/json").setBody("{}"));});
+            p.navigate(origin+"/login.html");p.locator("a[href='/forgot-password.html']").click();assertTrue(p.title().startsWith("비밀번호 재설정"));
+            p.locator("#username").fill("synthetic_recovery");p.locator("#email").fill("recovery@example.test");assertTrue(sent.isEmpty());p.locator("[data-request-code]").click();p.waitForFunction("document.querySelector('[data-email-status]').textContent.includes('발송을 요청했습니다')");assertEquals(1,sent.size());assertTrue(p.locator("[data-request-code]").isDisabled());
+            p.locator("#code").fill("123456");p.locator("#newPassword").fill("new synthetic recovery password");p.locator("[type=submit]").click();p.waitForFunction("document.querySelector('#recovery-status').textContent.includes('재설정했습니다')");assertEquals(2,sent.size());assertEquals("",p.locator("#newPassword").inputValue());assertFalse((boolean)p.evaluate("JSON.stringify({...localStorage,...sessionStorage}).includes('recovery@example.test')"));assertTrue(external.isEmpty());
+            for(int width:new int[]{390,768,1440}){p.setViewportSize(width,950);assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth<=innerWidth"));p.screenshot(new Page.ScreenshotOptions().setFullPage(true).setPath(dir.resolve("password-recovery-"+width+".png")));}
+            p.locator("[data-language-select]").selectOption("en");p.waitForFunction("document.querySelector('h1').textContent==='Reset password'");assertTrue(p.locator("main").textContent().contains("previously")||p.locator("main").textContent().contains("already verified"));
+        }
+    }
+    @Test void signupEmailNoticeCannotBeUsedAsMarketingConsentAndTypingDoesNotSend(){
+        try(var context=browser.newContext()){
+            Page p=context.newPage();List<String> sent=new ArrayList<>();p.route("**/api/v1/auth/email/signup-code",r->{sent.add(r.request().postData());r.fulfill(new Route.FulfillOptions().setStatus(202).setContentType("application/json").setBody("{\"challengeId\":\"00000000-0000-0000-0000-000000000777\",\"expiresInSeconds\":300,\"resendAfterSeconds\":60}"));});
+            p.navigate(origin+"/signup.html");assertTrue(p.locator("#email-purpose").textContent().contains("마케팅·광고 등 다른 목적으로 사용하지 않습니다"));assertNotNull(p.locator("#email").getAttribute("required"));assertEquals(0,p.locator("input[name*=marketing],input[name*=advertising]").count());p.locator("#username").fill("synthetic_email");p.locator("#email").fill("synthetic@example.test");assertTrue(sent.isEmpty());p.locator("[data-request-code]").click();assertTrue(sent.isEmpty());p.locator("[name=emailPolicyAccepted]").check();p.locator("[data-request-code]").click();p.waitForFunction("document.querySelector('[data-email-status]').textContent.includes('발송을 요청했습니다')");assertEquals(1,sent.size());p.locator("#code").fill("123456");p.locator("#email").fill("changed@example.test");assertEquals("",p.locator("#code").inputValue());assertFalse((boolean)p.evaluate("JSON.stringify({...localStorage,...sessionStorage}).includes('example.test')"));
         }
     }
     @Test void loginWarningCountdownAndUnlockAreVisible()throws Exception{
@@ -249,7 +273,7 @@ class BrowserTest {
         try(var context=browser.newContext()){
             Page p=context.newPage();var requests=new ArrayList<String>();
             p.route("**/api/v1/auth/signup",r->{requests.add(r.request().postData());r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{}"));});
-            p.navigate(origin+"/signup.html");assertEquals("128",p.locator("#username").getAttribute("maxlength"));p.locator("#username").fill("a");p.locator("#password").fill("abcde");p.locator("input[type=checkbox]").check();p.locator("button[type=submit]").click();assertTrue(requests.isEmpty());
+            p.navigate(origin+"/signup.html");assertEquals("128",p.locator("#username").getAttribute("maxlength"));p.locator("#username").fill("a");p.locator("#password").fill("abcde");verifySignupEmail(p);p.locator("[name=termsAccepted]").check();p.locator("button[type=submit]").click();assertTrue(requests.isEmpty());
             p.locator("#password").fill("abcdef");p.locator("button[type=submit]").click();p.waitForURL("**/login.html");assertEquals(1,requests.size());assertEquals("6",p.locator("#password").getAttribute("minlength"));assertEquals("1",p.locator("#username").getAttribute("minlength"));
             p.route("**/api/v1/auth/session",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\""+"u".repeat(128)+"\",\"role\":\"USER\",\"canReadNewsletter\":true}")));
             p.setViewportSize(390,900);p.navigate(origin+"/account.html");p.waitForSelector("#account-menu button");assertEquals("6",p.locator("[name=newPassword]").getAttribute("minlength"));assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth <= innerWidth"));

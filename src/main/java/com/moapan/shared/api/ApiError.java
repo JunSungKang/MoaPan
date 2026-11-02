@@ -19,6 +19,8 @@ public class ApiError extends RuntimeException {
             if(e.attemptsRemaining!=null)body.put("attemptsRemaining",e.attemptsRemaining);
             return b.body(body);
         }
+        @ExceptionHandler(com.moapan.identity.domain.CredentialPolicy.Rejected.class)
+        ResponseEntity<?> credentials(com.moapan.identity.domain.CredentialPolicy.Rejected e){return ResponseEntity.badRequest().cacheControl(CacheControl.noStore()).body(java.util.Map.of("error",e.getMessage()));}
         @ExceptionHandler({org.springframework.dao.DataIntegrityViolationException.class,org.springframework.orm.ObjectOptimisticLockingFailureException.class})
         ResponseEntity<?> conflict(Exception e) { return ResponseEntity.status(409).body(java.util.Map.of("error","conflict")); }
         @ExceptionHandler({org.springframework.web.bind.MethodArgumentNotValidException.class,org.springframework.http.converter.HttpMessageNotReadableException.class,IllegalArgumentException.class,org.springframework.web.method.annotation.MethodArgumentTypeMismatchException.class})

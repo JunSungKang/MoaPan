@@ -11,6 +11,11 @@ public class Account {
     @Column(nullable=false,length=5) public String role="USER";
     @Column(name="terms_version",length=32) public String termsVersion;
     @Column(name="terms_accepted_at") public java.time.Instant termsAcceptedAt;
+    @Column(name="email_cipher") public byte[] emailCipher;
+    @Column(name="email_key",length=64) public String emailKey;
+    @Column(name="email_verified_at") public java.time.Instant emailVerifiedAt;
+    @Column(name="email_policy_version",length=32) public String emailPolicyVersion;
+    @Column(name="email_policy_accepted_at") public java.time.Instant emailPolicyAcceptedAt;
     protected Account() {}
     public Account(String username,String hash){id=UUID.randomUUID();this.username=username;passwordHash=hash;}
 }

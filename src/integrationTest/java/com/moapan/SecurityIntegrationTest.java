@@ -28,11 +28,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(properties={"spring.flyway.enabled=true","moapan.secret=synthetic-only-test-secret-32-characters","moapan.public-base-url=http://localhost","server.servlet.session.cookie.secure=false"})
+@SpringBootTest(properties={"moapan.mail.enabled=true","moapan.mail.host=localhost","moapan.mail.from=no-reply@example.test","moapan.mail.data-key=MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=","spring.flyway.enabled=true","moapan.secret=synthetic-only-test-secret-32-characters","moapan.public-base-url=http://localhost","server.servlet.session.cookie.secure=false"})
 @AutoConfigureMockMvc
-@org.springframework.context.annotation.Import(SecurityIntegrationTest.FixtureConfig.class)
+@org.springframework.context.annotation.Import({SecurityIntegrationTest.FixtureConfig.class,com.moapan.identity.EmailTestSupport.Config.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SecurityIntegrationTest {
+    @Autowired com.moapan.identity.application.EmailOutbox emailOutbox;
+    @Autowired com.moapan.identity.EmailTestSupport.Mailbox emailMailbox;
     @org.springframework.boot.test.context.TestConfiguration
     static class FixtureConfig {
         static final java.util.concurrent.atomic.AtomicInteger failureStatus=new java.util.concurrent.atomic.AtomicInteger(429);
@@ -51,7 +53,7 @@ class SecurityIntegrationTest {
     @Autowired MockMvc mvc;@Autowired Accounts accounts;@Autowired Limits limits;@Autowired CatalogRepository repo;@Autowired CatalogService catalog;@Autowired Worker worker;@Autowired NewsService news;
     @Autowired org.springframework.session.SessionRepository<?> sessions;
     private static final String PASSWORD="synthetic password 12345";
-    private void signup(String user)throws Exception{mvc.perform(post("/api/v1/auth/signup").with(csrf()).contentType("application/json").content("{\"username\":\""+user+"\",\"termsAccepted\":true,\"termsVersion\":\"terms-1\",\"password\":\""+PASSWORD+"\"}")).andExpect(status().isOk()).andExpect(jsonPath("$.role").value("USER")).andExpect(jsonPath("$.passwordHash").doesNotExist());}
+    private void signup(String user)throws Exception{com.moapan.identity.EmailTestSupport.signup(mvc,emailOutbox,emailMailbox,user,PASSWORD);}
     private Map<String,Object> claimReady(){
         for(int i=0;i<100;i++){var job=worker.claim();if(job!=null)return job;try{Thread.sleep(20);}catch(InterruptedException e){Thread.currentThread().interrupt();throw new AssertionError(e);}}
         throw new AssertionError("Queued job not ready within 2 seconds: "+repo.db().sql("SELECT status,available_at,now() db_now FROM content_jobs WHERE status='QUEUED'").query().listOfRows());
@@ -140,7 +142,7 @@ class SecurityIntegrationTest {
         assertTrue(accounts.findByUsername("length_bad").isEmpty());
         for(String username:List.of("z","u".repeat(128))){
             String password=" aB1! ";
-            mvc.perform(post("/api/v1/auth/signup").with(csrf()).contentType("application/json").content("{\"username\":\""+username+"\",\"password\":\""+password+"\",\"termsAccepted\":true,\"termsVersion\":\""+AuthController.TERMS_VERSION+"\"}")).andExpect(status().isOk());
+            com.moapan.identity.EmailTestSupport.signup(mvc,emailOutbox,emailMailbox,username,password);
             var first=mvc.perform(post("/api/v1/auth/login").with(csrf()).contentType("application/json").content("{\"username\":\""+username+"\",\"password\":\""+password+"\"}")).andExpect(status().isOk()).andReturn().getResponse().getCookie("SESSION");
             mvc.perform(patch("/api/v1/account/password").cookie(first).with(csrf()).contentType("application/json").content("{\"currentPassword\":\""+password+"\",\"newPassword\":\"abcde\"}")).andExpect(status().isBadRequest());
             String changed="가나다라마바";
@@ -462,7 +464,7 @@ class SecurityIntegrationTest {
         try(var pool=Executors.newSingleThreadExecutor()){
             var pending=pool.submit(()->mvc.perform(post("/api/v1/auth/login").with(csrf()).contentType("application/json").content("{\"username\":\"replaced_login_race\",\"password\":\""+PASSWORD+"\"}")).andReturn().getResponse().getStatus());
             try{assertTrue(verified.await(10,TimeUnit.SECONDS));mvc.perform(delete("/api/v1/account").cookie(cookie).with(csrf()).contentType("application/json").content("{\"currentPassword\":\""+PASSWORD+"\"}")).andExpect(status().isOk());
-                mvc.perform(post("/api/v1/auth/signup").with(csrf()).contentType("application/json").content("{\"username\":\"replaced_login_race\",\"password\":\"different replacement credential 12345\",\"termsAccepted\":true,\"termsVersion\":\"terms-1\"}")).andExpect(status().isOk());
+                com.moapan.identity.EmailTestSupport.signup(mvc,emailOutbox,emailMailbox,"replaced_login_race","different replacement credential 12345");
             }finally{resume.countDown();}assertEquals(401,pending.get(10,TimeUnit.SECONDS));assertNotEquals(priorId,accounts.findByUsername("replaced_login_race").orElseThrow().id);
         }finally{resume.countDown();org.mockito.Mockito.reset(authManager);}
     }

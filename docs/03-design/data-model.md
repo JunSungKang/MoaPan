@@ -4,7 +4,7 @@
 
 SQL 진실 원천: src/main/resources/db/migration/V1__schema.sql, V2__tags.sql.
 
-users: UUID·정규화 아이디·해시·활성·권한만. spring_session/attributes: 세션 운영. auth_rate_limits/api_quotas/api_request_leases: 짧은 목적별 집계와 동시 요청 lease.
+users: UUID·정규화 아이디·해시·활성·권한·약관 및 아래 V25 인증 이메일. spring_session/attributes: 세션 운영. auth_rate_limits/api_quotas/api_request_leases: 짧은 목적별 집계와 동시 요청 lease.
 
 sites 1:N sources 1:N articles. sites와 sources는 상태·권리·기술점검·version을 분리한다. source GUID와 canonical URL 각각 고유 제약으로 중복을 막고 article_revisions는 입력 해시 변경 이력을 보관한다. 태그는 aliases·redirects·article_tags로 연결한다. edition items는 공통 위치를 고정한다. content_jobs는 source별 활성 작업 1개, lease 선점과 재시도를 관리한다. fetch_runs·worker_status·admin_actions는 운영 최소 정보다.
 
@@ -54,3 +54,10 @@ V18~22는 태그/별칭/주제·대표 기본값·광고 표시·지면 membersh
 
 ## V23 계정별 구독 권한
 account_subscriptions(account_id UUID PK/FK users ON DELETE CASCADE,status ACTIVE/REVOKED,starts_at/expires_at timestamptz,version bigint>0,updated_at)이며종료>시작 CHECK. 구독행없음은미구독,기존계정일괄부여없음. 사용자관심사/결제자료아님. 권한부여/연장/회수는계정행잠금과version검사·admin_actions감사를같은트랜잭션으로수행한다. 데이터는MP-DOC-035 참조.
+
+## 승인 변경: 필수 이메일 인증·계정 복구
+2026-11-03 사용자 승인으로 신규 가입 이메일 인증을 필수화하고 기존 계정 등록/변경·비밀번호 복구를 추가한다. 이메일은 인증·비밀번호 복구·결제/구독 관련 안내에만 사용하며 마케팅·광고·다른 목적 사용을 금지한다. 과거 이메일 미수집/복구 미지원 명세는 이 범위에서 대체된다. 상세 현재 계약은 MP-DOC-037(email-identity)과 코드 EmailController/AuthController/V25, 실제 검증은 MP-DOC-038을 따른다. 결제는 미구현이다.
+
+## V25 인증 이메일
+
+users에 email_cipher(bytea), email_key(varchar64 UNIQUE/HMAC), email_verified_at, email_policy_version, email_policy_accepted_at을 추가한다. 다섯 필드가 모두NULL(보존된 기존 계정)이거나 모두설정된 상태만 허용한다. 기존 행을 삭제하거나 주소를 추정하지 않는다. email_challenges는 목적SIGNUP/BIND/RESET, 계정FK/auth_version, 세션/사용자명/이메일HMAC, 암호화 주소, 코드HMAC, 오입력수,5분 만료시각을 갖는다. email_outbox는 계정/도전FK(cascade), 암호화 봉투, 상태,3회 제한,예약/만료/lease/오류코드만 저장한다. 발송 후 봉투NULL, 만료 도전과1일 메타데이터 삭제. 계정 삭제 시 계정에 연결된 이메일 도전·발송과 주소/계정 제한 카운터를 정리한다. 회원 마케팅/이메일 열람 추적 테이블은 없다.

@@ -1,0 +1,13 @@
+# Synthetic SMTP only. Apply with a fresh dedicated test project, never the live project.
+services:
+  mailbox-smtp:
+    environment:
+      MYNETWORKS: '127.0.0.0/8 172.31.251.1/32'
+    networks: !override [smtp-smoke]
+    ports: ['127.0.0.1:2525:25']
+    secrets:
+      - {source: smtp-ca, target: smtp-ca}
+networks:
+  smtp-smoke:
+    internal: false
+    ipam: {config: [{subnet: 172.31.251.0/28, gateway: 172.31.251.1}]}
