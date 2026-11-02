@@ -1,7 +1,7 @@
 # 계정별 구독 권한 검증서
 
 - 문서번호: MP-DOC-036
-- 상태: 구현·서비스 반영 검증 완료. 독립 current-head 리뷰·PR 준비 중. develop 병합은 별도 승인.
+- 상태: 구현·서비스 반영 검증 완료. 독립 코드 재리뷰 APPROVE. 최종 current-head App 승인 상태는 [PR #27](https://github.com/JunSungKang/MoaPan/pull/27) 원격 기록이 정본이며 develop 병합은 별도 승인.
 
 ## 인수 항목
 
@@ -15,7 +15,7 @@
 - [x] SA-08 권한별메뉴/teaser요청·기존공개지면/회원기능유지
 - [x] SA-09 전체회귀·HTML·보안/JAR/SBOM/최종이미지/trust검증
 - [x] SA-10 실제자료보존·V23 migrate·동일검사이미지서비스반영·HTTPS
-- [ ] SA-11 독립current-head리뷰·App승인/guardedPR. develop병합별도승인
+- [x] SA-11 독립리뷰·guardedPR/승인게이트 검증. 최종 App 상태는 PR #27 정본, develop병합별도승인
 
 ## 중간 실패와 수정
 새404문서의description누락을기존메타데이터시험이탐지해보완했다. 신규PG시험의마이그레이션초기화순서와시간바인딩을기존환경과일치하게수정했다. 권한변경양성시험은합성구독을명시적으로부여하고이전비로그인뉴스레터302/401전제는승인된404규약으로변경했다. no-store검사는서버HTML헤더를명시적으로맞췄다. 시험삭제·skip·보안정책완화로통과시키지않는다.
@@ -39,4 +39,6 @@
 
 공통뉴스레터오류이벤트를처음연결했을때공개지면도초기화되는회귀를전체시험이탐지했다. 구독전용epoch와정리대상을분리해공개지면/개인화/로그인은보존하며뉴스레터만정리한다. URL비예약문자인코딩도MVC와같은PathPattern segment 해석으로통일했다. 필터·오류응답이같은요청범위경로cache를쓰며원시URI/컨텍스트가달라지면재해석한다. 실제별칭URL/GET/HEAD와서버권한·오류content-type검증을추가했다.
 
-최종수정산출물로전체362시험을다시통과했고검사digest로web/worker를갱신한뒤HTTPS합성부여/따뜻한캐시/회수/별칭URL/HEAD를재검증했다. 구독상실은개인로그아웃이벤트와분리하고공개뉴스는유지한다. 현재 [PR #27](https://github.com/JunSungKang/MoaPan/pull/27)의수정head독립리뷰를대기한다. main/develop병합은수행하지않는다.
+최종수정산출물로전체362시험을다시통과했고검사digest로web/worker를갱신한뒤HTTPS합성부여/따뜻한캐시/회수/별칭URL/HEAD를재검증했다. 구독상실은개인로그아웃이벤트와분리하고공개뉴스는유지한다. [PR #27](https://github.com/JunSungKang/MoaPan/pull/27)의수정코드head 5864d8859ed2794d18af9154ed49697d8866cd67에서독립APPROVE/기존P2해결을확인했다. main/develop병합은수행하지않는다.
+
+독립 리뷰는 코드와 제출 증빙의읽기전용 검토이며시험중복실행으로보고하지않는다. 이마감문서변경후새head도다시검토하고그SHA에App formal APPROVED를제출해야전달완료다. 최종head의승인은PR 원격기록을확인하며개발코드리뷰승인을사용자의develop/main병합승인으로해석하지않는다.

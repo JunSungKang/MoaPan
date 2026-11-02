@@ -275,7 +275,7 @@
     "id": "MP-DOC-035",
     "path": "docs/03-design/subscription-access.md",
     "title": "계정별 뉴스레터 구독 권한 설계서",
-    "status": "서비스 반영 검증 완료·독립리뷰 준비",
+    "status": "서비스 검증·독립리뷰 완료, PR 승인게이트",
     "owner": "개발 담당",
     "reviewer": "독립 리뷰 담당"
   },
@@ -283,7 +283,7 @@
     "id": "MP-DOC-036",
     "path": "docs/05-test/subscription-access.md",
     "title": "계정별 구독 권한 검증서",
-    "status": "서비스 반영 검증 완료·독립리뷰 준비",
+    "status": "서비스 검증·독립리뷰 완료, PR 승인게이트",
     "owner": "개발 담당",
     "reviewer": "독립 리뷰 담당"
   }
