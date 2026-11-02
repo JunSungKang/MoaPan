@@ -131,4 +131,4 @@ GET/PUT `/api/v1/admin/translations/{id}/{language}` (ko/en), ADMIN 및 상태�
 GET `/api/v1/auth/session`: 정상 비회원은204/빈 본문, 유효한 로그인 세션만200/{id,username,role}. 익명 세션/쿠키를 생성하지 않는다. 삭제·만료·비활성 세션은 폐기 후204를 반환한다. no-store, 동일출처·전역 요청 제한 유지. 기존 GET `/api/v1/account`는 계속 인증 필수이며 비회원401이다. 화면은 정상적인 비회원 탐지를 상태 확인 API로 수행한다.
 
 ## 계정별 구독 권한 최신 규약
-뉴스레터HTML 및 /api/v1/newsletters 목록/본문/reuse/worksheet는비로그인도포함해유효권한없으면404 not_found/no-store. 그외인증API401/ADMIN403/CSRF403/DB503은유지한다. 계정DTO canReadNewsletter는읽기전용계산값. 관리자검색POST /api/v1/admin/subscriptions/search {username,page,size},부여/연장PUT /api/v1/admin/subscriptions/{id} {version,startsAt,expiresAt},회수POST .../{id}/revoke {version}. ADMIN/CSRF·기간400·충돌409,원자적감사. 상세는MP-DOC-035. 실제결제/가격/자동청구API없음.
+뉴스레터HTML 및 /api/v1/newsletters 목록/본문/reuse/worksheet는비로그인도포함해유효권한없으면404 not_found/no-store. 그외인증API401/ADMIN403/CSRF403/DB503은유지한다. 계정DTO canReadNewsletter는읽기전용계산값. 관리자검색POST /api/v1/admin/subscriptions/search {username,page,size,sort}（기본10명/RECENT, EXPIRING 지원）,부여/연장PUT /api/v1/admin/subscriptions/{id} {version,startsAt,expiresAt},회수POST .../{id}/revoke {version}. ADMIN/CSRF·기간400·충돌409,원자적감사. 상세는MP-DOC-035. 실제결제/가격/자동청구API없음.

@@ -27,6 +27,7 @@ class SiteDesignAuditTest {
             else if(path.equals("/api/v1/admin/interests"))body="{\"version\":0,\"weights\":{\"ai\":3}}";
             else if(path.equals("/api/v1/admin/classification"))body="{\"catalog\":{\"version\":0,\"topics\":[]},\"counts\":[],\"runtime\":{},\"recent\":[]}";
             else if(path.equals("/api/v1/admin/classification/topics"))body="{\"version\":0,\"topics\":[]}";
+            else if(path.equals("/api/v1/admin/subscriptions/search"))body="{\"items\":[],\"page\":0,\"hasNext\":false}";
             else if(path.startsWith("/api/v1/admin/")&&!path.equals("/api/v1/admin/advertisements"))body="[]";
             if(body==null)r.fallback();else r.fulfill(new Route.FulfillOptions().setStatus(status).setContentType("application/json").setBody(body));
         });

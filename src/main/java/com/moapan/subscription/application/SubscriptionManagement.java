@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @PreAuthorize("hasRole('ADMIN')")
 public class SubscriptionManagement {
-    public record Search(String username,Integer page,Integer size) {}
+    public record Search(String username,Integer page,Integer size,String sort) {}
     public record GrantInput(long version,Instant startsAt,Instant expiresAt) {}
     public record Version(long version) {}
     public record AccountView(UUID id,String username,String role,boolean active,String subscriptionStatus,
@@ -24,10 +24,19 @@ public class SubscriptionManagement {
     public Page search(Search input) {
         if(input==null)throw new ApiError(400,"invalid_subscription_search");
         String name=input.username()==null?"":input.username().toLowerCase(Locale.ROOT);
-        int page=input.page()==null?0:input.page(),size=input.size()==null?20:input.size();
+        int page=input.page()==null?0:input.page(),size=input.size()==null?10:input.size();
         if(name.length()>128||page<0||page>10000||size<1||size>100)throw new ApiError(400,"invalid_subscription_search");
-        var now=clock.instant();var rows=db.sql(SELECT+" WHERE position(:name in u.username)>0 ORDER BY u.username,u.id LIMIT :limit OFFSET :offset")
-                .param("name",name).param("limit",size+1).param("offset",page*size).query((rs,n)->map(rs,now)).list();
+        String sort=input.sort()==null?"RECENT":input.sort();
+        String usable="s.status='ACTIVE' AND u.active AND s.starts_at<=:now AND s.expires_at>:now";
+        String order=switch(sort){
+            case "RECENT" -> "CASE WHEN s.status='ACTIVE' THEN 0 WHEN s.status='REVOKED' THEN 1 ELSE 2 END,s.updated_at DESC NULLS LAST,u.username,u.id";
+            case "EXPIRING" -> "CASE WHEN "+usable+" THEN 0 ELSE 1 END,CASE WHEN "+usable+" THEN s.expires_at END ASC NULLS LAST,s.updated_at DESC NULLS LAST,u.username,u.id";
+            default -> throw new ApiError(400,"invalid_subscription_search");
+        };
+        var now=clock.instant();var query=db.sql(SELECT+" WHERE position(:name in u.username)>0 ORDER BY "+order+" LIMIT :limit OFFSET :offset")
+                .param("name",name).param("limit",size+1).param("offset",page*size);
+        if(sort.equals("EXPIRING"))query.param("now",now.atOffset(ZoneOffset.UTC));
+        var rows=query.query((rs,n)->map(rs,now)).list();
         return new Page(List.copyOf(rows.subList(0,Math.min(size,rows.size()))),page,rows.size()>size);
     }
 

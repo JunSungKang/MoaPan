@@ -92,6 +92,41 @@ class SubscriptionAccessIntegrationTest {
         assertFalse(r.contains("password"));assertFalse(r.contains("termsAccepted"));
         for(String body:List.of("{\"size\":-1}","{\"size\":101}","{\"page\":-1}"))mvc.perform(post("/api/v1/admin/subscriptions/search").cookie(admin.session()).with(csrf()).contentType("application/json").content(body)).andExpect(status().isBadRequest());
     }
+    @Test void subscriptionSearchDefaultsToTenRecentGrantsAndPaginatesEverySupportedDisplaySize()throws Exception {
+        String prefix="listing_"+UUID.randomUUID().toString().replace("-","");
+        for(int i=0;i<105;i++){
+            UUID id=UUID.randomUUID();
+            db.sql("INSERT INTO users(id,username,password_hash) VALUES(:id,:name,'synthetic-unused-hash')").param("id",id).param("name",prefix+String.format(Locale.ROOT,"_%03d",i)).update();
+            if(i<103)db.sql("INSERT INTO account_subscriptions(account_id,status,starts_at,expires_at,version,updated_at) VALUES(:id,'ACTIVE',now()-interval '1 day',now()+interval '10 days',1,now()-make_interval(mins=>:age))").param("id",id).param("age",i).update();
+        }
+        var first=subscriptionSearch(Map.of("username",prefix));assertEquals(10,first.path("items").size());assertTrue(first.path("hasNext").asBoolean());assertEquals(prefix+"_000",first.path("items").get(0).path("username").asText());
+        for(int size:List.of(10,30,50,100)){
+            var seen=new LinkedHashSet<String>();
+            for(int page=0;;page++){
+                var result=subscriptionSearch(Map.of("username",prefix,"sort","RECENT","size",size,"page",page));assertEquals(page,result.path("page").asInt());assertTrue(result.path("items").size()<=size);
+                for(var item:result.path("items"))assertTrue(seen.add(item.path("username").asText()),"No repeated account between pages");
+                if(!result.path("hasNext").asBoolean())break;assertTrue(page<12);
+            }
+            assertEquals(105,seen.size());assertEquals(prefix+"_104",seen.getLast());
+        }
+        for(String sort:List.of("","username","RECENT; DROP TABLE users","EXPIRING DESC"))mvc.perform(post("/api/v1/admin/subscriptions/search").cookie(admin.session()).with(csrf()).contentType("application/json").content(json.writeValueAsString(Map.of("sort",sort)))).andExpect(status().isBadRequest());
+    }
+    @Test void expiringSortPrioritizesUsableSubscriptionsAndKeepsOtherAccountsManageable()throws Exception {
+        String prefix="expiry_"+UUID.randomUUID().toString().replace("-","");
+        var now=Instant.now();
+        for(String kind:List.of("near","later","future","expired","revoked","disabled","none","near_tie")){
+            UUID id=UUID.randomUUID();db.sql("INSERT INTO users(id,username,password_hash,active) VALUES(:id,:name,'synthetic-unused-hash',:active)").param("id",id).param("name",prefix+"_"+kind).param("active",!kind.equals("disabled")).update();
+            if(kind.equals("none"))continue;
+            db.sql("INSERT INTO account_subscriptions(account_id,status,starts_at,expires_at,version,updated_at) VALUES(:id,:status,:start,:end,1,TIMESTAMPTZ '2026-01-01 00:00:00Z')")
+                    .param("id",id).param("status",kind.equals("revoked")?"REVOKED":"ACTIVE").param("start",now.plusSeconds((kind.equals("future")?1:-24)*3600).atOffset(ZoneOffset.UTC)).param("end",now.plusSeconds((kind.equals("expired")?-1:kind.equals("later")?24:2)*3600).atOffset(ZoneOffset.UTC)).update();
+        }
+        var result=subscriptionSearch(Map.of("username",prefix,"sort","EXPIRING","size",100));var names=new ArrayList<String>();for(var row:result.path("items"))names.add(row.path("username").asText());
+        assertEquals(List.of(prefix+"_near",prefix+"_near_tie",prefix+"_later"),names.subList(0,3));assertEquals(8,names.size());
+        var search=subscriptionSearch(Map.of("username",prefix+"_none","sort","EXPIRING"));assertEquals("NONE",search.path("items").get(0).path("subscriptionStatus").asText());
+    }
+    private tools.jackson.databind.JsonNode subscriptionSearch(Map<String,Object> body)throws Exception {
+        var result=mvc.perform(post("/api/v1/admin/subscriptions/search").cookie(admin.session()).with(csrf()).contentType("application/json").content(json.writeValueAsString(body))).andExpect(status().isOk()).andReturn().getResponse().getContentAsString();return json.readTree(result);
+    }
     @Test void signupCannotInjectSubscriptionAndDeletionRemovesOwnGrant()throws Exception{
         mvc.perform(post("/api/v1/auth/signup").with(csrf()).contentType("application/json").content(json.writeValueAsString(Map.of("username","injected_"+UUID.randomUUID(),"password","synthetic subscription password","termsAccepted",true,"termsVersion","terms-1","canReadNewsletter",true)))).andExpect(status().isBadRequest());
         grant(member);mvc.perform(delete("/api/v1/account").cookie(member.session()).with(csrf()).contentType("application/json").content("{\"currentPassword\":\"synthetic subscription password\"}")).andExpect(status().isOk());

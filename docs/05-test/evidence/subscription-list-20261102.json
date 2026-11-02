@@ -1,0 +1,125 @@
+{
+  "status": "IMPLEMENTED_SERVICE_VERIFIED_REVIEW_GATED",
+  "checkedAt": "2026-11-02T08:35:26.610Z",
+  "scope": "PR27 subscription list follow-up; no develop/main merge",
+  "tests": {
+    "unit": 171,
+    "postgresql": 124,
+    "playwright": 70,
+    "total": 365,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "finalVisualSubset": {
+    "tests": 8,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "note": "After full suite, wait for two rendering frames before responsive screenshots; production code unchanged."
+  },
+  "images": [
+    {
+      "digest": "sha256:1d695d96322b4b7dc97bfce496683856195c7b2c206e50a44a21897c72d14bab",
+      "vulnerabilities": 0,
+      "secrets": 0
+    },
+    {
+      "digest": "sha256:6c9531bf3a63d6efb23b5b1ab7bc891848267ddc8f7eb9ff9d4737e27d083fc0",
+      "vulnerabilities": 0,
+      "secrets": 0
+    }
+  ],
+  "jarSha256": "c9476c07e75ea920a0c8bfb187047ef4ef42e7c983873223a8a8613566d63547",
+  "html": {
+    "pages": 12,
+    "messages": 0
+  },
+  "requirements": {
+    "autoLoad": "first subscription tab entry, including direct hash",
+    "defaultSort": "RECENT grant/renewal",
+    "defaultSize": 10,
+    "sizes": [
+      10,
+      30,
+      50,
+      100
+    ],
+    "expiring": "Usable active subscriptions first, earliest expiry, deterministic ties",
+    "pageReset": true,
+    "serverPagination": "105 synthetic accounts traversed once each at every display size",
+    "noUsernameInURLOrStorage": true,
+    "adminCsrfAnd404Preserved": true
+  },
+  "live": {
+    "checkedAt": "2026-11-02T08:33:59.709Z",
+    "status": "PASS",
+    "checks": [
+      "default lookup and 10/30/50/100 limits",
+      "real grant/renewal ordering and usable expiry ordering",
+      "sort expression injection rejected",
+      "ADMIN-only search and existing grant/revoke404/public-news behavior"
+    ],
+    "syntheticCreated": 3,
+    "syntheticDeleted": 3,
+    "existingAccountsModified": 0
+  },
+  "dataPreserved": true,
+  "serviceRecords": {
+    "articles": 347,
+    "accounts": 2,
+    "newsletters": 1,
+    "subscriptions": 1,
+    "schema": 23
+  },
+  "review": {
+    "required": "independent current head and App formal review after commit/push",
+    "canonical": "https://github.com/JunSungKang/MoaPan/pull/27"
+  },
+  "artifacts": [
+    {
+      "path": ".local/subscription-access-20261102/list-before-tests.log",
+      "sha256": "464a84b0ff4131ccca2a2e24a7763b2dcc068ef5a72686da6c57bc61fde9d1c3"
+    },
+    {
+      "path": ".local/subscription-access-20261102/list-scoped-tests.log",
+      "sha256": "3bdb7c295706b1377e3e3b88ae7900d13df8f69e3d807a4c5156468df86a055e"
+    },
+    {
+      "path": ".local/subscription-access-20261102/list-all-tests.log",
+      "sha256": "bf705094f6ebd5ba0559dbbe7190039a5510af3a045b55239150e3b1b36243a1"
+    },
+    {
+      "path": ".local/subscription-access-20261102/list-visual-final.log",
+      "sha256": "fd0b4ca1a031a2bc2da339d8823d574144f1a96814f2b312a780d51ca1442673"
+    },
+    {
+      "path": ".local/subscription-access-20261102/list-html.log",
+      "sha256": "c0d891dd9fa53f8170cc9fdf2f75c29cc67e1707dd7b9645bc62b03ed6fbc18d"
+    },
+    {
+      "path": ".local/subscription-access-20261102/list-image-scan.log",
+      "sha256": "aa8e7e5804acf8237766eadb494e0237a5a06c4f1bb5c5445b63e5da4b620785"
+    },
+    {
+      "path": ".local/subscription-access-20261102/list-trust-audit.log",
+      "sha256": "878b770b127463b97cf1b98483f72e87a52c08c08daddd0904dbb68fa2eabde2"
+    },
+    {
+      "path": ".local/subscription-access-20261102/list-deploy.log",
+      "sha256": "a806619efe09ccfe8ae48d1cce1008e129e3f6314f753b54f04fa6cad1a15e03"
+    },
+    {
+      "path": ".local/subscription-access-20261102/list-http.log",
+      "sha256": "5e8a4c475edab31a5cfa48f60fa58c6e6bb44682b985454946c6bc6db7aa06e7"
+    },
+    {
+      "path": ".local/subscription-access-20261102/list-data-before.txt",
+      "sha256": "e35cce2b34e1061f900c67ea57cfe573384fa38d87542982c24102df8e5575c9"
+    },
+    {
+      "path": ".local/subscription-access-20261102/list-data-after.txt",
+      "sha256": "e35cce2b34e1061f900c67ea57cfe573384fa38d87542982c24102df8e5575c9"
+    }
+  ]
+}
