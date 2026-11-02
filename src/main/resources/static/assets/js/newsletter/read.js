@@ -1,7 +1,7 @@
 import {issueYear} from '../shared/format.js';
 import {readerTools} from './reader-tools.js';
 import{request}from'../shared/api.js';
-import{requireAccount,el,date,report,newsletterElement}from'../shared/common.js';
+import{requireNewsletter,el,date,report,newsletterElement}from'../shared/common.js';
 import{render}from'./render.js';
 import{language}from'../shared/i18n.js';
 import{brand}from'../shared/config.js';
@@ -19,7 +19,7 @@ function teaser(row,index){
  return item;
 }
 try{
- await requireAccount();const list=await request('/api/v1/newsletters');
+ await requireNewsletter();const list=await request('/api/v1/newsletters');
  const id=new URLSearchParams(location.search).get('id');
  if(id){
   const data=await request('/api/v1/newsletters/'+encodeURIComponent(id)),m=data.manuscript;
@@ -37,5 +37,5 @@ try{
   for(const topic of new Set(list.map(row=>row.topic))){const option=el('option',topic);option.value=topic;filter.append(option);}
   if(list.length)try{const latest=await request('/api/v1/newsletters/'+encodeURIComponent(list[0].id));const cover=latest.manuscript.blocks.find(b=>b.type==='image'&&/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/.test(b.url));if(cover){const image=el('img',undefined,'letter-cover');image.src=cover.url;image.alt=cover.text;const slot=target.querySelector('.teaser-cover');slot.removeAttribute('aria-hidden');slot.classList.remove('placeholder');slot.replaceChildren(image);}}catch{/* The archive remains usable if its optional cover is unavailable. */}
  }
-}catch(e){report(e);}
+}catch(e){if(e.status===404)location.replace('/404.html');else report(e);}
 filter.addEventListener('change',()=>{for(const article of target.querySelectorAll('article'))article.hidden=!!filter.value&&article.dataset.topic!==filter.value;});

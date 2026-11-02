@@ -1,0 +1,142 @@
+{
+  "status": "SERVICE_VALIDATED_REVIEW_PENDING",
+  "checkedAt": "2026-11-02T04:23:43.711Z",
+  "base": "fe81b65c2889a92136b3b2d3861c2e5a3f1482bb",
+  "checklist": [
+    {
+      "id": "SA-01",
+      "status": "PASS"
+    },
+    {
+      "id": "SA-02",
+      "status": "PASS"
+    },
+    {
+      "id": "SA-03",
+      "status": "PASS"
+    },
+    {
+      "id": "SA-04",
+      "status": "PASS"
+    },
+    {
+      "id": "SA-05",
+      "status": "PASS"
+    },
+    {
+      "id": "SA-06",
+      "status": "PASS"
+    },
+    {
+      "id": "SA-07",
+      "status": "PASS"
+    },
+    {
+      "id": "SA-08",
+      "status": "PASS"
+    },
+    {
+      "id": "SA-09",
+      "status": "PASS"
+    },
+    {
+      "id": "SA-10",
+      "status": "PASS"
+    },
+    {
+      "id": "SA-11",
+      "status": "OPEN"
+    }
+  ],
+  "tests": {
+    "test": {
+      "tests": 170,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "integrationTest": {
+      "tests": 121,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "e2eTest": {
+      "tests": 65,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "totalTests": 356,
+  "html": {
+    "pages": 12,
+    "messages": 0,
+    "validator": "26.10.12"
+  },
+  "images": [
+    {
+      "digest": "sha256:ee16331194f2f924dc1c82b7d324b710b4a6090e881e9923beb4d5051d4b0438",
+      "vulnerabilities": 0,
+      "secrets": 0
+    },
+    {
+      "digest": "sha256:bede4477077f76eb594428bad77d477443c39161eb4c909a56dcd9bb79cd2a79",
+      "vulnerabilities": 0,
+      "secrets": 0
+    }
+  ],
+  "jarSha256": "8ef2b640cebb475aa0eeef7839b295043f85b6a95a247c760ef17278faac18bf",
+  "schemaBefore": 22,
+  "schemaAfter": 23,
+  "existingRecords": {
+    "articles": 300,
+    "accounts": 2,
+    "newsletters": 1,
+    "idSetsPreserved": true,
+    "distributionPreserved": "FREE_PREVIEW",
+    "subscriptionsAfterSyntheticCleanup": 0
+  },
+  "live": {
+    "checkedAt": "2026-11-02T04:18:50.136Z",
+    "checks": [
+      "guest HTML/API real404 and same missing-page body",
+      "no default grant and ADMIN not a subscriber",
+      "manual grant, current remembered session, published list/detail and warm cache",
+      "revocation next request/warm cache/all reader paths+HEAD404, no relogin",
+      "public edition preserved"
+    ],
+    "status": "PASS",
+    "syntheticAccountsCreated": 2,
+    "syntheticAccountsDeleted": 2,
+    "existingAccountsGranted": 0
+  },
+  "modelClassesUnchanged": true,
+  "security": {
+    "tool": "Trivy0.76.1",
+    "dbVersion": 2,
+    "dbDownloadedAt": "2026-11-01T20:52:15.050556Z",
+    "jarPackages": 93,
+    "sbomComponents": 102,
+    "gate": "PASS",
+    "limitations": "Existing proxy GO-2026-5932 applicability evidence and password-policy S07 remain unchanged;no claim of all security checklist resolution."
+  },
+  "delivery": {
+    "service": "https://175.195.62.165/",
+    "mergeAuthorized": false,
+    "merge": "NOT_PERFORMED"
+  },
+  "evidenceHashes": {
+    "verified-all.log": "e8cc8d063b20e3798fe6cafdd88b3b5fa424a9663e255604a9c50f0250833e7a",
+    "final-image-scan.log": "c30525c0a5d7c467429c615cb687d664928387cb8054d62a7293dc95bf9adb40",
+    "final-trust-audit.log": "878b770b127463b97cf1b98483f72e87a52c08c08daddd0904dbb68fa2eabde2",
+    "model-before.txt": "06fe573e24fa4a0dde1f25af80a56b237ad36d968483a5a70b8075f58da93244",
+    "model-final.txt": "06fe573e24fa4a0dde1f25af80a56b237ad36d968483a5a70b8075f58da93244",
+    "migrate.log": "0c9d3eb1e75ee18f941a1471a7f27f8f224625bead7af1b1a1271d8d534ece05",
+    "deploy.log": "3dc459a783a2bb9e644e96e380cec54af6b4641503e18e5c773e9ca02faaa318",
+    "live-smoke.log": "ce7464dd7aa99c76758999ab7ca82288de3f3cade5652f2a40ad1a9ebabb26ba",
+    "data-before.txt": "69b027bb4a498c97389dcd19a043296b83256c533b3446fc85dd07f6f7e37d94",
+    "data-after.txt": "cf6ee22aacdf0bb75686e8039bdeee2be385acd7ac5541d98d8c58e12585029f",
+    "html-final.log": "c0d891dd9fa53f8170cc9fdf2f75c29cc67e1707dd7b9645bc62b03ed6fbc18d"
+  }
+}

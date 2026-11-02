@@ -1,3 +1,4 @@
+import {initializeSubscriptions} from '../subscription/administration.js';
 import {initializeTopicManagement} from './topic-management.js';
 import {initializeCollectionJobs,showCollectionResult} from './collection-jobs.js';
 import {initializeClassificationManagement} from './classification-management.js';
@@ -25,7 +26,7 @@ document.querySelector('#new-source').addEventListener('click',()=>{resetSource(
 document.querySelector('#manage-sources').addEventListener('click',()=>navigation.openCollection('sources'));
 document.querySelector('#site-filters').addEventListener('submit',e=>{e.preventDefault();sitePage=0;action(sites).catch(()=>{});});document.querySelector('#site-prev').addEventListener('click',()=>{sitePage=Math.max(0,sitePage-1);action(sites).catch(()=>{});});document.querySelector('#site-next').addEventListener('click',()=>{sitePage++;action(sites).catch(()=>{});});
 initializeArticleReview(document.querySelector('#article-review'),document.querySelector('#refresh-articles'));
-try{await requireAccount('ADMIN');initializeTopicManagement();initializeClassificationManagement();const results=await Promise.allSettled([initializeAdvertising(),representativeSettings(),sites(),request('/api/v1/admin/workers').then(rows=>document.querySelector('#workers').textContent=JSON.stringify(rows,null,2))]);for(const result of results)if(result.status==='rejected')report(result.reason);}catch(error){report(error);}
+try{await requireAccount('ADMIN');initializeSubscriptions();initializeTopicManagement();initializeClassificationManagement();const results=await Promise.allSettled([initializeAdvertising(),representativeSettings(),sites(),request('/api/v1/admin/workers').then(rows=>document.querySelector('#workers').textContent=JSON.stringify(rows,null,2))]);for(const result of results)if(result.status==='rejected')report(result.reason);}catch(error){report(error);}
 
 async function representativeSettings(){const [config,dictionary]=await Promise.all([request('/api/v1/admin/interests'),request('/api/v1/tags')]);representativeVersion=config.version;const list=document.querySelector('#representative-tags');list.replaceChildren();for(const tag of dictionary.tags){const row=el('div',undefined,'setting-row');const check=el('input');check.type='checkbox';check.value=tag.id;check.checked=!!config.weights[tag.id];check.id='representative-'+tag.id;const label=el('label',tag.name);label.htmlFor=check.id;const weight=el('input');weight.type='number';weight.min='1';weight.max='5';weight.value=config.weights[tag.id]||3;weight.setAttribute('aria-label',tag.name+' 대표 관심 정도');row.append(check,label,weight);list.append(row);}}
 document.querySelector('#reload-representative').addEventListener('click',()=>action(representativeSettings).catch(()=>{}));

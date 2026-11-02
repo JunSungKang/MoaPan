@@ -267,3 +267,6 @@ Helm migrationVersion14 lint/render/부정입력3PASS, 합성값렌더Trivy HIGH
 
 
 공통화 재검수:342 PASS(169/111/62),skip0·CSS150상태전후동일·Nu0·최종이미지/source/JAR/SBOM/모델CPU/trustgatePASS·실제서비스동일digest·데이터보존·PSI양쪽100/100/100/100. 구체적52선언/죽은경로/7클래스9생성경로 시정과 한계·자동번역재검증은 [MP-DOC-034](refactor-checklist.md)를 따른다.
+
+
+계정별 구독:356 PASS(170단위/121PG/65브라우저),failure/error/skip0·Nu12페이지0·source/JAR/SBOM/Helm·최종이미지/trust gate PASS. V23·실제HTTPS합성부여/회수/remembered세션/따뜻한캐시404·기존자료보존 확인. [MP-DOC-036](subscription-access.md). develop병합은별도승인이다.

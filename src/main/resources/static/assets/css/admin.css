@@ -4,7 +4,7 @@
 .admin-newsletter-link { font-size: .875rem; white-space: nowrap; }
 #admin-status:empty { min-height: .5rem; margin: 0; }
 .admin-tabs { display: grid; gap: 0; border-bottom: 1px solid var(--rule); }
-.admin-tabs-primary { grid-template-columns: repeat(6, minmax(0, 1fr)); margin: 1.25rem 0 0; }
+.admin-tabs-primary { grid-template-columns: repeat(7, minmax(0, 1fr)); margin: 1.25rem 0 0; }
 .admin-tabs-secondary { display: flex; flex-wrap: wrap; margin: 0 0 1.5rem; }
 .admin-tabs [role=tab] { min-height: 48px; padding: .75rem .8rem; border: 0; border-bottom: 3px solid transparent; font-size: .875rem; line-height: 1.5; background: transparent; color: var(--muted); }
 .admin-tabs [role=tab]:hover { color: var(--ink); background: #ffffff30; }
@@ -102,3 +102,5 @@
   .admin-workspace { padding: 0; }
   .admin-workspace pre { max-height: none; }
 }
+
+#subscription-accounts button { max-width: 100%; overflow-wrap: anywhere; text-align: left; }

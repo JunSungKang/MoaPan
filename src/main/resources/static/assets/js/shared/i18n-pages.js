@@ -1,4 +1,8 @@
 export default {
+"뉴스레터는 계정에 부여된 이용 기간 안에서 읽을 수 있습니다. 기간이 끝나거나 권한이 회수되면 열람이 제한됩니다. 현재 서비스에서는 결제나 자동 청구를 하지 않습니다.":"Newsletters are available during the access period granted to your account. Access ends when the period expires or permission is revoked. Payments and automatic billing are unavailable.",
+"뉴스레터 이용 권한이 있는 계정은 권한 상태와 이용 시작·종료 시각을 함께 보관합니다. 접근 권한을 확인하는 데만 사용하며, 탈퇴하면 해당 권한 정보도 삭제합니다. 관리자의 권한 변경 작업은 운영 기록으로 남깁니다.":"For accounts with newsletter access, we store the permission status and its start and expiry times to check access. These permissions are deleted when the account is deleted. Administrative permission changes are recorded for operations.",
+"담고담고의 오늘의 지면은 여러 출처의 뉴스를 모아 제목, 짧은 요약, 주제와 원문 링크를 무료로 제공합니다. 로그인하지 않아도 대표 관심사 지면을 읽을 수 있습니다. 회원은 관심사를 설정해 자신에게 맞는 순서로 뉴스를 볼 수 있습니다.":"Today’s edition provides collected news headlines, short summaries, topics and source links for free. Anyone can read the default edition; members can apply interests stored in their own browser.",
+
   "담고담고는 가입과 서비스 제공에 필요한 정보만 처리합니다.": "DamGoX2 processes only the information needed for registration and service delivery.",
   "이름·이메일·전화번호는 받지 않으며, 관심사 설정은 담고담고로 보내지 않고 현재 브라우저에 저장합니다.": "We do not collect your name, email address or phone number. Interests stay in your current browser and are not sent to DamGoX2.",
   "1. 어떤 정보를, 왜 사용하나요?": "1. What information do we use, and why?",

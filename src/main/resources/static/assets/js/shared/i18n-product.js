@@ -2,7 +2,7 @@ export default {
   "소식에서 다음 연구로": "From news to your next study",
   "오늘의 지면에서는 모아온 기술 소식을 누구나 읽을 수 있습니다. 뉴스레터는 그 주에 모은 자료를 연결해 확인된 사실과 앞으로 검증할 전망을 구분합니다.": "Anyone can read collected technology news in today’s edition. Our newsletter connects that week’s collected evidence and separates findings from scenarios to test.",
   "개인에게는 깊이 읽는 한 편": "A closer read for individuals",
-  "뉴스와 논문을 살펴볼 시간을 줄이고, 연구 질문과 다음 실험을 찾도록 돕습니다. 뉴스레터는 로그인 후 읽을 수 있으며 현재 무료 열람 기간입니다.": "Spend less time sorting news and papers, and find research questions and experiments to try. Newsletters require sign-in and are currently available as a free preview.",
+  "뉴스와 논문을 살펴볼 시간을 줄이고, 연구 질문과 다음 실험을 찾도록 돕습니다. 뉴스레터는 이용 권한이 부여된 계정으로 로그인해 읽을 수 있습니다.": "Spend less time sorting news and papers, and find research questions and experiments to try. Newsletters require a signed-in account with valid access.",
   "팀에게는 함께 결정하는 자료": "Materials for team decisions",
   "회의용 요약, 연구 우선순위표, 실험·평가 양식으로 팀의 검토를 이어갈 수 있습니다. 본문과 재게재가 허락된 그림은 출처를 밝혀 활용할 수 있습니다.": "Continue your team’s review with meeting briefs, research priorities and experiment worksheets. Reuse permitted text and figures with attribution.",
   "향후 개인·기업 구독을 준비하고 있습니다. 현재 결제나 자동 청구는 없으며 가격과 도입 일정은 정해지지 않았습니다.": "Individual and business subscriptions are planned. Payments and automatic billing are unavailable; pricing and launch dates have not been set.",

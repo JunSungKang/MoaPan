@@ -56,3 +56,5 @@ V17 read_cache_fingerprints는 공개 데이터 출력 해시만 저장한다. �
 
 ## 실제 서버 조회 캐시
 분류 사전(TagDictionary/TopicCatalog), 운영 공통 기본 관심사(RepresentativeInterests), 광고 표시(AdvertisingSettings), 지면·기사·출처(EditionReadModels), 발간 원고(PublicationReadModels)를 도메인별 read facade에서 공유한다. SharedReadCaches는 Caffeine region/고정 예산/60분 최대 수명만 소유한다. V18~22 쓰기 시 저장 지문을 읽고 변경 즉시 재적재하며 매 요청 인증·quota·cursor·현재 공개/권리·혜택 판정을 수행한다. 클라이언트 API는 그대로다. 원문·검색어·개인 관심사·회원별 응답은 공유 캐시 대상이 아니다. [실제 검증](../05-test/server-cache.md).
+
+계정별 구독은subscription도메인의DB adapter와기존EntitlementPolicy를사용한다. 운영역할은identity/access,상품권한은subscription,발간내용은newsletter가소유한다. 필터와ContentAccess가판정하고권한없는HTML/API는공통404로출력한다. 권한판정은서버공통발간캐시밖에서매번실행한다. 결제/가격/외부캐시는추가하지않는다. MP-DOC-035.

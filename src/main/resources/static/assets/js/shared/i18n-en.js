@@ -1,4 +1,7 @@
 export default {
+"페이지를 찾을 수 없습니다":"Page not found",
+"주소를 확인하거나 오늘의 지면으로 돌아가 주세요.":"Check the address or return to today’s edition.",
+"오늘의 지면으로 돌아가기":"Back to today’s edition",
 "여러 소식을 담고 펼치는 판":"A page to gather and unfold stories",
 "여러 출처의 뉴스를 관심사에 맞게 모아 종이신문처럼 읽는 개인화 뉴스 서비스입니다. 관심사는 서버로 보내지 않습니다. 로그인 후 대표 관심사 지면을 읽거나 자신의 관심사를 적용할 수 있습니다. 제공받은 제한된 후보 안에서 브라우저가 정렬합니다.":"DamGoX2 brings news from multiple sources into a newspaper-style edition. Your interests stay in your browser. Log in to read the default edition or apply your own interests within the limited articles provided.",
 "일반 로그인은 30분 동안 이용하지 않거나 로그인한 지 12시간이 지나면 만료됩니다. 자동 로그인을 선택하면 해당 브라우저의 로그인 상태를 최대 30일 동안 유지합니다. 로그아웃하면 해당 브라우저의 자동 로그인이 해제되며, 비밀번호 변경이나 탈퇴 시에는 모든 기기의 로그인 상태가 해제됩니다.":"A normal login expires after 30 minutes of inactivity or 12 hours. Choosing automatic login keeps this browser signed in for up to 30 days. Logging out ends automatic login in this browser. Changing your password or deleting your account signs out every device.",

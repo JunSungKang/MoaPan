@@ -21,7 +21,7 @@ class SiteDesignAuditTest {
             String body=null;int status=200;
             if(path.equals("/api/v1/auth/session")){
                 if(role.equals("GUEST")||page.contains("/login.html")||page.contains("/signup.html")){body="";status=204;}
-                else body=json.writeValueAsString(Map.of("id",BrowserTest.A,"username","synthetic_layout_user","role",role));
+                else body=json.writeValueAsString(Map.of("id",BrowserTest.A,"username","synthetic_layout_user","role",role,"canReadNewsletter",true));
             }else if(path.equals("/api/v1/newsletters"))body=json.writeValueAsString(List.of(Map.of("id",BrowserTest.A,"title","합성 뉴스레터 · Synthetic newsletter","introduction","화면 검증용 원고입니다.","topic","AI","published_at","2026-10-30T08:00:00Z")));
             else if(path.equals("/api/v1/newsletters/"+BrowserTest.A))body=json.writeValueAsString(BrowserTest.productIssue());
             else if(path.equals("/api/v1/admin/interests"))body="{\"version\":0,\"weights\":{\"ai\":3}}";

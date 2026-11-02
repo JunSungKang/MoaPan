@@ -118,7 +118,7 @@ GET /api/v1/advertisements: 회원만 접근. 활성 BANNER의 enabled/title/des
 PUT /api/v1/admin/newsletters/{id}: {version,manuscript,dossier}. dossier는draft에서null허용하며발간시필수다. schema는DATA_MODEL V14,예상밖필드400. 초안/발간본문과분리하여edit는dossier,evidence,revision,expectedWeek를추가반환한다. version규약은기존과동일하다.
 POST /api/v1/admin/newsletters/evidence: ADMIN+CSRF, {search(문자열0~100),weekStart(빈문자열또는월요일YYYY-MM-DD)}. 선택주에수집된표시/메타데이터허용자료를최대100개반환한다. {weekStart,cutoff,items:[{id,title,url,collectedAt,visible}]}. 기사원문/요약/검색이력없음,검색조건은처리중만사용한다. 과거주cutoff는주말직전으로제한한다.
 GET /api/v1/admin/newsletters/{id}/review: ADMIN; {version,expectedWeek,blockers,evidence}. 미발간초안은현재주,정정판은최초발간주다. GET은상태를바꾸지않는다. 발간POST는동일검사를서버에서다시실행한다. 오류409: research_required,invalid_evidence_period,evidence_required,evidence_unavailable,evidence_outside_week,uncollected_reference,forecast_required,forecast_incomplete,forecast_evidence_required,reuse_rights_review_required,editorial_review_required,correction_note_required,manuscript_incomplete.
-발간본문GET은기존필드에firstPublishedAt,revision,distribution,dossier,evidence,reuseAllowed를추가한다. 모든독자경로는로그인필수이며결제와무관한현재무료preview다. GET /api/v1/newsletters/{id}/reuse는REUSE_NEWSLETTER혜택과rightsConfirmed를추가검사하고미검토409, GET /api/v1/newsletters/{id}/worksheet는RESEARCH_WORKSHEET혜택을검사한다. 두경로는발간snapshot만반환하며초안/비공개근거가포함되지않는다. 원문복사/exportAPI가아니고자체원고에대한출력이다. 응답no-store,쿠키인증/401/403/404규약유지.
+발간본문GET은기존필드에firstPublishedAt,revision,distribution,dossier,evidence,reuseAllowed를추가한다. 모든독자경로는활성계정과유효한DB구독권한이필요하며실결제API는없다. GET /api/v1/newsletters/{id}/reuse는REUSE_NEWSLETTER혜택과rightsConfirmed를추가검사하고미검토409, GET /api/v1/newsletters/{id}/worksheet는RESEARCH_WORKSHEET혜택을검사한다. 두경로는발간snapshot만반환하며초안/비공개근거가포함되지않는다. 원문복사/exportAPI가아니고자체원고에대한출력이다. 응답no-store,구독열람거절은비로그인포함404로통일하며다른인증/관리/CSRF규약은유지한다.
 제품 재평가는 분석 문서에서 수행한다. 평가 전용 화면·API·데이터 저장 기능은 없다.
 
 보안 경합 보완(V15): 비밀번호 변경·탈퇴의 확인 이후 계정 인증 버전이 변경되면409 credential_changed. 인증 중 비밀번호 변경·계정 교체가 발생하면401 invalid_credentials. 일반 응답에 인증 버전·해시를 반환하지 않는다. 현재 아이디1~128자/비밀번호6~128자는 사용자 명시 지시로 유지한다.
@@ -129,3 +129,6 @@ GET/PUT `/api/v1/admin/translations/{id}/{language}` (ko/en), ADMIN 및 상태�
 
 ### 로그인 상태 확인
 GET `/api/v1/auth/session`: 정상 비회원은204/빈 본문, 유효한 로그인 세션만200/{id,username,role}. 익명 세션/쿠키를 생성하지 않는다. 삭제·만료·비활성 세션은 폐기 후204를 반환한다. no-store, 동일출처·전역 요청 제한 유지. 기존 GET `/api/v1/account`는 계속 인증 필수이며 비회원401이다. 화면은 정상적인 비회원 탐지를 상태 확인 API로 수행한다.
+
+## 계정별 구독 권한 최신 규약
+뉴스레터HTML 및 /api/v1/newsletters 목록/본문/reuse/worksheet는비로그인도포함해유효권한없으면404 not_found/no-store. 그외인증API401/ADMIN403/CSRF403/DB503은유지한다. 계정DTO canReadNewsletter는읽기전용계산값. 관리자검색POST /api/v1/admin/subscriptions/search {username,page,size},부여/연장PUT /api/v1/admin/subscriptions/{id} {version,startsAt,expiresAt},회수POST .../{id}/revoke {version}. ADMIN/CSRF·기간400·충돌409,원자적감사. 상세는MP-DOC-035. 실제결제/가격/자동청구API없음.

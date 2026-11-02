@@ -51,3 +51,6 @@ translation_runtime 분산 lease, 두 모델 작업 started_at, article_translat
 서버 캐시 기반 V17: read_cache_fingerprints(domain,subject,fingerprint)는 공개 출력 모델의 SHA-256만 저장한다. PK는(domain,subject), hash는64자리 소문자16진수다. set_read_cache_fingerprint 함수는 작성자 트랜잭션 안에서 계산하며 동일 hash에는 행을 갱신하지 않는다. 원문·회원·검색어를 넣지 않는다. 도메인별 생성/갱신/삭제 트리거는 후속 적용 사항이며 현재 운영 DB에 V17을 적용하지 않았다.
 
 V18~22는 태그/별칭/주제·대표 기본값·광고 표시·지면 membership/기사/번역/분류상태/출처/사이트·발간 원고의 정확한 출력 지문을 read_cache_fingerprints에 관리한다. 값은 domain/대상UUID/SHA256뿐이며 원문이나 회원 프로필을 넣지 않는다. 분류 job은 별도 article_classification 지문을 사용해 parent article 잠금 역전을 피한다. 기사/계정/발간물 기존 행은 보존하는 추가 마이그레이션이다.
+
+## V23 계정별 구독 권한
+account_subscriptions(account_id UUID PK/FK users ON DELETE CASCADE,status ACTIVE/REVOKED,starts_at/expires_at timestamptz,version bigint>0,updated_at)이며종료>시작 CHECK. 구독행없음은미구독,기존계정일괄부여없음. 사용자관심사/결제자료아님. 권한부여/연장/회수는계정행잠금과version검사·admin_actions감사를같은트랜잭션으로수행한다. 데이터는MP-DOC-035 참조.
