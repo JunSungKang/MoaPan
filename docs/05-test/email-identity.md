@@ -113,3 +113,25 @@ SMTP 시험은 독립 테스트 프로젝트를 만들고 종료 시 컨테이�
 사용자 캡처 피드백에 따라 외곽 테두리·스크롤 손잡이·닫기 버튼 상자의 무게를 줄이고, 종이색 외곽/밝은 읽기 패널/안쪽 여백을 구성했다. 제목21px·본문14px·소제목15px의 UI 글꼴 위계, 보조 거절/주 동의 버튼과 비활성 색을 구분한다. 24px 스크롤 조작 영역은 그대로이며 시각적 손잡이만 가늘게 했다. 키보드 포커스를 없애지 않고 모달 안쪽으로 제한한다. 실제 초기 상태와 읽기 완료·키보드 상태를 별도 캡처로 검수했다.
 
 집중 브라우저7 PASS. 390/768/1440의 terms-dialog-{width}.png(초기), terms-dialog-ready-{width}.png(읽기 완료)와 동의 체크 캡처를 확인했다. 약관 본문/서버/JS 동작/CSP/DB는 변경하지 않았다. 최종 check/e2eTest에서 단위181/UI77 PASS, FAIL/ERROR/SKIP0과 Nu 메시지0/CSS/docs 통과를 확인했다. JS/Java/DB 동작 코드는 바꾸지 않았으며 기존 PostgreSQL147 결과를 유지한다. 새 JAR SHA256은 684f13607aaeae9216f8ac373d35f82fff48ea7968e182208390c6978daef6fb이며 JAR/SBOM 스캔 취약점0이다. 전체 securityCheck는 기존 Postfix DS-0002 HIGH로 실제 exit1이며 예외를 추가하지 않았다. 증빙 terms-design-focused.log, terms-design-final.log, terms-design-html.log. 운영·DB·SMTP·이미지·병합은 변경하지 않는다.
+
+
+## 11. 사용자 기동 MailBox 실제 연결 재점검
+
+2026-11-04 KST에 사용자가 별도 기동한 MailBox를 읽기 전용으로 점검했다. 기존 합성 SMTP fixture의 성공을 이번 서버의 성공으로 재사용하지 않는다.
+
+| 항목 | 실제 결과 |
+|---|---|
+| SMTP/IMAP/Webmail 컨테이너 | 3개 실행 확인 |
+| SMTP strict TLS NOOP | FAIL: curl exit64, STARTTLS not supported. 메일 DATA 전송 없음 |
+| SMTP 설정 | TLS 인증서·STARTTLS·SMTP AUTH 미설정, root 실행, 공개25번, 사설망 전체 mynetworks |
+| 실제 SMTP 이미지 검사 | FAIL: HIGH33/CRITICAL1 원시 검출, 게이트 exit1. 중복 패키지/영향 검토 필요 |
+| 최신 앱 이미지 준비 | PASS: UID10001, Temurin27.0.1.0.2+1, JAR 호스트/이미지 SHA256 일치, 이미지 gate PASS |
+| 실제 수신함 도착/외부 배달 | BLOCKED/미실행: TLS 연결 실패 후 인증번호를 전송하지 않음 |
+| 서비스 전환 | BLOCKED/미실행: 보안 게이트·이전 root 예외 미승인 유지 |
+| 기존 서비스 | HTTPS 로그인200/healthy, 실행 이미지24fc8045a50c 유지 |
+
+SMTP 이미지 ID는 sha256:594e743418aadf1ed23478ba448bcb6cad5809c99858ecca9c06e43d7de12c99다. DB Version2, UpdatedAt2026-11-02T19:15:11Z/DownloadedAt2026-11-02T22:09:52Z/NextUpdate2026-11-03T19:15:11Z이며 실제 검사 시각2026-11-03T15:40:12Z 기준24시간/다음갱신 조건을 통과했다. 이전 검사 결과나 오래된 DB로0건 성공을 만들지 않았다.
+
+[Debian Postfix CVE-2026-43964](https://security-tracker.debian.org/tracker/CVE-2026-43964)는 설치3.7.11-0+deb12u1을 vulnerable로 표시하고 bookworm no-dsa/minor 주석도 제공한다. 스캐너 HIGH와 공급자 우선순위를 구분하며 미수정 상태를 성공으로 바꾸지 않는다. CRITICAL [CVE-2023-45853](https://security-tracker.debian.org/tracker/CVE-2023-45853)는 MiniZip에 관한 것으로 Debian은 해당 zlib에서 취약 MiniZip 바이너리를 만들지 않는다고 명시한다. 실행 이미지의 zlib1g1:1.2.13.dfsg-1/별도 MiniZip 패키지·파일 미검출을 확인했지만 기존 gate/ignore를 수정하지 않았다. 전체34건을 검토 완료하거나34개 독립 취약점으로 주장하지 않는다.
+
+최신 앱 이미지 ID는 sha256:dcbd1540948a855db099880321384086e9f090d767dd52cb81e6f5c0538f5d86이며 내장 JAR은684f13607aaeae9216f8ac373d35f82fff48ea7968e182208390c6978daef6fb다. 앱 이미지 검사 PASS와 전체 서비스 승인/메일 서버 검사 PASS는 별개다. 이번에는 기능 전체 시험을 재실행하지 않았으며 앞 절의 결과와 구분한다. 증빙은 .local/mailbox-live-20261104/{strict-tls-probe.txt,smtp-image-scan.log,app-image-build.log,app-image-scan.log}와 build/reports/security/image-{imageId}.json이다.

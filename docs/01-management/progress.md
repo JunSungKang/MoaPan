@@ -197,3 +197,8 @@ CSS 파일 요청과 선언 중복을 혼용한 설명을 정정했다. PR16은 
 
 ## 2026-11-04 Postfix root 실행 예외 미승인 확정
 사용자가 해당 SMTP 이미지의 DS-0002 HIGH 예외를 명시적으로 미승인하고 구현 보존·운영 전환 보류를 선택했다. 이전의 답변 대기는 이 결정으로 대체한다. 코드·검사 기준·ignore/예외·SMTP·이미지·운영 DB를 변경하지 않으며 root 경고를 미해결로 유지한다. 실제 메일 수신 검증의 사용자 인계는 위험 수용/운영 승인과 별개다. 기존 web 이미지 sha256:24fc8045a50cc78f44a57d0bdae30b12ed3d8bb52fcde7a1fa5e2042fafbf082와 SMTP 컨테이너 미실행을 읽기 전용으로 확인했다. PR28/구현을 보존하고 develop/main 병합은 수행하지 않는다. 이번 변경은 결정 문서화뿐이며 기존 시험을 재실행했다고 표시하지 않는다.
+
+
+## 2026-11-04 사용자가 기동한 MailBox 실제 연결 재점검
+MailBox SMTP/IMAP/Webmail 3개 컨테이너 실행을 확인했다. SMTP strict TLS NOOP 시험은 exit64/STARTTLS not supported로 실패했으며 인증번호·실제 메일은 전송하지 않았다. TLS 인증서/STARTTLS/SMTP AUTH 미설정, 사설망 전체 mynetworks와 공개25번, root 실행을 확인했다. 실제 SMTP 이미지594e743418aa의 Trivy 검사는 HIGH33/CRITICAL1을 보고하고 게이트 exit1이다. 이는 중복 패키지 검출을 포함한 원시 결과이며 전부 악용 가능한 취약점으로 확정하지 않는다. Debian 공식 자료에서 Postfix CVE-2026-43964의 설치 버전 영향과 zlib CVE-2023-45853의 MiniZip 미빌드 예외를 구분했다. 원래 root 위험 미승인/전체 보안 게이트를 유지한다. 형제 mail-box는 현재 읽기 전용이며 TLS·이미지 수정용 작업 경계 확대를 요청했다.
+대기 중 최신 약관/이메일 코드의 runtime 이미지를 새로 빌드했다. 이미지sha256:dcbd1540948a855db099880321384086e9f090d767dd52cb81e6f5c0538f5d86, UID10001, Temurin27.0.1.0.2+1, 실행JAR684f13607aaeae9216f8ac373d35f82fff48ea7968e182208390c6978daef6fb와 호스트 일치를 검증했다. 이 앱 이미지의 취약점/secret gate는 PASS이나 SMTP/전체 게이트를 통과한 것은 아니다. 운영 web/worker24fc8045a50c·V24를 바꾸지 않았으며 외부HTTPS 로그인200/healthy를 확인했다. [재점검 결과](../05-test/email-identity.md#11-사용자-기동-mailbox-실제-연결-재점검)를 따른다.
