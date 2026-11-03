@@ -130,7 +130,8 @@
         "Preserve signup inputs, native dialog focus containment/return, keyboard scrolling, readable 390/768/1440 layouts and Korean/English. Fetch/version errors fail closed and allow retry. No personal data in policy requests or browser persistence.",
         "Verify browser behavior, HTML/static checks and relevant full regression. Continue PR28 with current-head independent review; no merge or service/SMTP activation is included in this UI follow-up. Keep the pre-existing SMTP security finding and live V24 state explicit.",
         "Maintain current Trusted Types/CSP unchanged. Parse canonical static terms once on the server and expose only a fixed immutable readable tree at public GET /api/v1/auth/terms; build DOM nodes without HTML-string sinks. Test actual CSP enforcement and unauthenticated read access.",
-        "Corrected user requirement: remove the Read further button and its code/translations. Show an always-visible, operable right vertical scrollbar independent of OS overlay hiding, with synchronized thumb, pointer dragging/track interaction, keyboard controls and ARIA. Preserve scroll-end consent gating and checkbox synchronization."
+        "Corrected user requirement: remove the Read further button and its code/translations. Show an always-visible, operable right vertical scrollbar independent of OS overlay hiding, with synchronized thumb, pointer dragging/track interaction, keyboard controls and ARIA. Preserve scroll-end consent gating and checkbox synchronization.",
+        "User requested a cohesive, natural terms modal design. Refine paper palette, inset reading panel, typography, header/close control, subtle persistent scrollbar and clear footer actions. Preserve all consent/scroll/checkbox/CSP behavior; verify initial and read-to-end visual states at mobile/tablet/desktop."
       ],
       "validationCommands": [
         "sh scripts/build/gradle-local.sh --no-daemon check e2eTest",

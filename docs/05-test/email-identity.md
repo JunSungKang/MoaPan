@@ -107,3 +107,9 @@ SMTP 시험은 독립 테스트 프로젝트를 만들고 종료 시 컨테이�
 사용자 정정에 따라 아래로 읽기 버튼과 관련 HTML/JS/CSS/번역을 제거했다. 약관 본문 오른쪽에 24px 독립 트랙과 손잡이를 항상 표시한다. 실제 본문 위치와 손잡이 크기/위치·ARIA 값을 동기화하며 포인터 캡처 드래그, 트랙 클릭, Arrow/Page/Home/End를 지원한다. 본문 자체 휠·터치·키보드 스크롤은 유지한다. 짧은 본문에서는 전체 높이 손잡이와 비활성 상태를 표시한다. 운영체제의 native overlay 자동 숨김과 관계없이 표시되며 본문을 가리지 않는다. 동의 게이트와 체크박스 동기화는 유지했다.
 
 집중 브라우저7개와 Nu HTML 메시지0/CSS 검사를 통과했다. 390/768/1440에서 실제 마우스 드래그·트랙 클릭·키보드·끝 값100/동의 활성, 짧은 본문 비활성·한영 표시를 검증했다. 합성 캡처는 terms-dialog-{width}.png다. 최종 check/e2eTest/bootJar/sbom/securityCheck에서 단위181·전체UI77 PASS/FAIL·ERROR·SKIP0을 확인했다. Java/DB 코드는 변경하지 않았으며 PostgreSQL147은 앞 전체 실행의 결과를 유지한다. 최신 JAR SHA256은 2e5023dc707b4064d8d2302a3aa0c58fca28d888aca1058cd08550d193e87b6b이며 JAR/SBOM 스캔 취약점0이다. 전체 securityCheck는 기존 Postfix DS-0002 HIGH로 실제 exit1, 예외를 추가하지 않았다. 증빙 terms-scrollbar-focused.log / terms-scrollbar-final.log / terms-scrollbar-html.log. 운영/SMTP/DB/병합은 변경하지 않는다.
+
+## 10. 약관 팝업 디자인 정돈
+
+사용자 캡처 피드백에 따라 외곽 테두리·스크롤 손잡이·닫기 버튼 상자의 무게를 줄이고, 종이색 외곽/밝은 읽기 패널/안쪽 여백을 구성했다. 제목21px·본문14px·소제목15px의 UI 글꼴 위계, 보조 거절/주 동의 버튼과 비활성 색을 구분한다. 24px 스크롤 조작 영역은 그대로이며 시각적 손잡이만 가늘게 했다. 키보드 포커스를 없애지 않고 모달 안쪽으로 제한한다. 실제 초기 상태와 읽기 완료·키보드 상태를 별도 캡처로 검수했다.
+
+집중 브라우저7 PASS. 390/768/1440의 terms-dialog-{width}.png(초기), terms-dialog-ready-{width}.png(읽기 완료)와 동의 체크 캡처를 확인했다. 약관 본문/서버/JS 동작/CSP/DB는 변경하지 않았다. 최종 check/e2eTest에서 단위181/UI77 PASS, FAIL/ERROR/SKIP0과 Nu 메시지0/CSS/docs 통과를 확인했다. JS/Java/DB 동작 코드는 바꾸지 않았으며 기존 PostgreSQL147 결과를 유지한다. 새 JAR SHA256은 684f13607aaeae9216f8ac373d35f82fff48ea7968e182208390c6978daef6fb이며 JAR/SBOM 스캔 취약점0이다. 전체 securityCheck는 기존 Postfix DS-0002 HIGH로 실제 exit1이며 예외를 추가하지 않았다. 증빙 terms-design-focused.log, terms-design-final.log, terms-design-html.log. 운영·DB·SMTP·이미지·병합은 변경하지 않는다.

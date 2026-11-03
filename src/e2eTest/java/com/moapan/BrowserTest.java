@@ -259,6 +259,7 @@ class BrowserTest {
                 assertEquals("auto",p.locator("[data-terms-content]").evaluate("n=>getComputedStyle(n).overflowY"));
                 var bar=p.locator("[data-terms-scrollbar]").boundingBox();var thumb=p.locator("[data-terms-thumb]").boundingBox();var body=p.locator("[data-terms-content]").boundingBox();
                 assertTrue(bar.width>=20&&bar.height>100);assertTrue(thumb.height>0&&thumb.height<bar.height);assertTrue(bar.x>=body.x+body.width-1);
+                p.screenshot(new Page.ScreenshotOptions().setPath(Path.of("build/reports/screenshots/terms-dialog-"+width+".png")));
                 p.mouse().move(thumb.x+thumb.width/2,thumb.y+thumb.height/2);p.mouse().down();p.mouse().move(thumb.x+thumb.width/2,bar.y+bar.height/2,new Mouse.MoveOptions().setSteps(4));p.mouse().up();
                 assertThat(p.locator("[data-terms-agree]")).isDisabled();assertTrue(((Number)p.locator("[data-terms-content]").evaluate("n=>n.scrollTop")).doubleValue()>0);assertTrue(Integer.parseInt(p.locator("[data-terms-scrollbar]").getAttribute("aria-valuenow"))>0);
                 p.locator("[data-terms-scrollbar]").press("Home");assertThat(p.locator("[data-terms-scrollbar]")).hasAttribute("aria-valuenow","0");
@@ -267,10 +268,10 @@ class BrowserTest {
                 assertEquals(0,p.locator("[data-terms-content] a,[data-terms-content] h1").count());
                 p.evaluate("const n=document.querySelector('[data-terms-content]');n.scrollTop=0;n.dispatchEvent(new Event('scroll'))");assertTrue(p.locator("[data-terms-agree]").isDisabled());
                 assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth<=innerWidth && document.querySelector('[data-terms-decline]').getBoundingClientRect().bottom<=innerHeight && document.querySelector('#terms-dialog').getBoundingClientRect().top>=0"));
-                p.screenshot(new Page.ScreenshotOptions().setPath(Path.of("build/reports/screenshots/terms-dialog-"+width+".png")));
                 p.locator("[data-terms-scrollbar]").press("ArrowDown");assertTrue(((Number)p.locator("[data-terms-content]").evaluate("n=>n.scrollTop")).doubleValue()>0);p.locator("[data-terms-scrollbar]").press("PageDown");
                 p.locator("[data-terms-scrollbar]").press("End");assertThat(p.locator("[data-terms-agree]")).isEnabled();assertThat(p.locator("[data-terms-scrollbar]")).hasAttribute("aria-valuenow","100");
                 assertThat(p.locator("[data-terms-scrollbar]")).isVisible();
+                p.screenshot(new Page.ScreenshotOptions().setPath(Path.of("build/reports/screenshots/terms-dialog-ready-"+width+".png")));
                 p.locator("[data-terms-agree]").focus();p.keyboard().press("Tab");assertTrue((boolean)p.evaluate("document.activeElement.closest('#terms-dialog')!==null"));
                 p.locator("[data-terms-agree]").click();assertFalse(p.locator("#terms-dialog").isVisible());assertTrue((boolean)p.evaluate("document.activeElement.matches('[data-open-terms]')"));
                 assertTrue(p.locator("#terms-accepted").isChecked());p.screenshot(new Page.ScreenshotOptions().setPath(Path.of("build/reports/screenshots/terms-consent-"+width+".png")).setFullPage(true));

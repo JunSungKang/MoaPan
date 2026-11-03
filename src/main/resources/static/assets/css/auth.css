@@ -19,27 +19,35 @@
 .terms-option input { flex: 0 0 18px; width: 18px; height: 18px; margin: 3px 0 0; accent-color: #252722; }
 .agreement .terms-open { margin: 0; background: transparent; color: var(--ink); border-color: var(--rule); font-weight: 400; }
 .agreement [data-terms-consent] { font-size: 12px; color: var(--muted); }
-.terms-dialog { width: min(720px,calc(100vw - 32px)); max-height: calc(100dvh - 32px); padding: 0; overflow: hidden; box-sizing: border-box; }
+.terms-dialog { width: min(640px,calc(100vw - 24px)); max-height: calc(100dvh - 24px); padding: 0; overflow: hidden; box-sizing: border-box; background: #f5f6f0; border: 1px solid #cdd2c6; box-shadow: 0 18px 60px rgb(25 33 22 / .16); font-family: var(--font-ui,system-ui,sans-serif); }
+.terms-dialog::backdrop { background: rgb(24 31 21 / .3); }
 .terms-dialog[open] { display: flex; flex-direction: column; }
-.terms-dialog-header { display: flex; flex-shrink: 0; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 20px; border-bottom: 1px solid var(--rule); }
-.terms-dialog-header h2 { margin: 0; font-size: 22px; }
-.terms-dialog-close { min-width: 44px; min-height: 44px; font-size: 24px; padding: 4px; }
-.terms-reading-area { display: grid; grid-template-columns: minmax(0,1fr) 24px; grid-template-rows: minmax(0,1fr); flex: 1 1 auto; height: 56dvh; min-height: 0; max-height: 56dvh; overflow: hidden; }
-.terms-dialog-content { min-height: 0; overflow-y: auto; scrollbar-width: none; overscroll-behavior: contain; padding: 8px 20px 16px; font-size: 15px; line-height: 1.8; }
+.terms-dialog-header { display: flex; flex-shrink: 0; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 20px 12px 24px; }
+.terms-dialog-header h2 { margin: 0; font-size: 21px; line-height: 1.4; font-weight: 700; letter-spacing: -.03em; }
+.terms-dialog-close { display: grid; place-items: center; min-width: 44px; min-height: 44px; padding: 0; border: 0; background: transparent; color: #626d5b; font: 400 26px/1 system-ui,sans-serif; }
+.terms-dialog-close:hover { background: #e9ede2; color: var(--ink); }
+.terms-reading-area { display: grid; grid-template-columns: minmax(0,1fr) 24px; grid-template-rows: minmax(0,1fr); flex: 1 1 auto; height: 56dvh; min-height: 0; max-height: 56dvh; margin: 0 24px; overflow: hidden; background: #fdfef9; border: 1px solid #dde2d4; }
+.terms-dialog-content { min-height: 0; overflow-y: auto; scrollbar-width: none; overscroll-behavior: contain; padding: 18px 8px 24px 20px; font: 400 14px/1.85 var(--font-ui,system-ui,sans-serif); word-break: keep-all; overflow-wrap: anywhere; }
 .terms-dialog-content::-webkit-scrollbar { display: none; }
-.terms-scrollbar { position: relative; min-height: 44px; background: #dedfd6; border-left: 1px solid var(--rule); touch-action: none; user-select: none; cursor: pointer; }
-.terms-scrollbar-thumb { position: absolute; top: 0; right: 4px; left: 4px; height: 100%; background: #6b6d64; border: 1px solid #4c4e46; cursor: grab; }
-.terms-scrollbar[aria-disabled=true] { cursor: default; }
+.terms-scrollbar { position: relative; min-height: 44px; touch-action: none; user-select: none; cursor: default; }
+.terms-scrollbar::before { content: ''; position: absolute; top: 0; bottom: 0; left: 10px; width: 4px; background: #e4e8dc; border-radius: 2px; }
+.terms-scrollbar-thumb { position: absolute; top: 0; right: 8px; left: 8px; height: 100%; background: #78846d; border-radius: 4px; cursor: grab; }
 .terms-scrollbar[aria-disabled=true] .terms-scrollbar-thumb { opacity: .35; cursor: default; }
-.terms-dialog-content h2 { font-size: 18px; margin-top: 24px; }
-.terms-dialog-footer { display: block; flex-shrink: 0; width: 100%; margin: 0; padding: 12px 20px 20px; border-top: 1px solid var(--rule); text-align: left; }
-.terms-dialog-footer p { margin: 0 0 12px; font: 13px/1.6 system-ui,sans-serif; }
-.terms-dialog-actions { display: flex; gap: 12px; }
-.terms-dialog-actions button { flex: 1; min-height: 46px; font-weight: 600; }
-.terms-dialog-actions [data-terms-agree] { background: #252722; color: #fff; }
-.terms-dialog-actions button:disabled { opacity: .45; cursor: not-allowed; }
+.terms-dialog-content p { margin: 0 0 16px; }
+.terms-dialog-content>div>p:first-child { margin-bottom: 14px; color: #65705d; font-size: 12px; }
+.terms-dialog-content h2 { margin: 24px 0 10px; font-size: 15px; line-height: 1.6; font-weight: 700; }
+.terms-dialog-content ul, .terms-dialog-content ol { margin: 0 0 16px; padding-left: 20px; }
+.terms-dialog-content strong { font-weight: 650; }
+.terms-dialog-footer { display: block; flex-shrink: 0; width: 100%; margin: 0; padding: 14px 24px 24px; text-align: left; }
+.terms-dialog-footer p { margin: 0 0 12px; color: #626d5b; font: 12px/1.6 var(--font-ui,system-ui,sans-serif); }
+.terms-dialog-actions { display: flex; justify-content: flex-end; gap: 8px; }
+.terms-dialog-actions button { flex: 0 0 auto; min-width: 132px; min-height: 44px; padding: 10px 18px; background: #f5f6f0; border: 1px solid #c6cebc; border-radius: 2px; color: #3f4b37; font-size: 14px; font-weight: 600; }
+.terms-dialog-actions button:hover { background: #e9ede2; color: #283b23; }
+.terms-dialog-actions [data-terms-agree] { background: #344a3d; border-color: #344a3d; color: #fff; }
+.terms-dialog-actions [data-terms-agree]:not(:disabled):hover { background: #293e31; border-color: #293e31; color: #fff; }
+.terms-dialog-actions button:disabled { background: #e5e9df; border-color: #e5e9df; color: #75826b; opacity: 1; cursor: not-allowed; }
 .auth-page:has(.terms-dialog[open]) { overflow: hidden; }
-.terms-dialog :focus-visible { outline: 2px solid #315747; outline-offset: -3px; }
+.auth-page .terms-dialog :focus-visible { outline: 2px solid #536c49; outline-offset: -3px; }
 .auth-main [role=status] { font-size: 14px; margin: 0; color: #9b2525; }
 .auth-main [role=status]:empty { display: none; }
 .auth-switch { text-align: center; font-size: 14px; margin: 28px 0; }
@@ -48,6 +56,11 @@
 @media(max-width:480px) {
   .auth-brand { padding-top: 40px; }
   .auth-main h1 { margin-bottom: 24px; }
+  .terms-dialog-header { padding: 12px 12px 8px 16px; }
+  .terms-reading-area { margin: 0 16px; }
+  .terms-dialog-content { padding-left: 16px; }
+  .terms-dialog-footer { padding: 12px 16px 16px; }
+  .terms-dialog-actions button { flex: 1; min-width: 0; }
 }
 .login-limit { border-top: 1px solid #c8c3b8; padding-top: 16px; margin-top: 12px; font-size: 14px; }
 .login-limit p { margin: 0 0 8px; }
