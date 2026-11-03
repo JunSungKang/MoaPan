@@ -75,3 +75,23 @@ SMTP 시험은 독립 테스트 프로젝트를 만들고 종료 시 컨테이�
 [PR #28](https://github.com/JunSungKang/MoaPan/pull/28)은 구독 PR27을 의존성으로 포함하며 develop 대상, 병합 보류다. 독립 리뷰의 기존 지적은 수정했고 기존 HEAD b733de82f08b24a7489581445c9994142007a829의 App 리뷰는 DS-0002 미승인 때문에 CHANGES_REQUESTED다. 이 문서나 시험 추가 후에는 새로운 현재 HEAD로 다시 리뷰한다. 실제 현재 상태는 PR을 진실 원천으로 확인한다.
 
 로컬 증빙: .local/email-auth-20261103의 identity-delivery-tests.log, v24-upgrade-test.log, upgrade-full-regression.log, release-runtime.txt, release-image-scans.log, release-acceptance.log, smtp-memory-check.log, html-final.log 및 GitHub guard 결과. 계획/검토 의도와 실제 실행 성공을 구분한다.
+
+## 7. 회원가입 약관 팝업 후속 검증
+
+사용자 요청으로 새 창 약관 링크와 직접 체크박스를 가입 전용 native dialog로 바꿨다. canonical terms.html과 판 번호를 서버에서 한 번 읽어 공개 GET /api/v1/auth/terms의 불변 텍스트 트리로 제공한다. 브라우저는 HTML 문자열을 해석하지 않고 DOM API로 조립한다. 약관 문구·판 번호·기존 서버 동의 검증은 유지했다. 번역 사전은 첫 팝업 열기 때 적재하며 개인 입력을 조회 요청에 보내지 않는다.
+
+| 검증 | 실제 결과 |
+|---|---|
+| 끝까지 읽기 전 동의 비활성, 중간 스크롤, 키보드 End 후 활성 | PASS |
+| 동의/거절/닫기/Escape, 재열기 시 미동의·처음 위치, 가입 요청 차단 | PASS |
+| 가입 입력값 보존, 포커스 순환·복귀, 새 탭 생성 없음 | PASS |
+| 390×500 / 768×900 / 1440×900 본문 스크롤과 하단 버튼 가시성 | PASS, terms-dialog-{width}.png |
+| 503·다른 판 거부, 다시 열어 정상 문서 재조회 | PASS |
+| 영어 본문·버튼, 사전 첫 다운로드 실패→닫기→재열기 복구 | PASS |
+| 강제 Trusted Types 아래 HTML 문자열 sink 차단 및 텍스트 DOM 표시 | PASS |
+| 공개 GET/no-store/CSP/세션 미생성, 익명 POST 거부, 메일 큐 미변경 | PASS |
+| 정적 약관에서 내비게이션·실행 요소·HTML 속성 제거, 불변 읽기 모델 | PASS |
+
+최종 기능 회귀는 단위181 + PostgreSQL147 + Playwright76 = **404 PASS, FAIL0, ERROR0, SKIP0**다. 집중 팝업 시험6개와 Nu HTML 메시지0, CSS 중복 선언/문서 연결 검사도 통과했다. 증빙은 .local/email-auth-20261103/terms-csp-retry.log, terms-release-verification.log, terms-html-final.log와 build/test-results, build/reports/screenshots에 있다. 독립 사전 리뷰의 실패한 번역 Promise 캐시 문제를 수정하고 실제 일시 다운로드 실패 후 재시도를 검증했다. 보안 헤더를 적용하면서 드러난 시험의 unsafe-eval 의존 대기는 locator assertion으로 바꿨으며 제품 CSP는 약화하지 않았다.
+
+이번 JAR SHA256은 `dff536cc7cb8532f65b1a1164ddbeea98c558dfc38312edb7f5690f4f3c51b2b`다. 소스/JAR/SBOM 보안 재검사 결과는 build/reports/security를 따른다. 기존 SMTP DS-0002 HIGH와 전체 보안 게이트 보류는 그대로이며 경고 예외나 위험 수용을 추가하지 않았다. 이 새 JAR의 컨테이너 이미지는 만들거나 운영에 올리지 않았다. 앞 절의 기존 이미지 검사는 이번 변경 이미지 검사로 간주하지 않는다. 실제 서비스/V24는 유지하며 메일 수신 검증은 사용자가 직접 수행할 예정이고 발신 설정·서비스 전환·병합은 미실행이다. 실제 현재 커밋과 독립/App 리뷰 상태는 PR28에서 확인한다.

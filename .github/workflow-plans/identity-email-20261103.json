@@ -92,6 +92,57 @@
       "documentation": {
         "rationale": "Existing local skill belongs to another user request; preservation only, excluded from commits and PR diffs."
       }
+    },
+    {
+      "id": "signup-terms-dialog",
+      "expectedPaths": [
+        ".github/workflow-plans/identity-email-20261103.json",
+        "src/main/resources/static/signup.html",
+        "src/main/resources/static/terms.html",
+        "src/main/resources/static/assets/js/identity/auth.js",
+        "src/main/resources/static/assets/js/identity/terms-agreement.js",
+        "src/main/resources/static/assets/js/shared/i18n.js",
+        "src/main/resources/static/assets/js/shared/i18n-en.js",
+        "src/main/resources/static/assets/css/auth.css",
+        "src/e2eTest/java/com/moapan/BrowserTest.java",
+        "docs/01-management/plan.md",
+        "docs/01-management/progress.md",
+        "docs/05-test/email-identity.md",
+        "src/main/java/com/moapan/identity/domain/TermsDocument.java",
+        "src/main/java/com/moapan/identity/infrastructure/TermsDocuments.java",
+        "src/main/java/com/moapan/identity/api/TermsController.java",
+        "src/main/java/com/moapan/access/infrastructure/SecurityConfig.java",
+        "src/test/java/com/moapan/identity/infrastructure/TermsDocumentsTest.java",
+        "src/integrationTest/java/com/moapan/identity/EmailIdentityIntegrationTest.java",
+        "docs/03-design/api.md",
+        "src/e2eTest/java/com/moapan/SiteDesignAuditTest.java",
+        "docs/03-design/decisions.md"
+      ],
+      "forbiddenPaths": [
+        ".env",
+        ".github/workflows/**",
+        "**/*.pem",
+        "**/*.key"
+      ],
+      "acceptanceCriteria": [
+        "User explicitly requested the signup full terms in an in-page modal instead of a link/new tab. Reuse the canonical terms document and edition, with policy translations loaded on demand; do not duplicate or rewrite legal text.",
+        "Agree is disabled until the scrollable complete terms have reached the bottom (or all text fits). Disagree, close and Escape never grant consent. Reopening starts a fresh review; submitted termsVersion and backend consent validation remain unchanged.",
+        "Preserve signup inputs, native dialog focus containment/return, keyboard scrolling, readable 390/768/1440 layouts and Korean/English. Fetch/version errors fail closed and allow retry. No personal data in policy requests or browser persistence.",
+        "Verify browser behavior, HTML/static checks and relevant full regression. Continue PR28 with current-head independent review; no merge or service/SMTP activation is included in this UI follow-up. Keep the pre-existing SMTP security finding and live V24 state explicit.",
+        "Maintain current Trusted Types/CSP unchanged. Parse canonical static terms once on the server and expose only a fixed immutable readable tree at public GET /api/v1/auth/terms; build DOM nodes without HTML-string sinks. Test actual CSP enforcement and unauthenticated read access."
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh --no-daemon check e2eTest",
+        "sh scripts/test/html-check.sh",
+        "git diff --check"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/plan.md",
+          "docs/01-management/progress.md",
+          "docs/05-test/email-identity.md"
+        ]
+      }
     }
   ]
 }

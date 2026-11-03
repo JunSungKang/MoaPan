@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 /** Synthetic UI fixtures only. PostgreSQL/authentication is exercised by integrationTest. */
 class BrowserTest {
@@ -14,6 +15,7 @@ class BrowserTest {
     static final String A="10000000-0000-0000-0000-000000000001",B="10000000-0000-0000-0000-000000000002";
     static String active=A;
     @BeforeAll static void start()throws Exception{
+        String termsDocument=tools.jackson.databind.json.JsonMapper.builder().build().writeValueAsString(new com.moapan.identity.infrastructure.TermsDocuments().current());
         server=HttpServer.create(new InetSocketAddress(InetAddress.getLoopbackAddress(),0),0);
         server.createContext("/",exchange->{String path=exchange.getRequestURI().getPath();String response=null;String type="application/json";
             if(path.equals("/api/v1/auth/session"))response="{\"id\":\""+active+"\",\"username\":\"synthetic_user\",\"role\":\"USER\",\"canReadNewsletter\":true}";
@@ -26,6 +28,8 @@ class BrowserTest {
             else if((path.equals("/api/v1/news/edition")||path.equals("/api/v1/public/news/edition")))response=edition();
             else if(path.endsWith("/news/search"))response="{\"items\":[],\"page\":0,\"pages\":0,\"total\":0}";
             else if(path.equals("/api/v1/auth/csrf"))response="{\"token\":\"synthetic-csrf\",\"headerName\":\"X-CSRF-TOKEN\"}";
+            else if(path.equals("/api/v1/auth/terms"))response=termsDocument;
+            if(path.equals("/signup.html"))exchange.getResponseHeaders().set("Content-Security-Policy","default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; require-trusted-types-for 'script'; trusted-types 'none'");
             if(path.equals("/api/v1/auth/session")&&Objects.toString(exchange.getRequestHeaders().getFirst("Referer"),"").contains("/login.html")){exchange.getResponseHeaders().set("Content-Type","application/json");exchange.sendResponseHeaders(204,-1);exchange.close();return;}
             if(response!=null){byte[]bytes=response.getBytes(StandardCharsets.UTF_8);exchange.getResponseHeaders().set("Content-Type",type);exchange.sendResponseHeaders(200,bytes.length);exchange.getResponseBody().write(bytes);exchange.close();return;}
             if(path.equals("/"))path="/index.html";try(var in=BrowserTest.class.getResourceAsStream("/static"+path)){if(in==null){exchange.sendResponseHeaders(404,-1);}else{type=path.endsWith(".js")?"text/javascript":path.endsWith(".css")?"text/css":"text/html";exchange.getResponseHeaders().set("Content-Type",type+"; charset=utf-8");byte[]bytes=in.readAllBytes();exchange.sendResponseHeaders(200,bytes.length);exchange.getResponseBody().write(bytes);}}exchange.close();
@@ -34,7 +38,12 @@ class BrowserTest {
     static String edition(){StringBuilder items=new StringBuilder();for(int i=0;i<15;i++){if(i>0)items.append(',');items.append("{\"id\":\"synthetic-").append(i).append("\",\"title\":\"[합성 검증 기사] 긴 한글 제목과 인공지능 우주 소식이 여러 단의 신문 지면에서 자연스럽게 표시되는지 확인합니다 ").append(i).append("\",\"summaryBullets\":[\"실제 뉴스가 아닌 화면 검증용 합성 문장입니다. 외부 전송 없이 현재 후보를 정렬합니다.\"],\"source\":{\"id\":\"source-").append(i%5).append("\",\"site\":\"합성 출처\",\"name\":\"Synthetic\",\"language\":\"ko\"},\"publishedAt\":null,\"collectedAt\":\"2026-10-28T00:00:00Z\",\"tags\":[{\"id\":\"ai\",\"slug\":\"ai\",\"name\":\"인공지능\",\"category\":\"기술\",\"confidence\":1}],\"originalUrl\":\"https://example.org/synthetic/").append(i).append("\",\"summaryMode\":\"EXTRACTIVE_ORIGINAL_LANGUAGE\"}");}return "{\"editionId\":\"synthetic-edition\",\"editionAt\":\"2026-10-28T00:00:00Z\",\"periodDays\":7,\"candidateCount\":15,\"items\":["+items+"],\"nextCursor\":null}";}
     static void verifySignupEmail(Page page){
         page.route("**/api/v1/auth/email/signup-code",r->r.fulfill(new Route.FulfillOptions().setStatus(202).setContentType("application/json").setBody("{\"challengeId\":\"00000000-0000-0000-0000-000000000777\",\"expiresInSeconds\":300,\"resendAfterSeconds\":60}")));
-        page.locator("#email").fill("synthetic@example.test");page.locator("[name=emailPolicyAccepted]").check();page.locator("[data-request-code]").click();page.waitForFunction("document.querySelector('[data-email-status]').textContent.includes('발송을 요청했습니다')");page.locator("#code").fill("123456");
+        page.locator("#email").fill("synthetic@example.test");page.locator("[name=emailPolicyAccepted]").check();page.locator("[data-request-code]").click();assertThat(page.locator("[data-email-status]")).containsText("발송을 요청했습니다");page.locator("#code").fill("123456");
+    }
+    static void acceptSignupTerms(Page page){
+        page.locator("[data-open-terms]").click();page.locator("[data-terms-content] h2").first().waitFor();
+        page.locator("[data-terms-content]").focus();page.locator("[data-terms-content]").press("End");
+        assertThat(page.locator("[data-terms-agree]")).isEnabled();page.locator("[data-terms-agree]").click();
     }
     @AfterAll static void stop(){if(browser!=null)browser.close();if(playwright!=null)playwright.close();if(server!=null)server.stop(0);}
 
@@ -137,7 +146,7 @@ class BrowserTest {
           async()=>{const {slideWindow}=await import('/assets/js/edition/slides.js');const rows=Array.from({length:200},(_,i)=>({id:String(i).padStart(3,'0'),publishedAt:new Date(2026,0,i+1).toISOString()}));const home=slideWindow(rows,100),first=slideWindow(rows,-1),empty=slideWindow([],100);return home.pages===6&&home.total===42&&home.items.length===7&&home.page===5&&first.page===0&&first.items[0].id==='000'&&slideWindow(rows,NaN).page===0&&empty.pages===0&&empty.total===0&&empty.items.length===0;}
           """));
         p.locator("[data-language-select]").selectOption("en");p.waitForFunction("document.documentElement.lang==='en'&&document.querySelector('#open-search').textContent.includes('Search')");
-        p.navigate(origin+"/signup.html");p.waitForFunction("document.documentElement.lang==='en'");assertTrue(p.locator("h1").textContent().contains("Sign up"));
+        p.navigate(origin+"/signup.html");assertThat(p.locator("html")).hasAttribute("lang","en");assertTrue(p.locator("h1").textContent().contains("Sign up"));
         p.locator("[data-language-select]").selectOption("ko");p.waitForFunction("document.querySelector('h1').textContent.includes('회원가입')");
       }
     }
@@ -230,10 +239,65 @@ class BrowserTest {
                 p.screenshot(new Page.ScreenshotOptions().setPath(dir.resolve(mode+"-"+width+".png")).setFullPage(true));
             }
             p.locator("#username").fill("synthetic_terms");p.locator("#password").fill("synthetic password 12345");verifySignupEmail(p);
-            assertFalse(p.locator("[name=termsAccepted]").isChecked());p.locator("button[type=submit]").click();assertTrue(bodies.isEmpty());
-            Page terms=p.waitForPopup(()->p.locator(".agreement a").click());terms.waitForLoadState();assertTrue(terms.locator("main").textContent().contains("약관 개정 제 1판"));assertTrue(terms.locator("main").textContent().contains("미리 인증한 이메일로 비밀번호를 재설정할 수 있습니다"));terms.close();
-            assertEquals("synthetic_terms",p.locator("#username").inputValue());p.locator("[name=termsAccepted]").check();p.locator("button[type=submit]").click();p.waitForURL("**/login.html");
+            p.locator("button[type=submit]").click();assertTrue(bodies.isEmpty());assertEquals("true",p.locator("[data-open-terms]").getAttribute("aria-invalid"));
+            acceptSignupTerms(p);assertEquals(1,context.pages().size());assertEquals("이용약관에 동의했습니다.",p.locator("[data-terms-consent]").textContent());
+            assertEquals("synthetic_terms",p.locator("#username").inputValue());p.locator("button[type=submit]").click();p.waitForURL("**/login.html");
             assertEquals(1,bodies.size());assertTrue(bodies.getFirst().contains("\"termsAccepted\":true"));assertTrue(bodies.getFirst().contains("\"termsVersion\":\"terms-1\""));
+        }
+    }
+    @Test void signupTermsDialogRequiresReadingAndKeepsKeyboardFocusAndDraft()throws Exception{
+        Files.createDirectories(Path.of("build/reports/screenshots"));
+        try(var context=browser.newContext()){
+            Page p=context.newPage();var termRequests=new ArrayList<String>();var signups=new ArrayList<String>();
+            p.onRequest(r->{if(r.url().contains("/api/v1/auth/terms"))termRequests.add(r.url());});
+            p.route("**/api/v1/auth/signup",r->{signups.add(r.request().postData());r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{}"));});
+            for(int width:new int[]{390,768,1440}){
+                p.setViewportSize(width,width==390?500:900);p.navigate(origin+"/signup.html");p.locator("#username").fill("synthetic_terms_draft");p.locator("#password").fill("synthetic password");verifySignupEmail(p);
+                p.locator("[data-open-terms]").click();p.locator("[data-terms-content] h2").first().waitFor();
+                assertTrue(p.locator("[data-terms-agree]").isDisabled());assertEquals(1,context.pages().size());
+                assertTrue(p.locator("[data-terms-content]").textContent().contains("약관 개정 제 1판"));assertTrue(p.locator("[data-terms-content]").textContent().contains("현재 서비스에서는 결제나 자동 청구를 하지 않습니다"));
+                assertEquals(0,p.locator("[data-terms-content] a,[data-terms-content] h1").count());
+                p.evaluate("const n=document.querySelector('[data-terms-content]');n.scrollTop=(n.scrollHeight-n.clientHeight)/2;n.dispatchEvent(new Event('scroll'))");assertTrue(p.locator("[data-terms-agree]").isDisabled());
+                assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth<=innerWidth && document.querySelector('[data-terms-decline]').getBoundingClientRect().bottom<=innerHeight && document.querySelector('#terms-dialog').getBoundingClientRect().top>=0"));
+                p.screenshot(new Page.ScreenshotOptions().setPath(Path.of("build/reports/screenshots/terms-dialog-"+width+".png")));
+                p.locator("[data-terms-content]").focus();p.locator("[data-terms-content]").press("End");assertThat(p.locator("[data-terms-agree]")).isEnabled();
+                p.locator("[data-terms-agree]").focus();p.keyboard().press("Tab");assertTrue((boolean)p.evaluate("document.activeElement.closest('#terms-dialog')!==null"));
+                p.locator("[data-terms-agree]").click();assertFalse(p.locator("#terms-dialog").isVisible());assertTrue((boolean)p.evaluate("document.activeElement.matches('[data-open-terms]')"));
+                p.locator("[data-open-terms]").click();p.locator("[data-terms-content] h2").first().waitFor();assertTrue(p.locator("[data-terms-agree]").isDisabled());assertEquals(0,((Number)p.locator("[data-terms-content]").evaluate("n=>n.scrollTop")).intValue());
+                p.locator("[data-terms-decline]").click();p.locator("button[type=submit]").click();assertTrue(signups.isEmpty());
+                p.locator("[data-open-terms]").click();p.keyboard().press("Escape");assertFalse(p.locator("#terms-dialog").isVisible());assertTrue(p.locator("[data-terms-consent]").textContent().contains("약관을 읽고 동의해 주세요"));
+                p.locator("[data-open-terms]").click();p.locator("[data-terms-close]").click();assertFalse(p.locator("#terms-dialog").isVisible());
+                assertEquals("synthetic_terms_draft",p.locator("#username").inputValue());assertEquals("synthetic password",p.locator("#password").inputValue());assertEquals("123456",p.locator("#code").inputValue());
+            }
+            assertEquals(3,termRequests.size());assertTrue(termRequests.stream().allMatch(u->u.equals(origin+"/api/v1/auth/terms")));
+        }
+    }
+    @Test void signupTermsFailsClosedOnFetchAndVersionErrorsThenAllowsRetry(){
+        try(var context=browser.newContext()){
+            Page p=context.newPage();var calls=new java.util.concurrent.atomic.AtomicInteger();
+            p.route("**/api/v1/auth/terms",r->{int attempt=calls.incrementAndGet();if(attempt==1)r.fulfill(new Route.FulfillOptions().setStatus(503).setBody("unavailable"));else if(attempt==2)r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"version\":\"terms-999\",\"nodes\":[]}"));else r.resume();});
+            p.navigate(origin+"/signup.html");p.locator("[data-open-terms]").click();assertThat(p.locator("[data-terms-content]")).containsText("닫고 다시 시도");assertTrue(p.locator("[data-terms-agree]").isDisabled());p.locator("[data-terms-close]").click();
+            p.locator("[data-open-terms]").click();assertThat(p.locator("[data-terms-content]")).containsText("약관이 변경");assertTrue(p.locator("[data-terms-agree]").isDisabled());p.locator("[data-terms-decline]").click();
+            acceptSignupTerms(p);assertEquals(3,calls.get());assertEquals("이용약관에 동의했습니다.",p.locator("[data-terms-consent]").textContent());
+        }
+    }
+    @Test void signupTermsTranslationDownloadCanRetryAfterATemporaryFailure(){
+        try(var context=browser.newContext()){
+            context.addInitScript("localStorage.setItem('moapan-language','en')");Page p=context.newPage();var calls=new java.util.concurrent.atomic.AtomicInteger();
+            p.route("**/i18n-pages.js",r->{if(calls.incrementAndGet()==1)r.abort();else r.resume();});
+            p.navigate(origin+"/signup.html");p.locator("[data-open-terms]").click();assertThat(p.locator("[data-terms-content]")).containsText("Unable to load the terms");assertTrue(p.locator("[data-terms-agree]").isDisabled());p.locator("[data-terms-close]").click();
+            p.locator("[data-open-terms]").click();assertThat(p.locator("[data-terms-content]")).containsText("Terms revision 1");assertEquals(2,calls.get());
+        }
+    }
+    @Test void signupTermsAreTranslatedOnDemandWithoutHtmlSinksUnderTrustedTypes(){
+        try(var context=browser.newContext()){
+            context.addInitScript("localStorage.setItem('moapan-language','en')");Page p=context.newPage();var messages=new ArrayList<String>();p.onRequest(r->{if(r.url().endsWith("/i18n-pages.js"))messages.add(r.url());});
+            p.navigate(origin+"/signup.html");assertTrue(messages.isEmpty());p.locator("[data-open-terms]").click();assertThat(p.locator("[data-terms-content]")).containsText("Terms revision 1");
+            assertTrue((boolean)p.evaluate("(()=>{try{new DOMParser().parseFromString('<p>blocked</p>','text/html');return false;}catch(e){return e instanceof TypeError;}})()"));
+            assertEquals(1,messages.size());assertEquals("Agree",p.locator("[data-terms-agree]").textContent());assertEquals("Do not agree",p.locator("[data-terms-decline]").textContent());
+            assertTrue(p.locator("[data-terms-content]").textContent().contains("Registration and account management"));p.keyboard().press("Escape");
+            p.reload();p.route("**/api/v1/auth/terms",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"version\":\"terms-1\",\"nodes\":[{\"kind\":\"p\",\"text\":\"\",\"children\":[{\"kind\":\"text\",\"text\":\"Readable text <script>window.executed=true</script>\",\"children\":[]}]}]}")));
+            p.locator("[data-open-terms]").click();assertThat(p.locator("[data-terms-agree]")).isEnabled();assertEquals(0,p.locator("[data-terms-content] script,[data-terms-content] [onclick],[data-terms-content] a").count());assertFalse((boolean)p.evaluate("window.executed===true"));assertTrue(p.locator("[data-terms-content]").textContent().contains("<script>"));p.locator("[data-terms-agree]").click();
         }
     }
     @Test void forgotPasswordIsLinkedTranslatedAndNeverSendsWhileTyping()throws Exception{
@@ -243,7 +307,7 @@ class BrowserTest {
             p.route("**/api/v1/auth/password/reset-code",r->{sent.add(r.request().postData());assertFalse(r.request().url().contains("?"));r.fulfill(new Route.FulfillOptions().setStatus(202).setContentType("application/json").setBody("{\"challengeId\":\"00000000-0000-0000-0000-000000000777\",\"expiresInSeconds\":300,\"resendAfterSeconds\":60}"));});
             p.route("**/api/v1/auth/password/reset",r->{sent.add(r.request().postData());r.fulfill(new Route.FulfillOptions().setStatus(200).setContentType("application/json").setBody("{}"));});
             p.navigate(origin+"/login.html");p.locator("a[href='/forgot-password.html']").click();assertTrue(p.title().startsWith("비밀번호 재설정"));
-            p.locator("#username").fill("synthetic_recovery");p.locator("#email").fill("recovery@example.test");assertTrue(sent.isEmpty());p.locator("[data-request-code]").click();p.waitForFunction("document.querySelector('[data-email-status]').textContent.includes('발송을 요청했습니다')");assertEquals(1,sent.size());assertTrue(p.locator("[data-request-code]").isDisabled());
+            p.locator("#username").fill("synthetic_recovery");p.locator("#email").fill("recovery@example.test");assertTrue(sent.isEmpty());p.locator("[data-request-code]").click();assertThat(p.locator("[data-email-status]")).containsText("발송을 요청했습니다");assertEquals(1,sent.size());assertTrue(p.locator("[data-request-code]").isDisabled());
             p.locator("#code").fill("123456");p.locator("#newPassword").fill("new synthetic recovery password");p.locator("[type=submit]").click();p.waitForFunction("document.querySelector('#recovery-status').textContent.includes('재설정했습니다')");assertEquals(2,sent.size());assertEquals("",p.locator("#newPassword").inputValue());assertFalse((boolean)p.evaluate("JSON.stringify({...localStorage,...sessionStorage}).includes('recovery@example.test')"));assertTrue(external.isEmpty());
             for(int width:new int[]{390,768,1440}){p.setViewportSize(width,950);assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth<=innerWidth"));p.screenshot(new Page.ScreenshotOptions().setFullPage(true).setPath(dir.resolve("password-recovery-"+width+".png")));}
             p.locator("[data-language-select]").selectOption("en");p.waitForFunction("document.querySelector('h1').textContent==='Reset password'");assertTrue(p.locator("main").textContent().contains("previously")||p.locator("main").textContent().contains("already verified"));
@@ -252,7 +316,7 @@ class BrowserTest {
     @Test void signupEmailNoticeCannotBeUsedAsMarketingConsentAndTypingDoesNotSend(){
         try(var context=browser.newContext()){
             Page p=context.newPage();List<String> sent=new ArrayList<>();p.route("**/api/v1/auth/email/signup-code",r->{sent.add(r.request().postData());r.fulfill(new Route.FulfillOptions().setStatus(202).setContentType("application/json").setBody("{\"challengeId\":\"00000000-0000-0000-0000-000000000777\",\"expiresInSeconds\":300,\"resendAfterSeconds\":60}"));});
-            p.navigate(origin+"/signup.html");assertTrue(p.locator("#email-purpose").textContent().contains("마케팅·광고 등 다른 목적으로 사용하지 않습니다"));assertNotNull(p.locator("#email").getAttribute("required"));assertEquals(0,p.locator("input[name*=marketing],input[name*=advertising]").count());p.locator("#username").fill("synthetic_email");p.locator("#email").fill("synthetic@example.test");assertTrue(sent.isEmpty());p.locator("[data-request-code]").click();assertTrue(sent.isEmpty());p.locator("[name=emailPolicyAccepted]").check();p.locator("[data-request-code]").click();p.waitForFunction("document.querySelector('[data-email-status]').textContent.includes('발송을 요청했습니다')");assertEquals(1,sent.size());p.locator("#code").fill("123456");p.locator("#email").fill("changed@example.test");assertEquals("",p.locator("#code").inputValue());assertFalse((boolean)p.evaluate("JSON.stringify({...localStorage,...sessionStorage}).includes('example.test')"));
+            p.navigate(origin+"/signup.html");assertTrue(p.locator("#email-purpose").textContent().contains("마케팅·광고 등 다른 목적으로 사용하지 않습니다"));assertNotNull(p.locator("#email").getAttribute("required"));assertEquals(0,p.locator("input[name*=marketing],input[name*=advertising]").count());p.locator("#username").fill("synthetic_email");p.locator("#email").fill("synthetic@example.test");assertTrue(sent.isEmpty());p.locator("[data-request-code]").click();assertTrue(sent.isEmpty());p.locator("[name=emailPolicyAccepted]").check();p.locator("[data-request-code]").click();assertThat(p.locator("[data-email-status]")).containsText("발송을 요청했습니다");assertEquals(1,sent.size());p.locator("#code").fill("123456");p.locator("#email").fill("changed@example.test");assertEquals("",p.locator("#code").inputValue());assertFalse((boolean)p.evaluate("JSON.stringify({...localStorage,...sessionStorage}).includes('example.test')"));
         }
     }
     @Test void loginWarningCountdownAndUnlockAreVisible()throws Exception{
@@ -273,7 +337,7 @@ class BrowserTest {
         try(var context=browser.newContext()){
             Page p=context.newPage();var requests=new ArrayList<String>();
             p.route("**/api/v1/auth/signup",r->{requests.add(r.request().postData());r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{}"));});
-            p.navigate(origin+"/signup.html");assertEquals("128",p.locator("#username").getAttribute("maxlength"));p.locator("#username").fill("a");p.locator("#password").fill("abcde");verifySignupEmail(p);p.locator("[name=termsAccepted]").check();p.locator("button[type=submit]").click();assertTrue(requests.isEmpty());
+            p.navigate(origin+"/signup.html");assertEquals("128",p.locator("#username").getAttribute("maxlength"));p.locator("#username").fill("a");p.locator("#password").fill("abcde");verifySignupEmail(p);acceptSignupTerms(p);p.locator("button[type=submit]").click();assertTrue(requests.isEmpty());
             p.locator("#password").fill("abcdef");p.locator("button[type=submit]").click();p.waitForURL("**/login.html");assertEquals(1,requests.size());assertEquals("6",p.locator("#password").getAttribute("minlength"));assertEquals("1",p.locator("#username").getAttribute("minlength"));
             p.route("**/api/v1/auth/session",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"id\":\""+A+"\",\"username\":\""+"u".repeat(128)+"\",\"role\":\"USER\",\"canReadNewsletter\":true}")));
             p.setViewportSize(390,900);p.navigate(origin+"/account.html");p.waitForSelector("#account-menu button");assertEquals("6",p.locator("[name=newPassword]").getAttribute("minlength"));assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth <= innerWidth"));

@@ -3,6 +3,7 @@ import {viewer} from '../shared/common.js';
 import {t} from '../shared/i18n.js';
 import {emailVerification} from './email-verification.js';
 const form=document.querySelector('form');
+const signupTerms=form.dataset.mode==='signup'?(await import('./terms-agreement.js')).termsAgreement(form):null;
 const signupEmail=form.dataset.mode==='signup'?emailVerification(form,'/api/v1/auth/email/signup-code',()=>({username:form.elements.username.value,email:form.elements.email.value,emailPolicyAccepted:form.elements.emailPolicyAccepted.checked,emailPolicyVersion:'email-1'})):null;
 if(form.dataset.mode==='login')viewer.then(a=>{if(a)location.replace('/index.html');}).catch(()=>{});
 const savedUsernameKey='moapan-saved-username';
@@ -26,7 +27,7 @@ form.elements.username.addEventListener('input',()=>{if(deadline&&limitedUsernam
 document.addEventListener('visibilitychange',()=>{if(deadline)tick();});
 window.addEventListener('pagehide',()=>clearInterval(timer));
 window.addEventListener('pageshow',()=>{if(deadline){tick();if(deadline)timer=setInterval(tick,250);}});
-function error(name,message){const input=form.elements[name];input.setAttribute('aria-invalid','true');document.querySelector('#'+(name==='termsAccepted'?'terms':name)+'-error').textContent=message;input.focus();}
+function error(name,message){const input=name==='termsAccepted'?form.querySelector('[data-open-terms]'):form.elements[name];input.setAttribute('aria-invalid','true');document.querySelector('#'+(name==='termsAccepted'?'terms':name)+'-error').textContent=message;input.focus();}
 form.addEventListener('submit',async event=>{
   event.preventDefault();
   if(pending)return;
@@ -37,7 +38,7 @@ form.addEventListener('submit',async event=>{
   const username=form.elements.username.value,password=form.elements.password.value,signup=form.dataset.mode==='signup';
   if(!/^[A-Za-z0-9_]{1,128}$/.test(username)){error('username','영문·숫자·밑줄 1~128자로 입력하세요.');return;}
   if([...password].length<6||[...password].length>128){error('password','비밀번호는 6~128자로 입력하세요.');return;}
-  if(signup&&!form.elements.termsAccepted.checked){error('termsAccepted','약관을 읽고 동의해 주세요.');return;}
+  if(signup&&!signupTerms.accepted){error('termsAccepted','약관을 읽고 동의해 주세요.');return;}
   persistUsername();
   pending=true;button.disabled=true;
   try{

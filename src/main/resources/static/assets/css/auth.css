@@ -15,9 +15,24 @@
 .auth-main button { width: 100%; min-height: 48px; margin-top: 16px; background: #252722; color: #fff; border: 1px solid #252722; font-weight: 700; }
 .auth-main button:disabled { opacity: .6; }
 .agreement { margin-top: 20px; display: grid; gap: 8px; }
-.agreement label { display: flex; align-items: center; gap: 8px; font-weight: 400; }
-.agreement input { width: 18px; height: 18px; margin: 0; accent-color: #252722; }
-.agreement a { font-size: 12px; margin-left: 26px; }
+.agreement p { font-size: 14px; font-weight: 600; margin: 0; }
+.agreement .terms-open { margin: 0; background: transparent; color: var(--ink); border-color: var(--rule); font-weight: 400; }
+.agreement [data-terms-consent] { font-size: 12px; color: var(--muted); }
+.terms-dialog { width: min(720px,calc(100vw - 32px)); max-height: calc(100dvh - 32px); padding: 0; overflow: hidden; box-sizing: border-box; }
+.terms-dialog[open] { display: flex; flex-direction: column; }
+.terms-dialog-header { display: flex; flex-shrink: 0; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 20px; border-bottom: 1px solid var(--rule); }
+.terms-dialog-header h2 { margin: 0; font-size: 22px; }
+.terms-dialog-close { min-width: 44px; min-height: 44px; font-size: 24px; padding: 4px; }
+.terms-dialog-content { flex: 1 1 auto; min-height: 0; max-height: 56dvh; overflow-y: auto; overscroll-behavior: contain; padding: 8px 20px 16px; font-size: 15px; line-height: 1.8; }
+.terms-dialog-content h2 { font-size: 18px; margin-top: 24px; }
+.terms-dialog-footer { display: block; flex-shrink: 0; width: 100%; margin: 0; padding: 12px 20px 20px; border-top: 1px solid var(--rule); text-align: left; }
+.terms-dialog-footer p { margin: 0 0 12px; font: 13px/1.6 system-ui,sans-serif; }
+.terms-dialog-actions { display: flex; gap: 12px; }
+.terms-dialog-actions button { flex: 1; min-height: 46px; font-weight: 600; }
+.terms-dialog-actions [data-terms-agree] { background: #252722; color: #fff; }
+.terms-dialog-actions button:disabled { opacity: .45; cursor: not-allowed; }
+.auth-page:has(.terms-dialog[open]) { overflow: hidden; }
+.terms-dialog :focus-visible { outline: 2px solid #315747; outline-offset: -3px; }
 .auth-main [role=status] { font-size: 14px; margin: 0; color: #9b2525; }
 .auth-main [role=status]:empty { display: none; }
 .auth-switch { text-align: center; font-size: 14px; margin: 28px 0; }

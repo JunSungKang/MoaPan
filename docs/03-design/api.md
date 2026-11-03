@@ -9,6 +9,7 @@
 |Method|경로|입력·출력|
 |---|---|---|
 |GET|/api/v1/auth/csrf|token,headerName. JS 메모리만 저장|
+|GET|/api/v1/auth/terms|공개 읽기 전용 약관. version, nodes(kind,text,children). 기존 정적 약관을 단일 원본으로 사용하며 링크·HTML 속성·실행 요소를 제외. Cache-Control:no-store; 가입 화면에서 끝까지 스크롤 후 동의, 서버는 기존 termsAccepted/termsVersion 검증 유지|
 |POST|/api/v1/auth/signup|username,password,email,challengeId,code,termsAccepted=true,termsVersion=terms-1,emailPolicyAccepted=true,emailPolicyVersion=email-1. 반환 id,username,role(USER),canReadNewsletter,emailVerified|
 |POST|/api/v1/auth/login|username/password. 세션 ID 교체, 최소 계정 반환. 후속 GET csrf로 토큰 재발급|
 |POST|/api/v1/auth/logout|서버 세션 종료. 후속 로그인 전 csrf 재발급|
