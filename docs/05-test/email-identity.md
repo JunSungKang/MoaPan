@@ -95,3 +95,9 @@ SMTP 시험은 독립 테스트 프로젝트를 만들고 종료 시 컨테이�
 최종 기능 회귀는 단위181 + PostgreSQL147 + Playwright76 = **404 PASS, FAIL0, ERROR0, SKIP0**다. 집중 팝업 시험6개와 Nu HTML 메시지0, CSS 중복 선언/문서 연결 검사도 통과했다. 증빙은 .local/email-auth-20261103/terms-csp-retry.log, terms-release-verification.log, terms-html-final.log와 build/test-results, build/reports/screenshots에 있다. 독립 사전 리뷰의 실패한 번역 Promise 캐시 문제를 수정하고 실제 일시 다운로드 실패 후 재시도를 검증했다. 보안 헤더를 적용하면서 드러난 시험의 unsafe-eval 의존 대기는 locator assertion으로 바꿨으며 제품 CSP는 약화하지 않았다.
 
 이번 JAR SHA256은 `dff536cc7cb8532f65b1a1164ddbeea98c558dfc38312edb7f5690f4f3c51b2b`다. 소스/JAR/SBOM 보안 재검사 결과는 build/reports/security를 따른다. 기존 SMTP DS-0002 HIGH와 전체 보안 게이트 보류는 그대로이며 경고 예외나 위험 수용을 추가하지 않았다. 이 새 JAR의 컨테이너 이미지는 만들거나 운영에 올리지 않았다. 앞 절의 기존 이미지 검사는 이번 변경 이미지 검사로 간주하지 않는다. 실제 서비스/V24는 유지하며 메일 수신 검증은 사용자가 직접 수행할 예정이고 발신 설정·서비스 전환·병합은 미실행이다. 실제 현재 커밋과 독립/App 리뷰 상태는 PR28에서 확인한다.
+
+## 8. 스크롤 안내와 실제 약관 체크박스
+
+스크롤 영역 오른쪽에 native scrollbar 스타일과 아래로 읽기 화살표 버튼을 추가했다. 화살표는 본문을 한 화면씩 내리며 내용이 모두 보이거나 끝에 도달하면 숨긴다. 본문과 겹치지 않도록 별도 줄의 오른쪽에 배치했다. 가입 폼의 실제 필수 체크박스는 팝업 동의 때 선택되며, 미동의 체크 시 검토를 열고 직접 체크를 허용하지 않는다. 기존 체크를 해제하면 내부 동의도 취소한다. 거절/닫기/Escape/재열기도 체크를 해제한다.
+
+집중 브라우저 시험7개에서 자동 체크·해제·Space 키 검토·native 필수검증과 가입 차단, 화살표 클릭 스크롤·끝 숨김·한영·입력 보존을 검증했다. 전체 회귀181/147/77 =405 PASS, FAIL/ERROR/SKIP0이며, 본문과 안내를 분리한 최종 CSS 이후 check/e2eTest/bootJar/sbom/securityCheck를 다시 실행해 단위181·UI77을 재검증했다. Java/DB 코드는 변경하지 않았으며 PostgreSQL147 결과는 앞 전체 실행에서 확인했다. HTML 메시지0, CSS 중복 검사 PASS. 최종 JAR SHA256은 b99a4f25867099685bac3745ef569d4bcf808d29b5cbd1323f1c6b720a1a7df9이며 JAR/SBOM 스캔 취약점0이다. 전체 securityCheck는 기존 Postfix DS-0002 HIGH 때문에 실제 exit1이며 예외를 추가하지 않았다. 증빙: terms-affordance-focused.log, terms-affordance-release.log, terms-affordance-final.log, terms-affordance-html.log. 합성 캡처는 terms-dialog-{width}.png와 terms-consent-{width}.png이며 실제 서비스 화면이 아니다. 서버·DB·약관 문구·메일 설정과 기존 보안 게이트 상태는 변경하지 않았다.

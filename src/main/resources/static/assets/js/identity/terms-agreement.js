@@ -4,19 +4,24 @@ const readableTags=new Set(['p','h2','h3','strong','em','ul','ol','li','br','spa
 // Consent is page-local. The canonical public document owns the legal text/version.
 export function termsAgreement(form){
  const trigger=form.querySelector('[data-open-terms]'),consent=form.querySelector('[data-terms-consent]');
+ const checkbox=form.elements.termsAccepted;
  const dialog=document.querySelector('#terms-dialog'),content=dialog.querySelector('[data-terms-content]');
  const agree=dialog.querySelector('[data-terms-agree]'),hint=dialog.querySelector('[data-terms-hint]');
+ const scrollCue=dialog.querySelector('[data-terms-scroll]');
  let accepted=false,ready=false,reachedEnd=false,generation=0,documentBody,request;
  const resize=new ResizeObserver(checkEnd);
  function setConsent(value){
   accepted=value;
+  checkbox.checked=value;
   consent.textContent=t(value?'이용약관에 동의했습니다.':'약관을 읽고 동의해 주세요.');
   trigger.textContent=t(value?'약관 다시 읽기':'약관 전문 읽기');
   if(value){trigger.removeAttribute('aria-invalid');form.querySelector('#terms-error').textContent='';}
  }
  function checkEnd(){
   if(!ready||!dialog.open||content.clientHeight<=0)return;
-  if(content.scrollHeight-content.scrollTop-content.clientHeight<=2)reachedEnd=true;
+  const atEnd=content.scrollHeight-content.scrollTop-content.clientHeight<=2;
+  scrollCue.hidden=atEnd;
+  if(atEnd)reachedEnd=true;
   agree.disabled=!reachedEnd;
   hint.textContent=t(reachedEnd?'약관을 확인했다면 동의 여부를 선택해 주세요.':'끝까지 내려 읽으면 동의할 수 있습니다.');
  }
@@ -43,7 +48,7 @@ export function termsAgreement(form){
  }
  async function open(){
   if(dialog.open)return;
-  setConsent(false);ready=false;reachedEnd=false;agree.disabled=true;
+  setConsent(false);ready=false;reachedEnd=false;agree.disabled=true;scrollCue.hidden=true;
   content.replaceChildren(document.createTextNode(t('약관을 불러오는 중입니다.')));
   hint.textContent=t('끝까지 내려 읽으면 동의할 수 있습니다.');
   dialog.showModal();content.scrollTop=0;content.focus();
@@ -61,6 +66,14 @@ export function termsAgreement(form){
   }finally{clearTimeout(timeout);}
  }
  trigger.addEventListener('click',open);
+ checkbox.addEventListener('click',event=>{
+  if(accepted){setConsent(false);return;}
+  event.preventDefault();open();
+ });
+ checkbox.addEventListener('invalid',event=>{
+  event.preventDefault();trigger.setAttribute('aria-invalid','true');form.querySelector('#terms-error').textContent=t('약관을 읽고 동의해 주세요.');trigger.focus();
+ });
+ scrollCue.addEventListener('click',()=>{content.scrollBy({top:Math.max(80,content.clientHeight*.8),behavior:'instant'});content.focus({preventScroll:true});});
  content.addEventListener('scroll',checkEnd,{passive:true});
  agree.addEventListener('click',()=>{if(!ready||!reachedEnd)return;setConsent(true);dialog.close();});
  for(const button of dialog.querySelectorAll('[data-terms-decline],[data-terms-close]'))button.addEventListener('click',()=>{setConsent(false);dialog.close();});
@@ -72,7 +85,8 @@ export function termsAgreement(form){
   if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
   else if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
  });
- dialog.addEventListener('close',()=>{if(dialog.open)return;generation++;request?.abort();resize.disconnect();ready=false;reachedEnd=false;agree.disabled=true;trigger.focus();});
+ dialog.addEventListener('close',()=>{if(dialog.open)return;generation++;request?.abort();resize.disconnect();ready=false;reachedEnd=false;agree.disabled=true;scrollCue.hidden=true;trigger.focus();});
  window.addEventListener('moapan-language',()=>{if(dialog.open){reachedEnd=false;agree.disabled=true;requestAnimationFrame(checkEnd);}});
- return {get accepted(){return accepted;}};
+ setConsent(false);
+ return {get accepted(){return accepted&&checkbox.checked;}};
 }
