@@ -64,7 +64,7 @@ SMTP 시험은 독립 테스트 프로젝트를 만들고 종료 시 컨테이�
 | 발급/소비 잠금 역전 | 동일 advisory lock과 계정→challenge 순서, 잠금 전 해시 슬롯 확보로 수정·PG 경합 재검증 |
 | SMTP 외부 구간 평문 fallback | verify/호스트명/CA 검증 필수로 수정 |
 | 비웹 PasswordEncoder 의존성으로 worker 시작 실패 | 인터랙티브 identity 빈을 웹 역할에만 등록, 비웹 부팅 회귀 PASS |
-| Postfix master root, DS-0002 HIGH | 실제 미해결 설정 경고. 제한 capabilities/내부망/읽기 전용 rootfs는 완화책. 사용자 위험 수용 답변 전 예외·배포·병합 승인 금지 |
+| Postfix master root, DS-0002 HIGH | 실제 미해결 설정 경고. 제한 capabilities/내부망/읽기 전용 rootfs는 완화책. 2026-11-04 사용자 예외 미승인 확정. 구현 보존·운영 전환 보류, 경고 예외/배포 승인으로 처리 금지 |
 | 운영 발신 주소/DNS | 사용자에게 확인 요청. 소스 기본 도메인 SPF는 다른 MX를 허용하므로 현재 Mac에서 임의 활성화하지 않음 |
 | 외부 받은편지함 전달 | 미실행. 로컬 합성 메일함 성공으로 대체하지 않음 |
 | securityCheck/acceptanceTest | release-acceptance 명령에서 securityCheck가 실제 exit1. acceptanceTest는 실행 완료/PASS가 아님 |

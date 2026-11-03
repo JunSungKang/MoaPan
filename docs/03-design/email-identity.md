@@ -34,6 +34,6 @@ SMTP는 STARTTLS 필수 또는 SMTPS, 인증서/호스트 검증, 연결/읽기/
 
 MailBox 소스2개를 Apache-2.0 고지와 SHA256으로 동결했으며 소유자 원본은 수정하지 않았다. Debian12/13 기반에서 미해결 OS 취약점이 남아 배포하지 않고, 지원되는 Alpine3.24.3과 Postfix3.11.7로 이식했다. 원본 계정 목록/웹메일/IMAP은 가져오지 않는다. Linux 이관 시 형제 저장소 없이 포함 소스로 동일한 build context를 생성한다. Alpine 패키지의 vmail과 LMDB maps를 사용하며 private TLS 키는 chroot 내부 tmpfs에만 복사한다. 외부 SMTP도 verify/hostname/공식CA로 강제한다. 도메인별 호환성보다 TLS 실패 시 대기/만료를 우선하며 평문 fallback을 허용하지 않는다. 원본의 broad network 기본값 대신 전용 좁은 네트워크를 기본값으로 덮어쓴다.
 
-Postfix master의 root 실행은 Trivy DS-0002 HIGH로 남아 있으며 권한 분리·chroot·최소cap·무공개 SMTP포트는 완화책이다. 오탐/수정으로 간주하지 않는다. 사용자 위험 수용 여부를 질문한 상태이며 승인 전 securityCheck/acceptanceTest와 운영 전환은 차단한다. 애플리케이션과 worker는 계속UID10001 비루트다.
+Postfix master의 root 실행은 Trivy DS-0002 HIGH로 남아 있으며 권한 분리·chroot·최소cap·무공개 SMTP포트는 완화책이다. 오탐/수정으로 간주하지 않는다. 2026-11-04 사용자가 해당 SMTP 이미지의 root 실행 예외를 명시적으로 미승인했다. 구현은 보존하되 경고를 숨기거나 예외를 추가하지 않고 securityCheck/acceptanceTest와 SMTP 활성화·운영 전환 차단을 유지한다. 실수신 테스트를 사용자가 맡는 결정은 이 위험 수용을 뜻하지 않는다. 애플리케이션과 worker는 계속UID10001 비루트다.
 
 SMTP 중계의 큐·테스트 수신함·계정 맵은 용량이 제한된 메모리 파일시스템만 사용하며, 인증번호와 수신 주소를 SMTP 영속 볼륨에 남기지 않는다. SMTP 큐는 최대5분이며 재시작 시 소실될 수 있다. 애플리케이션 PostgreSQL의 발송 대기 내용은 별도로 암호화해 재시도하지만, SMTP 수락 이후의 받은편지함 도착을 보장하지 않는다. 메일이 도착하지 않으면 새 인증번호를 요청해야 한다. 미래 결제 기능의 영수증 발송·재전송 보장은 그 기능을 구현할 때 별도 검증한다. 이메일 데이터 키를 분실하거나 기존 DB와 다른 키로 교체하면 복호화와 복구가 불가능하므로 기존 키를 별도로 안전하게 보관·이관한다.
