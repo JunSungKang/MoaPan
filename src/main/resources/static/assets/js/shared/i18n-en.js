@@ -113,7 +113,7 @@ export default {
   "6~128자 · 공백 사용 가능": "6–128 characters · Spaces allowed",
   "영문·숫자·밑줄 1~128자": "1–128 letters, digits or underscores",
   "이용약관에 동의합니다 (필수)": "I agree to the terms of service (required)",
-  "아래로 읽기": "Read further",
+  "약관 스크롤": "Terms scrollbar",
   "약관 전문 읽기": "Read the full terms",
   "약관 다시 읽기": "Review the terms",
   "이용약관에 동의했습니다.": "Terms accepted.",

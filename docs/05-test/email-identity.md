@@ -101,3 +101,9 @@ SMTP 시험은 독립 테스트 프로젝트를 만들고 종료 시 컨테이�
 스크롤 영역 오른쪽에 native scrollbar 스타일과 아래로 읽기 화살표 버튼을 추가했다. 화살표는 본문을 한 화면씩 내리며 내용이 모두 보이거나 끝에 도달하면 숨긴다. 본문과 겹치지 않도록 별도 줄의 오른쪽에 배치했다. 가입 폼의 실제 필수 체크박스는 팝업 동의 때 선택되며, 미동의 체크 시 검토를 열고 직접 체크를 허용하지 않는다. 기존 체크를 해제하면 내부 동의도 취소한다. 거절/닫기/Escape/재열기도 체크를 해제한다.
 
 집중 브라우저 시험7개에서 자동 체크·해제·Space 키 검토·native 필수검증과 가입 차단, 화살표 클릭 스크롤·끝 숨김·한영·입력 보존을 검증했다. 전체 회귀181/147/77 =405 PASS, FAIL/ERROR/SKIP0이며, 본문과 안내를 분리한 최종 CSS 이후 check/e2eTest/bootJar/sbom/securityCheck를 다시 실행해 단위181·UI77을 재검증했다. Java/DB 코드는 변경하지 않았으며 PostgreSQL147 결과는 앞 전체 실행에서 확인했다. HTML 메시지0, CSS 중복 검사 PASS. 최종 JAR SHA256은 b99a4f25867099685bac3745ef569d4bcf808d29b5cbd1323f1c6b720a1a7df9이며 JAR/SBOM 스캔 취약점0이다. 전체 securityCheck는 기존 Postfix DS-0002 HIGH 때문에 실제 exit1이며 예외를 추가하지 않았다. 증빙: terms-affordance-focused.log, terms-affordance-release.log, terms-affordance-final.log, terms-affordance-html.log. 합성 캡처는 terms-dialog-{width}.png와 terms-consent-{width}.png이며 실제 서비스 화면이 아니다. 서버·DB·약관 문구·메일 설정과 기존 보안 게이트 상태는 변경하지 않았다.
+
+## 9. 버튼 제거·오른쪽 스크롤바 정정
+
+사용자 정정에 따라 아래로 읽기 버튼과 관련 HTML/JS/CSS/번역을 제거했다. 약관 본문 오른쪽에 24px 독립 트랙과 손잡이를 항상 표시한다. 실제 본문 위치와 손잡이 크기/위치·ARIA 값을 동기화하며 포인터 캡처 드래그, 트랙 클릭, Arrow/Page/Home/End를 지원한다. 본문 자체 휠·터치·키보드 스크롤은 유지한다. 짧은 본문에서는 전체 높이 손잡이와 비활성 상태를 표시한다. 운영체제의 native overlay 자동 숨김과 관계없이 표시되며 본문을 가리지 않는다. 동의 게이트와 체크박스 동기화는 유지했다.
+
+집중 브라우저7개와 Nu HTML 메시지0/CSS 검사를 통과했다. 390/768/1440에서 실제 마우스 드래그·트랙 클릭·키보드·끝 값100/동의 활성, 짧은 본문 비활성·한영 표시를 검증했다. 합성 캡처는 terms-dialog-{width}.png다. 최종 check/e2eTest/bootJar/sbom/securityCheck에서 단위181·전체UI77 PASS/FAIL·ERROR·SKIP0을 확인했다. Java/DB 코드는 변경하지 않았으며 PostgreSQL147은 앞 전체 실행의 결과를 유지한다. 최신 JAR SHA256은 2e5023dc707b4064d8d2302a3aa0c58fca28d888aca1058cd08550d193e87b6b이며 JAR/SBOM 스캔 취약점0이다. 전체 securityCheck는 기존 Postfix DS-0002 HIGH로 실제 exit1, 예외를 추가하지 않았다. 증빙 terms-scrollbar-focused.log / terms-scrollbar-final.log / terms-scrollbar-html.log. 운영/SMTP/DB/병합은 변경하지 않는다.

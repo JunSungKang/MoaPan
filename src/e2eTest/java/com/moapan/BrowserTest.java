@@ -255,16 +255,22 @@ class BrowserTest {
                 p.setViewportSize(width,width==390?500:900);p.navigate(origin+"/signup.html");p.locator("#username").fill("synthetic_terms_draft");p.locator("#password").fill("synthetic password");verifySignupEmail(p);
                 p.locator("[data-open-terms]").click();p.locator("[data-terms-content] h2").first().waitFor();
                 assertTrue(p.locator("[data-terms-agree]").isDisabled());assertEquals(1,context.pages().size());
-                assertFalse(p.locator("#terms-accepted").isChecked());assertThat(p.locator("[data-terms-scroll]")).isVisible();
-                assertEquals("scroll",p.locator("[data-terms-content]").evaluate("n=>getComputedStyle(n).overflowY"));
-                p.locator("[data-terms-scroll]").click();assertThat(p.locator("[data-terms-agree]")).isDisabled();assertTrue(((Number)p.locator("[data-terms-content]").evaluate("n=>n.scrollTop")).doubleValue()>0);
+                assertFalse(p.locator("#terms-accepted").isChecked());assertThat(p.locator("[data-terms-scrollbar]")).isVisible();assertEquals(0,p.locator("[data-terms-scroll]").count());
+                assertEquals("auto",p.locator("[data-terms-content]").evaluate("n=>getComputedStyle(n).overflowY"));
+                var bar=p.locator("[data-terms-scrollbar]").boundingBox();var thumb=p.locator("[data-terms-thumb]").boundingBox();var body=p.locator("[data-terms-content]").boundingBox();
+                assertTrue(bar.width>=20&&bar.height>100);assertTrue(thumb.height>0&&thumb.height<bar.height);assertTrue(bar.x>=body.x+body.width-1);
+                p.mouse().move(thumb.x+thumb.width/2,thumb.y+thumb.height/2);p.mouse().down();p.mouse().move(thumb.x+thumb.width/2,bar.y+bar.height/2,new Mouse.MoveOptions().setSteps(4));p.mouse().up();
+                assertThat(p.locator("[data-terms-agree]")).isDisabled();assertTrue(((Number)p.locator("[data-terms-content]").evaluate("n=>n.scrollTop")).doubleValue()>0);assertTrue(Integer.parseInt(p.locator("[data-terms-scrollbar]").getAttribute("aria-valuenow"))>0);
+                p.locator("[data-terms-scrollbar]").press("Home");assertThat(p.locator("[data-terms-scrollbar]")).hasAttribute("aria-valuenow","0");
+                p.mouse().click(bar.x+bar.width/2,bar.y+bar.height*.65);assertTrue(((Number)p.locator("[data-terms-content]").evaluate("n=>n.scrollTop")).doubleValue()>0);p.locator("[data-terms-scrollbar]").press("Home");
                 assertTrue(p.locator("[data-terms-content]").textContent().contains("약관 개정 제 1판"));assertTrue(p.locator("[data-terms-content]").textContent().contains("현재 서비스에서는 결제나 자동 청구를 하지 않습니다"));
                 assertEquals(0,p.locator("[data-terms-content] a,[data-terms-content] h1").count());
                 p.evaluate("const n=document.querySelector('[data-terms-content]');n.scrollTop=0;n.dispatchEvent(new Event('scroll'))");assertTrue(p.locator("[data-terms-agree]").isDisabled());
                 assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth<=innerWidth && document.querySelector('[data-terms-decline]').getBoundingClientRect().bottom<=innerHeight && document.querySelector('#terms-dialog').getBoundingClientRect().top>=0"));
                 p.screenshot(new Page.ScreenshotOptions().setPath(Path.of("build/reports/screenshots/terms-dialog-"+width+".png")));
-                p.locator("[data-terms-content]").focus();p.locator("[data-terms-content]").press("End");assertThat(p.locator("[data-terms-agree]")).isEnabled();
-                assertThat(p.locator("[data-terms-scroll]")).isHidden();
+                p.locator("[data-terms-scrollbar]").press("ArrowDown");assertTrue(((Number)p.locator("[data-terms-content]").evaluate("n=>n.scrollTop")).doubleValue()>0);p.locator("[data-terms-scrollbar]").press("PageDown");
+                p.locator("[data-terms-scrollbar]").press("End");assertThat(p.locator("[data-terms-agree]")).isEnabled();assertThat(p.locator("[data-terms-scrollbar]")).hasAttribute("aria-valuenow","100");
+                assertThat(p.locator("[data-terms-scrollbar]")).isVisible();
                 p.locator("[data-terms-agree]").focus();p.keyboard().press("Tab");assertTrue((boolean)p.evaluate("document.activeElement.closest('#terms-dialog')!==null"));
                 p.locator("[data-terms-agree]").click();assertFalse(p.locator("#terms-dialog").isVisible());assertTrue((boolean)p.evaluate("document.activeElement.matches('[data-open-terms]')"));
                 assertTrue(p.locator("#terms-accepted").isChecked());p.screenshot(new Page.ScreenshotOptions().setPath(Path.of("build/reports/screenshots/terms-consent-"+width+".png")).setFullPage(true));
@@ -309,10 +315,10 @@ class BrowserTest {
             context.addInitScript("localStorage.setItem('moapan-language','en')");Page p=context.newPage();var messages=new ArrayList<String>();p.onRequest(r->{if(r.url().endsWith("/i18n-pages.js"))messages.add(r.url());});
             p.navigate(origin+"/signup.html");assertTrue(messages.isEmpty());p.locator("[data-open-terms]").click();assertThat(p.locator("[data-terms-content]")).containsText("Terms revision 1");
             assertTrue((boolean)p.evaluate("(()=>{try{new DOMParser().parseFromString('<p>blocked</p>','text/html');return false;}catch(e){return e instanceof TypeError;}})()"));
-            assertEquals(1,messages.size());assertEquals("Agree",p.locator("[data-terms-agree]").textContent());assertEquals("Do not agree",p.locator("[data-terms-decline]").textContent());assertEquals("Read further",p.locator("[data-terms-scroll]").textContent().replace("↓","").trim());
+            assertEquals(1,messages.size());assertEquals("Agree",p.locator("[data-terms-agree]").textContent());assertEquals("Do not agree",p.locator("[data-terms-decline]").textContent());assertEquals("Terms scrollbar",p.locator("[data-terms-scrollbar]").getAttribute("aria-label"));
             assertTrue(p.locator("[data-terms-content]").textContent().contains("Registration and account management"));p.keyboard().press("Escape");
             p.reload();p.route("**/api/v1/auth/terms",r->r.fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"version\":\"terms-1\",\"nodes\":[{\"kind\":\"p\",\"text\":\"\",\"children\":[{\"kind\":\"text\",\"text\":\"Readable text <script>window.executed=true</script>\",\"children\":[]}]}]}")));
-            p.locator("[data-open-terms]").click();assertThat(p.locator("[data-terms-agree]")).isEnabled();assertThat(p.locator("[data-terms-scroll]")).isHidden();assertEquals(0,p.locator("[data-terms-content] script,[data-terms-content] [onclick],[data-terms-content] a").count());assertFalse((boolean)p.evaluate("window.executed===true"));assertTrue(p.locator("[data-terms-content]").textContent().contains("<script>"));p.locator("[data-terms-agree]").click();assertTrue(p.locator("#terms-accepted").isChecked());
+            p.locator("[data-open-terms]").click();assertThat(p.locator("[data-terms-agree]")).isEnabled();assertThat(p.locator("[data-terms-scrollbar]")).isVisible();assertThat(p.locator("[data-terms-scrollbar]")).hasAttribute("aria-disabled","true");assertEquals(0,p.locator("[data-terms-content] script,[data-terms-content] [onclick],[data-terms-content] a").count());assertFalse((boolean)p.evaluate("window.executed===true"));assertTrue(p.locator("[data-terms-content]").textContent().contains("<script>"));p.locator("[data-terms-agree]").click();assertTrue(p.locator("#terms-accepted").isChecked());
         }
     }
     @Test void forgotPasswordIsLinkedTranslatedAndNeverSendsWhileTyping()throws Exception{
