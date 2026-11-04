@@ -237,3 +237,13 @@ PR29 신규 변경을 수집/뉴스레터/웹 품질3커밋으로 푸시하고4b
 마지막 공개 SEO 감사·현재head 독립/App 검토·guarded develop 병합을 마감한다. GitHub 최종 승인·병합 SHA와 branch 정리는 PR29 현재 상태를 정본으로 확인하며 실행 전 성공으로 선기록하지 않는다. 기존 미추적 HTTPS 스킬3파일은 그대로 보존하며 commit에서 제외한다.
 
 최종 실서비스 SEO 독립 재점검(2026-11-04T10:25:29Z): 공개 HTTP13/canonical4/robots/sitemap/404·noindex PASS, 익명 접근성 한·영 ×390/768/1440px의90상태 실패0. 실제 HTTPS 지면 Lighthouse13.6.0을 fresh profile/cache로 각1회 측정해 모바일·데스크톱 성능/접근성/권장사항/SEO 모두100(raw1.0)이다. 모바일 LCP1315.8785ms/TBT68ms/CLS0, 데스크톱 LCP286.029ms/TBT0/CLS0. 점수 선택 재시도·TLS 우회·평가 기준 변경은 없었다. 비점수 진단은 보존했고 실제 포털 순위·CrUX·로그인 화면 전체 WCAG 인증으로 확대하지 않는다. 원본 해시는 서비스 인도 증빙에 기록했다. 이후 제품 코드/이미지를 변경하지 않았다.
+
+## 2026-11-04 남은 PR 순차 병합 — 구독 완료·이메일 통합
+
+사용자가 PR27·28·29 전체 develop 병합을 승인했다. PR27은 head a1a566e50a09d5617541f47ffcccd1027f54f115의 App current-head 승인을 확인하고 guarded human squash로 병합했다. merge SHA ea1c088cb0b195ab203436b9c02d2e08c8b929e0이며 정확한 PR head의 원격·추적·로컬 ref를 삭제/부재 확인했다. 첫 두 병합 요청은 GitHub502로 실패했고 develop 미변경을 확인한 뒤 재시도하여 성공했다.
+
+PR28은 새 develop을 공식 절차로 통합했다. 새 develop의 전체 tree가 이전 의존 head a1a566e와 동일하고 해당 head가 승인본11fad449의 조상임을 확인했다. 중복 squash 충돌21개를 승인본 내용으로 해결한 통합 commit999bd494ad49814e92de6aae35e5a5e527c2ab49의 전체 tracked tree는11fad449와 완전히 동일했다. 분리된 독립 검토에서도 부모·tree 동일성과 기존 시험 증빙 재사용의 타당성을 확인했다. 이후 이 두 관리 문서만 보완하며 제품 코드·설정은 바꾸지 않는다. 새 시험을 실행했다고 보고하지 않는다.
+
+999bd494는 canonical 원격에 push했으나 현재 PR28 API는 이전11fad449를 반환한다. PR29도 Git194ef330과 API87abf5a가 불일치한다. GitHub 공식 장애가 지속되는 동안 새 head가 PR에 반영되고 READ_COMPLETE/독립 승인·App formal 승인을 받아야 후속 병합할 수 있다. 아직 PR28/29 병합 완료라고 보고하지 않는다. 기존에 PR29 후보로 전환한 V25 서비스/실제 MailBox 인증·복구 검증 결과는 유지하며 이번 병합 작업으로 서비스·DB·메일서버·키·모델을 다시 교체하지 않았다.
+
+웹 품질 PR29도 현재 develop(ea1c088)을 통합 준비했고, 관리 기록 추가 전의 전체 tracked tree가 이미 배포·검증한194ef330과 동일함을 확인했다. 최신 관리 기록은 이메일 PR과 일치하도록 보완하며 제품 코드·JAR·실행 이미지는 바꾸지 않는다. PR28 새 canonical head e2317fd와 PR29 후속 통합 head는 PR API 반영 및 현재-head 승인 후에만 병합한다.

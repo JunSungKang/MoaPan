@@ -337,3 +337,12 @@ DB/정책: V23 1:1 구독·기간·version·계정삭제정리, 기본권한없�
 
 ## 52. 승인된 서비스 교체·MailBox 연결·develop 병합 (2026-11-04)
 사용자가 PR29의 서비스 교체와 develop 병합, 기존 MailBox를 통한 이메일 인증·복구의 실제 연동을 명시 승인했다. 이전 단계의 운영/병합 제외는 이 인도 단계에서 대체하며, 퇴역 내장SMTP root 예외를 승인한 것으로 해석하지 않는다. 1) 현재 이미지/TLS/AUTH·앱 산출물·권한 확인 및 최소 외부SMTP AUTH overlay, 2) 암호화 백업/격리V25복원·이전/새앱 호환성, 3) 동일 이미지의 V25 및 web/worker 교체·기존 DB/proxy/모델/키 보존, 4) 실제 HTTPS·합성 이메일가입/복구·구독/관리 경계와 데이터보존 검증·테스트 계정 정리, 5) 최종문서·current-head독립/App승인·guarded develop 병합과 세 ref 정리. 외부 MailBox 원본·컨테이너·운영계정은 수정하지 않고 필요한 SMTP 클라이언트 자격/공개CA만 프로젝트 안에 안전하게 설정한다. main·CI/CD·가격/결제·추가유료자원은 제외다.
+
+## 53. 승인된 남은 PR 전체 병합
+
+최신 사용자가 남아 있는 PR27·28·29의 develop 병합을 승인했다. 기존 Sprint Delivery를 유지하고 구독 → 이메일 → 웹 품질·실서비스 인도의 의존 순서로 처리한다. 앞선 개별 작업의 병합 제외는 이 승인 범위에서만 해제하며 main·CI/CD·실결제·서비스/메일박스 추가 변경은 제외한다.
+
+1. 현재 Git/PR head 일치·사용자 author/assignee·App current-head 승인·보호를 확인하고 각 PR을 guarded squash 병합한다. 병합한 정확한 head의 원격/추적/로컬 ref 부재까지 검증한다.
+2. 후속 PR은 최신 develop을 공식 base-refresh 절차로 통합한다. 충돌 해결은 기존 승인 제품과 비교하며 실제 파일 변경/기능 누락 여부를 확인한다. HEAD 변경 후에는 분리된 독립 검토와 새 App formal 승인을 받는다.
+3. 사용자가 이전에 정확히 승인한 프로젝트 .local/cache-delivery-worktree 경로를 병합 검증에 재사용한다. 원본 checkout의 미추적 HTTPS 스킬은 복사·이동·ignore·수정하지 않고 원본 경로에서 해시/미추적 상태를 확인한다. 실행 중인 서비스·DB·키·모델은 유지한다.
+4. GitHub 장애로 PR API와 실제 Git head가 다르면 오래된 승인으로 병합하지 않는다. 외부 오류와 완료/미완료를 구분해 기록한다.
