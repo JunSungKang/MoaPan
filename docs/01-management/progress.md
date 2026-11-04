@@ -216,3 +216,11 @@ MailBox SMTP/IMAP/Webmail 3개 컨테이너 실행을 확인했다. SMTP strict 
 SMTP 책임 분리·미사용 서버 정리 최종 로컬 검증: clean 전체 계약 PASS/408(184·147·77) FAIL·ERROR·SKIP0, 키7/Compose3모드12거부/Helm 두TLS·4거부/Nu0/최종 runtime058f45121034·builder23bd0e0bcc55 gate PASS. 첫 clean 시험 경로 준비 실패는 고쳐 같은 전체 명령으로 재검증했다. source DS-0002 0/새 예외·scanner 약화 없음. 중복 SMTP11tracked+7생성파일/이미지1개, 미사용 Mac런타임116파일·소스압축1개, 과거 프로젝트 이미지59태그 제거(실제 미사용52ID 삭제·실행5ID의 옛 별칭만 해제). 현재6서비스·완료형필수job3/DB V24·기존키·모델보존, 타프로젝트 미변경. Java85파일·브라우저42모듈 추가 참조 점검에서 미사용 후보/누락0. 실제 운영 전환은 외부 MailBox 차단을 유지한다. [증빙](../05-test/evidence/smtp-boundary-cleanup-20261104.json). 현재head 독립 리뷰/PR 전달은 마감 단계이며 develop/main은 병합하지 않는다.
 
 마지막 legacy moapan-* 이미지 재검수에서 실제 구성·문서화된 빌드 태그와 전체 컨테이너의 정확한 이미지ID/태그를 대조했다. 총59태그/미사용52ID 정리 후 기존 모든 컨테이너 ID·이미지·상태가 동일함을 확인했다. 실행5ID의 오래된 별칭만 해제했으며 현재 이름·필수 완료job 이미지·최종 검증 runtime/builder와 빌드 도구는 유지한다. 이 후속은 로컬 이미지 정리 및 결과 문서뿐이며 제품 소스/JAR/검증 이미지 digest는 동일하다.
+
+## 2026-11-04 남은 PR 순차 병합 — 구독 완료·이메일 통합
+
+사용자가 PR27·28·29 전체 develop 병합을 승인했다. PR27은 head a1a566e50a09d5617541f47ffcccd1027f54f115의 App current-head 승인을 확인하고 guarded human squash로 병합했다. merge SHA ea1c088cb0b195ab203436b9c02d2e08c8b929e0이며 정확한 PR head의 원격·추적·로컬 ref를 삭제/부재 확인했다. 첫 두 병합 요청은 GitHub502로 실패했고 develop 미변경을 확인한 뒤 재시도하여 성공했다.
+
+PR28은 새 develop을 공식 절차로 통합했다. 새 develop의 전체 tree가 이전 의존 head a1a566e와 동일하고 해당 head가 승인본11fad449의 조상임을 확인했다. 중복 squash 충돌21개를 승인본 내용으로 해결한 통합 commit999bd494ad49814e92de6aae35e5a5e527c2ab49의 전체 tracked tree는11fad449와 완전히 동일했다. 분리된 독립 검토에서도 부모·tree 동일성과 기존 시험 증빙 재사용의 타당성을 확인했다. 이후 이 두 관리 문서만 보완하며 제품 코드·설정은 바꾸지 않는다. 새 시험을 실행했다고 보고하지 않는다.
+
+999bd494는 canonical 원격에 push했으나 현재 PR28 API는 이전11fad449를 반환한다. PR29도 Git194ef330과 API87abf5a가 불일치한다. GitHub 공식 장애가 지속되는 동안 새 head가 PR에 반영되고 READ_COMPLETE/독립 승인·App formal 승인을 받아야 후속 병합할 수 있다. 아직 PR28/29 병합 완료라고 보고하지 않는다. 기존에 PR29 후보로 전환한 V25 서비스/실제 MailBox 인증·복구 검증 결과는 유지하며 이번 병합 작업으로 서비스·DB·메일서버·키·모델을 다시 교체하지 않았다.

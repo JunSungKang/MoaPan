@@ -323,3 +323,12 @@ DB/정책: V23 1:1 구독·기간·version·계정삭제정리, 기본권한없�
 먼저 MP-DOC-039에 MailBox 담당자용 프롬프트를 작성한다. 다른 저장소·컨테이너·계정·메일·설정은 변경하지 않는다. 고위험 원시 검출과 영향 판정을 구분하고 SMTP/TLS 성공을 전체 보안 통과로 확대하지 않는다.
 ### 50.2 이 프로젝트 수정·검증
 사용자 보유 MailBox와 중복된 내장 Postfix 서버·빌드/Compose/Helm 배포·준비/시험 진입점을 제거하고 기존 SMTP 클라이언트/암호화 outbox/외부 연결만 유지한다. 더 이상 실행하지 않는 root 서버를 실제 구성에서 퇴역시키며 검사 제외·root 위험 수용·USER 위장으로 해결하지 않는다. 이전 구현 보존은 회원/이메일 기능과 기존 데이터·키 보존을 유지하며, 최신 명시적 수정 요청 범위에서 중복 서버 패키징을 정리한다. 외부 SMTP Helm 렌더·Compose3모드·JSSE STARTTLS/SMTPS·권한·계정/메일 회귀·전체 check/integrationTest/e2eTest/bootJar/sbom/securityCheck/acceptanceTest·최종 앱 이미지를 검증한다. 외부 MailBox가 미해결이면 운영 전환은 계속 차단하며 GitHub current-head 독립 검토/PR 전달까지만 수행한다. main/develop 병합·CI/CD·다른 프로젝트 수정은 제외한다.
+
+## 53. 승인된 남은 PR 전체 병합
+
+최신 사용자가 남아 있는 PR27·28·29의 develop 병합을 승인했다. 기존 Sprint Delivery를 유지하고 구독 → 이메일 → 웹 품질·실서비스 인도의 의존 순서로 처리한다. 앞선 개별 작업의 병합 제외는 이 승인 범위에서만 해제하며 main·CI/CD·실결제·서비스/메일박스 추가 변경은 제외한다.
+
+1. 현재 Git/PR head 일치·사용자 author/assignee·App current-head 승인·보호를 확인하고 각 PR을 guarded squash 병합한다. 병합한 정확한 head의 원격/추적/로컬 ref 부재까지 검증한다.
+2. 후속 PR은 최신 develop을 공식 base-refresh 절차로 통합한다. 충돌 해결은 기존 승인 제품과 비교하며 실제 파일 변경/기능 누락 여부를 확인한다. HEAD 변경 후에는 분리된 독립 검토와 새 App formal 승인을 받는다.
+3. 사용자가 이전에 정확히 승인한 프로젝트 .local/cache-delivery-worktree 경로를 병합 검증에 재사용한다. 원본 checkout의 미추적 HTTPS 스킬은 복사·이동·ignore·수정하지 않고 원본 경로에서 해시/미추적 상태를 확인한다. 실행 중인 서비스·DB·키·모델은 유지한다.
+4. GitHub 장애로 PR API와 실제 Git head가 다르면 오래된 승인으로 병합하지 않는다. 외부 오류와 완료/미완료를 구분해 기록한다.
