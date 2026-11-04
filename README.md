@@ -154,3 +154,12 @@ docker compose -f compose.yaml -f scripts/deploy/compose-translation.yaml -f scr
 SMTP 포트를 호스트에 공개하지 않으며 web은 발송 대기 등록, worker만 내부 TLS SMTP에 연결한다. Postfix는 좁은 전용 네트워크만 신뢰하고 chroot·최소 capability를 사용한다. 별도 키는 Git/이미지에 넣지 않고 암호화 DB 백업과 함께 접근통제한다. 서버 인증서는90일, CA는365일이며 만료 전 운영자가 갱신하고 SMTP를 재생성해야 한다. 자동 갱신이나 외부 받은편지함 전달을 검증했다고 주장하지 않는다. 발신 도메인·SPF/DKIM/DMARC·포트25 송신 가능 여부·실제 메일함 도착을 확인하기 전 운영 가입 기능을 전환하지 않는다. 메일 미설정 시 신규 인증/가입·복구는503으로 닫히며 기존 계정 로그인은 유지된다. 상세는 [이메일 설계서](docs/03-design/email-identity.md)와 [검증서](docs/05-test/email-identity.md)를 따른다.
 
 SMTP 중계의 큐·테스트 수신함·계정 맵은 용량이 제한된 메모리 파일시스템만 사용하며, 인증번호와 수신 주소를 SMTP 영속 볼륨에 남기지 않는다. SMTP 큐는 최대5분이며 재시작 시 소실될 수 있다. 애플리케이션 PostgreSQL의 발송 대기 내용은 별도로 암호화해 재시도하지만, SMTP 수락 이후의 받은편지함 도착을 보장하지 않는다. 메일이 도착하지 않으면 새 인증번호를 요청해야 한다. 미래 결제 기능의 영수증 발송·재전송 보장은 그 기능을 구현할 때 별도 검증한다. 이메일 데이터 키를 분실하거나 기존 DB와 다른 키로 교체하면 복호화와 복구가 불가능하므로 기존 키를 별도로 안전하게 보관·이관한다.
+
+
+### 이미 실행 중인 MailBox에 연결
+
+별도로 운영하는 MailBox에는 `scripts/deploy/compose-mail-external.yaml`을 사용한다. 이 overlay는 SMTP 컨테이너를 새로 만들거나 기존 MailBox 설정을 수정하지 않는다. worker만 지정한 기존 Docker 네트워크에 연결하고, 웹은 암호화 발송 대기를 등록한다. 위의 내장 SMTP overlay와 함께 사용하지 않는다.
+
+`.env.example`의 `MAIL_FROM`, `MAIL_SMTP_HOST`, `MAIL_SMTP_PORT`, `MAIL_SMTP_NETWORK`, `MAIL_SMTP_CA_FILE`을 실제 운영값으로 설정한다. 서버 인증서에 포함된 이름을 SMTP 호스트로 사용하고, 별도 경로에서 확인한 운영자 CA 공개 인증서만 지정한다. 인증서 검증을 끄거나 CA 개인키를 가져오지 않는다. 기존 `.local/mail/data.key`를 보존하고, 새 환경에서는 최초 연결 전에 별도32바이트 암호화 키를 안전하게 준비한다. 해당 키의 백업·접근통제와 갱신/이관은 기존 암호화 DB와 함께 관리한다.
+
+검사·백업과 운영 승인 후에만, 실제 사용하는 local/public/server 및 두 모델 overlay 뒤에 `-f scripts/deploy/compose-mail-external.yaml`을 추가해 실행한다. 환경별 ingress 선택과 기존 볼륨을 생략하지 않는다. Compose 설정 검증 성공이나 SMTP 수락만으로 보안 게이트/실수신/운영 전환을 완료 처리하지 않는다. 2026-11-04 현재 STARTTLS와 합성 Maildir 수신은 확인했지만 SMTP 이미지 보안 게이트·root 예외 미승인으로 실제 서비스 전환은 보류 중이다. 상세는 [메일 검증서](docs/05-test/email-identity.md#12-starttls-적용-후-실제-전달-재검증)를 따른다.

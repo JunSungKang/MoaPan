@@ -135,3 +135,25 @@ SMTP 이미지 ID는 sha256:594e743418aadf1ed23478ba448bcb6cad5809c99858ecca9c06
 [Debian Postfix CVE-2026-43964](https://security-tracker.debian.org/tracker/CVE-2026-43964)는 설치3.7.11-0+deb12u1을 vulnerable로 표시하고 bookworm no-dsa/minor 주석도 제공한다. 스캐너 HIGH와 공급자 우선순위를 구분하며 미수정 상태를 성공으로 바꾸지 않는다. CRITICAL [CVE-2023-45853](https://security-tracker.debian.org/tracker/CVE-2023-45853)는 MiniZip에 관한 것으로 Debian은 해당 zlib에서 취약 MiniZip 바이너리를 만들지 않는다고 명시한다. 실행 이미지의 zlib1g1:1.2.13.dfsg-1/별도 MiniZip 패키지·파일 미검출을 확인했지만 기존 gate/ignore를 수정하지 않았다. 전체34건을 검토 완료하거나34개 독립 취약점으로 주장하지 않는다.
 
 최신 앱 이미지 ID는 sha256:dcbd1540948a855db099880321384086e9f090d767dd52cb81e6f5c0538f5d86이며 내장 JAR은684f13607aaeae9216f8ac373d35f82fff48ea7968e182208390c6978daef6fb다. 앱 이미지 검사 PASS와 전체 서비스 승인/메일 서버 검사 PASS는 별개다. 이번에는 기능 전체 시험을 재실행하지 않았으며 앞 절의 결과와 구분한다. 증빙은 .local/mailbox-live-20261104/{strict-tls-probe.txt,smtp-image-scan.log,app-image-build.log,app-image-scan.log}와 build/reports/security/image-{imageId}.json이다.
+
+
+## 12. STARTTLS 적용 후 실제 전달 재검증
+
+2026-11-04 09:16~09:24 KST 사용자 변경을 다시 점검했다. MailBox는 같은 SMTP 이미지594e743418aa를 사용하며 smtpd_tls_security_level=may/사설 CA 인증서를 추가했다. 기본 OS 신뢰만 사용하는 연결은 issuer 검증에서 거부됐고, 사용자 MailBox 원본의 공개 CA를 읽기 전용으로 확인해 SMTP 전용 CA로 지정한 연결은 통과했다. TLS/호스트 검증을 끄거나 JDK·호스트 전역 truststore를 바꾸지 않았다.
+
+| 항목 | 실제 결과 |
+|---|---|
+| CA·인증서·호스트 검증 | PASS: 운영자 CA chain/현재 유효기간/서버 이름 확인. CA SHA256 EF381BA95920F5D1032771255C8BB404B4993034F7C9F0B6A0951E15EA06D15C |
+| 실제 생산 SMTP adapter | PASS: 현재 SmtpMailTransport로 합성 메일1건 발송, STARTTLS 필수·CA/호스트 검증 유지 |
+| 수신함 도착 | PASS: MailBox의 기존 테스트 수신함 Maildir에 UUID가 일치하는 메일1건 확인, Received TLS 확인 |
+| 비루트 앱 이미지 Docker 연결 | PASS: UID10001/읽기 전용/cap ALL 제거한 일회 컨테이너에서 mailbox_default의 SMTP 이름·CA 검증 NOOP 성공. 실제 worker 미변경 |
+| 직접 연결 Compose | PASS(local/public/server): 내장 SMTP 생성 없음, worker의 기존 모델 네트워크 유지, web은 backend만 사용, 키/공개CA 파일 secret, private TLS key 미마운트, 필수 호스트 누락 거부 |
+| 최신 DB 동기화 | PASS: Version2/UpdatedAt2026-11-03T19:16:30Z/DownloadedAt2026-11-04T00:17:15Z/NextUpdate2026-11-04T19:16:30Z |
+| 현재 SMTP 이미지 재검사 | FAIL: HIGH33/CRITICAL1 원시 검출, 게이트 exit1. 개별 영향 판정은 제11절의 한계 유지 |
+| 최신 앱 이미지 재검사 | PASS: 기존 dcbd1540948a 이미지 digest에 최신 DB로 다시 검사 |
+| 전체 securityCheck | FAIL: 실제 exit1, scripts/mail/Dockerfile의 DS-0002 HIGH 유지. 예외/기준 변경 없음 |
+| 실제 가입·복구 서비스 전환/외부 수신함 | BLOCKED/미실행: 기존 web/worker/V24 유지. Gmail 등 인터넷 수신함으로 발송하지 않음 |
+
+합성 메시지 ID는 e5717e42-6a37-4fe7-b22a-dc35165032eb, 수신 파일 SHA256은88d581bef1b686b6fcaafc299f9586e85531a6f7d506783e38f161fc788885fb다. 테스트는 운영자 기존 수신함을 사용했고 실제 회원정보·비밀번호·인증번호를 넣지 않았다. 수신함의 다른 메시지·계정은 조사하지 않았다. 첫 adapter 실행은 오래된 시험 classpath에서 Jakarta Mail 클래스를 찾지 못해 발송 전에 실패했다. 현재 의존성으로 classpath를 다시 만든 뒤 성공했으며 준비 실패를 메일 전달 성공으로 합산하지 않는다. 임시 Java probe는 검증 뒤 삭제했다.
+
+직접 연결 설정은 scripts/deploy/compose-mail-external.yaml에만 추가했다. Compose 공개 설정 시험의 최초 실행은 시험용 MOAPAN_PUBLIC_HOST가 없어 실패했고, 필요한 환경을 명시한 재시험에서 통과했다. MailBox 원본/컨테이너 설정과 실제 .env·이메일 키·운영 DB를 변경하지 않았다. Java/JS/DB 제품 코드는 동일해 기존405 시험을 이번에 재실행했다고 주장하지 않는다. 증빙은 .local/mailbox-live-20261104의 smtp-probe-metadata.json/smtp-adapter-live.log/nonroot-network-starttls.log/external-compose-check.json/starttls-security-check.log/starttls-{smtp,app}-image-scan.log와 build/reports/security다.

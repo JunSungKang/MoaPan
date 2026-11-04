@@ -202,3 +202,8 @@ CSS 파일 요청과 선언 중복을 혼용한 설명을 정정했다. PR16은 
 ## 2026-11-04 사용자가 기동한 MailBox 실제 연결 재점검
 MailBox SMTP/IMAP/Webmail 3개 컨테이너 실행을 확인했다. SMTP strict TLS NOOP 시험은 exit64/STARTTLS not supported로 실패했으며 인증번호·실제 메일은 전송하지 않았다. TLS 인증서/STARTTLS/SMTP AUTH 미설정, 사설망 전체 mynetworks와 공개25번, root 실행을 확인했다. 실제 SMTP 이미지594e743418aa의 Trivy 검사는 HIGH33/CRITICAL1을 보고하고 게이트 exit1이다. 이는 중복 패키지 검출을 포함한 원시 결과이며 전부 악용 가능한 취약점으로 확정하지 않는다. Debian 공식 자료에서 Postfix CVE-2026-43964의 설치 버전 영향과 zlib CVE-2023-45853의 MiniZip 미빌드 예외를 구분했다. 원래 root 위험 미승인/전체 보안 게이트를 유지한다. 형제 mail-box는 현재 읽기 전용이며 TLS·이미지 수정용 작업 경계 확대를 요청했다.
 대기 중 최신 약관/이메일 코드의 runtime 이미지를 새로 빌드했다. 이미지sha256:dcbd1540948a855db099880321384086e9f090d767dd52cb81e6f5c0538f5d86, UID10001, Temurin27.0.1.0.2+1, 실행JAR684f13607aaeae9216f8ac373d35f82fff48ea7968e182208390c6978daef6fb와 호스트 일치를 검증했다. 이 앱 이미지의 취약점/secret gate는 PASS이나 SMTP/전체 게이트를 통과한 것은 아니다. 운영 web/worker24fc8045a50c·V24를 바꾸지 않았으며 외부HTTPS 로그인200/healthy를 확인했다. [재점검 결과](../05-test/email-identity.md#11-사용자-기동-mailbox-실제-연결-재점검)를 따른다.
+
+
+## 2026-11-04 STARTTLS 적용 후 실제 합성 전달 확인
+사용자 MailBox 변경 후 명시적 operator CA로 chain/호스트/유효기간 검증을 통과했다. 실제 SmtpMailTransport로 합성1건을 기존 운영자 Maildir에 발송·수신 확인하고, 검사된 앱 이미지UID10001의 기존 MailBox Docker 네트워크/TLS NOOP도 통과했다. 오래된 시험classpath의 준비 실패는 수정 후 재시험했으며 전송 성공과 구분한다. 외부 인터넷 수신함/실제 회원 인증·복구 운영 전환은 수행하지 않았다.
+기존 MailBox에 직접 연결하는 compose-mail-external.yaml을 준비하고 내장 SMTP 미생성/worker 기존 모델 네트워크 보존/web backend 유지/필수호스트 누락 거부/공개CA·별도키 secret을 검증했다. 최신 scanner DB 동기화 후 앱 이미지dcbd1540948a는 PASS, 실제 SMTP594e743418aa는 HIGH33/CRITICAL1 원시 검출로 FAIL이며 전체 securityCheck도 기존 DS-0002 때문에 exit1이다. root 예외 미승인과 작업 폴더 경계를 유지하며 실제서비스24fc8045a50c·V24/.env/키/MailBox 원본을 바꾸지 않는다. [실제 결과](../05-test/email-identity.md#12-starttls-적용-후-실제-전달-재검증).
