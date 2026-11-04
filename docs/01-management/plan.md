@@ -323,3 +323,14 @@ DB/정책: V23 1:1 구독·기간·version·계정삭제정리, 기본권한없�
 먼저 MP-DOC-039에 MailBox 담당자용 프롬프트를 작성한다. 다른 저장소·컨테이너·계정·메일·설정은 변경하지 않는다. 고위험 원시 검출과 영향 판정을 구분하고 SMTP/TLS 성공을 전체 보안 통과로 확대하지 않는다.
 ### 50.2 이 프로젝트 수정·검증
 사용자 보유 MailBox와 중복된 내장 Postfix 서버·빌드/Compose/Helm 배포·준비/시험 진입점을 제거하고 기존 SMTP 클라이언트/암호화 outbox/외부 연결만 유지한다. 더 이상 실행하지 않는 root 서버를 실제 구성에서 퇴역시키며 검사 제외·root 위험 수용·USER 위장으로 해결하지 않는다. 이전 구현 보존은 회원/이메일 기능과 기존 데이터·키 보존을 유지하며, 최신 명시적 수정 요청 범위에서 중복 서버 패키징을 정리한다. 외부 SMTP Helm 렌더·Compose3모드·JSSE STARTTLS/SMTPS·권한·계정/메일 회귀·전체 check/integrationTest/e2eTest/bootJar/sbom/securityCheck/acceptanceTest·최종 앱 이미지를 검증한다. 외부 MailBox가 미해결이면 운영 전환은 계속 차단하며 GitHub current-head 독립 검토/PR 전달까지만 수행한다. main/develop 병합·CI/CD·다른 프로젝트 수정은 제외한다.
+
+## 51. 웹 품질·도메인 리팩토링 최종 Sprint (2026-11-04)
+
+- 방법론: 기존 승인 Sprint Delivery. 작업영역은 현재 저장소만이며 기존 미추적 HTTPS스킬3개를 변경/커밋하지 않는다.
+- 목표: 공개·보호13페이지의 접근성/반응형/렌더링·요청 비용을 점검하고 모바일/데스크톱 Lighthouse100을 목표로 실제 측정한다. 점수를 만들기 위한 숨김·UA분기·검사완화는 금지한다.
+- 1. 기준 증거: 현재 공개HTTPS/격리 후보의 실제 결과를 구분하고 Java·ES Module·CSS·스크립트 진입점과 도메인별 책임을 전수 목록화한다.
+- 2. 개선: 확인된 접근성/성능 결함을 수정한다. 불필요한 상태·중복·미사용 심볼은 실제 참조/테스트로 입증해 삭제하고 기능마다 적합한 기존/신규 패턴의 선택 근거를 남긴다. 기능·보안·개인화·구독·메일 경계와 DB/모델/키는 유지한다.
+- 3. 검증: 전체 unit/PostgreSQL/Playwright·Nu·정적/동적 그래프·SBOM/JAR/이미지 보안과 독립 current-head 검토. 390/768/1440·한영·키보드·dialog·캐시·네트워크를 포함한다.
+- 4. 마지막 SEO: 모든 제품 변경 및 회귀 후 title/description/robots/canonical/sitemap/상태코드/링크/색인보호와 Lighthouse를 재감사하고 결과만 문서화한다. 이후 코드 변경 시 SEO를 다시 실행한다.
+- 제외: CI/CD·가격/결제·타 프로젝트·MailBox 변경·운영 교체·develop/main 병합. PR27/28은 미병합 선행 의존성이며 이전 앱/V24와 별도로 격리 후보를 검증한다.
+- 산출물: docs/05-test/web-quality.md, 도메인 패턴/정리 내역, 기계 증빙과 current-head PR. 실행하지 않은 시험/색인/배포/점수는 완료로 표시하지 않는다.

@@ -310,5 +310,13 @@
     "status": "전달용 프롬프트 작성, 타 프로젝트 미수정",
     "owner": "개발 담당",
     "reviewer": "독립 리뷰 담당"
+  },
+  {
+    "id": "MP-DOC-040",
+    "path": "docs/05-test/web-quality.md",
+    "title": "웹 품질·기능별 패턴 리팩토링 검증서",
+    "status": "최종 제품 검증 완료, PR current-head 검토 대기",
+    "owner": "개발 담당",
+    "reviewer": "독립 리뷰/SEO 감사 담당"
   }
 ]

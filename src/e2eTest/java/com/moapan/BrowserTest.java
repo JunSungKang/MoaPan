@@ -72,7 +72,7 @@ class BrowserTest {
 
     @Test void languagePickerChangesStoredCardTitleAndSummaryWithoutNetwork(){
         try(var context=browser.newContext()){
-            context.route("**/api/v1/news/edition*",r->{
+            context.route("**/api/v1/**news/edition*",r->{
                 var mapper=tools.jackson.databind.json.JsonMapper.builder().build();var root=mapper.readTree(edition());
                 for(var item:root.get("items")){
                     var object=(tools.jackson.databind.node.ObjectNode)item;
@@ -125,9 +125,10 @@ class BrowserTest {
         try(var context=browser.newContext()){
             Page p=context.newPage();p.navigate(origin+"/index.html");p.waitForSelector("#paper article");
             var card=p.locator("#paper article").first();
-            assertEquals(List.of("주제","작성일","작성자"),card.locator(".article-meta-line > span").evaluateAll("nodes=>nodes.map(n=>n.getAttribute('aria-label'))"));
-            assertEquals("정보 없음",card.locator(".article-meta-line > span").nth(1).textContent());
-            assertEquals("정보 없음",card.locator(".article-meta-line > span").nth(2).textContent());
+            assertEquals(List.of("주제: ","작성일: ","작성자: "),card.locator(".article-meta-line > span > .sr-only").allTextContents());
+            assertEquals("정보 없음",card.locator(".article-meta-line > span").nth(1).evaluate("n=>[...n.childNodes].filter(n=>n.nodeType===Node.TEXT_NODE).map(n=>n.textContent).join('')"));
+            assertEquals("정보 없음",card.locator(".article-meta-line > span").nth(2).evaluate("n=>[...n.childNodes].filter(n=>n.nodeType===Node.TEXT_NODE).map(n=>n.textContent).join('')"));
+            assertEquals(0,card.locator("span[aria-label],p[aria-label]").count());
             assertEquals(0,card.locator("h3").count());assertEquals(1,card.locator(".article-source").count());
             assertEquals(0,card.locator("button,.reason,.eyebrow,.byline").count());
             assertEquals(1,card.locator("h2 a[rel='noopener noreferrer']").count());
@@ -535,7 +536,7 @@ class BrowserTest {
 
     @Test void issueDateUsesLatestCollectedArticleAndMobileMetadataStacks(){
         try(var context=browser.newContext()){
-            context.route("**/api/v1/news/edition*",r->{
+            context.route("**/api/v1/**news/edition*",r->{
                 var mapper=tools.jackson.databind.json.JsonMapper.builder().build();var root=mapper.readTree(edition());
                 var first=(tools.jackson.databind.node.ObjectNode)root.path("items").path(0);first.put("collectedAt","2026-10-28T12:30:59Z");first.put("publishedAt","2026-10-27T08:12:45Z");first.put("author","Synthetic author");
                 var other=(tools.jackson.databind.node.ObjectNode)root.path("items").path(1);other.put("publishedAt","2026-10-29T00:00:00Z");
@@ -586,13 +587,13 @@ class BrowserTest {
     @Test void loadingEmptyErrorAndKeyboardStatesAreUsable(){
         try(var context=browser.newContext()){
             Page p=context.newPage();var pending=new java.util.concurrent.atomic.AtomicReference<Route>();
-            p.route("**/api/v1/news/edition*",pending::set);
+            p.route("**/api/v1/**news/edition*",pending::set);
             p.navigate(origin+"/index.html",new Page.NavigateOptions().setWaitUntil(com.microsoft.playwright.options.WaitUntilState.COMMIT));
             p.waitForFunction("document.querySelector('[role=status]').textContent.includes('불러오는 중')");p.waitForCondition(()->pending.get()!=null);assertNotNull(pending.get());
             pending.get().fulfill(new Route.FulfillOptions().setContentType("application/json").setBody("{\"editionId\":\"empty-fixture\",\"editionAt\":\"2026-10-28T00:00:00Z\",\"periodDays\":7,\"candidateCount\":0,\"items\":[],\"nextCursor\":null}"));
             p.waitForSelector("#paper p");assertEquals(0,p.locator("#paper article").count());assertTrue(p.locator("#paper").textContent().contains("표시할 기사가 없습니다"));
             p.keyboard().press("Tab");assertEquals("#main",p.evaluate("document.activeElement.getAttribute('href')"));
-            p.unroute("**/api/v1/news/edition*");p.route("**/api/v1/news/edition*",r->r.fulfill(new Route.FulfillOptions().setStatus(503).setContentType("application/json").setBody("{\"error\":\"temporarily_unavailable\"}")));
+            p.unroute("**/api/v1/**news/edition*");p.route("**/api/v1/**news/edition*",r->r.fulfill(new Route.FulfillOptions().setStatus(503).setContentType("application/json").setBody("{\"error\":\"temporarily_unavailable\"}")));
             p.reload();p.waitForFunction("document.querySelector('[role=status]').textContent.includes('일시적으로')");assertFalse(p.locator("#more").isVisible());
         }
     }

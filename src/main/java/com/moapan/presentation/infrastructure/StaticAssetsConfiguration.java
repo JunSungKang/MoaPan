@@ -19,10 +19,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @ConditionalOnWebApplication
 public class StaticAssetsConfiguration implements WebMvcConfigurer {
     private final ConcurrentMap<String,String> packagedEtags=new ConcurrentHashMap<>();
+    private final com.moapan.discovery.PublicDocumentMetadata publicDocuments;
+    public StaticAssetsConfiguration(com.moapan.discovery.PublicDocumentMetadata publicDocuments){this.publicDocuments=publicDocuments;}
 
     @Override public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/assets/**").addResourceLocations("classpath:/static/assets/")
             .setCacheControl(CacheControl.noCache().cachePublic()).setEtagGenerator(this::etag);
+        registry.addResourceHandler("/**").addResourceLocations("classpath:/static/")
+            .resourceChain(false).addTransformer(publicDocuments);
     }
 
     String etag(Resource resource) {

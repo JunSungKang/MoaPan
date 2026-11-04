@@ -1,5 +1,5 @@
 import {request} from '../shared/api.js';
-import {el} from '../shared/dom.js';
+import{el,originalEl}from'../shared/dom.js';
 import {t} from '../shared/i18n.js';
 
 let cached,pending,generation=0;
@@ -28,8 +28,8 @@ export function topicChecklist(ids=[]) {
     choices.replaceChildren();const known=new Set(data.tags.map(tag=>tag.id));
     const rows=[...data.tags,...[...selected].filter(id=>!known.has(id)).map(id=>({id,name:t('이름을 확인할 수 없는 기존 주제'),category:''}))];
     for(const tag of rows){const label=el('label',undefined,'check'),check=el('input');check.type='checkbox';check.value=tag.id;check.checked=selected.has(tag.id);
-      const name=el('span',tag.name);name.dataset.originalContent='';label.append(check,name);
-      if(tag.category)label.append(el('small',tag.category));check.addEventListener('change',()=>{if(check.checked)selected.add(tag.id);else selected.delete(tag.id);});choices.append(label);}
+      const name=known.has(tag.id)?originalEl('span',tag.name):el('span','이름을 확인할 수 없는 기존 주제');label.append(check,name);
+      if(tag.category)label.append(originalEl('small',tag.category));check.addEventListener('change',()=>{if(check.checked)selected.add(tag.id);else selected.delete(tag.id);});choices.append(label);}
     note.textContent=t('최대 6개를 선택하세요. 변경하지 않으면 기존 주제를 유지합니다.');filterChoices();
   }
   loadTopics().then(paint).catch(()=>{note.textContent=t('주제를 불러오지 못했습니다. 기존 선택은 유지됩니다.');});

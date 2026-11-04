@@ -151,3 +151,5 @@ GET `/api/v1/auth/session`: 정상 비회원은204/빈 본문, 유효한 로그�
 |PUT|/api/v1/account/email|challengeId,code,emailPolicyAccepted,emailPolicyVersion. 200 빈 응답, 모든 세션 종료|
 
 모든 POST/PUT는 CSRF 필수, 인증번호는 요청한 동일 브라우저 세션에서만 유효하다. 번호·수신 주소·비밀번호를 URL이나 응답 오류에 넣지 않는다. 미등록/만료/다른 용도/다른 세션/재사용 코드는400 invalid_verification, 코드5회 오입력 시 폐기, 재발송60초 및 목적별 제한은429+Retry-After, 메일 미설정은503 mail_unavailable, 이미 본인 인증된 주소의 중복 계정 등록은409 email_unavailable이다. GET 계정 이메일과 변경 API는401/본인 검사. SMTP 전송 요청202는 받은편지함 도착 보장이 아니다. 마케팅·임의 발송 API는 없다.
+
+원고 접근성 메타데이터(2026-11-04): manuscript.language는 ko/en/und, 누락/null은 기존 자료와의 호환을 위해 und로 처리하고 다른 값은400. 블록의 image.width/height는 선택 입력이며 저장 시 클라이언트 주장이 아닌 검증한 이미지 bytes의 실제 치수로 정규화한다. 다른 블록에는 치수를 보관하지 않는다. JSON 저장 구조만 확장하며 기존 DB migration을 수정하지 않는다. 목록/본문/reuse/worksheet의 구독404·no-store 및 관리자 CSRF/권한/버전 정책은 그대로다.

@@ -216,3 +216,9 @@ MailBox SMTP/IMAP/Webmail 3개 컨테이너 실행을 확인했다. SMTP strict 
 SMTP 책임 분리·미사용 서버 정리 최종 로컬 검증: clean 전체 계약 PASS/408(184·147·77) FAIL·ERROR·SKIP0, 키7/Compose3모드12거부/Helm 두TLS·4거부/Nu0/최종 runtime058f45121034·builder23bd0e0bcc55 gate PASS. 첫 clean 시험 경로 준비 실패는 고쳐 같은 전체 명령으로 재검증했다. source DS-0002 0/새 예외·scanner 약화 없음. 중복 SMTP11tracked+7생성파일/이미지1개, 미사용 Mac런타임116파일·소스압축1개, 과거 프로젝트 이미지59태그 제거(실제 미사용52ID 삭제·실행5ID의 옛 별칭만 해제). 현재6서비스·완료형필수job3/DB V24·기존키·모델보존, 타프로젝트 미변경. Java85파일·브라우저42모듈 추가 참조 점검에서 미사용 후보/누락0. 실제 운영 전환은 외부 MailBox 차단을 유지한다. [증빙](../05-test/evidence/smtp-boundary-cleanup-20261104.json). 현재head 독립 리뷰/PR 전달은 마감 단계이며 develop/main은 병합하지 않는다.
 
 마지막 legacy moapan-* 이미지 재검수에서 실제 구성·문서화된 빌드 태그와 전체 컨테이너의 정확한 이미지ID/태그를 대조했다. 총59태그/미사용52ID 정리 후 기존 모든 컨테이너 ID·이미지·상태가 동일함을 확인했다. 실행5ID의 오래된 별칭만 해제했으며 현재 이름·필수 완료job 이미지·최종 검증 runtime/builder와 빌드 도구는 유지한다. 이 후속은 로컬 이미지 정리 및 결과 문서뿐이며 제품 소스/JAR/검증 이미지 digest는 동일하다.
+
+2026-11-04 웹 품질·도메인 리팩토링 Sprint 착수. 기준11fad44(PR28)·운영앱24fc/V24를 구분하고 사용자 명시 승인에 따라 접근성/성능100목표·죽은코드·기능별 패턴을 감사한다. 최종 제품검증 뒤 SEO감사로 마무리한다. 아직 새 시험/패치/배포/병합 성공으로 표시하지 않는다.
+
+웹 품질 후속 중간 검증: 동적132상태의 axe 실패0, 공개13경계/canonical4개 검사와 격리 지면의 모바일·데스크톱4범주100점(preflight)을 확인했다. 최종 확정은 모든 수정 뒤 다시 측정한다. 실제 원고 언어/이미지 치수, canonical 최초 응답, 지면 병렬 로딩, 일회 패널 활성화, 메시지/수집 Specification/원고 Strategy를 보완했다. 회귀가 광고 늦은 응답 덮어쓰기, 사전 분리의 역변환 충돌과 공백 observer 루프, 원문 필드의 UI 변환을 발견해 실제 수정·집중 검증했다. 코드/도구 기준을 낮추지 않았으며 중단/실패 시험은 PASS에 합산하지 않는다. 원문 Factory 전환과 관련 집중 시험은 통과했으며 전체 clean 회귀·최종 산출물/이미지·마지막 SEO는 마감 단계다. 운영 기존6서비스/V24·MailBox·키·DB·전역 스킬은 변경하지 않는다.
+
+웹 품질 최종 제품 검증 완료: 전체 clean424(190/148/86) PASS·FAIL/ERROR/SKIP0, 마지막 미사용import 제거 후 집중UI9/단위190/산출물 보안 재확인. 공개4문서×2기기 Lighthouse 네 범주100, axe132상태0, Nu13문서0, HTTP13경계/canonical4일치. 코드 seal 고정 뒤 SEO를 마지막 제품 검증으로 실행했다. [MP-DOC-040](../05-test/web-quality.md)과 [증빙](../05-test/evidence/web-quality-20261104.json)에 digest·진단·한계를 기록했다. 현재 정식 PR/remote current-head 검토 마감 중이며 운영 서비스·DB·MailBox·develop/main 병합은 미변경이다.

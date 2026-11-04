@@ -6,6 +6,8 @@
 
 **CI·CD, GitHub Actions, 예약 workflow는 사용자 요청에 따라 구현·실행하지 않는다.** 검증은 로컬 명령으로 실행한다. 외부 HTTPS 배포와 사업 개시는 별도 승인·검토가 필요하다. 실제 인수 상태는 [진행 상태](docs/01-management/progress.md)와 [테스트 보고](docs/05-test/test-report.md)를 확인한다.
 
+웹 품질·패턴 재검토: [최종 점검서](docs/05-test/web-quality.md). 재현 명령은 `sh scripts/build/gradle-local.sh --no-daemon webQualityAudit`이며, Node/npm은 잠금된 Lighthouse·axe 감사 도구에 사용한다. 감사는 폐기 PostgreSQL·합성 자료를 사용하고 종료 시 테스트 서버를 정리한다.
+
 ## 로컬 실행
 
 ```sh

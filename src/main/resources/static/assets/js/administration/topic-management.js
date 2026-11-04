@@ -1,5 +1,5 @@
 import {request} from '../shared/api.js';
-import {el} from '../shared/dom.js';
+import{el,originalEl}from'../shared/dom.js';
 import {t} from '../shared/i18n.js';
 import {loadTopics} from './topics.js';
 
@@ -14,7 +14,7 @@ export function initializeTopicManagement() {
   }
   function options(select,empty,exclude='') {
     const value=select.value;select.replaceChildren();const blank=el('option',empty);blank.value='';select.append(blank);
-    for(const tag of catalog.tags){if(tag.id===exclude)continue;const option=el('option',`${tag.name} · ${tag.category}`);option.value=tag.id;select.append(option);}
+    for(const tag of catalog.tags){if(tag.id===exclude)continue;const option=originalEl('option',`${tag.name} · ${tag.category}`);option.value=tag.id;select.append(option);}
     select.value=[...select.options].some(option=>option.value===value)?value:'';
   }
   async function refresh() {
@@ -23,9 +23,9 @@ export function initializeTopicManagement() {
     if(selected&&catalog.tags.some(tag=>tag.id===selected)){choice.value=selected;form.querySelector('[type=submit]').textContent=t('주제 변경 저장');}
     else if(selected){selected='';choice.value='';missingSelection=form.dataset.edited==='true';if(!missingSelection){form.reset();form.querySelector('[type=submit]').textContent=t('새 주제 추가');}note.textContent=t('선택한 주제가 합쳐졌습니다. 다른 주제를 선택하세요.');}
     const list=document.querySelector('#topic-catalog-list');list.replaceChildren();
-    for(const tag of catalog.tags){const row=el('li'),name=el('strong',tag.name);name.dataset.originalContent='';
+    for(const tag of catalog.tags){const row=el('li'),name=originalEl('strong',tag.name);
       const aliases=catalog.aliases.filter(alias=>alias.tagId===tag.id).map(alias=>alias.alias);
-      row.append(name,el('span',tag.category),el('small',aliases.length?aliases.join(' · '):t('연결한 다른 표현이 없습니다.')));list.append(row);}
+      row.append(name,originalEl('span',tag.category),aliases.length?originalEl('small',aliases.join(' · ')):el('small','연결한 다른 표현이 없습니다.'));list.append(row);}
   }
   function editSelection() {
     selected=choice.value;missingSelection=false;const tag=catalog?.tags.find(tag=>tag.id===selected);form.elements.name.value=tag?.name||'';form.elements.category.value=tag?.category||'';

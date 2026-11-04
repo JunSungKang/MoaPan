@@ -1,5 +1,6 @@
+import {whenRevealed} from '../administration/reveal.js';
 import {request} from '../shared/api.js';
-import {el,date} from '../shared/common.js';
+import{el,date,originalEl}from'../shared/common.js';
 import {t} from '../shared/i18n.js';
 
 const koreanTime=new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'});
@@ -25,7 +26,7 @@ export function initializeSubscriptions() {
     list.setAttribute('aria-busy','true');list.replaceChildren();selected=null;form.hidden=true;document.querySelector('#subscription-selected').textContent=t('계정을 선택하세요.');note.textContent=t('계정을 불러오고 있습니다.');
     const criteria={username:query,page,size:Number(search.elements.size.value),sort:search.elements.sort.value};
     try{const result=await request('/api/v1/admin/subscriptions/search',{method:'POST',body:criteria,signal:controller.signal});if(ticket!==generation)return;
-      for(const row of result.items){const tr=el('tr');const choose=el('button',row.username);choose.type='button';choose.dataset.originalContent='';choose.addEventListener('click',()=>select(row));const name=el('td');name.append(choose);tr.append(name,el('td',t(states[row.subscriptionStatus])+(row.active?'':' · '+t('계정 비활성'))),el('td',row.expiresAt?date(row.expiresAt):'—'));list.append(tr);}
+      for(const row of result.items){const tr=el('tr');const choose=originalEl('button',row.username);choose.type='button';choose.addEventListener('click',()=>select(row));const name=el('td');name.append(choose);tr.append(name,el('td',t(states[row.subscriptionStatus])+(row.active?'':' · '+t('계정 비활성'))),el('td',row.expiresAt?date(row.expiresAt):'—'));list.append(tr);}
       if(!result.items.length){const tr=el('tr'),empty=el('td',t('검색 결과가 없습니다.'));empty.colSpan=3;tr.append(empty);list.append(tr);}
       hasNext=result.hasNext;document.querySelector('#subscription-page').textContent=String(page+1);note.textContent=t(result.items.length?'계정을 선택해 이용 기간을 설정하세요.':'검색 결과가 없습니다.');
     }catch(e){if(ticket===generation&&e.name!=='AbortError')note.textContent=t(e.message);}finally{if(ticket===generation){loading=false;list.removeAttribute('aria-busy');controls();}}
@@ -43,5 +44,5 @@ export function initializeSubscriptions() {
   form.addEventListener('submit',e=>{e.preventDefault();mutate(false);});document.querySelector('#subscription-revoke').addEventListener('click',()=>mutate(true));
   // Load once when this tab first becomes visible; preserve an editor's inputs on later tab switches.
   const panel=document.querySelector('#sections-panel-subscriptions');
-  if(!panel.hidden)load();else{const observer=new MutationObserver(()=>{if(!panel.hidden){observer.disconnect();load();}});observer.observe(panel,{attributes:true,attributeFilter:['hidden']});}
+  whenRevealed(panel,load);
 }

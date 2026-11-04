@@ -39,7 +39,7 @@ class SecurityIntegrationTest {
     static class FixtureConfig {
         static final java.util.concurrent.atomic.AtomicInteger failureStatus=new java.util.concurrent.atomic.AtomicInteger(429);
         @org.springframework.context.annotation.Bean @org.springframework.context.annotation.Primary
-        SafeFetch fixtureFetcher(){return new SafeFetch(){@Override public Result read(Map<String,Object> source){if(source.get("endpoint_url").equals("https://failure.example.org/feed"))throw new FetchFailure(failureStatus.get(),failureStatus.get()==429?"120":null);if(source.get("endpoint_url").equals("https://preview.example.org/feed"))return new Result(List.of(new Item("preview-fixture","Synthetic preview","https://preview.example.org/story","Synthetic preview only, never published or stored by preview.",null)),null,null,false);return super.read(source);}};}
+        SafeFetch fixtureFetcher(){return new SafeFetch(){@Override public Result read(Map<String,Object> source){if(source.get("endpoint_url").equals("https://failure.example.org/feed"))throw new FetchFailure(failureStatus.get()==429?"120":null);if(source.get("endpoint_url").equals("https://preview.example.org/feed"))return new Result(List.of(new Item("preview-fixture","Synthetic preview","https://preview.example.org/story","Synthetic preview only, never published or stored by preview.",null)),null,null);return super.read(source);}};}
     }
     @Autowired org.springframework.transaction.PlatformTransactionManager tm;
     @Autowired com.moapan.article.application.EditorialService editorial;
@@ -73,6 +73,14 @@ class SecurityIntegrationTest {
         mvc.perform(get("/admin.html").header("If-None-Match","*")).andExpect(status().isFound()).andExpect(header().string("Cache-Control","no-store"));
         mvc.perform(get("/api/v1/account").header("If-None-Match","*")).andExpect(status().isUnauthorized()).andExpect(header().string("Cache-Control","no-store"));
         mvc.perform(get("/api/v1/auth/csrf").header("If-None-Match","*")).andExpect(status().isOk()).andExpect(header().string("Cache-Control","no-store"));
+    }
+    @Test @Order(1) void publicInitialHtmlAndHeaderShareTheConfiguredAbsoluteCanonical()throws Exception{
+        mvc.perform(get("/")).andExpect(status().isOk()).andExpect(forwardedUrl("index.html"));
+        for(String path:List.of("/index.html","/about.html","/privacy.html","/terms.html")){
+            var response=mvc.perform(get(path).queryParam("canonical","https://untrusted.example/")).andExpect(status().isOk()).andExpect(header().string("Cache-Control",org.hamcrest.Matchers.containsString("no-store"))).andReturn().getResponse();
+            String link=response.getHeader("Link");assertNotNull(link);String canonical=link.substring(1,link.indexOf('>'));
+            assertTrue(response.getContentAsString().contains("rel=\"canonical\" href=\""+canonical+"\""));assertFalse(response.getContentAsString().contains("untrusted.example"));
+        }
     }
     @Test @Order(1) void unauthenticatedAndCsrf()throws Exception{
         mvc.perform(get("/api/v1/private.html")).andExpect(status().isUnauthorized()).andExpect(content().contentType("application/json"));
@@ -192,7 +200,7 @@ class SecurityIntegrationTest {
         UUID actor=accounts.findByUsername("synthetic_a").orElseThrow().id;
         @SuppressWarnings("unchecked")var created=(Map<String,Object>)catalog.createSite(new CatalogService.SiteInput("Synthetic fixture","https://example.org/","","",null),actor);UUID site=(UUID)created.get("id");
         assertThrows(ApiError.class,()->catalog.state(site,"ACTIVE",actor));catalog.updateSite(site,new CatalogService.SiteInput("Renamed fixture","https://example.org/","","",0L),actor);assertThrows(ApiError.class,()->catalog.updateSite(site,new CatalogService.SiteInput("Conflict","https://example.org/","","",0L),actor));
-        UUID source=UUID.randomUUID();repo.db().sql("INSERT INTO sources(id,site_id,label,type,endpoint_url,normalized_endpoint_url,enabled,rights_status,allow_metadata,allow_display,allow_summary,validation_status) VALUES(:id,:site,'Synthetic','RSS','https://example.org/feed','https://example.org/feed',true,'APPROVED',true,true,true,'PASSED')").param("id",source).param("site",site).update();catalog.state(site,"ACTIVE",actor);catalog.collect(source,actor);var job=claimReady();assertNotNull(job);var snapshot=repo.source(source,false);catalog.state(site,"PAUSED",actor);assertThrows(ApiError.class,()->worker.apply(job,snapshot,new SafeFetch.Result(List.of(new SafeFetch.Item("synthetic","Synthetic news title","https://example.org/news","Synthetic only description, not real news.",Instant.now())),null,null,false)));assertEquals(0,repo.db().sql("SELECT count(*) FROM articles WHERE source_id=:id").param("id",source).query(Integer.class).single());
+        UUID source=UUID.randomUUID();repo.db().sql("INSERT INTO sources(id,site_id,label,type,endpoint_url,normalized_endpoint_url,enabled,rights_status,allow_metadata,allow_display,allow_summary,validation_status) VALUES(:id,:site,'Synthetic','RSS','https://example.org/feed','https://example.org/feed',true,'APPROVED',true,true,true,'PASSED')").param("id",source).param("site",site).update();catalog.state(site,"ACTIVE",actor);catalog.collect(source,actor);var job=claimReady();assertNotNull(job);var snapshot=repo.source(source,false);catalog.state(site,"PAUSED",actor);assertThrows(ApiError.class,()->worker.apply(job,snapshot,new SafeFetch.Result(List.of(new SafeFetch.Item("synthetic","Synthetic news title","https://example.org/news","Synthetic only description, not real news.",Instant.now())),null,null)));assertEquals(0,repo.db().sql("SELECT count(*) FROM articles WHERE source_id=:id").param("id",source).query(Integer.class).single());
         catalog.state(site,"ARCHIVED",actor);catalog.state(site,"PAUSED",actor);assertEquals(false,repo.source(source,false).get("enabled"));assertEquals("UNREVIEWED",repo.source(source,false).get("rights_status"));
     }
     @Test @Order(7) void databaseHasNoProfileOrTrackingTables(){var names=repo.db().sql("SELECT table_name FROM information_schema.tables WHERE table_schema='public'").query(String.class).list();for(String name:List.of("user_profiles","user_interests","reading_history","click_events","search_history","user_embeddings"))assertFalse(names.contains(name));}
@@ -224,7 +232,7 @@ class SecurityIntegrationTest {
         for(int revision=0;revision<2;revision++){
             String original=summary+" "+marker+" "+revision+". "+"Unselected background material. ".repeat(30);
             catalog.collect(source,actor);var job=claimReady();
-            worker.apply(job,repo.source(source,false),new SafeFetch.Result(List.of(new SafeFetch.Item("retention-guid","Synthetic retention fixture","https://retention.example.org/story",original,Instant.parse("2026-10-10T00:00:00Z"))),null,null,false));
+            worker.apply(job,repo.source(source,false),new SafeFetch.Result(List.of(new SafeFetch.Item("retention-guid","Synthetic retention fixture","https://retention.example.org/story",original,Instant.parse("2026-10-10T00:00:00Z"))),null,null));
             var row=repo.db().sql("SELECT summary_bullets::text AS summary,canonical_url,input_hash FROM articles WHERE source_id=:source").param("source",source).query().singleRow();
             assertEquals("[\""+summary+"\"]",row.get("summary"));assertEquals("https://retention.example.org/story",row.get("canonical_url"));
             String hash=row.get("input_hash").toString();assertEquals(64,hash.length());if(firstHash==null)firstHash=hash;else assertNotEquals(firstHash,hash);
@@ -308,10 +316,10 @@ class SecurityIntegrationTest {
         repo.db().sql("INSERT INTO sites(id,name,homepage_url,normalized_homepage_url,status) VALUES(:id,'Worker synthetic','https://worker.example.org/','https://worker.example.org/','ACTIVE')").param("id",site).update();
         repo.db().sql("INSERT INTO sources(id,site_id,label,type,endpoint_url,normalized_endpoint_url,enabled,rights_status,allow_metadata,allow_display,allow_summary,validation_status) VALUES(:id,:site,'Synthetic','RSS','https://worker.example.org/feed','https://worker.example.org/feed',true,'APPROVED',true,true,true,'PASSED')").param("id",source).param("site",site).update();
         var item=new SafeFetch.Item("synthetic-guid","AI synthetic fixture","https://worker.example.org/story","AI is discussed in this entirely synthetic fixture sentence.",Instant.now());
-        for(int i=0;i<2;i++){catalog.collect(source,actor);var job=claimReady();worker.apply(job,repo.source(source,false),new SafeFetch.Result(List.of(item),null,null,false));}
+        for(int i=0;i<2;i++){catalog.collect(source,actor);var job=claimReady();worker.apply(job,repo.source(source,false),new SafeFetch.Result(List.of(item),null,null));}
         assertEquals(1,repo.db().sql("SELECT count(*) FROM articles WHERE source_id=:id").param("id",source).query(Integer.class).single());
         UUID article=repo.db().sql("SELECT id FROM articles WHERE source_id=:id").param("id",source).query(UUID.class).single();repo.db().sql("UPDATE articles SET summary_locked=true,tags_locked=true,summary_bullets='[\"Manual synthetic summary\"]' WHERE id=:id").param("id",article).update();
-        catalog.collect(source,actor);worker.apply(claimReady(),repo.source(source,false),new SafeFetch.Result(List.of(new SafeFetch.Item(item.guid(),"Changed synthetic title",item.url(),"Completely changed synthetic description for regression verification.",null)),null,null,false));
+        catalog.collect(source,actor);worker.apply(claimReady(),repo.source(source,false),new SafeFetch.Result(List.of(new SafeFetch.Item(item.guid(),"Changed synthetic title",item.url(),"Completely changed synthetic description for regression verification.",null)),null,null));
         assertEquals("[\"Manual synthetic summary\"]",repo.db().sql("SELECT summary_bullets::text FROM articles WHERE id=:id").param("id",article).query(String.class).single());assertEquals(1,repo.db().sql("SELECT count(*) FROM article_revisions WHERE article_id=:id").param("id",article).query(Integer.class).single());
         catalog.collect(source,actor);var lease=claimReady();repo.db().sql("INSERT INTO fetch_runs(id,source_id,result) VALUES(gen_random_uuid(),:source,'RUNNING')").param("source",source).update();repo.db().sql("UPDATE content_jobs SET lease_until=now()-interval '1 second' WHERE id=:id").param("id",lease.get("id")).update();worker.recover();assertEquals(1,repo.db().sql("SELECT count(*) FROM fetch_runs WHERE source_id=:id AND error_code='worker_lease_expired' AND finished_at IS NOT NULL").param("id",source).query(Integer.class).single());assertEquals("QUEUED",repo.db().sql("SELECT status FROM content_jobs WHERE id=:id").param("id",lease.get("id")).query(String.class).single());
     }
@@ -605,7 +613,7 @@ class SecurityIntegrationTest {
             new SafeFetch.Item("old","RAG old fixture","https://scope.example.org/old","",Instant.parse("2026-10-09T00:00:00Z")),
             new SafeFetch.Item("unknown","RAG undated fixture","https://scope.example.org/unknown","",null),
             new SafeFetch.Item("wrong","Astronomy fixture","https://scope.example.org/wrong","",Instant.parse("2026-10-10T00:00:00Z"))
-        ),null,null,false));assertEquals(1,result.created());assertEquals(1,repo.db().sql("SELECT count(*) FROM articles WHERE source_id=:id").param("id",source).query(Integer.class).single());
+        ),null,null));assertEquals(1,result.created());assertEquals(1,repo.db().sql("SELECT count(*) FROM articles WHERE source_id=:id").param("id",source).query(Integer.class).single());
     }
 
     @Autowired com.moapan.collection.infrastructure.ArxivGate arxivGate;

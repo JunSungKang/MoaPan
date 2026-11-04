@@ -6,7 +6,7 @@ import java.nio.charset.StandardCharsets;
 import static org.junit.jupiter.api.Assertions.*;
 class StaticAssetsConfigurationTest {
     @Test void changedContentsWithIdenticalUrlAndLengthInvalidateTheValidator() {
-        var config=new StaticAssetsConfiguration();
+        var config=new StaticAssetsConfiguration(new com.moapan.discovery.PublicDocumentMetadata("https://example.test"));
         assertEquals(config.etag(resource("first")),config.etag(resource("first")));
         assertNotEquals(config.etag(resource("first")),config.etag(resource("other")));
         assertTrue(config.etag(resource("first")).matches("W/\"[0-9a-f]{64}\""));
