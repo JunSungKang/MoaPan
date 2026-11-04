@@ -1,5 +1,5 @@
 {
-  "completedAt": "2026-11-04T04:21:10.449Z",
+  "completedAt": "2026-11-04T04:32:03.465Z",
   "scope": "DamGoX2 repository and proven-unused owned runtime artifacts only",
   "handoffPrompt": "docs/07-operation/mailbox-security-handoff.md",
   "tests": {
@@ -196,7 +196,27 @@
       "moapan-proxy-candidate:alpine"
     ],
     "noGlobalPrune": true,
-    "noVolumeDeletion": true
+    "noVolumeDeletion": true,
+    "retiredLocalHelpers": [
+      {
+        "path": ".local/translation/benchmark.mjs",
+        "sha256": "ef4cc16209a2940bb326e5892e0ead060f56f8682822d5541af85dc62e997511",
+        "bytes": 2888,
+        "reason": "Retired native benchmark/launcher; supported model runtime is Docker"
+      },
+      {
+        "path": ".local/translation/compare.mjs",
+        "sha256": "5100c7f2cc4c74eb1a57353e319146523484093a8b204e5b34ae19188ebc748b",
+        "bytes": 4151,
+        "reason": "Retired native benchmark/launcher; supported model runtime is Docker"
+      },
+      {
+        "path": ".local/translation/enable-sources.mjs",
+        "sha256": "a94ed44fb2307fc7b05ad5d6ed6d6dbbbf72dfc5882798d4befe3c7f89fab7d2",
+        "bytes": 3068,
+        "reason": "Retired one-off source bootstrap; active admin source APIs preserved"
+      }
+    ]
   },
   "deployment": {
     "performed": false,

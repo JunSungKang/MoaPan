@@ -177,3 +177,5 @@ SMTP 이미지 ID는 sha256:594e743418aadf1ed23478ba448bcb6cad5809c99858ecca9c06
 현재 Java85파일의 compiler symbol(비프레임워크 private264/무주석 type113) 참조 후보0·오류0, HTML13개 진입점의 JS42개 모두 연결/누락0을 확인했다. record 자동 필드·프레임워크 진입점은 삭제 근거로 삼지 않는다. 현재6서비스와 정상 종료된 필수 migration/model-init3개를 보존했다. host Node2개는 ChatGPT CUA 도구이고 TCP listener가 없어 앱 데몬으로 취급하지 않았다. 기존 DB V24와 앱24fc8045a50c·HTTPS200 유지, 실제 회원/키/모델/볼륨은 미변경이다. 외부 MailBox의 고위험과 root 미승인은 미해결이며 본 프로젝트 gate PASS를 외부 해결/운영 전환으로 확대하지 않는다.
 
 [최종 기계 증빙](evidence/smtp-boundary-cleanup-20261104.json). 실행 로그는 .local/smtp-boundary-fix-20261104의 clean-final-retry.log/final-image-scans.log/helm-check.log이며 최초 실패도 보존했다. 임시 분석 Java 코드는 제거했고 삭제 코드·실행파일의 별도 백업은 만들지 않았다.
+
+최종 추가 점검에서 퇴역한 native 런타임을 호출하는 이전 비교 실행기와 localhost 전용 측정기·일회성 출처 초기화 도구3개도 제거했다. 실행 프로세스/열린 파일/현재 운영 참조가 없음을 확인했고 내용·자격증명을 복사하거나 실행하지 않았다. 현재 관리자 출처 API와 Docker 모델 검증은 유지한다. 이 변경은 Git에 포함되지 않던 로컬 폐기 도구와 결과 문서뿐이며 검증한 앱/빌드 산출물은 동일하다.
