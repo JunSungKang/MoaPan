@@ -4,7 +4,7 @@
   "flowType": "integration",
   "branch": "codex/web-quality-20261104",
   "targetBranch": "develop",
-  "baseSha": "fe81b65c2889a92136b3b2d3861c2e5a3f1482bb",
+  "baseSha": "74b982ad20038ff27b36eaca05bde8871c800b08",
   "mergeMethod": "squash",
   "governance": {
     "prAuthorLogin": "JunSungKang",
@@ -222,6 +222,36 @@
           "docs/01-management/progress.md",
           "docs/06-transition/deployment.md",
           "docs/05-test/web-quality.md"
+        ]
+      }
+    },
+    {
+      "id": "approved-all-pr-merges",
+      "expectedPaths": [
+        "docs/**",
+        ".github/workflow-plans/**"
+      ],
+      "forbiddenPaths": [
+        ".env",
+        ".github/workflows/**",
+        "**/*.key",
+        "**/*.pem"
+      ],
+      "acceptanceCriteria": [
+        "Latest user explicitly requires all open PR27/28/29 merged into develop. This supersedes earlier no-develop-merge restrictions for those PRs and necessary reviewed base integrations only; preserve main, running service, MailBox, existing data, keys and models.",
+        "Use original authorized .local/cache-delivery-worktree destination for clean merge validation; do not move/ignore/copy/edit original untracked HTTPS skill files. Validate their original hash/untracked status from the original root.",
+        "Merge in dependency order with current canonical head matching PR API, fresh guard and exact-head App approval; integrate forward develop through official base-refresh procedure, resolve only against previously approved final product, verify tests/content and obtain new independent/App approval after every new head; no force pushes.",
+        "After each successful merge verify exact head remote/local/tracking ref cleanup. Do not substitute old PR API head or change protection to proceed through an incident."
+      ],
+      "validationCommands": [
+        "node scripts/test/docs-check.mjs",
+        "git diff --check",
+        "node /Users/kkkk/.codex/scripts/github-app-workflow-guard.mjs --verify-server .github/workflow-plans/web-quality-20261104.json"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/plan.md",
+          "docs/01-management/progress.md"
         ]
       }
     }

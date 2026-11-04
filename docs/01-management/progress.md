@@ -247,3 +247,13 @@ PR28은 새 develop을 공식 절차로 통합했다. 새 develop의 전체 tree
 999bd494는 canonical 원격에 push했으나 현재 PR28 API는 이전11fad449를 반환한다. PR29도 Git194ef330과 API87abf5a가 불일치한다. GitHub 공식 장애가 지속되는 동안 새 head가 PR에 반영되고 READ_COMPLETE/독립 승인·App formal 승인을 받아야 후속 병합할 수 있다. 아직 PR28/29 병합 완료라고 보고하지 않는다. 기존에 PR29 후보로 전환한 V25 서비스/실제 MailBox 인증·복구 검증 결과는 유지하며 이번 병합 작업으로 서비스·DB·메일서버·키·모델을 다시 교체하지 않았다.
 
 웹 품질 PR29도 현재 develop(ea1c088)을 통합 준비했고, 관리 기록 추가 전의 전체 tracked tree가 이미 배포·검증한194ef330과 동일함을 확인했다. 최신 관리 기록은 이메일 PR과 일치하도록 보완하며 제품 코드·JAR·실행 이미지는 바꾸지 않는다. PR28 새 canonical head e2317fd와 PR29 후속 통합 head는 PR API 반영 및 현재-head 승인 후에만 병합한다.
+
+PR 참조 후속 진단: 공식 장애는2026-11-04T11:50:06Z에 종료됐다. canonical Git/REST ref와 PR head/base가 달라 최신 원격 두 브랜치와 develop의 실제 merge-tree를 재계산했다. 최신 PR28/29는 모두 충돌0이며, PR API의 이전 snapshot은 각각21/31파일 충돌이었다. 동일 PR의 제한된 close/reopen을 검증된 사람 전용 wrapper로 수행해 PR28 e2317fd/base ea1c088과 PR29 a40d94a/base ea1c088을 정상화했다. branch·보호·승인 조건은 바꾸지 않았다.
+
+PR28 e2317fd는 현재-head READ_COMPLETE·분리된 독립 APPROVE와 App formal APPROVED를 받았다. 실제 병합은 GitHub405의 “마지막 pusher를 확인할 수 없어 추가 승인 필요”로 거절됐고 미병합 상태를 확인했다. 제품 코드 변경 없이 이 관리 기록을 사람 계정으로 새 commit/push하여 푸시 신원 정보 갱신을 시도한다. 새 head의 독립/App 승인은 다시 받으며, 현재까지 미완료인 병합을 완료로 선기록하지 않는다.
+
+## 2026-11-04 병합 참조 정상화·이메일 병합 완료
+
+PR28은 참조 갱신 후에도 마지막 pusher 미확정405로 차단됐다. 제품 변경 없이 사람 계정의 정상 새 commit/push(a09f509) 후 PR head가 자동 갱신됐고 READ_COMPLETE/독립 APPROVE/App current-head APPROVED를 새로 받았다. 보호 조건을 바꾸지 않은 guarded human squash 병합이 성공했다. merge SHA74b982ad20038ff27b36eaca05bde8871c800b08, 실제 source heada09f5097dc3362d175b74e8d2bcf9cbee7b87320, 원격·추적·로컬 head 삭제/부재까지 확인했다. 따라서 PR27·28은 실제 병합 완료다.
+
+PR29는 최신 develop74b982a를 통합했다. target tree가a09f509와 같고 a09f509는 원래 승인 identity11fad449에서 관리 문서2개만 다름을 검증했다. PR29는11fad449의 후속이므로 이미 배포·검증한 제품 파일194ef330/a40d94a를 그대로 보존하고 두 관리 문서의 최신 기록을 합쳤다. 최종 실행코드/정적 자산/의존성/컨테이너/모델/키는 바꾸지 않는다. 기존 시험·이미지/SEO 증빙을 새로 실행한 결과처럼 합산하지 않는다. 새 current-head 독립 검토/App 승인·병합/branch 정리는 PR29의 실제 원격 기록을 정본으로 확인한다.
