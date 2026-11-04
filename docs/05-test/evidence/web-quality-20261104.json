@@ -571,8 +571,14 @@
     "securityHold": "External MailBox activation hold remains."
   },
   "review": {
-    "separateReadOnlyCodeReview": "PASS after fixes",
-    "formalCurrentHead": "Pending guarded PR current-head approval"
+    "pr": 29,
+    "url": "https://github.com/JunSungKang/MoaPan/pull/29",
+    "separateReadOnlyCodeReview": "APPROVE",
+    "separateSeoAudit": "PASS",
+    "firstApprovedHead": "4b6a0ab15d761f4a168106ac3062388465e50c92",
+    "formalReviewer": "junsung-bot[bot]",
+    "firstFormalApprovalAt": "2026-11-04T07:16:27Z",
+    "currentHeadAuthority": "Latest formal approval in PR29; documentation-only followup is reviewed again. No product changes after final SEO."
   },
   "sources": [
     "https://developer.chrome.com/docs/lighthouse/performance/performance-scoring",

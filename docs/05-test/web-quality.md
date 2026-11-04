@@ -1,6 +1,6 @@
 # 웹 품질·기능별 패턴 리팩토링 검증서
 
-> 문서번호: MP-DOC-040 · 상태: 최종 제품 검증 완료 · 정식 PR 검토 대기 · 작성: 개발 담당 · 검토: 독립 리뷰/SEO 감사 담당
+> 문서번호: MP-DOC-040 · 상태: 최종 제품 검증·독립 코드/SEO 검토 완료 · 작성: 개발 담당 · 검토: 독립 리뷰/SEO 감사 담당
 
 ## 1. 범위와 기준
 
@@ -24,7 +24,7 @@
 - [x] WQ10 미사용 심볼/모듈/CSS/스크립트 최종 점검 및 제거 검증
 - [x] WQ11 전체 기능별 패턴과 유지/변경 이유 확정
 - [x] WQ12 전체 unit/PostgreSQL/Playwright/Nu 회귀
-- [ ] WQ13 최종 JAR/SBOM/이미지·도구 보안 및 current-head 독립 검토
+- [x] WQ13 최종 JAR/SBOM/이미지·도구 보안 및 current-head 독립 검토
 - [x] WQ14 모든 제품 변경 뒤 최종 SEO·모바일/데스크톱 Lighthouse 감사
 
 ## 3. 기능별 패턴 선정
@@ -75,4 +75,4 @@ webQualityAudit는 폐기 PostgreSQL/합성42기사·실제 Spring HTTP와 합�
 
 [실행 증빙](evidence/web-quality-20261104.json)에 시각·메트릭·진단·digest를 기록했다. 점수100이어도 일부 비점수 진단(공용 CSS의 페이지별 미사용·압축/전송 기회 등)은 남으며, 이를 미사용 프로젝트 코드 또는 오류0의 증명으로 바꾸지 않는다. [Lighthouse 점수 설명](https://developer.chrome.com/docs/lighthouse/performance/performance-scoring)과 [W3C 자동 도구의 한계](https://www.w3.org/WAI/test-evaluate/tools/selecting/)를 따른다.
 
-실행 서비스/DB V24/MailBox/키/모델은 교체하지 않았고 develop/main 병합도 수행하지 않았다. 외부 MailBox 운영 전환 보류는 별도이며, 이번 후보 검증을 운영 배포로 보고하지 않는다. 정식 current-head 독립 승인은 PR 기록으로 마감한다.
+실행 서비스/DB V24/MailBox/키/모델은 교체하지 않았고 develop/main 병합도 수행하지 않았다. 외부 MailBox 운영 전환 보류는 별도이며, 이번 후보 검증을 운영 배포로 보고하지 않는다. [PR29](https://github.com/JunSungKang/MoaPan/pull/29)에서 분리된 코드 검토와 SEO 최종 판정 PASS, 코드 head4b6a0ab의 App formal APPROVED를 확인했다. 이후 문서만 마감하며 최종 current-head 승인은 같은 PR의 최신 리뷰 기록을 정본으로 확인한다. 제품 seal·JAR·이미지와 마지막 SEO 결과는 불변이다.

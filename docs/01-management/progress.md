@@ -222,3 +222,5 @@ SMTP 책임 분리·미사용 서버 정리 최종 로컬 검증: clean 전체 �
 웹 품질 후속 중간 검증: 동적132상태의 axe 실패0, 공개13경계/canonical4개 검사와 격리 지면의 모바일·데스크톱4범주100점(preflight)을 확인했다. 최종 확정은 모든 수정 뒤 다시 측정한다. 실제 원고 언어/이미지 치수, canonical 최초 응답, 지면 병렬 로딩, 일회 패널 활성화, 메시지/수집 Specification/원고 Strategy를 보완했다. 회귀가 광고 늦은 응답 덮어쓰기, 사전 분리의 역변환 충돌과 공백 observer 루프, 원문 필드의 UI 변환을 발견해 실제 수정·집중 검증했다. 코드/도구 기준을 낮추지 않았으며 중단/실패 시험은 PASS에 합산하지 않는다. 원문 Factory 전환과 관련 집중 시험은 통과했으며 전체 clean 회귀·최종 산출물/이미지·마지막 SEO는 마감 단계다. 운영 기존6서비스/V24·MailBox·키·DB·전역 스킬은 변경하지 않는다.
 
 웹 품질 최종 제품 검증 완료: 전체 clean424(190/148/86) PASS·FAIL/ERROR/SKIP0, 마지막 미사용import 제거 후 집중UI9/단위190/산출물 보안 재확인. 공개4문서×2기기 Lighthouse 네 범주100, axe132상태0, Nu13문서0, HTTP13경계/canonical4일치. 코드 seal 고정 뒤 SEO를 마지막 제품 검증으로 실행했다. [MP-DOC-040](../05-test/web-quality.md)과 [증빙](../05-test/evidence/web-quality-20261104.json)에 digest·진단·한계를 기록했다. 현재 정식 PR/remote current-head 검토 마감 중이며 운영 서비스·DB·MailBox·develop/main 병합은 미변경이다.
+
+PR29 신규 변경을 수집/뉴스레터/웹 품질3커밋으로 푸시하고4b6a0ab에서 별도 코드 검토APPROVE/SEO감사PASS와 App formal APPROVED를 확인했다. WQ14항목을 실제 증빙으로 마감한다. 이어지는 커밋은 승인 기록 문서화뿐이며 제품 seal·JAR·이미지·마지막 SEO 결과는 동일하다. 문서 마감 head도 재리뷰·재승인 후 원격 SHA 일치를 확인한다. 서비스/DB/MailBox/develop/main은 변경하지 않는다.
