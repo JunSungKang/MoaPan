@@ -1,0 +1,421 @@
+{
+  "checkedAt": "2026-11-04T10:22:52.108Z",
+  "scope": "User-approved same-image web/worker replacement, V25 migration and existing independent MailBox client integration; no provider modifications, main merge or CI/CD.",
+  "application": {
+    "image": "sha256:d1e49e6d6c1010acc7230be1d7a9247bccb5c2422c78675ebd246c76ac848e5e",
+    "jarSha256": "e03b4ef23d680c45528f2804af32c2fcf1fec73a1a530780f7c1721c1138f998",
+    "java": "Eclipse Temurin 27.0.1.0.2+1",
+    "platform": "linux/arm64",
+    "uid": "10001:10001"
+  },
+  "migration": {
+    "from": 24,
+    "to": 25,
+    "encryptedBackup": true,
+    "isolatedRestore": true,
+    "isolatedDatabaseRemoved": true,
+    "oldAndNewApplicationCompatible": true,
+    "preexistingTablesCompared": 34,
+    "identicalBeforeAfter": true,
+    "tables": {
+      "account_subscriptions": {
+        "count": 1,
+        "sha256": "433fc97136bd944c5b36271716aeb3e64cc1b0f990ed0aaea6cc74449ff1662b"
+      },
+      "admin_actions": {
+        "count": 224,
+        "sha256": "1dc4c9253afe7ddc30988d1f08a10b6a7e08b6a8d55727f3b733a6e71843e716"
+      },
+      "advertising_settings": {
+        "count": 1,
+        "sha256": "613cef87ed436f182dde1413008e6fecdd8407824375e15b94c1646fb564f08f"
+      },
+      "ai_source_budgets": {
+        "count": 36,
+        "sha256": "b76003d685f489faca2ffe6c8869ea36c3075c61de0f5eb140bf0a572d82d54a"
+      },
+      "api_quotas": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "api_request_leases": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "article_classification_jobs": {
+        "count": 441,
+        "sha256": "76896f0756fc25075684103da48b31fbfcbec479b2ce598b98318a4624ca4850"
+      },
+      "article_revisions": {
+        "count": 124,
+        "sha256": "f2b79cbf634d99035f6d9c40391c3b7a617b704f9be4f9c3073fc0de2e9c5815"
+      },
+      "article_tags": {
+        "count": 425,
+        "sha256": "1782aee942ceeb93fb0a1ab29efb2fe921e499e67a3e1e36579f4bf2f058d54e"
+      },
+      "article_translation_jobs": {
+        "count": 441,
+        "sha256": "195402ecb21d82a93a3c5a16d619ccdeb9d1fa1faa7ce92afff13d2d7faf5960"
+      },
+      "article_translations": {
+        "count": 236,
+        "sha256": "cafa1712ca813ddea0a842c5638908c657268abdbea761f09138ee41878621f8"
+      },
+      "articles": {
+        "count": 496,
+        "sha256": "ba18b89e311ebbe8b41e1482805ef24f33de6ec5e72a6f62aa640b4524e380aa"
+      },
+      "auth_rate_limits": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "classification_config": {
+        "count": 1,
+        "sha256": "0e53314531e6dfc1d1148190410cbaeb88d05adc55e712e94a5df628ec61ae8d"
+      },
+      "classification_runtime": {
+        "count": 1,
+        "sha256": "c234135d1c45f14b364fbae865c68f1a9ad4a902d43b4223bf8dfa35de85baaf"
+      },
+      "classification_topics": {
+        "count": 5,
+        "sha256": "28e0fdd1ddf726dbaecdef0116ba2b77f3929cbcf512b771363bc592f3254dbb"
+      },
+      "content_jobs": {
+        "count": 208,
+        "sha256": "d5fc5aa021df9b7ebc1f964ca97500d747db864a35895fac13355559a271f764"
+      },
+      "fetch_runs": {
+        "count": 209,
+        "sha256": "7f96ee346eb2f814fba3b54db2775231163129ae9c4510e2ee739992ed36281e"
+      },
+      "news_edition_items": {
+        "count": 1466,
+        "sha256": "2e44e177aa2d71077ed8d5cf624e6fd41055737347053bba4d8642bedd04bf37"
+      },
+      "news_editions": {
+        "count": 5,
+        "sha256": "575628bfbab4543c7919fe7a8b984aaba859f1c3717b3adef492ab0566bb516b"
+      },
+      "newsletters": {
+        "count": 1,
+        "sha256": "131fbde818c0d50b1e14dd13ee9a9c23c336aa48fc29b5cd436fdc8c37bf7e65"
+      },
+      "read_cache_fingerprints": {
+        "count": 968,
+        "sha256": "1578dda04984dc39c5788db5a2930c33589fb6904ab31977a0291f13baf314cf"
+      },
+      "representative_interests": {
+        "count": 1,
+        "sha256": "ac122c006ac297bfe413e82f9b7b9840f8a56877630b40e3eb39d9f07f7ededa"
+      },
+      "sites": {
+        "count": 7,
+        "sha256": "5f707923d489a24f320042f581e3c7c4459b709b22b2805da8a47c90e4212753"
+      },
+      "source_access_gate": {
+        "count": 1,
+        "sha256": "cd2211d973dd1e1f204ded7a5d93431a56f1c9a1cc47a6fc3911e3f8caab2134"
+      },
+      "sources": {
+        "count": 12,
+        "sha256": "acd05a8aa8c056f821c5e6941570be2ed9602cdfe716ecc4590ac06655ef1696"
+      },
+      "spring_session": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "spring_session_attributes": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "tag_aliases": {
+        "count": 15,
+        "sha256": "f3ffe07b4ba6982aa8c8a232303fd6c0c30c05657d094302441d1481d46b6cc7"
+      },
+      "tag_redirects": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "tags": {
+        "count": 10,
+        "sha256": "a5c2ec310422786be55a7395f98a698de1184b18cbff28910bfd9d94ad726d8e"
+      },
+      "translation_runtime": {
+        "count": 1,
+        "sha256": "f2b093a4220b26a17d2bea8539050ad82e7308cc38de15844e895a2a06ed25f5"
+      },
+      "users": {
+        "count": 2,
+        "sha256": "bdac67efb72151004e6464201a40481e9be3ce2668839cd0d88de6e50b064540"
+      },
+      "worker_status": {
+        "count": 1,
+        "sha256": "4a7746c23822e65716ab7af67b0ab46e8789373d7871e6d89f02922e436f943d"
+      }
+    }
+  },
+  "preservation": {
+    "services": [
+      "db",
+      "proxy",
+      "classifier",
+      "translator"
+    ],
+    "containerIdsAndStartTimesUnchanged": true,
+    "existingSecretsAndVolumesPreserved": true
+  },
+  "smtp": {
+    "providerImage": "sha256:a2392bb2ab623efe485b6a3e9abc956aebc3930130b1350d73f8fe8a1d1df1ad",
+    "scannedVulnerabilities": 0,
+    "scannedSecrets": 0,
+    "externalProviderRootMasterObserved": true,
+    "rootExceptionAccepted": false,
+    "providerModified": false,
+    "network": "mailbox_default",
+    "hostname": "mailbox-smtp-receiver",
+    "port": 2587,
+    "starttlsRequired": true,
+    "hostnameAndCaVerified": true,
+    "smtpAuthentication": true,
+    "passwordFileSecret": true,
+    "webJoinedProviderNetwork": false,
+    "workerJoinedProviderNetwork": true,
+    "syntheticMessageReceived": true,
+    "receivedOverTls": true,
+    "arbitraryInternetRecipientDelivery": "NOT_TESTED"
+  },
+  "live": {
+    "startedAt": "2026-11-04T10:18:36.597Z",
+    "finishedAt": "2026-11-04T10:19:40.101Z",
+    "origin": "https://175.195.62.165",
+    "passed": 62,
+    "failed": 0,
+    "checks": [
+      "Guest / 200",
+      "Guest /login.html 200",
+      "Guest /signup.html 200",
+      "Guest /forgot-password.html 200",
+      "Guest /api/v1/public/news/edition 200",
+      "Guest /api/v1/news/edition 401",
+      "Guest /newsletter.html 404",
+      "Guest /api/v1/newsletters 404",
+      "Guest /api/v1/admin/sites 401",
+      "Guest /delivery-missing.html 404",
+      "CSRF issuance",
+      "CSRF missing rejected",
+      "Signup code issued",
+      "Mailbox TLS receipt",
+      "Delivered envelope erased",
+      "Verified signup",
+      "Synthetic account id",
+      "CSRF issuance",
+      "Login success",
+      "Session fixation protection",
+      "Authentication no-store",
+      "CSRF issuance",
+      "Verified normal account",
+      "Secure HttpOnly SameSite cookies",
+      "Normal user admin forbidden",
+      "Unsubscribed user newsletter hidden",
+      "Authenticated news",
+      "CSRF issuance",
+      "Login success",
+      "Session fixation protection",
+      "Authentication no-store",
+      "CSRF issuance",
+      "Local CLI promotion of synthetic account",
+      "Admin HTML",
+      "Admin sites API",
+      "Subscription management API",
+      "Synthetic subscription grant",
+      "Subscribed newsletter HTML",
+      "Subscribed newsletter API",
+      "Subscription revoked expiry now",
+      "Revoked newsletter hidden",
+      "CSRF issuance",
+      "Resend throttle Retry-After",
+      "Password reset code issued",
+      "Mailbox TLS receipt",
+      "Delivered envelope erased",
+      "Password reset completed",
+      "Old user session revoked",
+      "All other sessions revoked",
+      "CSRF issuance",
+      "Used verification code rejected",
+      "CSRF issuance",
+      "Login success",
+      "Session fixation protection",
+      "Authentication no-store",
+      "CSRF issuance",
+      "Login with new password",
+      "Email profile remains verified",
+      "Synthetic account deleted",
+      "Deleted session rejected",
+      "No synthetic account remains",
+      "No synthetic sessions remain"
+    ],
+    "realMailboxReceipt": true,
+    "passwordReset": true,
+    "syntheticAccountRemoved": true,
+    "serviceSecretsLogged": false
+  },
+  "health": {
+    "time": "2026-11-04T10:21:22.045Z",
+    "cert": {
+      "validFrom": "Nov  3 22:34:48 2026 GMT",
+      "validTo": "Nov 10 14:34:47 2026 GMT",
+      "issuer": "Let's Encrypt",
+      "hostnameVerified": true
+    },
+    "counters": {
+      "articles": 496,
+      "accounts": 2,
+      "newsletters": 1,
+      "subscriptions": 1,
+      "emailChallenges": 0,
+      "mailQueue": 0
+    },
+    "state": [
+      {
+        "name": "/moapan-web-1",
+        "running": true,
+        "health": "healthy",
+        "image": "sha256:d1e49e6d6c1010acc7230be1d7a9247bccb5c2422c78675ebd246c76ac848e5e",
+        "user": "10001:10001"
+      },
+      {
+        "name": "/moapan-worker-1",
+        "running": true,
+        "health": null,
+        "image": "sha256:d1e49e6d6c1010acc7230be1d7a9247bccb5c2422c78675ebd246c76ac848e5e",
+        "user": "10001:10001"
+      }
+    ]
+  },
+  "limitations": [
+    "Previous sealed 424 deterministic regression and Lighthouse8x100 remain candidate evidence; this delivery did not repeat the full test suite.",
+    "Actual Google/Naver/Bing ranking and off-site mail deliverability were not measured.",
+    "External SMTP master root configuration remains operator-managed; no embedded SMTP daemon or risk-suppression exception was added.",
+    "Manual local encrypted backup is not an automated off-host recovery service."
+  ],
+  "github": {
+    "pr": 29,
+    "base": "develop",
+    "url": "https://github.com/JunSungKang/MoaPan/pull/29",
+    "sourceOfFinalApprovalAndMerge": "Current-head GitHub PR reviews, merge commit and ref absence checks; not inferred from delivery tests."
+  },
+  "finalLiveSeo": {
+    "checkedAt": "2026-11-04T10:25:29.386Z",
+    "origin": "https://175.195.62.165/",
+    "tlsVerified": true,
+    "lighthouseTarget": 100,
+    "lighthouseResults": [
+      {
+        "profile": "mobile",
+        "url": "https://175.195.62.165/index.html",
+        "fetchTime": "2026-11-04T10:24:22.929Z",
+        "version": "13.6.0",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 100
+        },
+        "rawScores": {
+          "performance": 1,
+          "accessibility": 1,
+          "best-practices": 1,
+          "seo": 1
+        },
+        "metrics": {
+          "first-contentful-paint": 905.8785,
+          "largest-contentful-paint": 1315.8785,
+          "total-blocking-time": 68,
+          "cumulative-layout-shift": 0,
+          "speed-index": 905.8785
+        },
+        "diagnostics": [
+          {
+            "id": "total-blocking-time",
+            "score": 0.99,
+            "title": "Total Blocking Time"
+          },
+          {
+            "id": "max-potential-fid",
+            "score": 0.92,
+            "title": "Max Potential First Input Delay"
+          },
+          {
+            "id": "bf-cache",
+            "score": 0,
+            "title": "Page prevented back/forward cache restoration"
+          },
+          {
+            "id": "network-dependency-tree-insight",
+            "score": 0,
+            "title": "Network dependency tree"
+          },
+          {
+            "id": "render-blocking-insight",
+            "score": 0.5,
+            "title": "Render-blocking requests"
+          }
+        ]
+      },
+      {
+        "profile": "desktop",
+        "url": "https://175.195.62.165/index.html",
+        "fetchTime": "2026-11-04T10:24:29.766Z",
+        "version": "13.6.0",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 100
+        },
+        "rawScores": {
+          "performance": 1,
+          "accessibility": 1,
+          "best-practices": 1,
+          "seo": 1
+        },
+        "metrics": {
+          "first-contentful-paint": 274.029,
+          "largest-contentful-paint": 286.029,
+          "total-blocking-time": 0,
+          "cumulative-layout-shift": 0,
+          "speed-index": 274.029
+        },
+        "diagnostics": [
+          {
+            "id": "network-dependency-tree-insight",
+            "score": 0,
+            "title": "Network dependency tree"
+          },
+          {
+            "id": "render-blocking-insight",
+            "score": 0.5,
+            "title": "Render-blocking requests"
+          }
+        ]
+      }
+    ],
+    "accessibilityStates": 90,
+    "accessibilityFailingStates": 0,
+    "portalIndex": "UNKNOWN",
+    "liveScope": "Actual deployed HTTPS; anonymous only",
+    "profiles": "Fresh profiles/caches confined to this audit run; server cache unchanged",
+    "httpDocuments": 13,
+    "htmlAndHttpCanonicals": 4,
+    "rawReportHashes": {
+      "summary.json": "bf89d29d58aa1739da82402355a9a92c7a0b58b420bb7f7e5c681545505bf07d",
+      "site-http-audit.json": "90a3df7d9712a984607a4cb26a03b989ee5f811895ac8ffa868ee9d3e499a157",
+      "lighthouse-mobile.json": "c2ceb07b53784e60991ff88c88b8c177147d4c47c4be03f9d0440f255cce717c",
+      "lighthouse-desktop.json": "ee4bcd062e135eb8638357ec803f1a6d3f9c24da8fcc9527218b511780afebe3",
+      "accessibility.json": "f5077bf6a68d569f336457ff9e272271b70009e370e6e6528392d082ae2963dd",
+      "tls.json": "a51b6490bacd7c76e41e7f819b3507e0bf4b979e44abe41d06979cb4d001acde"
+    }
+  }
+}

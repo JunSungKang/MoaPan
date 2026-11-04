@@ -2,7 +2,7 @@
 
 > 문서번호: MP-DOC-013 · 기준: 저장소 현재 리비전 · 상태: 유지관리 · 작성: 개발 담당 · 검토: 독립 리뷰 담당
 
-2026-11-04 웹 품질 후속은 [MP-DOC-040](web-quality.md)이 최신 정본이다. unit190/PostgreSQL148/Playwright86 =424 PASS, FAIL/ERROR/SKIP0과 새로운 검증 JAR/이미지를 구분한다. 최종 제품 변경 뒤 공개4문서×2기기 Lighthouse 네 범주100·동적132상태 axe0·Nu13페이지0·HTTP13경계를 검증했다. 마지막 미사용import 제거 뒤 집중UI9/단위190/산출물 보안도 통과했다. 운영 기존 이미지/V24는 교체하지 않았다. 아래 과거 증빙의 시각·범위는 해당 문서를 따른다.
+2026-11-04 웹 품질 후속은 [MP-DOC-040](web-quality.md)이 최신 정본이다. unit190/PostgreSQL148/Playwright86 =424 PASS, FAIL/ERROR/SKIP0과 새로운 검증 JAR/이미지를 구분한다. 최종 제품 변경 뒤 공개4문서×2기기 Lighthouse 네 범주100·동적132상태 axe0·Nu13페이지0·HTTP13경계를 검증했다. 마지막 미사용import 제거 뒤 집중UI9/단위190/산출물 보안도 통과했다. 이후 사용자의 별도 승인으로 동일 이미지/V25 서비스 전환과 기존 MailBox의 실제 인증·복구를 완료했다. 기존34테이블 보존·실서비스62 assertion은 [인도 증빙](evidence/web-quality-delivery-20261104.json)을 따른다. 아래 과거 증빙의 시각·범위는 해당 문서를 따른다.
 
 최초 실행 시각·JUnit 집계·이미지 식별값·실제 수집은 [검증 요약](evidence/verification.json)에 기록한다. raw scanner/JUnit/스크린샷은 로컬 `build/reports`와 `build/test-results`, 명령 로그는 `.local/evidence`에 있으며 Git에 비밀값·원문 전문·DB dump를 넣지 않는다.
 

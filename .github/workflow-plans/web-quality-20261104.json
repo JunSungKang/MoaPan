@@ -188,6 +188,42 @@
           "docs/05-test/web-quality.md"
         ]
       }
+    },
+    {
+      "id": "approved-service-delivery",
+      "expectedPaths": [
+        ".github/workflow-plans/web-quality-20261104.json",
+        "scripts/deploy/compose-mail-auth.yaml",
+        "scripts/test/mail-deployment-check.mjs",
+        ".env.example",
+        "docs/**"
+      ],
+      "forbiddenPaths": [
+        ".env",
+        ".github/workflows/**",
+        "**/*.pem",
+        "**/*.key"
+      ],
+      "acceptanceCriteria": [
+        "Latest explicit user authorization: replace the current application service with the verified candidate and merge PR29 into develop after live verification. This supersedes earlier no-deployment/no-develop-merge exclusions only for this delivery; main/CI/CD/paid resources remain excluded.",
+        "User further explicitly requests connecting the existing operator-managed MailBox for email verification and password recovery. Inspect the current provider image/TLS/authentication, use strict STARTTLS plus SMTP AUTH and file secrets, and perform synthetic delivery/account verification. Do not modify/restart MailBox, accept the retired embedded SMTP root exception, or add an SMTP daemon. Preserve provider scope and report actual risks/limitations.",
+        "Preserve database/users/subscriptions/content/sessions, existing keys, model volumes and unrelated containers. Encrypt a pre-migration backup, restore and test V25 in an isolated database and check old/new application schema compatibility before production migration. Deploy the exact scanned application image, keep DB/proxy/models intact and verify image/JAR identity and live HTTPS/access boundaries.",
+        "Use only workspace-local private operational files; no secret values in command arguments/output, tracked files, screenshots or reports. Add the minimum authenticated external-client Compose overlay and deterministic configuration checks. No credential-length/personalization/security policy changes.",
+        "Update delivery evidence/progress, independently review the final current head and obtain fresh App formal approval after every push. Use guarded human merge and verify PR head remote/local/tracking cleanup. Preserve pre-existing local HTTPS skill files untracked."
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh --no-daemon check mailDeploymentCheck securityCheck",
+        "node scripts/test/docs-check.mjs",
+        "git diff --check"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/plan.md",
+          "docs/01-management/progress.md",
+          "docs/06-transition/deployment.md",
+          "docs/05-test/web-quality.md"
+        ]
+      }
     }
   ]
 }

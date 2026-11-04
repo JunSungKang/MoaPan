@@ -224,3 +224,16 @@ SMTP 책임 분리·미사용 서버 정리 최종 로컬 검증: clean 전체 �
 웹 품질 최종 제품 검증 완료: 전체 clean424(190/148/86) PASS·FAIL/ERROR/SKIP0, 마지막 미사용import 제거 후 집중UI9/단위190/산출물 보안 재확인. 공개4문서×2기기 Lighthouse 네 범주100, axe132상태0, Nu13문서0, HTTP13경계/canonical4일치. 코드 seal 고정 뒤 SEO를 마지막 제품 검증으로 실행했다. [MP-DOC-040](../05-test/web-quality.md)과 [증빙](../05-test/evidence/web-quality-20261104.json)에 digest·진단·한계를 기록했다. 현재 정식 PR/remote current-head 검토 마감 중이며 운영 서비스·DB·MailBox·develop/main 병합은 미변경이다.
 
 PR29 신규 변경을 수집/뉴스레터/웹 품질3커밋으로 푸시하고4b6a0ab에서 별도 코드 검토APPROVE/SEO감사PASS와 App formal APPROVED를 확인했다. WQ14항목을 실제 증빙으로 마감한다. 이어지는 커밋은 승인 기록 문서화뿐이며 제품 seal·JAR·이미지·마지막 SEO 결과는 동일하다. 문서 마감 head도 재리뷰·재승인 후 원격 SHA 일치를 확인한다. 서비스/DB/MailBox/develop/main은 변경하지 않는다.
+
+사용자가 서비스 교체·develop 병합과 기존 MailBox의 이메일 인증/복구 연동을 승인했다. 현재 SMTP는 이전과 다른 a2392bb2 이미지이며 새 원시 검사 vuln/secret0, 인증 전용2587/STARTTLS 강제/SASL AUTH 설정과 서비스명 SAN을 확인했다. 타 프로젝트는 읽기 전용으로 유지한다. 새 인도 범위 계약/계획을 갱신하고 백업·격리이행·실제연동·서비스교체를 준비한다. 아직 운영성공/병합완료로 표시하지 않는다.
+
+
+## 2026-11-04 서비스 교체·실제 이메일 인증/복구 완료
+
+사용자 최신 승인에 따라 검증 runtime d1e49e6d6c10/JAR e03b4ef23d68를 web/worker에 반영했다. V24 암호화 백업/격리 복원→V25→구·신 앱 JPA 기동을 검증했고 운영 migration 전후 기존34테이블 건수/행 SHA256 모두 일치했다. DB/proxy/두 모델 ID·시작시각·이미지, 원래 volume/key와 기존 계정2·구독1·뉴스레터1을 보존했다. 기사496, 합성 계정·challenge·대기 메일0.
+
+독립 MailBox 최신 a2392bb2ab62 취약점/secret0, 필수 STARTTLS/CA/hostname/SMTP AUTH·실수신을 확인했다. 파일 secret을 사용하는 최소 AUTH overlay와 3모드/6누락 거부 시험을 추가했고 check/mailDeploymentCheck/securityCheck PASS. 실제 HTTPS62 assertion에서 인증 가입/인증번호 수신/구독 회수 및404/복구/모든 세션 무효화/새 비밀번호/단회 코드/탈퇴를 확인했다. 외부 서버 수정·내장 SMTP/위험 suppression·CI/CD/main 병합은 없다. 최신 원본은 [서비스 인도 증빙](../05-test/evidence/web-quality-delivery-20261104.json), 절차는 MP-DOC-016 최신 운영 절이다.
+
+마지막 공개 SEO 감사·현재head 독립/App 검토·guarded develop 병합을 마감한다. GitHub 최종 승인·병합 SHA와 branch 정리는 PR29 현재 상태를 정본으로 확인하며 실행 전 성공으로 선기록하지 않는다. 기존 미추적 HTTPS 스킬3파일은 그대로 보존하며 commit에서 제외한다.
+
+최종 실서비스 SEO 독립 재점검(2026-11-04T10:25:29Z): 공개 HTTP13/canonical4/robots/sitemap/404·noindex PASS, 익명 접근성 한·영 ×390/768/1440px의90상태 실패0. 실제 HTTPS 지면 Lighthouse13.6.0을 fresh profile/cache로 각1회 측정해 모바일·데스크톱 성능/접근성/권장사항/SEO 모두100(raw1.0)이다. 모바일 LCP1315.8785ms/TBT68ms/CLS0, 데스크톱 LCP286.029ms/TBT0/CLS0. 점수 선택 재시도·TLS 우회·평가 기준 변경은 없었다. 비점수 진단은 보존했고 실제 포털 순위·CrUX·로그인 화면 전체 WCAG 인증으로 확대하지 않는다. 원본 해시는 서비스 인도 증빙에 기록했다. 이후 제품 코드/이미지를 변경하지 않았다.

@@ -334,3 +334,6 @@ DB/정책: V23 1:1 구독·기간·version·계정삭제정리, 기본권한없�
 - 4. 마지막 SEO: 모든 제품 변경 및 회귀 후 title/description/robots/canonical/sitemap/상태코드/링크/색인보호와 Lighthouse를 재감사하고 결과만 문서화한다. 이후 코드 변경 시 SEO를 다시 실행한다.
 - 제외: CI/CD·가격/결제·타 프로젝트·MailBox 변경·운영 교체·develop/main 병합. PR27/28은 미병합 선행 의존성이며 이전 앱/V24와 별도로 격리 후보를 검증한다.
 - 산출물: docs/05-test/web-quality.md, 도메인 패턴/정리 내역, 기계 증빙과 current-head PR. 실행하지 않은 시험/색인/배포/점수는 완료로 표시하지 않는다.
+
+## 52. 승인된 서비스 교체·MailBox 연결·develop 병합 (2026-11-04)
+사용자가 PR29의 서비스 교체와 develop 병합, 기존 MailBox를 통한 이메일 인증·복구의 실제 연동을 명시 승인했다. 이전 단계의 운영/병합 제외는 이 인도 단계에서 대체하며, 퇴역 내장SMTP root 예외를 승인한 것으로 해석하지 않는다. 1) 현재 이미지/TLS/AUTH·앱 산출물·권한 확인 및 최소 외부SMTP AUTH overlay, 2) 암호화 백업/격리V25복원·이전/새앱 호환성, 3) 동일 이미지의 V25 및 web/worker 교체·기존 DB/proxy/모델/키 보존, 4) 실제 HTTPS·합성 이메일가입/복구·구독/관리 경계와 데이터보존 검증·테스트 계정 정리, 5) 최종문서·current-head독립/App승인·guarded develop 병합과 세 ref 정리. 외부 MailBox 원본·컨테이너·운영계정은 수정하지 않고 필요한 SMTP 클라이언트 자격/공개CA만 프로젝트 안에 안전하게 설정한다. main·CI/CD·가격/결제·추가유료자원은 제외다.

@@ -1,10 +1,10 @@
 # 웹 품질·기능별 패턴 리팩토링 검증서
 
-> 문서번호: MP-DOC-040 · 상태: 최종 제품 검증·독립 코드/SEO 검토 완료 · 작성: 개발 담당 · 검토: 독립 리뷰/SEO 감사 담당
+> 문서번호: MP-DOC-040 · 상태: 제품 검증 완료·실서비스 전환 후 인도 검증 · 작성: 개발 담당 · 검토: 독립 리뷰/SEO 감사 담당
 
 ## 1. 범위와 기준
 
-사용자가 승인한 접근성·모바일/데스크톱100점 목표·미사용 코드 제거·기능별 패턴 재검토다. 기준11fad44(PR28, PR27 포함)와 운영 앱24fc/V24를 구분한다. 타 프로젝트·메일서버·운영 데이터/키/모델·CI/CD·develop/main 병합은 변경하지 않는다. Lighthouse100은 자동검사 범위의 점수이며 WCAG 전체 적합성·실사용자 성능·검색 순위를 보증하지 않는다.
+사용자가 승인한 접근성·모바일/데스크톱100점 목표·미사용 코드 제거·기능별 패턴 재검토다. 기준11fad44(PR28, PR27 포함)와 운영 앱24fc/V24를 구분한다. 최초 감사 범위에서는 타 프로젝트·메일서버·운영 데이터/키/모델·CI/CD·develop/main 병합을 제외했다. 이후 사용자가 별도로 서비스 전환·기존 MailBox 연동·develop 병합을 승인했으며 해당 인도 결과는 제6절을 따른다. main/CI/CD/타 프로젝트 변경은 계속 제외한다. Lighthouse100은 자동검사 범위의 점수이며 WCAG 전체 적합성·실사용자 성능·검색 순위를 보증하지 않는다.
 
 기준 공개 HTTPS PageSpeed: https://pagespeed.web.dev/analysis/https-175-195-62-165/aqry4fwe5w?form_factor=desktop (2026-11-04 14:08 KST). 모바일/데스크톱 성능·접근성·권장사항·SEO 모두100, CLS0. 모바일 LCP1374ms/데스크톱338ms. 이는 기존 운영본이며 이번 수정 후보의 배포 증거가 아니다.
 
@@ -75,4 +75,19 @@ webQualityAudit는 폐기 PostgreSQL/합성42기사·실제 Spring HTTP와 합�
 
 [실행 증빙](evidence/web-quality-20261104.json)에 시각·메트릭·진단·digest를 기록했다. 점수100이어도 일부 비점수 진단(공용 CSS의 페이지별 미사용·압축/전송 기회 등)은 남으며, 이를 미사용 프로젝트 코드 또는 오류0의 증명으로 바꾸지 않는다. [Lighthouse 점수 설명](https://developer.chrome.com/docs/lighthouse/performance/performance-scoring)과 [W3C 자동 도구의 한계](https://www.w3.org/WAI/test-evaluate/tools/selecting/)를 따른다.
 
-실행 서비스/DB V24/MailBox/키/모델은 교체하지 않았고 develop/main 병합도 수행하지 않았다. 외부 MailBox 운영 전환 보류는 별도이며, 이번 후보 검증을 운영 배포로 보고하지 않는다. [PR29](https://github.com/JunSungKang/MoaPan/pull/29)에서 분리된 코드 검토와 SEO 최종 판정 PASS, 코드 head4b6a0ab의 App formal APPROVED를 확인했다. 이후 문서만 마감하며 최종 current-head 승인은 같은 PR의 최신 리뷰 기록을 정본으로 확인한다. 제품 seal·JAR·이미지와 마지막 SEO 결과는 불변이다.
+최초 감사 마감 시점에는 실행 서비스/DB V24/MailBox/키/모델을 교체하지 않았고 develop/main 병합도 수행하지 않았다. 외부 MailBox 운영 전환 보류는 별도이며, 이번 후보 검증을 운영 배포로 보고하지 않는다. [PR29](https://github.com/JunSungKang/MoaPan/pull/29)에서 분리된 코드 검토와 SEO 최종 판정 PASS, 코드 head4b6a0ab의 App formal APPROVED를 확인했다. 이후 문서만 마감하며 최종 current-head 승인은 같은 PR의 최신 리뷰 기록을 정본으로 확인한다. 제품 seal·JAR·이미지와 마지막 SEO 결과는 불변이다.
+
+
+## 6. 승인된 서비스 인도·MailBox 실제 연동
+
+후속 사용자 승인에 따라 동일 검증 runtime/JAR를 실제 web/worker에 반영하고 운영 DB를 V25로 전환했다. src/제품 JAR/이미지는 제5절과 동일하며 새 파일은 SMTP AUTH 클라이언트 overlay와 구성 시험·운영 문서다. 전체 저장소 seal은 배포 스크립트 추가로 달라지므로 최초 감사 seal을 새 저장소 전체의 seal이라고 주장하지 않는다.
+
+암호화 백업→격리 복원→V25→기존/새 이미지 JPA 기동을 검증한 뒤 운영을 전환했다. 중지 구간에 비교한 기존34테이블 건수/행 SHA256 집계가 모두 일치했고 DB/proxy/두 모델의 ID·시작시각·이미지와 원래 볼륨/키를 보존했다. 웹 healthy·worker 실행과 동일 JAR SHA256을 확인했다. 검증 후 기사496·기존계정2·뉴스레터1·기존구독1을 유지하며 합성계정·인증 challenge·대기메일0이다.
+
+외부 MailBox 새 이미지의 취약점/secret0과 필수 STARTTLS·CA/hostname·SMTP AUTH를 확인했다. 실제 운영자 수신함에서 고유 시험 메일을 수신했고 실서비스 HTTPS62개 assertion이 통과했다: 이메일 인증 가입/실제 인증번호 수신·가입 후 권한·CSRF·구독 부여/회수·회수시각 종료·404·복구 인증번호·비밀번호 변경·모든 기존 세션 무효화·새 비밀번호 로그인·코드 재사용 거부·시험 계정 삭제다. 재발송 제한429는 Retry-After를 실제 기다린 뒤 시험했고 한도를 우회하지 않았다.
+
+후속 check/mailDeploymentCheck/securityCheck PASS, 기존 SMTP 구성3모드/12누락 거부와 AUTH 추가3모드/6누락 거부 PASS. 최초 AUTH 시험의 Compose network null 값을 부재로 잘못 판정한 실패는 키 존재 검사로 고쳐 재검증했고 실패를 성공으로 합산하지 않았다. 전체424/axe132/Nu13/8회Lighthouse는 제5절의 동일 후보 증빙을 유지하며 이번 배포에서 전체 회귀를 다시 실행했다고 표시하지 않는다. [서비스 인도 증빙](evidence/web-quality-delivery-20261104.json)과 [현재 재시작 절차](../06-transition/deployment.md)를 따른다.
+
+외부 MailBox master root는 외부 운영 관찰로 기록하고 과거 내장 SMTP 예외를 승인 처리하지 않았다. 이 프로젝트는 SMTP 서버를 추가하지 않았다. 인터넷의 모든 수신자 전달/포털 실제 순위/오프호스트 자동 백업/실제 결제는 검증하지 않았다. GitHub 최종 head 승인·병합은 [PR29의 현재 기록](https://github.com/JunSungKang/MoaPan/pull/29)을 정본으로 확인한다.
+
+최종 실서비스 SEO 독립 재점검(2026-11-04T10:25:29Z): 공개 HTTP13/canonical4/robots/sitemap/404·noindex PASS, 익명 접근성 한·영 ×390/768/1440px의90상태 실패0. 실제 HTTPS 지면 Lighthouse13.6.0을 fresh profile/cache로 각1회 측정해 모바일·데스크톱 성능/접근성/권장사항/SEO 모두100(raw1.0)이다. 모바일 LCP1315.8785ms/TBT68ms/CLS0, 데스크톱 LCP286.029ms/TBT0/CLS0. 점수 선택 재시도·TLS 우회·평가 기준 변경은 없었다. 비점수 진단은 보존했고 실제 포털 순위·CrUX·로그인 화면 전체 WCAG 인증으로 확대하지 않는다. 원본 해시는 서비스 인도 증빙에 기록했다. 이후 제품 코드/이미지를 변경하지 않았다.
