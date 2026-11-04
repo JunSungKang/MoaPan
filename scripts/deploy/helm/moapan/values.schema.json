@@ -107,34 +107,6 @@
         },
         "customCa": {
           "type": "boolean"
-        },
-        "server": {
-          "type": "object",
-          "required": [
-            "enabled",
-            "image",
-            "hostname",
-            "tlsSecret",
-            "trustedNetworks"
-          ],
-          "additionalProperties": false,
-          "properties": {
-            "enabled": {
-              "type": "boolean"
-            },
-            "image": {
-              "type": "string"
-            },
-            "hostname": {
-              "type": "string"
-            },
-            "tlsSecret": {
-              "type": "string"
-            },
-            "trustedNetworks": {
-              "type": "string"
-            }
-          }
         }
       }
     }

@@ -207,3 +207,10 @@ MailBox SMTP/IMAP/Webmail 3개 컨테이너 실행을 확인했다. SMTP strict 
 ## 2026-11-04 STARTTLS 적용 후 실제 합성 전달 확인
 사용자 MailBox 변경 후 명시적 operator CA로 chain/호스트/유효기간 검증을 통과했다. 실제 SmtpMailTransport로 합성1건을 기존 운영자 Maildir에 발송·수신 확인하고, 검사된 앱 이미지UID10001의 기존 MailBox Docker 네트워크/TLS NOOP도 통과했다. 오래된 시험classpath의 준비 실패는 수정 후 재시험했으며 전송 성공과 구분한다. 외부 인터넷 수신함/실제 회원 인증·복구 운영 전환은 수행하지 않았다.
 기존 MailBox에 직접 연결하는 compose-mail-external.yaml을 준비하고 내장 SMTP 미생성/worker 기존 모델 네트워크 보존/web backend 유지/필수호스트 누락 거부/공개CA·별도키 secret을 검증했다. 최신 scanner DB 동기화 후 앱 이미지dcbd1540948a는 PASS, 실제 SMTP594e743418aa는 HIGH33/CRITICAL1 원시 검출로 FAIL이며 전체 securityCheck도 기존 DS-0002 때문에 exit1이다. root 예외 미승인과 작업 폴더 경계를 유지하며 실제서비스24fc8045a50c·V24/.env/키/MailBox 원본을 바꾸지 않는다. [실제 결과](../05-test/email-identity.md#12-starttls-적용-후-실제-전달-재검증).
+
+
+## 2026-11-04 이 프로젝트 SMTP root 구성 제거 진행
+사용자 지시 순서대로 외부 MailBox 조치 프롬프트 MP-DOC-039를 먼저 작성·제시했다. 중복 내장 Postfix11파일과 빌드/Compose/Helm/준비·시험 진입점을 제거하고 외부 SMTP 클라이언트/outbox/인증·복구만 유지한다. 키 준비 CLI와 경계·보존 검증, Java STARTTLS 양성/CA·호스트 거부, 외부 Helm/Compose 검증을 보강했다. Compose 시험의 최초 합성 도메인/IP fixture 오류를 고친 뒤3모드·12누락 거부를 통과했다. focused SMTP7개와 Helm STARTTLS/SMTPS·거부 검증을 확인하고 전체 회귀·보안·새 이미지 검사 중이다. scanner 제외/예외를 추가하지 않으며 타 프로젝트·기존 서비스/DB/.env/키를 변경하지 않는다.
+
+
+SMTP 책임 분리·미사용 서버 정리 최종 로컬 검증: clean 전체 계약 PASS/408(184·147·77) FAIL·ERROR·SKIP0, 키7/Compose3모드12거부/Helm 두TLS·4거부/Nu0/최종 runtime058f45121034·builder23bd0e0bcc55 gate PASS. 첫 clean 시험 경로 준비 실패는 고쳐 같은 전체 명령으로 재검증했다. source DS-0002 0/새 예외·scanner 약화 없음. 중복 SMTP11tracked+7생성파일/이미지1개, 미사용 Mac런타임116파일·소스압축1개, 과거 미사용 프로젝트 이미지36태그/34ID 제거. 현재6서비스·완료형필수job3/DB V24·기존키·모델보존, 타프로젝트 미변경. Java85파일·브라우저42모듈 추가 참조 점검에서 미사용 후보/누락0. 실제 운영 전환은 외부 MailBox 차단을 유지한다. [증빙](../05-test/evidence/smtp-boundary-cleanup-20261104.json). 현재head 독립 리뷰/PR 전달은 마감 단계이며 develop/main은 병합하지 않는다.

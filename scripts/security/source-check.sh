@@ -7,4 +7,5 @@ if rg -n 'innerHTML|eval\(|new Function\(|https?://.*(fonts.googleapis|google-an
 node --test scripts/security/*.test.mjs
 
 node --test scripts/test/style-structure.test.mjs
+node --test scripts/test/email-key.test.mjs
 node scripts/test/style-structure.mjs

@@ -12,8 +12,8 @@
 {{- define "moapan.mailEnv" -}}
 {{- if .Values.mail.enabled }}
 - {name: MOAPAN_MAIL_ENABLED, value: "true"}
-- {name: MOAPAN_MAIL_HOST, value: {{ if .Values.mail.server.enabled }}"mailbox-smtp"{{ else }}{{ required "mail.host is required" .Values.mail.host | quote }}{{ end }}}
-- {name: MOAPAN_MAIL_PORT, value: {{ if .Values.mail.server.enabled }}"25"{{ else }}{{ .Values.mail.port | quote }}{{ end }}}
+- {name: MOAPAN_MAIL_HOST, value: {{ required "mail.host is required" .Values.mail.host | quote }}}
+- {name: MOAPAN_MAIL_PORT, value: {{ .Values.mail.port | quote }}}
 - {name: MOAPAN_MAIL_FROM, value: {{ required "mail.from is required" .Values.mail.from | quote }}}
 - {name: MOAPAN_MAIL_TLS, value: {{ .Values.mail.tls | quote }}}
 - {name: MOAPAN_MAIL_USERNAME, value: {{ .Values.mail.username | quote }}}

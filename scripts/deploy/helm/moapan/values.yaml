@@ -32,10 +32,3 @@ mail:
   username: ""
   existingSecret: ""
   customCa: false
-  # Optional private Postfix deployment; requires explicit acceptance of its root master.
-  server:
-    enabled: false
-    image: ""
-    hostname: ""
-    trustedNetworks: ""
-    tlsSecret: ""

@@ -140,26 +140,23 @@ Linux 서버에서는 `compose-public.yaml` 대신 `scripts/deploy/compose-serve
 
 ### 필수 수신 이메일·비밀번호 찾기
 
-신규 가입은 수신 이메일 인증이 필요하다. 로그인 페이지의 **비밀번호 찾기**에서 사전 인증한 이메일의 인증번호로 새 비밀번호를 설정한다. 복구·이메일 변경은 기존 모든 로그인 세션을 종료한다. 기존 회원은 현재 계정을 유지하며 계정 관리에서 현재 비밀번호와 새 이메일 인증으로 등록한다. 이메일은 인증·비밀번호 복구·결제/구독 안내에만 사용하고 마케팅·광고·다른 목적으로 사용하지 않는다. 현재 결제·청구와 뉴스레터 이메일 발송은 미구현이다.
+신규 가입은 수신 이메일 인증이 필요하다. 로그인 페이지의 **비밀번호 찾기**에서 사전 인증한 이메일의 인증번호로 새 비밀번호를 설정한다. 복구·이메일 변경은 기존 모든 로그인 세션을 종료한다. 기존 회원은 계정을 유지하며 계정 관리에서 현재 비밀번호와 새 이메일 인증으로 등록한다. 이메일은 인증·비밀번호 복구·결제/구독 안내에만 사용하고 마케팅·광고·다른 목적으로 사용하지 않는다. 현재 결제·청구와 뉴스레터 이메일 발송은 미구현이다.
 
-사용자 보유 MailBox SMTP 소스를 읽기 전용 입력으로 준비한다. 검토한 SMTP 소스2개와 라이선스를 `scripts/mail/upstream`과 `licenses/mailbox`에 포함해 Linux에서도 단독 저장소로 준비할 수 있다. `MAILBOX_SOURCE_PATH`는 운영자가 검토한 다른 소스 경로를 선택할 때만 지정한다. 빌드 입력/키/인증서는 이 프로젝트 `.local/mail`에만 생성한다. IMAP/Webmail이나 기존 수신자 목록은 가져오지 않는다.
+### 외부 MailBox 연결과 책임
+
+담고담고는 SMTP 클라이언트와 암호화 발송 대기만 관리한다. MailBox/Postfix/IMAP/Webmail 서버를 복제하거나 빌드·시작하지 않는다. 운영자가 별도로 관리하는 SMTP에 `scripts/deploy/compose-mail-external.yaml`로 연결한다. worker만 지정한 기존 SMTP Docker 네트워크에 연결하고 web은 기존 backend를 유지한다.
+
+최초 준비는 저장소 안에서 다음 명령을 실행한다. 기존 이메일 암호화 키를 덮어쓰거나 재생성하지 않으며, 서버 인증서나 개인키도 만들지 않는다. 기존 키가 잘못됐으면 교체하지 않고 실패한다.
 
 ```sh
-sh scripts/mail/prepare.sh
-# .env의 MAIL_FROM/MAIL_HOSTNAME을 운영자가 실제로 제어하는 도메인으로 설정한 뒤
-# 사용하는 local/public/server 및 두 모델 overlay에 아래 mail overlay도 함께 적용한다.
-docker compose -f compose.yaml -f scripts/deploy/compose-translation.yaml -f scripts/deploy/compose-classification.yaml -f scripts/deploy/compose-mail.yaml up -d --build
+node scripts/deploy/prepare-email-key.mjs
+node scripts/test/mail-deployment-check.mjs
 ```
 
-SMTP 포트를 호스트에 공개하지 않으며 web은 발송 대기 등록, worker만 내부 TLS SMTP에 연결한다. Postfix는 좁은 전용 네트워크만 신뢰하고 chroot·최소 capability를 사용한다. 별도 키는 Git/이미지에 넣지 않고 암호화 DB 백업과 함께 접근통제한다. 서버 인증서는90일, CA는365일이며 만료 전 운영자가 갱신하고 SMTP를 재생성해야 한다. 자동 갱신이나 외부 받은편지함 전달을 검증했다고 주장하지 않는다. 발신 도메인·SPF/DKIM/DMARC·포트25 송신 가능 여부·실제 메일함 도착을 확인하기 전 운영 가입 기능을 전환하지 않는다. 메일 미설정 시 신규 인증/가입·복구는503으로 닫히며 기존 계정 로그인은 유지된다. 상세는 [이메일 설계서](docs/03-design/email-identity.md)와 [검증서](docs/05-test/email-identity.md)를 따른다.
+별도32-byte 이메일 키는 `.local/mail/data.key`에 보관하며 암호화 DB와 함께 백업·접근통제한다. 호스트 보관 디렉터리는0700이며 파일은 비루트 앱UID10001이 파일 secret으로 읽을 수 있는 읽기 전용 권한을 사용한다. 키를 분실하거나 다른 키로 바꾸면 기존 이메일 데이터를 복구할 수 없다. 실제 키와 .env는 Git에 넣지 않는다.
 
-SMTP 중계의 큐·테스트 수신함·계정 맵은 용량이 제한된 메모리 파일시스템만 사용하며, 인증번호와 수신 주소를 SMTP 영속 볼륨에 남기지 않는다. SMTP 큐는 최대5분이며 재시작 시 소실될 수 있다. 애플리케이션 PostgreSQL의 발송 대기 내용은 별도로 암호화해 재시도하지만, SMTP 수락 이후의 받은편지함 도착을 보장하지 않는다. 메일이 도착하지 않으면 새 인증번호를 요청해야 한다. 미래 결제 기능의 영수증 발송·재전송 보장은 그 기능을 구현할 때 별도 검증한다. 이메일 데이터 키를 분실하거나 기존 DB와 다른 키로 교체하면 복호화와 복구가 불가능하므로 기존 키를 별도로 안전하게 보관·이관한다.
+.env.example의 MAIL_FROM/MAIL_SMTP_HOST/MAIL_SMTP_PORT/MAIL_SMTP_NETWORK/MAIL_SMTP_CA_FILE을 운영자가 관리하는 값으로 설정한다. 인증서 SAN에 있는 호스트 이름과 확인된 CA 공개 인증서만 지정한다. 공개 CA 파일은 파일 secret의 앱UID10001이 읽을 수 있게 준비한다. CA 개인키·서버 개인키는 앱에 전달하지 않으며 전역 truststore·호스트 검증을 변경하지 않는다. Compose는 STARTTLS 필수, Helm은 STARTTLS 또는 SMTPS를 지원한다.
 
+보안 검사·백업·운영 승인이 끝난 뒤 실제 사용하는 local/public/server와 두 모델 overlay 뒤에 `-f scripts/deploy/compose-mail-external.yaml`을 추가한다. 기존 ingress/볼륨과 검증한 앱 digest를 유지한다. 이전 내장 SMTP의 compose-mail.yaml 및 Helm mail.server 옵션은 퇴역했으며 재사용하지 않는다. 메일 미설정 시 신규 인증·가입·복구는503으로 닫히고 기존 계정 로그인은 유지된다.
 
-### 이미 실행 중인 MailBox에 연결
-
-별도로 운영하는 MailBox에는 `scripts/deploy/compose-mail-external.yaml`을 사용한다. 이 overlay는 SMTP 컨테이너를 새로 만들거나 기존 MailBox 설정을 수정하지 않는다. worker만 지정한 기존 Docker 네트워크에 연결하고, 웹은 암호화 발송 대기를 등록한다. 위의 내장 SMTP overlay와 함께 사용하지 않는다.
-
-`.env.example`의 `MAIL_FROM`, `MAIL_SMTP_HOST`, `MAIL_SMTP_PORT`, `MAIL_SMTP_NETWORK`, `MAIL_SMTP_CA_FILE`을 실제 운영값으로 설정한다. 서버 인증서에 포함된 이름을 SMTP 호스트로 사용하고, 별도 경로에서 확인한 운영자 CA 공개 인증서만 지정한다. 인증서 검증을 끄거나 CA 개인키를 가져오지 않는다. 기존 `.local/mail/data.key`를 보존하고, 새 환경에서는 최초 연결 전에 별도32바이트 암호화 키를 안전하게 준비한다. 해당 키의 백업·접근통제와 갱신/이관은 기존 암호화 DB와 함께 관리한다.
-
-검사·백업과 운영 승인 후에만, 실제 사용하는 local/public/server 및 두 모델 overlay 뒤에 `-f scripts/deploy/compose-mail-external.yaml`을 추가해 실행한다. 환경별 ingress 선택과 기존 볼륨을 생략하지 않는다. Compose 설정 검증 성공이나 SMTP 수락만으로 보안 게이트/실수신/운영 전환을 완료 처리하지 않는다. 2026-11-04 현재 STARTTLS와 합성 Maildir 수신은 확인했지만 SMTP 이미지 보안 게이트·root 예외 미승인으로 실제 서비스 전환은 보류 중이다. 상세는 [메일 검증서](docs/05-test/email-identity.md#12-starttls-적용-후-실제-전달-재검증)를 따른다.
+이 저장소의 검사 통과는 외부 MailBox의 보안 문제 해결을 뜻하지 않는다. 외부 이미지·중계 권한·TLS·실제 외부 수신함 전달을 별도로 검증한 뒤 운영을 전환한다. 현재 실제 결과는 [이메일 검증서](docs/05-test/email-identity.md), 외부 담당 작업용 프롬프트는 [MailBox 결함 조치 요청서](docs/07-operation/mailbox-security-handoff.md)를 따른다.

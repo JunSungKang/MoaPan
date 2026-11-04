@@ -27,12 +27,41 @@ class SmtpTransportTest {
     static MailTransport.Envelope message(){return new MailTransport.Envelope(UUID.randomUUID(),EmailPurpose.SIGNUP_CODE,"synthetic@example.test","Verification","Synthetic test only");}
     static SmtpMailTransport transport(String host,int port,String mode,boolean trusted){return new SmtpMailTransport(new MailSettings(true,host,port,"no-reply@example.test","","",mode,trusted?ca.toString():"","", "MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY="));}
     static final class Server implements AutoCloseable {
-        final ServerSocket listener;final ExecutorService executor=Executors.newSingleThreadExecutor();final Future<?> task;volatile boolean received;
-        Server(boolean secure)throws Exception{listener=secure?tls.getServerSocketFactory().createServerSocket(0,1,InetAddress.getLoopbackAddress()):new ServerSocket(0,1,InetAddress.getLoopbackAddress());listener.setSoTimeout(5000);task=executor.submit(()->{try(var socket=listener.accept()){socket.setSoTimeout(5000);var read=new BufferedReader(new InputStreamReader(socket.getInputStream(),StandardCharsets.UTF_8));var write=new PrintWriter(new OutputStreamWriter(socket.getOutputStream(),StandardCharsets.UTF_8),true);write.println("220 localhost ESMTP");String line;while((line=read.readLine())!=null){if(line.startsWith("EHLO")||line.startsWith("HELO"))write.println("250 localhost");else if(line.startsWith("MAIL FROM")||line.startsWith("RCPT TO"))write.println("250 OK");else if(line.equals("DATA")){write.println("354 continue");while((line=read.readLine())!=null&&!line.equals(".")){}received=true;write.println("250 accepted");}else if(line.equals("QUIT")){write.println("221 bye");break;}else write.println("502 unsupported");}}catch(IOException expected){/* A rejected TLS peer may terminate before SMTP. */}});}
+        final ServerSocket listener;final ExecutorService executor=Executors.newSingleThreadExecutor();final Future<?> task;volatile boolean received,upgraded;
+        Server(boolean secure)throws Exception{this(secure,false);}
+        Server(boolean secure,boolean offerStarttls)throws Exception{
+            listener=secure?tls.getServerSocketFactory().createServerSocket(0,1,InetAddress.getLoopbackAddress()):new ServerSocket(0,1,InetAddress.getLoopbackAddress());listener.setSoTimeout(5000);
+            task=executor.submit(()->serve(offerStarttls));
+        }
+        private void serve(boolean offerStarttls){
+            SSLSocket secured=null;
+            try(var socket=listener.accept()){
+                socket.setSoTimeout(5000);var read=reader(socket);var write=writer(socket);boolean encrypted=socket instanceof SSLSocket;
+                write.println("220 localhost ESMTP");String line;
+                while((line=read.readLine())!=null){
+                    if(line.startsWith("EHLO")||line.startsWith("HELO")){
+                        if(offerStarttls&&!encrypted){write.println("250-localhost");write.println("250 STARTTLS");}else write.println("250 localhost");
+                    }else if(line.equals("STARTTLS")&&offerStarttls&&!encrypted){
+                        write.println("220 Ready for TLS");secured=(SSLSocket)tls.getSocketFactory().createSocket(socket,"localhost",socket.getPort(),true);secured.setUseClientMode(false);secured.setSoTimeout(5000);secured.startHandshake();
+                        upgraded=true;encrypted=true;read=reader(secured);write=writer(secured);
+                    }else if(offerStarttls&&!encrypted)write.println("530 STARTTLS required");
+                    else if(line.startsWith("MAIL FROM")||line.startsWith("RCPT TO"))write.println("250 OK");
+                    else if(line.equals("DATA")){write.println("354 continue");while((line=read.readLine())!=null&&!line.equals(".")){}received=true;write.println("250 accepted");}
+                    else if(line.equals("QUIT")){write.println("221 bye");break;}
+                    else write.println("502 unsupported");
+                }
+            }catch(IOException expected){/* Rejected CA/hostname peers can terminate during the handshake. */}
+            finally{if(secured!=null)try{secured.close();}catch(IOException ignored){}}
+        }
+        private static BufferedReader reader(Socket socket)throws IOException{return new BufferedReader(new InputStreamReader(socket.getInputStream(),StandardCharsets.UTF_8));}
+        private static PrintWriter writer(Socket socket)throws IOException{return new PrintWriter(new OutputStreamWriter(socket.getOutputStream(),StandardCharsets.UTF_8),true);}
         int port(){return listener.getLocalPort();}public void close()throws Exception{listener.close();executor.shutdownNow();executor.awaitTermination(6,TimeUnit.SECONDS);}
     }
     @Test void matchingTrustedCertificateDeliversToSyntheticSmtp()throws Exception{try(var server=new Server(true)){transport("localhost",server.port(),"SMTPS",true).send(message());assertTrue(server.received);}}
     @Test void wrongHostnameIsRejectedEvenWhenCertificateIsTrusted()throws Exception{try(var server=new Server(true)){assertThrows(IllegalStateException.class,()->transport("127.0.0.1",server.port(),"SMTPS",true).send(message()));assertFalse(server.received);}}
     @Test void unknownCaIsRejected()throws Exception{try(var server=new Server(true)){assertThrows(IllegalStateException.class,()->transport("localhost",server.port(),"SMTPS",false).send(message()));assertFalse(server.received);}}
     @Test void serverWithoutStarttlsCannotReceiveMessage()throws Exception{try(var server=new Server(false)){assertThrows(IllegalStateException.class,()->transport("localhost",server.port(),"STARTTLS",true).send(message()));assertFalse(server.received);}}
+    @Test void requiredStarttlsWithVerifiedCertificateDelivers()throws Exception{try(var server=new Server(false,true)){transport("localhost",server.port(),"STARTTLS",true).send(message());assertTrue(server.upgraded);assertTrue(server.received);}}
+    @Test void starttlsWithWrongHostnameCannotReceiveMessage()throws Exception{try(var server=new Server(false,true)){assertThrows(IllegalStateException.class,()->transport("127.0.0.1",server.port(),"STARTTLS",true).send(message()));assertFalse(server.received);}}
+    @Test void starttlsWithUnknownCaCannotReceiveMessage()throws Exception{try(var server=new Server(false,true)){assertThrows(IllegalStateException.class,()->transport("localhost",server.port(),"STARTTLS",false).send(message()));assertFalse(server.received);}}
 }

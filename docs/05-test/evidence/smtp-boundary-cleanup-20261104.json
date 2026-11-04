@@ -1,0 +1,225 @@
+{
+  "completedAt": "2026-11-04T04:21:10.449Z",
+  "scope": "DamGoX2 repository and proven-unused owned runtime artifacts only",
+  "handoffPrompt": "docs/07-operation/mailbox-security-handoff.md",
+  "tests": {
+    "test": {
+      "tests": 184,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "integrationTest": {
+      "tests": 147,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "e2eTest": {
+      "tests": 77,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "additionalChecks": {
+    "emailKeyCases": 7,
+    "composeModes": 3,
+    "missingComposeConfigurationRejected": 12,
+    "helmModes": [
+      "STARTTLS",
+      "SMTPS"
+    ],
+    "helmMailInvalidCases": 4,
+    "htmlMessages": 0,
+    "javaSymbols": {
+      "files": 85,
+      "privateDeclarations": 264,
+      "unannotatedTypes": 113,
+      "compilerErrors": 0,
+      "unusedCandidates": 0,
+      "recordAndFrameworkHooksPreserved": true
+    },
+    "browserModules": {
+      "checkedAt": "2026-11-04T04:12:10.408Z",
+      "htmlCount": 13,
+      "moduleCount": 42,
+      "reachableModuleCount": 42,
+      "unreachable": [],
+      "missing": [],
+      "dynamicImportExpressions": []
+    }
+  },
+  "security": {
+    "localSecurityCheck": "PASS",
+    "localAcceptanceTest": "PASS",
+    "scannerPolicySha256": {
+      "scripts/security/security-check.sh": "8c9f3c7275e72fbd59cc52c8356fd70f2a9dd0381fdf18b46ac32a712751370d",
+      "scripts/security/verify-security-reports.mjs": "01f3c0fd2b7f5e55e1e3c300c2c179609f81217a33444860708f7b5d4eb316fa",
+      "scripts/security/security-applicability.mjs": "d66e364dda5248b3179d742b7c6cfcd12582f7b57a07ad59b8e4437610b692d8"
+    },
+    "noNewScannerException": true,
+    "scans": {
+      "source": {
+        "createdAt": "2026-11-04T12:54:12.395665+09:00",
+        "rawVulnerabilities": 5,
+        "highCriticalConfiguration": 0,
+        "secrets": 0
+      },
+      "jar": {
+        "createdAt": "2026-11-04T12:54:13.81451+09:00",
+        "rawVulnerabilities": 0,
+        "highCriticalConfiguration": 0,
+        "secrets": 0
+      },
+      "sbom": {
+        "createdAt": "2026-11-04T12:54:12.484538+09:00",
+        "rawVulnerabilities": 0,
+        "highCriticalConfiguration": 0,
+        "secrets": 0
+      },
+      "helm": {
+        "createdAt": "2026-11-04T12:54:03.497172+09:00",
+        "rawVulnerabilities": 0,
+        "highCriticalConfiguration": 0,
+        "secrets": 0
+      },
+      "helm-mail": {
+        "createdAt": "2026-11-04T12:54:04.753907+09:00",
+        "rawVulnerabilities": 0,
+        "highCriticalConfiguration": 0,
+        "secrets": 0
+      }
+    },
+    "imageScans": {
+      "runtime": {
+        "imageId": "sha256:058f45121034986b64c7f64f4e20b26654f494421a7cb00deddd3d5065e4945e",
+        "createdAt": "2026-11-04T12:54:46.458258+09:00",
+        "rawVulnerabilities": 0,
+        "secrets": 0
+      },
+      "builder": {
+        "imageId": "sha256:23bd0e0bcc555c0186f1a4baeb43809e0a22fcb9ffb4e0cb5067709a89e80fc9",
+        "createdAt": "2026-11-04T12:54:51.332202+09:00",
+        "rawVulnerabilities": 0,
+        "secrets": 0
+      }
+    },
+    "db": {
+      "Version": 2,
+      "NextUpdate": "2026-11-04T19:16:30.092558916Z",
+      "UpdatedAt": "2026-11-03T19:16:30.092559407Z",
+      "DownloadedAt": "2026-11-04T00:17:15.334934Z"
+    }
+  },
+  "jarSha256": "684f13607aaeae9216f8ac373d35f82fff48ea7968e182208390c6978daef6fb",
+  "retirement": {
+    "trackedFiles": [
+      "scripts/mail/Dockerfile",
+      "scripts/mail/prepare.sh",
+      "scripts/mail/secure-entrypoint.sh",
+      "scripts/mail/upstream/SOURCE.json",
+      "scripts/mail/upstream/entrypoint.sh",
+      "scripts/mail/upstream/main.cf",
+      "scripts/deploy/compose-mail.yaml",
+      "scripts/deploy/helm/moapan/templates/smtp.yaml",
+      "scripts/test/smtp-check.sh",
+      "scripts/test/compose-mail-smoke.yaml",
+      "src/integrationTest/java/com/moapan/identity/SmtpPostfixSmoke.java"
+    ],
+    "generatedContext": {
+      "removedGeneratedContext": ".local/mail/source",
+      "verifiedAgainstHead": "65b2c1e489ed85c2322820f90122653928a5c492",
+      "files": [
+        "Dockerfile",
+        "main.cf",
+        "patch-os-trust.sh",
+        "secure-entrypoint.sh",
+        "source.sha256",
+        "upstream-entrypoint.sh",
+        "virtual-mailbox-accounts"
+      ],
+      "existingDataKeyAndCertificatesTouched": false
+    },
+    "nativeRuntimeDirectories": [
+      {
+        "directory": ".local/translation/ollama-runtime",
+        "fileCount": 55,
+        "logicalBytes": 607969415
+      },
+      {
+        "directory": ".local/translation/runtime/llama-b11960",
+        "fileCount": 61,
+        "logicalBytes": 41660048
+      }
+    ],
+    "unusedNativeSourceArchiveRemoved": true,
+    "retiredSmtpImage": "sha256:96737b40de9f24d54bae15c22499dd706351db4cd534a955b0b43c70cd618a7b",
+    "oldProjectImageTagsRemoved": 36,
+    "oldProjectImageIdsRemoved": 34,
+    "removedImageTags": [
+      "damgox2-identity:runtime-20261104",
+      "damgox2-subscription:builder-revoke-20261102",
+      "damgox2-subscription:builder-list-20261102",
+      "damgox2-subscription:runtime-list-20261102",
+      "damgox2-subscription:runtime-delivery-20261102",
+      "damgox2-subscription:builder-delivery-20261102",
+      "damgox2-subscription:runtime-complete-20261102",
+      "damgox2-subscription:builder-complete-20261102",
+      "damgox2-subscription:runtime-reviewed-20261102",
+      "damgox2-subscription:builder-reviewed-20261102",
+      "damgox2-subscription:builder-final-20261102",
+      "damgox2-subscription:runtime-20261102",
+      "damgox2-subscription:runtime-final-20261102",
+      "damgox2-subscription:builder-20261102",
+      "damgox2-refactor:builder-final-20261102",
+      "damgox2-refactor:runtime-final-20261102",
+      "damgox2-refactor:builder-20261102",
+      "damgox2-refactor:runtime-20261102",
+      "damgox2-pagespeed:runtime-final-20261102",
+      "damgox2-pagespeed:builder-final-20261102",
+      "damgox2-pagespeed:builder-20261102",
+      "damgox2-pagespeed:runtime-20261102",
+      "damgox2-cleanup:builder-verified-20261102",
+      "damgox2-cleanup:runtime-final-20261102",
+      "damgox2-cache:builder-final-20261101",
+      "damgox2-cache:delivery-20261101",
+      "damgox2-cache:builder-20261101",
+      "damgox2-cache:proxy-20261101",
+      "damgox2-cache:foundation-20261101",
+      "damgox2-performance:proxy-20261101",
+      "damgox2-performance:web-20261101",
+      "damgox2-cache:pre-delivery-app-20261101",
+      "moapan-damgox2-candidate:20261101",
+      "moapan-damgox2-build:20261101",
+      "damgox2-cache:pre-delivery-proxy-20261101",
+      "moapan-proxy-candidate:alpine"
+    ],
+    "noGlobalPrune": true,
+    "noVolumeDeletion": true
+  },
+  "deployment": {
+    "performed": false,
+    "reason": "External MailBox security handoff remains unresolved; project scanner PASS is not MailBox remediation or risk acceptance",
+    "runningApp": "sha256:24fc8045a50cc78f44a57d0bdae30b12ed3d8bb52fcde7a1fa5e2042fafbf082",
+    "schema": "24",
+    "liveLoginHttp": 200,
+    "runningProjectServices": [
+      "db",
+      "web",
+      "worker",
+      "proxy",
+      "translator",
+      "classifier"
+    ],
+    "intentionalCompletedJobs": [
+      "migrate",
+      "model-init",
+      "classifier-model-init"
+    ],
+    "extraProjectNativeDaemons": 0,
+    "projectLaunchAgentMatches": 0,
+    "otherProjectModified": false,
+    "existingSecretsAndModelsModified": false
+  }
+}

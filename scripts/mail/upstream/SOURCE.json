@@ -1,9 +1,0 @@
-{
-  "origin": "User-owned sibling mail-box/smtp-receiver, read-only import on 2026-11-03",
-  "license": "Apache-2.0; licenses/mailbox/LICENSE.txt",
-  "files": {
-    "main.cf": "f6de234135b82d3d9bad043bcd64cd9532aef465466a7e3278923a2219fc89d1",
-    "entrypoint.sh": "862f589d87910f4ea4e2d081ab0e5f58c5b5810eb53b2731b4437cf20fe50f3b"
-  },
-  "changes": "Original source retained; container-only secure-entrypoint adds required verified TLS, narrow relay network, chroot TLS files, size/rate/retention bounds and disables recipient logging. Original broad defaults never serve as the final active policy."
-}

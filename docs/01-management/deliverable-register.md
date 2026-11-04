@@ -47,3 +47,5 @@
 
 | MP-DOC-037 | 이메일 인증·복구 설계서 | 개발 담당 | [문서](../03-design/email-identity.md) |
 | MP-DOC-038 | 이메일 인증·복구 검증서 | 개발 담당 | [문서](../05-test/email-identity.md) |
+
+| MP-DOC-039 | 외부 MailBox 보안 결함 조치 요청서 | 개발 담당 | [문서](../07-operation/mailbox-security-handoff.md) |

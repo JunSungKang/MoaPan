@@ -24,23 +24,22 @@ V25는 기존 users에 nullable 이메일 암호문·HMAC 조회키·인증/안�
 
 암호화 outbox는 worker만 소비한다. SKIP LOCKED 선점, 60초 lease, 최대3회/15초 재시도, 발송 후 내용 폐기, 만료/하루 이상 메타데이터 정리를 적용한다. SMTP 수락은 실제 받은편지함 도착의 증거가 아니며 lease 재시도는 중복 발송 가능성이 있는 at-least-once다. 인증 메일과 알림은 서비스 메일이며 뉴스레터 이메일 발송과 구분한다.
 
-SMTP는 STARTTLS 필수 또는 SMTPS, 인증서/호스트 검증, 연결/읽기/쓰기3초 제한을 적용한다. 운영자가 지정한 CA는 SMTP 전용 SSLContext에만 적용하며 JDK truststore/TLS 검증을 변경하지 않는다. 형제 mail-box 원본에는 TLS/SASL이 없어 원래 구성을 그대로 공개 릴레이로 실행하지 않는다. 실제 전달·도메인 DNS 설정은 별도 운영 검증이 필요하다.
+SMTP는 STARTTLS 필수 또는 SMTPS, 인증서/호스트 검증, 연결/읽기/쓰기3초 제한을 적용한다. 운영자가 지정한 CA는 SMTP 전용 SSLContext에만 적용하며 JDK truststore/TLS 검증을 변경하지 않는다. 외부 SMTP의 이미지·권한·TLS·도메인 설정은 MailBox 운영 책임이며 실제 전달을 별도 검증한다. 담고담고가 그 서버를 복제하거나 변경하지 않는다.
 
 ## 5. 안내·이행
 
 가입 화면에 정확한 용도와 필수 확인, 계정 화면에 등록/변경, 로그인 화면에 복구 링크를 제공한다. 이메일 미등록 기존 회원은 계속 로그인 가능하지만 이메일 복구를 사용할 수 없으므로 등록을 안내한다. 운영자 연락처·결제·법률 검토 완료는 임의 생성하거나 주장하지 않는다. 별도 키의 백업/복원은 암호화 DB 백업과 함께 접근통제하며 키가 없으면 이메일 복구가 불가능하다. 실제 결과는 MP-DOC-038을 따른다.
 
-## 6. 메일서버 이식과 실제 검토
+## 6. 중복 SMTP 서버 퇴역과 보안 책임
 
-MailBox 소스2개를 Apache-2.0 고지와 SHA256으로 동결했으며 소유자 원본은 수정하지 않았다. Debian12/13 기반에서 미해결 OS 취약점이 남아 배포하지 않고, 지원되는 Alpine3.24.3과 Postfix3.11.7로 이식했다. 원본 계정 목록/웹메일/IMAP은 가져오지 않는다. Linux 이관 시 형제 저장소 없이 포함 소스로 동일한 build context를 생성한다. Alpine 패키지의 vmail과 LMDB maps를 사용하며 private TLS 키는 chroot 내부 tmpfs에만 복사한다. 외부 SMTP도 verify/hostname/공식CA로 강제한다. 도메인별 호환성보다 TLS 실패 시 대기/만료를 우선하며 평문 fallback을 허용하지 않는다. 원본의 broad network 기본값 대신 전용 좁은 네트워크를 기본값으로 덮어쓴다.
+초기 구현은 외부 MailBox 소스를 복제한 별도 Postfix 서버까지 이 저장소에서 빌드·배포했다. 그 서버의 root 실행이 DS-0002 HIGH를 발생시켰다. 사용자는 위험 수용을 미승인했으며 2026-11-04 이 프로젝트 안에서 원인을 해결하도록 명시적으로 지시했다. 이에 중복 서버 Dockerfile/소스·준비 스크립트·Compose/Helm 배포·전용 Postfix smoke 진입점을 실제로 제거하고 SMTP 클라이언트/outbox만 유지한다. USER 위장·권한 상승 도구·스캐너 제외·예외로 경고를 숨기지 않는다.
 
-Postfix master의 root 실행은 Trivy DS-0002 HIGH로 남아 있으며 권한 분리·chroot·최소cap·무공개 SMTP포트는 완화책이다. 오탐/수정으로 간주하지 않는다. 2026-11-04 사용자가 해당 SMTP 이미지의 root 실행 예외를 명시적으로 미승인했다. 구현은 보존하되 경고를 숨기거나 예외를 추가하지 않고 securityCheck/acceptanceTest와 SMTP 활성화·운영 전환 차단을 유지한다. 실수신 테스트를 사용자가 맡는 결정은 이 위험 수용을 뜻하지 않는다. 애플리케이션과 worker는 계속UID10001 비루트다.
+SMTP는 운영자 별도 인프라다. 서버 큐·메일함·인증서/개인키·인터넷 중계는 외부 MailBox가 관리하고, 담고담고는 목적 제한·인증 도전·암호화 발송 대기·클라이언트 TLS/호스트 검증·bounded retry/TTL을 관리한다. 외부 결함은 MP-DOC-039로 인계하고 다른 프로젝트를 수정하지 않는다. 외부 SMTP의 고위험 검출을 담고담고의 소스 검사 PASS로 면제하지 않는다.
 
-SMTP 중계의 큐·테스트 수신함·계정 맵은 용량이 제한된 메모리 파일시스템만 사용하며, 인증번호와 수신 주소를 SMTP 영속 볼륨에 남기지 않는다. SMTP 큐는 최대5분이며 재시작 시 소실될 수 있다. 애플리케이션 PostgreSQL의 발송 대기 내용은 별도로 암호화해 재시도하지만, SMTP 수락 이후의 받은편지함 도착을 보장하지 않는다. 메일이 도착하지 않으면 새 인증번호를 요청해야 한다. 미래 결제 기능의 영수증 발송·재전송 보장은 그 기능을 구현할 때 별도 검증한다. 이메일 데이터 키를 분실하거나 기존 DB와 다른 키로 교체하면 복호화와 복구가 불가능하므로 기존 키를 별도로 안전하게 보관·이관한다.
-
+`node scripts/deploy/prepare-email-key.mjs`는 이 workspace의 별도32-byte 키만 준비한다. 기존 키 바이트를 보존·검증하며 잘못된 키·symlink·workspace 이탈·공유 호스트 디렉터리를 거부한다. 호스트 디렉터리0700 안의 파일은 Compose 비루트 secret 마운트가 읽을 수 있는0444이며 키를 출력하지 않는다. SMTP 서버 소스/CA/서버 개인키를 준비하지 않는다. 기존 키와 이전 로컬 인증서는 사용 여부를 확인하지 않은 채 삭제·회전하지 않는다.
 
 ## 7. 별도 실행한 MailBox 연결
 
-운영자가 별도로 구동한 SMTP는 `scripts/deploy/compose-mail-external.yaml`로 연결한다. 서버를 복제·시작·수정하지 않고 worker만 명시한 기존 Docker 네트워크에 참가한다. web은 기존 backend만 유지한다. 서버 인증서 SAN에 포함된 호스트·STARTTLS·운영자가 확인한 CA 공개 인증서와 기존 이메일 데이터 키를 설정한다. 키/CA는 파일 secret으로 읽고 CA 개인키·서버 개인키를 앱에 전달하지 않는다. 파일 secret을 앱UID10001이 읽을 수 있도록 공개 CA 파일의 읽기 권한을 준비하되 호스트 보관 디렉터리와 이메일 데이터 키의 접근은 제한한다. 내장 SMTP overlay와 동시 사용하지 않는다. Linux에서도 동일한 Compose overlay와 운영자 네트워크·secret 경로를 사용하며 전역 truststore를 수정하지 않는다.
+운영자가 별도로 구동한 SMTP는 `scripts/deploy/compose-mail-external.yaml`로 연결한다. 서버를 복제·시작·수정하지 않고 worker만 명시한 기존 Docker 네트워크에 참가한다. web은 기존 backend만 유지한다. 서버 인증서 SAN에 포함된 호스트·STARTTLS·운영자가 확인한 CA 공개 인증서와 기존 이메일 데이터 키를 설정한다. 키/CA는 파일 secret으로 읽고 CA 개인키·서버 개인키를 앱에 전달하지 않는다. 파일 secret을 앱UID10001이 읽을 수 있도록 공개 CA 파일의 읽기 권한을 준비하되 호스트 보관 디렉터리와 이메일 데이터 키의 접근은 제한한다. 내장 SMTP overlay와 mail.server Helm 옵션은 제거됐다. 예전 설정은 현재 배포에 사용하지 않는다. Linux에서도 동일한 Compose overlay와 운영자 네트워크·secret 경로를 사용하며 전역 truststore를 수정하지 않는다.
 
-2026-11-04 사용자 STARTTLS 적용 후 실제 SmtpMailTransport와 operator CA를 이용한 합성 전송·Maildir 수신 및 비루트 앱 이미지의 Docker 네트워크/TLS 연결을 확인했다. 이는 실제 가입/복구의 운영 전환 또는 외부 인터넷 수신함 배달 검증이 아니다. 별도 MailBox의 이미지 고위험 검출과 기존 root 실행 위험 미승인은 해소되지 않았으며 이를 연결 방식 변경으로 면제하지 않는다.
+2026-11-04 사용자 STARTTLS 적용 후 실제 SmtpMailTransport와 operator CA를 이용한 합성 전송·Maildir 수신 및 비루트 앱 이미지의 Docker 네트워크/TLS 연결을 확인했다. 이는 실제 가입/복구의 운영 전환 또는 외부 인터넷 수신함 배달 검증이 아니다. 별도 MailBox의 이미지 고위험 검출과 root 실행 위험 미승인은 이 프로젝트의 수정으로 해소되지 않는다. 실제 운영은 해당 외부 차단 해소 후 전환한다.

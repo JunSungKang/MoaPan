@@ -104,10 +104,5 @@ tasks.register('modelSmokeClasspath') {
     }
 }
 
-// Optional explicit test against the loopback-only MailBox fixture, never a real recipient.
-tasks.register('smtpSmoke', JavaExec) {
-    dependsOn integrationTestClasses
-    classpath = sourceSets.integrationTest.runtimeClasspath
-    mainClass = 'com.moapan.identity.SmtpPostfixSmoke'
-    systemProperty 'java.io.tmpdir', file('.local/tmp').absolutePath
-}
+tasks.register('mailDeploymentCheck', Exec) { commandLine 'node', 'scripts/test/mail-deployment-check.mjs' }
+tasks.named('integrationTest') { dependsOn tasks.named('mailDeploymentCheck') }

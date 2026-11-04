@@ -135,4 +135,4 @@ go-jose/v3에는 공식 v4 보안 수정을 이식했습니다. 공급자 정식
 
 ## 계정 이메일 라이브러리 (2026-11-03)
 
-Spring Boot mail/starter-mail와 Spring context-support는 Apache-2.0, Jakarta Mail API2.1.5와 Eclipse Angus Mail2.0.5는 EPL-2.0 경로를 선택해 미수정 라이브러리로 사용한다. 정확한 JAR의 LICENSE/NOTICE와 대응 source JAR URL/체크섬을 licenses/java와 java-inventory.json에 보관했다. 라이브러리 바이너리를 배포할 때 해당 라이브러리의 소스 제공과 고지 의무를 지켜야 하며, 독립적인 담고담고 전체 애플리케이션을 공개해야 한다고 판단하지 않는다. 라이브러리를 수정/재배포하거나 배포 형태를 바꾸면 다시 검토한다. 메일 서버에는 사용자 MailBox의 Apache-2.0 소스 일부와 Debian/Postfix 구성요소가 들어가므로 해당 이미지의 패키지 저작권/소스 제공 의무도 별도로 유지한다. 이 기록은 법률 검토 완료 선언이 아니다.
+Spring Boot mail/starter-mail와 Spring context-support는 Apache-2.0, Jakarta Mail API2.1.5와 Eclipse Angus Mail2.0.5는 EPL-2.0 경로를 선택해 미수정 라이브러리로 사용한다. 정확한 JAR의 LICENSE/NOTICE와 대응 source JAR URL/체크섬을 licenses/java와 java-inventory.json에 보관했다. 라이브러리 바이너리를 배포할 때 해당 라이브러리의 소스 제공과 고지 의무를 지켜야 하며, 독립적인 담고담고 전체 애플리케이션을 공개해야 한다고 판단하지 않는다. 라이브러리를 수정/재배포하거나 배포 형태를 바꾸면 다시 검토한다. 현재 애플리케이션은 외부 SMTP 클라이언트만 포함하며 MailBox/Postfix 서버를 빌드·배포하지 않는다. 퇴역한 내장 SMTP 구성의 과거 MailBox 고지 파일은 이력 근거로 보존한다. 기존에 만든 별도 이미지의 패키지 저작권/소스 제공 의무가 이 정리로 소멸하는 것은 아니며 외부 MailBox 배포자는 자신의 이미지 의무를 별도 검토해야 한다. 이 기록은 법률 검토 완료 선언이 아니다.
