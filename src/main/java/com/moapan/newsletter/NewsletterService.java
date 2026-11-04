@@ -1,6 +1,8 @@
 package com.moapan.newsletter;
 import java.util.*;
-import java.net.URI;
+import com.moapan.newsletter.domain.Manuscript;
+import com.moapan.newsletter.domain.Manuscript.Block;
+import com.moapan.newsletter.application.ManuscriptValidation;
 import java.time.*;
 import com.moapan.newsletter.domain.PublicationResearch;
 import com.moapan.newsletter.domain.PublicationResearch.*;
@@ -15,23 +17,11 @@ import com.moapan.shared.api.ApiError;
 import tools.jackson.databind.json.JsonMapper;
 @Service
 public class NewsletterService{
- public record Block(String type,String text,String url,String caption){}
- public record Manuscript(String title,String introduction,String topic,List<Block> blocks){}
  public record Input(long version,Manuscript manuscript,Dossier dossier){}
  private final JdbcClient db;private final JsonMapper json=JsonMapper.builder().build();
  private final PublicationEvidence evidence;private final ContentAccess access;private final Clock clock;
- private final PublicationReadModels readModels;
- public NewsletterService(JdbcClient db,PublicationEvidence evidence,ContentAccess access,Clock clock,PublicationReadModels readModels){this.db=db;this.evidence=evidence;this.access=access;this.clock=clock;this.readModels=readModels;}
- private String validate(Manuscript m){
-  if(m==null||m.title()==null||m.title().isBlank()||m.title().length()>180||m.introduction()==null||m.introduction().length()>1000||m.topic()==null||m.topic().length()>100||m.blocks()==null||m.blocks().size()>80)throw new ApiError(400,"invalid_manuscript");
-  for(var b:m.blocks()){
-   if(b==null||b.type()==null||!Set.of("paragraph","heading","quote","image","reference").contains(b.type())||b.text()==null||b.text().length()>12000||b.caption()==null||b.caption().length()>1000||b.url()==null)throw new ApiError(400,"invalid_block");
-   if(b.type().equals("image")){if(!b.url().matches("data:image/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+")||b.url().length()>300000||b.text().isBlank())throw new ApiError(400,"invalid_image");try{var bytes=Base64.getDecoder().decode(b.url().substring(b.url().indexOf(',')+1));try(var stream=javax.imageio.ImageIO.createImageInputStream(new java.io.ByteArrayInputStream(bytes))){var readers=javax.imageio.ImageIO.getImageReaders(stream);if(!readers.hasNext())throw new IllegalArgumentException();var reader=readers.next();try{reader.setInput(stream);if(reader.getWidth(0)>2000||reader.getHeight(0)>2000)throw new IllegalArgumentException();}finally{reader.dispose();}}}catch(Exception e){throw new ApiError(400,"invalid_image");}}
-   else if(b.type().equals("reference")){try{var u=URI.create(b.url());if(!"https".equals(u.getScheme())||u.getHost()==null||u.getUserInfo()!=null||b.url().length()>2048)throw new IllegalArgumentException();}catch(Exception e){throw new ApiError(400,"invalid_reference");}}
-   else if(!b.url().isEmpty())throw new ApiError(400,"invalid_block_url");
-  }
-  var encoded=json.writeValueAsString(m);if(encoded.length()>800000)throw new ApiError(400,"manuscript_too_large");return encoded;
- }
+ private final PublicationReadModels readModels;private final ManuscriptValidation validation;
+ public NewsletterService(JdbcClient db,PublicationEvidence evidence,ContentAccess access,Clock clock,PublicationReadModels readModels,ManuscriptValidation validation){this.db=db;this.evidence=evidence;this.access=access;this.clock=clock;this.readModels=readModels;this.validation=validation;}
  public Object list(){
   access.require(Benefit.READ_NEWSLETTER);
   var rows=readModels.catalog();
@@ -50,7 +40,7 @@ public class NewsletterService{
  @PreAuthorize("hasRole('ADMIN')") public Object drafts(){return db.sql("SELECT id,draft->>'title' title,version,published_at,updated_at FROM newsletters ORDER BY updated_at DESC,id LIMIT 100").query().listOfRows().stream().map(this::utcTimestamps).toList();}
  @PreAuthorize("hasRole('ADMIN')") public Object edit(UUID id){var r=db.sql("SELECT draft::text content,draft_dossier::text dossier,version,publication_revision,first_published_at FROM newsletters WHERE id=:id").param("id",id).query().listOfRows().stream().findFirst().orElseThrow(()->new ApiError(404,"newsletter_not_found"));var result=new LinkedHashMap<String,Object>();var d=dossier(r.get("dossier"));result.put("manuscript",json.readTree(r.get("content").toString()));result.put("version",r.get("version"));result.put("dossier",d);result.put("evidence",d==null?List.of():evidence.selected(d.articleIds(),false));result.put("revision",r.get("publication_revision"));result.put("expectedWeek",expectedWeek(r).toString());return result;}
  @Transactional @PreAuthorize("hasRole('ADMIN')") public Object save(UUID id,Input input,UUID actor){
-  if(input==null||input.version()<0)throw new ApiError(400,"invalid_version");String content=validate(input.manuscript());try{PublicationResearch.shape(input.dossier());}catch(IllegalArgumentException e){throw new ApiError(400,"invalid_research");}String research=json.writeValueAsString(input.dossier());
+  if(input==null||input.version()<0)throw new ApiError(400,"invalid_version");String content=validation.encode(input.manuscript());try{PublicationResearch.shape(input.dossier());}catch(IllegalArgumentException e){throw new ApiError(400,"invalid_research");}String research=json.writeValueAsString(input.dossier());
   lock(id);if(input.version()==0){if(db.sql("SELECT EXISTS(SELECT 1 FROM admin_actions WHERE target_id=:id AND action='newsletter_delete')").param("id",id).query(Boolean.class).single())throw new ApiError(409,"newsletter_deleted");db.sql("INSERT INTO newsletters(id,draft) VALUES(:id,CAST(:body AS jsonb)) ON CONFLICT DO NOTHING").param("id",id).param("body",content).update();}
   int n=db.sql("UPDATE newsletters SET draft=CAST(:body AS jsonb),draft_dossier=CAST(:research AS jsonb),version=version+1,updated_at=now() WHERE id=:id AND version=:version").param("id",id).param("body",content).param("research",research).param("version",input.version()).update();if(n!=1)throw new ApiError(409,"version_conflict");audit(actor,id,"newsletter_save");return edit(id);
  }
