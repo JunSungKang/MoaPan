@@ -51,7 +51,7 @@ Wrapper ZIP/JAR 체크섬, dependency locking, strict verification을 사용한�
 
 ## 개인정보와 운영
 
-이름·이메일·전화번호를 받지 않으며 개인 관심사·가중치는 브라우저 UUID별 IndexedDB에 저장한다. 검색 조건은 실행과 결과 페이지 이동 때 같은 origin 서버에 POST로 보내 일시 처리한다. URL·DB·로그·회원 검색 이력에 저장하거나 외부로 전송하지 않는다. 입력 중에는 전송하지 않는다. 비밀번호 복구와 자동 기기 동기화는 없으며, 암호화 파일로 관심사를 직접 옮길 수 있다. 같은 브라우저 프로필의 다른 접근자에 대한 암호학적 비밀성을 보장하지 않는다. 계정·세션·보안 카운터도 회원 관련 정보다.
+이름·전화번호는 받지 않는다. 필수 수신 이메일은 가입 인증·비밀번호 복구·결제 및 구독 관련 안내에만 사용하며 마케팅·광고·다른 목적으로 사용하지 않는다. 이메일은 별도 키로 암호화하고 개인 관심사·가중치는 브라우저 UUID별 IndexedDB에 저장한다. 검색 조건은 실행과 결과 페이지 이동 때 같은 origin 서버에 POST로 보내 일시 처리한다. URL·DB·로그·회원 검색 이력에 저장하거나 외부로 전송하지 않는다. 입력 중에는 전송하지 않는다. 미리 인증한 이메일로 비밀번호를 재설정할 수 있다. 자동 기기 동기화는 없으며, 암호화 파일로 관심사를 직접 옮길 수 있다. 같은 브라우저 프로필의 다른 접근자에 대한 암호학적 비밀성을 보장하지 않는다. 계정·세션·보안 카운터도 회원 관련 정보다.
 
 원문은 직접 링크로 이동한다. 기사 전문, 이미지·로고, 추적 SDK와 클릭 이벤트 저장은 기본 제공하지 않는다. [개인정보 경계](docs/07-operation/privacy.md), [API](docs/03-design/api.md), [출처](docs/07-operation/sources.md), [보안 검토](docs/07-operation/security-review.md), [배포·백업](docs/06-transition/deployment.md)를 참조한다.
 
@@ -114,7 +114,7 @@ Linux 서버에서는 `compose-public.yaml` 대신 `scripts/deploy/compose-serve
 
 광고는 관리자 → 광고 관리에서 직접 링크 배너를 저장하면 지면 재조회 시 반영됩니다. 애드센스는 승인/식별자 미보유 상태에 맞춰 연결 정보 등록만 지원하며 실제 송출은 연결되지 않았습니다. 상세 절차는 [배포·운영 안내](docs/06-transition/deployment.md#광고-등록-방법)를 참조하세요.
 
-서비스명은 담고담고(DamGoX2)이며 “여러 소식을 담고 펼치는 판”을 뜻합니다. 이름·영문 표기는 [config.js](src/main/resources/static/assets/js/shared/config.js)의 brand, 뉴스레터 표시·의미는 newsletter 설정에서 관리합니다. 유효한 구독 권한이 있는 계정으로 로그인하면 콘텐츠 메뉴에서 목록/본문을 읽습니다. 관리자 계정 메뉴 → 담고담고 관리에서 새 원고·글/그림·참고 자료를 편집하고 초안 저장/미리보기/발간/발간 취소를 할 수 있습니다. 원고 수정은 재발간 전까지 기존 발간본에 영향을 주지 않습니다. 이메일 발송은 없습니다.
+서비스명은 담고담고(DamGoX2)이며 “여러 소식을 담고 펼치는 판”을 뜻합니다. 이름·영문 표기는 [config.js](src/main/resources/static/assets/js/shared/config.js)의 brand, 뉴스레터 표시·의미는 newsletter 설정에서 관리합니다. 유효한 구독 권한이 있는 계정으로 로그인하면 콘텐츠 메뉴에서 목록/본문을 읽습니다. 관리자 계정 메뉴 → 담고담고 관리에서 새 원고·글/그림·참고 자료를 편집하고 초안 저장/미리보기/발간/발간 취소를 할 수 있습니다. 원고 수정은 재발간 전까지 기존 발간본에 영향을 주지 않습니다. 뉴스레터 자체의 이메일 발송은 제공하지 않습니다. 계정 인증·복구 메일과 구분합니다.
 
 ## 뉴스레터 연구·업무 활용
 관리자는 담고담고 관리에서 발간 주의 수집 자료와 전망/실험/중단 조건을 연결하고 발간 전 점검을 실행한다. 발간본은 최초호수/시각과 개정내용을 구분한다. 회원은 권리 확인된 원고를 출처 포함 복사·HTML로 내보내고 회의 요약·연구 우선순위·실험 양식으로 활용할 수 있다. 수집 기사 전문을 내보내지 않는다.
@@ -137,3 +137,26 @@ Linux 서버에서는 `compose-public.yaml` 대신 `scripts/deploy/compose-serve
 2026-11-02 06:40 KST 실제 외부 PageSpeed 측정에서 모바일·데스크톱 성능/접근성/권장사항/SEO가 모두100점, CLS0으로 확인됐다. 실험값이며 검색 순위나 모든 이용 환경의 점수 보장은 아니다. [측정·336시험·보안·서비스·최종 코드 점검 근거](docs/05-test/pagespeed-desktop.md)를 참조한다. 현재6개 Compose서비스와 기존DB/모델을 보존한다.
 
 구독 권한 관리: 관리자 → 구독 권한 → 아이디 검색/계정 선택 → 한국 시간 기준 이용 시작·종료 → 기간 저장·권한 부여 또는 회수. 이 조작은 결제나 자동 청구를 수행하지 않습니다. API/404/만료와보안경계는 [설계서](docs/03-design/subscription-access.md)·[검증서](docs/05-test/subscription-access.md)를 참고하세요. 구독모드는 managed만 지원합니다.
+
+### 필수 수신 이메일·비밀번호 찾기
+
+신규 가입은 수신 이메일 인증이 필요하다. 로그인 페이지의 **비밀번호 찾기**에서 사전 인증한 이메일의 인증번호로 새 비밀번호를 설정한다. 복구·이메일 변경은 기존 모든 로그인 세션을 종료한다. 기존 회원은 계정을 유지하며 계정 관리에서 현재 비밀번호와 새 이메일 인증으로 등록한다. 이메일은 인증·비밀번호 복구·결제/구독 안내에만 사용하고 마케팅·광고·다른 목적으로 사용하지 않는다. 현재 결제·청구와 뉴스레터 이메일 발송은 미구현이다.
+
+### 외부 MailBox 연결과 책임
+
+담고담고는 SMTP 클라이언트와 암호화 발송 대기만 관리한다. MailBox/Postfix/IMAP/Webmail 서버를 복제하거나 빌드·시작하지 않는다. 운영자가 별도로 관리하는 SMTP에 `scripts/deploy/compose-mail-external.yaml`로 연결한다. worker만 지정한 기존 SMTP Docker 네트워크에 연결하고 web은 기존 backend를 유지한다.
+
+최초 준비는 저장소 안에서 다음 명령을 실행한다. 기존 이메일 암호화 키를 덮어쓰거나 재생성하지 않으며, 서버 인증서나 개인키도 만들지 않는다. 기존 키가 잘못됐으면 교체하지 않고 실패한다.
+
+```sh
+node scripts/deploy/prepare-email-key.mjs
+node scripts/test/mail-deployment-check.mjs
+```
+
+별도32-byte 이메일 키는 `.local/mail/data.key`에 보관하며 암호화 DB와 함께 백업·접근통제한다. 호스트 보관 디렉터리는0700이며 파일은 비루트 앱UID10001이 파일 secret으로 읽을 수 있는 읽기 전용 권한을 사용한다. 키를 분실하거나 다른 키로 바꾸면 기존 이메일 데이터를 복구할 수 없다. 실제 키와 .env는 Git에 넣지 않는다.
+
+.env.example의 MAIL_FROM/MAIL_SMTP_HOST/MAIL_SMTP_PORT/MAIL_SMTP_NETWORK/MAIL_SMTP_CA_FILE을 운영자가 관리하는 값으로 설정한다. 인증서 SAN에 있는 호스트 이름과 확인된 CA 공개 인증서만 지정한다. 공개 CA 파일은 파일 secret의 앱UID10001이 읽을 수 있게 준비한다. CA 개인키·서버 개인키는 앱에 전달하지 않으며 전역 truststore·호스트 검증을 변경하지 않는다. Compose는 STARTTLS 필수, Helm은 STARTTLS 또는 SMTPS를 지원한다.
+
+보안 검사·백업·운영 승인이 끝난 뒤 실제 사용하는 local/public/server와 두 모델 overlay 뒤에 `-f scripts/deploy/compose-mail-external.yaml`을 추가한다. 기존 ingress/볼륨과 검증한 앱 digest를 유지한다. 이전 내장 SMTP의 compose-mail.yaml 및 Helm mail.server 옵션은 퇴역했으며 재사용하지 않는다. 메일 미설정 시 신규 인증·가입·복구는503으로 닫히고 기존 계정 로그인은 유지된다.
+
+이 저장소의 검사 통과는 외부 MailBox의 보안 문제 해결을 뜻하지 않는다. 외부 이미지·중계 권한·TLS·실제 외부 수신함 전달을 별도로 검증한 뒤 운영을 전환한다. 현재 실제 결과는 [이메일 검증서](docs/05-test/email-identity.md), 외부 담당 작업용 프롬프트는 [MailBox 결함 조치 요청서](docs/07-operation/mailbox-security-handoff.md)를 따른다.

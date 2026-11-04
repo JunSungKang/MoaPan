@@ -38,3 +38,19 @@
 검사한 앱 sha256:ec89cdad8d05eef1a5bf22956b45f234810359034bcc68898204c1f1f22cb772를 실제 web/worker에 반영했다. 호스트·이미지·web·worker의 JAR SHA-256은4ece479b47d3285dece0f58b14f40cd7af96f99ae15bae854f21cca03d5a1cfd로 같다. 실제 migrate/admin-cli/web/worker 역할, HTTPS 공개/보호경계·캐시·정적304·삭제모듈404를 검증했다. 암호화 백업·격리복원·300기사/2계정/1발간물 ID집합보존·합성계정삭제를 확인했다. DB/모델/proxy는 교체하지 않았다.
 
 독립 사전 검토에서 차단 결함은 없었다. 이 commit의 current-head 승인·develop 병합 결과는 해당 GitHub PR의 실제 상태를 기준으로 확인한다. 현재 코드·명시한 진입점과 시험의 판정이며 미래 확장·미확인 외부 소비자까지 보증하지 않는다.
+
+
+## 2026-11-04 서버·데몬 후속 정리
+
+
+최종 이 프로젝트 결과: **clean check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest PASS**, 19 tasks 실행. JUnit 단위184/PG147/UI77 =408 PASS, FAIL/ERROR/SKIP0. 키 경계/보존7건, Compose3모드/12누락 거부, Helm STARTTLS·SMTPS와4메일설정 거부·기본3거부, Nu 메시지0을 확인했다. 첫 clean은 새 시험의 build 디렉터리 준비 누락으로 sourceCheck 실패했고 이를 고친 뒤 동일 clean 전체 명령을 재실행해 통과했다. 판정 기준·assertion·timeout을 낮추지 않았다.
+
+소스 DS-0002 HIGH는 실제 서버 구성 퇴역 후0건이며 source/JAR/SBOM/두 Helm 시나리오 및 최종 앱·빌드 이미지 gate PASS다. source에는 JOSE3건과 x/crypto UNKNOWN2건(중복)이 원시 검출됐으며, JOSE에는 종전의 검증된 백포트/영향 근거를, UNKNOWN에는 기존 OpenPGP 코드 부재 판단을 유지했고 새로운 ignore/예외나 scanner 제외를 추가하지 않았다. JAR/SBOM·최종 이미지 취약점/secret은0건이다. JAR684f13607aaeae9216f8ac373d35f82fff48ea7968e182208390c6978daef6fb, runtime058f45121034986b64c7f64f4e20b26654f494421a7cb00deddd3d5065e4945e, builder23bd0e0bcc555c0186f1a4baeb43809e0a22fcb9ffb4e0cb5067709a89e80fc9를 대조했다.
+
+추가 사용자 요청에 따라 미사용 서버/데몬·시작 설정을 조사했다. 체크섬이 기존 소유 소스와 같은 생성 SMTP context7파일과 미사용 내장 SMTP 이미지1개를 제거했다. 컨테이너 마운트/열린 파일/현재 시작 참조가 없는 이전 Mac Ollama·llama/RPC 런타임2곳116파일과 불필요한 검증된 소스 압축파일1개, 현재 구성·빌드·컨테이너 참조를 대조해 과거 프로젝트 이미지 태그59개를 제거했다. 실제 미사용 이미지ID52개는 삭제됐고, 실행 이미지5개의 옛 별칭은 태그만 제거해 현재 이름과 이미지ID를 유지했다. 전역 prune/force/볼륨 삭제·타 프로젝트 변경은 하지 않았다.
+
+현재 Java85파일의 compiler symbol(비프레임워크 private264/무주석 type113) 참조 후보0·오류0, HTML13개 진입점의 JS42개 모두 연결/누락0을 확인했다. record 자동 필드·프레임워크 진입점은 삭제 근거로 삼지 않는다. 현재6서비스와 정상 종료된 필수 migration/model-init3개를 보존했다. host Node2개는 ChatGPT CUA 도구이고 TCP listener가 없어 앱 데몬으로 취급하지 않았다. 기존 DB V24와 앱24fc8045a50c·HTTPS200 유지, 실제 회원/키/모델/볼륨은 미변경이다. 외부 MailBox의 고위험과 root 미승인은 미해결이며 본 프로젝트 gate PASS를 외부 해결/운영 전환으로 확대하지 않는다.
+
+[최종 기계 증빙](evidence/smtp-boundary-cleanup-20261104.json). 실행 로그는 .local/smtp-boundary-fix-20261104의 clean-final-retry.log/final-image-scans.log/helm-check.log이며 최초 실패도 보존했다. 임시 분석 Java 코드는 제거했고 삭제 코드·실행파일의 별도 백업은 만들지 않았다.
+
+최종 추가 점검에서 퇴역한 native 런타임을 호출하는 이전 비교 실행기와 localhost 전용 측정기·일회성 출처 초기화 도구3개도 제거했다. 실행 프로세스/열린 파일/현재 운영 참조가 없음을 확인했고 내용·자격증명을 복사하거나 실행하지 않았다. 현재 관리자 출처 API와 Docker 모델 검증은 유지한다. 이 변경은 Git에 포함되지 않던 로컬 폐기 도구와 결과 문서뿐이며 검증한 앱/빌드 산출물은 동일하다.

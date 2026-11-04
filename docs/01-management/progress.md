@@ -172,3 +172,59 @@ CSS 파일 요청과 선언 중복을 혼용한 설명을 정정했다. PR16은 
 사용자 요청에 따라 종료일을남기는동작을PG3실패로재현했다. 서버시각확정/종료·updated_at·감사일치/중복멱등/시작전취소를구현했고V24에서기존REVOKED만보정+version증가하며ACTIVE기간제약을유지한다. PG구독16+마이그레이션1검증을통과했다. 화면이수신종료일을한국시간으로즉시반영하는회귀를보강했다. 전체시험/새JAR·이미지·trust/실제V24/서비스/원격리뷰는진행중이다. 기존권한이나원고·개인설정은변경하지않고현재PR27에전달하며develop/main병합은별도승인대상이다.
 
 회수 종료 시각 후속 구현·서비스 반영 검증 완료:369 PASS(171/128/70), Nu0, 최종 runtime/builder·JAR/SBOM·trust gate 통과. V23→24 migration과 web/worker 재시작, 실제 HTTPS의 종료/변경/감사 시각 일치·중복 보존·시작 전 취소·구 version409·열람404 확인. 기존 실제 보정 대상은0건, 기사/계정/발간/구독은 사전 예상 해시와 일치하며 합성2계정은 삭제했다. 현재 PR27 후속 commit/push·현재-head 독립/App 리뷰 마감 중이며 develop/main 병합은 별도 승인이다. [회수 증빙](../05-test/evidence/subscription-revocation-20261102.json).
+
+## 2026-11-03 필수 수신 이메일 구현 진행
+승인 범위: signup 필수 이메일, 인증/복구/계정 등록·변경, 자체 SMTP와 목적 제한 고지. 새 브랜치 codex/identity-email-20261103, PR27 구독 변경을 의존성으로 보존한다. V25는 테스트 DB만 적용했고 운영 V24/기존 이미지는 유지한다. 1차 이메일8+구독1 통합9 PASS. 전체 회귀·SMTP·보안·서비스 반영·PR은 아직 미완료다. 형제 mail-box는 읽기 전용, 전역 스킬 변경 없음. 결제/CI/병합 제외.
+
+## 2026-11-03 이메일 기능 최종 인도 준비
+브랜치 codex/identity-email-20261103. 이메일 필수 가입/가입 인증/비밀번호 찾기/기존 회원 이메일 등록·변경/용도 제한 UI·정책·고정 발송 템플릿 구현. 최종396 PASS(179/145/72), Nu 메시지0, SMTP 실제 합성 전달과 read-only/메모리 전용 큐 검증. PR27 의존성 보존, 운영V24/기존 이미지·계정/구독 유지. root DS-0002 HIGH 위험 수용과 운영 발신 주소/DNS 질문의 답변을 대기한다. 보안 게이트 실패를 PASS로 처리하거나 서비스/DB를 교체하지 않았다. 새 SMTP Helm 옵션은 준비·렌더링만 했다. 커밋/PR/정식리뷰 결과는 후속 기록을 따른다. 기존 미추적 HTTPS 스킬은 보존하며 커밋에서 제외한다.
+
+이메일 기능 구현 커밋 `6ffbdebd291ece109b8860bc0ebaf370491471a3`을 guarded human push했고 [PR #28](https://github.com/JunSungKang/MoaPan/pull/28)을 develop 대상으로 생성했다(사람 author/assignee). PR27은 의존성으로 유지하며 두 PR 모두 이번 작업에서 병합하지 않았다. 396개 기능 시험과 SMTP 합성 전달은 PASS지만 Postfix root DS-0002 HIGH가 남아 securityCheck/acceptanceTest 및 운영 전환은 보류한다. root 실행 방식과 실제 발신 주소/DNS 질문은 아직 승인·확정으로 처리하지 않는다. 정식 현재 HEAD 독립/App 리뷰 결과는 PR을 진실 원천으로 확인한다. 기존 운영 이미지/V24와 회원·구독·뉴스 데이터는 교체하지 않았다. 임시 SMTP 컨테이너/볼륨/네트워크를 정리했고 기존6개 서비스만 실행 중이다.
+
+이메일 목표 추가 인수 감사: V24에 합성 계정/실제 Argon2 해시/권한/활성/버전/약관/세션 bytes/구독을 저장한 뒤 V25로 올리는 독립 PostgreSQL 시험을 추가했다. 행 동일성·해시 일치·이메일 추정 미입력·부분 상태 거부·반복 마이그레이션 멱등 PASS. 전체397 PASS(179/146/72), FAIL/SKIP0. runtime 코드/JAR 미변경 및 이미지와 JAR SHA256 일치 확인. 운영 DB도 회원 필드를 읽지 않는 schema-only 조회로 V24 유지 확인. 시험결과서를 현재 판정 중심으로 정리했고 root 위험수용/운영 발신정보 대기는 동일하다.
+
+## 2026-11-03 회원가입 약관 팝업 후속
+약관 전문 링크/직접 체크를 native dialog와 명시적 동의·동의하지 않음으로 전환했다. 끝까지 스크롤해야 동의 가능, 재열기/닫기/Escape는 미동의, 가입 입력/키보드 포커스를 보존한다. 정적 약관을 단일 원본으로 GET /api/v1/auth/terms의 불변 텍스트 트리로 읽고 안전한 DOM API로 표시하며 기존 CSP/Trusted Types를 유지한다. 번역은 열 때만 적재하고 독립 리뷰의 실패 Promise 재사용 문제는 실제 실패→재열기 시험으로 수정·검증했다. 404개(181/147/76) 기능 시험, Nu0, CSS/문서 검사 PASS. 새 JAR dff536cc7cb8532f65b1a1164ddbeea98c558dfc38312edb7f5690f4f3c51b2b와 SBOM/소스를 재검사하며 기존 SMTP root 경고는 예외 처리하지 않는다. 이미지 새 빌드/서비스 반영/SMTP 활성화/DB 변경/병합은 미실행이며 기존 운영 V24를 유지한다. 실수신 검증은 사용자 담당으로 인계했으며 현재 PR28에 후속 변경을 전달한다. 상세 최신 결과는 MP-DOC-038 제7절과 PR 현재 HEAD 리뷰를 따른다.
+
+## 2026-11-03 약관 스크롤 안내·체크박스 연동
+사용자 요청으로 아래로 읽기 화살표/스크롤바 스타일과 실제 필수 약관 체크박스를 추가했다. 팝업 동의만 체크 허용, 직접 해제는 철회, 미동의 클릭/Space는 검토를 열며 거절/닫기/재열기는 미동의다. 집중 브라우저7/Nu0/CSS 검사 PASS. 캡처에서 본문 중첩을 확인해 화살표를 별도 행으로 분리했고 최종 전체 UI77·단위181 재검증, 앞 PostgreSQL147 포함405 PASS/FAIL·ERROR·SKIP0을 확인했다. 최종 JAR b99a4f25867099685bac3745ef569d4bcf808d29b5cbd1323f1c6b720a1a7df9와 SBOM 스캔 취약점0이나 전체 보안 게이트는 기존 Postfix root 경고 때문에 실패 상태를 유지한다. 서버/DB/메일/서비스/병합은 변경하지 않는다.
+
+## 2026-11-03 오른쪽 약관 스크롤바 정정
+버튼 대신 스크롤바를 원한 사용자 정정을 반영한다. 아래로 읽기 버튼/코드/번역을 제거하고 항상 보이는 오른쪽 트랙·손잡이와 실제 드래그/트랙 클릭/키보드 조작을 연결했다. 본문 끝 동의·체크박스 동기화 유지. 집중 UI7/Nu0/CSS PASS, 최종 단위181·전체UI77(FAIL·ERROR·SKIP0), 최신 JAR 2e5023dc707b4064d8d2302a3aa0c58fca28d888aca1058cd08550d193e87b6b·SBOM 스캔 취약점0을 확인했다. Java/DB 코드 불변으로 이전PG147 결과를 유지한다. 전체 securityCheck는 기존 Postfix root 경고 때문에 실패하며 예외를 추가하지 않았다. 서버/DB/메일/실행 서비스/병합은 그대로다.
+
+## 2026-11-03 약관 모달 디자인 정돈
+닫기 버튼 박스·굵은 경계를 줄이고 안쪽 읽기 패널/여백·UI 글꼴·주/보조 버튼·비활성 색을 정돈했다. 상시 스크롤바/체크/동의/CSP 동작은 그대로다. 집중UI7 PASS와 초기/완료 390·768·1440 합성 캡처를 검수했고 최종 단위181/UI77(FAIL·ERROR·SKIP0), Nu0/CSS/docs 및 JAR/SBOM 취약점0을 확인했다. 새 JAR 684f13607aaeae9216f8ac373d35f82fff48ea7968e182208390c6978daef6fb이며 기존 Postfix root 보안 게이트 실패는 유지한다. 메일/서비스/DB/병합은 변경하지 않는다.
+
+## 2026-11-04 Postfix root 실행 예외 미승인 확정
+사용자가 해당 SMTP 이미지의 DS-0002 HIGH 예외를 명시적으로 미승인하고 구현 보존·운영 전환 보류를 선택했다. 이전의 답변 대기는 이 결정으로 대체한다. 코드·검사 기준·ignore/예외·SMTP·이미지·운영 DB를 변경하지 않으며 root 경고를 미해결로 유지한다. 실제 메일 수신 검증의 사용자 인계는 위험 수용/운영 승인과 별개다. 기존 web 이미지 sha256:24fc8045a50cc78f44a57d0bdae30b12ed3d8bb52fcde7a1fa5e2042fafbf082와 SMTP 컨테이너 미실행을 읽기 전용으로 확인했다. PR28/구현을 보존하고 develop/main 병합은 수행하지 않는다. 이번 변경은 결정 문서화뿐이며 기존 시험을 재실행했다고 표시하지 않는다.
+
+
+## 2026-11-04 사용자가 기동한 MailBox 실제 연결 재점검
+MailBox SMTP/IMAP/Webmail 3개 컨테이너 실행을 확인했다. SMTP strict TLS NOOP 시험은 exit64/STARTTLS not supported로 실패했으며 인증번호·실제 메일은 전송하지 않았다. TLS 인증서/STARTTLS/SMTP AUTH 미설정, 사설망 전체 mynetworks와 공개25번, root 실행을 확인했다. 실제 SMTP 이미지594e743418aa의 Trivy 검사는 HIGH33/CRITICAL1을 보고하고 게이트 exit1이다. 이는 중복 패키지 검출을 포함한 원시 결과이며 전부 악용 가능한 취약점으로 확정하지 않는다. Debian 공식 자료에서 Postfix CVE-2026-43964의 설치 버전 영향과 zlib CVE-2023-45853의 MiniZip 미빌드 예외를 구분했다. 원래 root 위험 미승인/전체 보안 게이트를 유지한다. 형제 mail-box는 현재 읽기 전용이며 TLS·이미지 수정용 작업 경계 확대를 요청했다.
+대기 중 최신 약관/이메일 코드의 runtime 이미지를 새로 빌드했다. 이미지sha256:dcbd1540948a855db099880321384086e9f090d767dd52cb81e6f5c0538f5d86, UID10001, Temurin27.0.1.0.2+1, 실행JAR684f13607aaeae9216f8ac373d35f82fff48ea7968e182208390c6978daef6fb와 호스트 일치를 검증했다. 이 앱 이미지의 취약점/secret gate는 PASS이나 SMTP/전체 게이트를 통과한 것은 아니다. 운영 web/worker24fc8045a50c·V24를 바꾸지 않았으며 외부HTTPS 로그인200/healthy를 확인했다. [재점검 결과](../05-test/email-identity.md#11-사용자-기동-mailbox-실제-연결-재점검)를 따른다.
+
+
+## 2026-11-04 STARTTLS 적용 후 실제 합성 전달 확인
+사용자 MailBox 변경 후 명시적 operator CA로 chain/호스트/유효기간 검증을 통과했다. 실제 SmtpMailTransport로 합성1건을 기존 운영자 Maildir에 발송·수신 확인하고, 검사된 앱 이미지UID10001의 기존 MailBox Docker 네트워크/TLS NOOP도 통과했다. 오래된 시험classpath의 준비 실패는 수정 후 재시험했으며 전송 성공과 구분한다. 외부 인터넷 수신함/실제 회원 인증·복구 운영 전환은 수행하지 않았다.
+기존 MailBox에 직접 연결하는 compose-mail-external.yaml을 준비하고 내장 SMTP 미생성/worker 기존 모델 네트워크 보존/web backend 유지/필수호스트 누락 거부/공개CA·별도키 secret을 검증했다. 최신 scanner DB 동기화 후 앱 이미지dcbd1540948a는 PASS, 실제 SMTP594e743418aa는 HIGH33/CRITICAL1 원시 검출로 FAIL이며 전체 securityCheck도 기존 DS-0002 때문에 exit1이다. root 예외 미승인과 작업 폴더 경계를 유지하며 실제서비스24fc8045a50c·V24/.env/키/MailBox 원본을 바꾸지 않는다. [실제 결과](../05-test/email-identity.md#12-starttls-적용-후-실제-전달-재검증).
+
+
+## 2026-11-04 이 프로젝트 SMTP root 구성 제거 진행
+사용자 지시 순서대로 외부 MailBox 조치 프롬프트 MP-DOC-039를 먼저 작성·제시했다. 중복 내장 Postfix11파일과 빌드/Compose/Helm/준비·시험 진입점을 제거하고 외부 SMTP 클라이언트/outbox/인증·복구만 유지한다. 키 준비 CLI와 경계·보존 검증, Java STARTTLS 양성/CA·호스트 거부, 외부 Helm/Compose 검증을 보강했다. Compose 시험의 최초 합성 도메인/IP fixture 오류를 고친 뒤3모드·12누락 거부를 통과했다. focused SMTP7개와 Helm STARTTLS/SMTPS·거부 검증을 확인하고 전체 회귀·보안·새 이미지 검사 중이다. scanner 제외/예외를 추가하지 않으며 타 프로젝트·기존 서비스/DB/.env/키를 변경하지 않는다.
+
+
+SMTP 책임 분리·미사용 서버 정리 최종 로컬 검증: clean 전체 계약 PASS/408(184·147·77) FAIL·ERROR·SKIP0, 키7/Compose3모드12거부/Helm 두TLS·4거부/Nu0/최종 runtime058f45121034·builder23bd0e0bcc55 gate PASS. 첫 clean 시험 경로 준비 실패는 고쳐 같은 전체 명령으로 재검증했다. source DS-0002 0/새 예외·scanner 약화 없음. 중복 SMTP11tracked+7생성파일/이미지1개, 미사용 Mac런타임116파일·소스압축1개, 과거 프로젝트 이미지59태그 제거(실제 미사용52ID 삭제·실행5ID의 옛 별칭만 해제). 현재6서비스·완료형필수job3/DB V24·기존키·모델보존, 타프로젝트 미변경. Java85파일·브라우저42모듈 추가 참조 점검에서 미사용 후보/누락0. 실제 운영 전환은 외부 MailBox 차단을 유지한다. [증빙](../05-test/evidence/smtp-boundary-cleanup-20261104.json). 현재head 독립 리뷰/PR 전달은 마감 단계이며 develop/main은 병합하지 않는다.
+
+마지막 legacy moapan-* 이미지 재검수에서 실제 구성·문서화된 빌드 태그와 전체 컨테이너의 정확한 이미지ID/태그를 대조했다. 총59태그/미사용52ID 정리 후 기존 모든 컨테이너 ID·이미지·상태가 동일함을 확인했다. 실행5ID의 오래된 별칭만 해제했으며 현재 이름·필수 완료job 이미지·최종 검증 runtime/builder와 빌드 도구는 유지한다. 이 후속은 로컬 이미지 정리 및 결과 문서뿐이며 제품 소스/JAR/검증 이미지 digest는 동일하다.
+
+## 2026-11-04 남은 PR 순차 병합 — 구독 완료·이메일 통합
+
+사용자가 PR27·28·29 전체 develop 병합을 승인했다. PR27은 head a1a566e50a09d5617541f47ffcccd1027f54f115의 App current-head 승인을 확인하고 guarded human squash로 병합했다. merge SHA ea1c088cb0b195ab203436b9c02d2e08c8b929e0이며 정확한 PR head의 원격·추적·로컬 ref를 삭제/부재 확인했다. 첫 두 병합 요청은 GitHub502로 실패했고 develop 미변경을 확인한 뒤 재시도하여 성공했다.
+
+PR28은 새 develop을 공식 절차로 통합했다. 새 develop의 전체 tree가 이전 의존 head a1a566e와 동일하고 해당 head가 승인본11fad449의 조상임을 확인했다. 중복 squash 충돌21개를 승인본 내용으로 해결한 통합 commit999bd494ad49814e92de6aae35e5a5e527c2ab49의 전체 tracked tree는11fad449와 완전히 동일했다. 분리된 독립 검토에서도 부모·tree 동일성과 기존 시험 증빙 재사용의 타당성을 확인했다. 이후 이 두 관리 문서만 보완하며 제품 코드·설정은 바꾸지 않는다. 새 시험을 실행했다고 보고하지 않는다.
+
+999bd494는 canonical 원격에 push했으나 현재 PR28 API는 이전11fad449를 반환한다. PR29도 Git194ef330과 API87abf5a가 불일치한다. GitHub 공식 장애가 지속되는 동안 새 head가 PR에 반영되고 READ_COMPLETE/독립 승인·App formal 승인을 받아야 후속 병합할 수 있다. 아직 PR28/29 병합 완료라고 보고하지 않는다. 기존에 PR29 후보로 전환한 V25 서비스/실제 MailBox 인증·복구 검증 결과는 유지하며 이번 병합 작업으로 서비스·DB·메일서버·키·모델을 다시 교체하지 않았다.
+
+PR 참조 후속 진단: 공식 장애는2026-11-04T11:50:06Z에 종료됐다. canonical Git/REST ref와 PR head/base가 달라 최신 원격 두 브랜치와 develop의 실제 merge-tree를 재계산했다. 최신 PR28/29는 모두 충돌0이며, PR API의 이전 snapshot은 각각21/31파일 충돌이었다. 동일 PR의 제한된 close/reopen을 검증된 사람 전용 wrapper로 수행해 PR28 e2317fd/base ea1c088과 PR29 a40d94a/base ea1c088을 정상화했다. branch·보호·승인 조건은 바꾸지 않았다.
+
+PR28 e2317fd는 현재-head READ_COMPLETE·분리된 독립 APPROVE와 App formal APPROVED를 받았다. 실제 병합은 GitHub405의 “마지막 pusher를 확인할 수 없어 추가 승인 필요”로 거절됐고 미병합 상태를 확인했다. 제품 코드 변경 없이 이 관리 기록을 사람 계정으로 새 commit/push하여 푸시 신원 정보 갱신을 시도한다. 새 head의 독립/App 승인은 다시 받으며, 현재까지 미완료인 병합을 완료로 선기록하지 않는다.

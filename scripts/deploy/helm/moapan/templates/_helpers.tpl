@@ -8,3 +8,21 @@
 - name: MOAPAN_SECRET
   valueFrom: {secretKeyRef: {name: {{ .Values.existingSecret | quote }}, key: MOAPAN_SECRET}}
 {{- end -}}
+
+{{- define "moapan.mailEnv" -}}
+{{- if .Values.mail.enabled }}
+- {name: MOAPAN_MAIL_ENABLED, value: "true"}
+- {name: MOAPAN_MAIL_HOST, value: {{ required "mail.host is required" .Values.mail.host | quote }}}
+- {name: MOAPAN_MAIL_PORT, value: {{ .Values.mail.port | quote }}}
+- {name: MOAPAN_MAIL_FROM, value: {{ required "mail.from is required" .Values.mail.from | quote }}}
+- {name: MOAPAN_MAIL_TLS, value: {{ .Values.mail.tls | quote }}}
+- {name: MOAPAN_MAIL_USERNAME, value: {{ .Values.mail.username | quote }}}
+- {name: MOAPAN_MAIL_DATA_KEY_FILE, value: /run/secrets/email/data-key}
+{{- if .Values.mail.username }}
+- {name: MOAPAN_MAIL_PASSWORD_FILE, value: /run/secrets/email/smtp-password}
+{{- end }}
+{{- if .Values.mail.customCa }}
+- {name: MOAPAN_MAIL_CA_FILE, value: /run/secrets/email/ca.crt}
+{{- end }}
+{{- end }}
+{{- end -}}

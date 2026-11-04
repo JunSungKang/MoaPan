@@ -12,6 +12,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-session-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.flywaydb:flyway-database-postgresql'
     implementation 'org.bouncycastle:bcprov-jdk18on:1.86'
@@ -102,3 +103,6 @@ tasks.register('modelSmokeClasspath') {
         out.parentFile.mkdirs(); out.text = sourceSets.test.runtimeClasspath.asPath
     }
 }
+
+tasks.register('mailDeploymentCheck', Exec) { commandLine 'node', 'scripts/test/mail-deployment-check.mjs' }
+tasks.named('integrationTest') { dependsOn tasks.named('mailDeploymentCheck') }

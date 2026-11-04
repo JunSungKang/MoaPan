@@ -38,6 +38,7 @@ spec:
           env:
             - {name: MOAPAN_ROLE, value: web}
 {{ include "moapan.secretEnv" . | indent 12 }}
+{{ include "moapan.mailEnv" . | indent 12 }}
           securityContext: {readOnlyRootFilesystem: true, allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}}
           resources: {requests: {cpu: 100m, memory: 256Mi}, limits: {cpu: '1.5', memory: 768Mi}}
           ports: [{containerPort: 8080}]
@@ -45,6 +46,15 @@ spec:
           startupProbe: {httpGet: {path: /internal/live, port: 8080, httpHeaders: [{name: Host, value: {{ .Values.publicHost | quote }}}]}, periodSeconds: 5, failureThreshold: 24}
           livenessProbe: {httpGet: {path: /internal/live, port: 8080, httpHeaders: [{name: Host, value: {{ .Values.publicHost | quote }}}]}, periodSeconds: 20, failureThreshold: 3}
           volumeMounts:
+            {{- if .Values.mail.enabled }}
+            - {name: email-secrets, mountPath: /run/secrets/email, readOnly: true}
+            {{- end }}
             - {name: tmp, mountPath: /tmp}
       volumes:
+        {{- if .Values.mail.enabled }}
+        - name: email-secrets
+          secret:
+            secretName: {{ required "mail.existingSecret is required" .Values.mail.existingSecret | quote }}
+            defaultMode: 0444
+        {{- end }}
         - {name: tmp, emptyDir: {sizeLimit: 128Mi}}

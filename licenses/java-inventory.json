@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-01T11:19:40.975Z",
+  "checkedAt": "2026-11-02T22:05:38.427Z",
   "scope": "runtimeClasspath; declared metadata, not a legal opinion or a complete OS license audit",
   "components": [
     {
@@ -483,6 +483,46 @@
           "sha256": "992ed62dd3ee17d73ce6a4a5e02dd0fed9eb326bf386aa5304e6a512214df540"
         }
       ]
+    },
+    {
+      "group": "jakarta.mail",
+      "name": "jakarta.mail-api",
+      "version": "2.1.5",
+      "jarSha256": "aa493753acb7a8c45ba8f4c9cf1230a74e20237056dd5b5c8bc86c583e8cfa0e",
+      "url": "https://repo.maven.apache.org/maven2/jakarta/mail/jakarta.mail-api/2.1.5/jakarta.mail-api-2.1.5.pom",
+      "pomSha256": "f03bcb59bb77e1a0099c89063d9d09a6bb4d50d56997a4d5ee1bf58e3864ef43",
+      "licenses": [
+        {
+          "name": "EPL 2.0",
+          "url": "http://www.eclipse.org/legal/epl-2.0"
+        },
+        {
+          "name": "GPL2 w/ CPE",
+          "url": "https://www.gnu.org/software/classpath/license.html"
+        },
+        {
+          "name": "EDL 1.0",
+          "url": "http://www.eclipse.org/org/documents/edl-v10.php"
+        }
+      ],
+      "status": "DECLARED_REQUIRES_REVIEW",
+      "embeddedNotices": [
+        {
+          "entry": "META-INF/LICENSE.md",
+          "path": "licenses/java/jakarta.mail/jakarta.mail-api/2.1.5/LICENSE.md",
+          "sha256": "6e1f002892b81cbe0647019b150c8a056efc1add565671a4f8af629b6cd2cc7b"
+        },
+        {
+          "entry": "META-INF/NOTICE.md",
+          "path": "licenses/java/jakarta.mail/jakarta.mail-api/2.1.5/NOTICE.md",
+          "sha256": "2c1f3f79908afe0c9f6d0487dad02930ae1d3f3ac28ff3df0e9c7d70d312cb68"
+        }
+      ],
+      "review": {
+        "resolvedLicense": "EPL-2.0",
+        "reason": "Unmodified library; retained exact-version license/notice and corresponding source URL. EPL scope is this library, not independent application code; retain source availability on binary distribution.",
+        "source": "https://repo.maven.apache.org/maven2/jakarta/mail/jakarta.mail-api/2.1.5/jakarta.mail-api-2.1.5-sources.jar"
+      }
     },
     {
       "group": "jakarta.persistence",
@@ -1085,6 +1125,64 @@
           "sha256": "203414df1bdc467ff3d2c53e44ed7a7b9bcba90067bd2f3442b1d509a308b21e"
         }
       ]
+    },
+    {
+      "group": "org.eclipse.angus",
+      "name": "angus-mail",
+      "version": "2.0.5",
+      "jarSha256": "b4d8c30d35f455def6c7a05fe595a1e62ea2b80cac3efec1e9ccf4118b23168a",
+      "url": "https://repo.maven.apache.org/maven2/org/eclipse/angus/angus-mail/2.0.5/angus-mail-2.0.5.pom",
+      "pomSha256": "b2fb76a9ea807b355b8ffa634de84adefac2f279cf60d58cb59c6a6c114c55af",
+      "licenses": [
+        {
+          "name": "EPL 2.0",
+          "url": "http://www.eclipse.org/legal/epl-2.0"
+        },
+        {
+          "name": "GPL2 w/ CPE",
+          "url": "https://www.gnu.org/software/classpath/license.html"
+        },
+        {
+          "name": "EDL 1.0",
+          "url": "http://www.eclipse.org/org/documents/edl-v10.php"
+        }
+      ],
+      "parent": {
+        "url": "https://repo.maven.apache.org/maven2/org/eclipse/angus/all/2.0.5/all-2.0.5.pom",
+        "pomSha256": "624dd24f7a14f080dd0846cae6620da116fe254bfeb2704ad2e0f195da8d6da8",
+        "licenses": [
+          {
+            "name": "EPL 2.0",
+            "url": "http://www.eclipse.org/legal/epl-2.0"
+          },
+          {
+            "name": "GPL2 w/ CPE",
+            "url": "https://www.gnu.org/software/classpath/license.html"
+          },
+          {
+            "name": "EDL 1.0",
+            "url": "http://www.eclipse.org/org/documents/edl-v10.php"
+          }
+        ]
+      },
+      "status": "DECLARED_REQUIRES_REVIEW",
+      "embeddedNotices": [
+        {
+          "entry": "META-INF/LICENSE.md",
+          "path": "licenses/java/org.eclipse.angus/angus-mail/2.0.5/LICENSE.md",
+          "sha256": "a8f94fd9e41984cfadc6d26821c21ed047e3bdf48c5af899d735287e7cddd997"
+        },
+        {
+          "entry": "META-INF/NOTICE.md",
+          "path": "licenses/java/org.eclipse.angus/angus-mail/2.0.5/NOTICE.md",
+          "sha256": "bba43e29c8098aaa07c2130d979f6d44a62f9ad51f8061c96bf6889ff5926819"
+        }
+      ],
+      "review": {
+        "resolvedLicense": "EPL-2.0",
+        "reason": "Unmodified library; retained exact-version license/notice and corresponding source URL. EPL scope is this library, not independent application code; retain source availability on binary distribution.",
+        "source": "https://repo.maven.apache.org/maven2/org/eclipse/angus/angus-mail/2.0.5/angus-mail-2.0.5-sources.jar"
+      }
     },
     {
       "group": "org.flywaydb",
@@ -1763,6 +1861,38 @@
     },
     {
       "group": "org.springframework.boot",
+      "name": "spring-boot-mail",
+      "version": "4.1.2",
+      "jarSha256": "9cf1e5ddd937db3303dff5a78fc32c7e75cd49aaddb9db5d7a503415ba464dd4",
+      "url": "https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-mail/4.1.2/spring-boot-mail-4.1.2.pom",
+      "pomSha256": "82f48aa71e38dad5035e4b20d26795685ea8ace3ab53a1b4a0c4153c044abc58",
+      "licenses": [
+        {
+          "name": "Apache License, Version 2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0"
+        }
+      ],
+      "status": "DECLARED_REQUIRES_REVIEW",
+      "embeddedNotices": [
+        {
+          "entry": "META-INF/LICENSE.txt",
+          "path": "licenses/java/org.springframework.boot/spring-boot-mail/4.1.2/LICENSE.txt",
+          "sha256": "7200000367e0e8b47822d563a5ddd2dd3a97cc05b32bd7dbcc7b4eeb92b76628"
+        },
+        {
+          "entry": "META-INF/NOTICE.txt",
+          "path": "licenses/java/org.springframework.boot/spring-boot-mail/4.1.2/NOTICE.txt",
+          "sha256": "33ed49a8e57825e3497d5e4ad4ad67815dec123fadff99ffee9705bd1564deca"
+        }
+      ],
+      "review": {
+        "resolvedLicense": "Apache-2.0",
+        "reason": "Unmodified library; retained exact-version license/notice and corresponding source URL. EPL scope is this library, not independent application code; retain source availability on binary distribution.",
+        "source": "https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-mail/4.1.2/spring-boot-mail-4.1.2-sources.jar"
+      }
+    },
+    {
+      "group": "org.springframework.boot",
       "name": "spring-boot-persistence",
       "version": "4.1.2",
       "jarSha256": "fd1473df17db5d4d444eac14ed262407a971fc0a3a9631e6753343d72e7859af",
@@ -2030,6 +2160,38 @@
           "sha256": "33ed49a8e57825e3497d5e4ad4ad67815dec123fadff99ffee9705bd1564deca"
         }
       ]
+    },
+    {
+      "group": "org.springframework.boot",
+      "name": "spring-boot-starter-mail",
+      "version": "4.1.2",
+      "jarSha256": "9270b200502b683e31bee66ba7f3099e5c25b134202bfc849f3a044d6f2f5394",
+      "url": "https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-starter-mail/4.1.2/spring-boot-starter-mail-4.1.2.pom",
+      "pomSha256": "30d218fc40e949623091edbc8e89341224f3637a67846eef8cd9ae01e2a89417",
+      "licenses": [
+        {
+          "name": "Apache License, Version 2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0"
+        }
+      ],
+      "status": "DECLARED_REQUIRES_REVIEW",
+      "embeddedNotices": [
+        {
+          "entry": "META-INF/LICENSE.txt",
+          "path": "licenses/java/org.springframework.boot/spring-boot-starter-mail/4.1.2/LICENSE.txt",
+          "sha256": "7200000367e0e8b47822d563a5ddd2dd3a97cc05b32bd7dbcc7b4eeb92b76628"
+        },
+        {
+          "entry": "META-INF/NOTICE.txt",
+          "path": "licenses/java/org.springframework.boot/spring-boot-starter-mail/4.1.2/NOTICE.txt",
+          "sha256": "33ed49a8e57825e3497d5e4ad4ad67815dec123fadff99ffee9705bd1564deca"
+        }
+      ],
+      "review": {
+        "resolvedLicense": "Apache-2.0",
+        "reason": "Unmodified library; retained exact-version license/notice and corresponding source URL. EPL scope is this library, not independent application code; retain source availability on binary distribution.",
+        "source": "https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-starter-mail/4.1.2/spring-boot-starter-mail-4.1.2-sources.jar"
+      }
     },
     {
       "group": "org.springframework.boot",
@@ -2690,6 +2852,38 @@
           "sha256": "222dd5e84501f80ca9e334f843659471001c40762073efc29f351e2d53e57e38"
         }
       ]
+    },
+    {
+      "group": "org.springframework",
+      "name": "spring-context-support",
+      "version": "7.0.10",
+      "jarSha256": "7fe3d85f5a5e20ef2476d964ff6f42bf94b447ba99550e1d404d577427e5260c",
+      "url": "https://repo.maven.apache.org/maven2/org/springframework/spring-context-support/7.0.10/spring-context-support-7.0.10.pom",
+      "pomSha256": "477274fa08b6728b9c729da11a7fa08cbb45e90484a4583d016bd41a5f79e52c",
+      "licenses": [
+        {
+          "name": "Apache License, Version 2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0"
+        }
+      ],
+      "status": "DECLARED_REQUIRES_REVIEW",
+      "embeddedNotices": [
+        {
+          "entry": "META-INF/notice.txt",
+          "path": "licenses/java/org.springframework/spring-context-support/7.0.10/notice.txt",
+          "sha256": "dd0c7dcb434e06953bcf6677e8b67922f09bf79f1b477cd16868da59b68b928b"
+        },
+        {
+          "entry": "META-INF/license.txt",
+          "path": "licenses/java/org.springframework/spring-context-support/7.0.10/license.txt",
+          "sha256": "222dd5e84501f80ca9e334f843659471001c40762073efc29f351e2d53e57e38"
+        }
+      ],
+      "review": {
+        "resolvedLicense": "Apache-2.0",
+        "reason": "Unmodified library; retained exact-version license/notice and corresponding source URL. EPL scope is this library, not independent application code; retain source availability on binary distribution.",
+        "source": "https://repo.maven.apache.org/maven2/org/springframework/spring-context-support/7.0.10/spring-context-support-7.0.10-sources.jar"
+      }
     },
     {
       "group": "org.springframework",

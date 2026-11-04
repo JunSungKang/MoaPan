@@ -1,6 +1,10 @@
 import {request,refreshCsrf} from '../shared/api.js';
-import {report,viewer} from '../shared/common.js';
+import {viewer} from '../shared/common.js';
+import {t} from '../shared/i18n.js';
+import {emailVerification} from './email-verification.js';
 const form=document.querySelector('form');
+const signupTerms=form.dataset.mode==='signup'?(await import('./terms-agreement.js')).termsAgreement(form):null;
+const signupEmail=form.dataset.mode==='signup'?emailVerification(form,'/api/v1/auth/email/signup-code',()=>({username:form.elements.username.value,email:form.elements.email.value,emailPolicyAccepted:form.elements.emailPolicyAccepted.checked,emailPolicyVersion:'email-1'})):null;
 if(form.dataset.mode==='login')viewer.then(a=>{if(a)location.replace('/index.html');}).catch(()=>{});
 const savedUsernameKey='moapan-saved-username';
 function persistUsername(){
@@ -14,7 +18,7 @@ if(form.dataset.mode==='login'){
   save.addEventListener('change',persistUsername);
   form.elements.username.addEventListener('input',persistUsername);
 }
-const button=form.querySelector('button'),status=document.querySelector('[role=status]');
+const button=form.querySelector('[type=submit]'),status=form.querySelector('[data-auth-status]')||document.querySelector('[role=status]');
 let pending=false,deadline=0,timer,limitedUsername=null;
 function clearLimit(announce=false){clearInterval(timer);deadline=0;limitedUsername=null;const panel=document.querySelector('#login-limit');if(panel)panel.hidden=true;button.disabled=pending;if(announce)status.textContent='다시 로그인할 수 있습니다. 비밀번호를 확인하고 시도해 주세요.';}
 function tick(){const left=Math.max(0,Math.ceil((deadline-Date.now())/1000));if(!left){clearLimit(true);return;}document.querySelector('#login-countdown').textContent=String(Math.floor(left/60)).padStart(2,'0')+':'+String(left%60).padStart(2,'0');}
@@ -23,24 +27,24 @@ form.elements.username.addEventListener('input',()=>{if(deadline&&limitedUsernam
 document.addEventListener('visibilitychange',()=>{if(deadline)tick();});
 window.addEventListener('pagehide',()=>clearInterval(timer));
 window.addEventListener('pageshow',()=>{if(deadline){tick();if(deadline)timer=setInterval(tick,250);}});
-function error(name,message){const input=form.elements[name];input.setAttribute('aria-invalid','true');document.querySelector('#'+(name==='termsAccepted'?'terms':name)+'-error').textContent=message;input.focus();}
+function error(name,message){const input=name==='termsAccepted'?form.querySelector('[data-open-terms]'):form.elements[name];input.setAttribute('aria-invalid','true');document.querySelector('#'+(name==='termsAccepted'?'terms':name)+'-error').textContent=message;input.focus();}
 form.addEventListener('submit',async event=>{
   event.preventDefault();
   if(pending)return;
   if(deadline){tick();if(deadline)return;}
   for(const node of form.querySelectorAll('.field-error'))node.textContent='';
   for(const input of form.elements)input.removeAttribute('aria-invalid');
-  document.querySelector('[role=status]').textContent='';
+  status.textContent='';
   const username=form.elements.username.value,password=form.elements.password.value,signup=form.dataset.mode==='signup';
   if(!/^[A-Za-z0-9_]{1,128}$/.test(username)){error('username','영문·숫자·밑줄 1~128자로 입력하세요.');return;}
   if([...password].length<6||[...password].length>128){error('password','비밀번호는 6~128자로 입력하세요.');return;}
-  if(signup&&!form.elements.termsAccepted.checked){error('termsAccepted','약관을 읽고 동의해 주세요.');return;}
+  if(signup&&!signupTerms.accepted){error('termsAccepted','약관을 읽고 동의해 주세요.');return;}
   persistUsername();
   pending=true;button.disabled=true;
   try{
     const body={username,password};
     if(!signup)body.rememberMe=Boolean(form.elements.rememberMe?.checked);
-    if(signup){body.termsAccepted=true;body.termsVersion=form.dataset.termsVersion;}
+    if(signup){body.termsAccepted=true;body.termsVersion=form.dataset.termsVersion;body.email=form.elements.email.value;body.emailPolicyAccepted=form.elements.emailPolicyAccepted.checked;body.emailPolicyVersion='email-1';Object.assign(body,signupEmail.proof());}
     await request('/api/v1/auth/'+(signup?'signup':'login'),{method:'POST',body});
     form.elements.password.value='';await refreshCsrf();location.assign(signup?'/login.html':'/index.html');
   }catch(e){
@@ -51,6 +55,6 @@ form.addEventListener('submit',async event=>{
       status.textContent='아이디 또는 비밀번호를 확인해 주세요.'+(e.attemptsRemaining>=1&&e.attemptsRemaining<=5?' 로그인 제한까지 '+e.attemptsRemaining+'회 남았습니다.':'');
     }else if(e.code==='username_unavailable')error('username','이미 사용 중인 아이디입니다.');
     else if(e.code==='terms_version_outdated')error('termsAccepted','약관이 변경되었습니다. 새로고침 후 다시 확인해 주세요.');
-    else report(e);
+    else status.textContent=t(e.message);
   }finally{pending=false;button.disabled=deadline>Date.now();}
 });

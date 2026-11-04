@@ -9,14 +9,15 @@
 |Method|경로|입력·출력|
 |---|---|---|
 |GET|/api/v1/auth/csrf|token,headerName. JS 메모리만 저장|
-|POST|/api/v1/auth/signup|username/password, termsAccepted=true, termsVersion=terms-1. 반환 id,username,role(USER)|
+|GET|/api/v1/auth/terms|공개 읽기 전용 약관. version, nodes(kind,text,children). 기존 정적 약관을 단일 원본으로 사용하며 링크·HTML 속성·실행 요소를 제외. Cache-Control:no-store; 가입 화면에서 끝까지 스크롤 후 동의, 서버는 기존 termsAccepted/termsVersion 검증 유지|
+|POST|/api/v1/auth/signup|username,password,email,challengeId,code,termsAccepted=true,termsVersion=terms-1,emailPolicyAccepted=true,emailPolicyVersion=email-1. 반환 id,username,role(USER),canReadNewsletter,emailVerified|
 |POST|/api/v1/auth/login|username/password. 세션 ID 교체, 최소 계정 반환. 후속 GET csrf로 토큰 재발급|
 |POST|/api/v1/auth/logout|서버 세션 종료. 후속 로그인 전 csrf 재발급|
-|GET|/api/v1/account|id,username,role|
+|GET|/api/v1/account|id,username,role,canReadNewsletter,emailVerified (주소 없음)|
 |PATCH|/api/v1/account/password|currentPassword,newPassword. 모든 기존 세션 종료, 재로그인 필요|
 |DELETE|/api/v1/account|currentPassword. 계정·세션·연결 카운터 삭제|
 
-username은 ASCII 영문·숫자·밑줄1~128, 대문자를 소문자로 정규화. 비밀번호는6~128 Unicode code point, trim/절단하지 않는다. 이메일·role 등 추가 필드 금지. 가입 전 비밀번호 분실 복구 불가 안내.
+username은 ASCII 영문·숫자·밑줄1~128, 대문자를 소문자로 정규화. 비밀번호는6~128 Unicode code point, trim/절단하지 않는다. 가입 계약 외 필드(role 등)는 금지. 이메일은 ASCII 주소를 소문자로 정규화하고 인증을 요구한다. 사전 인증 이메일이 있어야 비밀번호를 재설정할 수 있으며 기존 비밀번호를 반환하지 않는다.
 
 ## 회원 뉴스
 
@@ -134,3 +135,19 @@ GET `/api/v1/auth/session`: 정상 비회원은204/빈 본문, 유효한 로그�
 뉴스레터HTML 및 /api/v1/newsletters 목록/본문/reuse/worksheet는비로그인도포함해유효권한없으면404 not_found/no-store. 그외인증API401/ADMIN403/CSRF403/DB503은유지한다. 계정DTO canReadNewsletter는읽기전용계산값. 관리자검색POST /api/v1/admin/subscriptions/search {username,page,size,sort}（기본10명/RECENT, EXPIRING 지원）,부여/연장PUT /api/v1/admin/subscriptions/{id} {version,startsAt,expiresAt},회수POST .../{id}/revoke {version}. ADMIN/CSRF·기간400·충돌409,원자적감사. 상세는MP-DOC-035. 실제결제/가격/자동청구API없음.
 
 구독 회수 후 expiresAt은 서버가 기록한 실제 회수 시각이며 updated_at 및 회수 감사 시각과 같다. 현재 version의 이미 회수된 계정은 추가 변경 없이 반환하고 구 version은409다. 시작 전 취소는 REVOKED 상태의 startsAt이 expiresAt보다 늦을 수 있으며 재부여는 정상 기간 검사를 다시 통과해야 한다.
+
+## 승인 변경: 필수 이메일 인증·계정 복구
+2026-11-03 사용자 승인으로 신규 가입 이메일 인증을 필수화하고 기존 계정 등록/변경·비밀번호 복구를 추가한다. 이메일은 인증·비밀번호 복구·결제/구독 관련 안내에만 사용하며 마케팅·광고·다른 목적 사용을 금지한다. 과거 이메일 미수집/복구 미지원 명세는 이 범위에서 대체된다. 상세 현재 계약은 MP-DOC-037(email-identity)과 코드 EmailController/AuthController/V25, 실제 검증은 MP-DOC-038을 따른다. 결제는 미구현이다.
+
+## 이메일 API (V25)
+
+|Method|경로|입력·출력|
+|---|---|---|
+|POST|/api/v1/auth/email/signup-code|username,email,emailPolicyAccepted=true,emailPolicyVersion=email-1. 202 challengeId,expiresInSeconds=300,resendAfterSeconds=60|
+|POST|/api/v1/auth/password/reset-code|username,email. 계정 존재 여부와 무관하게 같은202 구조와 일반 인증 메일|
+|POST|/api/v1/auth/password/reset|username,challengeId,code,newPassword. 200 빈 응답, 모든 세션 종료|
+|GET|/api/v1/account/email|본인만 verified,email,verifiedAt. 미등록은 false/null/null|
+|POST|/api/v1/account/email/code|현재 비밀번호 currentPassword,email,emailPolicyAccepted,emailPolicyVersion. 본인 인증 후202|
+|PUT|/api/v1/account/email|challengeId,code,emailPolicyAccepted,emailPolicyVersion. 200 빈 응답, 모든 세션 종료|
+
+모든 POST/PUT는 CSRF 필수, 인증번호는 요청한 동일 브라우저 세션에서만 유효하다. 번호·수신 주소·비밀번호를 URL이나 응답 오류에 넣지 않는다. 미등록/만료/다른 용도/다른 세션/재사용 코드는400 invalid_verification, 코드5회 오입력 시 폐기, 재발송60초 및 목적별 제한은429+Retry-After, 메일 미설정은503 mail_unavailable, 이미 본인 인증된 주소의 중복 계정 등록은409 email_unavailable이다. GET 계정 이메일과 변경 API는401/본인 검사. SMTP 전송 요청202는 받은편지함 도착 보장이 아니다. 마케팅·임의 발송 API는 없다.

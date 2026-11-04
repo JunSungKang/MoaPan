@@ -12,7 +12,7 @@ webReplicas: 1
 storageClass: ""
 databaseStorage: 10Gi
 modelStorage: 5Gi
-migrationVersion: "24"
+migrationVersion: "25"
 translationThreads: "2"
 ingress:
   enabled: true
@@ -21,3 +21,14 @@ ingress:
 
 classificationThreads: "2"
 classificationModelStorage: 5Gi
+
+# Operator-owned SMTP service. No embedded mail server or public SMTP port in this chart.
+mail:
+  enabled: false
+  host: ""
+  port: 587
+  from: ""
+  tls: STARTTLS
+  username: ""
+  existingSecret: ""
+  customCa: false

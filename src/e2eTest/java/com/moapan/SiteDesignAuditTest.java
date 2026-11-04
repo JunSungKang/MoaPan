@@ -8,6 +8,7 @@ import java.net.URI;
 import java.nio.file.*;
 import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 /** All pages use synthetic API fixtures; no production accounts or article content. */
 class SiteDesignAuditTest {
@@ -41,7 +42,7 @@ class SiteDesignAuditTest {
             for(String lang:List.of("ko","en"))for(int width:new int[]{390,768,1440})for(String name:pages){
                 String path=name.contains(".html")?name:name+".html";String label=lang+"-"+name.split("\\.")[0]+(name.contains("?")?"-detail":"")+"-"+width;
                 p.setViewportSize(width,1000);p.navigate(BrowserTest.origin+"/"+path);p.waitForLoadState(LoadState.NETWORKIDLE);
-                p.locator("[data-language-select]").selectOption(lang);p.waitForFunction("document.documentElement.lang=== '"+lang+"'");
+                p.locator("[data-language-select]").selectOption(lang);assertThat(p.locator("html")).hasAttribute("lang",lang);
                 assertTrue((boolean)p.evaluate("document.documentElement.scrollWidth<=innerWidth"),label+" horizontal overflow");
                 assertEquals(1,p.locator("h1:visible").count(),label+" needs one visible page heading");
                 if(!List.of("login","signup").contains(name)){

@@ -62,3 +62,36 @@ if(!absolute.startsWith(root+'/build/'))throw new Error('Helm scan output must b
 fs.mkdirSync(path.dirname(absolute),{recursive:true});fs.copyFileSync(source,absolute);
 JS
 fi
+# External SMTP client render only. No mail-server workload is part of this chart.
+cat >> "$work/values.yaml" <<EOF
+mail:
+  enabled: true
+  host: smtp.example.test
+  port: 587
+  from: no-reply@example.test
+  tls: STARTTLS
+  username: synthetic-user
+  existingSecret: synthetic-email
+  customCa: true
+EOF
+"$helm" lint "$chart" --strict -f "$work/values.yaml"
+"$helm" template moapan "$chart" -n moapan -f "$work/values.yaml" > "$work/smtp-rendered.yaml"
+node --input-type=module - "$work/rendered.yaml" "$work/smtp-rendered.yaml" <<'JSEND'
+import fs from 'node:fs';import assert from 'node:assert/strict';
+const [baseline,mail]=process.argv.slice(2).map(p=>fs.readFileSync(p,'utf8'));
+const documents=s=>s.split(/\n---/);
+for(const kind of ['Deployment','Service','Job'])assert.equal(documents(mail).filter(d=>d.includes('kind: '+kind+'\n')).length,documents(baseline).filter(d=>d.includes('kind: '+kind+'\n')).length,'Mail configuration must not create a daemon or listener');
+for(const component of ['web','worker']){const deployment=documents(mail).find(d=>d.includes('kind: Deployment')&&d.includes('name: '+component+'\n'));assert(deployment.includes('value: "smtp.example.test"'));assert(deployment.includes('value: "STARTTLS"'));assert(deployment.includes('MOAPAN_MAIL_DATA_KEY_FILE'));assert(deployment.includes('/run/secrets/email/ca.crt'));assert(deployment.includes('MOAPAN_MAIL_PASSWORD_FILE'));assert(deployment.includes('runAsUser: 10001'));}
+assert(!/runAsUser:\s*0(?:\D|$)|containerPort:\s*(?:25|465|587)(?:\D|$)/.test(mail),'No root mail workload or SMTP listener');
+assert(!mail.includes('path: smtp-key')&&!mail.includes('path: smtp-cert'),'No server TLS private key mount');
+console.log('External SMTP Helm workload, nonroot, secret and TLS boundaries passed');
+JSEND
+if "$helm" template moapan "$chart" -f "$work/values.yaml" --set-string mail.host= > "$work/rejected.log" 2>&1; then echo 'Missing SMTP hostname unexpectedly accepted'; exit 1; fi
+if "$helm" template moapan "$chart" -f "$work/values.yaml" --set-string mail.existingSecret= > "$work/rejected.log" 2>&1; then echo 'Missing email secret unexpectedly accepted'; exit 1; fi
+if "$helm" template moapan "$chart" -f "$work/values.yaml" --set mail.tls=NONE > "$work/rejected.log" 2>&1; then echo 'Unverified SMTP mode unexpectedly accepted'; exit 1; fi
+if "$helm" template moapan "$chart" -f "$work/values.yaml" --set mail.server.enabled=true > "$work/rejected.log" 2>&1; then echo 'Retired SMTP daemon option unexpectedly accepted'; exit 1; fi
+"$helm" template moapan "$chart" -n moapan -f "$work/values.yaml" --set mail.tls=SMTPS --set mail.port=465 > "$work/smtps-rendered.yaml"
+mkdir -p "$root/build/reports/security/helm-mail-render"
+cp "$work/smtp-rendered.yaml" "$root/build/reports/security/helm-mail-render/manifests.yaml"
+cp "$work/smtps-rendered.yaml" "$root/build/reports/security/helm-mail-render/smtps.yaml"
+printf 'External SMTP Helm STARTTLS/SMTPS and 4 rejection checks passed; no cluster resources created.\n'

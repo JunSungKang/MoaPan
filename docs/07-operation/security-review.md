@@ -229,3 +229,12 @@ Boot4.1.2 BOM의 Caffeine3.2.4와 error_prone_annotations2.49.0을 추가했다.
 ## 계정별 구독 권한 변경 검증 (2026-11-02)
 구독 권한은 요청별 DB 상태/기간으로 판정하고 HTML/API/HEAD·인코딩 별칭의 부적격 접근은 같은404/no-store를 반환한다. 권한은 세션/공유발간캐시에 저장하지 않는다. ADMIN/CSRF·최초경합·버전·감사·계정삭제·DB실패503·서비스직접호출·기존본문캐시를검증했다. 독립리뷰의UI인증상실/독자도구404 결함과 전체회귀의공개지면초기화는수정하고재검증했다. MP-DOC-035/036 및 PR #27 정본을 따른다. 가격/실결제/자격증명 길이·의존성·모델정책은 변경하지 않았다.
 공식 [Spring 보안공지](https://spring.io/security/)와 개별 CVE-2026-41707/47841/47877/47842의수정7.1.1, [JPA47834](https://spring.io/security/cve-2026-47834/)수정4.1.1을다시확인했다. 실제JAR Security7.1.2/JPA4.1.2는이후버전이며DPoP/WebAuthn/AuthorizationServer/해당AES API는추가하지않았다. [Oracle 공지](https://www.oracle.com/security-alerts/)와 [Temurin notes](https://adoptium.net/temurin/release-notes)를조회하고기존JDK보안빌드·실제런타임truststore수정검증을유지했다. 이확인은모든미공개취약점부재를보증하지않으며기존proxy 적용성·S07 잔여상태를닫지않는다.
+
+## 2026-11-04 SMTP 실행 예외에 대한 운영자 결정
+
+사용자는 자체 Postfix SMTP 이미지의 root master 실행에 따른 DS-0002 HIGH 예외를 명시적으로 미승인했다. 구현과 PR은 보존하고 해당 구성의 SMTP 활성화·운영 전환을 보류한다. 경고를 오탐으로 처리하거나 suppression/ignore·기준 완화로 게이트를 통과시키지 않는다. 로컬 합성 전달 성공과 사용자의 향후 실제 메일 수신 테스트는 이 보안 예외 승인과 별개다. 현재 web/worker와 V24를 유지하며 이 문서화로 스캐너·산출물을 재실행/재검증한 것으로 간주하지 않는다. 기존20항목 체크리스트의 항목·판정 기준은 추가하거나 바꾸지 않았다.
+
+
+## 2026-11-04 SMTP 서버 책임 분리와 DS-0002 원인 제거
+사용자 요청으로 외부 MailBox 결함 프롬프트 MP-DOC-039를 먼저 작성하고 이 프로젝트의 중복 Postfix 서버·패키징·생성물만 실제 퇴역했다. root USER 위장/권한 상승/새 ignore/scanner 제외를 추가하지 않았다. scanner 실행·판정·기존 적용성 파일3개는 변경 전과 SHA256이 같다. source DS-0002 FAIL0, JAR/SBOM/기본·외부메일 Helm 및 runtime058f45121034/builder23bd0e0bcc55 gate PASS. 기존 JOSE 메타데이터의 백포트 근거는 유지했다. clean 전체408 PASS와 키/설정/TLS 회귀·미사용 런타임 정리는 [증빙](../05-test/evidence/smtp-boundary-cleanup-20261104.json)을 따른다.
+외부 MailBox의 마지막 고위험 검출·root 예외 미승인은 이 작업으로 해결하지 않았으며 운영 전환은 계속 보류한다. 기존 고정20항목의 정의·순서·판정은 수정하지 않았고 이 기록을20항목 전체 완료로 해석하지 않는다.
