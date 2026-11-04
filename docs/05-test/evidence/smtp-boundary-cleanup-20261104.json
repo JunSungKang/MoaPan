@@ -1,5 +1,5 @@
 {
-  "completedAt": "2026-11-04T04:32:03.465Z",
+  "completedAt": "2026-11-04T04:43:35.754Z",
   "scope": "DamGoX2 repository and proven-unused owned runtime artifacts only",
   "handoffPrompt": "docs/07-operation/mailbox-security-handoff.md",
   "tests": {
@@ -155,8 +155,8 @@
     ],
     "unusedNativeSourceArchiveRemoved": true,
     "retiredSmtpImage": "sha256:96737b40de9f24d54bae15c22499dd706351db4cd534a955b0b43c70cd618a7b",
-    "oldProjectImageTagsRemoved": 36,
-    "oldProjectImageIdsRemoved": 34,
+    "oldProjectImageTagsRemoved": 59,
+    "oldProjectImageIdsRemoved": 52,
     "removedImageTags": [
       "damgox2-identity:runtime-20261104",
       "damgox2-subscription:builder-revoke-20261102",
@@ -193,7 +193,30 @@
       "moapan-damgox2-candidate:20261101",
       "moapan-damgox2-build:20261101",
       "damgox2-cache:pre-delivery-proxy-20261101",
-      "moapan-proxy-candidate:alpine"
+      "moapan-proxy-candidate:alpine",
+      "moapan-email-identity:20261103",
+      "damgox2-subscription:runtime-revoke-20261102",
+      "damgox2-pagespeed:proxy-20261102",
+      "moapan-damgo-service-candidate:20261101",
+      "moapan-damgo-service-build:20261101",
+      "moapan-damgo-candidate:20261101",
+      "moapan-usability-candidate:20261101",
+      "moapan-usability-build:20261101",
+      "moapan-article-candidate:20261101",
+      "moapan-article-build:20261101",
+      "moapan-admin-build:20261101",
+      "moapan-admin-candidate:20261101",
+      "moapan-design-candidate:20261101",
+      "moapan-design-build:20261101",
+      "moapan-proxy-build-candidate:alpine",
+      "moapan-app-build-candidate:alpine",
+      "moapan-classifier-candidate:alpine",
+      "moapan-translator-candidate:alpine",
+      "moapan-db-candidate:alpine",
+      "moapan-model-build-candidate:alpine",
+      "moapan-build-security:v16",
+      "moapan-security-build:20261030",
+      "moapan-build:security-20261031"
     ],
     "noGlobalPrune": true,
     "noVolumeDeletion": true,
@@ -216,7 +239,30 @@
         "bytes": 3068,
         "reason": "Retired one-off source bootstrap; active admin source APIs preserved"
       }
-    ]
+    ],
+    "activeImageAliasesUntagged": [
+      {
+        "tag": "damgox2-subscription:runtime-revoke-20261102",
+        "imageIdPreserved": "sha256:24fc8045a50cc78f44a57d0bdae30b12ed3d8bb52fcde7a1fa5e2042fafbf082"
+      },
+      {
+        "tag": "damgox2-pagespeed:proxy-20261102",
+        "imageIdPreserved": "sha256:453e34b953b74d07e425de9383bf2d7e3190deba1fe828eb34b036c69874074c"
+      },
+      {
+        "tag": "moapan-classifier-candidate:alpine",
+        "imageIdPreserved": "sha256:8a9b1fbd783fda8305655c4a0939df1faa52c29ebac220050ffe1c45d42a3ca5"
+      },
+      {
+        "tag": "moapan-translator-candidate:alpine",
+        "imageIdPreserved": "sha256:8e0b496277410200aeff2334844c93fd9a9544f73ad7218d0df50f6a6e17efce"
+      },
+      {
+        "tag": "moapan-db-candidate:alpine",
+        "imageIdPreserved": "sha256:8ee8af1f67452558bb3bcdf475b43ec4c1124f6df9957f7a9d79a08f5e292a0d"
+      }
+    ],
+    "containersUnchangedAfterImageRetirement": true
   },
   "deployment": {
     "performed": false,
