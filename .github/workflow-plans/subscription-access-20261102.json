@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 4,
+  "workSlug": "subscription-access-20261102",
+  "flowType": "integration",
+  "branch": "codex/subscription-access-20261102",
+  "targetBranch": "develop",
+  "baseSha": "fe81b65c2889a92136b3b2d3861c2e5a3f1482bb",
+  "mergeMethod": "squash",
+  "governance": {
+    "prAuthorLogin": "JunSungKang",
+    "assigneeLogin": "JunSungKang",
+    "reviewerLogin": "junsung-bot[bot]",
+    "requiredChecks": [],
+    "commitAuthor": {
+      "name": "jun-sung, Kang",
+      "email": "kjuns1@naver.com"
+    },
+    "coAuthors": [
+      {
+        "name": "Codex",
+        "email": "codex@openai.com"
+      },
+      {
+        "name": "junsung-bot[bot]",
+        "email": "302617028+junsung-bot[bot]@users.noreply.github.com"
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "subscription-access",
+      "expectedPaths": [
+        ".github/workflow-plans/subscription-access-20261102.json",
+        "AGENTS.md",
+        "README.md",
+        "docs/**",
+        "src/**",
+        "scripts/test/**",
+        "scripts/deploy/helm/moapan/values.yaml",
+        "scripts/deploy/helm/moapan/README.md"
+      ],
+      "forbiddenPaths": [
+        ".env",
+        ".github/workflows/**",
+        "licenses/**",
+        "build.gradle",
+        "gradle.lockfile",
+        "gradle/verification-metadata.xml",
+        "Dockerfile",
+        "compose.yaml",
+        "charts/**"
+      ],
+      "acceptanceCriteria": [
+        "Approved design: account_subscriptions account UUID primary key and FK,status ACTIVE/REVOKED,starts_at/expires_at/version/updated_at. Default no paid access, roles independent; existing accounts/content preserved. No price,payment,automaticbilling,or paid-publication assertion.",
+        "Replace all-member PreviewEntitlements with DB-backed grants;check every request including warm content cache;no entitlement/session/cross-request grant cache. Revocation commits affect subsequent requests;fail closed on DB error.",
+        "Hide newsletter links/teasers for no grant. Newsletter HTML and list/detail/reuse/worksheet APIs return common real HTTP404 for guest,non-subscriber,expired,revoked. Unknown resource same public body;HTML remains static/resources;no redirect-to-200 error. HEAD/conditional requests cannot bypass checks;preserve CSRF,quota,503 DB failure,ADMIN and unrelated auth semantics.",
+        "Admin account search/pagination and subscription grant/renew/revoke UI with readable usernames and date controls;server ADMIN,CSRF,optimisticversion,audit enforced;users cannot self-grant;account deletion cleans own grant.",
+        "Sprint Delivery: DB/domain/access/admin/presentation/regression plus SI-form docs. PostgreSQL/Playwright/unit/full source/JAR/SBOM/image/trust validation;same scanned image rollout to existing approved local service preserving records. Independent review and guarded human PR,NO merge until separate approval. No new worktree/global or local HTTPS skill modification,CI/CD,dependency/model changes.",
+        "Keep the existing Helm migration barrier synchronized with additive V23/V24;only migrationVersion changes in chart values and matching chart documentation,no infrastructure/CI expansion.",
+        "Approved follow-up: auto-load subscription accounts on first tab entry,default RECENT grant/renewal ordering and size10;offer EXPIRING ordering with currently usable accounts first,10/30/50/100 display sizes,server-side stable pagination and search,page reset on filter change,late response protection. Preserve no-subscription account management,ADMIN/CSRF/access404,privacy and manual grant semantics. Update the same subscription-domain PR and service after verification;no develop/main merge.",
+        "Approved revocation-time follow-up: persist server revocation instant as expires_at,updated_at and minimal revoke audit time; preserve scheduled start, allow cancelled REVOKED period to end before start while enforcing ACTIVE end>start via additive V24. Backfill only existing REVOKED expires_at from recorded updated_at and increment version only for corrected rows to reject stale edits; preserve recorded event time and other account/content/grant data. Repeated revocation is idempotent, stale version remains409, regrant uses new valid period. Synchronize Helm migration barrier24; test real PostgreSQL, display and actual rollout before current PR review; no merge."
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh --no-daemon check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest",
+        "sh scripts/test/html-check.sh",
+        "git diff --check"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/plan.md",
+          "docs/01-management/progress.md",
+          "docs/03-design/subscription-access.md",
+          "docs/05-test/subscription-access.md"
+        ]
+      }
+    },
+    {
+      "id": "preserve-local-https-skill",
+      "expectedPaths": [
+        ".agents/skills/https-certificate/SKILL.md",
+        ".agents/skills/https-certificate/agents/openai.yaml",
+        ".agents/skills/https-certificate/references/caddy-acme.md"
+      ],
+      "forbiddenPaths": [],
+      "acceptanceCriteria": [
+        "User explicitly requested that the existing HTTPS skill not be committed. Observe these exact untracked paths only to preserve unrelated work in place. Do not edit, stage, commit, move, delete or ignore them.",
+        "Before each commit, push and PR/review operation, verify original SHA-256 and that git ls-files returns no tracked/staged path. They are not performance or server-cache deliverables."
+      ],
+      "validationCommands": [
+        "node -e 'const fs=require(\"node:fs\"),c=require(\"node:crypto\"),cp=require(\"node:child_process\");for(const x of [{\"file\":\".agents/skills/https-certificate/SKILL.md\",\"sha256\":\"47071a68b12a638b0f7c3d3290f92833e955771f854312c2bb14c0074c1b0e0f\"},{\"file\":\".agents/skills/https-certificate/agents/openai.yaml\",\"sha256\":\"7272ebe0da2378a3c3cb769f9c614870091d91d42d13e4ad87d0d6f7d6cde9e7\"},{\"file\":\".agents/skills/https-certificate/references/caddy-acme.md\",\"sha256\":\"540d923e2c305dac16280286bd91fbd23b52a20bafffaf8b51372824483b8335\"}]){if(c.createHash(\"sha256\").update(fs.readFileSync(x.file)).digest(\"hex\")!==x.sha256)throw Error(\"Preserved skill changed: \"+x.file);if(cp.execFileSync(\"git\",[\"ls-files\",\"--\",x.file],{encoding:\"utf8\"}).trim())throw Error(\"Local skill must remain untracked: \"+x.file);}'"
+      ],
+      "documentation": {
+        "rationale": "Existing local skill belongs to another user request; preservation only, excluded from commits and PR diffs."
+      }
+    }
+  ]
+}

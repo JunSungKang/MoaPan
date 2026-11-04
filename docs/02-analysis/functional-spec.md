@@ -62,7 +62,7 @@ FS-15/16/17/24/28(REQ-07/08/14): 비회원은 오늘의 지면 최대42개(7개�
 |---|---|---|---|---|
 | FS-29 주간 근거·발간 |15|원고와 dossier를 같은version으로 저장; 최초발간주/선택기사collected_at/권리/확인·전망완결성·참고URL 검사|ADMIN+CSRF;400형식/409미충족·충돌. 수정된원고는점검안내폐기|PublicationResearchTest, SecurityIntegrationTest newsletterResearchGatesSnapshotsReuseAndRevisionIdentity, BrowserTest oldDraftCanMoveWeekAndStaleReviewCannotShowSuccess|
 | FS-30 재게재·업무양식 |16,17|발간본 snapshot·근거·무료/유료 출처만 사용; DOM안전 HTML과 로컬텍스트파일 생성|인증+별도혜택;미검토409/근거철회404;뉴스 원문 제외|publicationOutputsPreserveTruthfulCreditAndSafeOwnedContent, newsletterReaderCopiesAndDownloadsEnterpriseOutputs|
-| FS-32 구독 port |18|EntitlementProvider가 혜택과유효기간 제공;운영역할과독립검사|현재무료preview모든회원;미연결paid모드시작실패,결제API없음|EntitlementPolicyTest|
+| FS-32 구독 port |18|EntitlementProvider가 혜택과유효기간 제공;운영역할과독립검사|현재DB관리권한/기간;managed외모드시작실패,결제API없음|EntitlementPolicyTest|
 
 
 FS-24 관리자 화면 추가: 수집 사이트·기사 검토·주제 관리·대표 관심사·광고·처리 현황을6개 주메뉴로 구분한다. 수집은 목록/사이트정보/수집주소, 주제 관리는 자동 분류 기준/주제 목록의 하위탭을 제공한다. 선택한 작업영역만 표시하고 메뉴전환으로 미저장 입력을 지우거나 자동저장하지 않는다. 화살표/Home/End와 화면 해시·브라우저 뒤로가기를 지원한다. 새 사이트/선택 수정은 사이트정보, 주소 수정은 수집주소 입력을 연다. 늦은 상세응답은 다른 주메뉴로 이동한 사용자를 되돌리지 않는다. 점검·미리보기·202접수 결과는 접힘 밖에서 확인하고 작업조회 입력은 접어둘 수 있다. 기존 ADMIN/CSRF/version/API 계약은 그대로다.
@@ -73,3 +73,5 @@ FS-24 기사 검토 추가: 최근 최대100개 응답 중 한 기사만 보인�
 FS-24 운영입력 개선: 기사 검토는 수집일 시작/종료(한국시간·양끝 포함)와 최신수집/오래된수집/제목순 조건으로 서버에서 먼저 걸러 최대100개를 표시한다. 드롭다운은 조건의 순서를 따르고 제목·수집시각·출처로 기사를 식별한다. 기존 초안 유지/폐기확인/조회실패 보존 규약을 유지한다. 검증: SecurityIntegrationTest의 KST 경계·범위밖105건·정렬·권한, AdminUsabilityTest의 조건 요청/주제 선택/390·768·1440 화면.
 
 주제 목록은 기사와 관심사에 쓰는 이름·분야·같은 뜻의 표현을 등록하며 코드는 자동 생성한다. 자동 분류 기준은 그 목록에서1~8개를 선택하고 포함/제외 기준을 적어 분류모델이 사용할 주제를 정하는 별도 작업이다. 각 화면에 목적·예시·순서 안내를 제공한다. 기사 주제/수정할 주제/별칭 대상/합칠·남길 주제/수집 작업은 읽을 수 있는 이름으로 선택하고 UUID를 직접 입력하지 않는다. 주제 병합 시 기사잠금과 분류기준을 보존하고 작업 중 경합은409로 재시도한다. 목록 새로고침은 다른 관리자의 새 주제를 다시 조회하며, 누락된 분류 주제나 첫 목록 조회 실패 상태에서 저장하지 않는다. 검증: namedTopicOperationsGenerateCodesAndPreserveMergedConfiguration, topicMergeFailsQuicklyWhenRelatedArticleIsBeingProcessed, AdminUsabilityTest.
+
+FS-35 계정별 구독(REQ-20): V23권한/기간/version,요청별DB혜택검사,비로그인/미구독HTML/API404·일반없는주소동일화,subscriber메뉴/teaser,ADMIN검색/기간부여/연장/회수·CSRF/409/감사. FS-32의전회원preview를대체한다. Account삭제시권한정리. 입력·상태·예외·화면·시험은MP-DOC-035/036에연결한다.

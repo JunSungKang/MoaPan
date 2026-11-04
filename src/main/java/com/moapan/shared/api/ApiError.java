@@ -11,7 +11,8 @@ public class ApiError extends RuntimeException {
     public ApiError(int status,String code,Integer retryAfterSeconds,Integer attemptsRemaining) { super(code);this.status=status;this.code=code;this.retryAfterSeconds=retryAfterSeconds;this.attemptsRemaining=attemptsRemaining; }
     @RestControllerAdvice
     static class Handler {
-        @ExceptionHandler(ApiError.class) ResponseEntity<?> api(ApiError e) {
+        @ExceptionHandler(ApiError.class) ResponseEntity<?> api(ApiError e,jakarta.servlet.http.HttpServletRequest request) {
+            if(e.status==404)return NotFoundResponse.response(request);
             var b=ResponseEntity.status(e.status).cacheControl(CacheControl.noStore());
             if(e.status==429) b.header("Retry-After",String.valueOf(e.retryAfterSeconds==null?60:e.retryAfterSeconds));
             var body=new java.util.LinkedHashMap<String,Object>();body.put("error",e.code);
@@ -25,7 +26,7 @@ public class ApiError extends RuntimeException {
         @ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
         ResponseEntity<?> denied(Exception e) { return ResponseEntity.status(403).body(java.util.Map.of("error","forbidden")); }
         @ExceptionHandler(org.springframework.web.servlet.resource.NoResourceFoundException.class)
-        ResponseEntity<?> missingResource(Exception e) { return ResponseEntity.status(404).cacheControl(CacheControl.noStore()).body(java.util.Map.of("error","not_found")); }
+        ResponseEntity<?> missingResource(Exception e,jakarta.servlet.http.HttpServletRequest request) { return NotFoundResponse.response(request); }
         @ExceptionHandler(Exception.class) ResponseEntity<?> failure(Exception e) { return ResponseEntity.status(503).body(java.util.Map.of("error","temporarily_unavailable")); }
     }
 }

@@ -32,21 +32,21 @@ public class NewsletterService{
   }
   var encoded=json.writeValueAsString(m);if(encoded.length()>800000)throw new ApiError(400,"manuscript_too_large");return encoded;
  }
- @PreAuthorize("isAuthenticated()") public Object list(){
+ public Object list(){
   access.require(Benefit.READ_NEWSLETTER);
   var rows=readModels.catalog();
   var ids=new HashSet<UUID>();for(var row:rows)ids.addAll(row.articleIds());
   var visible=new HashSet<UUID>();for(var e:evidence.selected(ids,false))if(e.visible())visible.add(e.id());
   var output=new ArrayList<Map<String,Object>>();for(var row:rows){if(!visible.containsAll(row.articleIds()))continue;output.add(new LinkedHashMap<>(row.fields()));}return output;
  }
- @PreAuthorize("isAuthenticated()") public Object detail(UUID id){
+ public Object detail(UUID id){
   access.require(Benefit.READ_NEWSLETTER);
   var row=readModels.detail(id);var refs=row.articleIds().isEmpty()?List.<Evidence>of():evidence.selected(row.articleIds(),false);
   if(refs.size()!=row.articleIds().size()||refs.stream().anyMatch(e->!e.visible()))throw new ApiError(404,"newsletter_not_found");
   var out=new LinkedHashMap<String,Object>(row.fields());out.put("evidence",refs);return out;
  }
- @PreAuthorize("isAuthenticated()") public Object reuse(UUID id){access.require(Benefit.REUSE_NEWSLETTER);var result=detail(id);@SuppressWarnings("unchecked")var data=(Map<String,Object>)result;if(!Boolean.TRUE.equals(data.get("reuseAllowed")))throw new ApiError(409,"reuse_rights_review_required");return data;}
- @PreAuthorize("isAuthenticated()") public Object worksheet(UUID id){access.require(Benefit.RESEARCH_WORKSHEET);return detail(id);}
+ public Object reuse(UUID id){access.require(Benefit.REUSE_NEWSLETTER);var result=detail(id);@SuppressWarnings("unchecked")var data=(Map<String,Object>)result;if(!Boolean.TRUE.equals(data.get("reuseAllowed")))throw new ApiError(409,"reuse_rights_review_required");return data;}
+ public Object worksheet(UUID id){access.require(Benefit.RESEARCH_WORKSHEET);return detail(id);}
  @PreAuthorize("hasRole('ADMIN')") public Object drafts(){return db.sql("SELECT id,draft->>'title' title,version,published_at,updated_at FROM newsletters ORDER BY updated_at DESC,id LIMIT 100").query().listOfRows().stream().map(this::utcTimestamps).toList();}
  @PreAuthorize("hasRole('ADMIN')") public Object edit(UUID id){var r=db.sql("SELECT draft::text content,draft_dossier::text dossier,version,publication_revision,first_published_at FROM newsletters WHERE id=:id").param("id",id).query().listOfRows().stream().findFirst().orElseThrow(()->new ApiError(404,"newsletter_not_found"));var result=new LinkedHashMap<String,Object>();var d=dossier(r.get("dossier"));result.put("manuscript",json.readTree(r.get("content").toString()));result.put("version",r.get("version"));result.put("dossier",d);result.put("evidence",d==null?List.of():evidence.selected(d.articleIds(),false));result.put("revision",r.get("publication_revision"));result.put("expectedWeek",expectedWeek(r).toString());return result;}
  @Transactional @PreAuthorize("hasRole('ADMIN')") public Object save(UUID id,Input input,UUID actor){
@@ -59,7 +59,7 @@ public class NewsletterService{
  @Transactional @PreAuthorize("hasRole('ADMIN')") public void publish(UUID id,long version,boolean visible,UUID actor){
   lock(id);var row=reviewRow(id);if(((Number)row.get("version")).longValue()!=version)throw new ApiError(409,"version_conflict");
   if(visible){var d=dossier(row.get("dossier"));var m=json.readValue(row.get("content").toString(),Manuscript.class);var refs=d==null?List.<Evidence>of():evidence.selected(d.articleIds(),true);var blockers=publicationBlockers(m,d,refs,expectedWeek(row),((Number)row.get("publication_revision")).intValue()>0);if(!blockers.isEmpty())throw new ApiError(409,blockers.getFirst());}
-  if(db.sql("UPDATE newsletters SET issue_number=CASE WHEN :visible THEN COALESCE(issue_number,nextval('newsletter_issue_seq')) ELSE issue_number END,published=CASE WHEN :visible THEN draft ELSE NULL END,published_dossier=CASE WHEN :visible THEN draft_dossier ELSE NULL END,first_published_at=CASE WHEN :visible THEN COALESCE(first_published_at,now()) ELSE first_published_at END,published_at=CASE WHEN :visible THEN now() ELSE NULL END,publication_revision=publication_revision+CASE WHEN :visible THEN 1 ELSE 0 END,distribution=:distribution,version=version+1,updated_at=now() WHERE id=:id AND version=:version").param("visible",visible).param("distribution",access.distribution()).param("id",id).param("version",version).update()!=1)throw new ApiError(409,"version_conflict");audit(actor,id,visible?"newsletter_publish":"newsletter_withdraw");
+  if(db.sql("UPDATE newsletters SET issue_number=CASE WHEN :visible THEN COALESCE(issue_number,nextval('newsletter_issue_seq')) ELSE issue_number END,published=CASE WHEN :visible THEN draft ELSE NULL END,published_dossier=CASE WHEN :visible THEN draft_dossier ELSE NULL END,first_published_at=CASE WHEN :visible THEN COALESCE(first_published_at,now()) ELSE first_published_at END,published_at=CASE WHEN :visible THEN now() ELSE NULL END,publication_revision=publication_revision+CASE WHEN :visible THEN 1 ELSE 0 END,version=version+1,updated_at=now() WHERE id=:id AND version=:version").param("visible",visible).param("id",id).param("version",version).update()!=1)throw new ApiError(409,"version_conflict");audit(actor,id,visible?"newsletter_publish":"newsletter_withdraw");
  }
  private Map<String,Object> reviewRow(UUID id){return db.sql("SELECT draft::text content,draft_dossier::text dossier,version,first_published_at,publication_revision FROM newsletters WHERE id=:id").param("id",id).query().listOfRows().stream().findFirst().orElseThrow(()->new ApiError(404,"newsletter_not_found"));}
  private LocalDate expectedWeek(Map<String,Object> row){return PublicationResearch.week(row.get("first_published_at")==null?clock.instant():Instant.parse(utcTimestamp(row.get("first_published_at"))));}

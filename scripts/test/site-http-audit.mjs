@@ -21,7 +21,7 @@ async function get(p){
 const result={checkedAt:new Date().toISOString(),origin:base.origin,pages:[],checks:{},limitations:['Actual Google/Naver/Bing indexing and rank require portal evidence and remain UNKNOWN.','User-agent imitation and public search samples do not prove access from a real engine crawler.']};
 for(const name of pages){
  const p='/'+name+'.html',r=await get(p),publicPage=publicPages.includes(name),auth=['login','signup'].includes(name);
- assert.equal(r.status,publicPage||auth?200:302,p+' unexpected HTTP status');
+ assert.equal(r.status,name==='newsletter'?404:publicPage||auth?200:302,p+' unexpected HTTP status');
  result.pages.push({path:p,publicPage,...Object.fromEntries(Object.entries(r).filter(([k])=>k!=='text')),metadata:r.status===200?metadata(r.text):null});
 }
 const rootPage=await get('/');result.root={...Object.fromEntries(Object.entries(rootPage).filter(([k])=>k!=='text')),metadata:metadata(rootPage.text)};
@@ -31,7 +31,7 @@ result.checks.sitemap={status:sitemap.status,urls:[...sitemap.text.matchAll(/<lo
 const edition=await get('/api/v1/public/news/edition');assert.equal(edition.status,200);const payload=JSON.parse(edition.text);
 result.checks.publicEdition={status:edition.status,returnedItems:payload.items?.length,candidateCount:payload.candidateCount};
 const notFound=await get('/audit-no-such-page.html');assert.equal(notFound.status,404);result.checks.notFound={status:notFound.status,robotsHeader:notFound.robotsHeader};
-for(const p of ['/api/v1/newsletters','/api/v1/admin/sites']){const r=await get(p);assert.equal(r.status,401);result.checks[p]={status:r.status,robotsHeader:r.robotsHeader};}
+for(const p of ['/api/v1/newsletters','/api/v1/admin/sites']){const r=await get(p);assert.equal(r.status,p==='/api/v1/newsletters'?404:401);result.checks[p]={status:r.status,robotsHeader:r.robotsHeader};}
 result.absoluteHtmlCanonicals={passed:result.pages.filter(p=>p.publicPage&&/^https?:\/\//.test(p.metadata.canonical||'')).length,total:publicPages.length};
 const output=path.join(root,'build/reports/site-http-audit.json');fs.mkdirSync(path.dirname(output),{recursive:true});fs.writeFileSync(output,JSON.stringify(result,null,2)+'\n');
 console.log(JSON.stringify({pages:result.pages.length,publicPages:publicPages.length,absoluteHtmlCanonicals:result.absoluteHtmlCanonicals,actualPortalIndex:'UNKNOWN',output:'build/reports/site-http-audit.json'}));

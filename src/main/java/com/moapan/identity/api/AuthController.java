@@ -27,10 +27,10 @@ public class AuthController {
     record Signup(@NotNull @Size(min=1,max=128) String username,@NotNull @Size(min=6,max=256) String password,@NotNull @AssertTrue Boolean termsAccepted,@NotBlank @Size(max=32) String termsVersion){}
     record Change(@NotNull String currentPassword,@NotNull @Size(min=6,max=256)String newPassword){}
     record Confirm(@NotNull String currentPassword){}
-    record View(UUID id,String username,String role){}
+    record View(UUID id,String username,String role,boolean canReadNewsletter){}
     private record CredentialSnapshot(UUID id,long version){}
-    private final Accounts users;private final PasswordEncoder encoder;private final AuthenticationManager manager;private final SecurityContextRepository contexts;private final Limits limits;private final JdbcClient db;private final TransactionTemplate tx;private final Semaphore hashes=new Semaphore(4);
-    public AuthController(Accounts users,PasswordEncoder encoder,AuthenticationManager manager,SecurityContextRepository contexts,Limits limits,JdbcClient db,PlatformTransactionManager tm){this.users=users;this.encoder=encoder;this.manager=manager;this.contexts=contexts;this.limits=limits;this.db=db;this.tx=new TransactionTemplate(tm);}
+    private final com.moapan.subscription.application.ContentAccess access;private final Accounts users;private final PasswordEncoder encoder;private final AuthenticationManager manager;private final SecurityContextRepository contexts;private final Limits limits;private final JdbcClient db;private final TransactionTemplate tx;private final Semaphore hashes=new Semaphore(4);
+    public AuthController(Accounts users,PasswordEncoder encoder,AuthenticationManager manager,SecurityContextRepository contexts,Limits limits,JdbcClient db,PlatformTransactionManager tm,com.moapan.subscription.application.ContentAccess access){this.access=access;this.users=users;this.encoder=encoder;this.manager=manager;this.contexts=contexts;this.limits=limits;this.db=db;this.tx=new TransactionTemplate(tm);}
     @GetMapping("/api/v1/auth/csrf") Object csrf(CsrfToken token){return Map.of("token",token.getToken(),"headerName",token.getHeaderName());}
     @PostMapping("/api/v1/auth/signup") View signup(@Valid @RequestBody Signup input){
         if(!TERMS_VERSION.equals(input.termsVersion()))throw new ApiError(400,"terms_version_outdated");
@@ -75,6 +75,6 @@ public class AuthController {
     private static void passwordLength(String password){int n=password.codePointCount(0,password.length());if(n<6||n>128)throw new ApiError(400,"invalid_password_length");}
     private Account current(Authentication auth){return users.findById(UUID.fromString(auth.getName())).filter(a->a.active).orElseThrow(()->new ApiError(401,"authentication_required"));}
     private <T>T hash(java.util.function.Supplier<T> work){if(!hashes.tryAcquire())throw new ApiError(503,"hash_capacity");try{return work.get();}finally{hashes.release();}}
-    private static View view(Account a){return new View(a.id,a.username,a.role);}
+    private View view(Account a){return new View(a.id,a.username,a.role,access.allows(a.id,com.moapan.subscription.domain.EntitlementPolicy.Benefit.READ_NEWSLETTER));}
     private static String normalize(String value){if(!value.matches("[A-Za-z0-9_]{1,128}"))throw new ApiError(400,"invalid_username");String n=value.toLowerCase(Locale.ROOT);if(!n.matches("[a-z0-9_]{1,128}"))throw new ApiError(400,"invalid_username");return n;}
 }
