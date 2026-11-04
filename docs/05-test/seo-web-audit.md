@@ -1,12 +1,12 @@
 # SEO·웹 표준 점검 결과서
 
-> 문서번호: MP-DOC-027 · 기준: 2026-11-01 현재 변경 · 상태: 유지관리 · 작성: 개발 담당 · 독립 SEO 감사: seo_audit 에이전트 · 코드 검토: 독립 리뷰 담당
+> 문서번호: MP-DOC-027 · 기준: 2026-11-04 현재 코드·후속 검증 · 상태: 유지관리 · 작성: 개발 담당 · 독립 SEO 감사: seo_audit 에이전트 · 코드 검토: 독립 리뷰 담당
 
 ## 1. 범위와 판정 원칙
 
-전체 정적 HTML11개와 뉴스레터 상세를 점검했다. 별도 SEO 에이전트가 코드·실제 승인 HTTPS·공식 Google/네이버/Bing/W3C 지침을 읽기 전용으로 조사했다. 개발 담당은 브라우저·Nu·HTTP 재현 명령으로 보완했다. 검색 기술 준비도와 실제 검색엔진 색인·순위는 다르다. 임의 가중치의 SEO100점이나 검색 노출 확률을 만들지 않는다.
+최초 감사는 정적 HTML11개와 뉴스레터 상세였다. 현재 대상은 비밀번호 복구·404를 포함한13페이지이며 최신 결과는 제7절과 MP-DOC-040을 따른다. 아래72상태·11페이지 수치는2026-11-01 실행 기록이다. 별도 SEO 에이전트가 코드·실제 승인 HTTPS·공식 Google/네이버/Bing/W3C 지침을 읽기 전용으로 조사했다. 개발 담당은 브라우저·Nu·HTTP 재현 명령으로 보완했다. 검색 기술 준비도와 실제 검색엔진 색인·순위는 다르다. 임의 가중치의 SEO100점이나 검색 노출 확률을 만들지 않는다.
 
-현재 공개 지면과 소개·정책은 색인 허용, 로그인·가입은 noindex, 뉴스레터·관심사·계정은 로그인, 관리는 ADMIN이 필요하다. 보호 페이지가 검색되지 않는 것을 결함으로 세지 않는다. robots/noindex는 인증을 대체하지 않는다. SEO 정책/크롤링 구조 변경은 이번 작업에서 구현하지 않았다.
+현재 공개 지면과 소개·정책은 색인 허용, 로그인·가입은 noindex, 뉴스레터는 활성 계정과 유효한 구독권한이 필요하고 미충족 시 HTML/API 모두404다. 관심사·계정은 로그인, 관리는 ADMIN이 필요하다. 보호 페이지가 검색되지 않는 것을 결함으로 세지 않는다. robots/noindex는 인증을 대체하지 않는다. SEO 정책/크롤링 구조 변경은 이번 작업에서 구현하지 않았다.
 
 ## 2. 디자인·웹 표준 조치
 
@@ -33,7 +33,7 @@
 | /signup.html | 200 | noindex | 있음 | 불필요 |
 | /settings.html | 302 → login | noindex | 소스에 있음 | 불필요 |
 | /account.html | 302 → login | noindex | 소스에 있음 | 불필요 |
-| /newsletter.html | 302 → login | noindex | 소스에 있음 | 불필요 |
+| /newsletter.html | 404 (구독 미충족) | noindex | 소스에 있음 | 불필요 |
 | /admin.html | 302 → login | noindex·ADMIN | 소스에 있음 | 불필요 |
 | /newsletter-editor.html | 302 → login | noindex·ADMIN | 소스에 있음 | 불필요 |
 
@@ -48,7 +48,7 @@
 | sitemap | 200 XML, 공개4개만 포함, 가짜 lastmod 없음 |
 | robots | 200, sitemap 절대주소·public/assets 허용·internal/admin API 차단 |
 | 없는 페이지 | 404+noindex |
-| 보호 API | 뉴스레터·관리 익명401 |
+| 보호 API | 뉴스레터 익명404/no-store, 관리 익명401 |
 | 초기 기사 표시 | 원본 HTML 기사0, JavaScript 실행 후 첫7개 |
 | 포털 실제 색인 | Google/네이버/Bing 각각 **미확인** |
 
@@ -58,7 +58,7 @@ User-Agent를 Googlebot/Yeti/bingbot 문자열로 바꾼 요청도 home/robots/e
 
 ### P2 — 원본 HTML의 대표 URL
 
-공개4페이지의 canonical href는 상대경로다. JavaScript가 절대화하고 HTTP Link도 절대주소를 제공하므로 Google의 canonical 전체 실패라고 단정하지 않는다. 다만 [네이버 지침](https://searchadvisor.naver.com/guide/markup-structure)은 절대 URL을 요구하며 [Google도 절대 URL을 권장](https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls)한다. 승인 origin과 일치하는 최초 응답의 canonical 동기화를 별도 승인 후 검토해야 한다. /와/index.html은 현재 둘 다200이며 대표 주소 리다이렉트도 후속 검토 사항이다.
+공개4페이지의 canonical href는 상대경로다. JavaScript가 절대화하고 HTTP Link도 절대주소를 제공하므로 Google의 canonical 전체 실패라고 단정하지 않는다. 다만 [네이버 지침](https://searchadvisor.naver.com/guide/markup-structure)은 절대 URL을 요구하며 [Google도 절대 URL을 권장](https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls)한다. 2026-11-04 사용자 SEO 패치 승인으로 공개4문서의 최초 HTTP HTML canonical을 실행 origin과 동기화하는 고정 ResourceTransformer를 구현했다. 계정·기사 데이터 삽입/템플릿 엔진은 없으며 최종 HTTP/SEO 실행 결과는 제7절에 별도 기록한다. /와/index.html은 현재 둘 다200이며 대표 주소 리다이렉트도 후속 검토 사항이다.
 
 ### P2 — 뒷면 기사·링크의 발견성
 
@@ -68,7 +68,7 @@ User-Agent를 Googlebot/Yeti/bingbot 문자열로 바꾼 요청도 home/robots/e
 
 공개페이지에 og:url/og:image/WebSite 구조화 데이터가 없다. 기본 색인의 필수 조건은 아니며 [Google 사이트명 지침](https://developers.google.com/search/docs/appearance/site-names)에 따라 실제 브랜드·승인 주소·자체 이미지로 보강할 수 있다. 존재하지 않는 운영자·도메인·기사URL·발행정보를 만들지 않는다.
 
-루트 HTML은lang=ko지만 HTTP Content-Language는 요청 협상에 따라 en-US 또는 und 등으로 관찰됐다. [W3C 설명](https://www.w3.org/International/questions/qa-http-and-lang)처럼 HTTP의 audience 정보와 본문 언어는 구분해야 한다. 명확화 대상이며 이를 색인 차단으로 분류하지 않는다. 별도 영문URL 없이 브라우저 저장 언어로 전환하므로 영문 개별 색인/hreflang도 약속하지 않는다.
+2026-11-01에는 루트 HTML lang=ko와 HTTP Content-Language en-US/und 혼재가 관찰됐으나 이후 proxy의 해당 헤더를 제거했고2026-11-04 독립 운영 검사에서는 재현되지 않았다. [W3C 설명](https://www.w3.org/International/questions/qa-http-and-lang)처럼 HTTP의 audience 정보와 본문 언어는 구분해야 한다. 명확화 대상이며 이를 색인 차단으로 분류하지 않는다. 별도 영문URL 없이 브라우저 저장 언어로 전환하므로 영문 개별 색인/hreflang도 약속하지 않는다.
 
 ## 5. 실제 검색 표본과 확인 한계
 
@@ -99,3 +99,7 @@ User-Agent를 Googlebot/Yeti/bingbot 문자열로 바꾼 요청도 home/robots/e
 기존의9페이지/sitemap3개/index로그인필수 기록은 당시 결과이며, 현재 공개 정책·11페이지 감사로 대체한다.
 
 관리자 화면 추가 요청은6개 주메뉴와 하위탭으로 반영했다. 검색 접근·noindex·공개 문서 수·canonical은 변경하지 않았다. 관리자54상태·전체 페이지72상태 및 실제 HTTPS 경계의 후속 결과는 [관리자 실행 증빙](evidence/admin-navigation-20261101.json)으로 대체·보완한다. 이번 UI 후속 작업에서 포털 검색 표본이나 실제 색인을 새로 측정했다고 세지 않는다.
+
+## 7. 2026-11-04 최종 재검증
+
+최종 동결 코드의13HTTP 경계와 최초 HTML/HTTP 절대 canonical4개가 통과했다. 공개4문서×모바일/데스크톱의8회 Lighthouse에서 성능/접근성/권장사항/SEO 모두100, 동적132상태 axe 실패0·Nu13문서 메시지0이다. 제품 변경 뒤 마지막 검증으로 실행했고 코드 seal 일치를 확인했다. 상세 진단·시각·범위는 [MP-DOC-040](web-quality.md)과 [증빙](evidence/web-quality-20261104.json)을 따른다. 운영 기존 앱/V24와 격리된 최신 후보를 구분하며, 새 이메일 기능이 운영에 반영됐다고 표시하지 않는다. 실제 포털 소유확인/색인은 별도 미검증이다.

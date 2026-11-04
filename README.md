@@ -6,6 +6,8 @@
 
 **CI·CD, GitHub Actions, 예약 workflow는 사용자 요청에 따라 구현·실행하지 않는다.** 검증은 로컬 명령으로 실행한다. 외부 HTTPS 배포와 사업 개시는 별도 승인·검토가 필요하다. 실제 인수 상태는 [진행 상태](docs/01-management/progress.md)와 [테스트 보고](docs/05-test/test-report.md)를 확인한다.
 
+웹 품질·패턴 재검토: [최종 점검서](docs/05-test/web-quality.md). 재현 명령은 `sh scripts/build/gradle-local.sh --no-daemon webQualityAudit`이며, Node/npm은 잠금된 Lighthouse·axe 감사 도구에 사용한다. 감사는 폐기 PostgreSQL·합성 자료를 사용하고 종료 시 테스트 서버를 정리한다.
+
 ## 로컬 실행
 
 ```sh
@@ -144,7 +146,7 @@ Linux 서버에서는 `compose-public.yaml` 대신 `scripts/deploy/compose-serve
 
 ### 외부 MailBox 연결과 책임
 
-담고담고는 SMTP 클라이언트와 암호화 발송 대기만 관리한다. MailBox/Postfix/IMAP/Webmail 서버를 복제하거나 빌드·시작하지 않는다. 운영자가 별도로 관리하는 SMTP에 `scripts/deploy/compose-mail-external.yaml`로 연결한다. worker만 지정한 기존 SMTP Docker 네트워크에 연결하고 web은 기존 backend를 유지한다.
+담고담고는 SMTP 클라이언트와 암호화 발송 대기만 관리한다. MailBox/Postfix/IMAP/Webmail 서버를 복제하거나 빌드·시작하지 않는다. 운영자가 별도로 관리하는 SMTP에 `scripts/deploy/compose-mail-external.yaml`로 연결한다. SMTP 인증이 필요하면 그 뒤에 `scripts/deploy/compose-mail-auth.yaml`을 추가하고 MAIL_SMTP_USERNAME과 MAIL_SMTP_PASSWORD_FILE을 지정한다. 비밀번호 값은 환경변수에 넣지 않고 파일 secret으로 읽는다. worker만 지정한 기존 SMTP Docker 네트워크에 연결하고 web은 기존 backend를 유지한다.
 
 최초 준비는 저장소 안에서 다음 명령을 실행한다. 기존 이메일 암호화 키를 덮어쓰거나 재생성하지 않으며, 서버 인증서나 개인키도 만들지 않는다. 기존 키가 잘못됐으면 교체하지 않고 실패한다.
 
@@ -159,4 +161,4 @@ node scripts/test/mail-deployment-check.mjs
 
 보안 검사·백업·운영 승인이 끝난 뒤 실제 사용하는 local/public/server와 두 모델 overlay 뒤에 `-f scripts/deploy/compose-mail-external.yaml`을 추가한다. 기존 ingress/볼륨과 검증한 앱 digest를 유지한다. 이전 내장 SMTP의 compose-mail.yaml 및 Helm mail.server 옵션은 퇴역했으며 재사용하지 않는다. 메일 미설정 시 신규 인증·가입·복구는503으로 닫히고 기존 계정 로그인은 유지된다.
 
-이 저장소의 검사 통과는 외부 MailBox의 보안 문제 해결을 뜻하지 않는다. 외부 이미지·중계 권한·TLS·실제 외부 수신함 전달을 별도로 검증한 뒤 운영을 전환한다. 현재 실제 결과는 [이메일 검증서](docs/05-test/email-identity.md), 외부 담당 작업용 프롬프트는 [MailBox 결함 조치 요청서](docs/07-operation/mailbox-security-handoff.md)를 따른다.
+이 저장소의 검사 통과는 외부 MailBox의 보안 문제 해결을 뜻하지 않는다. 외부 이미지·중계 권한·TLS·실제 수신함 전달을 별도로 검증한다. 2026-11-04 현재 새 MailBox 이미지의 검사, 인증 STARTTLS와 운영자 실제 받은편지함 수신을 확인해 같은 검증 앱 이미지로 V25 서비스를 전환했다. 재시작 시 필요한 모든 overlay/비공개 파일 경로는 [현재 운영 전환](docs/06-transition/deployment.md#현재-운영-전환--2026-11-04-웹-품질외부-mailbox)을 따른다. Gmail 등 별도 인터넷 수신자 전달과 MailBox 운영을 보장한다는 의미는 아니다. 현재 실제 결과는 [이메일 검증서](docs/05-test/email-identity.md), 외부 담당 작업용 프롬프트는 [MailBox 결함 조치 요청서](docs/07-operation/mailbox-security-handoff.md)를 따른다.

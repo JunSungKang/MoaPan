@@ -4,9 +4,9 @@
 
 사용자 최신 완료 기준: 로컬 Mac에서 실행하고 휴대폰 데이터망에서 접속 성공. https://175.195.62.165/ 에서 사용자 확인을 받았다. 별도 호스팅 배포는 범위에서 제외. CI/CD·공개 터널·유료 자원 생성은 없다.
 
-공개 실행: .env에 PUBLIC_BASE_URL=https://175.195.62.165, MOAPAN_PUBLIC_HOST=175.195.62.165, COOKIE_SECURE=true를 설정한다. 비밀값은 기존 .env에 유지한다. `docker compose -f compose.yaml -f scripts/deploy/compose-public.yaml up -d --no-build --wait --wait-timeout 90`으로 실행한다. 기본 Compose만 실행하면 로컬 모드 설정이 적용되므로 공개 모드에서는 반드시 두 파일을 지정한다. Docker의 외부 privileged port forwarding은 사용자 승인 후 활성화했다.
+기본 공개 모드 예시(메일·모델을 함께 유지하는 현재 재시작은 아래 최신 운영 전환 절을 사용): .env에 PUBLIC_BASE_URL=https://175.195.62.165, MOAPAN_PUBLIC_HOST=175.195.62.165, COOKIE_SECURE=true를 설정한다. 비밀값은 기존 .env에 유지한다. `docker compose -f compose.yaml -f scripts/deploy/compose-public.yaml up -d --no-build --wait --wait-timeout 90`으로 실행한다. 기본 Compose만 실행하면 로컬 모드 설정이 적용되므로 공개 모드에서는 반드시 두 파일을 지정한다. Docker의 외부 privileged port forwarding은 사용자 승인 후 활성화했다.
 
-공개 proxy는 80→8081(HTTPS redirect/ACME),443→8443(TLS),127.0.0.1:8080(health only)만 노출한다. DB와 web은 호스트 포트를 열지 않는다. Let’s Encrypt shortlived IP 인증서를 Caddy가 named volume에 보관·자동 갱신한다. Mac과 Docker가 실행 중이고 해당 IP와 포트가 유지돼야 접속·갱신 가능하다. 현재 인증서 만료2026-11-03T21:11:17Z; IP가 바뀌면 .env·주소·인증서 재검증이 필요하다.
+공개 proxy는 80→8081(HTTPS redirect/ACME),443→8443(TLS),127.0.0.1:8080(health only)만 노출한다. DB와 web은 호스트 포트를 열지 않는다. Let’s Encrypt shortlived IP 인증서를 Caddy가 named volume에 보관·자동 갱신한다. Mac과 Docker가 실행 중이고 해당 IP와 포트가 유지돼야 접속·갱신 가능하다. 이전 측정 인증서 만료는2026-11-03T21:11:17Z였으며, 최신 실서비스 검증에서는 자동 갱신된 인증서 만료2026-11-10T14:34:47Z를 확인했다; IP가 바뀌면 .env·주소·인증서 재검증이 필요하다.
 
 공개 접속 중지: `docker compose -f compose.yaml -f scripts/deploy/compose-public.yaml stop proxy`. 볼륨 삭제는 필요 없다. 다시 로컬 HTTP로 전환하려면 PUBLIC_BASE_URL=http://localhost:8080, COOKIE_SECURE=false 후 기본 Compose로 재생성한다.
 
@@ -20,7 +20,7 @@ docker compose up -d --build
 docker compose ps
 ```
 
-접속은 http://localhost:8080. 합성 계정만 사용한다. migrate exit0 후 web·worker가 시작하며 worker/migrate/admin-cli는 HTTP 포트를 열지 않는다. proxy만127.0.0.1:8080을 공개한다. DB·web은 내부 네트워크에서만 연결한다. app는 linux/amd64, DB/proxy는 지원되는 native 플랫폼이다. 선택한 최신 Temurin 패치의 Linux arm64 바이너리가 아직 없어 Apple Silicon app는 emulation으로 실행한다.
+접속은 http://localhost:8080. 합성 계정만 사용한다. migrate exit0 후 web·worker가 시작하며 worker/migrate/admin-cli는 HTTP 포트를 열지 않는다. proxy만127.0.0.1:8080을 공개한다. DB·web은 내부 네트워크에서만 연결한다. 초기 앱 실행은 linux/amd64 emulation이었으며 현재는 공식 Temurin Linux arm64 빌드로 전환했다. 최신 런타임은 아래 운영 전환 절과 버전 기록을 따른다.
 
 관리자 부여: `docker compose run --rm -e MOAPAN_ROLE=admin-cli web`에서 기존 아이디를 stdin으로 입력한다. 초기 관리자 비밀번호는 없다. DB runtime 역할 moapan은 superuser/createdb/createrole 권한이 없으며 migration 자격은 분리한다.
 
@@ -68,3 +68,29 @@ V14 전환: newsletters에 nullable dossier와최초발간/개정필드를추가
 
 ## PageSpeed 후속 서비스 반영 검증 — 2026-11-02
 기존4개 Compose 설정을 모두 사용해 web/worker를 검증 runtime sha256:fba510fc15d13e3a078a6a27185d763a9046badb2aa7294e0790450e117db7f2로, proxy를 sha256:453e34b953b74d07e425de9383bf2d7e3190deba1fe828eb34b036c69874074c로 교체했다. 나머지DB/모델/볼륨 보존,6서비스정상/heartbeat·300기사/2계정/1발간물/V22·ID해시일치. 정상TLS검증을 유지한 실제HTTPS·HEAD·API접근경계·합성가입/로그인/탈퇴를 확인했다. 외부 PSI는 양쪽4분야100점. 새 유료자원/도메인/터널/CI/CD를 추가하지 않았다. builder/scan/truststore/실행JAR증빙은 [최종 검증서](../05-test/pagespeed-desktop.md)에 있다.
+
+## 현재 운영 전환 — 2026-11-04 웹 품질·외부 MailBox
+
+이 절이 앞선 날짜의 배포 기록보다 우선한다. 최신 사용자가 서비스 교체와 develop 병합, 별도 운영 중인 MailBox 연동을 승인했다. 내장 SMTP 서버는 되살리지 않으며 MailBox 프로젝트·컨테이너는 수정/재시작하지 않았다.
+
+- 앱 runtime: `sha256:d1e49e6d6c1010acc7230be1d7a9247bccb5c2422c78675ebd246c76ac848e5e`, JAR SHA256 `e03b4ef23d680c45528f2804af32c2fcf1fec73a1a530780f7c1721c1138f998`. Linux arm64, Temurin27.0.1.0.2+1, UID10001:10001. 빌드/스캔한 바이트 그대로 web/worker에 적용했다.
+- V24 암호화 백업을 격리 DB에 복원하고 복원 계정 비활성화/세션 제거→V25→구/신 앱 JPA 기동을 검증한 뒤 그 격리 DB를 삭제했다. 웹/worker 중지 후 추가 암호화 백업을 만들고 운영 V25를 적용했다. 모든 기존 테이블의 건수와 행 SHA256 집계가 전환 전후 일치했다. 기존 계정의 이메일을 추정해 채우지 않는다.
+- DB/proxy/번역·분류 모델의 container ID·시작시각·이미지가 그대로이며 원래 볼륨·키를 유지했다. 웹/worker만 재생성했다. HTTP 진입 포트를 추가하지 않았다.
+- 외부 MailBox의 현재 SMTP 이미지 `sha256:a2392bb2ab623efe485b6a3e9abc956aebc3930130b1350d73f8fe8a1d1df1ad`의 취약점/secret 검사 검출0. 이는 과거 보류된 이미지와 다르다. 별도 SMTP master의 root 관찰은 외부 운영 범위이며 본 프로젝트가 비루트로 바꾸거나 예외 승인한 것으로 표시하지 않는다. 앱과 worker는 계속 비루트 SMTP 클라이언트다.
+- 기존 `mailbox_default` 네트워크의 `mailbox-smtp-receiver:2587`에 필수 STARTTLS·SMTP AUTH로 연결한다. 서버 SAN의 실제 호스트와 운영자 CA를 검증하며 TLS/호스트 검증을 해제하지 않는다. CA 공개 인증서와 SMTP 비밀번호는 파일 secret, 이메일 데이터 키는 기존 파일 그대로 사용한다. web은 backend에만, worker만 SMTP/모델 네트워크에 참가한다.
+
+현재 인스턴스의 비공개 `mail.env`에는 연결 정보와 파일 경로만 있으며 SMTP 비밀번호는 별도 `.local/mail/external/smtp-password`에 있다. 기존 `.env`의 값은 바꾸지 않았다. `verified-app.yaml`은 위 세 역할의 동일 이미지ID만 지정한다. 이 파일들은 이 호스트의 운영 설정으로 Git에 포함하지 않는다. 동일한 검증 이미지가 로컬 Docker에 존재할 때 재시작 명령은 다음과 같다.
+
+```sh
+docker compose --env-file .env \
+  --env-file .local/deploy-web-quality-20261104/mail.env \
+  -f compose.yaml -f scripts/deploy/compose-public.yaml \
+  -f scripts/deploy/compose-translation.yaml -f scripts/deploy/compose-classification.yaml \
+  -f scripts/deploy/compose-mail-external.yaml -f scripts/deploy/compose-mail-auth.yaml \
+  -f .local/deploy-web-quality-20261104/verified-app.yaml \
+  up -d --no-deps --no-build --pull never --wait --wait-timeout 100 web worker
+```
+
+새 호스트는 `.env.example`의 비밀값 없는 계약과 두 SMTP overlay로 각 운영자의 연결/인증서/비밀파일을 준비한다. 이 호스트의 private 파일이나 키를 저장소로 복사하지 않는다. 스키마 변경 시 동일 이미지로 migrate 역할을 선행하며 새 이미지·설정 변경은 검사 후 반영한다. MailBox의 가용성·인증서 유효기간/갱신·발신 평판·인터넷 외부 수신자 전달은 별도 운영 책임이다. 운영자 MailBox 내 실제 수신 검증을 Gmail 등 모든 외부 메일함 전달 보장으로 확대하지 않는다.
+
+자동 백업은 추가하지 않았다. 이번 운영 전환용 age 암호화 백업과 복호화 키는 Git 제외 workspace 안의 제한된 경로에 분리 파일로 보존하며 수동 보관기간7일을 따른다. 동일 호스트 보관은 독립된 오프호스트 재해복구 보관소를 대신하지 않는다. 운영 이메일 데이터 키도 반드시 별도 보관해야 한다.

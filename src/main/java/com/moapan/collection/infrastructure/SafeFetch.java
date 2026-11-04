@@ -1,5 +1,4 @@
 package com.moapan.collection.infrastructure;
-import com.moapan.collection.infrastructure.ArxivGate;
 import com.moapan.collection.application.CollectionFilter;
 import com.moapan.shared.api.ApiError;
 import java.net.*;
@@ -24,7 +23,7 @@ public class SafeFetch {
     private static final JsonMapper JSON=JsonMapper.builder().build();
     @org.springframework.beans.factory.annotation.Autowired private ArxivGate arxivGate;
     public record Item(String guid,String title,String url,String description,Instant publishedAt,String author) implements com.moapan.article.domain.ArticleInput {public Item(String guid,String title,String url,String description,Instant publishedAt){this(guid,title,url,description,publishedAt,"");}}
-    public record Result(List<Item>items,String etag,String modified,boolean unchanged){}
+    public record Result(List<Item>items,String etag,String modified){}
     public static String canonical(String input){
         try{
             URI uri=URI.create(input).normalize();String host=uri.getHost();
@@ -62,7 +61,7 @@ public class SafeFetch {
                     String ref=(String)source.get("secret_ref");if(ref!=null){String secret=System.getenv(ref);if(secret==null||secret.contains("\r")||secret.contains("\n"))throw new ApiError(503,"source_secret_missing");get.setHeader("Authorization","Bearer "+secret);}
                     var response=client.execute(get,r->{
                         int status=r.getCode();String location=r.getFirstHeader("Location")==null?null:r.getFirstHeader("Location").getValue();String retry=r.getFirstHeader("Retry-After")==null?null:r.getFirstHeader("Retry-After").getValue();
-                        if(status==429||status>=500)throw new FetchFailure(status,retry);
+                        if(status==429||status>=500)throw new FetchFailure(retry);
                         if(status==304)return new Raw(status,null,null,null,location);
                         if(status>=300&&status<400)return new Raw(status,null,null,null,location);
                         if(status!=200)throw new ApiError(502,"source_http_rejected");
@@ -71,18 +70,18 @@ public class SafeFetch {
                         byte[] bytes;try(InputStream in=r.getEntity().getContent()){bytes=in.readNBytes(2_097_153);}if(bytes.length>2_097_152)throw new ApiError(502,"source_too_large");
                         return new Raw(status,bytes,header(r,"ETag",500),header(r,"Last-Modified",100),location);
                     });
-                    if(response.status==304)return new Result(List.of(),null,null,true);
+                    if(response.status==304)return new Result(List.of(),null,null);
                     if(response.location!=null&&response.status>=300&&response.status<400){current=redirect(current,response.location,host);continue;}
                     List<Item> items=parse(response.bytes,source.get("type").toString(),source.get("json_mapping").toString());
-                    return new Result(items.stream().filter(item->CollectionFilter.accepts(source,item)).toList(),response.etag,response.modified,false);
+                    return new Result(items.stream().filter(CollectionFilter.compile(source)).toList(),response.etag,response.modified);
                 }
                 throw new ApiError(502,"redirect_limit");
             }
-        }catch(ApiError|FetchFailure e){throw e;}catch(java.io.IOException e){throw new FetchFailure(0,null);}catch(Exception e){throw new ApiError(502,"source_fetch_or_parse_failed");}
+        }catch(ApiError|FetchFailure e){throw e;}catch(java.io.IOException e){throw new FetchFailure(null);}catch(Exception e){throw new ApiError(502,"source_fetch_or_parse_failed");}
     }
     private record Raw(int status,byte[]bytes,String etag,String modified,String location){}
     private static String header(org.apache.hc.core5.http.ClassicHttpResponse r,String name,int max){var h=r.getFirstHeader(name);if(h==null)return null;String v=h.getValue();return v.length()<=max&&!v.contains("\r")&&!v.contains("\n")?v:null;}
-    public static class FetchFailure extends RuntimeException {public final int status;public final String retry;public FetchFailure(int status,String retry){super("retryable_source_failure");this.status=status;this.retry=retry;}}
+    public static class FetchFailure extends RuntimeException {public final String retry;public FetchFailure(String retry){super("retryable_source_failure");this.retry=retry;}}
     public static List<Item> parse(byte[] bytes,String type,String mapping)throws Exception{
         if(bytes.length>2_097_152)throw new ApiError(502,"source_too_large");List<Item> result=new ArrayList<>();
         if(type.equals("JSON_API")){

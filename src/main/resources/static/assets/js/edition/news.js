@@ -1,6 +1,6 @@
-import {articleDate} from '../shared/format.js';
-import {language,t} from '../shared/i18n.js';
-import {articleText} from '../article/article-text.js';
+import {initialEdition,loadInitialEdition} from './initial-data.js';
+import {t} from '../shared/i18n.js';
+import {articleCard} from '../article/card.js';
 import {slideWindow} from './slides.js';
 import {request} from '../shared/api.js';
 import {el,report,viewer,setIssueDate} from '../shared/common.js';
@@ -11,38 +11,38 @@ const dialog=document.querySelector('#search-dialog');
 let candidates=[],prefs=defaults(),user=null,tagData,representative,filters={search:'',category:'',day:''};
 let generation=0,slide=0,searchActive=false,searchPage=null,searchBusy=false,searchTicket=0;
 const effective=()=>effectivePreferences(prefs,representative.weights);
-window.addEventListener('moapan-clear',()=>{generation++;searchTicket++;searchActive=false;searchPage=null;searchBusy=false;candidates=[];user=null;prefs=defaults();filters={search:'',category:'',day:''};for(const id of ['search','category','day'])document.querySelector('#'+id).value='';document.querySelector('#search-summary').textContent='';document.querySelector('#clear-search').hidden=true;paper.replaceChildren();setIssueDate([]);dialog.close();status.textContent='';if(representative)load();});
+window.addEventListener('moapan-clear',()=>{generation++;searchTicket++;searchActive=false;searchPage=null;searchBusy=false;candidates=[];user=null;prefs=defaults();filters={search:'',category:'',day:''};for(const id of ['search','category','day'])document.querySelector('#'+id).value='';document.querySelector('#search-summary').textContent='';document.querySelector('#clear-search').hidden=true;paper.replaceChildren();setIssueDate([]);dialog.close();status.textContent='';if(representative)load();else bootstrap(Promise.resolve(null),loadInitialEdition());});
 function render(){
  setIssueDate(candidates);
  const window=searchActive?{items:searchPage?.items||[],page:searchPage?.page||0,pages:searchPage?.pages||0}:slideWindow(rank(candidates,effective()),slide);
  slide=window.page;
- paper.replaceChildren();if(!window.items.length&&!searchBusy)paper.append(el('p',searchActive?'검색 조건에 맞는 기사가 없습니다.':'표시할 기사가 없습니다.'));
- for(const [index,article]of window.items.entries())paper.append(articleNode(article,index));
+ const content=document.createDocumentFragment();if(!window.items.length&&!searchBusy)content.append(el('p',searchActive?'검색 조건에 맞는 기사가 없습니다.':'표시할 기사가 없습니다.'));
+ for(const [index,article]of window.items.entries())content.append(articleCard(article,index));
+ paper.replaceChildren(content);
  document.querySelector('#slide-position').textContent=window.pages?(slide+1)+' / '+window.pages:'0 / 0';
  document.querySelector('#previous-slide').disabled=searchBusy||slide===0;
  document.querySelector('#next-slide').disabled=searchBusy||!window.pages||slide>=window.pages-1;
- document.querySelector('#search-summary').textContent=[filters.search&&('검색: '+filters.search),filters.category,filters.day].filter(Boolean).join(' · ');
+ document.querySelector('#search-summary').textContent=[filters.search&&(t('검색:')+' '+filters.search),filters.category,filters.day].filter(Boolean).join(' · ');
  document.querySelector('#clear-search').hidden=!searchActive;
 
 }
-function safeUrl(value){try{const u=new URL(value);return ['http:','https:'].includes(u.protocol)?u.href:'#';}catch{return '#';}}
-function articleNode(a,index){
- const text=articleText(a,language);
- const article=el('article',undefined,index===0?'lead':'');
- const heading=el('h2'),link=el('a',text.title);link.href=safeUrl(a.originalUrl);link.target='_blank';link.rel='noopener noreferrer';link.dataset.originalContent='';link.lang=text.language;heading.append(link);article.append(heading);
- const line=el('div',undefined,'article-meta-line');
- const subjects=el('span',a.tags.map(tag=>t(tag.name)).join(' · ')||'미분류','article-subjects');subjects.setAttribute('aria-label','주제');
- const written=el('span',a.publishedAt?articleDate(a.publishedAt):'정보 없음');written.className='article-written';written.setAttribute('aria-label','작성일');
- const author=el('span',a.author||'정보 없음','article-author');if(a.author)author.dataset.originalContent='';author.title=a.author||'';subjects.title=a.tags.map(t=>t.name).join(' · ');author.setAttribute('aria-label','작성자');
- line.append(subjects,written,author);article.append(line);
- const source=el('p',a.source.site,'article-source');source.setAttribute('aria-label','출처');article.append(source);
- if(text.summaryBullets.length){const list=el('ul');list.dataset.originalContent='';list.lang=text.language;for(const bullet of text.summaryBullets)list.append(el('li',bullet));article.append(list);}
- else article.append(el('p','연구 관점으로 요약할 정보가 부족합니다.','muted'));
- return article;
+
+async function load(initialPage){const ticket=generation;paper.setAttribute('aria-busy','true');status.textContent='지면을 불러오는 중입니다.';try{const page=initialPage??await request('/api/v1/public/news/edition');if(ticket!==generation)return;candidates=[...new Map(page.items.map(a=>[a.id,a])).values()];status.textContent='';render();}catch(error){report(error);}finally{if(ticket===generation)paper.setAttribute('aria-busy','false');}}
+async function bootstrap(accountResult=viewer,editionResult=initialEdition){
+ const ticket=generation;paper.setAttribute('aria-busy','true');status.textContent='지면을 불러오는 중입니다.';
+ try{
+  const [current,[dictionary,config,firstPage]]=await Promise.all([accountResult,editionResult]);
+  if(ticket!==generation)return;
+  const settings=current?await loadPreferences(current.id):defaults();if(ticket!==generation)return;
+  user=current;tagData=dictionary;representative=config;
+  representative.weights=canonicalize({...defaults(),weights:representative.weights},tagData.redirects).weights;
+  prefs=canonicalize(settings,tagData.redirects);
+  for(const category of [...new Set(tagData.tags.map(tag=>tag.category))]){const option=el('option',category);option.value=category;document.querySelector('#category').append(option);}
+  await load(firstPage);
+ }catch(error){if(ticket===generation)report(error);}
+ finally{if(ticket===generation)paper.setAttribute('aria-busy','false');}
 }
 
-async function load(){const ticket=generation;paper.setAttribute('aria-busy','true');status.textContent='지면을 불러오는 중입니다.';try{const page=await request(user?'/api/v1/news/edition?size=42':'/api/v1/public/news/edition');if(ticket!==generation)return;candidates=[...new Map(page.items.map(a=>[a.id,a])).values()];status.textContent='';render();}catch(error){report(error);}finally{if(ticket===generation)paper.setAttribute('aria-busy','false');}}
-try{[user,tagData,representative]=await Promise.all([viewer,request('/api/v1/public/tags'),request('/api/v1/public/interests')]);representative.weights=canonicalize({...defaults(),weights:representative.weights},tagData.redirects).weights;if(user)prefs=canonicalize(await loadPreferences(user.id),tagData.redirects);for(const c of [...new Set(tagData.tags.map(t=>t.category))]){const option=el('option',c);option.value=c;document.querySelector('#category').append(option);}await load();}catch(e){report(e);}
 document.querySelector('#open-search').addEventListener('click',()=>{for(const id of ['search','category','day'])document.querySelector('#'+id).value=filters[id];dialog.showModal();});
 document.querySelector('#cancel-search').addEventListener('click',()=>dialog.close());
 async function search(page){
@@ -66,3 +66,5 @@ paper.addEventListener('touchstart',e=>{if(e.touches.length===1)swipe={x:e.touch
 paper.addEventListener('touchend',e=>{if(!swipe||!e.changedTouches.length)return;const dx=e.changedTouches[0].clientX-swipe.x,dy=e.changedTouches[0].clientY-swipe.y;swipe=null;if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*1.5)moveSlide(dx<0?1:-1);},{passive:true});
 
 window.addEventListener('moapan-language',()=>{if(representative)render();});
+
+bootstrap();

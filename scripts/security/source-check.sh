@@ -8,4 +8,6 @@ node --test scripts/security/*.test.mjs
 
 node --test scripts/test/style-structure.test.mjs
 node --test scripts/test/email-key.test.mjs
+node --test scripts/test/request-errors.test.mjs
+node scripts/test/browser-module-audit.mjs
 node scripts/test/style-structure.mjs

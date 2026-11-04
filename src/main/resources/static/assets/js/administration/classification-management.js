@@ -1,5 +1,6 @@
+import {whenRevealed} from './reveal.js';
 import {request} from '../shared/api.js';
-import {el} from '../shared/dom.js';
+import{el,originalEl}from'../shared/dom.js';
 import {t} from '../shared/i18n.js';
 import {loadTopics} from './topics.js';
 
@@ -19,7 +20,7 @@ export function initializeClassificationManagement(){
       for(const tag of dictionary.tags){
         const row=el('div',undefined,'classification-choice'),label=el('label',undefined,'check'),check=el('input');
         check.type='checkbox';check.value=tag.id;check.checked=selected.has(tag.id);check.id='classify-'+tag.id;
-        const name=el('span',tag.name);name.dataset.originalContent='';label.append(check,name);
+        const name=originalEl('span',tag.name);label.append(check,name);
         const definition=el('textarea');definition.maxLength=200;definition.value=selected.get(tag.id)?.definition||'';
         definition.placeholder=t('포함할 내용과 제외할 내용을 적어 주세요.');definition.required=check.checked;definition.disabled=!check.checked;
         definition.setAttribute('aria-label',tag.name+' '+t('분류 기준'));
@@ -44,8 +45,6 @@ export function initializeClassificationManagement(){
     finally{saving=false;form.inert=false;refresh.disabled=false;}
   });
   const ensure=()=>{if(version===null&&!loading)load();};
-  document.querySelector('#sections-tab-topics').addEventListener('click',ensure);
-  document.querySelector('#topics-tab-classification').addEventListener('click',ensure);
+  whenRevealed(document.querySelector('#topics-panel-classification'),ensure);
   window.addEventListener('moapan-topic-catalog',()=>{if(version!==null&&!loading)note.textContent=t('주제 목록이 바뀌었습니다. 분류 기준을 다시 불러와 확인하세요.');});
-  if(!document.querySelector('#sections-panel-topics').hidden)ensure();
 }

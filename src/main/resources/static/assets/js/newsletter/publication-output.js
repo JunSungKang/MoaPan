@@ -1,5 +1,5 @@
 import {brand} from '../shared/config.js';
-import {render} from './render.js';
+import {render,manuscriptLanguage} from './render.js';
 export function attribution(data,code,url,lang='ko'){
  if(!['FREE_PREVIEW','PAID_SUBSCRIPTION'].includes(data.distribution))throw Error('출처 유형을 확인할 수 없습니다.');
  const paid=data.distribution==='PAID_SUBSCRIPTION',revision=data.revision||1;
@@ -17,7 +17,7 @@ export function htmlNewsletter(data,code,url,lang='ko'){
  const meta=doc.createElement('meta');meta.httpEquiv='Content-Security-Policy';meta.content="default-src 'none'; img-src data:; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'";doc.head.append(meta);
  const css=doc.createElement('style');css.textContent='body{max-width:760px;margin:3rem auto;padding:0 1rem;font-family:Georgia,serif;line-height:1.9;color:#252525}img{max-width:100%;height:auto}blockquote{border-left:2px solid;padding-left:1rem}footer{border-top:1px solid;margin-top:3rem;white-space:pre-wrap}a{overflow-wrap:anywhere}';doc.head.append(css);
  const article=doc.createElement('article'),heading=doc.createElement('h1'),intro=doc.createElement('p');heading.textContent=data.manuscript.title;intro.textContent=data.manuscript.introduction;const body=doc.createElement('div');render(body,data.manuscript);article.append(heading,intro,body);
- const footer=doc.createElement('footer');footer.textContent=attribution(data,code,url,lang);doc.body.append(article,footer);return '<!doctype html>\n'+doc.documentElement.outerHTML;
+ article.lang=manuscriptLanguage(data.manuscript);const footer=doc.createElement('footer');footer.textContent=attribution(data,code,url,lang);doc.body.append(article,footer);return '<!doctype html>\n'+doc.documentElement.outerHTML;
 }
 export function worksheet(data,code,url,kind='meeting',lang='ko'){
  const d=data.dossier;if(!d?.forecasts?.length)throw Error('준비된 연구 메모가 없습니다.');

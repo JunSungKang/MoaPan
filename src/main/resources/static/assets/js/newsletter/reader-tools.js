@@ -1,5 +1,6 @@
+import {manuscriptLanguage} from './render.js';
 import {request} from '../shared/api.js';
-import {el,report} from '../shared/dom.js';
+import{el,report,originalEl}from'../shared/dom.js';
 import {date} from '../shared/format.js';
 import {language,t} from '../shared/i18n.js';
 const output=()=>import('./publication-output.js');
@@ -16,7 +17,7 @@ export function readerTools(parent,data,label){
  button('인쇄',()=>{details.open=true;window.print();});
  const details=el('details',undefined,'research-notes');details.append(el('summary','근거와 연구 메모'));
  const period=el('p');const renderPeriod=()=>period.textContent=t('근거 주간')+': '+data.dossier.weekStart+' · '+date(data.dossier.cutoff);renderPeriod();window.addEventListener('moapan-language',renderPeriod);details.append(period);
- if(data.dossier.correctionNote)details.append(el('p',data.dossier.correctionNote));
- for(const f of data.dossier.forecasts){const article=el('article'),h=el('h3',f.question),list=el('dl');h.dataset.originalContent='';for(const [key,title]of [['observation','확인된 사실'],['outlook','편집부의 전망·가설'],['horizon','연구 기간'],['experiment','다음 실험'],['successCriteria','성공·전환 기준'],['stopCondition','중단·보류 조건']]){const value=el('dd',f[key]);value.dataset.originalContent='';list.append(el('dt',title),value);}article.append(h,list);for(const id of f.evidenceIds){const e=data.evidence?.find(e=>e.id===id);if(!e)continue;const link=el('a',e.title);link.dataset.originalContent='';try{const target=new URL(e.url);if(target.protocol!=='https:'||target.username||target.password)continue;link.href=target.href;}catch{continue;}link.target='_blank';link.rel='noopener noreferrer';const p=el('p');p.append(link,el('span',' · '+date(e.collectedAt)));article.append(p);}details.append(article);}
+ if(data.dossier.correctionNote){const note=el('p');note.textContent=data.dossier.correctionNote;note.dataset.originalContent='';note.lang=manuscriptLanguage(data.manuscript);details.append(note);}
+ for(const f of data.dossier.forecasts){const article=el('article'),h=originalEl('h3',f.question),list=el('dl');h.lang=manuscriptLanguage(data.manuscript);for(const [key,title]of [['observation','확인된 사실'],['outlook','편집부의 전망·가설'],['horizon','연구 기간'],['experiment','다음 실험'],['successCriteria','성공·전환 기준'],['stopCondition','중단·보류 조건']]){const value=originalEl('dd',f[key]);value.lang=manuscriptLanguage(data.manuscript);list.append(el('dt',title),value);}article.append(h,list);for(const id of f.evidenceIds){const e=data.evidence?.find(e=>e.id===id);if(!e)continue;const link=originalEl('a',e.title);link.lang='und';try{const target=new URL(e.url);if(target.protocol!=='https:'||target.username||target.password)continue;link.href=target.href;}catch{continue;}link.target='_blank';link.rel='noopener noreferrer';const p=el('p');p.append(link,el('span',' · '+date(e.collectedAt)));article.append(p);}details.append(article);}
  parent.append(tools,feedback,el('p','재게재할 때 출처·제공 문구·원문 링크를 함께 표시해 주세요. 수집 기사의 원문과 제3자 그림의 권리는 포함하지 않습니다.','muted'),details);
 }

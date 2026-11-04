@@ -1,5 +1,5 @@
 import {request} from '../shared/api.js';
-import {el} from '../shared/dom.js';
+import {el,originalEl} from '../shared/dom.js';
 import {date} from '../shared/format.js';
 import {t} from '../shared/i18n.js';
 
@@ -16,11 +16,13 @@ export function showCollectionResult(value,kind='result') {
 }
 export function initializeCollectionJobs(){
   const form=document.querySelector('#job-query'),select=document.querySelector('#job-id'),note=document.querySelector('#job-status');
-  let loading=false;
+  let loading=false;const optionData=new WeakMap();
+  function paintOption(option,{job,source}){option.textContent=`${source} · ${job.created_at?date(job.created_at):t('방금 요청')} · ${t(states[job.status]||job.status)}`;}
+  window.addEventListener('moapan-language',()=>{for(const option of select.options){const data=optionData.get(option);if(data)paintOption(option,data);}});
   function capture(job,source){
     let option=[...select.options].find(option=>option.value===job.id);
-    if(!option){option=el('option');option.value=job.id;select.append(option);}
-    option.textContent=`${source} · ${job.created_at?date(job.created_at):t('방금 요청')} · ${t(states[job.status]||job.status)}`;select.value=job.id;
+    if(!option){option=originalEl('option');option.value=job.id;select.append(option);}
+    const data={job,source};optionData.set(option,data);paintOption(option,data);select.value=job.id;
   }
   document.querySelector('#refresh-jobs').addEventListener('click',async()=>{
     if(loading)return;loading=true;const button=document.querySelector('#refresh-jobs');button.disabled=true;

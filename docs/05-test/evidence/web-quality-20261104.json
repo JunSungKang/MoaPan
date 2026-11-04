@@ -1,0 +1,588 @@
+{
+  "documentId": "MP-DOC-040",
+  "checkedAt": "2026-11-04T07:03:05.010Z",
+  "scope": "Frozen candidate, synthetic 42 articles and disposable PostgreSQL; not a deployment or search-portal indexing claim.",
+  "baselineCommit": "11fad449cdbe66a9aebeb466c4591f879af7e727",
+  "productSeal": {
+    "checkedAt": "2026-11-04T06:54:48.560Z",
+    "sha256": "46d0c3637d512f8f01ee4dc4ad1469506e5d86957b8c51e8536296a921eac7b0",
+    "files": 336
+  },
+  "tests": {
+    "full": {
+      "test": {
+        "tests": 190,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "integrationTest": {
+        "tests": 148,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "e2eTest": {
+        "tests": 86,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "total": 424,
+    "fullCommand": "clean check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest",
+    "followup": "After removing one unused JS import, check + WebQualityRegressionTest 9 + bootJar/SBOM/securityCheck passed. No Java/DB/test criteria changed.",
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "accessibility": {
+    "tool": "axe-core 4.14.0",
+    "initialStates": 126,
+    "initialFailingStates": 19,
+    "finalStates": 132,
+    "finalFailingStates": 0,
+    "html": {
+      "pages": 13,
+      "validator": "26.10.12 (0a70d65)",
+      "messages": 0
+    }
+  },
+  "lighthouse": {
+    "checkedAt": "2026-11-04T07:00:55.066Z",
+    "version": "13.6.0",
+    "scope": "Disposable real Spring/PostgreSQL with synthetic content, local Chromium; not live deployment or CrUX.",
+    "results": [
+      {
+        "profile": "mobile",
+        "page": "index",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 100
+        },
+        "metrics": {
+          "first-contentful-paint": 911.6619000000001,
+          "largest-contentful-paint": 1893.3238000000001,
+          "total-blocking-time": 0,
+          "cumulative-layout-shift": 0,
+          "speed-index": 911.6619000000001
+        },
+        "failures": [
+          {
+            "id": "largest-contentful-paint",
+            "title": "Largest Contentful Paint",
+            "score": 0.98
+          },
+          {
+            "id": "unminified-css",
+            "title": "Minify CSS",
+            "score": 0.5
+          },
+          {
+            "id": "bf-cache",
+            "title": "Page prevented back/forward cache restoration",
+            "score": 0
+          },
+          {
+            "id": "document-latency-insight",
+            "title": "Document request latency",
+            "score": 0.5
+          },
+          {
+            "id": "network-dependency-tree-insight",
+            "title": "Network dependency tree",
+            "score": 0
+          },
+          {
+            "id": "render-blocking-insight",
+            "title": "Render-blocking requests",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "profile": "mobile",
+        "page": "about",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 100
+        },
+        "metrics": {
+          "first-contentful-paint": 905.3272999999999,
+          "largest-contentful-paint": 905.3272999999999,
+          "total-blocking-time": 0,
+          "cumulative-layout-shift": 0.006248113350703198,
+          "speed-index": 905.3272999999999
+        },
+        "failures": [
+          {
+            "id": "unminified-css",
+            "title": "Minify CSS",
+            "score": 0.5
+          },
+          {
+            "id": "unused-css-rules",
+            "title": "Reduce unused CSS",
+            "score": 0
+          },
+          {
+            "id": "bf-cache",
+            "title": "Page prevented back/forward cache restoration",
+            "score": 0
+          },
+          {
+            "id": "document-latency-insight",
+            "title": "Document request latency",
+            "score": 0.5
+          },
+          {
+            "id": "network-dependency-tree-insight",
+            "title": "Network dependency tree",
+            "score": 0
+          },
+          {
+            "id": "render-blocking-insight",
+            "title": "Render-blocking requests",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "profile": "mobile",
+        "page": "privacy",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 100
+        },
+        "metrics": {
+          "first-contentful-paint": 904.7489,
+          "largest-contentful-paint": 904.7489,
+          "total-blocking-time": 19,
+          "cumulative-layout-shift": 0.006248113350703198,
+          "speed-index": 904.7489
+        },
+        "failures": [
+          {
+            "id": "max-potential-fid",
+            "title": "Max Potential First Input Delay",
+            "score": 0.99
+          },
+          {
+            "id": "unminified-css",
+            "title": "Minify CSS",
+            "score": 0.5
+          },
+          {
+            "id": "unused-css-rules",
+            "title": "Reduce unused CSS",
+            "score": 0
+          },
+          {
+            "id": "bf-cache",
+            "title": "Page prevented back/forward cache restoration",
+            "score": 0
+          },
+          {
+            "id": "document-latency-insight",
+            "title": "Document request latency",
+            "score": 0.5
+          },
+          {
+            "id": "network-dependency-tree-insight",
+            "title": "Network dependency tree",
+            "score": 0
+          },
+          {
+            "id": "render-blocking-insight",
+            "title": "Render-blocking requests",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "profile": "mobile",
+        "page": "terms",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 100
+        },
+        "metrics": {
+          "first-contentful-paint": 904.2639999999999,
+          "largest-contentful-paint": 904.2639999999999,
+          "total-blocking-time": 0,
+          "cumulative-layout-shift": 0.006248113350703198,
+          "speed-index": 904.2639999999999
+        },
+        "failures": [
+          {
+            "id": "unminified-css",
+            "title": "Minify CSS",
+            "score": 0.5
+          },
+          {
+            "id": "unused-css-rules",
+            "title": "Reduce unused CSS",
+            "score": 0
+          },
+          {
+            "id": "bf-cache",
+            "title": "Page prevented back/forward cache restoration",
+            "score": 0
+          },
+          {
+            "id": "document-latency-insight",
+            "title": "Document request latency",
+            "score": 0.5
+          },
+          {
+            "id": "network-dependency-tree-insight",
+            "title": "Network dependency tree",
+            "score": 0
+          },
+          {
+            "id": "render-blocking-insight",
+            "title": "Render-blocking requests",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "profile": "desktop",
+        "page": "index",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 100
+        },
+        "metrics": {
+          "first-contentful-paint": 246.4982,
+          "largest-contentful-paint": 457.2455,
+          "total-blocking-time": 0,
+          "cumulative-layout-shift": 0,
+          "speed-index": 246.4982
+        },
+        "failures": [
+          {
+            "id": "unminified-css",
+            "title": "Minify CSS",
+            "score": 0.5
+          },
+          {
+            "id": "unused-css-rules",
+            "title": "Reduce unused CSS",
+            "score": 0
+          },
+          {
+            "id": "document-latency-insight",
+            "title": "Document request latency",
+            "score": 0.5
+          },
+          {
+            "id": "network-dependency-tree-insight",
+            "title": "Network dependency tree",
+            "score": 0
+          },
+          {
+            "id": "render-blocking-insight",
+            "title": "Render-blocking requests",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "profile": "desktop",
+        "page": "about",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 100
+        },
+        "metrics": {
+          "first-contentful-paint": 245.37959999999998,
+          "largest-contentful-paint": 245.37959999999998,
+          "total-blocking-time": 0,
+          "cumulative-layout-shift": 0,
+          "speed-index": 245.37959999999998
+        },
+        "failures": [
+          {
+            "id": "unminified-css",
+            "title": "Minify CSS",
+            "score": 0.5
+          },
+          {
+            "id": "unused-css-rules",
+            "title": "Reduce unused CSS",
+            "score": 0
+          },
+          {
+            "id": "document-latency-insight",
+            "title": "Document request latency",
+            "score": 0.5
+          },
+          {
+            "id": "network-dependency-tree-insight",
+            "title": "Network dependency tree",
+            "score": 0
+          },
+          {
+            "id": "render-blocking-insight",
+            "title": "Render-blocking requests",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "profile": "desktop",
+        "page": "privacy",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 100
+        },
+        "metrics": {
+          "first-contentful-paint": 303.5211,
+          "largest-contentful-paint": 303.5211,
+          "total-blocking-time": 0,
+          "cumulative-layout-shift": 0,
+          "speed-index": 303.5211
+        },
+        "failures": [
+          {
+            "id": "unminified-css",
+            "title": "Minify CSS",
+            "score": 0.5
+          },
+          {
+            "id": "unused-css-rules",
+            "title": "Reduce unused CSS",
+            "score": 0.5
+          },
+          {
+            "id": "document-latency-insight",
+            "title": "Document request latency",
+            "score": 0.5
+          },
+          {
+            "id": "network-dependency-tree-insight",
+            "title": "Network dependency tree",
+            "score": 0
+          },
+          {
+            "id": "render-blocking-insight",
+            "title": "Render-blocking requests",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "profile": "desktop",
+        "page": "terms",
+        "scores": {
+          "performance": 100,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 100
+        },
+        "metrics": {
+          "first-contentful-paint": 244.22109999999998,
+          "largest-contentful-paint": 244.22109999999998,
+          "total-blocking-time": 0,
+          "cumulative-layout-shift": 0,
+          "speed-index": 244.22109999999998
+        },
+        "failures": [
+          {
+            "id": "unminified-css",
+            "title": "Minify CSS",
+            "score": 0.5
+          },
+          {
+            "id": "unused-css-rules",
+            "title": "Reduce unused CSS",
+            "score": 0
+          },
+          {
+            "id": "document-latency-insight",
+            "title": "Document request latency",
+            "score": 0.5
+          },
+          {
+            "id": "network-dependency-tree-insight",
+            "title": "Network dependency tree",
+            "score": 0
+          },
+          {
+            "id": "render-blocking-insight",
+            "title": "Render-blocking requests",
+            "score": 0
+          }
+        ]
+      }
+    ]
+  },
+  "http": {
+    "pages": 13,
+    "absoluteHtmlCanonicals": {
+      "passed": 4,
+      "total": 4
+    },
+    "sitemap": {
+      "status": 200,
+      "urls": [
+        "http://localhost:51015/index.html",
+        "http://localhost:51015/about.html",
+        "http://localhost:51015/privacy.html",
+        "http://localhost:51015/terms.html"
+      ]
+    },
+    "portalIndex": "UNKNOWN"
+  },
+  "codeAudit": {
+    "javaFiles": 141,
+    "privateDeclarations": 296,
+    "intentionalPrivateUtilityConstructors": 18,
+    "unusedImports": 0,
+    "browserModules": 45,
+    "unreachableModules": 0,
+    "lexicalJsUsage": {
+      "checkedAt": "2026-11-04T06:57:35.410Z",
+      "modules": 45,
+      "scope": "Conservative cross-module lexical screen; template/regex retained, framework/export hooks require manual assessment; not a proof of all possible runtime reachability.",
+      "functionCandidates": [],
+      "importCandidates": []
+    },
+    "removed": [
+      "SafeFetch.Result.unchanged",
+      "FetchFailure.status",
+      "CollectionFilter.accepts wrapper",
+      "obsolete dictionary modules after merge",
+      "4 obsolete UI messages",
+      "4 overridden duplicate dictionary entries",
+      "unused news language import",
+      "redundant original-content assignments"
+    ],
+    "limits": "Reflection/framework lifecycle and deliberate private constructors are retained. Static reference screens are not a proof of all possible runtime reachability."
+  },
+  "security": {
+    "scanner": "Trivy 0.76.1+moapan-security.1, existing reviewed build",
+    "database": {
+      "Version": 2,
+      "NextUpdate": "2026-11-04T19:16:30.092558916Z",
+      "UpdatedAt": "2026-11-03T19:16:30.092559407Z",
+      "DownloadedAt": "2026-11-04T00:17:15.334934Z"
+    },
+    "toolAudit": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    },
+    "jar": {
+      "vulnerabilities": [],
+      "secrets": 0
+    },
+    "sbom": {
+      "vulnerabilities": [],
+      "secrets": 0
+    },
+    "source": {
+      "vulnerabilities": [
+        {
+          "id": "GO-2026-5932",
+          "package": "golang.org/x/crypto",
+          "version": "v0.57.0",
+          "severity": "UNKNOWN"
+        },
+        {
+          "id": "CVE-2026-116587",
+          "package": "github.com/go-jose/go-jose/v3",
+          "version": "v3.0.5",
+          "severity": "HIGH"
+        },
+        {
+          "id": "CVE-2026-116585",
+          "package": "github.com/go-jose/go-jose/v3",
+          "version": "v3.0.5",
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "CVE-2026-116586",
+          "package": "github.com/go-jose/go-jose/v3",
+          "version": "v3.0.5",
+          "severity": "MEDIUM"
+        },
+        {
+          "id": "GO-2026-5932",
+          "package": "golang.org/x/crypto",
+          "version": "v0.58.0",
+          "severity": "UNKNOWN"
+        }
+      ],
+      "secrets": 0
+    },
+    "sourceDisposition": "Existing exact JOSE/crypto backport/non-exposure evidence retained; no new exceptions or weaker scanner criteria.",
+    "runtime": {
+      "vulnerabilities": [],
+      "secrets": 0
+    },
+    "builder": {
+      "vulnerabilities": [],
+      "secrets": 0
+    },
+    "artifacts": {
+      "checkedAt": "2026-11-04T06:56:52.935Z",
+      "jarSha256": "e03b4ef23d680c45528f2804af32c2fcf1fec73a1a530780f7c1721c1138f998",
+      "runtime": "sha256:d1e49e6d6c1010acc7230be1d7a9247bccb5c2422c78675ebd246c76ac848e5e",
+      "builder": "sha256:ba89ca219bf4e0ced0a61f75b9e07bba9a3ade6f1b15f41e026171edf818e1d4",
+      "runtimeUser": "10001:10001",
+      "architecture": "arm64",
+      "jarMatchesImage": true,
+      "removedCodeAbsent": true
+    },
+    "trust": {
+      "ordinaryHttps": "PASS",
+      "officialMitigationRootsAbsent": 4,
+      "roots": 117,
+      "rejectedChains": 14,
+      "customTruststore": false
+    }
+  },
+  "operations": {
+    "operatingServiceReplaced": false,
+    "productionDatabaseChanged": false,
+    "mailboxChanged": false,
+    "merged": false,
+    "operatingImage": "sha256:24fc8045a50cc78f44a57d0bdae30b12ed3d8bb52fcde7a1fa5e2042fafbf082",
+    "schema": "V24",
+    "securityHold": "External MailBox activation hold remains."
+  },
+  "review": {
+    "pr": 29,
+    "url": "https://github.com/JunSungKang/MoaPan/pull/29",
+    "separateReadOnlyCodeReview": "APPROVE",
+    "separateSeoAudit": "PASS",
+    "firstApprovedHead": "4b6a0ab15d761f4a168106ac3062388465e50c92",
+    "formalReviewer": "junsung-bot[bot]",
+    "firstFormalApprovalAt": "2026-11-04T07:16:27Z",
+    "currentHeadAuthority": "Latest formal approval in PR29; documentation-only followup is reviewed again. No product changes after final SEO."
+  },
+  "sources": [
+    "https://developer.chrome.com/docs/lighthouse/performance/performance-scoring",
+    "https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls",
+    "https://www.w3.org/WAI/test-evaluate/tools/selecting/"
+  ]
+}

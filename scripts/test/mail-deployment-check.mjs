@@ -26,3 +26,13 @@ for(const mode of ['local','public','server']){
   for(const field of ['MAIL_SMTP_HOST','MAIL_SMTP_NETWORK','MAIL_SMTP_CA_FILE','MAIL_FROM']){const missing={...environment};delete missing[field];assert.notEqual(spawnSync('docker',args([...files,'scripts/deploy/compose-mail-external.yaml']),{cwd:root,env:missing,stdio:'pipe'}).status,0,'Missing SMTP configuration must fail closed: '+field);}
 }
 console.log('External SMTP Compose local/public/server boundaries and 12 missing-configuration rejections passed; no containers changed.');
+
+for(const mode of ['local','public','server']){
+ const files=['compose.yaml',...(mode==='local'?[]:['scripts/deploy/compose-'+mode+'.yaml']),'scripts/deploy/compose-translation.yaml','scripts/deploy/compose-classification.yaml','scripts/deploy/compose-mail-external.yaml','scripts/deploy/compose-mail-auth.yaml'];
+ const args=['compose','--env-file','.env.example',...files.flatMap(p=>['-f',p]),'config','--format','json'];
+ const env={...environment,MAIL_SMTP_USERNAME:'synthetic-submit',MAIL_SMTP_PASSWORD_FILE:'./build/synthetic-smtp-password'};const config=execute(args,env);
+ for(const name of ['web','worker']){const s=config.services[name];assert.equal(s.environment.MOAPAN_MAIL_TLS,'STARTTLS');assert.equal(s.environment.MOAPAN_MAIL_USERNAME,'synthetic-submit');assert.equal(s.environment.MOAPAN_MAIL_PASSWORD_FILE,'/run/secrets/external-smtp-password');assert(!s.environment.MOAPAN_MAIL_PASSWORD);for(const secret of ['email-data-key','external-smtp-ca','external-smtp-password'])assert(s.secrets.some(v=>v.source===secret));}
+ assert.equal(config.networks['external-smtp'].external,true);assert(!('external-smtp' in config.services.web.networks));assert('external-smtp' in config.services.worker.networks);
+ for(const field of ['MAIL_SMTP_USERNAME','MAIL_SMTP_PASSWORD_FILE']){const missing={...env};delete missing[field];assert.notEqual(spawnSync('docker',args,{cwd:root,env:missing,stdio:'pipe'}).status,0,'Missing SMTP AUTH setting must fail closed: '+field);}
+}
+console.log('SMTP AUTH supplement passed three modes and six missing-configuration rejections; password values never enter Compose environment.');

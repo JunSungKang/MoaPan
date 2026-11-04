@@ -238,3 +238,11 @@ Boot4.1.2 BOM의 Caffeine3.2.4와 error_prone_annotations2.49.0을 추가했다.
 ## 2026-11-04 SMTP 서버 책임 분리와 DS-0002 원인 제거
 사용자 요청으로 외부 MailBox 결함 프롬프트 MP-DOC-039를 먼저 작성하고 이 프로젝트의 중복 Postfix 서버·패키징·생성물만 실제 퇴역했다. root USER 위장/권한 상승/새 ignore/scanner 제외를 추가하지 않았다. scanner 실행·판정·기존 적용성 파일3개는 변경 전과 SHA256이 같다. source DS-0002 FAIL0, JAR/SBOM/기본·외부메일 Helm 및 runtime058f45121034/builder23bd0e0bcc55 gate PASS. 기존 JOSE 메타데이터의 백포트 근거는 유지했다. clean 전체408 PASS와 키/설정/TLS 회귀·미사용 런타임 정리는 [증빙](../05-test/evidence/smtp-boundary-cleanup-20261104.json)을 따른다.
 외부 MailBox의 마지막 고위험 검출·root 예외 미승인은 이 작업으로 해결하지 않았으며 운영 전환은 계속 보류한다. 기존 고정20항목의 정의·순서·판정은 수정하지 않았고 이 기록을20항목 전체 완료로 해석하지 않는다.
+
+## 2026-11-04 웹 품질 검사 도구 보안
+
+테스트 전용 Lighthouse13.6.0의 npm 잠금에서 Sentry를 경유한 glob13.0.6/minimatch10.2.6을 확인했다. npm audit의 MODERATE5건은 두 직접 advisory와 상위 의존성 전파를 포함한다. [GHSA-3g3m-2fjr-6pw4](https://github.com/advisories/GHSA-3g3m-2fjr-6pw4)(CVE-2026-118773, glob9~14.0.1, 수정14.0.2)과 [GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249)(CVE-2026-118764, minimatch<11.0.1)를 공식 프로젝트 연결 공지/registry와 대조했다. 사용자 데이터나 운영 웹의 dependency는 아니지만 방치하지 않고 테스트 도구에 한정해 glob14.0.3/minimatch11.0.4 scoped override와 정확한 npm lock을 적용했다. npm audit 재검사0(info/low/moderate/high/critical 모두0), npm ci 무결성 설치·Lighthouse/axe 실행으로 호환성을 검증한다. Lighthouse13.6.0/axe4.14.0은 유지하고 오류 텔레메트리는 비활성화한다.
+
+직접 도구 tarball: npm 공식 registry의 lighthouse13.6.0 integrity sha512-2/HUPUpQyGm01VEgYCUjSlNZY7Zkhk1v3QI4c7UTbnaoRB7HF0qYMPzzaiidNf5iqw5wnmtm9LpGawKKqCfLmg==와 공식 [릴리스](https://github.com/GoogleChrome/lighthouse/releases/tag/v13.6.0)를 확인했다. 설치/캐시는 workspace .local에만 두며 운영 JAR/이미지에 포함하지 않는다. 원래 고정20항목/권고 비밀번호 정책·기존 applicability·MailBox 차단을 이 조치로 완료/예외로 바꾸지 않는다. 이번 도구 발견은 원래 체크리스트의 항목 추가가 아닌 별도 구성요소 검토 기록이다.
+
+2026-11-04 웹 품질 최종 산출물: [MP-DOC-040](../05-test/web-quality.md)과 실행 증빙의 최종 JAR/runtime/builder digest를 검사했다. JAR/SBOM/두 이미지 취약점·secret0, npm감사 전 등급0. 기존 source JOSE/crypto5건 근거·게이트 기준을 유지하며 새 ignore/예외·보안 완화는 추가하지 않았다. 최종 이미지 TLS/117roots/공식4루트 부재·14체인 거부 검증 PASS. 테스트 도구·실제 산출물 검사와 외부 MailBox 운영 전환 보류를 구분한다.

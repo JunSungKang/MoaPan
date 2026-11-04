@@ -1,5 +1,5 @@
 import {t} from '../shared/i18n.js';
-import {el} from '../shared/dom.js';
+import{el,originalEl}from'../shared/dom.js';
 import {date} from '../shared/format.js';
 export function blankDossier(weekStart){const now=new Date(),day=new Date(now.getTime()+9*3600000);const monday=new Date(Date.UTC(day.getUTCFullYear(),day.getUTCMonth(),day.getUTCDate()-((day.getUTCDay()+6)%7)));const week=weekStart||monday.toISOString().slice(0,10),end=new Date(week+'T00:00:00+09:00').getTime()+7*86400000;return {weekStart:week,cutoff:new Date(Math.min(now.getTime(),end-1)).toISOString(),articleIds:[],forecasts:[],rightsConfirmed:false,editorialReviewed:false,correctionNote:''};}
 export function researchEditor(onChange){
@@ -10,13 +10,13 @@ export function researchEditor(onChange){
  function paint(){
   document.querySelector('#research-week').value=state.weekStart;document.querySelector('#roll-research-week').hidden=state.weekStart===expectedWeek;try{document.querySelector('#research-cutoff').textContent=date(state.cutoff);}catch{document.querySelector('#research-cutoff').textContent=t('발간 주간과 검토 기준시각을 확인하세요.');}
   document.querySelector('#rights-confirmed').checked=state.rightsConfirmed;document.querySelector('#editorial-reviewed').checked=state.editorialReviewed;document.querySelector('#correction-note').value=state.correctionNote;
-  rows.replaceChildren();for(const id of state.articleIds){const item=evidence.find(e=>e.id===id);const row=el('div',undefined,'evidence-row');row.append(el('span',item?item.title+' · '+date(item.collectedAt):'자료를 다시 확인하세요.'));const remove=el('button','제외');remove.type='button';remove.addEventListener('click',()=>{state.articleIds=state.articleIds.filter(x=>x!==id);for(const f of state.forecasts)f.evidenceIds=f.evidenceIds.filter(x=>x!==id);changed();paint();});row.append(remove);rows.append(row);}
+  rows.replaceChildren();for(const id of state.articleIds){const item=evidence.find(e=>e.id===id);const row=el('div',undefined,'evidence-row');row.append(item?originalEl('span',item.title+' · '+date(item.collectedAt)):el('span','자료를 다시 확인하세요.'));const remove=el('button','제외');remove.type='button';remove.addEventListener('click',()=>{state.articleIds=state.articleIds.filter(x=>x!==id);for(const f of state.forecasts)f.evidenceIds=f.evidenceIds.filter(x=>x!==id);changed();paint();});row.append(remove);rows.append(row);}
   if(!state.articleIds.length)rows.append(el('p','이번 주에 수집한 자료를 찾아 근거에 담아 주세요.'));
   forecasts.replaceChildren();state.forecasts.forEach((f,i)=>{
    const section=el('fieldset',undefined,'forecast-editor');section.append(el('legend',t('전망')+' '+(i+1)));
    const names={question:'연구 질문',observation:'자료에서 확인한 사실',outlook:'편집부의 전망·가설',horizon:'연구 기간',experiment:'다음 실험',successCriteria:'성공·전환 기준',stopCondition:'중단·보류 조건'};
    for(const [key,name]of Object.entries(names)){const label=el('label',name),input=el('textarea');input.value=f[key];input.maxLength=key==='horizon'?200:['observation','outlook','experiment'].includes(key)?2000:1000;input.addEventListener('input',()=>{f[key]=input.value;changed();});label.append(input);section.append(label);}
-   const refs=el('fieldset');refs.append(el('legend','이 전망의 근거'));for(const id of state.articleIds){const item=evidence.find(e=>e.id===id),label=el('label',undefined,'check'),check=el('input');check.type='checkbox';check.checked=f.evidenceIds.includes(id);check.addEventListener('change',()=>{f.evidenceIds=check.checked?[...f.evidenceIds,id]:f.evidenceIds.filter(x=>x!==id);changed();});label.append(check,el('span',item?.title||t('확인할 수 없는 근거 자료')));refs.append(label);}section.append(refs);
+   const refs=el('fieldset');refs.append(el('legend','이 전망의 근거'));for(const id of state.articleIds){const item=evidence.find(e=>e.id===id),label=el('label',undefined,'check'),check=el('input');check.type='checkbox';check.checked=f.evidenceIds.includes(id);check.addEventListener('change',()=>{f.evidenceIds=check.checked?[...f.evidenceIds,id]:f.evidenceIds.filter(x=>x!==id);changed();});label.append(check,item?originalEl('span',item.title):el('span','확인할 수 없는 근거 자료'));refs.append(label);}section.append(refs);
    const remove=el('button','전망 삭제');remove.type='button';remove.addEventListener('click',()=>{state.forecasts.splice(i,1);changed();paint();});section.append(remove);forecasts.append(section);
   });
  }

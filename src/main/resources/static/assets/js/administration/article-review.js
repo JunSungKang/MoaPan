@@ -1,5 +1,5 @@
 import {request} from '../shared/api.js';
-import {el, report} from '../shared/dom.js';
+import{el, report,originalEl}from'../shared/dom.js';
 import {compactDate as formatCompactDate} from '../shared/format.js';
 import {t} from '../shared/i18n.js';
 import {topicChecklist} from './topics.js';
@@ -62,13 +62,13 @@ export function initializeArticleReview(root, refresh) {
   function editorFor(article, index) {
     const sheet = el('article', undefined, 'article-review-sheet');
     sheet.dataset.articleId = article.id;
-    const heading = el('h3', article.title); heading.id = 'review-title-' + index;
-    heading.tabIndex = -1; heading.dataset.originalContent = '';
+    const heading = originalEl('h3', article.title); heading.id = 'review-title-' + index;
+    heading.tabIndex = -1;
     sheet.setAttribute('aria-labelledby', heading.id);
     const badge = el('span', '저장하지 않은 변경', 'article-review-dirty'); badge.hidden = true;
     const identity = el('p', undefined, 'article-review-identity');
     identity.append(el('span',t('수집일')+' · '+compactDate(article.collected_at)));
-    if(article.site_name||article.source_label){const source=el('span',[article.site_name,article.source_label].filter(Boolean).join(' · '));source.dataset.originalContent='';identity.append(source);}
+    if(article.site_name||article.source_label){const source=originalEl('span',[article.site_name,article.source_label].filter(Boolean).join(' · '));identity.append(source);}
     sheet.append(badge, heading, identity);
     const form = el('form'), summary = el('label', '요약'), bullets = el('textarea');
     bullets.setAttribute('aria-label', '수동 요약 (한 줄 한 항목)');
@@ -137,7 +137,7 @@ export function initializeArticleReview(root, refresh) {
       });
       if (new Set(normalized.map(row => row.id)).size !== normalized.length) throw new Error(t('기사 목록을 불러오지 못했습니다.'));
       appliedCriteria={from,to,sort};rows = normalized;for(const editor of editors.values())editor.dispose?.();editors.clear(); dirty.clear(); list.replaceChildren(); picker.replaceChildren();
-      rows.forEach((row, index) => { const option = el('option', optionTitle(row,index)); option.value = String(index); picker.append(option); });
+      rows.forEach((row, index) => { const option = originalEl('option', optionTitle(row,index)); option.value = String(index); picker.append(option); });
       loading = false; toolbar.hidden = !rows.length;
       appliedCriteria={from,to,sort};paintApplied();
       status.textContent = rows.length ? '' : t('검토할 기사가 없습니다.');

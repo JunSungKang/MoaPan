@@ -28,7 +28,7 @@ public final class PublicationReadModels {
     }
     List<Header> catalog() {
         return catalog.read("published-catalog",()->stamp("publication_catalog",new UUID(0,0)),()->{
-            var rows=db.sql("SELECT id,issue_number,published->>'title' title,published->>'introduction' introduction,published->>'topic' topic,published_at,first_published_at,publication_revision,distribution,published_dossier::text dossier FROM newsletters WHERE published IS NOT NULL ORDER BY published_at DESC,id LIMIT 100").query().listOfRows();
+            var rows=db.sql("SELECT id,issue_number,published->>'title' title,published->>'introduction' introduction,published->>'topic' topic,published->>'language' language,published_at,first_published_at,publication_revision,distribution,published_dossier::text dossier FROM newsletters WHERE published IS NOT NULL ORDER BY published_at DESC,id LIMIT 100").query().listOfRows();
             return rows.stream().map(row->{
                 Dossier dossier=dossier(row.get("dossier"));var copy=new LinkedHashMap<>(row);copy.remove("dossier");
                 for(String field:List.of("published_at","first_published_at"))if(copy.get(field)!=null)copy.put(field,utc(copy.get(field)));

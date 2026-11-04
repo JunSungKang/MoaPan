@@ -217,6 +217,27 @@ SMTP 책임 분리·미사용 서버 정리 최종 로컬 검증: clean 전체 �
 
 마지막 legacy moapan-* 이미지 재검수에서 실제 구성·문서화된 빌드 태그와 전체 컨테이너의 정확한 이미지ID/태그를 대조했다. 총59태그/미사용52ID 정리 후 기존 모든 컨테이너 ID·이미지·상태가 동일함을 확인했다. 실행5ID의 오래된 별칭만 해제했으며 현재 이름·필수 완료job 이미지·최종 검증 runtime/builder와 빌드 도구는 유지한다. 이 후속은 로컬 이미지 정리 및 결과 문서뿐이며 제품 소스/JAR/검증 이미지 digest는 동일하다.
 
+2026-11-04 웹 품질·도메인 리팩토링 Sprint 착수. 기준11fad44(PR28)·운영앱24fc/V24를 구분하고 사용자 명시 승인에 따라 접근성/성능100목표·죽은코드·기능별 패턴을 감사한다. 최종 제품검증 뒤 SEO감사로 마무리한다. 아직 새 시험/패치/배포/병합 성공으로 표시하지 않는다.
+
+웹 품질 후속 중간 검증: 동적132상태의 axe 실패0, 공개13경계/canonical4개 검사와 격리 지면의 모바일·데스크톱4범주100점(preflight)을 확인했다. 최종 확정은 모든 수정 뒤 다시 측정한다. 실제 원고 언어/이미지 치수, canonical 최초 응답, 지면 병렬 로딩, 일회 패널 활성화, 메시지/수집 Specification/원고 Strategy를 보완했다. 회귀가 광고 늦은 응답 덮어쓰기, 사전 분리의 역변환 충돌과 공백 observer 루프, 원문 필드의 UI 변환을 발견해 실제 수정·집중 검증했다. 코드/도구 기준을 낮추지 않았으며 중단/실패 시험은 PASS에 합산하지 않는다. 원문 Factory 전환과 관련 집중 시험은 통과했으며 전체 clean 회귀·최종 산출물/이미지·마지막 SEO는 마감 단계다. 운영 기존6서비스/V24·MailBox·키·DB·전역 스킬은 변경하지 않는다.
+
+웹 품질 최종 제품 검증 완료: 전체 clean424(190/148/86) PASS·FAIL/ERROR/SKIP0, 마지막 미사용import 제거 후 집중UI9/단위190/산출물 보안 재확인. 공개4문서×2기기 Lighthouse 네 범주100, axe132상태0, Nu13문서0, HTTP13경계/canonical4일치. 코드 seal 고정 뒤 SEO를 마지막 제품 검증으로 실행했다. [MP-DOC-040](../05-test/web-quality.md)과 [증빙](../05-test/evidence/web-quality-20261104.json)에 digest·진단·한계를 기록했다. 현재 정식 PR/remote current-head 검토 마감 중이며 운영 서비스·DB·MailBox·develop/main 병합은 미변경이다.
+
+PR29 신규 변경을 수집/뉴스레터/웹 품질3커밋으로 푸시하고4b6a0ab에서 별도 코드 검토APPROVE/SEO감사PASS와 App formal APPROVED를 확인했다. WQ14항목을 실제 증빙으로 마감한다. 이어지는 커밋은 승인 기록 문서화뿐이며 제품 seal·JAR·이미지·마지막 SEO 결과는 동일하다. 문서 마감 head도 재리뷰·재승인 후 원격 SHA 일치를 확인한다. 서비스/DB/MailBox/develop/main은 변경하지 않는다.
+
+사용자가 서비스 교체·develop 병합과 기존 MailBox의 이메일 인증/복구 연동을 승인했다. 현재 SMTP는 이전과 다른 a2392bb2 이미지이며 새 원시 검사 vuln/secret0, 인증 전용2587/STARTTLS 강제/SASL AUTH 설정과 서비스명 SAN을 확인했다. 타 프로젝트는 읽기 전용으로 유지한다. 새 인도 범위 계약/계획을 갱신하고 백업·격리이행·실제연동·서비스교체를 준비한다. 아직 운영성공/병합완료로 표시하지 않는다.
+
+
+## 2026-11-04 서비스 교체·실제 이메일 인증/복구 완료
+
+사용자 최신 승인에 따라 검증 runtime d1e49e6d6c10/JAR e03b4ef23d68를 web/worker에 반영했다. V24 암호화 백업/격리 복원→V25→구·신 앱 JPA 기동을 검증했고 운영 migration 전후 기존34테이블 건수/행 SHA256 모두 일치했다. DB/proxy/두 모델 ID·시작시각·이미지, 원래 volume/key와 기존 계정2·구독1·뉴스레터1을 보존했다. 기사496, 합성 계정·challenge·대기 메일0.
+
+독립 MailBox 최신 a2392bb2ab62 취약점/secret0, 필수 STARTTLS/CA/hostname/SMTP AUTH·실수신을 확인했다. 파일 secret을 사용하는 최소 AUTH overlay와 3모드/6누락 거부 시험을 추가했고 check/mailDeploymentCheck/securityCheck PASS. 실제 HTTPS62 assertion에서 인증 가입/인증번호 수신/구독 회수 및404/복구/모든 세션 무효화/새 비밀번호/단회 코드/탈퇴를 확인했다. 외부 서버 수정·내장 SMTP/위험 suppression·CI/CD/main 병합은 없다. 최신 원본은 [서비스 인도 증빙](../05-test/evidence/web-quality-delivery-20261104.json), 절차는 MP-DOC-016 최신 운영 절이다.
+
+마지막 공개 SEO 감사·현재head 독립/App 검토·guarded develop 병합을 마감한다. GitHub 최종 승인·병합 SHA와 branch 정리는 PR29 현재 상태를 정본으로 확인하며 실행 전 성공으로 선기록하지 않는다. 기존 미추적 HTTPS 스킬3파일은 그대로 보존하며 commit에서 제외한다.
+
+최종 실서비스 SEO 독립 재점검(2026-11-04T10:25:29Z): 공개 HTTP13/canonical4/robots/sitemap/404·noindex PASS, 익명 접근성 한·영 ×390/768/1440px의90상태 실패0. 실제 HTTPS 지면 Lighthouse13.6.0을 fresh profile/cache로 각1회 측정해 모바일·데스크톱 성능/접근성/권장사항/SEO 모두100(raw1.0)이다. 모바일 LCP1315.8785ms/TBT68ms/CLS0, 데스크톱 LCP286.029ms/TBT0/CLS0. 점수 선택 재시도·TLS 우회·평가 기준 변경은 없었다. 비점수 진단은 보존했고 실제 포털 순위·CrUX·로그인 화면 전체 WCAG 인증으로 확대하지 않는다. 원본 해시는 서비스 인도 증빙에 기록했다. 이후 제품 코드/이미지를 변경하지 않았다.
+
 ## 2026-11-04 남은 PR 순차 병합 — 구독 완료·이메일 통합
 
 사용자가 PR27·28·29 전체 develop 병합을 승인했다. PR27은 head a1a566e50a09d5617541f47ffcccd1027f54f115의 App current-head 승인을 확인하고 guarded human squash로 병합했다. merge SHA ea1c088cb0b195ab203436b9c02d2e08c8b929e0이며 정확한 PR head의 원격·추적·로컬 ref를 삭제/부재 확인했다. 첫 두 병합 요청은 GitHub502로 실패했고 develop 미변경을 확인한 뒤 재시도하여 성공했다.
@@ -225,6 +246,14 @@ PR28은 새 develop을 공식 절차로 통합했다. 새 develop의 전체 tree
 
 999bd494는 canonical 원격에 push했으나 현재 PR28 API는 이전11fad449를 반환한다. PR29도 Git194ef330과 API87abf5a가 불일치한다. GitHub 공식 장애가 지속되는 동안 새 head가 PR에 반영되고 READ_COMPLETE/독립 승인·App formal 승인을 받아야 후속 병합할 수 있다. 아직 PR28/29 병합 완료라고 보고하지 않는다. 기존에 PR29 후보로 전환한 V25 서비스/실제 MailBox 인증·복구 검증 결과는 유지하며 이번 병합 작업으로 서비스·DB·메일서버·키·모델을 다시 교체하지 않았다.
 
+웹 품질 PR29도 현재 develop(ea1c088)을 통합 준비했고, 관리 기록 추가 전의 전체 tracked tree가 이미 배포·검증한194ef330과 동일함을 확인했다. 최신 관리 기록은 이메일 PR과 일치하도록 보완하며 제품 코드·JAR·실행 이미지는 바꾸지 않는다. PR28 새 canonical head e2317fd와 PR29 후속 통합 head는 PR API 반영 및 현재-head 승인 후에만 병합한다.
+
 PR 참조 후속 진단: 공식 장애는2026-11-04T11:50:06Z에 종료됐다. canonical Git/REST ref와 PR head/base가 달라 최신 원격 두 브랜치와 develop의 실제 merge-tree를 재계산했다. 최신 PR28/29는 모두 충돌0이며, PR API의 이전 snapshot은 각각21/31파일 충돌이었다. 동일 PR의 제한된 close/reopen을 검증된 사람 전용 wrapper로 수행해 PR28 e2317fd/base ea1c088과 PR29 a40d94a/base ea1c088을 정상화했다. branch·보호·승인 조건은 바꾸지 않았다.
 
 PR28 e2317fd는 현재-head READ_COMPLETE·분리된 독립 APPROVE와 App formal APPROVED를 받았다. 실제 병합은 GitHub405의 “마지막 pusher를 확인할 수 없어 추가 승인 필요”로 거절됐고 미병합 상태를 확인했다. 제품 코드 변경 없이 이 관리 기록을 사람 계정으로 새 commit/push하여 푸시 신원 정보 갱신을 시도한다. 새 head의 독립/App 승인은 다시 받으며, 현재까지 미완료인 병합을 완료로 선기록하지 않는다.
+
+## 2026-11-04 병합 참조 정상화·이메일 병합 완료
+
+PR28은 참조 갱신 후에도 마지막 pusher 미확정405로 차단됐다. 제품 변경 없이 사람 계정의 정상 새 commit/push(a09f509) 후 PR head가 자동 갱신됐고 READ_COMPLETE/독립 APPROVE/App current-head APPROVED를 새로 받았다. 보호 조건을 바꾸지 않은 guarded human squash 병합이 성공했다. merge SHA74b982ad20038ff27b36eaca05bde8871c800b08, 실제 source heada09f5097dc3362d175b74e8d2bcf9cbee7b87320, 원격·추적·로컬 head 삭제/부재까지 확인했다. 따라서 PR27·28은 실제 병합 완료다.
+
+PR29는 최신 develop74b982a를 통합했다. target tree가a09f509와 같고 a09f509는 원래 승인 identity11fad449에서 관리 문서2개만 다름을 검증했다. PR29는11fad449의 후속이므로 이미 배포·검증한 제품 파일194ef330/a40d94a를 그대로 보존하고 두 관리 문서의 최신 기록을 합쳤다. 최종 실행코드/정적 자산/의존성/컨테이너/모델/키는 바꾸지 않는다. 기존 시험·이미지/SEO 증빙을 새로 실행한 결과처럼 합산하지 않는다. 새 current-head 독립 검토/App 승인·병합/branch 정리는 PR29의 실제 원격 기록을 정본으로 확인한다.

@@ -1,0 +1,259 @@
+{
+  "schemaVersion": 4,
+  "workSlug": "web-quality-20261104",
+  "flowType": "integration",
+  "branch": "codex/web-quality-20261104",
+  "targetBranch": "develop",
+  "baseSha": "74b982ad20038ff27b36eaca05bde8871c800b08",
+  "mergeMethod": "squash",
+  "governance": {
+    "prAuthorLogin": "JunSungKang",
+    "assigneeLogin": "JunSungKang",
+    "reviewerLogin": "junsung-bot[bot]",
+    "requiredChecks": [],
+    "commitAuthor": {
+      "name": "jun-sung, Kang",
+      "email": "kjuns1@naver.com"
+    },
+    "coAuthors": [
+      {
+        "name": "Codex",
+        "email": "codex@openai.com"
+      },
+      {
+        "name": "junsung-bot[bot]",
+        "email": "302617028+junsung-bot[bot]@users.noreply.github.com"
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "identity-email",
+      "expectedPaths": [
+        ".github/workflow-plans/identity-email-20261103.json",
+        ".github/workflow-plans/subscription-access-20261102.json",
+        "AGENTS.md",
+        "README.md",
+        "THIRD_PARTY_NOTICES.md",
+        "build.gradle",
+        "gradle.lockfile",
+        "gradle/verification-metadata.xml",
+        "src/**",
+        "scripts/**",
+        "compose.yaml",
+        ".env.example",
+        "docs/**",
+        "licenses/**"
+      ],
+      "forbiddenPaths": [
+        ".env",
+        ".github/workflows/**",
+        "**/*.pem",
+        "**/*.key"
+      ],
+      "acceptanceCriteria": [
+        "User approved required verified email,signup codes,password reset,existing member verified email enrollment/change and custom self-hosted SMTP via read-only sibling mail-box;no payment implementation,credential-length changes,personal-interest transfer or CI/CD.",
+        "New identity feature branch contains previously approved unmerged subscription PR27 as an explicit dependency;do not modify or merge the old branch,develop or main. Preserve original accounts/subscription/contents and HTTPS skill files.",
+        "Transactional single-use six-digit challenges,5-minute expiry,5 failed attempts,resend60s and per-email/session/global quotas;purpose/account/auth_version/session binding;no email enumeration,no credentials/codes in response or logs;email/code/outbox protected at rest,bounded TTL/lease/retries. Password reset atomically replaces hash,increments auth_version,invalidates all sessions and outstanding challenges.",
+        "SMTP adapter uses verified TLS and bounded timeouts; only operator-configured external SMTP destinations and closed service-mail purposes. No embedded SMTP daemon build/deployment, no third-party messages except authorized verification/security messages and synthetic tests, and no external-directory writes.",
+        "UI keeps simple static HTML/ES Modules,bilingual forms,signup email requirement and owner-only enrollment/change/reset;current username/password limits preserved. Existing accounts are not deleted or guessed an email. Privacy/terms and SI documentation reflect email purposes and no marketing opt-in.",
+        "Verify actual PostgreSQL,concurrent use/resend/reset/session revoke,SMTP/TLS failure,UI privacy/layout,strict lock/verification,new dependencies/advisories/SBOM/JAR/images and same-digest service;unavailable external transport remains explicitly unverified and does not replace working service. Independent current-head review and guarded PR;no merge.",
+        "Latest user restriction: required signup recipient email,visible specific-purpose notice and consent evidence;email only for necessary verification,password recovery and future actual payment/subscription service notices. No marketing,advertising,other-purpose reuse,opt-in marketing controls,bulk-send/admin arbitrary message APIs or AI/analytics transmission. Closed typed purposes and fixed templates enforce the limitation;update all current user-facing policies and translations.",
+        "2026-11-04 root-risk exception remains NOT approved. Preserve application/email functionality, existing data, keys and PR. Do not suppress findings, weaken gates or deploy the retired root SMTP image. Latest authorized packaging retirement removes the local daemon; unresolved external MailBox security still blocks activation/runtime transition. Real inbox testing is not risk acceptance.",
+        "2026-11-04 latest explicit user authorization: write the external MailBox defect prompt first, then fix only this repository. Retire the redundant bundled Postfix daemon and all build/Compose/Helm/test entry points, preserve the application SMTP client and email/account functionality, data and existing keys. This supersedes preservation of obsolete SMTP server packaging only; root risk remains rejected. No suppression, scanner exclusion, USER disguise, external repository/container changes or deployment against unresolved external MailBox risk. Re-run configuration/TLS/full regression/artifact/image gates and independently review the current head.",
+        "Latest follow-up: audit project-owned unused servers/daemons/startup entry points and remove proven-obsolete native runtimes/generated server contexts/unreferenced old project image tags without backup copies. Preserve active six services, required migration/model-init jobs, all volumes/data/keys/model weights, current configured and container-referenced images, other projects and CUA tooling. Use compiler/HTML-module reference evidence for code candidates; do not delete framework entry points based only on name search.",
+        "Read-only inherited dependency PR28 at 11fad449cdbe66a9aebeb466c4591f879af7e727 includes PR27; no merge, deployment or external MailBox changes authorized by this audit."
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh --no-daemon clean check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest",
+        "sh scripts/test/html-check.sh",
+        "git diff --check"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/plan.md",
+          "docs/01-management/progress.md",
+          "docs/03-design/email-identity.md",
+          "docs/05-test/email-identity.md",
+          "docs/07-operation/mailbox-security-handoff.md",
+          "docs/05-test/dead-code-audit.md"
+        ]
+      }
+    },
+    {
+      "id": "preserve-local-https-skill",
+      "expectedPaths": [
+        ".agents/skills/https-certificate/SKILL.md",
+        ".agents/skills/https-certificate/agents/openai.yaml",
+        ".agents/skills/https-certificate/references/caddy-acme.md"
+      ],
+      "forbiddenPaths": [],
+      "acceptanceCriteria": [
+        "User explicitly requested that the existing HTTPS skill not be committed. Observe these exact untracked paths only to preserve unrelated work in place. Do not edit, stage, commit, move, delete or ignore them.",
+        "Before each commit, push and PR/review operation, verify original SHA-256 and that git ls-files returns no tracked/staged path. They are not performance or server-cache deliverables."
+      ],
+      "validationCommands": [
+        "node -e 'const fs=require(\"node:fs\"),c=require(\"node:crypto\"),cp=require(\"node:child_process\");for(const x of [{\"file\":\".agents/skills/https-certificate/SKILL.md\",\"sha256\":\"47071a68b12a638b0f7c3d3290f92833e955771f854312c2bb14c0074c1b0e0f\"},{\"file\":\".agents/skills/https-certificate/agents/openai.yaml\",\"sha256\":\"7272ebe0da2378a3c3cb769f9c614870091d91d42d13e4ad87d0d6f7d6cde9e7\"},{\"file\":\".agents/skills/https-certificate/references/caddy-acme.md\",\"sha256\":\"540d923e2c305dac16280286bd91fbd23b52a20bafffaf8b51372824483b8335\"}]){if(c.createHash(\"sha256\").update(fs.readFileSync(x.file)).digest(\"hex\")!==x.sha256)throw Error(\"Preserved skill changed: \"+x.file);if(cp.execFileSync(\"git\",[\"ls-files\",\"--\",x.file],{encoding:\"utf8\"}).trim())throw Error(\"Local skill must remain untracked: \"+x.file);}'"
+      ],
+      "documentation": {
+        "rationale": "Existing local skill belongs to another user request; preservation only, excluded from commits and PR diffs."
+      }
+    },
+    {
+      "id": "signup-terms-dialog",
+      "expectedPaths": [
+        ".github/workflow-plans/identity-email-20261103.json",
+        "src/main/resources/static/signup.html",
+        "src/main/resources/static/terms.html",
+        "src/main/resources/static/assets/js/identity/auth.js",
+        "src/main/resources/static/assets/js/identity/terms-agreement.js",
+        "src/main/resources/static/assets/js/shared/i18n.js",
+        "src/main/resources/static/assets/js/shared/i18n-en.js",
+        "src/main/resources/static/assets/css/auth.css",
+        "src/e2eTest/java/com/moapan/BrowserTest.java",
+        "docs/01-management/plan.md",
+        "docs/01-management/progress.md",
+        "docs/05-test/email-identity.md",
+        "src/main/java/com/moapan/identity/domain/TermsDocument.java",
+        "src/main/java/com/moapan/identity/infrastructure/TermsDocuments.java",
+        "src/main/java/com/moapan/identity/api/TermsController.java",
+        "src/main/java/com/moapan/access/infrastructure/SecurityConfig.java",
+        "src/test/java/com/moapan/identity/infrastructure/TermsDocumentsTest.java",
+        "src/integrationTest/java/com/moapan/identity/EmailIdentityIntegrationTest.java",
+        "docs/03-design/api.md",
+        "src/e2eTest/java/com/moapan/SiteDesignAuditTest.java",
+        "docs/03-design/decisions.md"
+      ],
+      "forbiddenPaths": [
+        ".env",
+        ".github/workflows/**",
+        "**/*.pem",
+        "**/*.key"
+      ],
+      "acceptanceCriteria": [
+        "User explicitly requested the signup full terms in an in-page modal instead of a link/new tab. Reuse the canonical terms document and edition, with policy translations loaded on demand; do not duplicate or rewrite legal text.",
+        "Agree is disabled until the scrollable complete terms have reached the bottom (or all text fits). Disagree, close and Escape never grant consent. Reopening starts a fresh review; submitted termsVersion and backend consent validation remain unchanged.",
+        "Preserve signup inputs, native dialog focus containment/return, keyboard scrolling, readable 390/768/1440 layouts and Korean/English. Fetch/version errors fail closed and allow retry. No personal data in policy requests or browser persistence.",
+        "Verify browser behavior, HTML/static checks and relevant full regression. Continue PR28 with current-head independent review; no merge or service/SMTP activation is included in this UI follow-up. Keep the pre-existing SMTP security finding and live V24 state explicit.",
+        "Maintain current Trusted Types/CSP unchanged. Parse canonical static terms once on the server and expose only a fixed immutable readable tree at public GET /api/v1/auth/terms; build DOM nodes without HTML-string sinks. Test actual CSP enforcement and unauthenticated read access.",
+        "Corrected user requirement: remove the Read further button and its code/translations. Show an always-visible, operable right vertical scrollbar independent of OS overlay hiding, with synchronized thumb, pointer dragging/track interaction, keyboard controls and ARIA. Preserve scroll-end consent gating and checkbox synchronization.",
+        "User requested a cohesive, natural terms modal design. Refine paper palette, inset reading panel, typography, header/close control, subtle persistent scrollbar and clear footer actions. Preserve all consent/scroll/checkbox/CSP behavior; verify initial and read-to-end visual states at mobile/tablet/desktop."
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh --no-daemon check e2eTest",
+        "sh scripts/test/html-check.sh",
+        "git diff --check"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/plan.md",
+          "docs/01-management/progress.md",
+          "docs/05-test/email-identity.md"
+        ]
+      }
+    },
+    {
+      "id": "web-quality-refactor",
+      "expectedPaths": [
+        ".github/workflow-plans/web-quality-20261104.json",
+        "src/**",
+        "scripts/**",
+        "docs/**",
+        "README.md",
+        "build.gradle"
+      ],
+      "forbiddenPaths": [
+        ".env",
+        ".github/workflows/**",
+        "**/*.key",
+        "**/*.pem"
+      ],
+      "acceptanceCriteria": [
+        "Latest user explicitly authorizes comprehensive accessibility/performance/SEO audit and patches, proven-unused code/method/class removal, domain-appropriate pattern refactoring; finish with a fresh SEO verification after all product changes. Continue Sprint Delivery without another worktree.",
+        "Inventory all Java/JS/CSS/HTML/scripts/entrypoints; preserve reflection/framework/SQL/security and privacy contracts. Remove only demonstrated dead code, no backups. Select patterns by concrete responsibility/duplication need; document keep/refactor/remove decisions for every domain.",
+        "Measure actual baseline and final mobile/desktop Lighthouse performance/accessibility/best-practices/SEO; target 100, fix actionable causes without hiding content, disabling protections, UA-specific behavior or altering audit criteria. Report score variability, live-versus-isolated candidate and unresolved external constraints honestly.",
+        "Verify keyboard/focus/labels/contrast/dialogs/reduced motion/390-768-1440px and both languages across every page. Maintain static HTML/ES Modules, security headers, no tracking, local interests, current credentials and user data.",
+        "Run complete regression, Nu validator, asset/cache/network checks, artifact/image security and current-head independent review. Final verification action after implementation must be SEO audit; no product changes afterward without rerunning SEO. No CI/CD, MailBox modifications, paid resources, credential policy changes, main/develop merge or service replacement."
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh --no-daemon clean check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest",
+        "sh scripts/test/html-check.sh",
+        "git diff --check"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/plan.md",
+          "docs/01-management/progress.md",
+          "docs/03-design/decisions.md",
+          "docs/05-test/web-quality.md"
+        ]
+      }
+    },
+    {
+      "id": "approved-service-delivery",
+      "expectedPaths": [
+        ".github/workflow-plans/web-quality-20261104.json",
+        "scripts/deploy/compose-mail-auth.yaml",
+        "scripts/test/mail-deployment-check.mjs",
+        ".env.example",
+        "docs/**"
+      ],
+      "forbiddenPaths": [
+        ".env",
+        ".github/workflows/**",
+        "**/*.pem",
+        "**/*.key"
+      ],
+      "acceptanceCriteria": [
+        "Latest explicit user authorization: replace the current application service with the verified candidate and merge PR29 into develop after live verification. This supersedes earlier no-deployment/no-develop-merge exclusions only for this delivery; main/CI/CD/paid resources remain excluded.",
+        "User further explicitly requests connecting the existing operator-managed MailBox for email verification and password recovery. Inspect the current provider image/TLS/authentication, use strict STARTTLS plus SMTP AUTH and file secrets, and perform synthetic delivery/account verification. Do not modify/restart MailBox, accept the retired embedded SMTP root exception, or add an SMTP daemon. Preserve provider scope and report actual risks/limitations.",
+        "Preserve database/users/subscriptions/content/sessions, existing keys, model volumes and unrelated containers. Encrypt a pre-migration backup, restore and test V25 in an isolated database and check old/new application schema compatibility before production migration. Deploy the exact scanned application image, keep DB/proxy/models intact and verify image/JAR identity and live HTTPS/access boundaries.",
+        "Use only workspace-local private operational files; no secret values in command arguments/output, tracked files, screenshots or reports. Add the minimum authenticated external-client Compose overlay and deterministic configuration checks. No credential-length/personalization/security policy changes.",
+        "Update delivery evidence/progress, independently review the final current head and obtain fresh App formal approval after every push. Use guarded human merge and verify PR head remote/local/tracking cleanup. Preserve pre-existing local HTTPS skill files untracked."
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh --no-daemon check mailDeploymentCheck securityCheck",
+        "node scripts/test/docs-check.mjs",
+        "git diff --check"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/plan.md",
+          "docs/01-management/progress.md",
+          "docs/06-transition/deployment.md",
+          "docs/05-test/web-quality.md"
+        ]
+      }
+    },
+    {
+      "id": "approved-all-pr-merges",
+      "expectedPaths": [
+        "docs/**",
+        ".github/workflow-plans/**"
+      ],
+      "forbiddenPaths": [
+        ".env",
+        ".github/workflows/**",
+        "**/*.key",
+        "**/*.pem"
+      ],
+      "acceptanceCriteria": [
+        "Latest user explicitly requires all open PR27/28/29 merged into develop. This supersedes earlier no-develop-merge restrictions for those PRs and necessary reviewed base integrations only; preserve main, running service, MailBox, existing data, keys and models.",
+        "Use original authorized .local/cache-delivery-worktree destination for clean merge validation; do not move/ignore/copy/edit original untracked HTTPS skill files. Validate their original hash/untracked status from the original root.",
+        "Merge in dependency order with current canonical head matching PR API, fresh guard and exact-head App approval; integrate forward develop through official base-refresh procedure, resolve only against previously approved final product, verify tests/content and obtain new independent/App approval after every new head; no force pushes.",
+        "After each successful merge verify exact head remote/local/tracking ref cleanup. Do not substitute old PR API head or change protection to proceed through an incident."
+      ],
+      "validationCommands": [
+        "node scripts/test/docs-check.mjs",
+        "git diff --check",
+        "node /Users/kkkk/.codex/scripts/github-app-workflow-guard.mjs --verify-server .github/workflow-plans/web-quality-20261104.json"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/plan.md",
+          "docs/01-management/progress.md"
+        ]
+      }
+    }
+  ]
+}

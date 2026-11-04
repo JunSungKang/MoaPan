@@ -106,3 +106,18 @@ tasks.register('modelSmokeClasspath') {
 
 tasks.register('mailDeploymentCheck', Exec) { commandLine 'node', 'scripts/test/mail-deployment-check.mjs' }
 tasks.named('integrationTest') { dependsOn tasks.named('mailDeploymentCheck') }
+
+tasks.register('prepareWebAudit', Exec) { commandLine 'node','scripts/test/prepare-web-audit.mjs' }
+tasks.register('webQualityAudit', JavaExec) {
+    dependsOn e2eTestClasses, prepareWebAudit
+    classpath = sourceSets.e2eTest.runtimeClasspath
+    mainClass = 'com.moapan.WebQualityAudit'
+    args System.getenv('QUALITY_STAGE') ?: 'final'
+    jvmArgs '-Djava.io.tmpdir=' + file('.local/tmp').absolutePath, '-Duser.home=' + file('.local/test-home').absolutePath
+    environment 'TMPDIR',file('.local/tmp').absolutePath
+    environment 'PLAYWRIGHT_BROWSERS_PATH',file('.local/browsers').absolutePath
+    environment 'PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD','1'
+    environment 'DOCKER_HOST',System.getenv('DOCKER_HOST') ?: (System.getProperty('os.name').toLowerCase().contains('mac') ? 'unix://' + System.getProperty('user.home') + '/.docker/run/docker.sock' : 'unix:///var/run/docker.sock')
+    environment 'TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE','/var/run/docker.sock'
+    systemProperty 'api.version','1.44'
+}

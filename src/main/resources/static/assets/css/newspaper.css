@@ -1,10 +1,11 @@
 /* Shared primitives and domain rules; responsive/print conditions are intentional. */
-:root { color-scheme: light; --muted: #5d605a; --accent: #67423b; }
+:root { color-scheme: light; --muted: #5d605a; --accent: #67423b; --control-border: #76786f; }
 * { box-sizing: border-box; }
 body { margin: 0; background-color: var(--paper); background-position: 0 0,2px 4px,0 0; color: var(--ink); line-height: 1.65; }
 a { color: inherit; text-underline-offset: .2em; }
 button, input, select, textarea { font: inherit; color: inherit; }
-button, input, select, textarea { border: 1px solid var(--rule); background: transparent; padding: .45rem .65rem; border-radius: 0; }
+button, input, select, textarea { border: 1px solid var(--control-border); background: transparent; padding: .45rem .65rem; border-radius: 0; }
+input::placeholder, textarea::placeholder { color: var(--muted); opacity: 1; }
 button { cursor: pointer; }
 button:hover, button[aria-pressed=true] { background: var(--ink); color: var(--paper); }
 button:disabled { opacity: .5; cursor: wait; }
@@ -12,6 +13,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 main, .masthead, footer { max-width: 1440px; margin: auto; padding: 1.2rem 2rem; }
 .skip { position: absolute; left: -10000px; }
 .skip:focus { position: static; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
 .topline { justify-content: space-between; flex-wrap: wrap; }
 .meta { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
 .nav { display: flex; align-items: center; flex-wrap: wrap; }
@@ -123,7 +125,7 @@ dialog input, dialog select { width: 100%; min-width: 0; }
 }
 .header-tools { display: flex; align-items: center; gap: 1rem; }
 .language-picker { display: inline-flex; letter-spacing: 0; }
-.language-picker select { border: 0; border-bottom: 1px solid var(--rule); padding: .2rem .15rem; background: transparent; }
+.language-picker select { border: 0; border-bottom: 1px solid var(--control-border); padding: .2rem .15rem; background: transparent; }
 @media print {
   .language-picker { display: none; }
 }

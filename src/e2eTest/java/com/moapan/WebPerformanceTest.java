@@ -70,7 +70,7 @@ class WebPerformanceTest {
             var page=context.newPage();page.navigate("http://localhost:"+port+"/index.html");ready(page,"index");
             assertEquals(true,page.evaluate("()=>{try{new DOMParser().parseFromString('<p>blocked</p>','text/html');return false;}catch(e){return e instanceof TypeError;}}"));
             String html=(String)page.evaluate("async data=>(await import('/assets/js/newsletter/publication-output.js')).htmlNewsletter(data,'2026-001',location.origin+'/newsletter.html')",BrowserTest.productIssue());
-            assertTrue(html.startsWith("<!doctype html>"));assertTrue(html.contains("<article>"));assertTrue(html.contains("<footer>"));assertFalse(html.contains("<script"));
+            assertTrue(html.startsWith("<!doctype html>"));assertTrue(html.contains("<article lang=\"und\">"));assertTrue(html.contains("<footer>"));assertFalse(html.contains("<script"));
         }
     }
     static void ready(Page p,String name){p.waitForSelector("[data-language-select]");if(name.equals("index"))p.waitForSelector("#paper > *");p.waitForLoadState(com.microsoft.playwright.options.LoadState.NETWORKIDLE);}
