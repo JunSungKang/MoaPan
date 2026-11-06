@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {volumePlan,volumeSuffixes,equalSnapshots} from '../deploy/infrastructure-migration.mjs';
+import path from 'node:path';
+import {volumePlan,volumeSuffixes,equalSnapshots,evidenceDestination} from '../deploy/infrastructure-migration.mjs';
 const names=volumeSuffixes.map(s=>'moapan_'+s);
 test('offline migration maps every volume exactly once without deletion',()=>{
  const plan=volumePlan(names,[]);assert.equal(new Set(plan.map(p=>p.target)).size,8);assert(plan.every(p=>p.target==='damgox2_'+p.suffix));
@@ -24,4 +25,16 @@ test('canonical deployment names and runtime mail/role bindings stay aligned',()
  const properties=fs.readFileSync('src/main/resources/application.properties','utf8');
  for(const key of ['ENABLED','HOST','PORT','FROM','USERNAME','PASSWORD_FILE','TLS','CA_FILE','DATA_KEY_FILE'])assert(properties.includes('DAMGOX2_MAIL_'+key));
  assert(fs.readFileSync('src/main/java/com/moapan/MoapanApplication.java','utf8').includes('DAMGOX2_ROLE'));
+});
+test('evidence resolves parents before copy and rejects symlink escapes',()=>{
+ const root=fs.realpathSync('.'),work=fs.mkdtempSync(path.join(root,'.local/tmp/infrastructure-path-'));
+ try{
+  assert.equal(evidenceDestination(root,path.relative(root,work+'/evidence.json')),work+'/evidence.json');
+  // Stay within the authorized workspace while simulating escape from .local.
+  fs.symlinkSync(root,work+'/escape','dir');
+  assert.throws(()=>evidenceDestination(root,path.relative(root,work+'/escape/evidence.json')),/escapes/);
+  assert.throws(()=>evidenceDestination(root,'../evidence.json'),/inside/);
+  fs.writeFileSync(work+'/existing.json','{}');
+  assert.throws(()=>evidenceDestination(root,path.relative(root,work+'/existing.json')),/already exists/);
+ }finally{fs.rmSync(work,{recursive:true});}
 });

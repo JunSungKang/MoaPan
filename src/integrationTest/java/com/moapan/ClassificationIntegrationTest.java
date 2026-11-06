@@ -70,6 +70,32 @@ class ClassificationIntegrationTest {
         assertTrue(translations.store(article,hash,"ko",new com.moapan.translation.infrastructure.ArticleTranslations.Text("합성 번역",List.of("합성 요약")),"old-policy"));
         assertTrue(translations.read(List.of(new com.moapan.translation.infrastructure.ArticleTranslations.Original(article,"Synthetic security advisory",List.of("A synthetic access control issue.")))).isEmpty());
     }
+    private String baselinePolicy(String field)throws Exception{
+        return tools.jackson.databind.json.JsonMapper.builder().build().readTree(java.nio.file.Files.readString(java.nio.file.Path.of("src/test/resources/infrastructure-ai-policy-baseline.json"))).path(field).asText();
+    }
+    @Test void existingUnlockedTranslationSurvivesDeploymentRenameReadAndClaim()throws Exception{
+        var translation=translator(false);String provider=baselinePolicy("translationProvider");
+        String hash=com.moapan.translation.infrastructure.ArticleTranslations.contentHash("Synthetic security advisory",List.of("A synthetic access control issue."));
+        var text=new com.moapan.translation.infrastructure.ArticleTranslations.Text("기존 합성 번역",List.of("기존 합성 요약"));
+        assertTrue(translations.store(article,hash,"ko",text,provider));
+        var original=new com.moapan.translation.infrastructure.ArticleTranslations.Original(article,"Synthetic security advisory",List.of("A synthetic access control issue."));
+        assertEquals(text,translations.read(List.of(original)).get(article).get("ko"));
+        assertNull(translation.claim());
+        assertEquals(text,translations.read(List.of(original)).get(article).get("ko"));
+        assertEquals(provider,repo.db().sql("SELECT provider FROM article_translations WHERE article_id=:id AND NOT locked").param("id",article).query(String.class).single());
+    }
+    @Test void existingCompletedClassificationAndTagsSurviveDeploymentRenameClaim()throws Exception{
+        var topics=catalog.snapshot(false);
+        String oldHash=com.moapan.article.domain.ArticleFingerprint.contentHash(baselinePolicy("classificationPolicy")+":"+topics.version(),topics.topics().stream().map(t->t.id()+"|"+t.slug()+"|"+t.name()+"|"+t.definition()).toList());
+        UUID tag=topics.topics().getFirst().id();
+        repo.db().sql("INSERT INTO article_tags VALUES(:id,:tag,1,'LLM',false)").param("id",article).param("tag",tag).update();
+        String content=com.moapan.article.domain.ArticleFingerprint.contentHash("Synthetic security advisory",List.of("A synthetic access control issue."));
+        repo.db().sql("INSERT INTO article_classification_jobs(article_id,content_hash,policy_hash,state) VALUES(:id,:content,:policy,'DONE')").param("id",article).param("content",content).param("policy",oldHash).update();
+        assertNull(worker.claim());
+        assertEquals("DONE",repo.db().sql("SELECT state FROM article_classification_jobs WHERE article_id=:id").param("id",article).query(String.class).single());
+        assertEquals(oldHash,repo.db().sql("SELECT policy_hash FROM article_classification_jobs WHERE article_id=:id").param("id",article).query(String.class).single());
+        assertEquals(List.of(tag),repo.db().sql("SELECT tag_id FROM article_tags WHERE article_id=:id").param("id",article).query(UUID.class).list());
+    }
     @Test void budgetSettlementUsesReservationDateAcrossMidnight(){
         var day=repo.db().sql("SELECT current_date").query(java.time.LocalDate.class).single();
         repo.db().sql("INSERT INTO ai_source_budgets(source_id,model,day,seconds) VALUES(:id,'translation',current_date-1,100),(:id,'translation',current_date,100)").param("id",source).update();

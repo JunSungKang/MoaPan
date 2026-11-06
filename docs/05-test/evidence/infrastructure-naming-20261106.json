@@ -1,5 +1,5 @@
 {
-  "verifiedAt": "2026-11-06T08:28:05.741Z",
+  "verifiedAt": "2026-11-06T09:00:07.710Z",
   "status": "LOCAL_SERVICE_VERIFIED_GITHUB_REVIEW_PENDING",
   "scope": "Docker/Compose/Helm damgox2 rename with data preservation; no CI/CD, payment, main merge or other-project changes",
   "baseline": "ffedf357297159b72f4d5bfed58f27f16b66f49a",
@@ -9,18 +9,18 @@
   "gradle": "9.8.2",
   "postgresql": "18.6",
   "runtimeJar": {
-    "sha256": "952a3695d09658a66176d855de2c15f990f6aae376c215b25e3144bc31797d63",
+    "sha256": "f02802b457298db5df4420d8c88df61370fbe1056aafbfd8e9834251bea3fc28",
     "hostEqualsContainer": true
   },
   "tests": {
     "test": {
-      "tests": 190,
+      "tests": 192,
       "failures": 0,
       "errors": 0,
       "skipped": 0
     },
     "integrationTest": {
-      "tests": 148,
+      "tests": 150,
       "failures": 0,
       "errors": 0,
       "skipped": 0
@@ -33,7 +33,7 @@
     }
   },
   "migrationUnitTests": {
-    "passed": 4,
+    "passed": 5,
     "failed": 0,
     "skipped": 0
   },
@@ -119,6 +119,18 @@
   ],
   "services": [
     {
+      "name": "damgox2-worker-1",
+      "image": "sha256:32e21cdaaa9ebc8803866a130d40faf42bfc9c559847a249822120524caf9217",
+      "status": "running",
+      "health": null
+    },
+    {
+      "name": "damgox2-web-1",
+      "image": "sha256:32e21cdaaa9ebc8803866a130d40faf42bfc9c559847a249822120524caf9217",
+      "status": "running",
+      "health": "healthy"
+    },
+    {
       "name": "damgox2-proxy-1",
       "image": "sha256:553a883f2a14265c66ac70b6e2017b1032540516be34f6bbca02a8327ff12e11",
       "status": "running",
@@ -133,18 +145,6 @@
     {
       "name": "damgox2-classifier-1",
       "image": "sha256:c0ea5e516e19ef98d40e85a1586ab3719a3a13908d4bc4ede3e411b1442a44b3",
-      "status": "running",
-      "health": "healthy"
-    },
-    {
-      "name": "damgox2-worker-1",
-      "image": "sha256:a1c123edb96df689f334268bf3226e003a9b4058e4c7881dab4adae27e123886",
-      "status": "running",
-      "health": null
-    },
-    {
-      "name": "damgox2-web-1",
-      "image": "sha256:a1c123edb96df689f334268bf3226e003a9b4058e4c7881dab4adae27e123886",
       "status": "running",
       "health": "healthy"
     },
@@ -260,25 +260,25 @@
     "images": {
       "app": {
         "tag": "damgox2-local:1.0.0",
-        "id": "sha256:a1c123edb96df689f334268bf3226e003a9b4058e4c7881dab4adae27e123886",
-        "reportSha256": "01099e138cfbf958c0f00d3a8f7f325630e7798436f3703b166e732f615ccf05",
-        "createdAt": "2026-11-06T17:07:54.710046+09:00",
+        "id": "sha256:32e21cdaaa9ebc8803866a130d40faf42bfc9c559847a249822120524caf9217",
+        "reportSha256": "08439db36bd4680bcfbc22b7cf605e4ed190a7b6f1454f7817a792d6a55babc1",
+        "createdAt": "2026-11-06T17:58:16.005052+09:00",
         "rawFindings": [],
         "secrets": 0
       },
       "database": {
         "tag": "damgox2-db-local:18.6",
         "id": "sha256:318a1c98713b45f3115f3a69e27c4d741999d1a29bbc67344c91277532141c1f",
-        "reportSha256": "a6dffcffee5a013f29e7fb73da44109e24e191b3c514c47c5f908478aedf5fa0",
-        "createdAt": "2026-11-06T17:06:38.277398+09:00",
+        "reportSha256": "e68b309f5667684fe21d627394a355c368dc8bbd966c7e9d4200ff80d7cbc314",
+        "createdAt": "2026-11-06T17:58:16.51217+09:00",
         "rawFindings": [],
         "secrets": 0
       },
       "proxy": {
         "tag": "damgox2-proxy-public:2.11.7",
         "id": "sha256:553a883f2a14265c66ac70b6e2017b1032540516be34f6bbca02a8327ff12e11",
-        "reportSha256": "f30e1a0dcabf9945e9ff6ada33b2e06150aa3391b473a626d4e6579a2dacb0c6",
-        "createdAt": "2026-11-06T17:24:11.235981+09:00",
+        "reportSha256": "bf2f52a048565d4579860565917f3d483e9d2d7e12f9890330b1c9ffdbe1bc9a",
+        "createdAt": "2026-11-06T17:58:16.760275+09:00",
         "rawFindings": [
           {
             "id": "GO-2026-5932",
@@ -292,32 +292,32 @@
       "translator": {
         "tag": "damgox2-translator:cpu-b11960",
         "id": "sha256:04a55c3263edf6a7041f5bd8ffda043392ca9553b18493df38b4c18cd2d37776",
-        "reportSha256": "01006bebd07d1dd07f6679ab67fb88e3d6c592bcf82954c19f71ba83b5dba674",
-        "createdAt": "2026-11-06T17:06:40.516264+09:00",
+        "reportSha256": "159b66419409d051c5d732f9bc56562ff4739454e3bc43ecccdccdaf359818b4",
+        "createdAt": "2026-11-06T17:58:17.475028+09:00",
         "rawFindings": [],
         "secrets": 0
       },
       "classifier": {
         "tag": "damgox2-classifier:cpu-b11960",
         "id": "sha256:c0ea5e516e19ef98d40e85a1586ab3719a3a13908d4bc4ede3e411b1442a44b3",
-        "reportSha256": "a65b95e8bd4c3c0f3b9fd7ee4d97da52de5b8d63e9512eb4274b7fd9749c968b",
-        "createdAt": "2026-11-06T17:06:41.234198+09:00",
+        "reportSha256": "536b4f9dd56b396e49baf38ff13a4d22672a6606d32bb2333e85e090570c7a62",
+        "createdAt": "2026-11-06T17:58:17.688056+09:00",
         "rawFindings": [],
         "secrets": 0
       },
       "builder": {
         "tag": "damgox2-build:1.0.0",
-        "id": "sha256:cba204e7645cb4da85682edb06b5ba10a5ac7585c14393a0ecc933dacfd61641",
-        "reportSha256": "7550ecf0651a47eb863e7221da30a6eadf334dd7dcd2e5ff2968fcdbeb30f50f",
-        "createdAt": "2026-11-06T17:15:34.651072+09:00",
+        "id": "sha256:ea62e98f55a2bc925a4e383425b0df4a28ae253993c12ac27c20b1feeb80fbf8",
+        "reportSha256": "1826c04e12f3b457fed7620927f5227c2804fa8266793b67c5a01e237246aaee",
+        "createdAt": "2026-11-06T17:58:16.256549+09:00",
         "rawFindings": [],
         "secrets": 0
       },
       "proxyBuilder": {
         "tag": "damgox2-proxy-build:2.11.7",
         "id": "sha256:3809d7b015a1203362581fff821850683d8dfafb48b7ef6ad4d6146a37638181",
-        "reportSha256": "f288361388abd994e7565bad0a031f44800fad36bc263b670c01cfa38133fa45",
-        "createdAt": "2026-11-06T17:24:16.200223+09:00",
+        "reportSha256": "39e111ea1f3733c4c37eb8d4a6df8980c59f60a1a489ed4e44d64f85a45241cf",
+        "createdAt": "2026-11-06T17:58:17.244665+09:00",
         "rawFindings": [
           {
             "id": "GO-2026-5932",
@@ -331,8 +331,8 @@
       "localProxy": {
         "tag": "damgox2-proxy-local:2.11.7",
         "id": "sha256:474a92d8f2d251d07a4a0f7e01ab4aeb3b0eb283335c0488bbdcf15af67e5e2c",
-        "reportSha256": "6bcc9b0e8ae01200a534a31542e7a5894441fe9742eec121cc09fa1f7cd7f54c",
-        "createdAt": "2026-11-06T17:24:11.695207+09:00",
+        "reportSha256": "e4ec3b52bf80a66f34f4005cdc719e79cea5385f814898abda80d3c1658fb4d9",
+        "createdAt": "2026-11-06T17:58:16.981175+09:00",
         "rawFindings": [
           {
             "id": "GO-2026-5932",
@@ -369,9 +369,6 @@
     "clusterInstall": "NOT_RUN_NO_CLUSTER"
   },
   "models": {
-    "checkedAt": "2026-11-06T08:13:33.914256462Z",
-    "limits": "Synthetic smoke only; not proof against unknown prompt injection or all semantic errors.",
-    "realInferenceRequests": 3,
     "checks": [
       {
         "inferenceRequests": 0,
@@ -380,19 +377,22 @@
       },
       {
         "check": "benign-translation",
-        "millis": 7599,
+        "millis": 6809,
         "validated": true
       },
       {
         "check": "benign-classification",
-        "millis": 25043,
+        "millis": 23402,
         "validated": true
       },
       {
         "check": "client-cancellation-stops-real-inference",
         "validated": true
       }
-    ]
+    ],
+    "checkedAt": "2026-11-06T08:54:41.835252592Z",
+    "limits": "Synthetic smoke only; not proof against unknown prompt injection or all semantic errors.",
+    "realInferenceRequests": 3
   },
   "smtp": {
     "starttls": true,
@@ -416,7 +416,8 @@
     "serialized security principal/session attribute names",
     "browser IndexedDB/storage keys",
     "immutable SQL migrations",
-    "historical reports and cryptographic identifiers"
+    "historical reports and cryptographic identifiers",
+    "private model request identity and byte-identical AI policy adapters"
   ],
   "artifactSha256": {
     "gradle-final.log": "89c0deca9e40b744c55f01fbeba84c8263fc13497cacb581fae67065ba0b699c",
@@ -428,7 +429,97 @@
     "cutover.log": "0b6ede69650884b7ff5adb46e7ac1552480cb1ce0c3cdc8a891dd9459a67b931",
     "model-smoke.log": "60a49705127433c7e12ec40556897044e9a5b1d6d89fd4a49aa8adb8f2372b97",
     "smtp-connection.log": "e6f9254ad1aea38cc15c0ab3e87c015a59c1c1e863e31c5b4b82162d3b5671c9",
-    "final-live-http.log": "0ef19c40befd558606e2bb96ff6978886283cf6773f96b5024b7c107e7c2f92d"
+    "final-live-http.log": "0ef19c40befd558606e2bb96ff6978886283cf6773f96b5024b7c107e7c2f92d",
+    "compatibility-focused.log": "e19c0c3c16acc3ece993e6a0e967a8f33df425efcacee133dddbec88e3fb9236",
+    "compatibility-full.log": "f7f2f9289a0f4da9212521fe03ed95027dfc3a3e2452be4631ace40cc7b8b1eb",
+    "all-images-compatible-final.log": "fa7fb2660bc50fdcf5862c248fd9d37361a73628a3d1bc98b1d077869a663c46",
+    "ai-result-recovery-final.log": "6cd9f64125c283912458fcee7a6806550c104c04b7ff525c1c1005e6095f4960",
+    "model-smoke-compatible.log": "2d6e8f57f4965dacab550f3ac0069e7922f9d1ba69f4d2578b33a47b060ee904",
+    "compatible-live-http.log": "0ef19c40befd558606e2bb96ff6978886283cf6773f96b5024b7c107e7c2f92d"
   },
-  "github": "Commit/push/review/develop merge results are the canonical PR record; no pre-recorded merge success."
+  "github": "Commit/push/review/develop merge results are the canonical PR record; no pre-recorded merge success.",
+  "aiCompatibilityCorrection": {
+    "reviewedHead": "e465ff4a735f7ad01f417c295d4c43ff94d1c50c",
+    "finding": "Whole-class policy hashes changed with deployment environment/alias literals, invalidating existing unlocked translations and classification jobs after worker resume.",
+    "observedTranslationCount": {
+      "before": 272,
+      "afterFirstDeployment": 9,
+      "restored": 272
+    },
+    "fix": "Byte-identical original policy classes and policy/provider identities; canonical DAMGOX2 environment maps to stable internal Java properties. Private legacy request identity is retained; actual Docker/server alias is damgox2. No hash bypass or fixed runtime fingerprint.",
+    "compatibility": {
+      "at": "2026-11-06T08:53:54.991Z",
+      "baselineJarSha256": "e03b4ef23d680c45528f2804af32c2fcf1fec73a1a530780f7c1721c1138f998",
+      "originalClassCount": 14,
+      "allClassBytesEqual": true,
+      "runtimePolicyAndProviderEqual": true,
+      "canonicalRuntimeAliasWithLegacyWireAccepted": true,
+      "aiPolicyAlgorithmUnchanged": true
+    },
+    "recovery": {
+      "at": "2026-11-06T08:51:23.244Z",
+      "restoredTables": [
+        {
+          "table": "article_translation_jobs",
+          "rows": 528,
+          "allRowsEqual": true
+        },
+        {
+          "table": "article_classification_jobs",
+          "rows": 528,
+          "allRowsEqual": true
+        },
+        {
+          "table": "article_translations",
+          "rows": 272,
+          "allRowsEqual": true
+        },
+        {
+          "table": "article_tags",
+          "rows": 502,
+          "allRowsEqual": true
+        }
+      ],
+      "strictPreconditionsUnchanged": [
+        "articles",
+        "tags",
+        "classification_config",
+        "classification_topics",
+        "admin_actions",
+        "sites",
+        "source_rights_and_configuration"
+      ],
+      "accountsSessionsQuotasUntouched": true,
+      "cacheTriggersEnabled": true,
+      "method": "single transaction DELETE/COPY with all normal V21 triggers enabled; no TRUNCATE/disable trigger",
+      "runtimeLeasesReleased": true,
+      "budget": {
+        "before": "classification|131|72575|8477\ntranslation|529|327063|5978",
+        "after": "classification|192|104631|9834\ntranslation|628|388829|7160",
+        "reset": false
+      },
+      "articleCardFingerprintMismatches": 0,
+      "classificationFingerprintMismatches": 0,
+      "afterWorkerResumedAt": "2026-11-06T08:55:58.459Z",
+      "existingTranslationsAndTagsPreservedAfterRealWorkerClaim": true,
+      "unchangedProtectedTables": [
+        "users",
+        "sites",
+        "sources",
+        "articles",
+        "tags",
+        "classification_config",
+        "classification_topics",
+        "admin_actions",
+        "newsletters"
+      ]
+    },
+    "firstRecoveryTransaction": "Failed and rolled back. Data-only pg_dump search_path reset was adapted to public before retry with normal V21 triggers; final exact table SHA checks passed.",
+    "budget": "Actual inference usage retained, no quota reset; pending work remains bounded by source daily limit."
+  },
+  "evidencePathCorrection": {
+    "canonicalParentRealpath": true,
+    "existingDestinationRejectedBeforeCopy": true,
+    "symlinkRegression": "Owned workspace symlink outside .local, no writes outside workspace"
+  }
 }

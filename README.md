@@ -164,4 +164,4 @@ node scripts/test/mail-deployment-check.mjs
 이 저장소의 검사 통과는 외부 MailBox의 보안 문제 해결을 뜻하지 않는다. 외부 이미지·중계 권한·TLS·실제 수신함 전달을 별도로 검증한다. 2026-11-04 현재 새 MailBox 이미지의 검사, 인증 STARTTLS와 운영자 실제 받은편지함 수신을 확인해 같은 검증 앱 이미지로 V25 서비스를 전환했다. 재시작 시 필요한 모든 overlay/비공개 파일 경로는 [현재 운영 전환](docs/06-transition/deployment.md#현재-운영-전환--2026-11-06-damgox2-명칭-이관)을 따른다. Gmail 등 별도 인터넷 수신자 전달과 MailBox 운영을 보장한다는 의미는 아니다. 현재 실제 결과는 [이메일 검증서](docs/05-test/email-identity.md), 외부 담당 작업용 프롬프트는 [MailBox 결함 조치 요청서](docs/07-operation/mailbox-security-handoff.md)를 따른다.
 
 ## Docker/Helm 명칭 이관
-배포 프로젝트와 이미지·리소스는 damgox2 이름을 사용한다. 기존 환경에서는 새 이름으로 up만 실행하면 빈 볼륨이 생기므로 먼저 [데이터 보존 이관 절차](docs/03-design/infrastructure-naming.md)를 따른다. 실제 전환 결과는 [검증서](docs/05-test/infrastructure-naming.md)를 참조한다. Java 내부 패키지·세션·브라우저 저장 식별자와 불변 SQL 이력은 호환성을 위해 유지한다.
+배포 프로젝트와 이미지·리소스는 damgox2 이름을 사용한다. 기존 환경에서는 새 이름으로 up만 실행하면 빈 볼륨이 생기므로 먼저 [데이터 보존 이관 절차](docs/03-design/infrastructure-naming.md)를 따른다. 실제 전환 결과는 [검증서](docs/05-test/infrastructure-naming.md)를 참조한다. Java 내부 패키지·세션·브라우저 저장 식별자와 불변 SQL 이력은 호환성을 위해 유지한다. AI 정책14개 클래스 bytes와 private model 요청 식별자도 유지해 기존 번역·분류를 보존하며 실제 Docker/server alias는 damgox2다.

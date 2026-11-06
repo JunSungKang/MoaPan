@@ -19,6 +19,18 @@ export function equalSnapshots(before,after){
   if(JSON.stringify(before)!==JSON.stringify(after))throw Error('Data fingerprint mismatch; do not remove source resources');
   return true;
 }
+export function evidenceDestination(root,output){
+  const canonical=fs.realpathSync(root),local=fs.realpathSync(path.join(canonical,'.local'));
+  if(local!==path.join(canonical,'.local'))throw Error('Workspace .local must not redirect outside its root');
+  const requested=path.resolve(canonical,output||'');
+  if(!requested.startsWith(local+'/'))throw Error('Evidence must be inside workspace .local/');
+  const parent=fs.realpathSync(path.dirname(requested));
+  if(parent!==local&&!parent.startsWith(local+'/'))throw Error('Evidence parent escapes workspace .local/');
+  const destination=path.join(parent,path.basename(requested));
+  try{fs.lstatSync(destination);throw Error('Evidence already exists');}
+  catch(error){if(error.code!=='ENOENT')throw error;}
+  return destination;
+}
 const docker=(...args)=>{
   try{return execFileSync('docker',args,{encoding:'utf8',stdio:['pipe','pipe','pipe'],maxBuffer:64*1024*1024});}
   catch{throw Error('Docker migration operation failed; output withheld to protect database rows and credentials');}
@@ -52,8 +64,7 @@ export function copyVolumes(image){
 }
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
   const root=fs.realpathSync(path.join(path.dirname(fileURLToPath(import.meta.url)),'../..'));
-  const [image,output]=process.argv.slice(2),destination=path.resolve(root,output||'');
-  if(!destination.startsWith(root+'/.local/'))throw Error('Evidence must be inside workspace .local/');
+  const [image,output]=process.argv.slice(2),destination=evidenceDestination(root,output);
   fs.writeFileSync(destination,JSON.stringify({verifiedAt:new Date().toISOString(),volumes:copyVolumes(image)},null,2)+'\n',{mode:0o600,flag:'wx'});
   console.log('All 8 offline volume copies verified; source data retained.');
 }
