@@ -2,7 +2,7 @@
 
 > 문서번호: MP-DOC-006 · 기준: 저장소 현재 리비전 · 상태: 유지관리 · 작성: 개발 담당 · 검토: 독립 리뷰 담당
 
-브라우저 → proxy → web → PostgreSQL. 별도 worker는 승인된 RSS/Atom/GET JSON → 정규화·추출형 요약·태그 → PostgreSQL. 동일 JAR의 역할을 MOAPAN_ROLE로 선택한다. migrate/admin-cli/worker는 HTTP 포트를 열지 않는다.
+브라우저 → proxy → web → PostgreSQL. 별도 worker는 승인된 RSS/Atom/GET JSON → 정규화·추출형 요약·태그 → PostgreSQL. 동일 JAR의 역할을 DAMGOX2_ROLE로 선택한다. migrate/admin-cli/worker는 HTTP 포트를 열지 않는다.
 
 Account는 JPA, 기능별 CatalogRepository/JdbcClient는 명시 SQL을 사용한다. Controller→Service→Repository 경계를 유지하고 Entity는 응답으로 반환하지 않는다. 서버에 회원 개인 관심사·검색 이력 저장·클릭 추적 API는 없다. 기사 검색 API는 POST 조건을 일시 처리하며 공개 DB 자료만 조회한다. 관리자 공통 대표 관심사 singleton은 서버 DB에 저장하고 공개 기본값 API로 제공한다. IndexedDB 설정과 로컬 정렬은 내려받은 후보 안에서만 동작한다.
 
@@ -19,7 +19,7 @@ worker → 전용 internal network → translator(CPU)로 제목·요약을 전�
 
 
 ## Kubernetes 배치 추가
-최신 사용자 요청으로 초기 V1의 Kubernetes 제외를 변경했다. scripts/deploy/helm/moapan에 전체 역할용 chart를 제공한다. Compose는 현 실행 경로, Helm은 향후 서버 배치 경로다. DB StatefulSet/PVC, migrate Job, web/worker/proxy/translator Deployment, 모델 init 다운로드/PVC, ClusterIP/Ingress/NetworkPolicy로 분리한다. 실클러스터·egress 제한·TLS 운영 조건은 차트 README의 미검증 범위를 따른다. CI/CD는 계속 제외한다.
+최신 사용자 요청으로 초기 V1의 Kubernetes 제외를 변경했다. scripts/deploy/helm/damgox2에 전체 역할용 chart를 제공한다. Compose는 현 실행 경로, Helm은 향후 서버 배치 경로다. DB StatefulSet/PVC, migrate Job, web/worker/proxy/translator Deployment, 모델 init 다운로드/PVC, ClusterIP/Ingress/NetworkPolicy로 분리한다. 실클러스터·egress 제한·TLS 운영 조건은 차트 README의 미검증 범위를 따른다. CI/CD는 계속 제외한다.
 
 분류: Java worker의 별도 비동기 PostgreSQL 큐 → 내부 classifier:11436(Qwen3.5-4B Q4_K_M) → hash/권리/잠금 재검증 → article_tags. 번역 서비스와 이미지·키·볼륨을 분리한다. 모델이 선택할 주제 목록은 관리자가 운영 DB에 정의한다. 상세 설계와 Compose/Helm 경계는 [분류 설계](classification.md), [도메인 상세설계](domain-design.md)를 따른다.
 

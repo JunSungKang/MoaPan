@@ -51,3 +51,6 @@
 | MP-DOC-039 | 외부 MailBox 보안 결함 조치 요청서 | 개발 담당 | [문서](../07-operation/mailbox-security-handoff.md) |
 
 | MP-DOC-040 | 웹 품질·기능별 패턴 리팩토링 검증서 | 개발 담당 | [문서](../05-test/web-quality.md) |
+
+| MP-DOC-041 | 인프라 명칭·데이터 이관 설계서 | 개발 담당 | [문서](../03-design/infrastructure-naming.md) |
+| MP-DOC-042 | 인프라 명칭 이관 검증서 | 개발 담당 | [문서](../05-test/infrastructure-naming.md) |

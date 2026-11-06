@@ -346,3 +346,11 @@ DB/정책: V23 1:1 구독·기간·version·계정삭제정리, 기본권한없�
 2. 후속 PR은 최신 develop을 공식 base-refresh 절차로 통합한다. 충돌 해결은 기존 승인 제품과 비교하며 실제 파일 변경/기능 누락 여부를 확인한다. HEAD 변경 후에는 분리된 독립 검토와 새 App formal 승인을 받는다.
 3. 사용자가 이전에 정확히 승인한 프로젝트 .local/cache-delivery-worktree 경로를 병합 검증에 재사용한다. 원본 checkout의 미추적 HTTPS 스킬은 복사·이동·ignore·수정하지 않고 원본 경로에서 해시/미추적 상태를 확인한다. 실행 중인 서비스·DB·키·모델은 유지한다.
 4. GitHub 장애로 PR API와 실제 Git head가 다르면 오래된 승인으로 병합하지 않는다. 외부 오류와 완료/미완료를 구분해 기록한다.
+
+## 2026-11-06 Docker·Compose·Helm 인프라 명칭 이관
+### 1. 구성·호환성
+사용자 승인에 따라 damgox2 프로젝트·이미지·컨테이너·네트워크·볼륨·Helm 리소스·실행 환경변수/경로를 통일한다. Java 패키지/내부 property와 기존 회원 세션·브라우저 저장·암호화 식별자, 적용된 SQL migration과 과거 hash 증빙은 보존한다. 현재 단일 인프라 도메인 PR로 원자적 전달하며 결제 기획은 구현하지 않는다.
+### 2. 무손실 서비스 이관
+기존 운영 이미지/리소스/볼륨과 타 프로젝트 기준값을 확보한다. 암호화 DB 백업·격리 복원 후 worker/web 정지, DB 행 fingerprint와 권한/세션·키 기준값을 확보하고 전체 기존 프로젝트 볼륨을 정지 상태에서 복사·검증한다. 새 DB/역할명으로 변경하고 인증서·모델·메일 secret 값을 보존한 채 검증 이미지로 전환한다. 최종 동등성 검증 후에만 이전 리소스 이름을 제거한다.
+### 3. 검증·전달
+기존 전체 Gradle 회귀, Compose local/public/server 및 SMTP overlay, Helm lint/render, migration 안전장치 시험, source/JAR/SBOM/최종 이미지 검사와 실제 HTTPS를 확인한다. 기존 미추적 HTTPS 스킬을 변경·커밋하지 않는다. current-head 독립/App 검토 후 guarded human develop 병합과 head branch 3종 정리를 검증한다.

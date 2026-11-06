@@ -3,10 +3,10 @@ kind: Deployment
 metadata: {namespace: {{ .Release.Namespace | quote }}, name: proxy}
 spec:
   replicas: 1
-  selector: {matchLabels: {app: moapan, component: proxy}}
+  selector: {matchLabels: {app: damgox2, component: proxy}}
   template:
     metadata:
-      labels: {app: moapan, component: proxy}
+      labels: {app: damgox2, component: proxy}
       annotations: {checksum/config: '{{ include (print $.Template.BasePath "/config.yaml") . | sha256sum }}'}
     spec:
       automountServiceAccountToken: false
@@ -16,7 +16,7 @@ spec:
       securityContext: {runAsUser: 10001, runAsGroup: 10001, runAsNonRoot: true, seccompProfile: {type: RuntimeDefault}}
       containers:
         - name: proxy
-          image: {{ include "moapan.image" .Values.images.proxy }}
+          image: {{ include "damgox2.image" .Values.images.proxy }}
           ports: [{containerPort: 8080}]
           securityContext: {readOnlyRootFilesystem: true, allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}}
           resources: {requests: {cpu: 50m, memory: 64Mi}, limits: {cpu: '0.5', memory: 128Mi}}
@@ -24,7 +24,7 @@ spec:
           livenessProbe: {tcpSocket: {port: 8080}, initialDelaySeconds: 15}
           volumeMounts: [{name: config, mountPath: /etc/caddy, readOnly: true}, {name: tmp, mountPath: /tmp}, {name: data, mountPath: /data}, {name: cache, mountPath: /config}]
       volumes:
-        - {name: config, configMap: {name: moapan-caddy}}
+        - {name: config, configMap: {name: damgox2-caddy}}
         - {name: tmp, emptyDir: {}}
         - {name: data, emptyDir: {}}
         - {name: cache, emptyDir: {}}

@@ -13,3 +13,5 @@
 | 운영 | 보안, 개인정보, 콘텐츠 출처 관리 | [07-operation](07-operation/) |
 
 관리 절차는 [문서관리계획서](01-management/document-control.md), 변경 경로는 [이관대장](01-management/path-mapping.json)을 따른다.
+
+Docker/Compose/Helm 명칭 변경은 [이관 설계서 MP-DOC-041](03-design/infrastructure-naming.md), 실제 실행 결과는 [검증서 MP-DOC-042](05-test/infrastructure-naming.md)를 정본으로 관리한다.

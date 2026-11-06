@@ -1,4 +1,4 @@
-module moapan.local/proxy
+module damgox2.local/proxy
 
 go 1.27.0
 

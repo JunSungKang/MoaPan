@@ -1,14 +1,14 @@
 # Third-party notices and source availability
 
-MOAPAN 자체 코드의 라이선스를 이 문서로 새로 부여하지 않습니다. 저장소 공개와 오픈소스 이용허락은 별개이며 프로젝트 라이선스는 소유자가 결정합니다.
+DAMGOX2 자체 코드의 라이선스를 이 문서로 새로 부여하지 않습니다. 저장소 공개와 오픈소스 이용허락은 별개이며 프로젝트 라이선스는 소유자가 결정합니다.
 
 ## 실제 확인 범위
 현재 runtimeClasspath 102개 JAR의 POM 선언, 실제 SHA256이 일치하는 87개 JAR의 내장 고지와 나머지15개 구성요소의 공식 버전별 고지, 고정 모델 2종, llama.cpp/Caddy 및 실행 이미지 기반 구성요소를 확인했습니다. 전체 법률 적합성에 대한 보증이 아닙니다. 상세 좌표·원본 URL·SHA·내장 고지는 [Java 목록](licenses/java-inventory.json), [모델](licenses/models), [원문 출처](licenses/SOURCES.json)에 있습니다. 의존성 JAR와 JDK/OS의 기존 고지는 삭제하지 않습니다.
 
 ## 코드 공개·배포 의무 판정
-- 확인된 현재 구성에서 단순한 웹서비스 제공만으로 독립된 MOAPAN 전체 소스를 일반 공개해야 한다는 의무는 확인되지 않았습니다. 조사한 애플리케이션 runtime과 두 모델에 AGPL 선언은 발견하지 않았습니다.
-- Java Temurin은 GPL-2.0 WITH Classpath-exception-2.0입니다. 독립 애플리케이션에 예외가 적용되지만 JDK 자체의 GPL 의무는 없어지지 않습니다. JDK/OS GPL 구성요소가 포함된 이미지를 외부에 배포한다면 해당 구성요소와 수정사항(신뢰 저장소 조치 등)의 대응 소스 제공 조건을 충족해야 합니다. 이것을 MOAPAN 전체 소스의 일괄 공개 의무와 혼동하지 않습니다.
-- Logback의 EPL/LGPL 선택 중 EPL-2.0을 사용하고 AspectJ도 EPL-2.0을 적용합니다. 이미지/JAR 재배포 시 해당 라이브러리의 소스 접근과 고지를 보장해야 합니다. 정확한 버전의 공식 source JAR를 앱 이미지의 /opt/moapan/third-party-sources에 포함합니다. 원본 저장소·해당 버전도 함께 확인해야 하며, 이들 라이브러리를 수정하면 수정한 부분의 소스 제공 조건을 다시 검토해야 합니다.
+- 확인된 현재 구성에서 단순한 웹서비스 제공만으로 독립된 DAMGOX2 전체 소스를 일반 공개해야 한다는 의무는 확인되지 않았습니다. 조사한 애플리케이션 runtime과 두 모델에 AGPL 선언은 발견하지 않았습니다.
+- Java Temurin은 GPL-2.0 WITH Classpath-exception-2.0입니다. 독립 애플리케이션에 예외가 적용되지만 JDK 자체의 GPL 의무는 없어지지 않습니다. JDK/OS GPL 구성요소가 포함된 이미지를 외부에 배포한다면 해당 구성요소와 수정사항(신뢰 저장소 조치 등)의 대응 소스 제공 조건을 충족해야 합니다. 이것을 DAMGOX2 전체 소스의 일괄 공개 의무와 혼동하지 않습니다.
+- Logback의 EPL/LGPL 선택 중 EPL-2.0을 사용하고 AspectJ도 EPL-2.0을 적용합니다. 이미지/JAR 재배포 시 해당 라이브러리의 소스 접근과 고지를 보장해야 합니다. 정확한 버전의 공식 source JAR를 앱 이미지의 /opt/damgox2/third-party-sources에 포함합니다. 원본 저장소·해당 버전도 함께 확인해야 하며, 이들 라이브러리를 수정하면 수정한 부분의 소스 제공 조건을 다시 검토해야 합니다.
 - Jakarta API의 EPL/EDL/GPL+Classpath 등 복수 선언은 원본 고지를 보존합니다. 별도 애플리케이션의 결합만으로 자체 코드에 같은 라이선스를 자동 지정하지 않습니다.
 - Qwen3.5-4B와 Index-Translate-2B의 현재 고정 GGUF는 모델 카드에서 Apache-2.0으로 표시됩니다. 원본 모델/변환 출처와 라이선스를 이미지 및 모델 볼륨에 보존합니다. 상표·학습 데이터·모델 출력의 권리까지 보장하는 의미가 아닙니다.
 - 수정 Trivy는 Apache-2.0 공식 소스를 기반으로 보안 의존성을 갱신했습니다. 원본 commit·패치 recipe·도구 변경 사실을 보존합니다. Caddy/llama.cpp/Go 모듈의 원본 고지도 이미지에 보존합니다.
@@ -131,7 +131,7 @@ Spring Session4.1.1의 두 POM은 Broadcom Foundation License라고 표시하지
 ## 2026-10-31 런타임 OS·프록시 보안 변경
 Alpine3.24.3 musl 기반으로 이동하며 선택 JDK·모델은 유지합니다. musl(MIT), BusyBox(GPL-2.0-only), GCC runtime(GPL-3.0 + GCC Runtime Library Exception) 등 OS 구성요소의 의무는 각각 적용됩니다. [GCC 공식 예외](https://gcc.gnu.org/onlinedocs/libstdc++/manual/license.html)는 독립 코드의 라이선스 선택을 허용하지만 런타임 자체의 조건을 없애지 않습니다. 외부 이미지 재배포 전 실제 APK 버전별 대응 소스와 고지를 제공해야 하며, 현 단계에서는 이미지를 외부 registry에 공개 배포하지 않습니다.
 
-go-jose/v3에는 공식 v4 보안 수정을 이식했습니다. 공급자 정식 v3 릴리스와 구분하며 Apache-2.0 저작권·변경 표시를 유지합니다. 프록시 이미지 /opt/moapan/security에 수정 소스·패치·체크섬·설명서를 포함하고 /opt/moapan/licenses/go에 모듈 고지를 보존합니다. 상세 근거는 scripts/deploy/proxy/patches/README.md입니다. 자체 서비스 전체 코드의 공개 의무가 확인됐다는 뜻은 아닙니다.
+go-jose/v3에는 공식 v4 보안 수정을 이식했습니다. 공급자 정식 v3 릴리스와 구분하며 Apache-2.0 저작권·변경 표시를 유지합니다. 프록시 이미지 /opt/damgox2/security에 수정 소스·패치·체크섬·설명서를 포함하고 /opt/damgox2/licenses/go에 모듈 고지를 보존합니다. 상세 근거는 scripts/deploy/proxy/patches/README.md입니다. 자체 서비스 전체 코드의 공개 의무가 확인됐다는 뜻은 아닙니다.
 
 ## 계정 이메일 라이브러리 (2026-11-03)
 

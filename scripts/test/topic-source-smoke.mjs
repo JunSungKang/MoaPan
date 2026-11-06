@@ -2,7 +2,7 @@ import {readFileSync} from 'node:fs';
 // Local synthetic account only; credentials and cookies remain in process memory.
 import { randomBytes } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
-const base = process.env.MOAPAN_SMOKE_BASE_URL || 'http://localhost:8080';
+const base = process.env.DAMGOX2_SMOKE_BASE_URL || 'http://localhost:8080';
 if (!base.startsWith('https://') && base !== 'http://localhost:8080') throw Error('Non-loopback smoke requires HTTPS');
 let cookie='',csrf;
 async function call(path,method='GET',body){
@@ -16,7 +16,7 @@ async function token(){csrf=(await call('/api/v1/auth/csrf')).token;}
 const username='smoke_'+randomBytes(6).toString('hex'), password=randomBytes(32).toString('base64url');let created=false;
 try{
   await token();await call('/api/v1/auth/signup','POST',{username,password,termsAccepted:true,termsVersion:'terms-1'});created=true;
-  const grant=spawnSync('docker',['compose','-f','compose.yaml','-f','scripts/deploy/compose-public.yaml','run','--rm','-T','-e','MOAPAN_ROLE=admin-cli','web'],{timeout:60000,killSignal:'SIGKILL',input:username+'\n',encoding:'utf8'});
+  const grant=spawnSync('docker',['compose','-f','compose.yaml','-f','scripts/deploy/compose-public.yaml','run','--rm','-T','-e','DAMGOX2_ROLE=admin-cli','web'],{timeout:60000,killSignal:'SIGKILL',input:username+'\n',encoding:'utf8'});
   if(grant.status!==0)throw Error('Local admin-cli failed; inspect role startup without credentials');
   await call('/api/v1/auth/login','POST',{username,password});await token();
   const {definitions,publishedSince}=JSON.parse(readFileSync(new URL('../../config/sources/topic-sources.json',import.meta.url),'utf8'));

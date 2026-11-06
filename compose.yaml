@@ -1,6 +1,6 @@
-name: moapan
+name: damgox2
 x-app: &app
-  image: moapan-local:1.0.0
+  image: damgox2-local:1.0.0
   build:
     context: .
     target: runtime
@@ -11,30 +11,30 @@ x-app: &app
   mem_limit: 768m
   cpus: 1.5
   environment: &environment
-    DATABASE_URL: jdbc:postgresql://db:5432/moapan
-    DATABASE_USER: moapan
+    DATABASE_URL: jdbc:postgresql://db:5432/damgox2
+    DATABASE_USER: damgox2
     DATABASE_PASSWORD: ${DATABASE_PASSWORD:?Set DATABASE_PASSWORD}
-    MOAPAN_SECRET: ${MOAPAN_SECRET:?Set MOAPAN_SECRET}
+    DAMGOX2_SECRET: ${DAMGOX2_SECRET:?Set DAMGOX2_SECRET}
     PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:?Set PUBLIC_BASE_URL}
     COOKIE_SECURE: ${COOKIE_SECURE:-true}
     SOURCE_MIN_INTERVAL_SECONDS: ${SOURCE_MIN_INTERVAL_SECONDS:-300}
   networks: [backend]
 services:
   db:
-    image: moapan-db-local:18.6
+    image: damgox2-db-local:18.6
     build:
       context: .
       target: database
     environment:
-      POSTGRES_DB: moapan
-      POSTGRES_USER: moapan_migrate
+      POSTGRES_DB: damgox2
+      POSTGRES_USER: damgox2_migrate
       POSTGRES_PASSWORD: ${DATABASE_ADMIN_PASSWORD:?Set DATABASE_ADMIN_PASSWORD}
       POSTGRES_APP_PASSWORD: ${DATABASE_PASSWORD:?Set DATABASE_PASSWORD}
       POSTGRES_INITDB_ARGS: '--locale=C.UTF-8'
     volumes: [database_v1:/var/lib/postgresql]
     networks: [backend]
     healthcheck:
-      test: ['CMD-SHELL','pg_isready -U moapan -d moapan']
+      test: ['CMD-SHELL','pg_isready -U damgox2 -d damgox2']
       interval: 5s
       timeout: 3s
       retries: 20
@@ -47,8 +47,8 @@ services:
     <<: *app
     environment:
       <<: *environment
-      MOAPAN_ROLE: migrate
-      DATABASE_USER: moapan_migrate
+      DAMGOX2_ROLE: migrate
+      DATABASE_USER: damgox2_migrate
       DATABASE_PASSWORD: ${DATABASE_ADMIN_PASSWORD:?Set DATABASE_ADMIN_PASSWORD}
     depends_on:
       db: {condition: service_healthy}
@@ -57,7 +57,7 @@ services:
     <<: *app
     environment:
       <<: *environment
-      MOAPAN_ROLE: web
+      DAMGOX2_ROLE: web
     depends_on:
       migrate: {condition: service_completed_successfully}
     restart: unless-stopped
@@ -71,12 +71,12 @@ services:
     <<: *app
     environment:
       <<: *environment
-      MOAPAN_ROLE: worker
+      DAMGOX2_ROLE: worker
     depends_on:
       migrate: {condition: service_completed_successfully}
     restart: unless-stopped
   proxy:
-    image: moapan-proxy-local:2.11.7
+    image: damgox2-proxy-local:2.11.7
     build:
       context: .
       target: proxy

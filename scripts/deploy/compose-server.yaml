@@ -4,14 +4,14 @@ services:
     healthcheck:
       test: ['CMD-SHELL','curl -fsS -H "Host: $${PUBLIC_BASE_URL#*://}" http://localhost:8080/internal/live >/dev/null']
   proxy:
-    image: moapan-proxy-public:2.11.7
+    image: damgox2-proxy-public:2.11.7
     build:
       target: public-proxy
     environment:
-      MOAPAN_PUBLIC_HOST: ${MOAPAN_PUBLIC_HOST:?Set approved public domain or IP}
+      DAMGOX2_PUBLIC_HOST: ${DAMGOX2_PUBLIC_HOST:?Set approved public domain or IP}
     ports: !override
-      - '${MOAPAN_LISTEN_ADDRESS:-0.0.0.0}:80:8081'
-      - '${MOAPAN_LISTEN_ADDRESS:-0.0.0.0}:443:8443'
+      - '${DAMGOX2_LISTEN_ADDRESS:-0.0.0.0}:80:8081'
+      - '${DAMGOX2_LISTEN_ADDRESS:-0.0.0.0}:443:8443'
     volumes: !override [public_caddy_data:/data,public_caddy_config:/config]
 volumes:
   public_caddy_data:

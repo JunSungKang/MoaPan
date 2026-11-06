@@ -1,6 +1,6 @@
 services:
   classifier-model-init:
-    image: moapan-classifier:cpu-b11960
+    image: damgox2-classifier:cpu-b11960
     build:
       context: .
       dockerfile: scripts/classification/Dockerfile
@@ -14,7 +14,7 @@ services:
     cpus: 0.5
     restart: 'no'
   classifier:
-    image: moapan-classifier:cpu-b11960
+    image: damgox2-classifier:cpu-b11960
     build:
       context: .
       dockerfile: scripts/classification/Dockerfile
@@ -42,8 +42,8 @@ services:
       start_period: 120s
   worker:
     environment:
-      MOAPAN_CLASSIFICATION_URL: http://classifier:11436/v1/chat/completions
-      MOAPAN_CLASSIFICATION_KEY_FILE: /run/secrets/classification_key
+      DAMGOX2_CLASSIFICATION_URL: http://classifier:11436/v1/chat/completions
+      DAMGOX2_CLASSIFICATION_KEY_FILE: /run/secrets/classification_key
     secrets: [classification_key]
     networks: [backend,classification]
 secrets:

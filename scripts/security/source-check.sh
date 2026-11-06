@@ -11,3 +11,5 @@ node --test scripts/test/email-key.test.mjs
 node --test scripts/test/request-errors.test.mjs
 node scripts/test/browser-module-audit.mjs
 node scripts/test/style-structure.mjs
+
+node --test scripts/test/infrastructure-naming.test.mjs

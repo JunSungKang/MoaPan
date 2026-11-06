@@ -12,7 +12,7 @@ import java.time.Clock;
 @EnableScheduling
 public class MoapanApplication {
     public static void main(String[] args) {
-        String role = System.getenv().getOrDefault("MOAPAN_ROLE", "web");
+        String role = System.getenv().getOrDefault("DAMGOX2_ROLE", "web");
         if (!java.util.Set.of("web","worker","migrate","admin-cli").contains(role)) throw new IllegalArgumentException("Invalid role");
         if (role.equals("migrate")) { org.flywaydb.core.Flyway.configure().dataSource(System.getenv("DATABASE_URL"),System.getenv("DATABASE_USER"),System.getenv("DATABASE_PASSWORD")).cleanDisabled(true).load().migrate(); restrictHistory(); return; }
         SpringApplication app = new SpringApplication(MoapanApplication.class);
@@ -22,7 +22,7 @@ public class MoapanApplication {
         } else app.run(args);
     }
     private static void restrictHistory() {
-        try (var connection=java.sql.DriverManager.getConnection(System.getenv("DATABASE_URL"),System.getenv("DATABASE_USER"),System.getenv("DATABASE_PASSWORD"));var statement=connection.createStatement()) { statement.execute("REVOKE INSERT,UPDATE,DELETE ON flyway_schema_history FROM moapan"); } catch(java.sql.SQLException e) { throw new IllegalStateException("Migration privilege finalization failed"); }
+        try (var connection=java.sql.DriverManager.getConnection(System.getenv("DATABASE_URL"),System.getenv("DATABASE_USER"),System.getenv("DATABASE_PASSWORD"));var statement=connection.createStatement()) { statement.execute("REVOKE INSERT,UPDATE,DELETE ON flyway_schema_history FROM damgox2"); } catch(java.sql.SQLException e) { throw new IllegalStateException("Migration privilege finalization failed"); }
     }
     @Bean Clock clock() { return Clock.systemUTC(); }
 }

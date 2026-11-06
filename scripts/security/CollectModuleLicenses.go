@@ -27,7 +27,7 @@ func main(){
   // Exactly one source-verified local backport is allowed; other replacements fail closed.
   if m.Path!="github.com/go-jose/go-jose/v3"||m.Version!="v3.0.5"||m.Replace.Path!="./patched-jose"||m.Replace.Dir!="/proxy/patched-jose"{panic("unreviewed module replacement")}
   verify:=exec.Command("sha256sum","-c","/proxy/patches/modified.sha256");verify.Dir=m.Replace.Dir;if output,err:=verify.CombinedOutput();err!=nil{panic(fmt.Sprintf("backport source mismatch: %v %s",err,output))}
-  m.Dir=m.Replace.Dir;m.Version+="+moapan.security.1"
+  m.Dir=m.Replace.Dir;m.Version+="+damgox2.security.1"
  };if m.Dir==""{continue};entries=append(entries,collect(target,m.Path,m.Version,m.Dir))}
  goroot,err:=exec.Command("go","env","GOROOT").Output();must(err);entries=append(entries,collect(target,"Go standard library","1.27.3",strings.TrimSpace(string(goroot))))
  sort.Slice(entries,func(i,j int)bool{return entries[i].Module<entries[j].Module})

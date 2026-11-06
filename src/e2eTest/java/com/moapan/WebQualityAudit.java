@@ -30,7 +30,7 @@ public final class WebQualityAudit {
                 seed(context.getBean(JdbcClient.class));
                 String origin="http://localhost:"+((WebServerApplicationContext)context).getWebServer().getPort()+"/";
                 run(List.of("node","scripts/test/lighthouse-audit.mjs",origin,stage),Map.of());
-                if(!stage.equals("baseline"))run(List.of("node","scripts/test/site-http-audit.mjs"),Map.of("MOAPAN_AUDIT_BASE_URL",origin));
+                if(!stage.equals("baseline"))run(List.of("node","scripts/test/site-http-audit.mjs"),Map.of("DAMGOX2_AUDIT_BASE_URL",origin));
             }
         }
         if(!stage.equals("baseline")&&!findings.isEmpty())throw new IllegalStateException("Accessibility findings remain: "+findings);

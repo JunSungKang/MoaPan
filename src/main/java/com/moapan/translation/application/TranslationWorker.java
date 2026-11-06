@@ -21,7 +21,7 @@ public class TranslationWorker {
     private final JsonMapper json=JsonMapper.builder().build();
     public TranslationWorker(JdbcClient db,TranslationModel translator,ArticleTranslations translations,PlatformTransactionManager manager){this.db=db;this.translator=translator;this.translations=translations;tx=new TransactionTemplate(manager);}
     @Scheduled(fixedDelay=1000) public void tick(){
-        if(!"worker".equals(System.getenv("MOAPAN_ROLE"))||!translator.enabled())return;
+        if(!"worker".equals(System.getenv("DAMGOX2_ROLE"))||!translator.enabled())return;
         try{if(runtimeReady())processOne();}catch(Exception ignored){/* No article, output or credentials in logs. */}
     }
     public boolean runtimeReady(){

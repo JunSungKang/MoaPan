@@ -1,12 +1,12 @@
 # Connect to an operator-managed SMTP container; does not start or modify that server.
 x-external-mail-environment: &external-mail-environment
-  MOAPAN_MAIL_ENABLED: 'true'
-  MOAPAN_MAIL_HOST: ${MAIL_SMTP_HOST:?Set verified SMTP hostname}
-  MOAPAN_MAIL_PORT: '${MAIL_SMTP_PORT:-25}'
-  MOAPAN_MAIL_FROM: ${MAIL_FROM:?Set operator-controlled sender}
-  MOAPAN_MAIL_TLS: STARTTLS
-  MOAPAN_MAIL_CA_FILE: /run/secrets/external-smtp-ca
-  MOAPAN_MAIL_DATA_KEY_FILE: /run/secrets/email-data-key
+  DAMGOX2_MAIL_ENABLED: 'true'
+  DAMGOX2_MAIL_HOST: ${MAIL_SMTP_HOST:?Set verified SMTP hostname}
+  DAMGOX2_MAIL_PORT: '${MAIL_SMTP_PORT:-25}'
+  DAMGOX2_MAIL_FROM: ${MAIL_FROM:?Set operator-controlled sender}
+  DAMGOX2_MAIL_TLS: STARTTLS
+  DAMGOX2_MAIL_CA_FILE: /run/secrets/external-smtp-ca
+  DAMGOX2_MAIL_DATA_KEY_FILE: /run/secrets/email-data-key
 x-external-mail-secrets: &external-mail-secrets
   - {source: email-data-key, target: email-data-key}
   - {source: external-smtp-ca, target: external-smtp-ca}

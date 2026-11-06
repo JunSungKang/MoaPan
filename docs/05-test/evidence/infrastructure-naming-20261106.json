@@ -1,0 +1,434 @@
+{
+  "verifiedAt": "2026-11-06T08:28:05.741Z",
+  "status": "LOCAL_SERVICE_VERIFIED_GITHUB_REVIEW_PENDING",
+  "scope": "Docker/Compose/Helm damgox2 rename with data preservation; no CI/CD, payment, main merge or other-project changes",
+  "baseline": "ffedf357297159b72f4d5bfed58f27f16b66f49a",
+  "url": "https://175.195.62.165/",
+  "jdk": "Eclipse Temurin 27.0.1.0.2+1",
+  "springBoot": "4.1.2",
+  "gradle": "9.8.2",
+  "postgresql": "18.6",
+  "runtimeJar": {
+    "sha256": "952a3695d09658a66176d855de2c15f990f6aae376c215b25e3144bc31797d63",
+    "hostEqualsContainer": true
+  },
+  "tests": {
+    "test": {
+      "tests": 190,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "integrationTest": {
+      "tests": 148,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "e2eTest": {
+      "tests": 86,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "migrationUnitTests": {
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0
+  },
+  "freshDatabase": {
+    "at": "2026-11-06T08:16:33.377Z",
+    "tables": 37,
+    "freshInit": true,
+    "migrateRole": true,
+    "leastPrivilege": true
+  },
+  "database": {
+    "tables": 37,
+    "allCountsAndRowSha256Equal": true,
+    "snapshotSha256": "b4dc719b303110ea7c69f81e43fd68b11f27c657b8cbf41ae4e2072949548959",
+    "counts": {
+      "articles": 583,
+      "newsletters": 1,
+      "users": 2
+    },
+    "roleOidsPasswordsPrivilegesEqual": true,
+    "scramPreserved": true,
+    "finalEncryptedBackup": {
+      "backup": ".local/backups/damgox2-rename-final-20261106.sql.age",
+      "sha256": "70eef6bf80d6e3ab847da075cf43d3fa2488f51792a5d8eafdb07faa3912e48a",
+      "bytes": 1928519
+    },
+    "isolatedRestore": {
+      "at": "2026-11-06T08:12:51.148Z",
+      "image": "sha256:318a1c98713b45f3115f3a69e27c4d741999d1a29bbc67344c91277532141c1f",
+      "tables": 37,
+      "allRowsEqual": true
+    }
+  },
+  "volumes": [
+    {
+      "source": "moapan_caddy_config",
+      "target": "damgox2_caddy_config",
+      "suffix": "caddy_config",
+      "sha256": "ccaf3c721c216a81acdb07266386856bc9b6502b6f8fa4bbcb8592477241ed86"
+    },
+    {
+      "source": "moapan_caddy_data",
+      "target": "damgox2_caddy_data",
+      "suffix": "caddy_data",
+      "sha256": "7d95fe2c0a5db84bf350231d4d17a24816af96f9375cf1cd705519ee306b9f06"
+    },
+    {
+      "source": "moapan_classification_models",
+      "target": "damgox2_classification_models",
+      "suffix": "classification_models",
+      "sha256": "25dcf975eafc7578cab02e33e8e1af9235f155bb284925c861e90e13d29ef8e5"
+    },
+    {
+      "source": "moapan_database",
+      "target": "damgox2_database",
+      "suffix": "database",
+      "sha256": "55afeffb8be4a7861a74b55ee8ddc868b93ee20bc89d7ffd9eb37264fe6e01d4"
+    },
+    {
+      "source": "moapan_database_v1",
+      "target": "damgox2_database_v1",
+      "suffix": "database_v1",
+      "sha256": "a23b1c1eefd6822d1fb25de4164c2b495db24e343c208e4106d484516e081a03"
+    },
+    {
+      "source": "moapan_public_caddy_config",
+      "target": "damgox2_public_caddy_config",
+      "suffix": "public_caddy_config",
+      "sha256": "c96d3cd3662861ff384655b1e3d7e6cc681d5e86a2ccffb3ccc9a36f7554db97"
+    },
+    {
+      "source": "moapan_public_caddy_data",
+      "target": "damgox2_public_caddy_data",
+      "suffix": "public_caddy_data",
+      "sha256": "1e235841eba907d24a5081295e5e7d5ded65bc8a0803a9e059c3a5f413fe3c3b"
+    },
+    {
+      "source": "moapan_translation_models",
+      "target": "damgox2_translation_models",
+      "suffix": "translation_models",
+      "sha256": "d2b43987d65ae53492d8b0e54b05db4add752ea45443e26dc9838debc9e79a66"
+    }
+  ],
+  "services": [
+    {
+      "name": "damgox2-proxy-1",
+      "image": "sha256:553a883f2a14265c66ac70b6e2017b1032540516be34f6bbca02a8327ff12e11",
+      "status": "running",
+      "health": "healthy"
+    },
+    {
+      "name": "damgox2-translator-1",
+      "image": "sha256:04a55c3263edf6a7041f5bd8ffda043392ca9553b18493df38b4c18cd2d37776",
+      "status": "running",
+      "health": "healthy"
+    },
+    {
+      "name": "damgox2-classifier-1",
+      "image": "sha256:c0ea5e516e19ef98d40e85a1586ab3719a3a13908d4bc4ede3e411b1442a44b3",
+      "status": "running",
+      "health": "healthy"
+    },
+    {
+      "name": "damgox2-worker-1",
+      "image": "sha256:a1c123edb96df689f334268bf3226e003a9b4058e4c7881dab4adae27e123886",
+      "status": "running",
+      "health": null
+    },
+    {
+      "name": "damgox2-web-1",
+      "image": "sha256:a1c123edb96df689f334268bf3226e003a9b4058e4c7881dab4adae27e123886",
+      "status": "running",
+      "health": "healthy"
+    },
+    {
+      "name": "damgox2-model-init-1",
+      "image": "sha256:04a55c3263edf6a7041f5bd8ffda043392ca9553b18493df38b4c18cd2d37776",
+      "status": "exited",
+      "health": null
+    },
+    {
+      "name": "damgox2-classifier-model-init-1",
+      "image": "sha256:c0ea5e516e19ef98d40e85a1586ab3719a3a13908d4bc4ede3e411b1442a44b3",
+      "status": "exited",
+      "health": null
+    },
+    {
+      "name": "damgox2-migrate-1",
+      "image": "sha256:a1c123edb96df689f334268bf3226e003a9b4058e4c7881dab4adae27e123886",
+      "status": "exited",
+      "health": null
+    },
+    {
+      "name": "damgox2-db-1",
+      "image": "sha256:318a1c98713b45f3115f3a69e27c4d741999d1a29bbc67344c91277532141c1f",
+      "status": "running",
+      "health": "healthy"
+    }
+  ],
+  "cleanup": {
+    "at": "2026-11-06T08:15:06.975Z",
+    "services": [
+      {
+        "name": "damgox2-proxy-1",
+        "image": "sha256:e69932d4fef5812f6462d9998bd80263a329994444411559e7a8cddc8135c6a4",
+        "healthy": "healthy",
+        "nonroot": "10001:10001"
+      },
+      {
+        "name": "damgox2-translator-1",
+        "image": "sha256:04a55c3263edf6a7041f5bd8ffda043392ca9553b18493df38b4c18cd2d37776",
+        "healthy": "healthy",
+        "nonroot": "10001:10001"
+      },
+      {
+        "name": "damgox2-classifier-1",
+        "image": "sha256:c0ea5e516e19ef98d40e85a1586ab3719a3a13908d4bc4ede3e411b1442a44b3",
+        "healthy": "healthy",
+        "nonroot": "10001:10001"
+      },
+      {
+        "name": "damgox2-worker-1",
+        "image": "sha256:a1c123edb96df689f334268bf3226e003a9b4058e4c7881dab4adae27e123886",
+        "healthy": "running",
+        "nonroot": "10001:10001"
+      },
+      {
+        "name": "damgox2-web-1",
+        "image": "sha256:a1c123edb96df689f334268bf3226e003a9b4058e4c7881dab4adae27e123886",
+        "healthy": "healthy",
+        "nonroot": "10001:10001"
+      },
+      {
+        "name": "damgox2-db-1",
+        "image": "sha256:318a1c98713b45f3115f3a69e27c4d741999d1a29bbc67344c91277532141c1f",
+        "healthy": "healthy",
+        "nonroot": ""
+      }
+    ],
+    "unrelatedContainersUnchanged": 11,
+    "secretsUnchanged": 5,
+    "removedContainers": 9,
+    "removedVolumes": [
+      "moapan_caddy_config",
+      "moapan_caddy_data",
+      "moapan_classification_models",
+      "moapan_database",
+      "moapan_database_v1",
+      "moapan_public_caddy_config",
+      "moapan_public_caddy_data",
+      "moapan_translation_models"
+    ],
+    "removedNetworks": [
+      "moapan_backend",
+      "moapan_classification",
+      "moapan_default",
+      "moapan_translation"
+    ],
+    "removedImageTags": [
+      "moapan-local:1.0.0",
+      "moapan-proxy-public:2.11.7",
+      "moapan-classifier:cpu-b11960",
+      "moapan-translator:cpu-b11960",
+      "moapan-runtime-candidate:alpine",
+      "moapan-db-local:18.6",
+      "moapan-build:1.0.0",
+      "moapan-proxy-build:2.11.7",
+      "moapan-proxy-local:2.11.7"
+    ]
+  },
+  "unrelatedContainersUnchanged": 11,
+  "secretFilesUnchanged": 5,
+  "environmentValuesUnchanged": true,
+  "preexistingUntrackedSkillsUnchanged": 3,
+  "security": {
+    "scanner": "Trivy 0.76.1+moapan-security.1 (existing reviewed security build; 0.76.2 release notice retained)",
+    "db": {
+      "Version": 2,
+      "NextUpdate": "2026-11-07T06:50:38.697106816Z",
+      "UpdatedAt": "2026-11-06T06:50:38.697107077Z",
+      "DownloadedAt": "2026-11-06T08:04:37.259829Z"
+    },
+    "sourceJarSbomGate": "PASS",
+    "images": {
+      "app": {
+        "tag": "damgox2-local:1.0.0",
+        "id": "sha256:a1c123edb96df689f334268bf3226e003a9b4058e4c7881dab4adae27e123886",
+        "reportSha256": "01099e138cfbf958c0f00d3a8f7f325630e7798436f3703b166e732f615ccf05",
+        "createdAt": "2026-11-06T17:07:54.710046+09:00",
+        "rawFindings": [],
+        "secrets": 0
+      },
+      "database": {
+        "tag": "damgox2-db-local:18.6",
+        "id": "sha256:318a1c98713b45f3115f3a69e27c4d741999d1a29bbc67344c91277532141c1f",
+        "reportSha256": "a6dffcffee5a013f29e7fb73da44109e24e191b3c514c47c5f908478aedf5fa0",
+        "createdAt": "2026-11-06T17:06:38.277398+09:00",
+        "rawFindings": [],
+        "secrets": 0
+      },
+      "proxy": {
+        "tag": "damgox2-proxy-public:2.11.7",
+        "id": "sha256:553a883f2a14265c66ac70b6e2017b1032540516be34f6bbca02a8327ff12e11",
+        "reportSha256": "f30e1a0dcabf9945e9ff6ada33b2e06150aa3391b473a626d4e6579a2dacb0c6",
+        "createdAt": "2026-11-06T17:24:11.235981+09:00",
+        "rawFindings": [
+          {
+            "id": "GO-2026-5932",
+            "package": "golang.org/x/crypto",
+            "version": "v0.58.0",
+            "severity": "UNKNOWN"
+          }
+        ],
+        "secrets": 0
+      },
+      "translator": {
+        "tag": "damgox2-translator:cpu-b11960",
+        "id": "sha256:04a55c3263edf6a7041f5bd8ffda043392ca9553b18493df38b4c18cd2d37776",
+        "reportSha256": "01006bebd07d1dd07f6679ab67fb88e3d6c592bcf82954c19f71ba83b5dba674",
+        "createdAt": "2026-11-06T17:06:40.516264+09:00",
+        "rawFindings": [],
+        "secrets": 0
+      },
+      "classifier": {
+        "tag": "damgox2-classifier:cpu-b11960",
+        "id": "sha256:c0ea5e516e19ef98d40e85a1586ab3719a3a13908d4bc4ede3e411b1442a44b3",
+        "reportSha256": "a65b95e8bd4c3c0f3b9fd7ee4d97da52de5b8d63e9512eb4274b7fd9749c968b",
+        "createdAt": "2026-11-06T17:06:41.234198+09:00",
+        "rawFindings": [],
+        "secrets": 0
+      },
+      "builder": {
+        "tag": "damgox2-build:1.0.0",
+        "id": "sha256:cba204e7645cb4da85682edb06b5ba10a5ac7585c14393a0ecc933dacfd61641",
+        "reportSha256": "7550ecf0651a47eb863e7221da30a6eadf334dd7dcd2e5ff2968fcdbeb30f50f",
+        "createdAt": "2026-11-06T17:15:34.651072+09:00",
+        "rawFindings": [],
+        "secrets": 0
+      },
+      "proxyBuilder": {
+        "tag": "damgox2-proxy-build:2.11.7",
+        "id": "sha256:3809d7b015a1203362581fff821850683d8dfafb48b7ef6ad4d6146a37638181",
+        "reportSha256": "f288361388abd994e7565bad0a031f44800fad36bc263b670c01cfa38133fa45",
+        "createdAt": "2026-11-06T17:24:16.200223+09:00",
+        "rawFindings": [
+          {
+            "id": "GO-2026-5932",
+            "package": "golang.org/x/crypto",
+            "version": "v0.58.0",
+            "severity": "UNKNOWN"
+          }
+        ],
+        "secrets": 0
+      },
+      "localProxy": {
+        "tag": "damgox2-proxy-local:2.11.7",
+        "id": "sha256:474a92d8f2d251d07a4a0f7e01ab4aeb3b0eb283335c0488bbdcf15af67e5e2c",
+        "reportSha256": "6bcc9b0e8ae01200a534a31542e7a5894441fe9742eec121cc09fa1f7cd7f54c",
+        "createdAt": "2026-11-06T17:24:11.695207+09:00",
+        "rawFindings": [
+          {
+            "id": "GO-2026-5932",
+            "package": "golang.org/x/crypto",
+            "version": "v0.58.0",
+            "severity": "UNKNOWN"
+          }
+        ],
+        "secrets": 0
+      }
+    },
+    "openpgp": {
+      "at": "2026-11-06T08:25:45.947Z",
+      "advisory": "GO-2026-5932",
+      "source": "https://pkg.go.dev/vuln/GO-2026-5932",
+      "binarySha256": "bb3a82be9eb6e332315ecc0cc1faed64c8873486f0e06c5d83fdc933aef7888f",
+      "symbols": 81216,
+      "openpgpSymbols": 0,
+      "symbolOutputSha256": "c2dc5bf259ee87a6a0522450eb75d128a74c92b4832a84d765744abec5ff0de5",
+      "finalBuilderImage": "sha256:3809d7b015a1203362581fff821850683d8dfafb48b7ef6ad4d6146a37638181",
+      "buildToolRemoved": true
+    },
+    "unusedPatchToolRemoved": true,
+    "newIgnores": false,
+    "highCriticalUnresolved": 0,
+    "unknownHighRisk": 0,
+    "notes": "GO-2026-5932 remains a raw UNKNOWN for x/crypto. Official advisory is specific to OpenPGP; current exact proxy symbol inspection proves the affected package absent. No claim that unknown vulnerabilities are impossible."
+  },
+  "helm": {
+    "chart": "scripts/deploy/helm/damgox2",
+    "lintAndTemplate": "PASS",
+    "invalidBaselineInputsRejected": 3,
+    "invalidMailInputsRejected": 4,
+    "clusterInstall": "NOT_RUN_NO_CLUSTER"
+  },
+  "models": {
+    "checkedAt": "2026-11-06T08:13:33.914256462Z",
+    "limits": "Synthetic smoke only; not proof against unknown prompt injection or all semantic errors.",
+    "realInferenceRequests": 3,
+    "checks": [
+      {
+        "inferenceRequests": 0,
+        "check": "known-adversarial-inputs",
+        "held": 6
+      },
+      {
+        "check": "benign-translation",
+        "millis": 7599,
+        "validated": true
+      },
+      {
+        "check": "benign-classification",
+        "millis": 25043,
+        "validated": true
+      },
+      {
+        "check": "client-cancellation-stops-real-inference",
+        "validated": true
+      }
+    ]
+  },
+  "smtp": {
+    "starttls": true,
+    "hostnameVerified": true,
+    "operatorCa": true,
+    "authenticatedConnection": true,
+    "messageSent": false
+  },
+  "http": {
+    "pages": 13,
+    "publicPages": 4,
+    "absoluteHtmlCanonicals": {
+      "passed": 4,
+      "total": 4
+    },
+    "actualPortalIndex": "UNKNOWN",
+    "output": "build/reports/site-http-audit.json"
+  },
+  "compatibility": [
+    "Java package/property namespaces",
+    "serialized security principal/session attribute names",
+    "browser IndexedDB/storage keys",
+    "immutable SQL migrations",
+    "historical reports and cryptographic identifiers"
+  ],
+  "artifactSha256": {
+    "gradle-final.log": "89c0deca9e40b744c55f01fbeba84c8263fc13497cacb581fae67065ba0b699c",
+    "sealed-source-gate.log": "339285f552ade05c86a33658c9230e70149163ea2115f72767feeca76efeb850",
+    "image-scan.log": "99de8f3588b0f640dad65921c4e5519a1cf6fffa77e20ec02f8479aae3ba206f",
+    "image-scan-final.log": "ab90fe8fc9752fca2390bbd28fde96504e27ae100e992ac05364e6f6b417b4d0",
+    "image-scan-builder-complete.log": "3f3d8146dfb9d761346db203fc9d5a3a20a72e017ec6fe6c78c161a6eb4b07cc",
+    "image-scan-proxy-all-names.log": "c75f4cda2a0e7c7fca88f1b302528ddefab4c63fc7b1f300d250fc0a9dfcfd49",
+    "cutover.log": "0b6ede69650884b7ff5adb46e7ac1552480cb1ce0c3cdc8a891dd9459a67b931",
+    "model-smoke.log": "60a49705127433c7e12ec40556897044e9a5b1d6d89fd4a49aa8adb8f2372b97",
+    "smtp-connection.log": "e6f9254ad1aea38cc15c0ab3e87c015a59c1c1e863e31c5b4b82162d3b5671c9",
+    "final-live-http.log": "0ef19c40befd558606e2bb96ff6978886283cf6773f96b5024b7c107e7c2f92d"
+  },
+  "github": "Commit/push/review/develop merge results are the canonical PR record; no pre-recorded merge success."
+}

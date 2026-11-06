@@ -15,7 +15,7 @@ public class Limits {
     private final JdbcClient db; private final TransactionTemplate tx; private final byte[] key;
     public Limits(JdbcClient db,PlatformTransactionManager manager,@Value("${moapan.secret}")String secret){
         this.db=db;tx=new TransactionTemplate(manager);tx.setPropagationBehavior(3);
-        if(secret.length()<32) throw new IllegalStateException("MOAPAN_SECRET must have at least 32 characters"); key=secret.getBytes(java.nio.charset.StandardCharsets.UTF_8);
+        if(secret.length()<32) throw new IllegalStateException("DAMGOX2_SECRET must have at least 32 characters"); key=secret.getBytes(java.nio.charset.StandardCharsets.UTF_8);
     }
     public String fingerprint(String value){try{Mac mac=Mac.getInstance("HmacSHA256");mac.init(new SecretKeySpec(key,"HmacSHA256"));return HexFormat.of().formatHex(mac.doFinal(value.getBytes(java.nio.charset.StandardCharsets.UTF_8)));}catch(Exception e){throw new IllegalStateException("HMAC unavailable");}}
     public int auth(String bucket,int maximum,int seconds){

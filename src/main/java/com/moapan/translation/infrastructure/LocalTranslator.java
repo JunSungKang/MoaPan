@@ -21,7 +21,7 @@ public class LocalTranslator implements com.moapan.translation.application.Trans
     private final java.util.concurrent.Semaphore inference=new java.util.concurrent.Semaphore(1);
     private final HttpClient http=HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(3)).followRedirects(HttpClient.Redirect.NEVER).build();
     private static final JsonMapper json=JsonMapper.builder().build();
-    public LocalTranslator(@Value("${MOAPAN_TRANSLATION_URL:}") String url,@Value("${MOAPAN_TRANSLATION_KEY_FILE:}") String keyFile){
+    public LocalTranslator(@Value("${DAMGOX2_TRANSLATION_URL:}") String url,@Value("${DAMGOX2_TRANSLATION_KEY_FILE:}") String keyFile){
         if(timeoutSeconds()<10||timeoutSeconds()>600)throw new IllegalStateException("invalid_translation_timeout");
         endpoint=url.isBlank()?null:URI.create(url);
         if(endpoint!=null&&(!"http".equals(endpoint.getScheme())||!Set.of("127.0.0.1","translator").contains(endpoint.getHost())||endpoint.getPort()!=11435||!"/v1/chat/completions".equals(endpoint.getPath())||endpoint.getUserInfo()!=null||endpoint.getQuery()!=null||endpoint.getFragment()!=null))throw new IllegalStateException("invalid_local_translation_endpoint");
@@ -60,7 +60,7 @@ public class LocalTranslator implements com.moapan.translation.application.Trans
             default -> "Return only the complete translation without commentary or markdown headings.";
         };
         if(attempt>1)prompt+="\nTranslate each sentence in source order. Preserve factual relationships exactly.";
-        return Map.of("model","moapan-translation","messages",List.of(Map.of("role","system","content",prompt),Map.of("role","user","content",json.writeValueAsString(Map.of("source_text",input)))),"temperature",0,"max_tokens",1200,"stream",true,"chat_template_kwargs",Map.of("enable_thinking",false));
+        return Map.of("model","damgox2-translation","messages",List.of(Map.of("role","system","content",prompt),Map.of("role","user","content",json.writeValueAsString(Map.of("source_text",input)))),"temperature",0,"max_tokens",1200,"stream",true,"chat_template_kwargs",Map.of("enable_thinking",false));
     }
     public static String prompt(String input,String language){
         String target=language.equals("ko")?"韩语":"英语";

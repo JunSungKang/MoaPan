@@ -257,3 +257,12 @@ PR28 e2317fd는 현재-head READ_COMPLETE·분리된 독립 APPROVE와 App forma
 PR28은 참조 갱신 후에도 마지막 pusher 미확정405로 차단됐다. 제품 변경 없이 사람 계정의 정상 새 commit/push(a09f509) 후 PR head가 자동 갱신됐고 READ_COMPLETE/독립 APPROVE/App current-head APPROVED를 새로 받았다. 보호 조건을 바꾸지 않은 guarded human squash 병합이 성공했다. merge SHA74b982ad20038ff27b36eaca05bde8871c800b08, 실제 source heada09f5097dc3362d175b74e8d2bcf9cbee7b87320, 원격·추적·로컬 head 삭제/부재까지 확인했다. 따라서 PR27·28은 실제 병합 완료다.
 
 PR29는 최신 develop74b982a를 통합했다. target tree가a09f509와 같고 a09f509는 원래 승인 identity11fad449에서 관리 문서2개만 다름을 검증했다. PR29는11fad449의 후속이므로 이미 배포·검증한 제품 파일194ef330/a40d94a를 그대로 보존하고 두 관리 문서의 최신 기록을 합쳤다. 최종 실행코드/정적 자산/의존성/컨테이너/모델/키는 바꾸지 않는다. 기존 시험·이미지/SEO 증빙을 새로 실행한 결과처럼 합산하지 않는다. 새 current-head 독립 검토/App 승인·병합/branch 정리는 PR29의 실제 원격 기록을 정본으로 확인한다.
+
+## 2026-11-06 damgox2 인프라 명칭 이관 착수
+사용자가 Docker 이미지·컨테이너·Compose·Helm 잔여 이름의 전면 변경, 데이터 보존, 서비스 반영, 커밋/푸시/develop 병합을 명시 승인했다. 기준 develop ffedf357과 원격 일치, App 선택·사람 ADMIN·기존 protection/현재 계약 guard를 확인했다. 운영6서비스·완료job3·프로젝트볼륨8을 조사했다. 현재 구성/실행 환경 명칭을 변경 중이며 아직 시험·데이터 이관·서비스 교체·병합을 완료로 표시하지 않는다. 기존 미추적 .agents 스킬3파일은 원본 SHA를 보존하고 커밋에서 제외한다.
+
+이관 준비 중간 검증: Compose 모든 overlay와 Helm lint/template·부적절 값 거부, 오프라인 이관 사전조건4시험을 통과했다. 새 앱/DB/프록시/번역/분류 이미지를 빌드했고 암호화 PostgreSQL 백업과37테이블 격리 복원을 확인했다. 전체 Gradle 회귀 및 최신 DB 이미지 스캔을 진행하며 실제서비스/원본 볼륨은 아직 바꾸지 않았다. 프록시 backport 고지 경로 변경에 맞춰6파일 원본/수정 체크섬과5패키지 실제 시험을 재검증했다.
+
+실서비스 이관 완료: 8볼륨 파일/권한 지문·37테이블 행 지문·DB역할 OID/암호/권한 일치, 최종 암호화 백업의 격리 복원37테이블 일치, 새6서비스/공개HTTPS13경계/canonical4개·STARTTLS/AUTH 무발송 연결·두 모델 실제 추론/취소 시험을 확인했다. 원래moapan9컨테이너/8볼륨/4망/9태그를 제거했고 타프로젝트11컨테이너·비밀5파일이 동일하다. 현재 전체 회귀424(190/148/86), FAIL/ERROR/SKIP0과 추가 이관4시험을 통과했다. 최종 이미지/문서 및 독립 PR검토·병합을 마감하며 실행 전 병합 성공으로 표시하지 않는다.
+
+최종 명칭 전수 점검에서 active Docker/Compose/Helm/모델 파일의 대소문자 moapan 잔여0을 확인했다(전용 이관 도구의 과거 source 이름은 필수 입력으로 유지). 프록시의 로컬 Go marker/시험 이름까지 변경하고5패키지·6source hash·최종proxy3이미지 scan을 재검증해 같은 공개proxy ID를 서비스에 반영했다. sourceCheck/check/securityCheck 후속 PASS, 공개HTTPS13경계/canonical4개 재검증. 기존 .env 비밀값 유지 확인 후 작업용 env사본·임시source/SMTP probe/일회 이관 runner를 삭제했다. 최종 산출물은 MP-DOC-041/042 및 비밀값 없는 증빙 JSON으로 등록했다. 이후에는 독립 리뷰·현재-head App 승인·guarded develop 병합/branch 정리 결과를 PR에서 확인한다.
