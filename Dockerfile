@@ -26,17 +26,17 @@ RUN echo '3b8a25775a69158b5ad2b1d17a80a88dc7b40a352a73eb27d06c612a7ce68e98  grad
 COPY scripts ./scripts
 COPY src ./src
 COPY licenses ./licenses
-RUN --mount=type=cache,id=moapan-gradle-9.8.2,target=/workspace/.gradle-home,sharing=locked mkdir -p /workspace/.local/tmp && ./gradlew --no-daemon -Djava.io.tmpdir=/workspace/.local/tmp bootJar && sh scripts/security/fetch-thirdparty-sources.sh
+RUN --mount=type=cache,id=damgox2-gradle-9.8.2,target=/workspace/.gradle-home,sharing=locked mkdir -p /workspace/.local/tmp && ./gradlew --no-daemon -Djava.io.tmpdir=/workspace/.local/tmp bootJar && sh scripts/security/fetch-thirdparty-sources.sh
 FROM patched-jdk AS runtime
 WORKDIR /app
-RUN addgroup -g 10001 moapan && adduser -D -H -u 10001 -G moapan moapan
-COPY --from=build --chown=10001:10001 /workspace/build/libs/moapan-1.0.0.jar /app/moapan.jar
-COPY THIRD_PARTY_NOTICES.md /opt/moapan/THIRD_PARTY_NOTICES.md
-COPY licenses /opt/moapan/licenses
-COPY --from=build /workspace/build/third-party-sources /opt/moapan/third-party-sources
+RUN addgroup -g 10001 damgox2 && adduser -D -H -u 10001 -G damgox2 damgox2
+COPY --from=build --chown=10001:10001 /workspace/build/libs/damgox2-1.0.0.jar /app/damgox2.jar
+COPY THIRD_PARTY_NOTICES.md /opt/damgox2/THIRD_PARTY_NOTICES.md
+COPY licenses /opt/damgox2/licenses
+COPY --from=build /workspace/build/third-party-sources /opt/damgox2/third-party-sources
 USER 10001:10001
-ENV MOAPAN_ROLE=web JAVA_TOOL_OPTIONS='-XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp -Duser.timezone=UTC'
-ENTRYPOINT ["java","-jar","/app/moapan.jar"]
+ENV DAMGOX2_ROLE=web JAVA_TOOL_OPTIONS='-XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp -Duser.timezone=UTC'
+ENTRYPOINT ["java","-jar","/app/damgox2.jar"]
 
 FROM verified-alpine AS proxy-build
 ARG TARGETARCH
@@ -49,7 +49,7 @@ ENV PATH="/usr/local/go/bin:${PATH}" GOTOOLCHAIN=local CGO_ENABLED=0
 WORKDIR /proxy
 COPY scripts/deploy/proxy/ ./
 COPY scripts/security/CollectModuleLicenses.go /license-tools/collect.go
-RUN --mount=type=cache,id=moapan-go-mod,target=/root/go/pkg/mod \
+RUN --mount=type=cache,id=damgox2-go-mod,target=/root/go/pkg/mod \
     go mod download github.com/go-jose/go-jose/v3 \
     && cp -R /root/go/pkg/mod/github.com/go-jose/go-jose/v3@v3.0.5 /proxy/patched-jose \
     && chmod -R u+w /proxy/patched-jose \
@@ -59,11 +59,12 @@ RUN --mount=type=cache,id=moapan-go-mod,target=/root/go/pkg/mod \
     && cp /proxy/patches/jose_security_test.go . \
     && cp /proxy/patches/public_api_test.go . \
     && cp /proxy/patches/json_security_test.go json/ \
-    && cp /proxy/patches/cipher_security_test.go cipher/
+    && cp /proxy/patches/cipher_security_test.go cipher/ \
+    && apk del patch
 RUN go mod edit -replace=github.com/go-jose/go-jose/v3=./patched-jose
-RUN --mount=type=cache,id=moapan-go-mod,target=/root/go/pkg/mod --mount=type=cache,id=moapan-go-build,target=/root/.cache/go-build \
+RUN --mount=type=cache,id=damgox2-go-mod,target=/root/go/pkg/mod --mount=type=cache,id=damgox2-go-build,target=/root/.cache/go-build \
     go test -mod=readonly -timeout 120s github.com/go-jose/go-jose/v3/...
-RUN --mount=type=cache,id=moapan-go-mod,target=/root/go/pkg/mod --mount=type=cache,id=moapan-go-build,target=/root/.cache/go-build go build -mod=readonly -trimpath -o /caddy . \
+RUN --mount=type=cache,id=damgox2-go-mod,target=/root/go/pkg/mod --mount=type=cache,id=damgox2-go-build,target=/root/.cache/go-build go build -mod=readonly -trimpath -o /caddy . \
     && go build -mod=readonly -trimpath -o /gosu github.com/tianon/gosu \
     && go run -mod=readonly /license-tools/collect.go /third-party-notices
 FROM postgres:18.6-alpine@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5 AS database
@@ -72,20 +73,20 @@ RUN apk upgrade --no-cache && apk add --no-cache ca-certificates openssl \
     && sh /security/patch-os-trust.sh && apk del openssl && rm -rf /security
 COPY --from=proxy-build /gosu /usr/local/bin/gosu
 COPY --chmod=0555 scripts/deploy/db-init.sh /docker-entrypoint-initdb.d/10-app-user.sh
-COPY --from=proxy-build /third-party-notices /opt/moapan/licenses/go
-COPY THIRD_PARTY_NOTICES.md /opt/moapan/THIRD_PARTY_NOTICES.md
+COPY --from=proxy-build /third-party-notices /opt/damgox2/licenses/go
+COPY THIRD_PARTY_NOTICES.md /opt/damgox2/THIRD_PARTY_NOTICES.md
 FROM verified-alpine AS proxy
 RUN apk upgrade --no-cache && apk add --no-cache ca-certificates curl \
     && sh /security/patch-os-trust.sh && apk del openssl && rm -rf /security \
     && mkdir -p /data /config && chown -R 10001:10001 /data /config
 COPY --from=proxy-build /caddy /usr/bin/caddy
 COPY Caddyfile /etc/caddy/Caddyfile
-COPY --from=proxy-build /third-party-notices /opt/moapan/licenses/go
-COPY licenses/native/caddy /opt/moapan/licenses/caddy
-COPY --from=proxy-build /proxy/patched-jose /opt/moapan/security/go-jose-v3-source
-COPY scripts/deploy/proxy/patches/README.md /opt/moapan/security/jose-backport.md
-COPY scripts/deploy/proxy/patches/*.sha256 scripts/deploy/proxy/patches/*.patch /opt/moapan/security/
-COPY THIRD_PARTY_NOTICES.md /opt/moapan/THIRD_PARTY_NOTICES.md
+COPY --from=proxy-build /third-party-notices /opt/damgox2/licenses/go
+COPY licenses/native/caddy /opt/damgox2/licenses/caddy
+COPY --from=proxy-build /proxy/patched-jose /opt/damgox2/security/go-jose-v3-source
+COPY scripts/deploy/proxy/patches/README.md /opt/damgox2/security/jose-backport.md
+COPY scripts/deploy/proxy/patches/*.sha256 scripts/deploy/proxy/patches/*.patch /opt/damgox2/security/
+COPY THIRD_PARTY_NOTICES.md /opt/damgox2/THIRD_PARTY_NOTICES.md
 RUN chmod 0755 /etc/caddy && chmod 0444 /etc/caddy/Caddyfile
 USER 10001:10001
 ENV HOME=/tmp XDG_DATA_HOME=/data XDG_CONFIG_HOME=/config

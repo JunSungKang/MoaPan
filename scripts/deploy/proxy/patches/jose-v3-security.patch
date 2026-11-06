@@ -3,7 +3,7 @@ index e402195..fd74c17 100644
 --- a/jwk.go
 +++ b/jwk.go
 @@ -0,0 +1 @@
-+// Modified by MOAPAN: upstream security fixes backported; see /opt/moapan/security/jose-backport.md.
++// Modified by DAMGOX2: upstream security fixes backported; see /opt/damgox2/security/jose-backport.md.
 @@ -178 +179,3 @@ func (k JSONWebKey) MarshalJSON() ([]byte, error) {
 -func (k *JSONWebKey) UnmarshalJSON(data []byte) (err error) {
 +func (k *JSONWebKey) UnmarshalJSON(data []byte) error { return k.unmarshalJSON(data, true) }
@@ -16,7 +16,7 @@ index e402195..fd74c17 100644
 +
 @@ -483,0 +491,5 @@ func (k *JSONWebKey) Valid() bool {
 +// Backported from upstream v4.1.6, commit a0111f82742fa92bceec9ede40845e73319e6230.
-+const MoapanSecurityBackport = "jose-v3-20261031.1"
++const DamGoX2SecurityBackport = "jose-v3-20261031.1"
 +
 +var MaxRSAModulusBits = 4096
 +
@@ -78,7 +78,7 @@ index 489a04e..02cd646 100644
 --- a/shared.go
 +++ b/shared.go
 @@ -0,0 +1 @@
-+// Modified by MOAPAN: upstream security fixes backported; see /opt/moapan/security/jose-backport.md.
++// Modified by DAMGOX2: upstream security fixes backported; see /opt/damgox2/security/jose-backport.md.
 @@ -285,2 +286,2 @@ func (parsed rawHeader) getEPK() (*JSONWebKey, error) {
 -	var epk *JSONWebKey
 -	err := json.Unmarshal(*v, &epk)
@@ -97,7 +97,7 @@ index 401fc18..4888927 100644
 --- a/jws.go
 +++ b/jws.go
 @@ -0,0 +1 @@
-+// Modified by MOAPAN: upstream security fixes backported; see /opt/moapan/security/jose-backport.md.
++// Modified by DAMGOX2: upstream security fixes backported; see /opt/damgox2/security/jose-backport.md.
 @@ -237,0 +239 @@ func (parsed *rawJSONWebSignature) sanitized() (*JSONWebSignature, error) {
 +		obj.Signatures[i].header = sig.Header
 diff --git a/json/scanner.go b/json/scanner.go
@@ -105,7 +105,7 @@ index ee6622e..f170d86 100644
 --- a/json/scanner.go
 +++ b/json/scanner.go
 @@ -0,0 +1 @@
-+// Modified by MOAPAN: upstream security fixes backported; see /opt/moapan/security/jose-backport.md.
++// Modified by DAMGOX2: upstream security fixes backported; see /opt/damgox2/security/jose-backport.md.
 @@ -173,2 +174,8 @@ func (s *scanner) eof() int {
 -func (s *scanner) pushParseState(p int) {
 -	s.parseState = append(s.parseState, p)
@@ -130,7 +130,7 @@ index af029ce..f36fefb 100644
 --- a/cipher/cbc_hmac.go
 +++ b/cipher/cbc_hmac.go
 @@ -0,0 +1 @@
-+// Modified by MOAPAN: upstream security fixes backported; see /opt/moapan/security/jose-backport.md.
++// Modified by DAMGOX2: upstream security fixes backported; see /opt/damgox2/security/jose-backport.md.
 @@ -53,0 +55,2 @@ func NewCBCHMAC(key []byte, newBlockCipher func([]byte) (cipher.Block, error)) (
 +	default:
 +		return nil, errors.New("go-jose/go-jose: invalid key size for CBC-HMAC")
@@ -142,7 +142,7 @@ index 8870e89..79b7825 100644
 --- a/crypter.go
 +++ b/crypter.go
 @@ -0,0 +1 @@
-+// Modified by MOAPAN: upstream security fixes backported; see /opt/moapan/security/jose-backport.md.
++// Modified by DAMGOX2: upstream security fixes backported; see /opt/damgox2/security/jose-backport.md.
 @@ -490,0 +492 @@ func (obj JSONWebEncryption) Decrypt(decryptionKey interface{}) ([]byte, error)
 +		if len(cek) != cipher.keySize() { return nil, ErrCryptoFailure }
 @@ -564,0 +567 @@ func (obj JSONWebEncryption) DecryptMulti(decryptionKey interface{}) (int, Heade

@@ -1,4 +1,4 @@
-module moapan.local/backup-tools
+module damgox2.local/backup-tools
 
 go 1.27.0
 

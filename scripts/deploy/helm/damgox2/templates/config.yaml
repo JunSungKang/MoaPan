@@ -1,16 +1,16 @@
 apiVersion: v1
 kind: ConfigMap
-metadata: {namespace: {{ .Release.Namespace | quote }}, name: moapan-settings}
+metadata: {namespace: {{ .Release.Namespace | quote }}, name: damgox2-settings}
 data:
-  DATABASE_URL: jdbc:postgresql://db:5432/moapan
-  DATABASE_USER: moapan
+  DATABASE_URL: jdbc:postgresql://db:5432/damgox2
+  DATABASE_USER: damgox2
   PUBLIC_BASE_URL: {{ printf "https://%s" (required "publicHost is required" .Values.publicHost) | quote }}
   COOKIE_SECURE: "true"
   SOURCE_MIN_INTERVAL_SECONDS: "300"
 ---
 apiVersion: v1
 kind: ConfigMap
-metadata: {namespace: {{ .Release.Namespace | quote }}, name: moapan-caddy}
+metadata: {namespace: {{ .Release.Namespace | quote }}, name: damgox2-caddy}
 data:
   Caddyfile: |
     {

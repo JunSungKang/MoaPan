@@ -15,11 +15,11 @@ import tools.jackson.databind.json.JsonMapper;
 @Component
 public class Worker {
     public record Counts(int created,int updated){}
-    @org.springframework.beans.factory.annotation.Value("${MOAPAN_CLASSIFICATION_URL:}") private String classificationUrl="";
+    @org.springframework.beans.factory.annotation.Value("${DAMGOX2_CLASSIFICATION_URL:}") private String classificationUrl="";
     private final CatalogRepository repo;private final SafeFetch fetch;private final TransactionTemplate tx;private final String worker=UUID.randomUUID().toString();private final JsonMapper json=JsonMapper.builder().build();
     public Worker(CatalogRepository repo,SafeFetch fetch,PlatformTransactionManager tm){this.repo=repo;this.fetch=fetch;tx=new TransactionTemplate(tm);}
     @Scheduled(fixedDelay=5000)public void tick(){
-        if(!"worker".equals(System.getenv("MOAPAN_ROLE")))return;
+        if(!"worker".equals(System.getenv("DAMGOX2_ROLE")))return;
         repo.db().sql("INSERT INTO worker_status VALUES(:id,now()) ON CONFLICT(id) DO UPDATE SET heartbeat_at=now()").param("id",worker).update();
         recover();cleanup();schedule();processOne();refreshStoredSummary();
     }

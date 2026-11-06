@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// Modified by MOAPAN: official a0111f8 and 25b55fe regressions adapted to v3 parsing API.
+// Modified by DAMGOX2: official a0111f8 and 25b55fe regressions adapted to v3 parsing API.
 package jose
 import("encoding/base64";"strings";"testing";"github.com/go-jose/go-jose/v3/json")
 func TestEmbeddedPrivateJWKRejected(t *testing.T) {

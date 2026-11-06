@@ -10,7 +10,7 @@ WORKDIR /source
 RUN curl -fL --retry 2 -o source.tar.gz https://github.com/ggml-org/llama.cpp/archive/8642541b255bfb5dc39cd351a178be09013a55d6.tar.gz \
     && echo '1688a167a8edd9499cdd0c19b8bd044f0fa184b466981977bbf2222d884953a4  source.tar.gz' | sha256sum -c - \
     && tar -xzf source.tar.gz --strip-components=1 && rm source.tar.gz
-RUN --mount=type=cache,id=moapan-llama-musl-b11960-${TARGETARCH},target=/source/build,sharing=locked cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DGGML_NATIVE=OFF -DBUILD_SHARED_LIBS=OFF -DLLAMA_CURL=OFF -DLLAMA_BUILD_TESTS=OFF -DLLAMA_BUILD_EXAMPLES=OFF -DLLAMA_BUILD_SERVER=ON -DLLAMA_BUILD_UI=OFF -DLLAMA_USE_PREBUILT_UI=OFF \
+RUN --mount=type=cache,id=damgox2-llama-musl-b11960-${TARGETARCH},target=/source/build,sharing=locked cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DGGML_NATIVE=OFF -DBUILD_SHARED_LIBS=OFF -DLLAMA_CURL=OFF -DLLAMA_BUILD_TESTS=OFF -DLLAMA_BUILD_EXAMPLES=OFF -DLLAMA_BUILD_SERVER=ON -DLLAMA_BUILD_UI=OFF -DLLAMA_USE_PREBUILT_UI=OFF \
     && cmake --build build --target llama-server -j 2 && cp build/bin/llama-server /llama-server
 FROM verified-alpine AS classifier
 RUN apk upgrade --no-cache && apk add --no-cache ca-certificates curl util-linux-misc libgomp libstdc++ \

@@ -19,7 +19,7 @@ public class ClassificationWorker {
     public ClassificationWorker(JdbcClient db,TopicCatalog catalog,ClassificationModel classifier,PlatformTransactionManager tm){this.db=db;this.catalog=catalog;this.classifier=classifier;tx=new TransactionTemplate(tm);}
     public record Job(UUID id,UUID token,String hash,String title,List<String> summary,com.moapan.classification.domain.TopicTaxonomy.Snapshot topics,UUID source,java.time.LocalDate budgetDay){}
     @Scheduled(fixedDelay=1000) public void tick(){
-        if(!"worker".equals(System.getenv("MOAPAN_ROLE"))||!classifier.enabled())return;
+        if(!"worker".equals(System.getenv("DAMGOX2_ROLE"))||!classifier.enabled())return;
         try{processOne();}catch(Exception ignored){/* Only bounded error codes persist, never article/model text or credentials. */}
     }
     public Job claim(){return tx.execute(status->{

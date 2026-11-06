@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import assert from 'node:assert/strict';
 const root=fs.realpathSync(new URL('../..',import.meta.url));
-const base=new URL(process.env.MOAPAN_AUDIT_BASE_URL||'http://localhost:8080');
+const base=new URL(process.env.DAMGOX2_AUDIT_BASE_URL||'http://localhost:8080');
 assert(!base.username&&!base.password&&!base.search&&!base.hash&&base.pathname==='/','Origin only');
 assert(base.protocol==='https:'||(base.protocol==='http:'&&['localhost','127.0.0.1','[::1]'].includes(base.hostname)),'HTTPS required outside loopback');
 const publicPages=['index','about','privacy','terms'];

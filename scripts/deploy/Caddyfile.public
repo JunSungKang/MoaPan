@@ -2,12 +2,12 @@
  admin off
  http_port 8081
  https_port 8443
- default_sni {$MOAPAN_PUBLIC_HOST}
+ default_sni {$DAMGOX2_PUBLIC_HOST}
  servers {
   protocols h1 h2
  }
 }
-https://{$MOAPAN_PUBLIC_HOST} {
+https://{$DAMGOX2_PUBLIC_HOST} {
  tls {
   issuer acme {
    dir https://acme-v02.api.letsencrypt.org/directory
@@ -37,7 +37,7 @@ https://{$MOAPAN_PUBLIC_HOST} {
 http://localhost:8080 {
  handle /about.html {
   reverse_proxy web:8080 {
-   header_up Host {$MOAPAN_PUBLIC_HOST}
+   header_up Host {$DAMGOX2_PUBLIC_HOST}
   }
  }
  handle {

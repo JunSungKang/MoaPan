@@ -1,13 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
-metadata: {namespace: {{ .Release.Namespace | quote }}, name: web}
+metadata: {namespace: {{ .Release.Namespace | quote }}, name: worker}
 spec:
-  replicas: {{ .Values.webReplicas }}
+  replicas: 1
   strategy: {type: Recreate}
-  selector: {matchLabels: {app: moapan, component: web}}
+  selector: {matchLabels: {app: damgox2, component: worker}}
   template:
     metadata:
-      labels: {app: moapan, component: web}
+      labels: {app: damgox2, component: worker}
       annotations:
         checksum/settings: {{ include (print $.Template.BasePath "/config.yaml") . | sha256sum }}
     spec:
@@ -18,7 +18,7 @@ spec:
       securityContext: {runAsUser: 10001, runAsGroup: 10001, runAsNonRoot: true, seccompProfile: {type: RuntimeDefault}}
       initContainers:
         - name: wait-schema
-          image: {{ include "moapan.image" .Values.images.database }}
+          image: {{ include "damgox2.image" .Values.images.database }}
           env:
             - name: PGPASSWORD
               valueFrom: {secretKeyRef: {name: {{ .Values.existingSecret | quote }}, key: DATABASE_PASSWORD}}
@@ -27,29 +27,31 @@ spec:
           args:
             - |
               n=0
-              until [ "$(psql -h db -U moapan -d moapan -Atc "SELECT count(*) FROM flyway_schema_history WHERE version='{{ .Values.migrationVersion }}' AND success" 2>/dev/null)" = 1 ]; do
+              until [ "$(psql -h db -U damgox2 -d damgox2 -Atc "SELECT count(*) FROM flyway_schema_history WHERE version='{{ .Values.migrationVersion }}' AND success" 2>/dev/null)" = 1 ]; do
                 n=$((n+1)); [ "$n" -lt 200 ] || exit 1; sleep 3
               done
           securityContext: {readOnlyRootFilesystem: true, allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}}
       containers:
-        - name: web
-          image: {{ include "moapan.image" .Values.images.app }}
-          envFrom: [{configMapRef: {name: moapan-settings}}]
+        - name: worker
+          image: {{ include "damgox2.image" .Values.images.app }}
+          envFrom: [{configMapRef: {name: damgox2-settings}}]
           env:
-            - {name: MOAPAN_ROLE, value: web}
-{{ include "moapan.secretEnv" . | indent 12 }}
-{{ include "moapan.mailEnv" . | indent 12 }}
+            - {name: DAMGOX2_ROLE, value: worker}
+{{ include "damgox2.secretEnv" . | indent 12 }}
+{{ include "damgox2.mailEnv" . | indent 12 }}
+            - {name: DAMGOX2_TRANSLATION_URL, value: 'http://translator:11435/v1/chat/completions'}
+            - {name: DAMGOX2_TRANSLATION_KEY_FILE, value: /run/secrets/translation_key}
+            - {name: TRANSLATION_TIMEOUT_SECONDS, value: '300'}
+            - {name: DAMGOX2_CLASSIFICATION_URL, value: 'http://classifier:11436/v1/chat/completions'}
+            - {name: DAMGOX2_CLASSIFICATION_KEY_FILE, value: /run/secrets/classification_key}
           securityContext: {readOnlyRootFilesystem: true, allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}}
           resources: {requests: {cpu: 100m, memory: 256Mi}, limits: {cpu: '1.5', memory: 768Mi}}
-          ports: [{containerPort: 8080}]
-          readinessProbe: {httpGet: {path: /internal/live, port: 8080, httpHeaders: [{name: Host, value: {{ .Values.publicHost | quote }}}]}, periodSeconds: 10}
-          startupProbe: {httpGet: {path: /internal/live, port: 8080, httpHeaders: [{name: Host, value: {{ .Values.publicHost | quote }}}]}, periodSeconds: 5, failureThreshold: 24}
-          livenessProbe: {httpGet: {path: /internal/live, port: 8080, httpHeaders: [{name: Host, value: {{ .Values.publicHost | quote }}}]}, periodSeconds: 20, failureThreshold: 3}
           volumeMounts:
             {{- if .Values.mail.enabled }}
             - {name: email-secrets, mountPath: /run/secrets/email, readOnly: true}
             {{- end }}
             - {name: tmp, mountPath: /tmp}
+            - {name: key, mountPath: /run/secrets, readOnly: true}
       volumes:
         {{- if .Values.mail.enabled }}
         - name: email-secrets
@@ -58,3 +60,7 @@ spec:
             defaultMode: 0444
         {{- end }}
         - {name: tmp, emptyDir: {sizeLimit: 128Mi}}
+        - name: key
+          secret:
+            secretName: {{ .Values.existingSecret | quote }}
+            items: [{key: TRANSLATION_KEY, path: translation_key}, {key: CLASSIFICATION_KEY, path: classification_key}]

@@ -1,11 +1,11 @@
 apiVersion: batch/v1
 kind: Job
-metadata: {namespace: {{ .Release.Namespace | quote }}, name: 'moapan-migrate-{{ .Release.Revision }}'}
+metadata: {namespace: {{ .Release.Namespace | quote }}, name: 'damgox2-migrate-{{ .Release.Revision }}'}
 spec:
   backoffLimit: 3
   activeDeadlineSeconds: 600
   template:
-    metadata: {labels: {app: moapan, component: migrate}}
+    metadata: {labels: {app: damgox2, component: migrate}}
     spec:
       restartPolicy: Never
       automountServiceAccountToken: false
@@ -15,17 +15,17 @@ spec:
       securityContext: {runAsUser: 10001, runAsGroup: 10001, runAsNonRoot: true, seccompProfile: {type: RuntimeDefault}}
       initContainers:
         - name: wait-db
-          image: {{ include "moapan.image" .Values.images.database }}
+          image: {{ include "damgox2.image" .Values.images.database }}
           resources: {requests: {cpu: 25m, memory: 32Mi}, limits: {cpu: '0.25', memory: 128Mi}}
-          command: [sh, -ec, 'until pg_isready -h db -U moapan_migrate -d moapan; do sleep 3; done']
+          command: [sh, -ec, 'until pg_isready -h db -U damgox2_migrate -d damgox2; do sleep 3; done']
           securityContext: {readOnlyRootFilesystem: true, allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}}
       containers:
         - name: migrate
-          image: {{ include "moapan.image" .Values.images.app }}
-          envFrom: [{configMapRef: {name: moapan-settings}}]
+          image: {{ include "damgox2.image" .Values.images.app }}
+          envFrom: [{configMapRef: {name: damgox2-settings}}]
           env:
-            - {name: MOAPAN_ROLE, value: migrate}
-            - {name: DATABASE_USER, value: moapan_migrate}
+            - {name: DAMGOX2_ROLE, value: migrate}
+            - {name: DATABASE_USER, value: damgox2_migrate}
             - name: DATABASE_PASSWORD
               valueFrom: {secretKeyRef: {name: {{ .Values.existingSecret | quote }}, key: DATABASE_ADMIN_PASSWORD}}
           securityContext: {readOnlyRootFilesystem: true, allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}}

@@ -1,6 +1,6 @@
 services:
   model-init:
-    image: moapan-translator:cpu-b11960
+    image: damgox2-translator:cpu-b11960
     build:
       context: .
       dockerfile: scripts/translation/Dockerfile
@@ -14,7 +14,7 @@ services:
     cpus: 0.5
     restart: 'no'
   translator:
-    image: moapan-translator:cpu-b11960
+    image: damgox2-translator:cpu-b11960
     build:
       context: .
       dockerfile: scripts/translation/Dockerfile
@@ -42,8 +42,8 @@ services:
       start_period: 120s
   worker:
     environment:
-      MOAPAN_TRANSLATION_URL: http://translator:11435/v1/chat/completions
-      MOAPAN_TRANSLATION_KEY_FILE: /run/secrets/translation_key
+      DAMGOX2_TRANSLATION_URL: http://translator:11435/v1/chat/completions
+      DAMGOX2_TRANSLATION_KEY_FILE: /run/secrets/translation_key
       TRANSLATION_TIMEOUT_SECONDS: ${TRANSLATION_TIMEOUT_SECONDS:-300}
     secrets: [translation_key]
     networks: [backend,translation]

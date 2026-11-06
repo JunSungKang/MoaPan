@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 4,
+  "workSlug": "damgox2-infrastructure-20261106",
+  "flowType": "integration",
+  "branch": "codex/damgox2-infrastructure-20261106",
+  "targetBranch": "develop",
+  "baseSha": "ffedf357297159b72f4d5bfed58f27f16b66f49a",
+  "mergeMethod": "squash",
+  "governance": {
+    "prAuthorLogin": "JunSungKang",
+    "assigneeLogin": "JunSungKang",
+    "reviewerLogin": "junsung-bot[bot]",
+    "requiredChecks": [],
+    "commitAuthor": {
+      "name": "jun-sung, Kang",
+      "email": "kjuns1@naver.com"
+    },
+    "coAuthors": [
+      {
+        "name": "Codex",
+        "email": "codex@openai.com"
+      },
+      {
+        "name": "junsung-bot[bot]",
+        "email": "302617028+junsung-bot[bot]@users.noreply.github.com"
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "infrastructure-identity-migration",
+      "expectedPaths": [
+        "compose.yaml",
+        "Dockerfile",
+        "Caddyfile",
+        ".dockerignore",
+        ".env.example",
+        "settings.gradle",
+        "build.gradle",
+        "AGENTS.md",
+        "README.md",
+        "THIRD_PARTY_NOTICES.md",
+        "scripts/**",
+        "src/main/resources/application.properties",
+        "src/main/java/**",
+        "src/test/**",
+        "src/integrationTest/**",
+        "src/e2eTest/**",
+        "docs/**",
+        ".github/workflow-plans/damgox2-infrastructure-20261106.json",
+        ".agents/skills/https-certificate/**"
+      ],
+      "forbiddenPaths": [
+        ".env",
+        ".local/**",
+        ".github/workflows/**",
+        "src/main/resources/db/migration/**",
+        "src/main/resources/static/**",
+        "gradle.lockfile",
+        "gradle/verification-metadata.xml"
+      ],
+      "acceptanceCriteria": [
+        "User explicitly authorizes complete Docker/image/container/Compose/Helm moapan to damgox2 migration, live replacement, human commits/push and develop merge. Sprint Delivery; payment/newsletter policy work is excluded.",
+        "Preserve all existing database rows, credentials, sessions, encryption keys, models and TLS state; encrypted PostgreSQL backup plus isolated restore; stopped-volume copies verified before old resources are removed; unrelated MailBox/coin resources remain unchanged.",
+        "Use damgox2 project, image tags, containers, networks, volume names, Helm resource names, runtime paths and canonical environment names. Keep Java package/property namespaces and browser/cryptographic compatibility identifiers, immutable SQL migrations and historical evidence intact; explicitly document scope.",
+        "Verify Compose all overlays/Helm, build/JDK/truststore, full unit/PostgreSQL/browser/security tests, final image IDs, real HTTPS and data equality; scan database/proxy/model/app/build images without suppressions or false success.",
+        "Preserve pre-existing untracked .agents/skills/https-certificate files without modification or commit; scope allowance exists only because guard includes untracked paths. Never modify global skills or other projects.",
+        "Independent current-head code review and App formal APPROVED precede guarded human develop merge; verify canonical SHA and delete exact PR head remote/tracking/local refs. No CI/CD, main merge, purchases or changes to repository visibility/protection."
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh --no-daemon clean check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest",
+        "sh scripts/test/helm-check.sh",
+        "node --test scripts/test/infrastructure-naming.test.mjs",
+        "sh scripts/security/image-scan.sh <exact-built-image-ids>",
+        "git diff --check"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/plan.md",
+          "docs/01-management/progress.md",
+          "docs/03-design/infrastructure-naming.md",
+          "docs/05-test/infrastructure-naming.md",
+          "docs/05-test/evidence/infrastructure-naming-20261106.json"
+        ]
+      }
+    }
+  ]
+}

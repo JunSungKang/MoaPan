@@ -2,7 +2,7 @@
 import {execFileSync} from 'node:child_process';
 import assert from 'node:assert/strict';
 const docker=args=>execFileSync('docker',args,{timeout:30000,killSignal:'SIGKILL',encoding:'utf8',stdio:['pipe','pipe','pipe']}).trim();
-const sql=text=>docker(['compose','exec','-T','db','psql','-U','moapan_migrate','-d','moapan','-At','--set','ON_ERROR_STOP=1','-c',text]);
+const sql=text=>docker(['compose','exec','-T','db','psql','-U','damgox2_migrate','-d','damgox2','-At','--set','ON_ERROR_STOP=1','-c',text]);
 assert.equal(process.env.PUBLIC_BASE_URL||'http://localhost:8080','http://localhost:8080');
 const delay=ms=>new Promise(r=>setTimeout(r,ms));
 assert.equal(docker(['compose','exec','-T','web','printenv','PUBLIC_BASE_URL']),'http://localhost:8080','Recovery test is restricted to the loopback synthetic deployment');

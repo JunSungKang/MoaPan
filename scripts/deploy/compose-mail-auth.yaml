@@ -1,7 +1,7 @@
 # Additional client-side SMTP AUTH; compose after compose-mail-external.yaml.
 x-smtp-auth: &smtp-auth
-  MOAPAN_MAIL_USERNAME: ${MAIL_SMTP_USERNAME:?Set SMTP submission username}
-  MOAPAN_MAIL_PASSWORD_FILE: /run/secrets/external-smtp-password
+  DAMGOX2_MAIL_USERNAME: ${MAIL_SMTP_USERNAME:?Set SMTP submission username}
+  DAMGOX2_MAIL_PASSWORD_FILE: /run/secrets/external-smtp-password
 services:
   web:
     environment: *smtp-auth

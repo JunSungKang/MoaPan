@@ -13,7 +13,7 @@
 ```sh
 cp .env.example .env
 # .env를 비공개로 편집: DATABASE_PASSWORD는 64자 이상의 fresh random hex,
-# DATABASE_ADMIN_PASSWORD와 MOAPAN_SECRET은 각각 다른 충분한 random secret 사용.
+# DATABASE_ADMIN_PASSWORD와 DAMGOX2_SECRET은 각각 다른 충분한 random secret 사용.
 docker compose config --quiet
 docker compose up -d --build
 docker compose ps
@@ -26,7 +26,7 @@ docker compose ps
 회원가입 후 다음 명령에 기존 아이디를 stdin으로 입력해 관리자 권한을 부여한다. 비밀번호는 CLI 인자로 받지 않는다.
 
 ```sh
-docker compose run --rm -e MOAPAN_ROLE=admin-cli web
+docker compose run --rm -e DAMGOX2_ROLE=admin-cli web
 ```
 
 관리자 화면: http://localhost:8080/admin.html. 사이트 DRAFT 등록 → 수집 주소 등록 → 이용조건 검토·허용 동작 저장 → 기술 점검 → 주소 사용 활성화 → 사이트 활성화 → 지금 수집. 미리보기는 기사로 저장하지 않는다. 202는 작업 접수이며 성공은 job/runs에서 확인한다.
@@ -41,12 +41,12 @@ docker compose run --rm -e MOAPAN_ROLE=admin-cli web
 
 JDK는 정확한 공급자 빌드가 필요하다. 현재 macOS aarch64 workspace JDK와 cache를 사용할 때는 같은 인자를 `sh scripts/build/gradle-local.sh`에 전달한다. `java`, `javac`, Gradle toolchain과 런타임을 [버전 기록](docs/06-transition/versions.md)과 대조한다. preview·incubator·Maven 빌드는 사용하지 않는다.
 
-Playwright Java browser는 먼저 `sh scripts/build/gradle-local.sh playwrightInstall`로 workspace `.local/browsers`에 준비한다. PostgreSQL 통합 테스트에는 Docker가 필요하다. 테스트는 격리 Testcontainers DB와 합성 계정·문장을 사용한다. 현재 서비스는 `MOAPAN_AUDIT_BASE_URL=https://175.195.62.165 node scripts/test/site-http-audit.mjs`로 읽기 전용 점검한다. 실제 주제 출처 등록·수집 시험은 `scripts/test/topic-source-smoke.mjs`로 분리하며, 이 명령은 DB를 변경하므로 승인된 격리 검증 환경에서만 실행한다. 과거 NASA/NOAA를 재활성화하는 구형 local-smoke 실행기는 폐기했다.
+Playwright Java browser는 먼저 `sh scripts/build/gradle-local.sh playwrightInstall`로 workspace `.local/browsers`에 준비한다. PostgreSQL 통합 테스트에는 Docker가 필요하다. 테스트는 격리 Testcontainers DB와 합성 계정·문장을 사용한다. 현재 서비스는 `DAMGOX2_AUDIT_BASE_URL=https://175.195.62.165 node scripts/test/site-http-audit.mjs`로 읽기 전용 점검한다. 실제 주제 출처 등록·수집 시험은 `scripts/test/topic-source-smoke.mjs`로 분리하며, 이 명령은 DB를 변경하므로 승인된 격리 검증 환경에서만 실행한다. 과거 NASA/NOAA를 재활성화하는 구형 local-smoke 실행기는 폐기했다.
 
 `securityCheck`에는 공식 배포 체크섬을 검증한 Trivy가 필요하며, 미준비·검사 오류는 실패다. `.local/bin`의 검증된 도구를 우선 사용한다. 최종 이미지 검사는 별도 실행한다.
 
 ```sh
-sh scripts/security/image-scan.sh moapan-local:1.0.0 moapan-proxy-local:2.11.7 moapan-db-local:18.6 moapan-build:1.0.0 moapan-proxy-build:2.11.7
+sh scripts/security/image-scan.sh damgox2-local:1.0.0 damgox2-proxy-local:2.11.7 damgox2-db-local:18.6 damgox2-build:1.0.0 damgox2-proxy-build:2.11.7
 ```
 
 Wrapper ZIP/JAR 체크섬, dependency locking, strict verification을 사용한다. checksum metadata 생성만으로 공급자 신뢰 검토가 완료됐다고 간주하지 않는다. 로컬 명령은 native file watcher를 끈다(macOS FSEvents 정지 진단 후 선택).
@@ -99,7 +99,7 @@ Linux 서버에서는 `compose-public.yaml` 대신 `scripts/deploy/compose-serve
 | docs/05-test/evidence | 비밀값 없는 검증 증빙 |
 | .local·build·.gradle | 비공개 설정/캐시/실행 산출물, Git 제외 |
 
-현재 작업은 `codex/moapan-v1` 브랜치로 전달하며 main 병합은 별도다. 기존 경로를 참조하는 외부 명령은 위 분류에 맞춰 변경한다.
+작업은 develop 기준의 `codex/` 브랜치와 PR로 전달하며 main 병합은 별도다. 기존 경로를 참조하는 외부 명령은 위 분류에 맞춰 변경한다.
 
 ## 자동 준비와 Kubernetes 전환
 
@@ -107,7 +107,7 @@ Linux 서버에서는 `compose-public.yaml` 대신 `scripts/deploy/compose-serve
 
 사용 모델은 **IndexTeam/Index-Translate-2B-GGUF · Q8_0**, 고정 revision `3a0eca6ce931d88d00614d427ab3ed8ff0743902`다. 약2.08GB 모델 파일은 Git/이미지에 넣지 않고 실행 시 전용 볼륨에 저장한다. [다운로드 구현](scripts/translation/model-init.sh).
 
-[Helm 차트](scripts/deploy/helm/moapan/README.md)는 전체 이미지 역할을 Kubernetes로 배치한다. Secret·registry digest·Ingress·StorageClass는 실제 클러스터 값으로 설정해야 한다. lint/template 검증과 실제 클러스터 실행은 구분하며 현재 클러스터 실행은 미검증이다.
+[Helm 차트](scripts/deploy/helm/damgox2/README.md)는 전체 이미지 역할을 Kubernetes로 배치한다. Secret·registry digest·Ingress·StorageClass는 실제 클러스터 값으로 설정해야 한다. lint/template 검증과 실제 클러스터 실행은 구분하며 현재 클러스터 실행은 미검증이다.
 
 ## Qwen 기사 주제 분류
 `sh scripts/deploy/start.sh local|public|server`는 기존 번역과 별개로 Qwen3.5-4B Q4_K_M도 Hugging Face에서 고정 revision으로 다운로드·SHA256 검증 후 내부 Compose 서비스로 실행한다. classifier는 외부 포트를 열지 않으며 Java worker가 저장된 제목·요약을 비동기 분류한다. 관리자 화면 **기사 주제 분류**에서 1~8개 태그와 포함/제외 기준을 편집할 수 있다. 초기 5개 주제는 시작용 기본값이다. 수동 잠금은 유지하며 기존 기사는 순차 처리한다.
@@ -161,4 +161,7 @@ node scripts/test/mail-deployment-check.mjs
 
 보안 검사·백업·운영 승인이 끝난 뒤 실제 사용하는 local/public/server와 두 모델 overlay 뒤에 `-f scripts/deploy/compose-mail-external.yaml`을 추가한다. 기존 ingress/볼륨과 검증한 앱 digest를 유지한다. 이전 내장 SMTP의 compose-mail.yaml 및 Helm mail.server 옵션은 퇴역했으며 재사용하지 않는다. 메일 미설정 시 신규 인증·가입·복구는503으로 닫히고 기존 계정 로그인은 유지된다.
 
-이 저장소의 검사 통과는 외부 MailBox의 보안 문제 해결을 뜻하지 않는다. 외부 이미지·중계 권한·TLS·실제 수신함 전달을 별도로 검증한다. 2026-11-04 현재 새 MailBox 이미지의 검사, 인증 STARTTLS와 운영자 실제 받은편지함 수신을 확인해 같은 검증 앱 이미지로 V25 서비스를 전환했다. 재시작 시 필요한 모든 overlay/비공개 파일 경로는 [현재 운영 전환](docs/06-transition/deployment.md#현재-운영-전환--2026-11-04-웹-품질외부-mailbox)을 따른다. Gmail 등 별도 인터넷 수신자 전달과 MailBox 운영을 보장한다는 의미는 아니다. 현재 실제 결과는 [이메일 검증서](docs/05-test/email-identity.md), 외부 담당 작업용 프롬프트는 [MailBox 결함 조치 요청서](docs/07-operation/mailbox-security-handoff.md)를 따른다.
+이 저장소의 검사 통과는 외부 MailBox의 보안 문제 해결을 뜻하지 않는다. 외부 이미지·중계 권한·TLS·실제 수신함 전달을 별도로 검증한다. 2026-11-04 현재 새 MailBox 이미지의 검사, 인증 STARTTLS와 운영자 실제 받은편지함 수신을 확인해 같은 검증 앱 이미지로 V25 서비스를 전환했다. 재시작 시 필요한 모든 overlay/비공개 파일 경로는 [현재 운영 전환](docs/06-transition/deployment.md#현재-운영-전환--2026-11-06-damgox2-명칭-이관)을 따른다. Gmail 등 별도 인터넷 수신자 전달과 MailBox 운영을 보장한다는 의미는 아니다. 현재 실제 결과는 [이메일 검증서](docs/05-test/email-identity.md), 외부 담당 작업용 프롬프트는 [MailBox 결함 조치 요청서](docs/07-operation/mailbox-security-handoff.md)를 따른다.
+
+## Docker/Helm 명칭 이관
+배포 프로젝트와 이미지·리소스는 damgox2 이름을 사용한다. 기존 환경에서는 새 이름으로 up만 실행하면 빈 볼륨이 생기므로 먼저 [데이터 보존 이관 절차](docs/03-design/infrastructure-naming.md)를 따른다. 실제 전환 결과는 [검증서](docs/05-test/infrastructure-naming.md)를 참조한다. Java 내부 패키지·세션·브라우저 저장 식별자와 불변 SQL 이력은 호환성을 위해 유지한다. AI 정책14개 클래스 bytes와 private model 요청 식별자도 유지해 기존 번역·분류를 보존하며 실제 Docker/server alias는 damgox2다.
