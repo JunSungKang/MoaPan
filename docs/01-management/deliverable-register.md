@@ -54,3 +54,6 @@
 
 | MP-DOC-041 | 인프라 명칭·데이터 이관 설계서 | 개발 담당 | [문서](../03-design/infrastructure-naming.md) |
 | MP-DOC-042 | 인프라 명칭 이관 검증서 | 개발 담당 | [문서](../05-test/infrastructure-naming.md) |
+
+| MP-DOC-049 | Ubuntu 26.04·Temurin 25 통합 운영 인계 | 개발 담당 | [문서](../06-transition/platform-ubuntu25.md) |
+| MP-DOC-050 | Ubuntu 26.04·Java 25 전환 검증서 | 개발 담당 | [문서](../05-test/platform-ubuntu25.md) |

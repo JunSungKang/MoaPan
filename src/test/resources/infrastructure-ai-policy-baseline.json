@@ -1,23 +1,24 @@
 {
-  "sourceJarSha256": "e03b4ef23d680c45528f2804af32c2fcf1fec73a1a530780f7c1721c1138f998",
+  "sourceJarSha256": "123b34a29007f56fbdab557dbcf08e0b04ecf018ae1f52889c3f011129c26fba",
   "base": "ffedf357297159b72f4d5bfed58f27f16b66f49a",
   "classes": {
-    "com/moapan/ai/domain/AiPolicy.class": "b7da7ff8b2b6225e33243e4288a8f6abdbc2f408030ede7cd7ad78d54ec54eab",
-    "com/moapan/ai/domain/ArticleGuard$Held.class": "5b442d990cf3fc8862a63af8f730351cec1f2cf2f58d91e884d7f03f8628013b",
-    "com/moapan/ai/domain/ArticleGuard.class": "2ae4b663d2757ab6513e65c76615962860eeee3232f3863c38a75aa2ce8c4a8f",
-    "com/moapan/ai/infrastructure/ModelJson.class": "20d8000b30c96cd2e970f33aa173f9434977c4915b58a202e8214818918838ee",
-    "com/moapan/ai/infrastructure/ModelStream$Invalid.class": "e1e5ef83126b9431b6ecae8571833db297610b0bcafe606ef0f9cc94a660f0d7",
-    "com/moapan/ai/infrastructure/ModelStream.class": "09db29e32606ea6ac4a08c4f0231240b47b09d56b97e381b81a7a66916aaae66",
-    "com/moapan/ai/infrastructure/ModelTokenBudget$ArticleBudgetExceeded.class": "a0e59cab156ea2f63fc18622ddfb6952c4751a16d3bcdc9ae93b91ddd607c3ab",
-    "com/moapan/ai/infrastructure/ModelTokenBudget.class": "ec1df8c65059e9d4c47fcc8a281bb59bacea4b69d14b4ff4a027d0098e5388a6",
-    "com/moapan/classification/infrastructure/LocalClassifier.class": "b8cbebccda0d8469f797be910c297b87ade93d17fd0f4cf93c9c4a97abd1cbb7",
-    "com/moapan/translation/domain/TranslationGlossary$Term.class": "6b59ea64e59d999ac614c3d426ab789354e25378bb6ea0baf94dde32d8b5d226",
-    "com/moapan/translation/domain/TranslationGlossary.class": "76e2e951fabf76185a15e596b0f11760a361cbbc8a70972772f53be40746a297",
-    "com/moapan/translation/domain/TranslationValidator$Protected.class": "fa64bc388fdf4f202f5e75489f5ce9b1f4ceadda319863226473faa2b8742f3c",
-    "com/moapan/translation/domain/TranslationValidator.class": "898d364c00df4168ea0d6faecfd875227bae8645a776a7dfa338d5538b91c630",
-    "com/moapan/translation/infrastructure/LocalTranslator.class": "6a21e211cd05dc1d94c65b9eb691ba77a948144d667f2db507f59cd5e3df244f"
+    "com/moapan/ai/domain/AiPolicy.class": "4809b9d51103e517e60a37fea8081dd5509bbed000a4550eec8245e59ab2a1cf",
+    "com/moapan/ai/domain/ArticleGuard$Held.class": "63096b555e18c197fe5c72109020d36dfb3a97e929c6e331677170e8711aa744",
+    "com/moapan/ai/domain/ArticleGuard.class": "fcefae03432e165c96860b8eab20233fbc108650a3557a0ee055e2112d2018df",
+    "com/moapan/ai/infrastructure/ModelJson.class": "3d180cc8292cbc39a56d97c4c742f317c76270297905554e5541a293ee8c6614",
+    "com/moapan/ai/infrastructure/ModelStream$Invalid.class": "d7eee4cd6a2f1fa42ccd9fcf4abdf9dc5a549bf2f2ddb3a1cb700bcf645e2eb1",
+    "com/moapan/ai/infrastructure/ModelStream.class": "b88666e038e231f43abc764211ebb0ec4c1794c44a6d9d522700453151431498",
+    "com/moapan/ai/infrastructure/ModelTokenBudget$ArticleBudgetExceeded.class": "ba026a441f465e9e70b6666939e6e5ce0ad6a8f98adaae1aa1931876c9c9b0cf",
+    "com/moapan/ai/infrastructure/ModelTokenBudget.class": "e4c14ae42c9047661908f2c091bd55cae4fc37e84ff9cd88f3fc04bc0174d5a9",
+    "com/moapan/classification/infrastructure/LocalClassifier.class": "8b61a2a35d593b94778bd20536ccab97c716bda1ddece40065f4ca7174820127",
+    "com/moapan/translation/domain/TranslationGlossary$Term.class": "b5c902197ea9266ad418d4c33542b82c4580749c2df70cfd7c598a72345134c5",
+    "com/moapan/translation/domain/TranslationGlossary.class": "7e77e5f8ee2add5c49725f0727e847104400926a9ecbfdfa94751fc740adf235",
+    "com/moapan/translation/domain/TranslationValidator$Protected.class": "08226273d89fdefc498abeac9c3d65df2fbeefbdcd5b64149cf6072fd02f1086",
+    "com/moapan/translation/domain/TranslationValidator.class": "1db555323fe7a6ba152e5e66c35639fd826f8653d6990cbc19275e2989db83e0",
+    "com/moapan/translation/infrastructure/LocalTranslator.class": "f7d27ce9d7436942cadc0c7c1e730a947924642dd85742edd1ac82d35db2d51a"
   },
-  "translationPolicy": "guard-v3/32dbe79b2fbde82c84aeb2d13b8d1bd156b47208546950eaae17ded93db98c9e",
-  "translationProvider": "index-translate-2b/guard-v3/32dbe79b2fbde82c84aeb2d13b8d1bd156b47208546950eaae17ded93db98c9e",
-  "classificationPolicy": "qwen3.5-4b/d20ca0e438aeba2113c1ac23978d5c819b23fd6b80bf0420e274f012d4359da7"
+  "translationPolicy": "guard-v3/3c71ded57a28058f98a27aa5808c895a4625b33cb3cbec7fef6c81168354f233",
+  "translationProvider": "index-translate-2b/guard-v3/3c71ded57a28058f98a27aa5808c895a4625b33cb3cbec7fef6c81168354f233",
+  "classificationPolicy": "qwen3.5-4b/42ab0aaef92d4cedd1b5db311123128807f2170ba9aa07dcae14653760d328ab",
+  "java": 25
 }

@@ -1,0 +1,199 @@
+{
+  "schemaVersion": 4,
+  "workSlug": "platform-ubuntu25-20261109",
+  "flowType": "integration",
+  "branch": "codex/platform-ubuntu25-20261109",
+  "targetBranch": "develop",
+  "baseSha": "829d59ab0bb72e50f82d3f0df06ce9e5c7e80b30",
+  "mergeMethod": "squash",
+  "governance": {
+    "prAuthorLogin": "JunSungKang",
+    "assigneeLogin": "JunSungKang",
+    "reviewerLogin": "junsung-bot[bot]",
+    "requiredChecks": [],
+    "commitAuthor": {
+      "name": "jun-sung, Kang",
+      "email": "kjuns1@naver.com"
+    },
+    "coAuthors": [
+      {
+        "name": "Codex",
+        "email": "codex@openai.com"
+      },
+      {
+        "name": "junsung-bot[bot]",
+        "email": "302617028+junsung-bot[bot]@users.noreply.github.com"
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "preserve-existing-pending-work",
+      "expectedPaths": [
+        "Dockerfile",
+        "README.md",
+        "THIRD_PARTY_NOTICES.md",
+        "compose.yaml",
+        "docs/01-management/deliverable-register.json",
+        "docs/01-management/deliverable-register.md",
+        "docs/01-management/plan.md",
+        "docs/01-management/progress.md",
+        "docs/02-analysis/business-validation.md",
+        "docs/02-analysis/functional-spec.md",
+        "docs/02-analysis/requirements.md",
+        "docs/03-design/api.md",
+        "docs/03-design/data-model.md",
+        "docs/03-design/decisions.md",
+        "docs/05-test/acceptance-matrix.md",
+        "docs/05-test/bugs.md",
+        "docs/06-transition/deployment.md",
+        "docs/06-transition/versions.md",
+        "docs/07-operation/security-review.md",
+        "docs/README.md",
+        "licenses/SOURCES.json",
+        "scripts/backup/build-backup-tools.sh",
+        "scripts/classification/Dockerfile",
+        "scripts/deploy/compose-public.yaml",
+        "scripts/deploy/compose-server.yaml",
+        "scripts/deploy/helm/damgox2/values.yaml",
+        "scripts/deploy/proxy/go.mod",
+        "scripts/deploy/proxy/go.sum",
+        "scripts/security/build-trivy.sh",
+        "scripts/security/security-applicability.mjs",
+        "scripts/security/security-applicability.test.mjs",
+        "scripts/security/security-check.sh",
+        "scripts/security/verify-image-report.mjs",
+        "scripts/security/verify-security-reports.mjs",
+        "scripts/translation/Dockerfile",
+        "src/e2eTest/java/com/moapan/SiteDesignAuditTest.java",
+        "src/integrationTest/java/com/moapan/SecurityIntegrationTest.java",
+        "src/integrationTest/java/com/moapan/cache/PublicationCacheIntegrationTest.java",
+        "src/integrationTest/java/com/moapan/identity/EmailMigrationIntegrationTest.java",
+        "src/main/java/com/moapan/newsletter/NewsletterController.java",
+        "src/main/java/com/moapan/newsletter/NewsletterService.java",
+        "src/main/java/com/moapan/newsletter/PublicationReadModels.java",
+        "src/main/java/com/moapan/newsletter/domain/PublicationResearch.java",
+        "src/main/resources/static/about.html",
+        "src/main/resources/static/account.html",
+        "src/main/resources/static/admin.html",
+        "src/main/resources/static/assets/css/newsletter.css",
+        "src/main/resources/static/assets/css/newspaper.css",
+        "src/main/resources/static/assets/js/administration/admin.js",
+        "src/main/resources/static/assets/js/newsletter/edit.js",
+        "src/main/resources/static/assets/js/newsletter/publication-output.js",
+        "src/main/resources/static/assets/js/newsletter/read.js",
+        "src/main/resources/static/assets/js/newsletter/reader-tools.js",
+        "src/main/resources/static/assets/js/newsletter/research-editor.js",
+        "src/main/resources/static/assets/js/shared/common.js",
+        "src/main/resources/static/assets/js/shared/i18n-en.js",
+        "src/main/resources/static/assets/js/shared/i18n-features.js",
+        "src/main/resources/static/assets/js/shared/i18n-pages.js",
+        "src/main/resources/static/assets/js/shared/request-errors.js",
+        "src/main/resources/static/index.html",
+        "src/main/resources/static/newsletter-editor.html",
+        "src/main/resources/static/newsletter.html",
+        "src/main/resources/static/privacy.html",
+        "src/main/resources/static/settings.html",
+        "src/main/resources/static/terms.html",
+        "src/test/java/com/moapan/newsletter/PublicationResearchTest.java",
+        ".agents/skills/https-certificate/SKILL.md",
+        ".agents/skills/https-certificate/agents/openai.yaml",
+        ".agents/skills/https-certificate/references/caddy-acme.md",
+        ".github/workflow-plans/business-alignment-20261108.json",
+        ".github/workflow-plans/payment-handoff-20261106.json",
+        ".github/workflow-plans/security-gate-20261108.json",
+        ".github/workflow-plans/service-delivery-security-review-20261108.json",
+        "docs/02-analysis/business-direction.md",
+        "docs/02-analysis/payment-handoff.md",
+        "docs/05-test/business-alignment.md",
+        "docs/05-test/evidence/business-alignment-20261108.json",
+        "docs/05-test/evidence/screenshots/business-direction/en-1440.png",
+        "docs/05-test/evidence/screenshots/business-direction/ko-1440.png",
+        "docs/05-test/evidence/screenshots/business-direction/ko-390.png",
+        "docs/05-test/evidence/security-gate-20261108.json",
+        "docs/05-test/evidence/service-delivery-security-review-20261108.json",
+        "docs/05-test/security-gate-20261108.md",
+        "docs/05-test/service-delivery-security-review-20261108.md",
+        "docs/07-operation/editorial-handbook.md",
+        "scripts/security/InspectGoBinary.go",
+        "scripts/security/install-trivy.sh",
+        "scripts/security/jose-backport-check.sh",
+        "scripts/security/jose-validation.mjs",
+        "scripts/test/ProxySecurityCheck.go",
+        "src/e2eTest/java/com/moapan/BusinessDirectionBrowserTest.java",
+        "src/integrationTest/java/com/moapan/cache/BusinessContinuityIntegrationTest.java",
+        "src/main/java/com/moapan/catalog/api/SourceRightsController.java",
+        "src/main/java/com/moapan/catalog/application/SourceRightsReviews.java",
+        "src/main/java/com/moapan/newsletter/application/PublicationHistory.java",
+        "src/main/resources/db/migration/V26__editorial_continuity.sql",
+        "src/main/resources/db/migration/V27__source_rights_reviews.sql",
+        "src/main/resources/static/assets/css/service-about.css",
+        "src/main/resources/static/assets/js/administration/source-rights.js",
+        "src/main/resources/static/assets/js/newsletter/assessment-states.js",
+        "src/main/resources/static/assets/js/newsletter/follow-up-editor.js",
+        "src/main/resources/static/assets/js/newsletter/history.js"
+      ],
+      "forbiddenPaths": [],
+      "acceptanceCriteria": [
+        "Preserve all baseline user changes and untracked local skills. Stage only platform task changes; do not commit unrelated pre-existing business, payment or skill changes. Preserve current live data and previously deployed features."
+      ],
+      "validationCommands": [
+        "git diff --check"
+      ],
+      "documentation": {
+        "rationale": "Private per-file initial hashes and copies in workspace .local/platform-ubuntu25-20261109; never commit private snapshots."
+      }
+    },
+    {
+      "id": "ubuntu-temurin25-platform-delivery",
+      "expectedPaths": [
+        ".github/workflow-plans/platform-ubuntu25-20261109.json",
+        "AGENTS.md",
+        "Dockerfile",
+        "compose*.yaml",
+        "docker-bake.hcl",
+        "build.gradle",
+        "gradle.properties",
+        "scripts/**",
+        "src/main/java/com/moapan/**",
+        "src/main/resources/application.properties",
+        "src/test/**",
+        "src/integrationTest/**",
+        "src/e2eTest/**",
+        "docs/**",
+        "README.md",
+        "licenses/**",
+        "THIRD_PARTY_NOTICES.md",
+        "src/main/resources/ai/**"
+      ],
+      "forbiddenPaths": [
+        ".github/workflows/**",
+        ".env",
+        ".local/**"
+      ],
+      "acceptanceCriteria": [
+        "User explicitly authorizes implementation, isolated validation, real Docker replacement, human commit and push; no PR merge. Common contract/images missing must not block; provide private project-owned fallback tags without replacing other session tags.",
+        "All newly delivered final images use exact official Ubuntu26.04 digest; Temurin25 JDK/JRE exact security build, Node24 where used, no new Python tool unless3.14. Shared app image for web/worker and shared glibc native AI image for separate translator/classifier, each internal9931. Compose project platform with damgox2-* service names, reserved web20000..20004 and API20100..20104; preserve current public80/443 and certificate/model volumes.",
+        "DB host/name/user/password-file configurable; shared target damgox2/damgox2_sid with distinct database-scoped migration role, no cluster admin. If shared DB absent, attach existing database network and preserve existing DB/container/volume/credentials; never migrate shared data or create duplicate production PG.",
+        "Hold actual macOS flock on explicitly user-authorized /Users/kkkk/Desktop/jskang/03.workspace/01.project/operations/run/deploy.lock during project replacement; create only missing parent directories/lock file there, no other operations edits. Re-read container/database configuration after acquisition, preserve backups, mounts and rollback configuration. Never stop another project, prune, down-v or remove broad orphans.",
+        "Validate Java25 core/unit/integration/E2E, bounded worker shutdown/restart, exact CA policy, AI class fingerprint transition with explicit prior-result preservation/quarantine, both real pinned model inference, SMTP strict STARTTLS/hostname/AUTH without storing credentials in command args/logs; scan final image IDs with fresh DB. Promote only scanned IDs; rollback app configuration on failure, preserving data and old database.",
+        "Use guarded human commit/push only and verify remote SHA; preserve pre-existing user changes without blanket staging, no force push or unrequested merge. Keep secrets/model weights/data/caches/common operations files out of Git."
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh --no-daemon check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest",
+        "docker buildx bake -f docker-bake.hcl --print",
+        "docker compose --env-file .env --env-file .local/platform-ubuntu25-20261109/operator.env -f compose.platform.yaml config --quiet",
+        "sh scripts/security/image-scan.sh <verified-images>",
+        "node scripts/test/docs-check.mjs",
+        "git diff --check"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/progress.md",
+          "docs/06-transition/platform-ubuntu25.md",
+          "docs/05-test/platform-ubuntu25.md"
+        ]
+      }
+    }
+  ]
+}

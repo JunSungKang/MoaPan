@@ -11,7 +11,7 @@ DAMGOX2 자체 코드의 라이선스를 이 문서로 새로 부여하지 않�
 - Logback의 EPL/LGPL 선택 중 EPL-2.0을 사용하고 AspectJ도 EPL-2.0을 적용합니다. 이미지/JAR 재배포 시 해당 라이브러리의 소스 접근과 고지를 보장해야 합니다. 정확한 버전의 공식 source JAR를 앱 이미지의 /opt/damgox2/third-party-sources에 포함합니다. 원본 저장소·해당 버전도 함께 확인해야 하며, 이들 라이브러리를 수정하면 수정한 부분의 소스 제공 조건을 다시 검토해야 합니다.
 - Jakarta API의 EPL/EDL/GPL+Classpath 등 복수 선언은 원본 고지를 보존합니다. 별도 애플리케이션의 결합만으로 자체 코드에 같은 라이선스를 자동 지정하지 않습니다.
 - Qwen3.5-4B와 Index-Translate-2B의 현재 고정 GGUF는 모델 카드에서 Apache-2.0으로 표시됩니다. 원본 모델/변환 출처와 라이선스를 이미지 및 모델 볼륨에 보존합니다. 상표·학습 데이터·모델 출력의 권리까지 보장하는 의미가 아닙니다.
-- 수정 Trivy는 Apache-2.0 공식 소스를 기반으로 보안 의존성을 갱신했습니다. 원본 commit·패치 recipe·도구 변경 사실을 보존합니다. Caddy/llama.cpp/Go 모듈의 원본 고지도 이미지에 보존합니다.
+- 보안 검사는 Apache-2.0 공식 Trivy0.76.2 릴리스를 체크섬·Sigstore 서명·자체 검사 후 사용합니다. 이전 수정 빌드의 기록은 당시 증빙에 보존합니다. Caddy2.11.9/llama.cpp/Go 모듈의 원본 고지도 이미지에 보존합니다. Caddy의 하위 go-jose/v3는 공급자 정식 수정본이 아닌 고지된 보안 백포트이며, 매 보안 검사에서 수정 소스·공식 전체 테스트·미패치 공격 비교를 재검증합니다.
 
 ## 배포 전 준수 조건
 현재 동작하는 SaaS와 외부 이미지/실행파일 배포를 구분합니다. 외부 배포 전에는 최종 digest별로 GPL/약한 copyleft의 대응 소스·수정분·고지를 수령자가 실제 얻을 수 있는지 확인해야 합니다. 공급자 URL만 적는 것으로 항상 의무를 충족한다고 주장하지 않습니다. 필요한 GPL 대응 소스나 적법한 제공 방식이 확보되지 않으면 이미지 공개 배포를 보류하세요. 임의의 3년 제공 약속이나 운영자 연락처를 만들지 않았습니다.
@@ -128,8 +128,11 @@ Spring Session4.1.1의 두 POM은 Broadcom Foundation License라고 표시하지
 |tools.jackson.core:jackson-core|3.1.7|The Apache Software License, Version 2.0|
 |tools.jackson.core:jackson-databind|3.1.7|The Apache Software License, Version 2.0|
 
-## 2026-10-31 런타임 OS·프록시 보안 변경
-Alpine3.24.3 musl 기반으로 이동하며 선택 JDK·모델은 유지합니다. musl(MIT), BusyBox(GPL-2.0-only), GCC runtime(GPL-3.0 + GCC Runtime Library Exception) 등 OS 구성요소의 의무는 각각 적용됩니다. [GCC 공식 예외](https://gcc.gnu.org/onlinedocs/libstdc++/manual/license.html)는 독립 코드의 라이선스 선택을 허용하지만 런타임 자체의 조건을 없애지 않습니다. 외부 이미지 재배포 전 실제 APK 버전별 대응 소스와 고지를 제공해야 하며, 현 단계에서는 이미지를 외부 registry에 공개 배포하지 않습니다.
+## 현재 운영 전환: Ubuntu 26.04·Temurin 25 (2026-11-09)
+
+새 앱·프록시·AI 실행 이미지는 공식 Ubuntu26.04 digest와 Temurin25.0.5+8-LTS를 사용합니다. 정확한 바이너리 URL·체크섬은 scripts/platform/runtime-versions.json에 기록합니다. JRE의 legal 디렉터리와 Ubuntu의 패키지 저작권 고지를 이미지에 보존합니다. glibc(LGPL-2.1-or-later), GCC runtime(GPL-3.0 + GCC Runtime Library Exception), Ubuntu에 포함된 다른 GPL 구성요소의 고지·대응 소스 조건은 각 패키지에 적용됩니다. 외부 이미지 배포 전에 실제 설치 패키지별 소스 제공 조건을 이행해야 합니다. 애플리케이션 전체 소스의 일괄 공개 의무를 뜻하지 않으며, 현 단계에서 이미지를 외부 registry에 배포하지 않습니다. Temurin의 변경 사항은 기존 공식 기준에 따른 신뢰 저장소 조치이며 스크립트를 함께 제공합니다.
+
+이전 Alpine3.24.3·musl 이미지는 복구용 과거 산출물입니다. 새 Ubuntu 이미지는 musl 바이너리를 복사하지 않고 동일한 고정 llama.cpp 소스를 대상 아키텍처와 glibc에서 재컴파일합니다. 기존 PostgreSQL은 데이터 이관 담당 세션으로 넘기기 위해 변경 없이 계속 운영하며 새 이미지 전환 완료 범위와 구분합니다. [GCC 공식 예외](https://gcc.gnu.org/onlinedocs/libstdc++/manual/license.html)는 독립 코드의 라이선스 선택을 허용하지만 런타임 자체의 조건을 없애지 않습니다.
 
 go-jose/v3에는 공식 v4 보안 수정을 이식했습니다. 공급자 정식 v3 릴리스와 구분하며 Apache-2.0 저작권·변경 표시를 유지합니다. 프록시 이미지 /opt/damgox2/security에 수정 소스·패치·체크섬·설명서를 포함하고 /opt/damgox2/licenses/go에 모듈 고지를 보존합니다. 상세 근거는 scripts/deploy/proxy/patches/README.md입니다. 자체 서비스 전체 코드의 공개 의무가 확인됐다는 뜻은 아닙니다.
 

@@ -39,10 +39,10 @@ spec:
             - {name: DAMGOX2_ROLE, value: worker}
 {{ include "damgox2.secretEnv" . | indent 12 }}
 {{ include "damgox2.mailEnv" . | indent 12 }}
-            - {name: DAMGOX2_TRANSLATION_URL, value: 'http://translator:11435/v1/chat/completions'}
+            - {name: DAMGOX2_TRANSLATION_URL, value: 'http://translator:9931/v1/chat/completions'}
             - {name: DAMGOX2_TRANSLATION_KEY_FILE, value: /run/secrets/translation_key}
             - {name: TRANSLATION_TIMEOUT_SECONDS, value: '300'}
-            - {name: DAMGOX2_CLASSIFICATION_URL, value: 'http://classifier:11436/v1/chat/completions'}
+            - {name: DAMGOX2_CLASSIFICATION_URL, value: 'http://classifier:9931/v1/chat/completions'}
             - {name: DAMGOX2_CLASSIFICATION_KEY_FILE, value: /run/secrets/classification_key}
           securityContext: {readOnlyRootFilesystem: true, allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}}
           resources: {requests: {cpu: 100m, memory: 256Mi}, limits: {cpu: '1.5', memory: 768Mi}}

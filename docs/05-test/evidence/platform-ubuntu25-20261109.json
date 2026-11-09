@@ -1,0 +1,249 @@
+{
+  "verifiedAt": "2026-11-09T05:27:59.120Z",
+  "status": "PASS",
+  "scope": "Ubuntu26.04/Temurin25 platform implementation, isolation and actual local Docker replacement; no merge/shared-PG migration",
+  "daemon": "desktop-linux",
+  "architecture": "linux/arm64",
+  "runtime": {
+    "java": "Eclipse Temurin25.0.5+8-LTS",
+    "node": "24.18.0",
+    "python": "not-used",
+    "ubuntu": "26.04"
+  },
+  "ubuntuDigest": "sha256:6a06111c3b0a8600feadb270aec771dc239bf407b25625f93f44ab00e11f4d3c",
+  "images": [
+    {
+      "role": "app",
+      "id": "sha256:9ac4289f24e5ab05c1bd93c831eaac8fb254c51e3b186b69d14bcd56f9f8b911",
+      "scannedAt": "2026-11-09T14:24:50.694041+09:00",
+      "os": {
+        "Family": "ubuntu",
+        "Name": "26.04"
+      },
+      "highCritical": 0,
+      "secrets": 0
+    },
+    {
+      "role": "proxy",
+      "id": "sha256:e7eae250af0b9d745514cd29bf6cc8312c0d538264d567887de38c08689dc976",
+      "scannedAt": "2026-11-09T14:24:52.674729+09:00",
+      "os": {
+        "Family": "ubuntu",
+        "Name": "26.04"
+      },
+      "highCritical": 0,
+      "secrets": 0
+    },
+    {
+      "role": "ai",
+      "id": "sha256:66f1f6ff7074ef7cd450de68e03e218731042a3ea367ef64d864fd6e4f3425b8",
+      "scannedAt": "2026-11-09T14:24:53.900767+09:00",
+      "os": {
+        "Family": "ubuntu",
+        "Name": "26.04"
+      },
+      "highCritical": 0,
+      "secrets": 0
+    }
+  ],
+  "tests": [
+    {
+      "type": "test",
+      "tests": 197,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "type": "integrationTest",
+      "tests": 158,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "type": "e2eTest",
+      "tests": 90,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "isolation": {
+    "verifiedAt": "2026-11-09T05:25:24.652Z",
+    "status": "PASS",
+    "java": 25,
+    "dbTarget": "damgox2/damgox2_sid",
+    "databasePasswordFile": true,
+    "migrationWithoutSuperuserCreateDbCreateRole": true,
+    "runtimeHistoryWriteDenied": true,
+    "schema": 27,
+    "publicEdition": 200,
+    "protectedAccount": 401,
+    "newsletter": 404,
+    "csrf": 200,
+    "workerNoHttp": true,
+    "workerStopAndRestartMillis": 9154,
+    "workerStopWithin15Seconds": true,
+    "workerExitCode": 143,
+    "workerRestartHeartbeat": true,
+    "productionMutated": false
+  },
+  "lock": {
+    "mechanism": "macOS flock; parent and inherited FD verified",
+    "heldDuringReplacement": true
+  },
+  "backupRestore": {
+    "status": "PASS",
+    "tables": 39,
+    "allRowsAndCountsMatch": true,
+    "encryptedStreaming": true,
+    "plaintextDumpWritten": false,
+    "isolatedTmpfs": true
+  },
+  "unchangedFrozenTables": 33,
+  "policy": {
+    "classCount": 14,
+    "changed": {
+      "translations": 282,
+      "translationJobs": 544,
+      "classificationJobs": 544
+    },
+    "identity": {
+      "classificationPolicy": "qwen3.5-4b/42ab0aaef92d4cedd1b5db311123128807f2170ba9aa07dcae14653760d328ab",
+      "classes": {
+        "com/moapan/ai/domain/AiPolicy.class": "4809b9d51103e517e60a37fea8081dd5509bbed000a4550eec8245e59ab2a1cf",
+        "com/moapan/ai/domain/ArticleGuard$Held.class": "63096b555e18c197fe5c72109020d36dfb3a97e929c6e331677170e8711aa744",
+        "com/moapan/ai/domain/ArticleGuard.class": "fcefae03432e165c96860b8eab20233fbc108650a3557a0ee055e2112d2018df",
+        "com/moapan/ai/infrastructure/ModelJson.class": "3d180cc8292cbc39a56d97c4c742f317c76270297905554e5541a293ee8c6614",
+        "com/moapan/ai/infrastructure/ModelStream$Invalid.class": "d7eee4cd6a2f1fa42ccd9fcf4abdf9dc5a549bf2f2ddb3a1cb700bcf645e2eb1",
+        "com/moapan/ai/infrastructure/ModelStream.class": "b88666e038e231f43abc764211ebb0ec4c1794c44a6d9d522700453151431498",
+        "com/moapan/ai/infrastructure/ModelTokenBudget$ArticleBudgetExceeded.class": "ba026a441f465e9e70b6666939e6e5ce0ad6a8f98adaae1aa1931876c9c9b0cf",
+        "com/moapan/ai/infrastructure/ModelTokenBudget.class": "e4c14ae42c9047661908f2c091bd55cae4fc37e84ff9cd88f3fc04bc0174d5a9",
+        "com/moapan/classification/infrastructure/LocalClassifier.class": "8b61a2a35d593b94778bd20536ccab97c716bda1ddece40065f4ca7174820127",
+        "com/moapan/translation/domain/TranslationGlossary$Term.class": "b5c902197ea9266ad418d4c33542b82c4580749c2df70cfd7c598a72345134c5",
+        "com/moapan/translation/domain/TranslationGlossary.class": "7e77e5f8ee2add5c49725f0727e847104400926a9ecbfdfa94751fc740adf235",
+        "com/moapan/translation/domain/TranslationValidator$Protected.class": "08226273d89fdefc498abeac9c3d65df2fbeefbdcd5b64149cf6072fd02f1086",
+        "com/moapan/translation/domain/TranslationValidator.class": "1db555323fe7a6ba152e5e66c35639fd826f8653d6990cbc19275e2989db83e0",
+        "com/moapan/translation/infrastructure/LocalTranslator.class": "f7d27ce9d7436942cadc0c7c1e730a947924642dd85742edd1ac82d35db2d51a"
+      },
+      "translationPolicy": "guard-v3/3c71ded57a28058f98a27aa5808c895a4625b33cb3cbec7fef6c81168354f233",
+      "java": 25,
+      "translationProvider": "index-translate-2b/guard-v3/3c71ded57a28058f98a27aa5808c895a4625b33cb3cbec7fef6c81168354f233"
+    },
+    "hostAndDeployedClassHashesEqual": true
+  },
+  "modelChecks": [
+    {
+      "kind": "translation",
+      "status": "PASS",
+      "durationMs": 2985,
+      "apiAuthentication": 401,
+      "port": 9931,
+      "modelVolumeReadOnly": true
+    },
+    {
+      "kind": "classification",
+      "status": "PASS",
+      "durationMs": 9812,
+      "apiAuthentication": 401,
+      "port": 9931,
+      "modelVolumeReadOnly": true
+    }
+  ],
+  "smtp": "STARTTLS=PASS certificate-chain=PASS hostname=PASS AUTH=235 message-submitted=false TLS=TLSv1.3",
+  "worker": {
+    "stopMillis": 672,
+    "restarted": true
+  },
+  "http": {
+    "about": 200,
+    "edition": 200,
+    "account": 401,
+    "newsletter": 404,
+    "csrf": 200
+  },
+  "publicUrl": "https://175.195.62.165/",
+  "database": {
+    "container": "damgox2-db-1",
+    "changed": false,
+    "stopped": false,
+    "target": "damgox2/damgox2",
+    "commonTarget": "damgox2/damgox2_sid",
+    "commonMigration": "not-performed"
+  },
+  "otherProjects": [
+    {
+      "name": "onlyplus-api",
+      "sameIdAndStart": true
+    },
+    {
+      "name": "onlyplus-worker",
+      "sameIdAndStart": true
+    },
+    {
+      "name": "platform-movie-kids-web-1",
+      "sameIdAndStart": true
+    },
+    {
+      "name": "mailbox-webmail-proxy",
+      "sameIdAndStart": true
+    },
+    {
+      "name": "mailbox-webmail-ui",
+      "sameIdAndStart": true
+    },
+    {
+      "name": "mailbox-imap-mailbox",
+      "sameIdAndStart": true
+    },
+    {
+      "name": "mailbox-smtp-receiver",
+      "sameIdAndStart": true
+    },
+    {
+      "name": "ai-coin-trader-postgresql",
+      "sameIdAndStart": true
+    }
+  ],
+  "scanner": {
+    "tool": "Trivy0.76.2",
+    "databaseSchema": 2,
+    "databasePublishedAt": "2026-11-09T00:56:17.155719746Z",
+    "databaseDownloadedAt": "2026-11-09T04:47:10.113223Z"
+  },
+  "jarSha256": "06a8fd49c1096f6260fbdec4841a337b0da9480c80bf3cdffc72d21d89d83485",
+  "notPerformed": [
+    "AMD64 execution",
+    "separate Linux host",
+    "common PG data migration",
+    "SMTP recipient/inbox delivery",
+    "forced production rollback drill",
+    "PR merge"
+  ],
+  "git": {
+    "branch": "codex/platform-ubuntu25-20261109",
+    "preExistingBusinessChanges": "preserved unstaged",
+    "localSkills": "excluded",
+    "indexSnapshotBootJar": "PASS",
+    "indexSnapshotCheck": "PASS",
+    "indexSnapshotIntegrationTest": "PASS",
+    "indexSnapshotResults": [
+      {
+        "suite": "test",
+        "tests": 195,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "integrationTest",
+        "tests": 152,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  "hostAndDeployedJarEqual": true
+}

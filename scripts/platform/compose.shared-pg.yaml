@@ -1,0 +1,25 @@
+# Apply only after the common operations session has restored/verified damgox2.
+services:
+  damgox2-web:
+    environment: &shared-db
+      DAMGOX2_DATABASE_HOST: ${DAMGOX2_SHARED_PG_HOST:?Set verified common PostgreSQL host}
+      DAMGOX2_DATABASE_PORT: ${DAMGOX2_SHARED_PG_PORT:-5432}
+      DAMGOX2_DATABASE_NAME: damgox2
+      DAMGOX2_DATABASE_USER: damgox2_sid
+      DAMGOX2_DATABASE_PASSWORD_FILE: /run/secrets/database-password
+  damgox2-worker:
+    environment: *shared-db
+  damgox2-migrate:
+    environment:
+      <<: *shared-db
+      DAMGOX2_DATABASE_MIGRATION_USER: ${DAMGOX2_SHARED_PG_MIGRATION_USER:?Set database-scoped migration owner}
+      DAMGOX2_DATABASE_MIGRATION_PASSWORD_FILE: /run/secrets/migration-password
+networks:
+  damgox2-database:
+    external: true
+    name: ${DAMGOX2_SHARED_PG_NETWORK:?Set existing shared PostgreSQL network}
+secrets:
+  damgox2-database-password:
+    file: ${DAMGOX2_SHARED_PG_PASSWORD_FILE:?Set private damgox2_sid password file}
+  damgox2-migration-password:
+    file: ${DAMGOX2_SHARED_PG_MIGRATION_PASSWORD_FILE:?Set private migration password file}

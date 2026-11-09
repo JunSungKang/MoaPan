@@ -1,5 +1,9 @@
 # 버전·공급망 확인
 
+현재 Ubuntu26.04·Temurin25.0.5+8 전환의 설정·실행 결과는 [통합 운영 인계](platform-ubuntu25.md)와 [검증서](../05-test/platform-ubuntu25.md)를 우선한다. 아래 Java27/Alpine·이전 Compose 명령은 과거 실행 기록이며 새 서비스에 재사용하지 않는다.
+
+
+
 > 문서번호: MP-DOC-018 · 기준: 저장소 현재 리비전 · 상태: 유지관리 · 작성: 개발 담당 · 검토: 독립 리뷰 담당
 
 착수·최종 확인일: 2026-10-28 UTC/Asia-Seoul. 최종 실행 시각·산출물 SHA256·이미지 digest는 [검증 증빙](../05-test/evidence/verification.json)을 참조한다. 공식 release API의 release_name과 실제 JVM 전체 문자열을 함께 확인했다. API의 단순 semver 필드는 추가 공급자 patch를 생략하므로 그것만으로 버전을 확정하지 않았다.

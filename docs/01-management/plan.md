@@ -354,3 +354,6 @@ DB/정책: V23 1:1 구독·기간·version·계정삭제정리, 기본권한없�
 기존 운영 이미지/리소스/볼륨과 타 프로젝트 기준값을 확보한다. 암호화 DB 백업·격리 복원 후 worker/web 정지, DB 행 fingerprint와 권한/세션·키 기준값을 확보하고 전체 기존 프로젝트 볼륨을 정지 상태에서 복사·검증한다. 새 DB/역할명으로 변경하고 인증서·모델·메일 secret 값을 보존한 채 검증 이미지로 전환한다. 최종 동등성 검증 후에만 이전 리소스 이름을 제거한다.
 ### 3. 검증·전달
 기존 전체 Gradle 회귀, Compose local/public/server 및 SMTP overlay, Helm lint/render, migration 안전장치 시험, source/JAR/SBOM/최종 이미지 검사와 실제 HTTPS를 확인한다. 기존 미추적 HTTPS 스킬을 변경·커밋하지 않는다. current-head 독립/App 검토 후 guarded human develop 병합과 head branch 3종 정리를 검증한다.
+
+## 2026-11-09 Ubuntu25 통합 운영 Sprint
+공식 Ubuntu26.04 fallback·Temurin25.0.5+8, 공유 앱/AI 이미지와 platform Compose, 외부 DB password-file/SID override, 명시적14-class AI 결과 호환, CA/STARTTLS/AUTH, 실제 flock·암호화 복원·운영 교체를 구현/검증한다. 기존 데이터·타 프로젝트·기존 미커밋 사업/UI/스킬 변경은 보존한다. 승인 범위는 자기 변경 commit/push까지이며 PR 병합·공통PG 데이터 이관은 포함하지 않는다. 완료 증빙은 MP-DOC-049/050과 workflow-plan platform-ubuntu25-20261109이다.

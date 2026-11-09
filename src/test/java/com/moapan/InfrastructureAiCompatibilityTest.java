@@ -16,8 +16,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class InfrastructureAiCompatibilityTest {
     @TempDir Path work;
-    @Test void deploymentRenamePreservesEveryOriginalExecutablePolicyByte() throws Exception {
+    @Test void reviewedJava25BaselinePinsEveryExecutablePolicyByte() throws Exception {
         var baseline=tools.jackson.databind.json.JsonMapper.builder().build().readTree(Files.readString(Path.of("src/test/resources/infrastructure-ai-policy-baseline.json")));
+        assertEquals(25,Runtime.version().feature());
+        assertTrue(Files.isRegularFile(Path.of("src/test/resources/infrastructure-ai-policy-java27-baseline.json")));
         int checked=0;
         for(var entry:baseline.path("classes").properties()){
             try(var stream=getClass().getClassLoader().getResourceAsStream(entry.getKey())){
@@ -26,7 +28,7 @@ class InfrastructureAiCompatibilityTest {
                 checked++;
             }
         }
-        assertTrue(checked>=9);
+        assertEquals(14,checked);
         assertEquals(baseline.path("translationPolicy").asText(),com.moapan.translation.application.TranslationWorker.POLICY);
         assertEquals(baseline.path("translationProvider").asText(),com.moapan.translation.application.TranslationWorker.PROVIDER);
         assertEquals(baseline.path("classificationPolicy").asText(),LocalClassifier.POLICY);

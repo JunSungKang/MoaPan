@@ -15,3 +15,7 @@
 관리 절차는 [문서관리계획서](01-management/document-control.md), 변경 경로는 [이관대장](01-management/path-mapping.json)을 따른다.
 
 Docker/Compose/Helm 명칭 변경은 [이관 설계서 MP-DOC-041](03-design/infrastructure-naming.md), 실제 실행 결과는 [검증서 MP-DOC-042](05-test/infrastructure-naming.md)를 정본으로 관리한다.
+
+## Ubuntu25 플랫폼 운영 전환
+- [MP-DOC-049 운영 구성·공통 PG·복구 인계](06-transition/platform-ubuntu25.md)
+- [MP-DOC-050 Java25·보안·실제 교체 검증](05-test/platform-ubuntu25.md)

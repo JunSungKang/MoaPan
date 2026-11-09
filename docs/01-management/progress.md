@@ -268,3 +268,11 @@ PR29는 최신 develop74b982a를 통합했다. target tree가a09f509와 같고 a
 최종 명칭 전수 점검에서 active Docker/Compose/Helm/모델 파일의 대소문자 moapan 잔여0을 확인했다(전용 이관 도구의 과거 source 이름은 필수 입력으로 유지). 프록시의 로컬 Go marker/시험 이름까지 변경하고5패키지·6source hash·최종proxy3이미지 scan을 재검증해 같은 공개proxy ID를 서비스에 반영했다. sourceCheck/check/securityCheck 후속 PASS, 공개HTTPS13경계/canonical4개 재검증. 기존 .env 비밀값 유지 확인 후 작업용 env사본·임시source/SMTP probe/일회 이관 runner를 삭제했다. 최종 산출물은 MP-DOC-041/042 및 비밀값 없는 증빙 JSON으로 등록했다. 이후에는 독립 리뷰·현재-head App 승인·guarded develop 병합/branch 정리 결과를 PR에서 확인한다.
 
 독립 리뷰 e465ff4에서 F1(AI 클래스 해시 변경으로 기존 결과 무효화)·F2(이관 증빙 부모 symlink 경계)를 발견해 병합을 보류했다. worker/web 중지 후272→9로 감소한 번역과 두 job/태그4테이블을 frozen 암호화 백업에서 복구했고 각 전체 행 SHA가 원래와 같다. 신규 기사·권리/주제·운영자 변경 부재를 확인하고 trigger를 살린 단일 DELETE/COPY를 사용했다. 첫 복구 실패는 롤백 후 search_path를 명시해 해결했다. 예산/계정/세션/인증 quota는 되돌리지 않았다. 정책14class bytes·POLICY/PROVIDER를 유지하는 내부 property 매핑으로 수정하고 실제 모델 서버의 legacy wire 호환을 검증했다. 최종 전체 clean428(192/150/86) FAIL/ERROR/SKIP0·이관5·최종8이미지 gate·실제 모델/HTTPS와 worker 재개 후272번역/502태그 지문 보존 PASS. 새 head 독립 재리뷰·App 승인·병합을 진행한다.
+
+## 2026-11-09 Ubuntu25 플랫폼 전환 착수
+공통 계약/이미지 부재는 최신 사용자 지시로 프로젝트 자체 fallback 제작으로 해결한다. 실제 desktop-linux/aarch64와 사람/App 원격 권한을 확인했다. 기존 dirty 파일을 workspace-local 사본/지문으로 보존했으며 feature branch codex/platform-ubuntu25-20261109에서 작업한다. 운영 변경·공통 PG 이관은 아직 미실행이다.
+
+현재 Java25 단위197·통합158·브라우저90은 첫 회귀에서 통과했다. 보안 task는 새 Dockerfile이 이전 직접 build 명령의 base 이름을 해석하지 못해 실패했으며, 검증을 끄지 않고 동일 Bake DAG의 proxy-check 대상으로 수정 중이다. 실제 운영은 아직 교체하지 않았다. Ubuntu native AI/proxy 이미지 scan HIGH/CRITICAL0을 확인했다.
+
+## 2026-11-09 Ubuntu25 플랫폼 운영 전환 완료
+Temurin25.0.5+8/Ubuntu26.04 앱·proxy·공유AI 이미지로 platform-damgox2-*5개 서비스를 교체했다. 실제 flock 아래 암호화 백업·39개 테이블 복원 대조,14개 정책 class 대조와282개 번역/각544개 작업 보존, 모델 실제 추론, MailBox STARTTLS/hostname/AUTH235, worker672ms 종료·재시작, HTTPS/API를 확인했다. 기존PG는 중지/변경하지 않았고 타 운영8개도 동일ID/시각을 유지했다. 445개 테스트·securityCheck/acceptanceTest·최종3이미지 HIGH/CRITICAL0/secret0 PASS. 상세 MP-DOC-049/050. 공통PG 이관·AMD64·수신함 배달·merge는 미실행이다. 기존 사업/UI/스킬 변경은 보존하고 플랫폼 및 보안·스키마 호환 선행 변경만 커밋 대상으로 분리했다.

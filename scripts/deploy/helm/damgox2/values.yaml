@@ -12,7 +12,7 @@ webReplicas: 1
 storageClass: ""
 databaseStorage: 10Gi
 modelStorage: 5Gi
-migrationVersion: "25"
+migrationVersion: "27"
 translationThreads: "2"
 ingress:
   enabled: true
