@@ -20,7 +20,7 @@ V28은 기존 article_classification_jobs에 시스템 모델 provenance 한 필
 
 ## 실제 재검증과 반영
 
-단위197·통합163·E2E90, 합계450건 실패/오류/skip0이다. CSS 지면 시험의 언어 선택자 대기 timeout이 한 번 발생했으며 기준 완화 없이 단독 재실행과 전체90건 재실행을 통과했다. 최초 실패와 재실행 로그를 workspace 증빙으로 보존했다. securityCheck/acceptanceTest와 최종 앱·proxy·AI 이미지 검사도 통과했다.
+단위197·통합164·E2E90, 합계451건 실패/오류/skip0이다. CSS 지면 시험의 언어 선택자 대기 timeout이 한 번 발생했으며 기준 완화 없이 단독 재실행과 전체90건 재실행을 통과했다. 최초 실패와 재실행 로그를 workspace 증빙으로 보존했다. securityCheck/acceptanceTest와 최종 앱·proxy·AI 이미지 검사도 통과했다.
 
 동일 운영 flock 아래 새 암호화 백업을 격리 PG로 복원해39개 테이블 지문/건수를 대조한 뒤 V28을 적용했다. 기존36개 테이블과 model_policy를 제외한 분류 작업 내용이 그대로임을 확인했다. DB는 중지하지 않았고 proxy·모델과 다른 운영10개 컨테이너도 재시작하지 않았다. 웹·worker만 같은 검사 완료 앱 이미지로 교체하고 worker717ms 종료·재시작, HTTPS200·계정401·구독페이지404를 확인했다.14개 정책 class와 모든 POLICY/PROVIDER 값은 이전 실제 실행 JAR와 동일하다.
 
@@ -29,3 +29,7 @@ Docker image store에서 이전 index ID의 재실행 조회가 되지 않는 �
 정제 결과는 [증빙](evidence/platform-merge-review-20261109.json)에 있으며 원시 검사·백업·원래 이미지 설정·복구용 override는 .local/platform-merge-20261109에만 있다. V28은 추가형 스키마라 복구 시 컬럼/이력을 파괴적으로 되돌리지 않는다. 실제 운영에 고의 장애를 발생시킨 시험은 수행하지 않았다.
 
 새 최종 앱에서도 정상 HTTPS·기본117roots·공식4root 제거·폐기/악성14chain 거부와 MailBox STARTTLS/TLS1.3·CA·hostname·AUTH235를 재확인했다. 메일 메시지는 발송하지 않았다.
+
+## F4 재리뷰의 부분 작업 경계
+
+5317 head 재리뷰에서 원복 안전 SQL이 번역 작업의 policy_version을 검사하지 않는 것을 추가 확인했다. 정상 결과의 순·역전환이 성공해도 unreviewed-policy 부분 작업이 공존하면 구 worker를 시작하면 안 된다. 배포와 시험이 같은 legacy-worker-safe.sql을 읽도록 추출했고, 기존2개 검사에서 expected unsafe1/actual0 실패를 PostgreSQL로 재현했다. 번역 row provider·모든 번역 job policy·분류 model provenance의3개 검사를 모두 수행하는 SQL로 보완한 뒤 전체 통합164건이 통과했다. 기존 부분 결과·시도 횟수의 보존 단언과 검사 기준은 유지했다. 이 마지막 보완은 호스트 배포 도구·시험 변경이어서 운영 JAR와 이미지99d428ea는 그대로다.

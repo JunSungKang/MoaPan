@@ -20,7 +20,7 @@
     },
     {
       "suite": "integrationTest",
-      "tests": 163,
+      "tests": 164,
       "failures": 0,
       "errors": 0,
       "skipped": 0
@@ -79,5 +79,19 @@
     "normalHttps": true,
     "rejectedChains": 14,
     "roots117": true
+  },
+  "rollbackSqlRegression": {
+    "initialPredicateExpectedUnsafe": 1,
+    "initialPredicateActualUnsafe": 0,
+    "initialResult": "FAIL",
+    "correctedPredicate": "Includes translation providers, all translation job policies and classification model provenance",
+    "finalResult": "PASS",
+    "usesSameSqlAsDeployment": true
+  },
+  "secondReview": {
+    "head": "5317c8fa7a7d13bfd23d15b87c247fb9714afbb2",
+    "state": "CHANGES_REQUESTED",
+    "remaining": "F4 missing translation job policy guard",
+    "followup": "Shared SQL and PostgreSQL regression added; current-head review still required"
   }
 }

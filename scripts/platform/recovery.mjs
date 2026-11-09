@@ -1,4 +1,13 @@
 import {pipeline} from 'node:stream/promises';
+import fs from 'node:fs';
+
+export function legacyWorkerSafe(query,legacy){
+  const literals={old_provider:legacy.translationProvider,old_translation_policy:legacy.translationPolicy,old_classification_model:legacy.classificationPolicy};
+  for(const value of Object.values(literals))if(typeof value!=='string'||!value||value.length>160)throw Error('Reviewed legacy identity required');
+  const template=fs.readFileSync(new URL('./legacy-worker-safe.sql',import.meta.url),'utf8');
+  const sql=template.replace(/:([a-z_]+)/g,(_,name)=>{if(!(name in literals))throw Error('Unknown recovery bind');return "'"+literals[name].replaceAll("'","''")+"'";});
+  return query(sql)==='0';
+}
 
 /** Preserve the attempt even if the remote commit succeeds but its acknowledgement is lost. */
 export class ReviewedPolicyChange {

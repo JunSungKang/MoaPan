@@ -6,7 +6,7 @@ import {execFileSync} from 'node:child_process';
 import {databaseSnapshot} from '../deploy/infrastructure-migration.mjs';
 import {modelCheck} from './model-check.mjs';
 import {restoreCheck} from './restore-check.mjs';
-import {ReviewedPolicyChange} from './recovery.mjs';
+import {ReviewedPolicyChange,legacyWorkerSafe} from './recovery.mjs';
 
 const root=fs.realpathSync('.'),base=root+'/.local/platform-ubuntu25-20261109';
 const lock='/Users/kkkk/Desktop/jskang/03.workspace/01.project/operations/run/deploy.lock';
@@ -109,7 +109,7 @@ try {
     if(started)for(const service of [...services].reverse()){const id=docker([...args,'ps','-aq',service]);if(id)docker(['stop','--timeout','20',id]);}
     policyChange.rollback(
       ()=>{evidence.reverseTransition=runtime('policy-transition',{DAMGOX2_POLICY_TRANSITION:'rollback-reviewed-java27'});},
-      ()=>sql("SELECT (SELECT count(*) FROM article_translations WHERE NOT locked AND provider<>'"+legacy.translationProvider+"')+(SELECT count(*) FROM article_classification_jobs WHERE model_policy IS DISTINCT FROM '"+legacy.classificationPolicy+"')")==='0'
+      ()=>legacyWorkerSafe(sql,legacy)
     );
     if(stopped)for(const name of ['damgox2-translator-1','damgox2-classifier-1','damgox2-web-1','damgox2-proxy-1','damgox2-worker-1'])docker(['start',old.find(c=>c.Name==='/'+name).Id]);
     evidence.rolledBack=true;
