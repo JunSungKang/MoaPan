@@ -18,8 +18,9 @@
     },
     {
       "path": "licenses/native/caddy/LICENSE.txt",
-      "url": "https://raw.githubusercontent.com/caddyserver/caddy/v2.11.7/LICENSE",
-      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+      "url": "https://raw.githubusercontent.com/caddyserver/caddy/v2.11.9/LICENSE",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "verifiedAt": "2026-11-08T04:27:04.609Z"
     },
     {
       "path": "licenses/common/EPL-2.0.txt",
@@ -41,5 +42,16 @@
       "url": "https://raw.githubusercontent.com/spdx/license-list-data/main/text/Classpath-exception-2.0.txt",
       "sha256": "f36ecd7d28dc3c49854d3908a3824696972aed34f5ffe426174f35fb03c5f194"
     }
-  ]
+  ],
+  "runtimeSources": {
+    "checkedAt": "2026-11-09T05:15:34.781Z",
+    "inventory": "scripts/platform/runtime-versions.json",
+    "ubuntu": "https://hub.docker.com/_/ubuntu",
+    "temurin": "https://github.com/adoptium/temurin25-binaries/releases/tag/jdk-25.0.5%2B8",
+    "license": "GPL-2.0 WITH Classpath-exception-2.0",
+    "ubuntuPackageCopyrights": "/usr/share/doc/*/copyright",
+    "javaNotices": "/opt/java/openjdk/legal",
+    "scope": "New app/proxy/AI images; existing PostgreSQL preserved pending shared migration",
+    "sourceAvailability": "External image distribution requires matching supplier and Ubuntu package source compliance; no registry distribution performed."
+  }
 }

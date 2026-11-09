@@ -61,3 +61,6 @@ account_subscriptions(account_id UUID PK/FK users ON DELETE CASCADE,status ACTIV
 ## V25 인증 이메일
 
 users에 email_cipher(bytea), email_key(varchar64 UNIQUE/HMAC), email_verified_at, email_policy_version, email_policy_accepted_at을 추가한다. 다섯 필드가 모두NULL(보존된 기존 계정)이거나 모두설정된 상태만 허용한다. 기존 행을 삭제하거나 주소를 추정하지 않는다. email_challenges는 목적SIGNUP/BIND/RESET, 계정FK/auth_version, 세션/사용자명/이메일HMAC, 암호화 주소, 코드HMAC, 오입력수,5분 만료시각을 갖는다. email_outbox는 계정/도전FK(cascade), 암호화 봉투, 상태,3회 제한,예약/만료/lease/오류코드만 저장한다. 발송 후 봉투NULL, 만료 도전과1일 메타데이터 삭제. 계정 삭제 시 계정에 연결된 이메일 도전·발송과 주소/계정 제한 카운터를 정리한다. 회원 마케팅/이메일 열람 추적 테이블은 없다.
+
+## V28 시스템 분류 provenance
+article_classification_jobs.model_policy(varchar160, nullable)는 생성 모델 정책의 검증된 출처이며 회원 프로필이 아니다. NULL/다른 모델 결과는 자동 재처리하지 않고 보존한다. 정확한 현재 taxonomy hash의 legacy 행만 worker가 stamp하고, 명시 CLI는 알려진 source hash/provenance만 순·역 이행한다. 동일 모델 provenance인 과거 taxonomy 작업만 재대기한다. 값 변경은 article_classification 캐시 지문에도 반영한다. 기존 payload/counters·태그·회원 행은 마이그레이션에서 변경하지 않는다.

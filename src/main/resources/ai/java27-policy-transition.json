@@ -1,0 +1,65 @@
+{
+  "fromJava": 27,
+  "toJava": 25,
+  "translationPolicy": "guard-v3/32dbe79b2fbde82c84aeb2d13b8d1bd156b47208546950eaae17ded93db98c9e",
+  "translationProvider": "index-translate-2b/guard-v3/32dbe79b2fbde82c84aeb2d13b8d1bd156b47208546950eaae17ded93db98c9e",
+  "classificationPolicy": "qwen3.5-4b/d20ca0e438aeba2113c1ac23978d5c819b23fd6b80bf0420e274f012d4359da7",
+  "classes": [
+    {
+      "name": "com/moapan/ai/domain/AiPolicy.class",
+      "sha256": "b7da7ff8b2b6225e33243e4288a8f6abdbc2f408030ede7cd7ad78d54ec54eab"
+    },
+    {
+      "name": "com/moapan/ai/domain/ArticleGuard$Held.class",
+      "sha256": "5b442d990cf3fc8862a63af8f730351cec1f2cf2f58d91e884d7f03f8628013b"
+    },
+    {
+      "name": "com/moapan/ai/domain/ArticleGuard.class",
+      "sha256": "2ae4b663d2757ab6513e65c76615962860eeee3232f3863c38a75aa2ce8c4a8f"
+    },
+    {
+      "name": "com/moapan/ai/infrastructure/ModelJson.class",
+      "sha256": "20d8000b30c96cd2e970f33aa173f9434977c4915b58a202e8214818918838ee"
+    },
+    {
+      "name": "com/moapan/ai/infrastructure/ModelStream$Invalid.class",
+      "sha256": "e1e5ef83126b9431b6ecae8571833db297610b0bcafe606ef0f9cc94a660f0d7"
+    },
+    {
+      "name": "com/moapan/ai/infrastructure/ModelStream.class",
+      "sha256": "09db29e32606ea6ac4a08c4f0231240b47b09d56b97e381b81a7a66916aaae66"
+    },
+    {
+      "name": "com/moapan/ai/infrastructure/ModelTokenBudget$ArticleBudgetExceeded.class",
+      "sha256": "a0e59cab156ea2f63fc18622ddfb6952c4751a16d3bcdc9ae93b91ddd607c3ab"
+    },
+    {
+      "name": "com/moapan/ai/infrastructure/ModelTokenBudget.class",
+      "sha256": "ec1df8c65059e9d4c47fcc8a281bb59bacea4b69d14b4ff4a027d0098e5388a6"
+    },
+    {
+      "name": "com/moapan/classification/infrastructure/LocalClassifier.class",
+      "sha256": "b8cbebccda0d8469f797be910c297b87ade93d17fd0f4cf93c9c4a97abd1cbb7"
+    },
+    {
+      "name": "com/moapan/translation/domain/TranslationGlossary$Term.class",
+      "sha256": "6b59ea64e59d999ac614c3d426ab789354e25378bb6ea0baf94dde32d8b5d226"
+    },
+    {
+      "name": "com/moapan/translation/domain/TranslationGlossary.class",
+      "sha256": "76e2e951fabf76185a15e596b0f11760a361cbbc8a70972772f53be40746a297"
+    },
+    {
+      "name": "com/moapan/translation/domain/TranslationValidator$Protected.class",
+      "sha256": "fa64bc388fdf4f202f5e75489f5ce9b1f4ceadda319863226473faa2b8742f3c"
+    },
+    {
+      "name": "com/moapan/translation/domain/TranslationValidator.class",
+      "sha256": "898d364c00df4168ea0d6faecfd875227bae8645a776a7dfa338d5538b91c630"
+    },
+    {
+      "name": "com/moapan/translation/infrastructure/LocalTranslator.class",
+      "sha256": "6a21e211cd05dc1d94c65b9eb691ba77a948144d667f2db507f59cd5e3df244f"
+    }
+  ]
+}

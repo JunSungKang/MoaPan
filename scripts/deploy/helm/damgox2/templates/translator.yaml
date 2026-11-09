@@ -28,13 +28,13 @@ spec:
       containers:
         - name: translator
           image: {{ include "damgox2.image" .Values.images.translator }}
-          env: [{name: TRANSLATION_THREADS, value: {{ .Values.translationThreads | quote }}}]
-          ports: [{containerPort: 11435}]
+          env: [{name: DAMGOX2_AI_KIND, value: translation}, {name: TRANSLATION_THREADS, value: {{ .Values.translationThreads | quote }}}]
+          ports: [{containerPort: 9931}]
           securityContext: {readOnlyRootFilesystem: true, allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}}
           resources: {requests: {cpu: '1', memory: 3Gi}, limits: {cpu: '2', memory: 4Gi}}
-          readinessProbe: {httpGet: {path: /health, port: 11435}, periodSeconds: 15}
-          startupProbe: {httpGet: {path: /health, port: 11435}, periodSeconds: 10, failureThreshold: 30}
-          livenessProbe: {httpGet: {path: /health, port: 11435}, periodSeconds: 15, failureThreshold: 12}
+          readinessProbe: {httpGet: {path: /health, port: 9931}, periodSeconds: 15}
+          startupProbe: {httpGet: {path: /health, port: 9931}, periodSeconds: 10, failureThreshold: 30}
+          livenessProbe: {httpGet: {path: /health, port: 9931}, periodSeconds: 15, failureThreshold: 12}
           volumeMounts: [{name: model, mountPath: /models, readOnly: true}, {name: tmp, mountPath: /tmp}, {name: key, mountPath: /run/secrets, readOnly: true}]
       volumes:
         - {name: model, persistentVolumeClaim: {claimName: damgox2-model}}

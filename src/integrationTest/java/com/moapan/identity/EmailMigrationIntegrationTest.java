@@ -35,7 +35,7 @@ class EmailMigrationIntegrationTest {
             var beforeUsers=db.sql(users).query(String.class).list();
             var snapshots=new LinkedHashMap<String,List<String>>();
             for(String table:List.of("spring_session","spring_session_attributes","account_subscriptions"))snapshots.put(table,snapshot(db,table));
-            var latest=Flyway.configure().dataSource(postgres.getJdbcUrl(),postgres.getUsername(),postgres.getPassword()).cleanDisabled(true).load();
+            var latest=Flyway.configure().dataSource(postgres.getJdbcUrl(),postgres.getUsername(),postgres.getPassword()).target("25").cleanDisabled(true).load();
             assertEquals(1,latest.migrate().migrationsExecuted);latest.validate();
             assertTrue(beforeUsers.equals(db.sql(users).query(String.class).list()),"Existing credential/role/consent rows must remain identical");
             for(var entry:snapshots.entrySet())assertTrue(entry.getValue().equals(snapshot(db,entry.getKey())),"Existing operational rows changed: "+entry.getKey());
@@ -44,6 +44,10 @@ class EmailMigrationIntegrationTest {
             assertThrows(DataIntegrityViolationException.class,()->db.sql("UPDATE users SET email_key=repeat('a',64) WHERE id=:id").param("id",admin).update());
             assertEquals(0,latest.migrate().migrationsExecuted);
             assertTrue(beforeUsers.equals(db.sql(users).query(String.class).list()),"Repeated migration must not alter legacy accounts");
+            var current=Flyway.configure().dataSource(postgres.getJdbcUrl(),postgres.getUsername(),postgres.getPassword()).cleanDisabled(true).load();
+            int pending=current.info().pending().length;assertEquals(pending,current.migrate().migrationsExecuted);current.validate();
+            assertEquals(0,current.info().pending().length);assertEquals(beforeUsers,db.sql(users).query(String.class).list());
+            for(var entry:snapshots.entrySet())assertEquals(entry.getValue(),snapshot(db,entry.getKey()),"Later migrations must also preserve "+entry.getKey());
         }
     }
     private static List<String> snapshot(JdbcClient db,String table){

@@ -1,0 +1,34 @@
+{
+ admin off
+ default_sni {$DAMGOX2_PUBLIC_HOST}
+ servers {
+  protocols h1 h2
+ }
+}
+https://{$DAMGOX2_PUBLIC_HOST} {
+ tls {
+  issuer acme {
+   dir https://acme-v02.api.letsencrypt.org/directory
+   profile shortlived
+  }
+ }
+ # HTML declares its actual language; the server does not negotiate translations.
+ header -Content-Language
+ @public_documents path / /index.html /about.html /privacy.html /terms.html /robots.txt /sitemap.xml /assets/*
+ encode @public_documents zstd gzip
+ @internal path /internal/* /actuator/*
+ respond @internal 404
+ header Strict-Transport-Security "max-age=31536000; includeSubDomains"
+ request_body {
+  max_size 1MB
+ }
+ reverse_proxy damgox2-web:8080 {
+  header_up -X-Forwarded-For
+  header_up -X-Forwarded-Host
+  header_up -X-Forwarded-Proto
+  transport http {
+   dial_timeout 5s
+   response_header_timeout 15s
+  }
+ }
+}

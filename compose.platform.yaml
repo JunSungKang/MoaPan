@@ -1,0 +1,157 @@
+name: platform
+x-app-environment: &app-environment
+  DAMGOX2_DATABASE_HOST: ${DAMGOX2_DATABASE_HOST:-damgox2-db-1}
+  DAMGOX2_DATABASE_PORT: ${DAMGOX2_DATABASE_PORT:-5432}
+  DAMGOX2_DATABASE_NAME: ${DAMGOX2_DATABASE_NAME:-damgox2}
+  DAMGOX2_DATABASE_USER: ${DAMGOX2_DATABASE_USER:-damgox2_sid}
+  DAMGOX2_DATABASE_PASSWORD_FILE: /run/secrets/database-password
+  DAMGOX2_SECRET: ${DAMGOX2_SECRET:?Set existing application secret}
+  PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:?Set approved HTTPS origin}
+  COOKIE_SECURE: 'true'
+  SOURCE_MIN_INTERVAL_SECONDS: ${SOURCE_MIN_INTERVAL_SECONDS:-300}
+  DAMGOX2_MAIL_ENABLED: ${DAMGOX2_MAIL_ENABLED:-false}
+  DAMGOX2_MAIL_HOST: ${DAMGOX2_MAIL_HOST:-mailbox-smtp-receiver}
+  DAMGOX2_MAIL_PORT: ${DAMGOX2_MAIL_PORT:-2587}
+  DAMGOX2_MAIL_FROM: ${DAMGOX2_MAIL_FROM:-}
+  DAMGOX2_MAIL_USERNAME: ${DAMGOX2_MAIL_USERNAME:-}
+  DAMGOX2_MAIL_TLS: STARTTLS
+  DAMGOX2_MAIL_CA_FILE: /run/secrets/external-smtp-ca
+  DAMGOX2_MAIL_PASSWORD_FILE: /run/secrets/external-smtp-password
+  DAMGOX2_MAIL_DATA_KEY_FILE: /run/secrets/email-data-key
+x-app: &app
+  image: ${DAMGOX2_APP_IMAGE:-damgox2-app:ubuntu26.04-java25-20261109}
+  read_only: true
+  tmpfs: ['/tmp:size=128m,mode=1777']
+  cap_drop: [ALL]
+  security_opt: ['no-new-privileges:true']
+  mem_limit: 768m
+  cpus: 1.5
+  pids_limit: 256
+  restart: unless-stopped
+  stop_grace_period: 45s
+  secrets: [{source: damgox2-database-password,target: database-password},{source: damgox2-email-data-key,target: email-data-key},{source: damgox2-smtp-ca,target: external-smtp-ca},{source: damgox2-smtp-password,target: external-smtp-password}]
+  networks: [damgox2-backend,damgox2-database]
+services:
+  damgox2-web:
+    <<: *app
+    environment:
+      <<: *app-environment
+      DAMGOX2_ROLE: web
+    ports: ['127.0.0.1:${DAMGOX2_API_PORT:-20100}:8080']
+    healthcheck:
+      test: ['CMD-SHELL','curl -fsS -H "Host: $${PUBLIC_BASE_URL#*://}" http://127.0.0.1:8080/internal/ready >/dev/null']
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 45s
+  damgox2-worker:
+    <<: *app
+    environment:
+      <<: *app-environment
+      DAMGOX2_ROLE: worker
+      DAMGOX2_TRANSLATION_URL: http://damgox2-translator:9931/v1/chat/completions
+      DAMGOX2_TRANSLATION_KEY_FILE: /run/secrets/translation_key
+      DAMGOX2_CLASSIFICATION_URL: http://damgox2-classifier:9931/v1/chat/completions
+      DAMGOX2_CLASSIFICATION_KEY_FILE: /run/secrets/classification_key
+      TRANSLATION_TIMEOUT_SECONDS: ${TRANSLATION_TIMEOUT_SECONDS:-300}
+    secrets: [{source: damgox2-database-password,target: database-password},{source: damgox2-email-data-key,target: email-data-key},{source: damgox2-smtp-ca,target: external-smtp-ca},{source: damgox2-smtp-password,target: external-smtp-password},{source: damgox2-translation-key,target: translation_key},{source: damgox2-classification-key,target: classification_key}]
+    networks: [damgox2-backend,damgox2-database,damgox2-translation,damgox2-classification,damgox2-mail]
+    depends_on:
+      damgox2-translator: {condition: service_healthy}
+      damgox2-classifier: {condition: service_healthy}
+  damgox2-proxy:
+    image: ${DAMGOX2_PROXY_IMAGE:-damgox2-proxy:ubuntu26.04-java25-20261109}
+    environment:
+      DAMGOX2_PUBLIC_HOST: ${DAMGOX2_PUBLIC_HOST:?Set existing public IP/domain}
+    ports:
+      - '${DAMGOX2_BIND_ADDRESS:-127.0.0.1}:80:80'
+      - '${DAMGOX2_BIND_ADDRESS:-127.0.0.1}:443:443'
+      - '127.0.0.1:${DAMGOX2_WEB_PORT:-20000}:80'
+    volumes: [damgox2-caddy-data:/data,damgox2-caddy-config:/config]
+    networks: [damgox2-backend]
+    read_only: true
+    tmpfs: ['/tmp:size=16m,mode=1777']
+    cap_drop: [ALL]
+    cap_add: [NET_BIND_SERVICE]
+    security_opt: ['no-new-privileges:true']
+    mem_limit: 192m
+    cpus: 0.5
+    restart: unless-stopped
+    depends_on:
+      damgox2-web: {condition: service_healthy}
+    healthcheck:
+      test: ['CMD-SHELL','curl -fsS --resolve "$${DAMGOX2_PUBLIC_HOST}:443:127.0.0.1" "https://$${DAMGOX2_PUBLIC_HOST}/about.html" >/dev/null']
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+  damgox2-translator:
+    image: ${DAMGOX2_AI_IMAGE:-damgox2-ai:ubuntu26.04-java25-20261109}
+    environment: {DAMGOX2_AI_KIND: translation,TRANSLATION_THREADS: '${TRANSLATION_THREADS:-2}'}
+    volumes: [damgox2-translation-models:/models:ro]
+    secrets: [{source: damgox2-translation-key,target: translation_key}]
+    networks: [damgox2-translation]
+    read_only: true
+    tmpfs: ['/tmp:size=128m,mode=1777']
+    cap_drop: [ALL]
+    security_opt: ['no-new-privileges:true']
+    mem_limit: 4g
+    cpus: 2
+    pids_limit: 128
+    restart: unless-stopped
+    stop_grace_period: 20s
+    healthcheck:
+      test: ['CMD','curl','--fail','--silent','--max-time','3','http://127.0.0.1:9931/health']
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 120s
+  damgox2-classifier:
+    extends: {service: damgox2-translator}
+    environment: {DAMGOX2_AI_KIND: classification,CLASSIFICATION_THREADS: '${CLASSIFICATION_THREADS:-2}'}
+    volumes: !override [damgox2-classification-models:/models:ro]
+    secrets: !override [{source: damgox2-classification-key,target: classification_key}]
+    networks: !override [damgox2-classification]
+  damgox2-migrate:
+    <<: *app
+    profiles: [tools]
+    restart: 'no'
+    environment:
+      <<: *app-environment
+      DAMGOX2_ROLE: migrate
+      DAMGOX2_DATABASE_MIGRATION_USER: ${DAMGOX2_DATABASE_MIGRATION_USER:-damgox2_migrate}
+      DAMGOX2_DATABASE_MIGRATION_PASSWORD_FILE: /run/secrets/migration-password
+    secrets: !override [{source: damgox2-migration-password,target: migration-password}]
+    networks: !override [damgox2-database]
+  damgox2-model-init:
+    extends: {service: damgox2-translator}
+    profiles: [tools]
+    restart: 'no'
+    environment: {DAMGOX2_AI_KIND: translation,DAMGOX2_AI_MODE: init}
+    secrets: !override []
+    volumes: !override [damgox2-translation-models:/models]
+    networks: !override [damgox2-backend]
+    healthcheck: {disable: true}
+  damgox2-classifier-model-init:
+    extends: {service: damgox2-model-init}
+    environment: {DAMGOX2_AI_KIND: classification,DAMGOX2_AI_MODE: init}
+    volumes: !override [damgox2-classification-models:/models]
+networks:
+  damgox2-backend: {}
+  damgox2-database: {external: true,name: '${DAMGOX2_DATABASE_NETWORK:-damgox2_backend}'}
+  damgox2-mail: {external: true,name: '${DAMGOX2_SMTP_NETWORK:-mailbox_default}'}
+  damgox2-translation: {internal: true}
+  damgox2-classification: {internal: true}
+volumes:
+  damgox2-caddy-data: {external: true,name: damgox2_public_caddy_data}
+  damgox2-caddy-config: {external: true,name: damgox2_public_caddy_config}
+  damgox2-translation-models: {external: true,name: damgox2_translation_models}
+  damgox2-classification-models: {external: true,name: damgox2_classification_models}
+secrets:
+  damgox2-database-password: {file: '${DAMGOX2_DB_PASSWORD_FILE:?Set private database password file}'}
+  damgox2-migration-password: {file: '${DAMGOX2_DB_MIGRATION_PASSWORD_FILE:-./.local/platform/unconfigured-migration-secret}'}
+  damgox2-email-data-key: {file: '${MAIL_DATA_KEY_FILE:-./.local/mail/data.key}'}
+  damgox2-smtp-ca: {file: '${MAIL_SMTP_CA_FILE:-./.local/mail/external/operator-ca.crt}'}
+  damgox2-smtp-password: {file: '${MAIL_SMTP_PASSWORD_FILE:-./.local/mail/external/smtp-password}'}
+  damgox2-translation-key: {file: '${TRANSLATION_KEY_FILE:-./.local/translation/api.key}'}
+  damgox2-classification-key: {file: '${CLASSIFICATION_KEY_FILE:-./.local/classification/api.key}'}

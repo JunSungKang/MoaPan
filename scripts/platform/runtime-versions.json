@@ -1,0 +1,66 @@
+{
+  "checkedAt": "2026-11-09T04:35:45.860Z",
+  "ubuntu": {
+    "image": "ubuntu:26.04@sha256:6a06111c3b0a8600feadb270aec771dc239bf407b25625f93f44ab00e11f4d3c",
+    "digest": "sha256:6a06111c3b0a8600feadb270aec771dc239bf407b25625f93f44ab00e11f4d3c"
+  },
+  "node": {
+    "image": "node:24.18.0@sha256:5711a0d445a1af54af9589066c646df387d1831a608226f4cd694fc59e745059",
+    "version": "24.18.0"
+  },
+  "java": [
+    {
+      "os": "linux",
+      "arch": "aarch64",
+      "type": "jdk",
+      "version": "25.0.5+8-LTS",
+      "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.5%2B8/OpenJDK25U-jdk_aarch64_linux_hotspot_25.0.5_8.tar.gz",
+      "sha256": "bb5b2ded252f21c6090cf780b0a408ad0d83bbb557e702955643557f13231880",
+      "source": "https://api.adoptium.net/v3/assets/latest/25/hotspot?architecture=aarch64&image_type=jdk&os=linux&vendor=eclipse"
+    },
+    {
+      "os": "linux",
+      "arch": "aarch64",
+      "type": "jre",
+      "version": "25.0.5+8-LTS",
+      "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.5%2B8/OpenJDK25U-jre_aarch64_linux_hotspot_25.0.5_8.tar.gz",
+      "sha256": "963931723891302ebb2687178532c3d793d71e2577cd058061c7efb396140a86",
+      "source": "https://api.adoptium.net/v3/assets/latest/25/hotspot?architecture=aarch64&image_type=jre&os=linux&vendor=eclipse"
+    },
+    {
+      "os": "linux",
+      "arch": "x64",
+      "type": "jdk",
+      "version": "25.0.5+8-LTS",
+      "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.5%2B8/OpenJDK25U-jdk_x64_linux_hotspot_25.0.5_8.tar.gz",
+      "sha256": "68982529869257d0ee6b824ec5aa270ff8b118bb438670da0b97ebdab178d7fb",
+      "source": "https://api.adoptium.net/v3/assets/latest/25/hotspot?architecture=x64&image_type=jdk&os=linux&vendor=eclipse"
+    },
+    {
+      "os": "linux",
+      "arch": "x64",
+      "type": "jre",
+      "version": "25.0.5+8-LTS",
+      "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.5%2B8/OpenJDK25U-jre_x64_linux_hotspot_25.0.5_8.tar.gz",
+      "sha256": "6fac98f0c8202efc3135a9e9e42aa61963ec42d1c5cbb40caf231e7b14a24ef6",
+      "source": "https://api.adoptium.net/v3/assets/latest/25/hotspot?architecture=x64&image_type=jre&os=linux&vendor=eclipse"
+    },
+    {
+      "os": "mac",
+      "arch": "aarch64",
+      "type": "jdk",
+      "version": "25.0.5+8-LTS",
+      "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.5%2B8/OpenJDK25U-jdk_aarch64_mac_hotspot_25.0.5_8.tar.gz",
+      "sha256": "36dc14d797aaff6d89aab302cd053fdba6207dfdcf772052fa7b023a94b0e857",
+      "source": "https://api.adoptium.net/v3/assets/latest/25/hotspot?architecture=aarch64&image_type=jdk&os=mac&vendor=eclipse"
+    }
+  ],
+  "llama": {
+    "commit": "8642541b255bfb5dc39cd351a178be09013a55d6",
+    "sha256": "1688a167a8edd9499cdd0c19b8bd044f0fa184b466981977bbf2222d884953a4"
+  },
+  "python": {
+    "projectTools": "none",
+    "requiredMajorIfIntroduced": "3.14"
+  }
+}

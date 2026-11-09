@@ -19,7 +19,7 @@ public class LocalClassifier implements com.moapan.classification.application.Cl
     private static final JsonMapper JSON=JsonMapper.builder().enable(tools.jackson.databind.DeserializationFeature.FAIL_ON_TRAILING_TOKENS).build();
     public LocalClassifier(@Value("${MOAPAN_CLASSIFICATION_URL:}") String url,@Value("${MOAPAN_CLASSIFICATION_KEY_FILE:}") String keyFile){
         endpoint=url.isBlank()?null:URI.create(url);
-        if(endpoint!=null&&(!"http".equals(endpoint.getScheme())||!Set.of("127.0.0.1","classifier").contains(endpoint.getHost())||endpoint.getPort()!=11436||!"/v1/chat/completions".equals(endpoint.getPath())||endpoint.getUserInfo()!=null||endpoint.getQuery()!=null||endpoint.getFragment()!=null))throw new IllegalStateException("invalid_classification_endpoint");
+        if(endpoint!=null&&(!"http".equals(endpoint.getScheme())||!(Set.of("127.0.0.1","classifier","damgox2-classifier").contains(endpoint.getHost())&&endpoint.getPort()==9931||Set.of("127.0.0.1","classifier").contains(endpoint.getHost())&&endpoint.getPort()==11436)||!"/v1/chat/completions".equals(endpoint.getPath())||endpoint.getUserInfo()!=null||endpoint.getQuery()!=null||endpoint.getFragment()!=null))throw new IllegalStateException("invalid_classification_endpoint");
         try{key=endpoint==null?"":Files.readString(Path.of(keyFile)).strip();}catch(Exception e){throw new IllegalStateException("classification_key_required");}
         if(endpoint!=null&&key.length()<32)throw new IllegalStateException("classification_key_required");
     }

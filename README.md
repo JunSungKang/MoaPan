@@ -2,34 +2,26 @@
 
 # 담고담고 · DamGoX2
 
-여러 출처의 뉴스를 관심사에 맞게 모아 종이신문처럼 읽는 개인화 뉴스 V1. Java 27 / Spring Boot 4 / Gradle / PostgreSQL / 정적 HTML·CSS·Vanilla ES Modules / Docker Compose 기반이다.
+여러 출처의 뉴스를 관심사에 맞게 모아 종이신문처럼 읽는 개인화 뉴스 V1. Temurin Java 25 / Ubuntu 26.04 / Spring Boot 4 / Gradle / PostgreSQL / 정적 HTML·CSS·Vanilla ES Modules / Docker Compose 기반이다.
 
 **CI·CD, GitHub Actions, 예약 workflow는 사용자 요청에 따라 구현·실행하지 않는다.** 검증은 로컬 명령으로 실행한다. 외부 HTTPS 배포와 사업 개시는 별도 승인·검토가 필요하다. 실제 인수 상태는 [진행 상태](docs/01-management/progress.md)와 [테스트 보고](docs/05-test/test-report.md)를 확인한다.
 
 웹 품질·패턴 재검토: [최종 점검서](docs/05-test/web-quality.md). 재현 명령은 `sh scripts/build/gradle-local.sh --no-daemon webQualityAudit`이며, Node/npm은 잠금된 Lighthouse·axe 감사 도구에 사용한다. 감사는 폐기 PostgreSQL·합성 자료를 사용하고 종료 시 테스트 서버를 정리한다.
 
-## 로컬 실행
+## 통합 운영 실행
+
+새 실행 진입점은 [compose.platform.yaml](compose.platform.yaml)이다. Compose 프로젝트는 platform이고 서비스는 damgox2-*로 구분한다. 기존 compose.yaml·compose-public/server는 이전 서비스 점검·복구 문맥이며 새 이미지 빌드 진입점으로 사용하지 않는다.
+
+공식 Ubuntu26.04 위의 Temurin25.0.5+8-LTS 앱 이미지 하나를 web/worker가 공유한다. 번역·분류도 동일한 glibc 기반 AI 이미지 하나를 각각의 컨테이너에서 사용한다. 포트는 모두 내부9931이며 호스트에는 공개하지 않는다. 새 PostgreSQL을 기동하지 않고 외부 설정의 기존 DB에 연결한다. 공통 PG 이관이 준비되면 damgox2/damgox2_sid로 전환한다.
 
 ```sh
-cp .env.example .env
-# .env를 비공개로 편집: DATABASE_PASSWORD는 64자 이상의 fresh random hex,
-# DATABASE_ADMIN_PASSWORD와 DAMGOX2_SECRET은 각각 다른 충분한 random secret 사용.
-docker compose config --quiet
-docker compose up -d --build
-docker compose ps
+sh scripts/platform/build.sh
+# 비공개 설정과 secret 파일 준비 후; 실제 값은 Git에 넣지 않는다.
+docker compose --env-file .env --env-file .local/platform.env -f compose.platform.yaml config --quiet
+# 기존 운영 교체는 아래 인계서의 잠금/백업 절차를 먼저 수행한다.
 ```
 
-접속: http://localhost:8080. 기본 loopback HTTP에서는 합성 계정만 사용한다. DB와 web 포트는 host에 공개하지 않는다. `.env`, tool cache, 검사 원본, 개인 backup은 `.local`과 함께 Git에서 제외한다. `.env.example`을 실제 운영 secret으로 사용하면 안 된다.
-
-첫 기동은 migrate가 Flyway를 실행한 뒤 web·worker가 시작된다. web/worker는 app 전용 non-superuser DB 역할, migrate는 별도 자격으로 실행한다. app 이미지는 Alpine3.24.3과 Temurin27.0.1.0.2+1 공식 musl Linux amd64/arm64 배포 파일을 각각 SHA256 검증해 구성한다. 현재 실행 검증은 Linux ARM64 컨테이너에서 완료했으며 별도 Linux 서버·AMD64·GPU 실행은 미검증이다. PostgreSQL·Caddy는 digest로 고정한 공식 소스/베이스에 보안 패치를 반영해 로컬 이미지를 빌드한다. Caddy와 gosu만 Go 1.27.3으로 재빌드하며 제품 코드는 Java다.
-
-회원가입 후 다음 명령에 기존 아이디를 stdin으로 입력해 관리자 권한을 부여한다. 비밀번호는 CLI 인자로 받지 않는다.
-
-```sh
-docker compose run --rm -e DAMGOX2_ROLE=admin-cli web
-```
-
-관리자 화면: http://localhost:8080/admin.html. 사이트 DRAFT 등록 → 수집 주소 등록 → 이용조건 검토·허용 동작 저장 → 기술 점검 → 주소 사용 활성화 → 사이트 활성화 → 지금 수집. 미리보기는 기사로 저장하지 않는다. 202는 작업 접수이며 성공은 job/runs에서 확인한다.
+[필요 설정·공통 PG 전환·복구 인계](docs/06-transition/platform-ubuntu25.md), [검증서](docs/05-test/platform-ubuntu25.md)를 따른다. 운영80/443과 인증서·모델 볼륨을 재사용하며, 점검용 web20000/API20100은 loopback으로 제한한다. AMD64·별도 Linux 서버 실행은 구성 지원과 실제 검증을 구분한다. Node24는 빌드·검증 도구에만 사용하고 프로젝트 Python 실행 도구는 추가하지 않는다.
 
 비회원도 대표 관심사 지면(7개씩 최대6슬라이드·42개)을 볼 수 있다. 관리자 화면의 대표 관심사에서 기본 주제를 변경하며, 로그인한 회원도 개인 관심사가 없으면 대표값을 사용한다. 뉴스레터 목록·본문은 로그인한 활성 계정에 유효한 구독 권한이 있어야 이용하며, 권한이 없으면 메뉴를 숨기고 직접 HTML/API도404로 응답한다. 계정/관심사 기능은 로그인이 필요하다. 관리 기능은 ADMIN만 허용한다. 공개 뉴스는 조회량·공개 권리 제한을 적용하고 회원 전용 API는 계속 인증을 요구한다. 기사 검색은 팝업에서 실행하며 수집된 공개자료의 최신순 최대140개를 7개씩20슬라이드로 조회한다. 현재 약관은 최초 제1판이며 이전 이력은 없다.
 
@@ -43,10 +35,10 @@ JDK는 정확한 공급자 빌드가 필요하다. 현재 macOS aarch64 workspac
 
 Playwright Java browser는 먼저 `sh scripts/build/gradle-local.sh playwrightInstall`로 workspace `.local/browsers`에 준비한다. PostgreSQL 통합 테스트에는 Docker가 필요하다. 테스트는 격리 Testcontainers DB와 합성 계정·문장을 사용한다. 현재 서비스는 `DAMGOX2_AUDIT_BASE_URL=https://175.195.62.165 node scripts/test/site-http-audit.mjs`로 읽기 전용 점검한다. 실제 주제 출처 등록·수집 시험은 `scripts/test/topic-source-smoke.mjs`로 분리하며, 이 명령은 DB를 변경하므로 승인된 격리 검증 환경에서만 실행한다. 과거 NASA/NOAA를 재활성화하는 구형 local-smoke 실행기는 폐기했다.
 
-`securityCheck`에는 공식 배포 체크섬을 검증한 Trivy가 필요하며, 미준비·검사 오류는 실패다. `.local/bin`의 검증된 도구를 우선 사용한다. 최종 이미지 검사는 별도 실행한다.
+`securityCheck`에는 공식 체크섬·서명과 자체 검사를 통과한 Trivy0.76.2가 필요하며 미준비·검사 오류는 실패다. 검증된 cosign 경로를 COSIGN_BIN으로 제공하고 `sh scripts/security/install-trivy.sh`로 workspace 후보를 준비한 뒤 검사/승격한다. JOSE 수정 소스·정식 시험·미패치 공격 비교를 매 검사에서 재검증한다. 실제 결과는 [플랫폼 검증서](docs/05-test/platform-ubuntu25.md)를 따른다. 최종 이미지 검사는 별도 실행한다.
 
 ```sh
-sh scripts/security/image-scan.sh damgox2-local:1.0.0 damgox2-proxy-local:2.11.7 damgox2-db-local:18.6 damgox2-build:1.0.0 damgox2-proxy-build:2.11.7
+sh scripts/security/image-scan.sh damgox2-app:ubuntu26.04-java25-20261109 damgox2-proxy:ubuntu26.04-java25-20261109 damgox2-ai:ubuntu26.04-java25-20261109
 ```
 
 Wrapper ZIP/JAR 체크섬, dependency locking, strict verification을 사용한다. checksum metadata 생성만으로 공급자 신뢰 검토가 완료됐다고 간주하지 않는다. 로컬 명령은 native file watcher를 끈다(macOS FSEvents 정지 진단 후 선택).

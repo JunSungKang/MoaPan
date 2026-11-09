@@ -1,0 +1,17 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import {execFileSync,spawn} from 'node:child_process';
+const env={...process.env,DAMGOX2_SECRET:'synthetic-only-platform-secret-at-least32',PUBLIC_BASE_URL:'https://damgox2.example.test',DAMGOX2_PUBLIC_HOST:'damgox2.example.test',DAMGOX2_DB_PASSWORD_FILE:'./.local/synthetic-unread-secret'};
+const args=['compose','--env-file','/dev/null','-f','compose.platform.yaml'];
+test('platform has one app, one AI image, separate9931 instances and no PostgreSQL service',()=>{const c=JSON.parse(execFileSync('docker',[...args,'config','--format','json'],{env,encoding:'utf8'}));assert.equal(c.name,'platform');assert(Object.keys(c.services).every(s=>s.startsWith('damgox2-')));assert.equal(c.services['damgox2-web'].image,c.services['damgox2-worker'].image);assert.equal(c.services['damgox2-translator'].image,c.services['damgox2-classifier'].image);assert(!Object.values(c.services).some(s=>/postgres|database/.test(s.image)));for(const k of ['translator','classifier']){const s=c.services['damgox2-'+k];assert(!s.ports?.length);assert(s.healthcheck.test.join(' ').includes(':9931'));}for(const k of ['web','worker']){assert(!c.services['damgox2-'+k].environment.DATABASE_PASSWORD);assert(c.services['damgox2-'+k].environment.DAMGOX2_DATABASE_PASSWORD_FILE);}});
+test('shared PostgreSQL override uses exact target and no cluster administration credentials',()=>{const e={...env,DAMGOX2_SHARED_PG_HOST:'shared-pg',DAMGOX2_SHARED_PG_NETWORK:'shared-test',DAMGOX2_SHARED_PG_PASSWORD_FILE:'./.local/synthetic-unread-secret',DAMGOX2_SHARED_PG_MIGRATION_USER:'damgox2_migrate',DAMGOX2_SHARED_PG_MIGRATION_PASSWORD_FILE:'./.local/synthetic-unread-secret'};const c=JSON.parse(execFileSync('docker',[...args,'-f','scripts/platform/compose.shared-pg.yaml','--profile','tools','config','--format','json'],{env:e,encoding:'utf8'}));assert.equal(c.services['damgox2-worker'].environment.DAMGOX2_DATABASE_USER,'damgox2_sid');assert.equal(c.services['damgox2-worker'].environment.DAMGOX2_DATABASE_NAME,'damgox2');assert.equal(c.networks['damgox2-database'].name,'shared-test');assert.equal(c.services['damgox2-migrate'].environment.DAMGOX2_DATABASE_MIGRATION_USER,'damgox2_migrate');});
+test('native deployment flock excludes another process on the same inode',async()=>{
+ const parent=fs.realpathSync('.')+'/.local/tmp';fs.mkdirSync(parent,{recursive:true});const dir=fs.mkdtempSync(parent+'/platform-lock-test-'),file=dir+'/deploy.lock',command=dir+'/lock';let child;
+ try {
+  execFileSync('cc',['-Wall','-Wextra','-Werror','scripts/platform/deploy-lock.c','-o',command],{env:{...process.env,TMPDIR:dir},stdio:'pipe'});
+  child=spawn(command,[file,process.execPath,'-e','process.stdout.write("locked\\n");setTimeout(()=>{},1000)'],{stdio:['ignore','pipe','pipe']});
+  await new Promise((resolve,reject)=>{child.stdout.once('data',resolve);child.once('error',reject);});
+  assert.throws(()=>execFileSync(command,[file,process.execPath,'-e','process.exit(0)'],{stdio:'pipe'}),e=>e.status===75);
+  await new Promise(resolve=>child.once('exit',resolve));child=null;
+  execFileSync(command,[file,process.execPath,'-e','process.exit(0)']);
+  fs.symlinkSync(file,dir+'/symlink');assert.throws(()=>execFileSync(command,[dir+'/symlink',process.execPath,'-e','process.exit(0)'],{stdio:'pipe'}),e=>e.status===3);
+ } finally {if(child){child.kill('SIGTERM');await new Promise(resolve=>child.once('exit',resolve));}fs.rmSync(dir,{recursive:true});}
+});

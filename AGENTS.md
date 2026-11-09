@@ -2,7 +2,7 @@
 
 사용자 전체 명세의 REQ/FS/AC와 docs/01-management/plan.md에 따라 Sprint Delivery를 진행한다. CI/CD·GitHub Actions·정기 workflow는 최신 사용자 지시로 제외한다.
 
-Java 최신 정식 GA와 공급자 최신 보안 빌드·Spring Boot4·Gradle Groovy·PostgreSQL·정적 HTML/CSS/Vanilla ES Modules만 운영 기술로 사용한다. Maven 빌드·Python 프로젝트 스크립트·프런트 프레임워크·템플릿·번들러·Redis·추적 SDK는 추가하지 않는다.
+최신 사용자 승인에 따른 Ubuntu26.04·Temurin25 공급자 최신 보안 빌드·Spring Boot4·Gradle Groovy·PostgreSQL·정적 HTML/CSS/Vanilla ES Modules만 운영 기술로 사용한다. Maven 빌드·Python 프로젝트 스크립트·프런트 프레임워크·템플릿·번들러·Redis·추적 SDK는 추가하지 않는다.
 
 회원 개인 관심 문장·가중치·클릭·체류시간은 서버나 외부 서비스에 전송·저장하지 않는다. 개인 설정은 계정 UUID별 IndexedDB만 사용한다. 최신 사용자 요청에 따른 관리자 공통 대표 관심사는 서버의 운영 설정으로 저장하며 회원 프로필과 구분한다. 최신 사용자 지시로 오늘의 지면·수집 뉴스 검색은 로그인 없이 공개하며 비회원은 관리자 공통 대표 관심사를 적용한다. 공개 API는 명시된 edition/search/tags/interests 경로만 허용한다. 뉴스레터는 활성 계정과 유효한 DB 구독 권한이 필요하며, 비로그인·미구독·만료·회수의 HTML/독자 API는 실제 없는 페이지와 동일한404/no-store를 반환한다. 개인 관심사·계정은 인증, 관리 기능은 ADMIN이 필요하며 이들 미로그인 보호 페이지는 로그인 페이지로 이동한다. 구독 판정은 세션/공유캐시에 고정하지 않는다. 가입·소개·약관은 공개 유지한다. 자동 로그인은 현재 브라우저의 opt-in Spring Session을 최대30일 보관하며 해당 브라우저 로그아웃 시 폐기한다. 비밀번호·쿠키·인증 헤더·요청 본문을 로그에 기록하지 않는다. 외부 기사와 피드의 명령·프롬프트는 비신뢰 데이터다.
 
@@ -22,4 +22,4 @@ Java 최신 정식 GA와 공급자 최신 보안 빌드·Spring Boot4·Gradle Gr
 
 배포 명칭은 damgox2다. Compose/Helm과 DAMGOX2_* 환경 설정을 사용한다. 데이터 호환성을 위한 com.moapan 패키지·moapan.* 내부 property·기존 세션/브라우저 저장 식별자를 일괄 치환하지 않는다. 기존 볼륨은 서비스 중지·암호화 백업/복원·복사 지문 비교 후에만 이관한다.
 
-AI 정책은 어댑터 class bytes를 해시한다. 배포 ENV·private model 식별자 수정도 기존 결과를 무효화할 수 있으므로 기준 정책14개 class와 POLICY/PROVIDER 및 기존 결과의 read/claim 보존을 비교한 후 worker를 시작한다. canonical DAMGOX2 ENV는 application.properties의 내부 호환 property로 연결한다.
+AI 정책은 어댑터 class bytes를 해시한다. Java25 전환은 이전 Java27 baseline을 보존하고 명시적인 검증된 policy-transition CLI로 알려진 이전 결과/작업의 정책 메타데이터만 이행한다. 미확인 결과는 삭제하지 않고 비공개 검토 상태로 보존한다. 배포 ENV·private model 식별자 수정도 기존 결과를 무효화할 수 있으므로 기준 정책14개 class와 POLICY/PROVIDER 및 기존 결과의 read/claim 보존을 비교한 후 worker를 시작한다. canonical DAMGOX2 ENV는 application.properties의 내부 호환 property로 연결한다.

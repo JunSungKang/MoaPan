@@ -24,7 +24,7 @@ public class LocalTranslator implements com.moapan.translation.application.Trans
     public LocalTranslator(@Value("${MOAPAN_TRANSLATION_URL:}") String url,@Value("${MOAPAN_TRANSLATION_KEY_FILE:}") String keyFile){
         if(timeoutSeconds()<10||timeoutSeconds()>600)throw new IllegalStateException("invalid_translation_timeout");
         endpoint=url.isBlank()?null:URI.create(url);
-        if(endpoint!=null&&(!"http".equals(endpoint.getScheme())||!Set.of("127.0.0.1","translator").contains(endpoint.getHost())||endpoint.getPort()!=11435||!"/v1/chat/completions".equals(endpoint.getPath())||endpoint.getUserInfo()!=null||endpoint.getQuery()!=null||endpoint.getFragment()!=null))throw new IllegalStateException("invalid_local_translation_endpoint");
+        if(endpoint!=null&&(!"http".equals(endpoint.getScheme())||!(Set.of("127.0.0.1","translator","damgox2-translator").contains(endpoint.getHost())&&endpoint.getPort()==9931||Set.of("127.0.0.1","translator").contains(endpoint.getHost())&&endpoint.getPort()==11435)||!"/v1/chat/completions".equals(endpoint.getPath())||endpoint.getUserInfo()!=null||endpoint.getQuery()!=null||endpoint.getFragment()!=null))throw new IllegalStateException("invalid_local_translation_endpoint");
         try{key=endpoint==null?"":Files.readString(Path.of(keyFile)).strip();}catch(Exception e){throw new IllegalStateException("translation_key_required");}
         if(endpoint!=null&&key.length()<32)throw new IllegalStateException("translation_key_required");
     }

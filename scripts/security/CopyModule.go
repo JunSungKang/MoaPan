@@ -1,0 +1,5 @@
+// Byte-verified writable copy of public Go module source; never preserves host
+// ownership, ACLs or read-only directory modes across a Docker Desktop mount.
+package main
+import("crypto/sha256";"fmt";"os";"path/filepath")
+func main(){if len(os.Args)!=3{panic("source and destination required")};count:=0;err:=filepath.WalkDir(os.Args[1],func(p string,e os.DirEntry,err error)error{if err!=nil{return err};relative,err:=filepath.Rel(os.Args[1],p);if err!=nil{return err};destination:=filepath.Join(os.Args[2],relative);if e.IsDir(){return os.MkdirAll(destination,0700)};if !e.Type().IsRegular(){return fmt.Errorf("module contains a non-regular entry")};bytes,err:=os.ReadFile(p);if err!=nil{return err};if err=os.WriteFile(destination,bytes,0600);err!=nil{return err};copy,err:=os.ReadFile(destination);if err!=nil{return err};if sha256.Sum256(bytes)!=sha256.Sum256(copy){return fmt.Errorf("module copy checksum mismatch")};count++;return nil});if err!=nil{panic(err)};fmt.Printf("Verified public module source files copied: %d\n",count)}

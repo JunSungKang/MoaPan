@@ -1,16 +1,32 @@
-import fs from 'node:fs';
+import {createHash} from 'node:crypto';
 import assert from 'node:assert/strict';
-import {test,mock} from 'node:test';
+import {test} from 'node:test';
 import {documentedSourceBackport} from './security-applicability.mjs';
-const finding={VulnerabilityID:'CVE-2026-116587',PkgName:'github.com/go-jose/go-jose/v3',InstalledVersion:'v3.0.5'};
-test('source backport proof is exact and fails closed for malformed or changed evidence',()=>{
- const read=fs.readFileSync.bind(fs),file='docs/05-test/evidence/jose-v3-backport.json',review=JSON.parse(read(file,'utf8'));
- assert.equal(documentedSourceBackport(finding),true);
- for(const changed of[{VulnerabilityID:'CVE-2099-1234'},{PkgName:'unrelated'},{InstalledVersion:'v3.0.4'}])assert.equal(documentedSourceBackport({...finding,...changed}),false);
- for(const changed of[{sourceSha256:{}},{expiresAt:'invalid'},{expiresAt:'2000-01-01T00:00:00Z'},{runtimeSourceChecksumsVerified:0}]){
-  mock.method(fs,'readFileSync',(p,...args)=>p===file?JSON.stringify({...review,...changed}):read(p,...args));
-  try{assert.equal(documentedSourceBackport(finding),false);}finally{mock.restoreAll();}
- }
- mock.method(fs,'readFileSync',(p,...args)=>p==='Dockerfile'?Buffer.from('synthetic changed recipe'):read(p,...args));
- try{assert.equal(documentedSourceBackport(finding),false);}finally{mock.restoreAll();}
-});
+import {verifyJoseValidation,sourcePaths,proofFiles,advisories} from './jose-validation.mjs';
+const now=Date.parse('2026-11-08T10:00:00Z'),directory='build/reports/security/';
+const sha=data=>createHash('sha256').update(data).digest('hex');
+function fixture(){
+ const names=['TestDamGoX2OversizedRSARejectedBeforeValidation','TestEmbeddedPrivateJWKRejected','TestGeneralSerializationUnprotectedHeader','TestJWERejectsShortGCMCEKForDeclaredContentEncryption','TestJWERejectsShortCBCHMACCEKForDeclaredContentEncryption'];
+ const packages=['','/cipher','/cryptosigner','/json','/jwt'].map(s=>'github.com/go-jose/go-jose/v3'+s);
+ const lines=data=>data.map(e=>JSON.stringify({Time:new Date(now-120000).toISOString(),...e})).join('\n');
+ const files=Object.fromEntries(sourcePaths.map(p=>[p,'synthetic source '+p]));
+ files[directory+'jose-patched.jsonl']=lines([...packages.map(Package=>({Package,Action:'pass'})),...names.map(Test=>({Test,Action:'pass'}))]);
+ files[directory+'jose-unpatched.jsonl']=lines(names.map(Test=>({Test,Action:'fail'})));
+ files[directory+'jose-runtime-checks.txt']=['a','b','c','d','e','f'].map(p=>p+': OK').join('\n')+'\n'+'a'.repeat(64)+'  /caddy\n';
+ files[directory+'jose-builder.id']='sha256:'+'b'.repeat(64)+'\n';
+ files[directory+'proxy-boundaries.txt']='Proxy boundary checks PASS: 27; fixture';
+ files['.local/bin/trivy']='synthetic scanner';
+ for(const name of ['caddy','trivy'])files[directory+name+'-functions.json']=JSON.stringify({Functions:20000,SHA256:name==='caddy'?'a'.repeat(64):sha(files['.local/bin/trivy']),Matches:{'golang.org/x/crypto/openpgp':[]}});
+ for(const [ghsa,cve] of Object.entries(advisories))files[directory+ghsa+'.json']=JSON.stringify({ghsa_id:ghsa,cve_id:cve,vulnerabilities:[{package:{name:'github.com/go-jose/go-jose/v3',ecosystem:'go'}}]});
+ const proof={schemaVersion:1,status:'fixed',validatedAt:new Date(now-60000).toISOString(),builderImage:files[directory+'jose-builder.id'].trim(),binarySha256:'a'.repeat(64)};
+ const resign=()=>{proof.sourceSha256=Object.fromEntries(sourcePaths.map(p=>[p,sha(files[p])]));proof.proofSha256=Object.fromEntries(proofFiles.map(p=>[directory+p,sha(files[directory+p])]));};resign();
+ const read=p=>{if(!(p in files))throw Error('missing proof');return files[p];};
+ return{proof,files,resign,verify:()=>verifyJoseValidation(proof,{read,now})};
+}
+test('accept fresh executed positive and negative controls with exact source/binary/advisory proof',()=>fixture().verify());
+test('reject stale, invalid and future verification time',()=>{for(const value of ['invalid','2026-11-07T09:59:59Z','2026-11-08T10:00:01Z']){const f=fixture();f.proof.validatedAt=value;assert.throws(f.verify);}});
+test('fresh record cannot disguise old test results or a newly available official fix',()=>{const f=fixture();f.files[directory+'jose-patched.jsonl']=f.files[directory+'jose-patched.jsonl'].replaceAll('2026-11-08T09:58:00.000Z','2026-11-06T09:58:00.000Z');f.resign();assert.throws(f.verify);const g=fixture();const file=directory+Object.keys(advisories)[0]+'.json';const advisory=JSON.parse(g.files[file]);advisory.vulnerabilities[0].patched_versions='3.0.6';g.files[file]=JSON.stringify(advisory);g.resign();assert.throws(g.verify);});
+test('no applicability exception for other CVEs, packages or unpatched versions',()=>{for(const changed of [{VulnerabilityID:'CVE-2099-1234'},{PkgName:'other'},{InstalledVersion:'v3.0.4'}])assert.equal(documentedSourceBackport({VulnerabilityID:'CVE-2026-116587',PkgName:'github.com/go-jose/go-jose/v3',InstalledVersion:'v3.0.5',...changed}),false);});
+test('reject omitted, changed or missing source and proof files',()=>{for(const p of [...sourcePaths,...proofFiles.map(p=>directory+p)]){const f=fixture();f.files[p]+=' changed';assert.throws(f.verify);const g=fixture();delete g.files[p];assert.throws(g.verify);}const f=fixture();delete f.proof.sourceSha256.Dockerfile;assert.throws(f.verify);});
+test('reject failed patched tests or a negative control that does not reproduce every defect',()=>{for(const name of ['jose-patched.jsonl','jose-unpatched.jsonl']){const f=fixture();f.files[directory+name]=f.files[directory+name].replace('"Action":"'+(name.includes('unpatched')?'fail':'pass')+'"','"Action":"skip"');f.resign();assert.throws(f.verify);}const f=fixture();f.files[directory+'jose-patched.jsonl']+='\n'+JSON.stringify({Action:'fail',Test:'new attack'});f.resign();assert.throws(f.verify);});
+test('reject stale supplier scope and incomplete runtime source checks even with matching checksums',()=>{for(const kind of ['advisory','source','binary','image']){const f=fixture();if(kind==='advisory')f.files[directory+Object.keys(advisories)[0]+'.json']=JSON.stringify({ghsa_id:Object.keys(advisories)[0],cve_id:Object.values(advisories)[0],vulnerabilities:[]});if(kind==='source')f.files[directory+'jose-runtime-checks.txt']=f.files[directory+'jose-runtime-checks.txt'].replace('a: OK','a: FAILED');if(kind==='binary')f.proof.binarySha256='c'.repeat(64);if(kind==='image')f.proof.builderImage='sha256:'+'c'.repeat(64);f.resign();assert.throws(f.verify);}});

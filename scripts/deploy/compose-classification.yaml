@@ -1,9 +1,9 @@
 services:
   classifier-model-init:
-    image: damgox2-classifier:cpu-b11960
+    image: damgox2-ai:ubuntu26.04-java25-20261109
     build:
       context: .
-      dockerfile: scripts/classification/Dockerfile
+      target: ai
     entrypoint: ['/opt/classification/model-init.sh']
     volumes: [classification_models:/models]
     read_only: true
@@ -14,11 +14,12 @@ services:
     cpus: 0.5
     restart: 'no'
   classifier:
-    image: damgox2-classifier:cpu-b11960
+    image: damgox2-ai:ubuntu26.04-java25-20261109
     build:
       context: .
-      dockerfile: scripts/classification/Dockerfile
+      target: ai
     environment:
+      DAMGOX2_AI_KIND: classification
       CLASSIFICATION_THREADS: ${CLASSIFICATION_THREADS:-2}
     volumes: [classification_models:/models:ro]
     secrets: [classification_key]
@@ -35,14 +36,14 @@ services:
     depends_on:
       classifier-model-init: {condition: service_completed_successfully}
     healthcheck:
-      test: ['CMD','curl','--fail','--silent','--max-time','3','http://127.0.0.1:11436/health']
+      test: ['CMD','curl','--fail','--silent','--max-time','3','http://127.0.0.1:9931/health']
       interval: 15s
       timeout: 5s
       retries: 5
       start_period: 120s
   worker:
     environment:
-      DAMGOX2_CLASSIFICATION_URL: http://classifier:11436/v1/chat/completions
+      DAMGOX2_CLASSIFICATION_URL: http://classifier:9931/v1/chat/completions
       DAMGOX2_CLASSIFICATION_KEY_FILE: /run/secrets/classification_key
     secrets: [classification_key]
     networks: [backend,classification]
