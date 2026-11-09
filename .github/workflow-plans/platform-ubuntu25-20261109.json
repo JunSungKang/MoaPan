@@ -204,19 +204,20 @@
       "forbiddenPaths": [
         ".github/workflows/**",
         ".env",
-        ".local/**",
-        ".agents/**"
+        ".local/**"
       ],
       "acceptanceCriteria": [
         "Create a human-authored PR into develop with the required assignee; use independent read-only code review and App current-head formal APPROVED before human merge. Fix actual blocking defects without weakening protection or security gates.",
         "Preserve all pending user/business/UI/local-skill changes. If needed, temporarily stash only tracked changes, leave untracked local skills untouched, restore exact contents and drop only the verified task-created stash after successful comparison. No worktree or unrelated commit.",
-        "Merge exact reviewed head through the guarded human wrapper, delete its remote, remote-tracking and local refs, fast-forward local develop, and verify all three head refs absent plus local/remote develop SHA agreement. Do not change running services or databases for a documentation-only merge."
+        "Merge exact reviewed head through the guarded human wrapper, delete its remote, remote-tracking and local refs, fast-forward local develop, and verify all three head refs absent plus local/remote develop SHA agreement. Do not change running services or databases for a documentation-only merge.",
+        "The pre-existing .agents files are admitted only as unchanged untracked baseline: verify their original SHA256 and verify no .agents path is present in staged or base-to-head commit diff. They are not newly authored tracked changes and must never be committed."
       ],
       "validationCommands": [
         "node ~/.codex/scripts/github-app-plan-validate.mjs .github/workflow-plans/platform-ubuntu25-20261109.json",
         "node scripts/test/docs-check.mjs",
         "git diff --check",
-        "node ~/.codex/scripts/github-app-workflow-guard.mjs --verify-server .github/workflow-plans/platform-ubuntu25-20261109.json"
+        "node ~/.codex/scripts/github-app-workflow-guard.mjs --verify-server .github/workflow-plans/platform-ubuntu25-20261109.json",
+        "git diff --name-only 829d59ab0bb72e50f82d3f0df06ce9e5c7e80b30 HEAD -- .agents"
       ],
       "documentation": {
         "paths": [
