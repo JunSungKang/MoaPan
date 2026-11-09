@@ -172,7 +172,7 @@
         ".local/**"
       ],
       "acceptanceCriteria": [
-        "User explicitly authorizes implementation, isolated validation, real Docker replacement, human commit and push; no PR merge. Common contract/images missing must not block; provide private project-owned fallback tags without replacing other session tags.",
+        "The initial request authorized implementation, isolation, real Docker replacement, commit and push. Latest explicit user instruction on 2026-11-09 also authorizes human PR/assignee, independent current-head code review, App formal approval, develop merge and exact head-branch cleanup. Common contract/images missing must not block; use owned fallback tags without replacing other session tags.",
         "All newly delivered final images use exact official Ubuntu26.04 digest; Temurin25 JDK/JRE exact security build, Node24 where used, no new Python tool unless3.14. Shared app image for web/worker and shared glibc native AI image for separate translator/classifier, each internal9931. Compose project platform with damgox2-* service names, reserved web20000..20004 and API20100..20104; preserve current public80/443 and certificate/model volumes.",
         "DB host/name/user/password-file configurable; shared target damgox2/damgox2_sid with distinct database-scoped migration role, no cluster admin. If shared DB absent, attach existing database network and preserve existing DB/container/volume/credentials; never migrate shared data or create duplicate production PG.",
         "Hold actual macOS flock on explicitly user-authorized /Users/kkkk/Desktop/jskang/03.workspace/01.project/operations/run/deploy.lock during project replacement; create only missing parent directories/lock file there, no other operations edits. Re-read container/database configuration after acquisition, preserve backups, mounts and rollback configuration. Never stop another project, prune, down-v or remove broad orphans.",
@@ -192,6 +192,35 @@
           "docs/01-management/progress.md",
           "docs/06-transition/platform-ubuntu25.md",
           "docs/05-test/platform-ubuntu25.md"
+        ]
+      }
+    },
+    {
+      "id": "reviewed-develop-integration",
+      "expectedPaths": [
+        ".github/workflow-plans/platform-ubuntu25-20261109.json",
+        "docs/01-management/progress.md"
+      ],
+      "forbiddenPaths": [
+        ".github/workflows/**",
+        ".env",
+        ".local/**",
+        ".agents/**"
+      ],
+      "acceptanceCriteria": [
+        "Create a human-authored PR into develop with the required assignee; use independent read-only code review and App current-head formal APPROVED before human merge. Fix actual blocking defects without weakening protection or security gates.",
+        "Preserve all pending user/business/UI/local-skill changes. If needed, temporarily stash only tracked changes, leave untracked local skills untouched, restore exact contents and drop only the verified task-created stash after successful comparison. No worktree or unrelated commit.",
+        "Merge exact reviewed head through the guarded human wrapper, delete its remote, remote-tracking and local refs, fast-forward local develop, and verify all three head refs absent plus local/remote develop SHA agreement. Do not change running services or databases for a documentation-only merge."
+      ],
+      "validationCommands": [
+        "node ~/.codex/scripts/github-app-plan-validate.mjs .github/workflow-plans/platform-ubuntu25-20261109.json",
+        "node scripts/test/docs-check.mjs",
+        "git diff --check",
+        "node ~/.codex/scripts/github-app-workflow-guard.mjs --verify-server .github/workflow-plans/platform-ubuntu25-20261109.json"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/progress.md"
         ]
       }
     }

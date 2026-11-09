@@ -276,3 +276,6 @@ PR29는 최신 develop74b982a를 통합했다. target tree가a09f509와 같고 a
 
 ## 2026-11-09 Ubuntu25 플랫폼 운영 전환 완료
 Temurin25.0.5+8/Ubuntu26.04 앱·proxy·공유AI 이미지로 platform-damgox2-*5개 서비스를 교체했다. 실제 flock 아래 암호화 백업·39개 테이블 복원 대조,14개 정책 class 대조와282개 번역/각544개 작업 보존, 모델 실제 추론, MailBox STARTTLS/hostname/AUTH235, worker672ms 종료·재시작, HTTPS/API를 확인했다. 기존PG는 중지/변경하지 않았고 타 운영8개도 동일ID/시각을 유지했다. 445개 테스트·securityCheck/acceptanceTest·최종3이미지 HIGH/CRITICAL0/secret0 PASS. 상세 MP-DOC-049/050. 공통PG 이관·AMD64·수신함 배달·merge는 미실행이다. 기존 사업/UI/스킬 변경은 보존하고 플랫폼 및 보안·스키마 호환 선행 변경만 커밋 대상으로 분리했다.
+
+## 2026-11-09 Ubuntu25 플랫폼 develop 병합 승인
+후속 사용자 지시로 기존 codex/platform-ubuntu25-20261109의 develop 병합이 명시적으로 승인됐다. 사람 PR/assignee → 독립된 현재 head 코드 리뷰 → App formal APPROVED → 사람 wrapper 병합과 정확한 head의 원격/추적/로컬 ref 삭제를 수행한다. 기존 미커밋 사업/UI/로컬 스킬은 보존한다. 이번 추가 범위는 병합 절차이며 실행 서비스·DB를 다시 변경하지 않는다. 실제 PR·검토·병합 결과는 GitHub 상태와 workspace-local 병합 증빙으로 확인한다.
