@@ -279,3 +279,6 @@ Temurin25.0.5+8/Ubuntu26.04 앱·proxy·공유AI 이미지로 platform-damgox2-*
 
 ## 2026-11-09 Ubuntu25 플랫폼 develop 병합 승인
 후속 사용자 지시로 기존 codex/platform-ubuntu25-20261109의 develop 병합이 명시적으로 승인됐다. 사람 PR/assignee → 독립된 현재 head 코드 리뷰 → App formal APPROVED → 사람 wrapper 병합과 정확한 head의 원격/추적/로컬 ref 삭제를 수행한다. 기존 미커밋 사업/UI/로컬 스킬은 보존한다. 이번 추가 범위는 병합 절차이며 실행 서비스·DB를 다시 변경하지 않는다. 실제 PR·검토·병합 결과는 GitHub 상태와 workspace-local 병합 증빙으로 확인한다.
+
+## 2026-11-09 PR31 독립 리뷰 보완·운영 재검증
+초기40a7 head에서 독립 리뷰가 unknown 번역/분류 보존, 복원 child 종료, 정책 commit 응답 유실, 쓰기 전 경로 검증5건을 발견해 App CHANGES_REQUESTED로 기록했다. 재현3건 실패 확인 후 수정했고, 단위197/통합163/E2E90=450 및 복구/경로8건, securityCheck/acceptanceTest·이미지 검사·V28 비관리자 격리검증을 통과했다. 동일 flock 아래 암호화39테이블 복원 후 nullable model_policy/캐시 지문V28을 적용하고 웹·worker를 검사한99d428ea 앱으로 교체했다. 기존36테이블과 분류 작업의 이전 필드를 보존했고 DB·proxy·AI·다른10개 운영컨테이너를 중지/재시작하지 않았다. worker717ms 종료/재시작·HTTPS/API 경계를 통과했다.14개class와 POLICY/PROVIDER는 이전25 이미지와 같다. 복구 이미지f0daf152를 원본JAR로 비밀값 없이 보관·검사했다. 현재 head의 독립 재리뷰·develop 병합과 정확한 head branch 삭제 결과는 PR #31과 workspace-local 인계 증빙으로 확인한다. MP-DOC-051 참조.

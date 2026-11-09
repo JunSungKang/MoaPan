@@ -31,7 +31,9 @@ public final class AiPolicyTransition {
             var changed=new LinkedHashMap<String,Integer>();
             changed.put("translations",update(db,"UPDATE article_translations SET provider=? WHERE provider=? AND NOT locked",rollback?oldProvider:TranslationWorker.PROVIDER,rollback?TranslationWorker.PROVIDER:oldProvider));
             changed.put("translationJobs",update(db,"UPDATE article_translation_jobs SET policy_version=?,state=CASE WHEN state='RUNNING' THEN 'RETRY' ELSE state END,lease_until=NULL,lease_token=NULL WHERE policy_version=?",rollback?oldTranslation:TranslationWorker.POLICY,rollback?TranslationWorker.POLICY:oldTranslation));
-            changed.put("classificationJobs",update(db,"UPDATE article_classification_jobs SET policy_hash=?,state=CASE WHEN state='RUNNING' THEN 'RETRY' ELSE state END,lease_until=NULL,lease_token=NULL WHERE policy_hash=?",rollback?oldHash:newHash,rollback?newHash:oldHash));
+            try(var q=db.prepareStatement("UPDATE article_classification_jobs SET policy_hash=?,model_policy=?,state=CASE WHEN state='RUNNING' THEN 'RETRY' ELSE state END,lease_until=NULL,lease_token=NULL WHERE policy_hash=? AND (model_policy IS NULL OR model_policy=?)")){
+                q.setString(1,rollback?oldHash:newHash);q.setString(2,rollback?oldClass:LocalClassifier.POLICY);q.setString(3,rollback?newHash:oldHash);q.setString(4,rollback?LocalClassifier.POLICY:oldClass);changed.put("classificationJobs",q.executeUpdate());
+            }
             try(var q=db.createStatement()){q.executeUpdate("UPDATE translation_runtime SET lease_token=NULL,lease_until=NULL WHERE id=1");q.executeUpdate("UPDATE classification_runtime SET lease_token=NULL,lease_until=NULL WHERE id=1");}
             db.commit();return Map.copyOf(changed);
         }catch(Exception e){db.rollback();if(e instanceof SQLException sql)throw sql;throw new IllegalStateException("policy_transition_failed");}finally{db.setAutoCommit(auto);}

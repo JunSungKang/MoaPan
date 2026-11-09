@@ -164,7 +164,8 @@
         "README.md",
         "licenses/**",
         "THIRD_PARTY_NOTICES.md",
-        "src/main/resources/ai/**"
+        "src/main/resources/ai/**",
+        "src/main/resources/db/migration/V28__classification_model_provenance.sql"
       ],
       "forbiddenPaths": [
         ".github/workflows/**",
@@ -210,7 +211,8 @@
         "Create a human-authored PR into develop with the required assignee; use independent read-only code review and App current-head formal APPROVED before human merge. Fix actual blocking defects without weakening protection or security gates.",
         "Preserve all pending user/business/UI/local-skill changes. If needed, temporarily stash only tracked changes, leave untracked local skills untouched, restore exact contents and drop only the verified task-created stash after successful comparison. No worktree or unrelated commit.",
         "Merge exact reviewed head through the guarded human wrapper, delete its remote, remote-tracking and local refs, fast-forward local develop, and verify all three head refs absent plus local/remote develop SHA agreement. Do not change running services or databases for a documentation-only merge.",
-        "The pre-existing .agents files are admitted only as unchanged untracked baseline: verify their original SHA256 and verify no .agents path is present in staged or base-to-head commit diff. They are not newly authored tracked changes and must never be committed."
+        "The pre-existing .agents files are admitted only as unchanged untracked baseline: verify their original SHA256 and verify no .agents path is present in staged or base-to-head commit diff. They are not newly authored tracked changes and must never be committed.",
+        "Resolve independent PR31 findings F1-F5 with deterministic regressions. V28 adds only nullable per-job model provenance, preserving all data and non-admin migration. If the running app must be patched, hold the already authorized shared flock, preserve encrypted recovery data and other services, migrate safely, promote only the scanned new shared app image and verify unchanged14-class policy identity before worker start."
       ],
       "validationCommands": [
         "node ~/.codex/scripts/github-app-plan-validate.mjs .github/workflow-plans/platform-ubuntu25-20261109.json",

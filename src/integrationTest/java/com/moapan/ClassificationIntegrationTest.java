@@ -29,6 +29,8 @@ class ClassificationIntegrationTest {
     @Autowired CatalogRepository repo;@Autowired ClassificationWorker worker;@Autowired TopicCatalog catalog;@Autowired MockMvc mvc;
     @Autowired org.springframework.transaction.PlatformTransactionManager transactionManager;
     @Autowired com.moapan.translation.infrastructure.ArticleTranslations translations;
+    @Autowired com.moapan.edition.application.NewsService news;
+    @Autowired com.moapan.edition.application.NewsSearch search;
     UUID article,source;
     @BeforeEach void fixture(){
         repo.db().sql("INSERT INTO users(id,username,password_hash,role) VALUES ('00000000-0000-0000-0000-000000000099','synthetic_classifier_admin','unused-fixture-hash','ADMIN'),('00000000-0000-0000-0000-000000000098','synthetic_classifier_user','unused-fixture-hash','USER') ON CONFLICT DO NOTHING").update();
@@ -56,6 +58,55 @@ class ClassificationIntegrationTest {
     }
     @Test void unknownTranslationProviderIsQuarantinedWithoutDeletionOrInference(){
         var t=translator(false);String hash=com.moapan.translation.infrastructure.ArticleTranslations.contentHash("Synthetic security advisory",List.of("A synthetic access control issue."));assertTrue(translations.store(article,hash,"ko",new com.moapan.translation.infrastructure.ArticleTranslations.Text("기존 결과",List.of("확인 대기")),"unreviewed-provider"));assertNull(t.claim());assertEquals("unreviewed-provider",repo.db().sql("SELECT provider FROM article_translations WHERE article_id=:id").param("id",article).query(String.class).single());
+    }
+    @Test void unknownTranslationWithCurrentQueuedJobCannotBeClaimedOrOverwritten(){
+        var t=translator(false);repo.db().sql("UPDATE sources SET allow_translation=true WHERE id=:id").param("id",source).update();
+        String hash=com.moapan.translation.infrastructure.ArticleTranslations.contentHash("Synthetic security advisory",List.of("A synthetic access control issue."));
+        var text=new com.moapan.translation.infrastructure.ArticleTranslations.Text("확인 대기 결과",List.of("기존 결과를 보존합니다."));
+        assertTrue(translations.store(article,hash,"ko",text,"unreviewed-provider"));
+        repo.db().sql("INSERT INTO article_translation_jobs(article_id,policy_version,state,attempts) VALUES(:id,:p,'RETRY',2)").param("id",article).param("p",com.moapan.translation.application.TranslationWorker.POLICY).update();
+        assertNull(t.claim());
+        assertFalse(translations.store(article,hash,"ko",new com.moapan.translation.infrastructure.ArticleTranslations.Text("새 결과",List.of("덮어쓰면 안 됩니다.")),com.moapan.translation.application.TranslationWorker.PROVIDER));
+        assertEquals("확인 대기 결과",repo.db().sql("SELECT title FROM article_translations WHERE article_id=:id").param("id",article).query(String.class).single());
+        assertEquals(2,repo.db().sql("SELECT attempts FROM article_translation_jobs WHERE article_id=:id").param("id",article).query(Integer.class).single());
+    }
+    @Test void unknownPartialTranslationJobRetainsProgressAndCounters(){
+        var t=translator(false);repo.db().sql("INSERT INTO article_translation_jobs(article_id,policy_version,state,attempts,progress,field_attempts) VALUES(:id,'unreviewed-policy','RETRY',4,'{\"0\":\"보존할 부분 결과\"}','{\"0\":2}')").param("id",article).update();
+        assertNull(t.claim());assertEquals("unreviewed-policy",repo.db().sql("SELECT policy_version FROM article_translation_jobs WHERE article_id=:id").param("id",article).query(String.class).single());
+        assertEquals(4,repo.db().sql("SELECT attempts FROM article_translation_jobs WHERE article_id=:id").param("id",article).query(Integer.class).single());
+        assertEquals("보존할 부분 결과",repo.db().sql("SELECT progress->>'0' FROM article_translation_jobs WHERE article_id=:id").param("id",article).query(String.class).single());
+        repo.db().sql("UPDATE article_translation_jobs SET attempts=20,started_at=now()-interval '3 days' WHERE article_id=:id").param("id",article).update();
+        assertNull(t.claim());assertEquals("보존할 부분 결과",repo.db().sql("SELECT progress->>'0' FROM article_translation_jobs WHERE article_id=:id").param("id",article).query(String.class).single());
+        assertEquals(20,repo.db().sql("SELECT attempts FROM article_translation_jobs WHERE article_id=:id").param("id",article).query(Integer.class).single());
+    }
+    @Test void unknownClassificationAndTagsSurviveTransitionAndWorkerClaim()throws Exception{
+        var topics=catalog.snapshot(false);UUID tag=topics.topics().getFirst().id();
+        repo.db().sql("INSERT INTO article_tags VALUES(:id,:tag,1,'LLM',false)").param("id",article).param("tag",tag).update();
+        repo.db().sql("INSERT INTO article_classification_jobs(article_id,content_hash,policy_hash,state,attempts) VALUES(:id,repeat('a',64),repeat('f',64),'DONE',2)").param("id",article).update();
+        try(var c=java.sql.DriverManager.getConnection(pg.getJdbcUrl(),pg.getUsername(),pg.getPassword())){com.moapan.bootstrap.AiPolicyTransition.transition(c,false);}
+        assertNull(worker.claim());assertEquals("f".repeat(64),repo.db().sql("SELECT policy_hash FROM article_classification_jobs WHERE article_id=:id").param("id",article).query(String.class).single());
+        assertEquals("DONE",repo.db().sql("SELECT state FROM article_classification_jobs WHERE article_id=:id").param("id",article).query(String.class).single());
+        assertEquals(List.of(tag),repo.db().sql("SELECT tag_id FROM article_tags WHERE article_id=:id").param("id",article).query(UUID.class).list());
+    }
+    @Test void unknownTranslationArrivingAfterClaimStopsHeartbeatAndAtomicWrite(){
+        var t=translator(false);var job=t.claim();assertNotNull(job);
+        String hash=com.moapan.translation.infrastructure.ArticleTranslations.contentHash("Synthetic security advisory",List.of("A synthetic access control issue."));
+        var text=new com.moapan.translation.infrastructure.ArticleTranslations.Text("검토 대기",List.of("원래 결과입니다."));
+        assertTrue(translations.store(article,hash,"ko",text,"unreviewed-provider"));
+        assertFalse(t.heartbeat(article,(UUID)job.get("token")));assertFalse(translations.store(article,hash,"ko",text,com.moapan.translation.application.TranslationWorker.PROVIDER));
+        assertEquals("unreviewed-provider",repo.db().sql("SELECT provider FROM article_translations WHERE article_id=:id").param("id",article).query(String.class).single());
+    }
+    @Test void unrecognizedModelWithCurrentHashIsHiddenAndInvalidatesCachedTags(){
+        var topics=catalog.snapshot(false);var topic=topics.topics().getFirst();
+        repo.db().sql("DELETE FROM news_edition_items").update();repo.db().sql("DELETE FROM news_editions").update();
+        repo.db().sql("INSERT INTO article_tags VALUES(:id,:tag,1,'LLM',false)").param("id",article).param("tag",topic.id()).update();
+        repo.db().sql("INSERT INTO article_classification_jobs(article_id,content_hash,policy_hash,model_policy,state) VALUES(:id,repeat('a',64),:policy,:model,'DONE')").param("id",article).param("policy",topics.hash()).param("model",LocalClassifier.POLICY).update();
+        assertEquals(1,news.publicEdition().items().stream().filter(a->a.id().equals(article)).findFirst().orElseThrow().tags().size());
+        repo.db().sql("UPDATE article_classification_jobs SET model_policy='unreviewed-model' WHERE article_id=:id").param("id",article).update();
+        assertTrue(news.publicEdition().items().stream().filter(a->a.id().equals(article)).findFirst().orElseThrow().tags().isEmpty());
+        String category=repo.db().sql("SELECT category FROM tags WHERE id=:id").param("id",topic.id()).query(String.class).single();
+        assertEquals(0,search.search(new com.moapan.edition.application.NewsSearch.Input("",category,null,0),null).total());
+        assertNull(worker.claim());assertEquals(1,repo.db().sql("SELECT count(*) FROM article_tags WHERE article_id=:id").param("id",article).query(Integer.class).single());
     }
     private static class FilesForPolicy {static String read()throws Exception{try(var in=ClassificationIntegrationTest.class.getResourceAsStream("/ai/java27-policy-transition.json")){return new String(in.readAllBytes(),java.nio.charset.StandardCharsets.UTF_8);}}}
     private com.moapan.translation.application.TranslationWorker translator(boolean fail){

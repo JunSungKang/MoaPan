@@ -18,3 +18,4 @@ node scripts/test/style-structure.mjs
 node --test scripts/test/infrastructure-naming.test.mjs
 
 node --test scripts/test/platform-configuration.test.mjs
+node --test scripts/test/platform-recovery.test.mjs

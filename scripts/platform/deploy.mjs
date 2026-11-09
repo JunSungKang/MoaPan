@@ -6,6 +6,7 @@ import {execFileSync} from 'node:child_process';
 import {databaseSnapshot} from '../deploy/infrastructure-migration.mjs';
 import {modelCheck} from './model-check.mjs';
 import {restoreCheck} from './restore-check.mjs';
+import {ReviewedPolicyChange} from './recovery.mjs';
 
 const root=fs.realpathSync('.'),base=root+'/.local/platform-ubuntu25-20261109';
 const lock='/Users/kkkk/Desktop/jskang/03.workspace/01.project/operations/run/deploy.lock';
@@ -15,8 +16,8 @@ const held=fs.fstatSync(descriptor),named=fs.statSync(lock);assert(held.isFile()
 assert(base.startsWith(root+'/'));assert.equal(fs.realpathSync(base),base);
 const directory=fs.mkdtempSync(base+'/delivery-');fs.chmodSync(directory,0o700);
 const evidence={startedAt:new Date().toISOString(),directory:path.relative(root,directory),lock,lockHeld:true,status:'INCOMPLETE'};
-let interrupted=false,rollingBack=false;
-for(const signal of ['SIGINT','SIGTERM','SIGHUP'])process.on(signal,()=>{interrupted=true;});
+let interrupted=false,rollingBack=false;const cancellation=new AbortController();
+for(const signal of ['SIGINT','SIGTERM','SIGHUP'])process.on(signal,()=>{interrupted=true;cancellation.abort();});
 function command(binary,args,options={}){if(interrupted&&!rollingBack)throw Error('Interrupted deployment; rollback required');try{return execFileSync(binary,args,{encoding:'utf8',stdio:['pipe','pipe','pipe'],maxBuffer:67108864,...options}).trim();}catch{throw Error(binary+' '+args[0]+' failed; diagnostics withheld to protect credentials/data');}}
 const docker=(args,options)=>command('docker',args,options);
 const inspect=ids=>JSON.parse(docker(['inspect',...ids]));
@@ -58,7 +59,7 @@ const runtime=(role,extra={})=>{
   const env={...process.env,...worker.environment,DAMGOX2_ROLE:role,...extra};
   return docker(['run','--rm','--read-only','--network',configuration.networks['damgox2-database'].name,'--tmpfs','/tmp:size=128m,mode=1777','--memory','512m','--cap-drop','ALL','--security-opt','no-new-privileges:true','--mount','type=bind,src='+configuration.secrets['damgox2-database-password'].file+',dst=/run/secrets/database-password,readonly',...['DAMGOX2_DATABASE_HOST','DAMGOX2_DATABASE_PORT','DAMGOX2_DATABASE_NAME','DAMGOX2_DATABASE_USER','DAMGOX2_DATABASE_PASSWORD_FILE','DAMGOX2_ROLE','DAMGOX2_POLICY_TRANSITION'].filter(k=>env[k]).flatMap(k=>['-e',k]),target.app.Id],{env});
 };
-let stopped=false,transitioned=false,started=false;
+let stopped=false,started=false;const policyChange=new ReviewedPolicyChange();
 try {
   // Stop only exact verified project IDs; keep old containers/mounts for rollback. PG never stops.
   stopped=true;for(const c of old)docker(['stop','--timeout','45',c.Id]);
@@ -67,14 +68,16 @@ try {
   const backupLog=command('sh',['scripts/backup/backup.sh',recipient]);
   const backup=backupLog.replace('Encrypted backup created: ','');assert(backup.startsWith(root+'/.local/backups/'));assert(fs.statSync(backup).size>0);
   evidence.backup={file:path.relative(root,backup),sha256:createHash('sha256').update(fs.readFileSync(backup)).digest('hex')};
-  evidence.backupRestore=await restoreCheck({root,image:db.Image,backup,expected:before});
+  evidence.backupRestore=await restoreCheck({root,image:db.Image,backup,expected:before,signal:cancellation.signal});
+  docker([...args,'--profile','tools','run','--rm','--no-deps','-T','damgox2-migrate']);
+  assert.equal(sql('SELECT version FROM flyway_schema_history WHERE success ORDER BY installed_rank DESC LIMIT 1'),'28');
   evidence.models=await modelCheck({image:target.ai.Id,configuration,directory});
   const smtpEnv={...process.env,...worker.environment};
   evidence.smtp=command('docker',['run','--rm','--read-only','--network',configuration.networks['damgox2-mail'].name,'--cap-drop','ALL','--security-opt','no-new-privileges:true','--memory','192m','--mount','type=bind,src='+base+'/probes,dst=/probes,readonly',...['damgox2-smtp-ca','damgox2-smtp-password'].flatMap(key=>['--mount','type=bind,src='+configuration.secrets[key].file+',dst=/run/secrets/'+(key.endsWith('-ca')?'external-smtp-ca':'external-smtp-password')+',readonly']),...['DAMGOX2_MAIL_HOST','DAMGOX2_MAIL_PORT','DAMGOX2_MAIL_USERNAME','DAMGOX2_MAIL_CA_FILE','DAMGOX2_MAIL_PASSWORD_FILE'].flatMap(k=>['-e',k]),'--entrypoint','java',target.app.Id,'-cp','/probes','SmtpConnectionCheck'],{env:smtpEnv});
   evidence.policy=JSON.parse(runtime('policy-info'));assert.equal(evidence.policy.java,25);assert.equal(Object.keys(evidence.policy.classes).length,14);
-  evidence.transition=JSON.parse(runtime('policy-transition',{DAMGOX2_POLICY_TRANSITION:'apply-reviewed-java25'}).split('\n').at(-1));transitioned=true;
+  evidence.transition=policyChange.apply(()=>JSON.parse(runtime('policy-transition',{DAMGOX2_POLICY_TRANSITION:'apply-reviewed-java25'}).split('\n').at(-1)));
   const after=databaseSnapshot(db.Id,'damgox2','damgox2');write('database-after-policy.json',after);
-  const mutable=new Set(['article_translations','article_translation_jobs','article_classification_jobs','translation_runtime','classification_runtime','read_cache_fingerprints']);
+  const mutable=new Set(['article_translations','article_translation_jobs','article_classification_jobs','translation_runtime','classification_runtime','read_cache_fingerprints','flyway_schema_history']);
   assert.deepEqual(before.filter(t=>!mutable.has(t.table)),after.filter(t=>!mutable.has(t.table)),'Non-policy tables changed during frozen transition');
   evidence.unchangedFrozenTables=before.filter(t=>!mutable.has(t.table)).length;
   started=true;
@@ -104,7 +107,10 @@ try {
   evidence.error=error.message;evidence.status='FAILED';
   try {
     if(started)for(const service of [...services].reverse()){const id=docker([...args,'ps','-aq',service]);if(id)docker(['stop','--timeout','20',id]);}
-    if(transitioned)evidence.reverseTransition=runtime('policy-transition',{DAMGOX2_POLICY_TRANSITION:'rollback-reviewed-java27'});
+    policyChange.rollback(
+      ()=>{evidence.reverseTransition=runtime('policy-transition',{DAMGOX2_POLICY_TRANSITION:'rollback-reviewed-java27'});},
+      ()=>sql("SELECT (SELECT count(*) FROM article_translations WHERE NOT locked AND provider<>'"+legacy.translationProvider+"')+(SELECT count(*) FROM article_classification_jobs WHERE model_policy IS DISTINCT FROM '"+legacy.classificationPolicy+"')")==='0'
+    );
     if(stopped)for(const name of ['damgox2-translator-1','damgox2-classifier-1','damgox2-web-1','damgox2-proxy-1','damgox2-worker-1'])docker(['start',old.find(c=>c.Name==='/'+name).Id]);
     evidence.rolledBack=true;
   }catch(rollback){evidence.rolledBack=false;evidence.rollbackError=rollback.message;}

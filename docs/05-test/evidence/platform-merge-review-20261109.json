@@ -1,0 +1,83 @@
+{
+  "verifiedAt": "2026-11-09T09:08:26.350Z",
+  "initialReviewedHead": "40a7f6f7b98d4710b3b230d766d9038635740326",
+  "pr": "https://github.com/JunSungKang/MoaPan/pull/31",
+  "initialReview": "CHANGES_REQUESTED",
+  "findings": [
+    "F1 unknown translation/partial job retention",
+    "F2 trusted model provenance and cache visibility",
+    "F3 bounded/cancellable encrypted restore pipeline",
+    "F4 lost acknowledgement policy recovery",
+    "F5 canonical parent before any write"
+  ],
+  "tests": [
+    {
+      "suite": "test",
+      "tests": 197,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "integrationTest",
+      "tests": 163,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "e2eTest",
+      "tests": 90,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "regression": {
+    "originalCode": 3,
+    "originalFailures": 3,
+    "recoveryControls": 8,
+    "status": "PASS"
+  },
+  "deployment": {
+    "status": "PASS",
+    "appImage": "sha256:99d428ea05d657801c1829a8eacf8bf307523099fb4d9638e56ea4df93d2094c",
+    "recoveryImage": "sha256:f0daf152c372e69579823d0c09f716532edf00958e0baae04fa816fc3b30c68c",
+    "schema": 28,
+    "policyIdentityUnchanged": true,
+    "classCount": 14,
+    "restore": {
+      "status": "PASS",
+      "tables": 39,
+      "allRowsAndCountsMatch": true,
+      "encryptedStreaming": true,
+      "plaintextDumpWritten": false,
+      "isolatedTmpfs": true
+    },
+    "unchangedTables": 36,
+    "classificationPayloadUnchanged": true,
+    "databaseNotStopped": true,
+    "proxyAndModelsNotRestarted": true,
+    "otherServicesUnchanged": 10,
+    "workerStopMillis": 717,
+    "http": {
+      "about": "200",
+      "edition": "200",
+      "account": "401",
+      "newsletter": "404"
+    }
+  },
+  "scan": {
+    "createdAt": "2026-11-09T17:56:07.863658+09:00",
+    "imageId": "sha256:99d428ea05d657801c1829a8eacf8bf307523099fb4d9638e56ea4df93d2094c",
+    "highCritical": 0,
+    "secrets": 0
+  },
+  "review": "Independent current-head re-review and guarded merge are recorded in PR31; this evidence does not predict their outcome.",
+  "smtp": "STARTTLS=PASS certificate-chain=PASS hostname=PASS AUTH=235 message-submitted=false TLS=TLSv1.3",
+  "trust": {
+    "normalHttps": true,
+    "rejectedChains": 14,
+    "roots117": true
+  }
+}

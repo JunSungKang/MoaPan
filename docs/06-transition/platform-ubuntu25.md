@@ -81,3 +81,11 @@ docker compose --env-file .env --env-file .local/platform.env \
 실패 시 실행기는 새5개 서비스만 중지하고 정책 매핑을 rollback-reviewed-java27로 되돌린 뒤 이전 정확한 컨테이너 ID를 시작한다. 실제 배포에서는 자동 복구 경로가 호출되지 않았다. 사후 수동 복구도 같은 운영 잠금 아래 worker 중지 → 이전/현재 정책과 알려지지 않은 provider 재검토 → 정책 역매핑 → 이전5개 컨테이너 시작 → HTTPS/worker 재검증 순서로 수행한다. DB의 파괴적 롤백이나 전체 dump 복원은 자동으로 하지 않는다. 이후 발생한 새 데이터와 보안 공지를 재검토하지 않고 과거 이미지를 재공개하지 않는다.
 
 현재 구성·실행에는 기존 미커밋 사업/UI 변경을 보존했다. 이번 Git 전달에서는 플랫폼 변경과 V27 호환·보안 선행 코드만 포함하고 해당 기존 변경·로컬 스킬은 별도 미커밋 상태로 유지한다. 따라서 운영 이미지에는 보존된 작업본도 들어 있고, 이번 단일 커밋만으로 그 별도 변경까지 게시했다고 주장하지 않는다. 커밋 대상 자체의 독립 소스 사본에서도 Java25 bootJar 빌드를 별도로 확인했다. PR 병합과 공통 PG 데이터 이관은 이번 승인 범위가 아니다.
+
+## PR31 후속 보존·복구 보완
+
+최초 전환 이후 독립 리뷰 F1~F5를 [MP-DOC-051](../05-test/platform-merge-review.md)로 보완했다. 현재 스키마는V28이며 분류 작업에 nullable model_policy와 캐시 지문 반영을 추가했다. 미확인 provider/부분 작업은 자동 초기화하거나 덮어쓰지 않고, 다른 모델 provenance의 분류·태그는 자동 재처리하지 않는다. 정상 taxonomy 변경은 검증된 동일 모델 provenance에 한해서만 재처리한다. 새14-class 지문은 이전25 실행본과 같아 정책 ID를 재변경하거나 원래 번역을 다시 생성하지 않았다.
+
+현재 앱 이미지는 sha256:99d428ea05d657801c1829a8eacf8bf307523099fb4d9638e56ea4df93d2094c이며 damgox2-app:verified-99d428ea05d6 태그로도 보관한다. 복구용은 damgox2-app-recovery:java25-20261109이고 원본 JAR SHA는 최초 실행06a8fd49c1096f6260fbdec4841a337b0da9480c80bf3cdffc72d21d89d83485와 같다. 실제 정확한 값과 override는 .local/platform-merge-20261109/previous-app-images.json 및 new-app-images.json을 따른다. 새 앱/worker만 교체했고 DB·모델·proxy는 그대로다.
+
+복원 streaming은 양쪽 프로세스의 실패·timeout·취소를 회수해 유한 시간에 실패한다. 정책 전환은 commit 후 응답을 잃어도 시도 사실을 유지하고, 역전환의 응답까지 잃으면 실제 DB 상태를 기준으로 확인한다. 구 worker가 처리할 수 없는 unknown 결과/작업이 남거나 안전 상태 확인이 실패하면 구 worker를 시작하지 않는다. 데이터 보존을 위해 해당 경우에는 worker를 중지한 상태로 운영자 검토가 필요하다. 실행기·공통PG migration의 최신 기준은V28이다.
