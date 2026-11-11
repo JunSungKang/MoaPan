@@ -71,3 +71,8 @@ Ubuntu의 공급자 미패치 구성요소를 제거하기 위해 [공식 Alpine
 
 ## 2026-11-06 인프라 명칭 변경 재검증
 Temurin 공식 최신 release 페이지에서27.0.1.0.2+1을 재확인했다. 실제 컨테이너 java/javac27.0.1.0.2, 호스트/컨테이너 JAR SHA256 일치. Boot4.1.2/Gradle9.8.2/PostgreSQL18.6/기존 고정 모델과 공급자 checksum은 유지한다. Docker/Compose/Helm 명칭은 damgox2로 이관했다. 현재8이미지 로컬ID·검사 시각·고정한 운영 이미지와 실제 판정은 [MP-DOC-042](../05-test/infrastructure-naming.md)와 연결된 증빙을 따른다. 이전 절의 이미지/도구 이름은 당시 증빙으로 보존하며 현재 실행 명령은 deployment.md의2026-11-06절이 정본이다.
+
+
+## 2026-11-11 메모리 릴리스 확인
+
+공식 Adoptium API를 실제 조회해 Temurin25.0.5+8-LTS가 동일 메이저의 최신 빌드임을 확인했다. Linux/aarch64 JDK SHA256 bb5b2ded252f21c6090cf780b0a408ad0d83bbb557e702955643557f13231880. 기존25.0.5+8 공통 JDK/JRE와 Ubuntu26.04를 유지하며, 새 앱 이미지와 AI 이미지 ID 및 검사 DB 시각은 [측정 증빙](../05-test/evidence/memory-performance-20261111.json)에 기록한다. native llama-server는 이전 실행 파일과 SHA256이 동일하며 모델 파일도 기존 체크섬을 유지한다. [Adoptium 공식 API](https://api.adoptium.net/v3/assets/latest/25/hotspot?architecture=aarch64&image_type=jdk&os=linux&vendor=eclipse).

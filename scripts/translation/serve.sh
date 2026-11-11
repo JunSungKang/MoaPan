@@ -3,10 +3,12 @@ set -eu
 threads=${TRANSLATION_THREADS:-2}
 case "$threads" in ''|*[!0-9]*) echo 'Invalid translation thread count'; exit 1;; esac
 [ "$threads" -ge 1 ] && [ "$threads" -le 64 ] || exit 1
+idle=${DAMGOX2_AI_IDLE_SECONDS:-300}
+case "$idle" in -1) ;; ''|*[!0-9]*) echo 'Invalid AI idle period'; exit 1;; *) [ "$idle" -ge 1 ] && [ "$idle" -le 86400 ] || exit 1;; esac
 [ -s /run/secrets/translation_key ] || { echo 'Translation key missing'; exit 1; }
 printf '%s  %s\n' a09d287f41d297206947a2e51acc29dd03c8b22356111fdb1e289c0c97c173f3 /models/index-translate-2b-q8.gguf | sha256sum -c -
 # No outgoing network, web UI, RPC, prompt logs, GPU or dynamic model download.
-llama-server -m /models/index-translate-2b-q8.gguf --alias damgox2-translation --host 0.0.0.0 --port 9931 -c 4096 -b 64 -ub 64 -np 1 -ngl 0 -t "$threads" --no-webui --offline --no-cache-prompt --cache-ram 0 --api-key-file /run/secrets/translation_key --reasoning off --log-disable &
+llama-server -m /models/index-translate-2b-q8.gguf --alias damgox2-translation --host 0.0.0.0 --port 9931 -c 4096 -b 64 -ub 64 -np 1 -ngl 0 -t "$threads" --no-webui --offline --no-cache-prompt --cache-ram 0 --api-key-file /run/secrets/translation_key --reasoning off --sleep-idle-seconds "$idle" --log-disable &
 server=$!
 stop(){ kill "$server" 2>/dev/null || true; wait "$server" 2>/dev/null || true; }
 trap 'stop; exit 0' TERM INT

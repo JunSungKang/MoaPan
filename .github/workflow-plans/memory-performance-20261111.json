@@ -1,0 +1,174 @@
+{
+  "schemaVersion": 4,
+  "workSlug": "memory-performance-20261111",
+  "flowType": "integration",
+  "branch": "codex/memory-performance-20261111",
+  "targetBranch": "develop",
+  "baseSha": "71ecb391bef29c6a47d03d029471b60c48fa07ec",
+  "mergeMethod": "squash",
+  "governance": {
+    "prAuthorLogin": "JunSungKang",
+    "assigneeLogin": "JunSungKang",
+    "reviewerLogin": "junsung-bot[bot]",
+    "requiredChecks": [],
+    "commitAuthor": {
+      "name": "jun-sung, Kang",
+      "email": "kjuns1@naver.com"
+    },
+    "coAuthors": [
+      {
+        "name": "Codex",
+        "email": "codex@openai.com"
+      },
+      {
+        "name": "junsung-bot[bot]",
+        "email": "302617028+junsung-bot[bot]@users.noreply.github.com"
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "preserve-pending",
+      "expectedPaths": [
+        ".agents/skills/https-certificate/SKILL.md",
+        ".agents/skills/https-certificate/agents/openai.yaml",
+        ".agents/skills/https-certificate/references/caddy-acme.md",
+        ".github/workflow-plans/business-alignment-20261108.json",
+        ".github/workflow-plans/payment-handoff-20261106.json",
+        ".github/workflow-plans/security-gate-20261108.json",
+        ".github/workflow-plans/service-delivery-security-review-20261108.json",
+        "README.md",
+        "compose.yaml",
+        "docs/01-management/deliverable-register.json",
+        "docs/01-management/deliverable-register.md",
+        "docs/01-management/plan.md",
+        "docs/01-management/progress.md",
+        "docs/02-analysis/business-direction.md",
+        "docs/02-analysis/business-validation.md",
+        "docs/02-analysis/functional-spec.md",
+        "docs/02-analysis/payment-handoff.md",
+        "docs/02-analysis/requirements.md",
+        "docs/03-design/api.md",
+        "docs/03-design/data-model.md",
+        "docs/03-design/decisions.md",
+        "docs/05-test/acceptance-matrix.md",
+        "docs/05-test/bugs.md",
+        "docs/05-test/business-alignment.md",
+        "docs/05-test/evidence/business-alignment-20261108.json",
+        "docs/05-test/evidence/screenshots/business-direction/en-1440.png",
+        "docs/05-test/evidence/screenshots/business-direction/ko-1440.png",
+        "docs/05-test/evidence/screenshots/business-direction/ko-390.png",
+        "docs/05-test/evidence/security-gate-20261108.json",
+        "docs/05-test/evidence/service-delivery-security-review-20261108.json",
+        "docs/05-test/security-gate-20261108.md",
+        "docs/05-test/service-delivery-security-review-20261108.md",
+        "docs/06-transition/deployment.md",
+        "docs/06-transition/versions.md",
+        "docs/07-operation/editorial-handbook.md",
+        "docs/07-operation/security-review.md",
+        "docs/README.md",
+        "scripts/deploy/compose-public.yaml",
+        "scripts/deploy/compose-server.yaml",
+        "src/e2eTest/java/com/moapan/BusinessDirectionBrowserTest.java",
+        "src/e2eTest/java/com/moapan/SiteDesignAuditTest.java",
+        "src/integrationTest/java/com/moapan/SecurityIntegrationTest.java",
+        "src/integrationTest/java/com/moapan/cache/BusinessContinuityIntegrationTest.java",
+        "src/integrationTest/java/com/moapan/cache/PublicationCacheIntegrationTest.java",
+        "src/main/java/com/moapan/catalog/api/SourceRightsController.java",
+        "src/main/java/com/moapan/catalog/application/SourceRightsReviews.java",
+        "src/main/java/com/moapan/newsletter/NewsletterController.java",
+        "src/main/java/com/moapan/newsletter/NewsletterService.java",
+        "src/main/java/com/moapan/newsletter/PublicationReadModels.java",
+        "src/main/java/com/moapan/newsletter/application/PublicationHistory.java",
+        "src/main/java/com/moapan/newsletter/domain/PublicationResearch.java",
+        "src/main/resources/static/about.html",
+        "src/main/resources/static/account.html",
+        "src/main/resources/static/admin.html",
+        "src/main/resources/static/assets/css/newsletter.css",
+        "src/main/resources/static/assets/css/newspaper.css",
+        "src/main/resources/static/assets/css/service-about.css",
+        "src/main/resources/static/assets/js/administration/admin.js",
+        "src/main/resources/static/assets/js/administration/source-rights.js",
+        "src/main/resources/static/assets/js/newsletter/assessment-states.js",
+        "src/main/resources/static/assets/js/newsletter/edit.js",
+        "src/main/resources/static/assets/js/newsletter/follow-up-editor.js",
+        "src/main/resources/static/assets/js/newsletter/history.js",
+        "src/main/resources/static/assets/js/newsletter/publication-output.js",
+        "src/main/resources/static/assets/js/newsletter/read.js",
+        "src/main/resources/static/assets/js/newsletter/reader-tools.js",
+        "src/main/resources/static/assets/js/newsletter/research-editor.js",
+        "src/main/resources/static/assets/js/shared/common.js",
+        "src/main/resources/static/assets/js/shared/i18n-en.js",
+        "src/main/resources/static/assets/js/shared/i18n-features.js",
+        "src/main/resources/static/assets/js/shared/i18n-pages.js",
+        "src/main/resources/static/assets/js/shared/request-errors.js",
+        "src/main/resources/static/index.html",
+        "src/main/resources/static/newsletter-editor.html",
+        "src/main/resources/static/newsletter.html",
+        "src/main/resources/static/privacy.html",
+        "src/main/resources/static/settings.html",
+        "src/main/resources/static/terms.html",
+        "src/test/java/com/moapan/newsletter/PublicationResearchTest.java"
+      ],
+      "forbiddenPaths": [],
+      "acceptanceCriteria": [
+        "Preserve baseline user/business/UI/skill files; stage only this performance change. Untracked local skills remain untracked and unchanged. No external operations/project edits."
+      ],
+      "validationCommands": [
+        "git diff --check"
+      ],
+      "documentation": {
+        "rationale": "Private per-file SHA256 baseline in workspace .local/memory-performance-20261111; never commit it."
+      }
+    },
+    {
+      "id": "bounded-runtime-memory",
+      "expectedPaths": [
+        ".github/workflow-plans/memory-performance-20261111.json",
+        "Dockerfile",
+        "compose.platform.yaml",
+        "scripts/performance/**",
+        "scripts/test/runtime-memory*",
+        "scripts/deploy/helm/damgox2/**",
+        "src/main/resources/application.properties",
+        "src/main/resources/application-worker.properties",
+        "src/main/java/com/moapan/bootstrap/**",
+        "src/test/java/com/moapan/bootstrap/**",
+        "src/integrationTest/java/com/moapan/performance/**",
+        "docs/**",
+        "scripts/security/source-check.sh",
+        "scripts/security/jose-backport-check.sh",
+        "scripts/translation/serve.sh",
+        "scripts/classification/serve.sh"
+      ],
+      "forbiddenPaths": [
+        ".env",
+        ".local/**",
+        ".github/workflows/**"
+      ],
+      "acceptanceCriteria": [
+        "Sprint Delivery: baseline -> measured isolated tuning -> regression/security -> own Docker services only -> guarded commit/push/PR/independent App review/develop merge and head cleanup, explicitly authorized by latest user.",
+        "Compare actual cgroup/RSS/PSS and latency/throughput using same fixture, image, CPU and load. No fabricated savings from reducing memory limits alone. Select settings reducing measured footprint with zero errors and p95/throughput regression at most20% (repeat noisy runs); record limitations.",
+        "Keep AI weights/context/validation/14 policy class identities and security/quota behavior; no Redis, dependencies, schema or personal-data changes. Keep connection concurrency headroom for nested transactions and worker leases.",
+        "Preserve shared PostgreSQL and other services; hold explicitly authorized common native deployment flock. Snapshot current per-service config/images and rebuild only own services with same networks/mounts/secrets/ports. Verify mail strictTLS/AUTH, public/protected API, worker shutdown/restart, security gate before promotion.",
+        "Only own paths committed. Current-head independent read-only review, App APPROVED, human merge wrapper, three head refs absent, local/remote develop match. Restore exact baseline pending content.",
+        "Repair cold-cache security verifier preconditions without relaxing any gate: explicitly download the exact checksum-verified original JOSE module for the existing negative control. Preserve all five expected failures and current source/image verification.",
+        "Measured AI lifecycle optimization is allowed without changing weights/context/output policy: default300-second idle unload, opt-out -1, same pinned native executable and model volumes, repeated sleep/wake with deterministic synthetic output/health/auth checks. Compare active/sleep RSS and document cold-wake cost. Upgrade only own translator/classifier alongside web/worker, preserve proxy/database/mail/other services and roll back all changed services on failure."
+      ],
+      "validationCommands": [
+        "sh scripts/build/gradle-local.sh --no-daemon check integrationTest e2eTest bootJar sbom securityCheck acceptanceTest",
+        "node --test scripts/test/runtime-memory.test.mjs",
+        "node scripts/performance/benchmark.mjs",
+        "node scripts/test/docs-check.mjs",
+        "git diff --check"
+      ],
+      "documentation": {
+        "paths": [
+          "docs/01-management/progress.md",
+          "docs/05-test/memory-performance.md",
+          "docs/06-transition/memory-runtime.md"
+        ]
+      }
+    }
+  ]
+}

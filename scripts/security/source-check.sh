@@ -19,3 +19,4 @@ node --test scripts/test/infrastructure-naming.test.mjs
 
 node --test scripts/test/platform-configuration.test.mjs
 node --test scripts/test/platform-recovery.test.mjs
+node --test scripts/test/runtime-memory*.test.mjs

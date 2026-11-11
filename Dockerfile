@@ -12,18 +12,23 @@ RUN echo '3b8a25775a69158b5ad2b1d17a80a88dc7b40a352a73eb27d06c612a7ce68e98  grad
 COPY scripts ./scripts
 COPY src ./src
 COPY licenses ./licenses
+RUN mkdir -p /workspace/.local/security-tools && javac -d /workspace/.local/security-tools scripts/security/TrustStorePatch.java
 RUN --mount=type=cache,id=damgox2-gradle-9.8.2-java25,target=/workspace/.gradle-home,sharing=locked mkdir -p /workspace/.local/tmp && ./gradlew --no-daemon -Djava.io.tmpdir=/workspace/.local/tmp bootJar && sh scripts/security/fetch-thirdparty-sources.sh
 FROM ${JAVA_RUNTIME_IMAGE} AS runtime
 USER 0:0
 WORKDIR /app
 RUN groupadd -g 10001 damgox2 && useradd -r -u 10001 -g 10001 -M damgox2
+COPY --from=build /workspace/.local/security-tools/TrustStorePatch.class /security/TrustStorePatch.class
+COPY scripts/security/patch-os-trust.sh /security/patch-os-trust.sh
+RUN java -cp /security TrustStorePatch "$JAVA_HOME/lib/security/cacerts" && sh /security/patch-os-trust.sh && rm -rf /security
 COPY --from=build --chown=10001:10001 /workspace/build/libs/damgox2-1.0.0.jar /app/damgox2.jar
 COPY THIRD_PARTY_NOTICES.md /opt/damgox2/THIRD_PARTY_NOTICES.md
 COPY licenses /opt/damgox2/licenses
 COPY --from=build /workspace/build/third-party-sources /opt/damgox2/third-party-sources
+COPY --chmod=0555 scripts/performance/java-entrypoint.sh /opt/damgox2/java-entrypoint.sh
 USER 10001:10001
-ENV DAMGOX2_ROLE=web JAVA_TOOL_OPTIONS='-XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp -Duser.timezone=UTC'
-ENTRYPOINT ["java","-jar","/app/damgox2.jar"]
+ENV DAMGOX2_ROLE=web MALLOC_ARENA_MAX=2
+ENTRYPOINT ["/opt/damgox2/java-entrypoint.sh"]
 FROM ${NATIVE_BUILD_IMAGE} AS proxy-build
 USER 0:0
 ENV CGO_ENABLED=0

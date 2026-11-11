@@ -28,6 +28,10 @@ docker run --rm --user "$(id -u):$(id -g)" --read-only --cap-drop ALL --security
  -e GOCACHE=/workspace/.local/go-cache -e TMPDIR=/workspace/.local/tmp --entrypoint sh "$image" -ec '
  go version
  go test -p 2 -count=1 -mod=readonly -json -timeout 120s github.com/go-jose/go-jose/v3/... > /workspace/build/reports/security/jose-patched.jsonl
+ # A pristine host cache need not contain the original, because /proxy replaces
+ # it with the patched local module. Fetch this exact checksum-verified version
+ # explicitly so the unpatched negative control is reproducible on first run.
+ go mod download github.com/go-jose/go-jose/v3@v3.0.5
  work=$(mktemp -d "$TMPDIR/jose-negative.XXXXXX")
  trap '\''rm -rf "$work"'\'' EXIT HUP INT TERM
  go run /workspace/scripts/security/CopyModule.go "$GOMODCACHE/github.com/go-jose/go-jose/v3@v3.0.5" "$work"

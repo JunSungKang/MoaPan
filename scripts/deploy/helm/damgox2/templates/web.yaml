@@ -37,6 +37,8 @@ spec:
           envFrom: [{configMapRef: {name: damgox2-settings}}]
           env:
             - {name: DAMGOX2_ROLE, value: web}
+            - {name: DAMGOX2_DB_POOL_MAX, value: {{ .Values.runtime.web.maxConnections | quote }}}
+            - {name: DAMGOX2_DB_POOL_MIN, value: {{ .Values.runtime.web.idleConnections | quote }}}
 {{ include "damgox2.secretEnv" . | indent 12 }}
 {{ include "damgox2.mailEnv" . | indent 12 }}
           securityContext: {readOnlyRootFilesystem: true, allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}}

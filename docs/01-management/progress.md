@@ -288,3 +288,8 @@ Temurin25.0.5+8/Ubuntu26.04 앱·proxy·공유AI 이미지로 platform-damgox2-*
 
 ## 2026-11-09 기본 운영 점검의 번역문 포장 표시 수정
 지면·기사 검색에서 일부 번역문이 source_text JSON으로 노출되는 문제를 표시 계층에서 수정했다. 원문/번역 저장값과 AI 정책14개 class는 변경하지 않는다. Node 회귀4개와 공개 HTTPS 자산/화면 검사를 통과했다. 기존 운영 JAR의 해당 정적 파일만 바꾼 r2 이미지로 공통 flock 안에서 웹만 교체했다. 다른 컨테이너의 ID/시각·영속 마운트를 보존했다. 미커밋 사업·뉴스레터 작업은 이 커밋과 배포에서 제외했다. docs/05-test/article-translation-wrapper.md 참조.
+
+
+## 2026-11-11 메모리·성능 Sprint
+
+Sprint Delivery로 기존 미커밋79개 파일을 보존하고 develop71ecb39와 이번 변경만 납품했다. 격리 비교에서 웹/worker 합산RSS640.4→478.9MiB(-25.2%), p95평균89.28→88.28ms, 처리량231.8→224.3건/초(-3.2%)·오류0이다. AI의 모델·native·정책·4096 context는 유지하고300초 유휴 해제를 추가했다. 각 모델 두 번 sleep/wake·출력 일치·health200·인증401을 확인했으며 RSS와 파일 캐시는 구분한다. 기능439개·Node10개와 JAR/SBOM/최종이미지·strict STARTTLS/AUTH·14개 TLS 부정 체인 검증 PASS다. CA117개 anchor와14개 AI 클래스 지문은 같다. PR33의 최초 독립 리뷰 F1/F2(전체ENV 보존·공통파일 없이 복구)를 수정하고 head1d82337의 App APPROVED 후21:32에 운영 네 서비스만 교체했다. 안정 DB10개 테이블 지문·다른 운영 컨테이너12개·전체 운영자 ENV·볼륨·포트를 보존했다. worker644ms 종료/재시작과 운영 HTTPS200/401/404,21:37 두 모델300초 수면·health·재시작0을 확인했다. 공통 운영 파일은 수정하지 않았다. 암호화 복구 구성과 이전 이미지는 보존하며 실제 복구 시험은 합성 컨테이너에서 수행했다. 운영 증빙을 추가한 최종 head는 다시 리뷰하며 develop 최종 승인·병합 SHA는 [PR33](https://github.com/JunSungKang/MoaPan/pull/33), 상세는 [검증서](../05-test/memory-performance.md)와 [인계서](../06-transition/memory-runtime.md)를 기준으로 한다. main·CI/CD·기존 사업 변경은 범위 밖이다.
