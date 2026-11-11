@@ -9,11 +9,15 @@ images:
   classifier: ""
 imagePullSecrets: []
 webReplicas: 1
+runtime:
+  web: {maxConnections: 8, idleConnections: 2}
+  worker: {maxConnections: 6, idleConnections: 1}
 storageClass: ""
 databaseStorage: 10Gi
 modelStorage: 5Gi
 migrationVersion: "28"
 translationThreads: "2"
+aiIdleSeconds: "300"
 ingress:
   enabled: true
   className: ""

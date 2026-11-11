@@ -1,0 +1,410 @@
+{
+  "status": "MEASURED_AND_TESTED",
+  "at": "2026-11-11T11:39:45.368Z",
+  "architecture": "linux/arm64",
+  "java": "Temurin25.0.5+8",
+  "scope": "base71ecb39 plus performance changes; baseline pending79 files excluded",
+  "appImage": "sha256:bdda575ee9dd4d8949d470f0800af440bf4d3e022b1ec5be0cdfcd4886937316",
+  "aiImage": "sha256:867bdad6857d4b6ff5d5c52ec17eb760a6a95faad04d37c05a4b66b1c1486d14",
+  "benchmark": {
+    "at": "2026-11-11T11:30:59.565Z",
+    "image": "sha256:bdda575ee9dd4d8949d470f0800af440bf4d3e022b1ec5be0cdfcd4886937316",
+    "cpu": 1.5,
+    "memoryLimitMiB": 768,
+    "concurrency": 8,
+    "articles": 300,
+    "runs": [
+      {
+        "variant": "baseline",
+        "startupMs": 7334,
+        "idle": {
+          "cgroupMiB": 364.484375,
+          "workingMiB": 330.87890625,
+          "rssMiB": 334.6875,
+          "pssMiB": 322.7587890625
+        },
+        "peak": {
+          "cgroupMiB": 408.0703125,
+          "workingMiB": 374.46484375,
+          "rssMiB": 377.91796875,
+          "pssMiB": 365.9892578125
+        },
+        "connections": 12,
+        "afterIdle": {
+          "cgroupMiB": 405.30078125,
+          "workingMiB": 371.6953125,
+          "rssMiB": 374.1171875,
+          "pssMiB": 362.1826171875
+        },
+        "idleConnections": 12,
+        "workerMemory": {
+          "cgroupMiB": 301.08203125,
+          "workingMiB": 241.890625,
+          "rssMiB": 254.46875,
+          "pssMiB": 242.5341796875
+        },
+        "workerStopMs": 492,
+        "burst": {
+          "requests": 80,
+          "errors": 0,
+          "p50Ms": 107.30624999999964,
+          "p95Ms": 215.73833300000115,
+          "requestsPerSecond": 252.55362016420432
+        },
+        "requests": 240,
+        "errors": 0,
+        "p50Ms": 12.761082999999417,
+        "p95Ms": 88.7084589999995,
+        "requestsPerSecond": 234.18048794865155
+      },
+      {
+        "variant": "tuned",
+        "startupMs": 7294,
+        "idle": {
+          "cgroupMiB": 257.13671875,
+          "workingMiB": 257.1015625,
+          "rssMiB": 254.10546875,
+          "pssMiB": 244.4833984375
+        },
+        "peak": {
+          "cgroupMiB": 266.58203125,
+          "workingMiB": 266.546875,
+          "rssMiB": 264.8515625,
+          "pssMiB": 255.2294921875
+        },
+        "connections": 8,
+        "afterIdle": {
+          "cgroupMiB": 264.0859375,
+          "workingMiB": 264.05078125,
+          "rssMiB": 261.06640625,
+          "pssMiB": 251.4296875
+        },
+        "idleConnections": 2,
+        "workerMemory": {
+          "cgroupMiB": 281.71484375,
+          "workingMiB": 197.3671875,
+          "rssMiB": 216.21484375,
+          "pssMiB": 206.5771484375
+        },
+        "workerStopMs": 481,
+        "burst": {
+          "requests": 80,
+          "errors": 0,
+          "p50Ms": 100.68483299999207,
+          "p95Ms": 192.2642499999929,
+          "requestsPerSecond": 263.84930576712975
+        },
+        "requests": 240,
+        "errors": 0,
+        "p50Ms": 12.375625000000582,
+        "p95Ms": 87.84141699998872,
+        "requestsPerSecond": 229.76853181291733
+      },
+      {
+        "variant": "tuned",
+        "startupMs": 7276,
+        "idle": {
+          "cgroupMiB": 239.1953125,
+          "workingMiB": 233.52734375,
+          "rssMiB": 251.5703125,
+          "pssMiB": 241.15625
+        },
+        "peak": {
+          "cgroupMiB": 253.84765625,
+          "workingMiB": 248.1796875,
+          "rssMiB": 261.6875,
+          "pssMiB": 251.2734375
+        },
+        "connections": 8,
+        "afterIdle": null,
+        "idleConnections": null,
+        "workerMemory": {
+          "cgroupMiB": 202.4296875,
+          "workingMiB": 202.421875,
+          "rssMiB": 215.03515625,
+          "pssMiB": 204.6025390625
+        },
+        "workerStopMs": 489,
+        "burst": {
+          "requests": 80,
+          "errors": 0,
+          "p50Ms": 86.45020900000236,
+          "p95Ms": 126.24420899999677,
+          "requestsPerSecond": 379.78627071870625
+        },
+        "requests": 240,
+        "errors": 0,
+        "p50Ms": 13.064374999987194,
+        "p95Ms": 88.72649999998976,
+        "requestsPerSecond": 218.82329369402606
+      },
+      {
+        "variant": "baseline",
+        "startupMs": 7276,
+        "idle": {
+          "cgroupMiB": 328.328125,
+          "workingMiB": 328.3046875,
+          "rssMiB": 340.046875,
+          "pssMiB": 327.2578125
+        },
+        "peak": {
+          "cgroupMiB": 379.03125,
+          "workingMiB": 379.0078125,
+          "rssMiB": 393.68359375,
+          "pssMiB": 380.89453125
+        },
+        "connections": 12,
+        "afterIdle": null,
+        "idleConnections": null,
+        "workerMemory": {
+          "cgroupMiB": 242.9140625,
+          "workingMiB": 242.91015625,
+          "rssMiB": 254.640625,
+          "pssMiB": 241.8515625
+        },
+        "workerStopMs": 488,
+        "burst": {
+          "requests": 80,
+          "errors": 0,
+          "p50Ms": 105.94204200000968,
+          "p95Ms": 187.2721250000177,
+          "requestsPerSecond": 253.331272990101
+        },
+        "requests": 240,
+        "errors": 0,
+        "p50Ms": 13.23695800002315,
+        "p95Ms": 89.8494579999824,
+        "requestsPerSecond": 229.42531879945815
+      }
+    ],
+    "productionDataUsed": false,
+    "payloadSha256": "07b2c9e749cb23b80beb70e52c0b3fa92a4da5a605ca9428f986088ab7f8dd68",
+    "completed": true
+  },
+  "summary": {
+    "baseline": {
+      "rssMiB": 640.35546875,
+      "webRssMiB": 385.80078125,
+      "workerRssMiB": 254.5546875,
+      "workingMiB": 619.13671875,
+      "p95Ms": 89.27895849999095,
+      "rps": 231.80290337405484,
+      "burstP95Ms": 201.50522900000942
+    },
+    "tuned": {
+      "rssMiB": 478.89453125,
+      "webRssMiB": 263.26953125,
+      "workerRssMiB": 215.625,
+      "workingMiB": 457.2578125,
+      "p95Ms": 88.28395849998924,
+      "rps": 224.2959127534717,
+      "burstP95Ms": 159.25422949999484
+    },
+    "rssReductionPercent": 25.214266978179843,
+    "throughputChangePercent": -3.2385231208555187,
+    "p95ChangePercent": -1.114484327235754,
+    "gate": true
+  },
+  "aiBenchmark": {
+    "image": "sha256:867bdad6857d4b6ff5d5c52ec17eb760a6a95faad04d37c05a4b66b1c1486d14",
+    "checkedAt": "2026-11-11T11:36:39.811Z",
+    "fixtureIdleSeconds": 10,
+    "productionIdleSeconds": 300,
+    "models": [
+      {
+        "kind": "translation",
+        "activeMiB": 2130.81640625,
+        "activeCgroup": {
+          "currentMiB": 1772.17578125,
+          "workingMiB": 453.62109375,
+          "anonymousMiB": 215.34765625,
+          "fileMiB": 1551.16015625,
+          "inactiveFileMiB": 1318.5546875
+        },
+        "firstMs": 1671.306208,
+        "warmMs": 1618.1386250000005,
+        "nativeExecutableUnchanged": true,
+        "modelChecksumVerifiedByEntrypoint": true,
+        "apiAuthentication": 401,
+        "context": 4096,
+        "cycles": [
+          {
+            "idleMiB": 159.2109375,
+            "idleCgroup": {
+              "currentMiB": 1708.26953125,
+              "workingMiB": 389.71484375,
+              "anonymousMiB": 153.35546875,
+              "fileMiB": 1551.16015625,
+              "inactiveFileMiB": 1318.5546875
+            },
+            "wakeMs": 2556.596207999999,
+            "wokenMiB": 2137.62109375,
+            "outputUnchanged": true,
+            "health200": true,
+            "restarts": 0
+          },
+          {
+            "idleMiB": 181.26171875,
+            "idleCgroup": {
+              "currentMiB": 1732.5625,
+              "workingMiB": 414.0078125,
+              "anonymousMiB": 175.40625,
+              "fileMiB": 1551.16015625,
+              "inactiveFileMiB": 1318.5546875
+            },
+            "wakeMs": 2494.032125000005,
+            "wokenMiB": 2137.62890625,
+            "outputUnchanged": true,
+            "health200": true,
+            "restarts": 0
+          }
+        ]
+      },
+      {
+        "kind": "classification",
+        "activeMiB": 2982.13671875,
+        "activeCgroup": {
+          "currentMiB": 1645.7890625,
+          "workingMiB": 515.5390625,
+          "anonymousMiB": 371.78125,
+          "fileMiB": 1266.25390625,
+          "inactiveFileMiB": 1130.25
+        },
+        "firstMs": 3873.127416000003,
+        "warmMs": 3742.5934169999964,
+        "nativeExecutableUnchanged": true,
+        "modelChecksumVerifiedByEntrypoint": true,
+        "apiAuthentication": 401,
+        "context": 4096,
+        "cycles": [
+          {
+            "idleMiB": 193.015625,
+            "idleCgroup": {
+              "currentMiB": 1461.05078125,
+              "workingMiB": 330.80078125,
+              "anonymousMiB": 190.88671875,
+              "fileMiB": 1266.25390625,
+              "inactiveFileMiB": 1130.25
+            },
+            "wakeMs": 5122.823000000004,
+            "wokenMiB": 2992.81640625,
+            "outputUnchanged": true,
+            "health200": true,
+            "restarts": 0
+          },
+          {
+            "idleMiB": 211.05078125,
+            "idleCgroup": {
+              "currentMiB": 1474.9921875,
+              "workingMiB": 345.5234375,
+              "anonymousMiB": 204.97265625,
+              "fileMiB": 1266.25390625,
+              "inactiveFileMiB": 1129.46875
+            },
+            "wakeMs": 5212.160875000001,
+            "wokenMiB": 2992.8203125,
+            "outputUnchanged": true,
+            "health200": true,
+            "restarts": 0
+          }
+        ]
+      }
+    ],
+    "status": "PASS"
+  },
+  "tests": {
+    "test": {
+      "tests": 195,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "integrationTest": {
+      "tests": 158,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "e2eTest": {
+      "tests": 86,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "nodeRuntimeTests": 7,
+  "security": {
+    "scanner": "Trivy0.76.2",
+    "db": {
+      "Version": 2,
+      "NextUpdate": "2026-11-11T19:01:23.081218965Z",
+      "UpdatedAt": "2026-11-10T19:01:23.081219346Z",
+      "DownloadedAt": "2026-11-11T11:18:55.984524Z"
+    },
+    "appHighCritical": 0,
+    "aiHighCritical": 0,
+    "unchangedProxyHighCritical": 0,
+    "secrets": 0,
+    "javaAnchors": 117,
+    "osAnchors": 119,
+    "negativeTlsChains": 14,
+    "mail": "STARTTLS/certificate-chain/hostname/AUTH235 TLS1.3; no message sent"
+  },
+  "limitations": [
+    "Shared developer host: other projects may run; paired ABBA container measurements, not an SLA.",
+    "Two p95 values are averaged; this is not a pooled p95.",
+    "RSS, cgroup working set and OS file cache are distinct; shared file pages can be charged to another cgroup.",
+    "Active inference still needs full model memory; first background job after sleep pays reload cost.",
+    "Only linux/arm64 measured; repeat sizing on target Linux hardware."
+  ],
+  "deployment": "pending",
+  "github": "PR/review/merge pending",
+  "identity": {
+    "status": "PASS",
+    "image": "sha256:bdda575ee9dd4d8949d470f0800af440bf4d3e022b1ec5be0cdfcd4886937316",
+    "classes": 14,
+    "identity": {
+      "translationProvider": "index-translate-2b/guard-v3/3c71ded57a28058f98a27aa5808c895a4625b33cb3cbec7fef6c81168354f233",
+      "java": 25,
+      "translationPolicy": "guard-v3/3c71ded57a28058f98a27aa5808c895a4625b33cb3cbec7fef6c81168354f233",
+      "classes": {
+        "com/moapan/ai/domain/AiPolicy.class": "4809b9d51103e517e60a37fea8081dd5509bbed000a4550eec8245e59ab2a1cf",
+        "com/moapan/ai/domain/ArticleGuard$Held.class": "63096b555e18c197fe5c72109020d36dfb3a97e929c6e331677170e8711aa744",
+        "com/moapan/ai/domain/ArticleGuard.class": "fcefae03432e165c96860b8eab20233fbc108650a3557a0ee055e2112d2018df",
+        "com/moapan/ai/infrastructure/ModelJson.class": "3d180cc8292cbc39a56d97c4c742f317c76270297905554e5541a293ee8c6614",
+        "com/moapan/ai/infrastructure/ModelStream$Invalid.class": "d7eee4cd6a2f1fa42ccd9fcf4abdf9dc5a549bf2f2ddb3a1cb700bcf645e2eb1",
+        "com/moapan/ai/infrastructure/ModelStream.class": "b88666e038e231f43abc764211ebb0ec4c1794c44a6d9d522700453151431498",
+        "com/moapan/ai/infrastructure/ModelTokenBudget$ArticleBudgetExceeded.class": "ba026a441f465e9e70b6666939e6e5ce0ad6a8f98adaae1aa1931876c9c9b0cf",
+        "com/moapan/ai/infrastructure/ModelTokenBudget.class": "e4c14ae42c9047661908f2c091bd55cae4fc37e84ff9cd88f3fc04bc0174d5a9",
+        "com/moapan/classification/infrastructure/LocalClassifier.class": "8b61a2a35d593b94778bd20536ccab97c716bda1ddece40065f4ca7174820127",
+        "com/moapan/translation/domain/TranslationGlossary$Term.class": "b5c902197ea9266ad418d4c33542b82c4580749c2df70cfd7c598a72345134c5",
+        "com/moapan/translation/domain/TranslationGlossary.class": "7e77e5f8ee2add5c49725f0727e847104400926a9ecbfdfa94751fc740adf235",
+        "com/moapan/translation/domain/TranslationValidator$Protected.class": "08226273d89fdefc498abeac9c3d65df2fbeefbdcd5b64149cf6072fd02f1086",
+        "com/moapan/translation/domain/TranslationValidator.class": "1db555323fe7a6ba152e5e66c35639fd826f8653d6990cbc19275e2989db83e0",
+        "com/moapan/translation/infrastructure/LocalTranslator.class": "f7d27ce9d7436942cadc0c7c1e730a947924642dd85742edd1ac82d35db2d51a"
+      },
+      "classificationPolicy": "qwen3.5-4b/42ab0aaef92d4cedd1b5db311123128807f2170ba9aa07dcae14653760d328ab"
+    },
+    "trustAnchorsSha256": "af02bb1bc34c56e99e296da192c39ed5d1c6a2caffaadaf2f7d884e6f7600909",
+    "jarSha256": "4c69c7cf2dfc9fd603b661bcdf24c2b1e8726794a4d8923a66418f89fe93980b",
+    "unchangedFromBothProductionImages": true
+  },
+  "imageScans": {
+    "sha256:bdda575ee9dd4d8949d470f0800af440bf4d3e022b1ec5be0cdfcd4886937316": {
+      "createdAt": "2026-11-11T20:19:52.654005+09:00",
+      "findings": {
+        "MEDIUM": 42,
+        "LOW": 4
+      },
+      "secrets": 0
+    },
+    "sha256:867bdad6857d4b6ff5d5c52ec17eb760a6a95faad04d37c05a4b66b1c1486d14": {
+      "createdAt": "2026-11-11T20:30:51.913382+09:00",
+      "findings": {
+        "MEDIUM": 42,
+        "LOW": 4
+      },
+      "secrets": 0
+    }
+  }
+}

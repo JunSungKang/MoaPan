@@ -28,7 +28,7 @@ spec:
       containers:
         - name: classifier
           image: {{ include "damgox2.image" .Values.images.classifier }}
-          env: [{name: DAMGOX2_AI_KIND, value: classification}, {name: CLASSIFICATION_THREADS, value: {{ .Values.classificationThreads | quote }}}]
+          env: [{name: DAMGOX2_AI_KIND, value: classification}, {name: CLASSIFICATION_THREADS, value: {{ .Values.classificationThreads | quote }}}, {name: DAMGOX2_AI_IDLE_SECONDS, value: {{ .Values.aiIdleSeconds | quote }}}]
           ports: [{containerPort: 9931}]
           securityContext: {readOnlyRootFilesystem: true, allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}}
           resources: {requests: {cpu: '1', memory: 3Gi}, limits: {cpu: '2', memory: 4Gi}}

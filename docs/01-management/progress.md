@@ -288,3 +288,8 @@ Temurin25.0.5+8/Ubuntu26.04 앱·proxy·공유AI 이미지로 platform-damgox2-*
 
 ## 2026-11-09 기본 운영 점검의 번역문 포장 표시 수정
 지면·기사 검색에서 일부 번역문이 source_text JSON으로 노출되는 문제를 표시 계층에서 수정했다. 원문/번역 저장값과 AI 정책14개 class는 변경하지 않는다. Node 회귀4개와 공개 HTTPS 자산/화면 검사를 통과했다. 기존 운영 JAR의 해당 정적 파일만 바꾼 r2 이미지로 공통 flock 안에서 웹만 교체했다. 다른 컨테이너의 ID/시각·영속 마운트를 보존했다. 미커밋 사업·뉴스레터 작업은 이 커밋과 배포에서 제외했다. docs/05-test/article-translation-wrapper.md 참조.
+
+
+## 2026-11-11 메모리·성능 Sprint
+
+Sprint Delivery로 별도 feature branch와 계약을 만들고 기존 미커밋79개 파일을 보존했다. 납품 소스는 develop71ecb39와 이번 변경만 내보내 빌드했다. 웹/worker 합산RSS640.4→478.9MiB(-25.2%), p95평균89.28→88.28ms, 처리량231.8→224.3건/초(-3.2%)이며 오류0이다. AI는 모델·native binary·정책·4096 context를 유지하고300초 유휴 해제를 추가했다. 두 모델 각각 두 번의 sleep/wake·출력 일치·health200·인증401·재시작0을 검증했다. RSS와 cgroup/파일 캐시는 구분한다. 기능439개와 Node 추가 시험, fresh DB 보안 게이트·최종 앱/AI 이미지·메일STARTTLS/AUTH·14 TLS 부정 체인 검증을 완료했다. 기존 CA 정책과14개 AI 클래스 지문을 보존했다. 운영 교체·독립 리뷰·develop 병합을 진행하며, 최종 결과는 [검증서](../05-test/memory-performance.md)와 PR 상태로 확인한다.

@@ -28,7 +28,7 @@ spec:
       containers:
         - name: translator
           image: {{ include "damgox2.image" .Values.images.translator }}
-          env: [{name: DAMGOX2_AI_KIND, value: translation}, {name: TRANSLATION_THREADS, value: {{ .Values.translationThreads | quote }}}]
+          env: [{name: DAMGOX2_AI_KIND, value: translation}, {name: TRANSLATION_THREADS, value: {{ .Values.translationThreads | quote }}}, {name: DAMGOX2_AI_IDLE_SECONDS, value: {{ .Values.aiIdleSeconds | quote }}}]
           ports: [{containerPort: 9931}]
           securityContext: {readOnlyRootFilesystem: true, allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}}
           resources: {requests: {cpu: '1', memory: 3Gi}, limits: {cpu: '2', memory: 4Gi}}

@@ -19,3 +19,6 @@ Docker/Compose/Helm 명칭 변경은 [이관 설계서 MP-DOC-041](03-design/inf
 ## Ubuntu25 플랫폼 운영 전환
 - [MP-DOC-049 운영 구성·공통 PG·복구 인계](06-transition/platform-ubuntu25.md)
 - [MP-DOC-050 Java25·보안·실제 교체 검증](05-test/platform-ubuntu25.md)
+
+- [메모리·성능 최적화 검증서](05-test/memory-performance.md)
+- [메모리 실행 정책·공통 운영 인계](06-transition/memory-runtime.md)

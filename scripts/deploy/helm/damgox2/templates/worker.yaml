@@ -37,6 +37,8 @@ spec:
           envFrom: [{configMapRef: {name: damgox2-settings}}]
           env:
             - {name: DAMGOX2_ROLE, value: worker}
+            - {name: DAMGOX2_DB_POOL_MAX, value: {{ .Values.runtime.worker.maxConnections | quote }}}
+            - {name: DAMGOX2_DB_POOL_MIN, value: {{ .Values.runtime.worker.idleConnections | quote }}}
 {{ include "damgox2.secretEnv" . | indent 12 }}
 {{ include "damgox2.mailEnv" . | indent 12 }}
             - {name: DAMGOX2_TRANSLATION_URL, value: 'http://translator:9931/v1/chat/completions'}

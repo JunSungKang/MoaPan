@@ -59,3 +59,7 @@
 | MP-DOC-050 | Ubuntu 26.04·Java 25 전환 검증서 | 개발 담당 | [문서](../05-test/platform-ubuntu25.md) |
 
 | MP-DOC-051 | Ubuntu25 플랫폼 병합 독립 리뷰 보완 검증서 | 개발 담당 | [문서](../05-test/platform-merge-review.md) |
+
+| MP-DOC-052 | 기사 번역문 포장 표시 회귀 | 개발 담당 | [문서](../05-test/article-translation-wrapper.md) |
+| MP-DOC-053 | 메모리·성능 최적화 검증서 | 개발 담당 | [문서](../05-test/memory-performance.md) |
+| MP-DOC-054 | 메모리 실행 정책·운영 인계 | 개발 담당 | [문서](../06-transition/memory-runtime.md) |

@@ -1,0 +1,22 @@
+# Apply after the operator's existing Compose; changes only DamGoX2 services.
+services:
+  damgox2-web:
+    image: ${DAMGOX2_MEMORY_APP_IMAGE:?Set scanned immutable app image ID}
+    environment:
+      JAVA_TOOL_OPTIONS: ''
+      DAMGOX2_DB_POOL_MAX: ${DAMGOX2_WEB_DB_POOL_MAX:-8}
+      DAMGOX2_DB_POOL_MIN: ${DAMGOX2_WEB_DB_POOL_MIN:-2}
+  damgox2-worker:
+    image: ${DAMGOX2_MEMORY_APP_IMAGE:?Set scanned immutable app image ID}
+    environment:
+      JAVA_TOOL_OPTIONS: ''
+      DAMGOX2_DB_POOL_MAX: ${DAMGOX2_WORKER_DB_POOL_MAX:-6}
+      DAMGOX2_DB_POOL_MIN: ${DAMGOX2_WORKER_DB_POOL_MIN:-1}
+  damgox2-translator:
+    image: ${DAMGOX2_MEMORY_AI_IMAGE:?Set scanned immutable AI image ID}
+    environment:
+      DAMGOX2_AI_IDLE_SECONDS: ${DAMGOX2_AI_IDLE_SECONDS:-300}
+  damgox2-classifier:
+    image: ${DAMGOX2_MEMORY_AI_IMAGE:?Set scanned immutable AI image ID}
+    environment:
+      DAMGOX2_AI_IDLE_SECONDS: ${DAMGOX2_AI_IDLE_SECONDS:-300}
