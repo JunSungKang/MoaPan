@@ -34,7 +34,7 @@
 ## 3. 기능·보안
 
 - 단위195·PostgreSQL 통합158·Playwright86, 총439. 실패·오류·skip0. 최종 aggregate 실행에서 변경 없는 Java 시험은 Gradle의 이전 성공 결과를 재사용했다.
-- 역할별 launcher/운영자 override/입력 검증/인증서 지문 의미/4개 서비스 override Node 시험7개 PASS.
+- 역할별 launcher/운영자 override/입력 검증/인증서 지문 의미/4개 서비스 override Node 시험10개 PASS.
 - SMTP STARTTLS·인증서 chain·hostname·AUTH235, TLS1.3 PASS. 메일 발송·받은편지함 도착은 시험하지 않았다.
 - 기존117개 Java 신뢰 anchor와14개 AI class/policy 지문 유지. 정상 HTTPS 및 공식14개 잘못된 체인 TLS 거부 PASS. 공통 base가 다시 포함한 emSign G1을 기존 공식 완화 도구로 제거했으며 OS에서도4개 root가 없음을 확인했다. 예전 cacerts를 복사하지 않았다.
 - Trivy0.76.2 DB 동기화 2026-11-11T11:18:55.984524Z; 최종 앱/AI 및 변경 없는 proxy HIGH/CRITICAL0·secret0. MEDIUM/LOW는 보고서에 남긴다. JAR102개 패키지/SBOM107개 구성요소와 공급자 advisory/JOSE 실제 부정 대조 검증 PASS.
@@ -48,3 +48,11 @@
 ## 5. 운영·GitHub
 
 운영 교체와 독립 리뷰 후 실제 결과를 추가한다. 프로젝트 밖 공통 운영 파일은 수정하지 않는다. PR 상태가 최종 승인·병합의 근거이며 main은 대상이 아니다.
+
+## 6. PR33 독립 리뷰 보완
+
+최초 head88a8692의 독립 리뷰는 CHANGES_REQUESTED였다. F1은 현재 컨테이너에만 있는 운영자 ENV가 새 base/image에서 사라질 수 있는 단방향 검사였다. 현재 Config.Env 전체를 고정하고 새 이미지 기본값까지 합친 전체 유효 ENV를 양방향 비교한다. 사용자 JVM override는 보존하고 dollar 문자는 Compose 입력에서 한 번만 escape한다. 컨테이너에만 있는 연결 timeout과 dollar 포함 ENV 회귀를 추가했다.
+
+F2는 서비스 중지 후 공통 파일/보간 입력이 바뀌면 정상 교체와 rollback이 모두 같은 변경된 파일에서 막히는 문제였다. 자체 네 서비스와 필요한 외부 리소스만 메모리에 고정해 stdin으로 실행한다. 정상 경로는 공통 변경을 감지해 중단하고 복구는 고정한 이전 구성만 사용한다. 별도의 age 암호화 복구 구성은 작업 폴더에0600으로 보관하고 복호화 일치를 교체 전에 검사한다. 비밀값이 든 평문 구성은 파일/로그/CLI 인자에 남기지 않는다.
+
+실제 Docker 합성 네 컨테이너를 중지하고 웹만 새 구성으로 시작한 뒤, 합성 공통 구성 파일을 변경하고 삭제했다. 실패를 탐지하고 공통 파일 없이 이전 네 컨테이너의 image/ENV/command와 실행 상태를 복원했다. 기존7개+신규3개 Node 시험10개 실패·skip0이다. 운영 서비스는 이 보완 시점에 아직 변경하지 않았다. 운영 반영과 current-head 재리뷰는 별도로 확인한다.
