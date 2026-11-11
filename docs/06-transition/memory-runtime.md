@@ -1,6 +1,6 @@
 # 메모리 실행 정책·운영 인계
 
-문서번호: MP-DOC-054 · 기준일: 2026-11-11 · 상태: 기능·보안 검증 완료, 운영 반영 대기
+문서번호: MP-DOC-054 · 기준일: 2026-11-11 · 상태: 기능·보안·운영 반영 PASS, 최종 리뷰·병합은 PR33
 
 같은 앱 이미지를 web/worker가 사용하고 image entrypoint가 역할에 맞는 기본값을 설정한다. 기본 JVM은 web Xmx256MiB, worker Xmx192MiB, Xms32MiB, compact object headers, code cache96MiB, MinHeapFreeRatio20/MaxHeapFreeRatio40 및 단계 없는 힙 축소를 사용한다. 명시한 JAVA_TOOL_OPTIONS와 MALLOC_ARENA_MAX는 보존한다. 기본 malloc arena는2다. GC 알고리즘·JIT tier는 기존 JVM 선택을 유지한다.
 
@@ -27,3 +27,9 @@ DAMGOX2_AI_IDLE_SECONDS는 기본300초, -1은 항상 준비 상태 유지, 허�
 ## 공통 Compose 인계
 
 공통 운영 Compose는 수정하지 않는다. 운영 담당자는 DAMGOX2_MEMORY_APP_IMAGE와 DAMGOX2_MEMORY_AI_IMAGE에 검증된 image ID를 넣고, 기존 Compose 뒤에 이 프로젝트 scripts/performance/compose.memory.yaml을 추가한다. --no-deps와 명시한 damgox2-web/worker/translator/classifier만 사용한다. 공개80/443·API20100·인증서/모델 볼륨·MailBox 연결은 그대로다. 복구에는 현재 컨테이너의 전체 유효 ENV와 원래 네 서비스 구성을 고정한 암호화 snapshot을 사용한다. .local/memory-performance-20261111/recovery-*.json.age에만0600으로 저장하고 평문은 메모리·stdin에서만 처리한다. age identity는 기본 .local/backups/keys/delivery-security-20261108.identity이며 DAMGOX2_RECOVERY_IDENTITY_FILE로 작업 폴더 안의 다른 identity를 지정할 수 있다. 공통 파일 변경은 정상 교체만 중단한다. 자동 복구는 변경된 공통 파일과 보간 환경을 다시 읽지 않는다. 수동 복구도 같은 운영 flock을 보유하고 age -d의 결과를 docker compose --env-file /dev/null -p platform -f - up -d --no-build --no-deps --pull never의 네 damgox2 서비스로 파이프한다. 공유 DB·다른 서비스는 포함하지 않는다.
+
+## 실제 반영 결과
+
+2026-11-11 21:32(Asia/Seoul)에 교체를 완료했다. 앱은 sha256:bdda575ee9dd4d8949d470f0800af440bf4d3e022b1ec5be0cdfcd4886937316, AI는 sha256:867bdad6857d4b6ff5d5c52ec17eb760a6a95faad04d37c05a4b66b1c1486d14다. 재빌드하지 않고 스캔한 동일 image ID를 사용했다. proxy sha256:58df6665093ea8347ead8c71fe0aa5b1b9721ad48df902dafca1c44fb9f4a628, 공유 PG damgox2/damgox2_sid, SMTP 연결은 유지했다. 운영 URL은 https://175.195.62.165/ 이며 HTTPS 지면200·계정401·뉴스레터404와 worker 종료/재시작·모델300초 수면을 확인했다.
+
+복구 구성은 .local/memory-performance-20261111/recovery-1794400300745.json.age에 보관한다. 이전 앱 이미지는 web sha256:e8cd511d2b5ad060ac15216583ff558cb96263b9061af6ac41305fa45e0af6bd, worker sha256:b4351c22025974e153c1ccf352d0fb9e6e5a175d45c066f1ed49e1dd6f91be11, 두 AI는 sha256:c17a591073c3ea269374f40d9c2de9f575517538530cd9332c26972eaf9991ea다. 원래 tag와 damgox2-memory-rollback의 역할별 tag를 보존한다. 비밀값이나 복구 파일은 Git에 포함하지 않는다. 공통 운영 Compose가 향후 재실행될 때 이전 이미지로 되돌아가지 않도록 위 override와 전체 운영자 설정 보존을 함께 인계한다. 실제 복구 시험은 합성 네 컨테이너에서 수행했으며 운영 데이터 복구를 시도하지 않았다.

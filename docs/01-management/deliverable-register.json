@@ -371,16 +371,16 @@
     "id": "MP-DOC-053",
     "path": "docs/05-test/memory-performance.md",
     "title": "메모리·성능 최적화 검증서",
-    "status": "검증 진행",
+    "status": "기능·성능·보안·운영 PASS; 최종 리뷰/병합은 PR33",
     "owner": "개발 담당",
-    "reviewer": "독립 리뷰 담당"
+    "reviewer": "독립 재리뷰 APPROVE(1d82337), 최종 증빙은 PR33"
   },
   {
     "id": "MP-DOC-054",
     "path": "docs/06-transition/memory-runtime.md",
     "title": "메모리 실행 정책·운영 인계",
-    "status": "검증 진행",
+    "status": "기능·성능·보안·운영 PASS; 최종 리뷰/병합은 PR33",
     "owner": "개발 담당",
-    "reviewer": "독립 리뷰 담당"
+    "reviewer": "독립 재리뷰 APPROVE(1d82337), 최종 증빙은 PR33"
   }
 ]

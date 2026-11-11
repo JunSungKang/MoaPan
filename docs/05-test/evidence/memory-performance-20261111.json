@@ -1,6 +1,6 @@
 {
-  "status": "MEASURED_AND_TESTED",
-  "at": "2026-11-11T11:39:45.368Z",
+  "status": "DEPLOYED_AND_VERIFIED",
+  "at": "2026-11-11T12:37:27.044Z",
   "architecture": "linux/arm64",
   "java": "Temurin25.0.5+8",
   "scope": "base71ecb39 plus performance changes; baseline pending79 files excluded",
@@ -357,8 +357,141 @@
     "Active inference still needs full model memory; first background job after sleep pays reload cost.",
     "Only linux/arm64 measured; repeat sizing on target Linux hardware."
   ],
-  "deployment": "pending",
-  "github": "PR/review/merge pending",
+  "deployment": {
+    "startedAt": "2026-11-11T12:31:40.754Z",
+    "status": "PASS",
+    "image": "sha256:bdda575ee9dd4d8949d470f0800af440bf4d3e022b1ec5be0cdfcd4886937316",
+    "aiImage": "sha256:867bdad6857d4b6ff5d5c52ec17eb760a6a95faad04d37c05a4b66b1c1486d14",
+    "baseConfigSha256": "510e0b9ab6f4853c78a798053bed5c4f49652cb67af57f18f53b39a6b00619d5",
+    "recoveryRoundTrip": true,
+    "policyAndTruststoreUnchanged": true,
+    "nativeExecutableUnchanged": true,
+    "oldImages": {
+      "web": "sha256:e8cd511d2b5ad060ac15216583ff558cb96263b9061af6ac41305fa45e0af6bd",
+      "worker": "sha256:b4351c22025974e153c1ccf352d0fb9e6e5a175d45c066f1ed49e1dd6f91be11",
+      "translator": "sha256:c17a591073c3ea269374f40d9c2de9f575517538530cd9332c26972eaf9991ea",
+      "classifier": "sha256:c17a591073c3ea269374f40d9c2de9f575517538530cd9332c26972eaf9991ea"
+    },
+    "workerStopMs": 644,
+    "stableTablesUnchanged": 10,
+    "otherContainersUnchanged": 12,
+    "workerRestartHeartbeat": true,
+    "https": {
+      "about": 200,
+      "edition": 200,
+      "account": 401,
+      "newsletter": 404
+    },
+    "finishedAt": "2026-11-11T12:32:35.317Z",
+    "encryptedRecoveryConfiguration": true,
+    "encryptedRecoveryRoundTrip": true,
+    "originalEnvironmentPreserved": true,
+    "runtimeControls": {
+      "web": {
+        "heap": "-Xmx256m",
+        "compactHeaders": true,
+        "poolMax": "8",
+        "poolMin": "2"
+      },
+      "worker": {
+        "heap": "-Xmx192m",
+        "compactHeaders": true,
+        "poolMax": "6",
+        "poolMin": "1"
+      },
+      "translator": {
+        "idleSeconds": "300"
+      },
+      "classifier": {
+        "idleSeconds": "300"
+      }
+    },
+    "workerCacheBudget8MiB": true,
+    "recoveryFileMode": "0600",
+    "productionIdle": {
+      "at": "2026-11-11T12:37:27.044Z",
+      "models": {
+        "translator": {
+          "sleeping": true,
+          "restarts": 0,
+          "healthy": true
+        },
+        "classifier": {
+          "sleeping": true,
+          "restarts": 0,
+          "healthy": true
+        }
+      }
+    },
+    "productionIdleMetrics": {
+      "at": "2026-11-11T12:37:26.350Z",
+      "services": {
+        "web": {
+          "id": "36c2597a9dc5e436936c3b13add00014eb062f03b5502843049846918c990771",
+          "image": "sha256:bdda575ee9dd4d8949d470f0800af440bf4d3e022b1ec5be0cdfcd4886937316",
+          "startedAt": "2026-11-11T12:31:43.71482276Z",
+          "health": "healthy",
+          "currentMiB": 246.38671875,
+          "workingMiB": 240.19921875,
+          "anonymousMiB": 231.90625,
+          "fileMiB": 8.17578125,
+          "rssMiB": 247.30078125,
+          "restarts": 0
+        },
+        "worker": {
+          "id": "60cd4773be1fbfa90ce819ab1f6b4e019277e63e266999d8c2c2d517aa13845a",
+          "image": "sha256:bdda575ee9dd4d8949d470f0800af440bf4d3e022b1ec5be0cdfcd4886937316",
+          "startedAt": "2026-11-11T12:32:28.219856669Z",
+          "health": null,
+          "currentMiB": 212.97265625,
+          "workingMiB": 212.97265625,
+          "anonymousMiB": 208.984375,
+          "fileMiB": 0.04296875,
+          "rssMiB": 225.32421875,
+          "restarts": 0
+        },
+        "translator": {
+          "id": "e7bf89fd87956e6e25978f5a32415eaa43ca39c3b9c5cb3bd84302803b192bd1",
+          "image": "sha256:867bdad6857d4b6ff5d5c52ec17eb760a6a95faad04d37c05a4b66b1c1486d14",
+          "startedAt": "2026-11-11T12:31:57.810597211Z",
+          "health": "healthy",
+          "currentMiB": 1424.25390625,
+          "workingMiB": 1354.19140625,
+          "anonymousMiB": 128.51171875,
+          "fileMiB": 1292.421875,
+          "rssMiB": 132.4609375,
+          "restarts": 0
+        },
+        "classifier": {
+          "id": "2c471c1212896e9f94a14e9fb3e5088ee8693920a9f6f8a6ac2d8b8d20f92d17",
+          "image": "sha256:867bdad6857d4b6ff5d5c52ec17eb760a6a95faad04d37c05a4b66b1c1486d14",
+          "startedAt": "2026-11-11T12:32:09.119810966Z",
+          "health": "healthy",
+          "currentMiB": 1329.69140625,
+          "workingMiB": 325.9140625,
+          "anonymousMiB": 128.66015625,
+          "fileMiB": 1196.73828125,
+          "rssMiB": 134.39453125,
+          "restarts": 0
+        }
+      },
+      "jdbcConnections": 5
+    },
+    "jdbcConnections": {
+      "before": 24,
+      "afterStart": 4,
+      "afterIdle": 5
+    },
+    "note": "Live observations, not controlled performance comparison. Earlier AI already had swapped pages. Stable fingerprints exclude mutable job/session/counter tables."
+  },
+  "github": {
+    "pr": 33,
+    "url": "https://github.com/JunSungKang/MoaPan/pull/33",
+    "base": "develop",
+    "codeHead": "1d82337d947d40a2afcfc5cca439144b7ce1dfdc",
+    "codeHeadAppReview": "APPROVED 2026-11-11T12:30:25Z",
+    "finalEvidenceHead": "current PR head requires renewed review; final review and merge SHA are recorded on PR33"
+  },
   "identity": {
     "status": "PASS",
     "image": "sha256:bdda575ee9dd4d8949d470f0800af440bf4d3e022b1ec5be0cdfcd4886937316",
@@ -421,6 +554,12 @@
       "nodeTests": 10,
       "failures": 0
     },
-    "currentHeadReReview": "pending"
+    "currentHeadReReview": {
+      "head": "1d82337d947d40a2afcfc5cca439144b7ce1dfdc",
+      "decision": "APPROVE",
+      "findings": "F1/F2 RESOLVED",
+      "appSubmittedAt": "2026-11-11T12:30:25Z",
+      "finalEvidenceReview": "see PR33 current-head review"
+    }
   }
 }
